@@ -1,0 +1,7 @@
+annotator.App
+    the main annotator class.
+
+annotator.App.include
+    The only thing it does is add modules to the registry so they are notified when an event fires.
+    (and their configure(registry) function is called IF EXISTS)
+    The most important event: 'start' (fired with App.start())
