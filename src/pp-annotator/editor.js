@@ -1,64 +1,88 @@
-
 var Editor = require('annotator').ui.editor.Editor;
 var Widget = require('annotator').ui.widget.Widget;
 var util = require('annotator').util;
 
 
 var $ = util.$;
-var _t = util.gettext;
 var Promise = util.Promise;
-
 var NS = "annotator-editor";
 
-/*
-annotator.ui.editor.Editor extension with different
--html template
--fields
 
-Much of original editor functionality is nevertheless inherited.
+
+// React imports
+var ReactDOM = require('react-dom');
+var React = require('react');
+import AnnotationForm from './form.jsx';
+
+/*
+annotator.ui.editor.Editor extension
+- without Editor field add and load mechanism (and React-rendered form)
+
+Css and show/hide functionality of the outer editor container is nevertheless inherited.
  */
 var PrzypisEditor = exports.PrzypisEditor = Editor.extend({
 
-    // Copied Editor.constructor that calls directly Widget, which is Editor's prototype
+    // calls directly Widget, which is Editor's prototype
     constructor: function (options) {
         // ignore Editor.constructor
         Widget.call(this, options);
 
         this.fields = [];
         this.annotation = {};
+    },
 
-        if (this.options.defaultFields) {
-        this.addField({
-            type: 'textarea',
-            label: 'Komentarz',
-            load: function (field, annotation) {
-                $(field).find('textarea').val(annotation.text || '');
-            },
-            submit: function (field, annotation) {
-                annotation.text = $(field).find('textarea').val();
-            }
-        });
+    updateForm: function (annotation) {
+        ReactDOM.render(
+            React.createElement(AnnotationForm,
+                $.extend(this.formEvents(), annotation),
+                null),
+            document.getElementById('react-form-slot')
+        );
+    },
+
+    formEvents: function() {
+        var self = this;
+        return {
+                    onSave: function (e) {
+                        self._onSaveClick(e);
+                    },
+                    onCancel: function (e) {
+                        self._onCancelClick(e);
+                    },
+                    updateAnnotationWithState: function(state) {
+                        // Update annotation field values with the state of the React form
+                        self.annotation.fields = $.extend(self.annotation.fields, state);
+                    }
+                };
+    },
+    // Override parent attach function to render React form
+    attach: function() {
+        // Call parent function (renders PrzypisEditor.template)
+        Editor.prototype.attach.call(this);
+        this.updateForm({});
+    },
+
+    // Shortened original Editor submit: field values are passed through updateAnnotationWithState
+    // The rest is left unchanged
+    submit: function () {
+        if (typeof this.dfd !== 'undefined' && this.dfd !== null) {
+            this.dfd.resolve();
         }
+        this.hide();
+    },
+
+
+    load: function (annotation, position) {
+        this.annotation = annotation;
+        this.updateForm(annotation.fields);
 
         var self = this;
+        return new Promise(function (resolve, reject) {
+            self.dfd = {resolve: resolve, reject: reject};
+            self.show(position);
+        });
+    },
 
-        this.element
-            .on("submit." + NS, 'form', function (e) {
-                self._onFormSubmit(e);
-            })
-            .on("click." + NS, '.annotator-save', function (e) {
-                self._onSaveClick(e);
-            })
-            .on("click." + NS, '.annotator-cancel', function (e) {
-                self._onCancelClick(e);
-            })
-            .on("mouseover." + NS, '.annotator-cancel', function (e) {
-                self._onCancelMouseover(e);
-            })
-            .on("keydown." + NS, 'textarea', function (e) {
-                self._onTextareaKeydown(e);
-            });
-    }
 });
 
 
@@ -69,24 +93,9 @@ PrzypisEditor.classes = {
     focus: 'annotator-focus'
 };
 
-// Copied from annotator.ui.editor.Editor
-// (not inherited from Editor)
+// Template with a slot for React component
 PrzypisEditor.template = [
     '<div class="annotator-outer annotator-editor annotator-hide">',
-    '  <form class="annotator-widget">',
-    '    <ul class="annotator-listing"></ul>',
-    '    <div class="annotator-controls">',
-    '     <a href="#cancel" class="annotator-cancel"> Anuluj </a>',
-    '      <a href="#save"',
-    '         class="annotator-save annotator-focus"> Zapisz </a>',
-    '    </div>',
-    '  </form>',
+    '  <div id="react-form-slot"></div>',
     '</div>'
 ].join('\n');
-
-// Copied from annotator.ui.editor.Editor
-// (not inherited from Editor)
-PrzypisEditor.options = {
-    // Add the default field(s) to the editor.
-    defaultFields: true
-};

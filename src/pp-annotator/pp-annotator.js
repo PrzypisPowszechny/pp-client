@@ -180,7 +180,7 @@ function addPermissionsCheckboxes(editor, ident, authz) {
 }
 
 
-// pp annotator ui module
+// pp annotator ui module (almost unchanged annotator.ui.main)
 function ui(options) {
     if (typeof options === 'undefined' || options === null) {
         options = {};
@@ -210,6 +210,7 @@ function ui(options) {
         });
         s.adder.attach();
 
+        //Use PrzypisEditor instead of standard annotator.ui.Editor
         s.editor = new PrzypisEditor({
             extensions: options.editorExtensions
         });
