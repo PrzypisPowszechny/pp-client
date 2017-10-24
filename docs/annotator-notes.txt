@@ -5,3 +5,18 @@ annotator.App.include
     The only thing it does is add modules to the registry so they are notified when an event fires.
     (and their configure(registry) function is called IF EXISTS)
     The most important event: 'start' (fired with App.start())
+
+
+
+
+Modules:
+
+ui - responsuble for all possible visible content, the most important
+
+ui.adder - the pen icon that appears after text selection
+ui.editor - the editor widget (js + html)
+ui.viewer - the viewer widget (js + html)
+ui.highlighter - code for adding a <span> in the text to highlight an annotation
+ui.textselector - text selection hooks
+
+ui.tags - unimportant (for tags extension)
