@@ -2,7 +2,7 @@
 
 var util = require('annotator').util;
 
-var adder = require('annotator').ui.adder;
+
 var editor = require('annotator').ui.editor;
 var highlighter = require('annotator').ui.highlighter;
 var textselector = require('annotator').ui.textselector;
@@ -16,7 +16,7 @@ var _t = util.gettext;
 // var removeDynamicStyle = require('annotator').ui.removeDynamicStyle;
 
 var PrzypisEditor = require('./editor').PrzypisEditor;
-
+var PrzypisAdder = require('./adder').PrzypisAdder;
 
 // trim strips whitespace from either end of a string.
 //
@@ -203,7 +203,7 @@ function ui(options) {
         var ident = app.registry.getUtility('identityPolicy');
         var authz = app.registry.getUtility('authorizationPolicy');
 
-        s.adder = new adder.Adder({
+        s.adder = new PrzypisAdder({
             onCreate: function (ann) {
                 app.annotations.create(ann);
             }
