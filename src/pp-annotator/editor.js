@@ -14,6 +14,16 @@ var ReactDOM = require('react-dom');
 var React = require('react');
 import AnnotationForm from './form.jsx';
 
+// preventEventDefault copied from annotator.ui.editor
+function preventEventDefault(event) {
+    if (typeof event !== 'undefined' &&
+        event !== null &&
+        typeof event.preventDefault === 'function') {
+        event.preventDefault();
+    }
+}
+
+
 /*
 annotator.ui.editor.Editor extension
 - without Editor field add and load mechanism (and React-rendered form)
@@ -26,6 +36,9 @@ var PrzypisEditor = exports.PrzypisEditor = Editor.extend({
     constructor: function (options) {
         // ignore Editor.constructor
         Widget.call(this, options);
+
+        this.onSave = this.options.onSave;
+        this.onCancel = this.options.onCancel;
 
         this.fields = [];
         this.annotation = {};
@@ -66,7 +79,7 @@ var PrzypisEditor = exports.PrzypisEditor = Editor.extend({
     // The rest is left unchanged
     submit: function () {
         if (typeof this.dfd !== 'undefined' && this.dfd !== null) {
-            this.dfd.resolve();
+            this.dfd.resolve(this.annotation);
         }
         this.hide();
     },
@@ -99,3 +112,9 @@ PrzypisEditor.template = [
     '  <div id="react-form-slot"></div>',
     '</div>'
 ].join('\n');
+
+
+PrzypisEditor.options = {
+    onSave: null,
+    onCancel: null
+};

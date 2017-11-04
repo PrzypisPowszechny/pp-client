@@ -204,8 +204,15 @@ function ui(options) {
         var authz = app.registry.getUtility('authorizationPolicy');
 
         s.adder = new PrzypisAdder({
-            onCreate: function (ann) {
-                app.annotations.create(ann);
+            beginAnnotationCreate: function (annotation) {
+                s.editor.load(annotation, s.interactionPoint)
+                    .then(function(annotation) {
+                        app.annotations.create(annotation);
+                    });
+
+            },
+            beforeRequestCreate: function (annotation) {
+                //TODO what happens when the adder's request button is clicked
             }
         });
         s.adder.attach();
@@ -233,12 +240,15 @@ function ui(options) {
         });
 
         s.viewer = new viewer.Viewer({
-            onEdit: function (ann) {
+            onEdit: function (annotation) {
                 // Copy the interaction point from the shown viewer:
                 s.interactionPoint = util.$(s.viewer.element)
                                          .css(['top', 'left']);
 
-                app.annotations.update(ann);
+                s.editor.load(annotation, s.interactionPoint)
+                    .then(function(annotation) {
+                        app.annotations.update(annotation);
+                    });
             },
             onDelete: function (ann) {
                 app.annotations['delete'](ann);
@@ -274,17 +284,17 @@ function ui(options) {
         annotationDeleted: function (ann) { s.highlighter.undraw(ann); },
         annotationUpdated: function (ann) { s.highlighter.redraw(ann); },
 
-        beforeAnnotationCreated: function (annotation) {
-            // Editor#load returns a promise that is resolved if editing
-            // completes, and rejected if editing is cancelled. We return it
-            // here to "stall" the annotation process until the editing is
-            // done.
-            return s.editor.load(annotation, s.interactionPoint);
-        },
-
-        beforeAnnotationUpdated: function (annotation) {
-            return s.editor.load(annotation, s.interactionPoint);
-        }
+        // beforeAnnotationCreated: function (annotation) {
+        //     // Editor#load returns a promise that is resolved if editing
+        //     // completes, and rejected if editing is cancelled. We return it
+        //     // here to "stall" the annotation process until the editing is
+        //     // done.
+        //     return s.editor.load(annotation, s.interactionPoint);
+        // },
+        //
+        // beforeAnnotationUpdated: function (annotation) {
+        //     return s.editor.load(annotation, s.interactionPoint);
+        // }
     };
 }
 
