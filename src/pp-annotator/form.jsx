@@ -14,19 +14,24 @@ export default class AnnotationForm extends React.Component {
             comment: props.fields.comment || '',
         };
 
-        this.handleChange = this.handleChange.bind(this);
+        this.handleCommentChange = this.handleCommentChange.bind(this);
         this.onSave = this.onSave.bind(this);
+        this.onCancel = this.onCancel.bind(this);
     }
 
 
-    handleChange(event) {
+    handleCommentChange(event) {
         this.setState({comment: event.target.value});
     }
 
     onSave(event) {
-        this.props.onSave(event);
-        // Update annotation field to be accessible from outside the component
-        this.props.fields.comment = this.state.comment;
+        this.props.onSave({
+                comment: this.state.comment
+        });
+    }
+
+    onCancel(event) {
+        this.props.onCancel();
     }
 
 
@@ -40,7 +45,7 @@ export default class AnnotationForm extends React.Component {
 
                 <ul className="annotator-listing">
                     <li className="annotator-item">
-                        <textarea placeholder="Komentarz" value={this.state.comment} onChange={this.handleChange}/>
+                        <textarea placeholder="Komentarz" value={this.state.comment} onChange={this.handleCommentChange}/>
                     </li>
                 </ul>
                 <div className="annotator-controls">
