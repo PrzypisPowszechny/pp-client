@@ -1,17 +1,21 @@
-// Annotator base classes
-var Widget = require('annotator').ui.widget.Widget;
-var util = require('annotator').util;
+import React from 'react';
+import ReactDOM from "react-dom";
 
-// The same dependencies as annotator's for consistency (at least for now)
-var $ = util.$;
-var Promise = util.Promise;
-var NS = "przypis-editor";
-
-// React imports
-var ReactDOM = require('react-dom');
-var React = require('react');
 import AnnotationForm from './form.jsx';
 
+// Annotator base classes
+import { util, ui as PPUI } from 'annotator';
+
+const Widget = PPUI.widget.Widget;
+
+// The same dependencies as annotator's for consistency (at least for now)
+const {$, Promise} = util;
+
+// TODO remove?
+// const NS = "przypis-editor";
+
+
+/* TODO remove?
 // preventEventDefault copied from annotator.ui.editor
 function preventEventDefault(event) {
     if (typeof event !== 'undefined' &&
@@ -20,26 +24,29 @@ function preventEventDefault(event) {
         event.preventDefault();
     }
 }
+*/
 
-//ANNOTATOR FUNCTIONS (copied from annotator.ui.editor)
 
-// dragTracker is a function which allows a callback to track changes made to
-// the position of a draggable "handle" element.
-//
-// handle - A DOM element to make draggable
-// callback - Callback function
-//
-// Callback arguments:
-//
-// delta - An Object with two properties, "x" and "y", denoting the amount the
-//         mouse has moved since the last (tracked) call.
-//
-// Callback returns: Boolean indicating whether to track the last movement. If
-// the movement is not tracked, then the amount the mouse has moved will be
-// accumulated and passed to the next mousemove event.
-//
-var dragTracker = exports.dragTracker = function dragTracker(handle, callback) {
-    var lastPos = null,
+// ANNOTATOR FUNCTIONS (copied from annotator.ui.editor)
+
+/**
+ * dragTracker is a function which allows a callback to track changes made to
+ * the position of a draggable "handle" element.
+ *
+ * handle - A DOM element to make draggable
+ * callback - Callback function
+ *
+ * Callback arguments:
+ *
+ * delta - An Object with two properties, "x" and "y", denoting the amount the
+ * mouse has moved since the last (tracked) call.
+ *
+ * Callback returns: Boolean indicating whether to track the last movement. If
+ * the movement is not tracked, then the amount the mouse has moved will be
+ * accumulated and passed to the next mousemove event.
+ */
+export function dragTracker(handle, callback) {
+    let lastPos = null,
         throttled = false;
 
     // Event handler for mousemove
@@ -48,12 +55,12 @@ var dragTracker = exports.dragTracker = function dragTracker(handle, callback) {
             return;
         }
 
-        var delta = {
+        const delta = {
             y: e.pageY - lastPos.top,
             x: e.pageX - lastPos.left
         };
 
-        var trackLastMove = true;
+        let trackLastMove = true;
         // The callback function can return false to indicate that the tracker
         // shouldn't keep updating the last position. This can be used to
         // implement "walls" beyond which (for example) resizing has no effect.
@@ -70,7 +77,9 @@ var dragTracker = exports.dragTracker = function dragTracker(handle, callback) {
 
         // Throttle repeated mousemove events
         throttled = true;
-        setTimeout(function () { throttled = false; }, 1000 / 60);
+        setTimeout(function () {
+            throttled = false;
+        }, 1000 / 60);
     }
 
     // Event handler for mouseup
@@ -107,28 +116,30 @@ var dragTracker = exports.dragTracker = function dragTracker(handle, callback) {
     $(handle).on('mousedown', mouseDown);
 
     return {destroy: destroy};
-};
+}
 
 
-// resizer is a component that uses a dragTracker under the hood to track the
-// dragging of a handle element, using that motion to resize another element.
-//
-// element - DOM Element to resize
-// handle - DOM Element to use as a resize handle
-// options - Object of options.
-//
-// Available options:
-//
-// invertedX - If this option is defined as a function, and that function
-//             returns a truthy value, the horizontal sense of the drag will be
-//             inverted. Useful if the drag handle is at the left of the
-//             element, and so dragging left means "grow the element"
-// invertedY - If this option is defined as a function, and that function
-//             returns a truthy value, the vertical sense of the drag will be
-//             inverted. Useful if the drag handle is at the bottom of the
-//             element, and so dragging down means "grow the element"
-var resizer = exports.resizer = function resizer(element, handle, options) {
-    var $el = $(element);
+/**
+ * resizer is a component that uses a dragTracker under the hood to track the
+ * dragging of a handle element, using that motion to resize another element.
+ *
+ * element - DOM Element to resize
+ * handle - DOM Element to use as a resize handle
+ * options - Object of options.
+ *
+ * Available options:
+ *
+ * invertedX - If this option is defined as a function, and that function
+ * returns a truthy value, the horizontal sense of the drag will be
+ * inverted. Useful if the drag handle is at the left of the
+ * element, and so dragging left means "grow the element"
+ * invertedY - If this option is defined as a function, and that function
+ * returns a truthy value, the vertical sense of the drag will be
+ * inverted. Useful if the drag handle is at the bottom of the
+ * element, and so dragging down means "grow the element"
+ */
+export function resizer(element, handle, options) {
+    const $el = $(element);
     if (typeof options === 'undefined' || options === null) {
         options = {};
     }
@@ -136,7 +147,7 @@ var resizer = exports.resizer = function resizer(element, handle, options) {
     // Translate the delta supplied by dragTracker into a delta that takes
     // account of the invertedX and invertedY callbacks if defined.
     function translate(delta) {
-        var directionX = 1,
+        let directionX = 1,
             directionY = -1;
 
         if (typeof options.invertedX === 'function' && options.invertedX()) {
@@ -154,7 +165,7 @@ var resizer = exports.resizer = function resizer(element, handle, options) {
 
     // Callback for dragTracker
     function resize(delta) {
-        var height = $el.height(),
+        const height = $el.height(),
             width = $el.width(),
             translated = translate(delta);
 
@@ -167,22 +178,22 @@ var resizer = exports.resizer = function resizer(element, handle, options) {
 
         // Did the element dimensions actually change? If not, then we've
         // reached the minimum size, and we shouldn't track
-        var didChange = ($el.height() !== height || $el.width() !== width);
-        return didChange;
+        return ($el.height() !== height || $el.width() !== width);
     }
 
     // We return the dragTracker object in order to expose its methods.
     return dragTracker(handle, resize);
-};
+}
 
 
-// mover is a component that uses a dragTracker under the hood to track the
-// dragging of a handle element, using that motion to move another element.
-//
-// element - DOM Element to move
-// handle - DOM Element to use as a move handle
-//
-var mover = exports.mover = function mover(element, handle) {
+/**
+ * mover is a component that uses a dragTracker under the hood to track the
+ * dragging of a handle element, using that motion to move another element.
+ *
+ * element - DOM Element to move
+ * handle - DOM Element to use as a move handle
+ */
+export function mover(element, handle) {
     function move(delta) {
         $(element).css({
             top: parseInt($(element).css('top'), 10) + delta.y,
@@ -192,20 +203,19 @@ var mover = exports.mover = function mover(element, handle) {
 
     // We return the dragTracker object in order to expose its methods.
     return dragTracker(handle, move);
-};
+}
 
 
-
-
-/*
-annotator.ui.editor.Editor extension
-- without Editor field add and load mechanism (and React-rendered form)
-
-Css and show/hide functionality of the outer editor container is nevertheless inherited.
+/**
+ * annotator.ui.editor.Editor extension
+ * - without Editor field add and load mechanism (and React-rendered form)
+ *
+ * Css and show/hide functionality of the outer editor container is nevertheless inherited.
  */
-var PrzypisEditor = exports.PrzypisEditor = Widget.extend({
-
-    // calls directly Widget, which is Editor's prototype
+export const PrzypisEditor = Widget.extend({
+    /**
+     * calls directly Widget, which is Editor's prototype
+     */
     constructor: function (options) {
         Widget.call(this, options);
 
@@ -219,56 +229,50 @@ var PrzypisEditor = exports.PrzypisEditor = Widget.extend({
         // see annotator.ui.editor's constructor
     },
 
-
+    /**
+     * Returns an unresolved Promise that will be resolved when the save/cancel button is clicked.
+     * If load function is waited upon, it will finish only when the save/cancel button is clicked.
+     */
     load: function (annotation, position) {
         this.annotation = annotation;
         this.updateForm(annotation.fields);
 
-        var self = this;
-        // Returns an unresolved Promise that will be resolved when the save/cancel button is clicked.
-        // If load function is waited upon, it will finish only when the save/cancel button is clicked.
-        return new Promise(function (resolve, reject) {
-            self.dfd = {resolve: resolve, reject: reject};
-            self.show(position);
-        });
+        function onSuccess(resolve, reject) {
+            this.dfd = {resolve: resolve, reject: reject};
+            this.show(position);
+        }
+
+        return new Promise(onSuccess.bind(this));
     },
 
-    // Renders (or updates, if already rendered) React component within the Editor html container
+    /**
+     * Renders (or updates, if already rendered) React component within the Editor html container
+     */
     updateForm: function (fields) {
-        var self = this;
-
         //When save button is clicked, react form field value dictionary will be passed to this function
-        var save = function (fields) {
+        const save = function (fields) {
             // Load field values from component props
-            self.annotation.fields = fields;
+            this.annotation.fields = fields;
 
             // Resolve deferred promise; will result in asynchronous user input
-            if (typeof self.dfd !== 'undefined' && self.dfd !== null) {
-                self.dfd.resolve(self.annotation);
+            if (typeof this.dfd !== 'undefined' && this.dfd !== null) {
+                this.dfd.resolve(this.annotation);
             }
-            self.hide();
-        };
-
-
-        this.reactForm = React.createElement(
-            AnnotationForm,
-                {
-                    fields: fields || {},
-                    onSave: save,
-                    onCancel: function() {self.cancel();}
-                },
-            null);
+            this.hide();
+        }.bind(this);
 
         ReactDOM.render(
-            this.reactForm,
+            <AnnotationForm fields={fields || {}} onSave={save} onCancel={this.cancel.bind(this)}/>,
             document.getElementById('react-form-slot')
         );
     },
 
-    // Public: Cancels the editing process, discarding any edits made to the
-    // annotation.
-    //
-    // Returns itself.
+    /**
+     * Public: Cancels the editing process, discarding any edits made to the
+     * annotation.
+     *
+     * Returns itself.
+     */
     cancel: function () {
         if (typeof this.dfd !== 'undefined' && this.dfd !== null) {
             this.dfd.reject('editing cancelled');
@@ -277,18 +281,20 @@ var PrzypisEditor = exports.PrzypisEditor = Widget.extend({
     },
 
 
-    // Public: Show the editor.
-    //
-    // position - An Object specifying the position in which to show the editor
-    //            (optional).
-    //
-    // Examples
-    //
-    //   editor.show()
-    //   editor.hide()
-    //   editor.show({top: '100px', left: '80px'})
-    //
-    // Returns nothing.
+    /**
+     * Public: Show the editor.
+     *
+     * position - An Object specifying the position in which to show the editor
+     * (optional).
+     *
+     * Examples
+     *
+     * editor.show()
+     * editor.hide()
+     * editor.show({top: '100px', left: '80px'})
+     *
+     * Returns nothing.
+     */
     show: function (position) {
         if (typeof position !== 'undefined' && position !== null) {
             this.element.css({
@@ -310,16 +316,20 @@ var PrzypisEditor = exports.PrzypisEditor = Widget.extend({
     },
 
 
-    // Override parent attach function to render React form
-    attach: function() {
+    /**
+     * Override parent attach function to render React form
+     */
+    attach: function () {
         // Call parent function (renders PrzypisEditor.template)
         Widget.prototype.attach.call(this);
         this.updateForm({});
     },
 
-    // Sets up mouse events for resizing and dragging the editor window.
-    //
-    // Returns nothing.
+    /**
+     * Sets up mouse events for resizing and dragging the editor window.
+     *
+     * Returns nothing.
+     */
     _setupDraggables: function () {
         if (typeof this._resizer !== 'undefined' && this._resizer !== null) {
             this._resizer.destroy();
@@ -331,7 +341,7 @@ var PrzypisEditor = exports.PrzypisEditor = Widget.extend({
         this.element.find('.annotator-resize').remove();
 
         // Find the first/last item element depending on orientation
-        var cornerItem;
+        let cornerItem;
         if (this.element.hasClass(this.classes.invert.y)) {
             cornerItem = this.element.find('.annotator-item:last');
         } else {
@@ -342,23 +352,22 @@ var PrzypisEditor = exports.PrzypisEditor = Widget.extend({
             $('<span class="annotator-resize"></span>').appendTo(cornerItem);
         }
 
-        var controls = this.element.find('.annotator-controls')[0],
+        const controls = this.element.find('.annotator-controls')[0],
             textarea = this.element.find('textarea:first')[0],
-            resizeHandle = this.element.find('.annotator-resize')[0],
-            self = this;
+            resizeHandle = this.element.find('.annotator-resize')[0];
 
         this._resizer = resizer(textarea, resizeHandle, {
             invertedX: function () {
-                return self.element.hasClass(self.classes.invert.x);
-            },
+                return this.element.hasClass(this.classes.invert.x);
+            }.bind(this),
+
             invertedY: function () {
-                return self.element.hasClass(self.classes.invert.y);
-            }
+                return this.element.hasClass(this.classes.invert.y);
+            }.bind(this)
         });
 
         this._mover = mover(this.element[0], controls);
     }
-
 });
 
 
