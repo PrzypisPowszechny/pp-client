@@ -1,15 +1,9 @@
-import React from 'react';
-import {render} from 'react-dom';
-import ReactDOM from 'react-dom';
-import annotator from 'annotator';
+import React, { Component } from 'react';
 
-
-var $ = annotator.util.$;
-
-export default class AnnotationForm extends React.Component {
-
+export default class AnnotationForm extends Component {
     constructor(props) {
-        super();
+        super(props);
+
         this.state = {
             comment: props.fields.comment || '',
         };
@@ -19,21 +13,19 @@ export default class AnnotationForm extends React.Component {
         this.onCancel = this.onCancel.bind(this);
     }
 
-
     handleCommentChange(event) {
         this.setState({comment: event.target.value});
     }
 
-    onSave(event) {
+    onSave() {
         this.props.onSave({
-                comment: this.state.comment
+            comment: this.state.comment,
         });
     }
 
-    onCancel(event) {
+    onCancel() {
         this.props.onCancel();
     }
-
 
     componentWillReceiveProps(newProps) {
         this.setState({comment: newProps.fields.comment || ''});
@@ -42,16 +34,22 @@ export default class AnnotationForm extends React.Component {
     render() {
         return (
             <form className="annotator-widget">
-
                 <ul className="annotator-listing">
                     <li className="annotator-item">
-                        <textarea placeholder="Komentarz" value={this.state.comment} onChange={this.handleCommentChange}/>
+                        <textarea
+                            placeholder="Komentarz"
+                            value={this.state.comment}
+                            onChange={this.handleCommentChange}
+                        />
                     </li>
                 </ul>
                 <div className="annotator-controls">
-                    <a href="#cancel" className="annotator-cancel" onClick={this.props.onCancel}> Anuluj </a>
-                    <a href="#save" className="annotator-save annotator-focus" onClick={this.onSave}> Zapisz </a>
-                 </div>
+                    {/*
+                     TODO I guess it'd better to use buttons here, to avoid problems with href value moving the view to top
+                      */}
+                    <a href="#" className="annotator-cancel" onClick={this.props.onCancel}> Anuluj </a>
+                    <a href="#" className="annotator-save annotator-focus" onClick={this.onSave}> Zapisz </a>
+                </div>
             </form>
         );
     }
