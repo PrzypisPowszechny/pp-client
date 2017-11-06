@@ -44,30 +44,27 @@ var PrzypisEditor = exports.PrzypisEditor = Editor.extend({
         this.annotation = {};
     },
 
-    updateForm: function (annotation) {
-        ReactDOM.render(
-            React.createElement(AnnotationForm,
-                $.extend(this.formEvents(), annotation),
-                null),
-            document.getElementById('react-form-slot')
-        );
-    },
-
-    formEvents: function() {
+    updateForm: function (fields) {
         var self = this;
-        return {
+        this.reactForm = React.createElement(
+            AnnotationForm,
+                {
+                    fields: fields || {},
                     onSave: function (e) {
                         self._onSaveClick(e);
                     },
                     onCancel: function (e) {
                         self._onCancelClick(e);
-                    },
-                    updateAnnotationWithState: function(state) {
-                        // Update annotation field values with the state of the React form
-                        self.annotation.fields = $.extend(self.annotation.fields, state);
                     }
-                };
+                },
+            null);
+
+        ReactDOM.render(
+            this.reactForm,
+            document.getElementById('react-form-slot')
+        );
     },
+
     // Override parent attach function to render React form
     attach: function() {
         // Call parent function (renders PrzypisEditor.template)
@@ -78,6 +75,9 @@ var PrzypisEditor = exports.PrzypisEditor = Editor.extend({
     // Shortened original Editor submit: field values are passed through updateAnnotationWithState
     // The rest is left unchanged
     submit: function () {
+        // Load field values from component props
+        this.annotation.fields = this.reactForm.props.fields;
+
         if (typeof this.dfd !== 'undefined' && this.dfd !== null) {
             this.dfd.resolve(this.annotation);
         }

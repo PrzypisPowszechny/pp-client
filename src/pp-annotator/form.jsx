@@ -11,7 +11,7 @@ export default class AnnotationForm extends React.Component {
     constructor(props) {
         super();
         this.state = {
-            comment: props.comment || '',
+            comment: props.fields.comment || '',
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -25,12 +25,13 @@ export default class AnnotationForm extends React.Component {
 
     onSave(event) {
         this.props.onSave(event);
-        this.props.updateAnnotationWithState(this.state);
+        // Update annotation field to be accessible from outside the component
+        this.props.fields.comment = this.state.comment;
     }
 
 
     componentWillReceiveProps(newProps) {
-        this.setState({comment: newProps.comment || ''});
+        this.setState({comment: newProps.fields.comment || ''});
     }
 
     render() {
