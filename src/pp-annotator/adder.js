@@ -1,12 +1,11 @@
-"use strict";
+import { ui, util } from 'annotator';
 
-var Widget = require('annotator').ui.widget.Widget;
-var util = require('annotator').util;
+const Widget = ui.widget.Widget;
 
 // annotator jquery for consistency
-var $ = util.$;
+const $ = util.$;
 
-var NS = 'przypis-adder';
+const NS = 'przypis-adder';
 
 
 // Adder shows and hides an annotation adder button that can be clicked on to
@@ -15,7 +14,7 @@ var NS = 'przypis-adder';
 // PrzypisAdder is for the most part a copy of annotator.Adder, except with two buttons, thus:
 // onCreate callback replaced with beginAnnotationCreate and beforeRequestCreate
 
-var PrzypisAdder = Widget.extend({
+const PrzypisAdder = Widget.extend({
 
     constructor: function (options) {
         Widget.call(this, options);
@@ -26,19 +25,12 @@ var PrzypisAdder = Widget.extend({
         this.beginAnnotationCreate = this.options.beginAnnotationCreate;
         this.beforeRequestCreate = this.options.beforeRequestCreate;
 
-        var self = this;
         this.element
-            .on("click." + NS, 'button', function (e) {
-                self._onClick(e);
-            })
-            .on("mousedown." + NS, 'button', function (e) {
-                self._onMousedown(e);
-            });
+            .on("click." + NS, 'button', this._onClick.bind(this))
+            .on("mousedown." + NS, 'button', this._onMousedown.bind(this));
 
         this.document = this.element[0].ownerDocument;
-        $(this.document.body).on("mouseup." + NS, function (e) {
-            self._onMouseup(e);
-        });
+        $(this.document.body).on("mouseup." + NS, this._onMouseup.bind(this));
     },
 
     destroy: function () {
@@ -142,14 +134,14 @@ var PrzypisAdder = Widget.extend({
 
         if (this.annotation !== null) {
             // create annotation button clicked
-            if (event.target == this.element.find(".create-annotation")[0]) {
+            if (event.target === this.element.find(".create-annotation")[0]) {
                 if (typeof this.beginAnnotationCreate === 'function') {
                     this.beginAnnotationCreate(this.annotation, event);
                 }
             }
 
             // create request button clicked
-            if (event.target == this.element.find(".create-request")[0]) {
+            if (event.target === this.element.find(".create-request")[0]) {
                 if (typeof this.beforeRequestCreate === 'function') {
                     this.beforeRequestCreate(this.annotation, event);
                 }
