@@ -1,10 +1,9 @@
-var webpack = require('webpack');
-var path = require('path');
+const path = require('path');
 
-var BUILD_DIR = path.resolve(__dirname, 'src/public');
-var APP_DIR = path.resolve(__dirname, 'src');
+const BUILD_DIR = path.resolve(__dirname, 'src/public');
+const APP_DIR = path.resolve(__dirname, 'src');
 
-var config = {
+const config = {
     entry: "./src/index.jsx",
     output: {
         path: BUILD_DIR,
@@ -12,7 +11,6 @@ var config = {
     },
     module: {
         loaders: [
-
             {
                 test: /\.jsx?/,
                 include: APP_DIR,
