@@ -22,6 +22,7 @@ export default class AnnotationForm extends Component {
 
         this.state = AnnotationForm.stateFromProps(props);
 
+        this.handleInputChange = this.handleInputChange.bind(this);
         this.onSave = this.onSave.bind(this);
         this.onCancel = this.onCancel.bind(this);
     }
@@ -37,28 +38,23 @@ export default class AnnotationForm extends Component {
         };
     }
 
-    handleCommentChange(event) {
-        this.setState({comment: event.target.value});
+    handleInputChange(event) {
+        const target = event.target;
+        const name = target.name;
+        this.setState({[name]: target.value});
     }
 
-    handleLinkChange(event) {
-        this.setState({link: event.target.value});
-    }
-
-    handleLinkTitleChange(event) {
-        this.setState({linkTitle: event.target.value});
-    }
 
     handleIsLinkOnlyChange(event) {
-        this.setState({isLinkOnly: event.target.value});
+        this.setState({isLinkOnly: event.target.checked});
     }
 
     onSave() {
         const fieldsToSave = sliceKeys(this.state, savedFields);
-        if(self.state.isLinkOnly) {
+        if(this.state.isLinkOnly) {
             fieldsToSave.comment = '';
         }
-        this.props.onSave();
+        this.props.onSave(fieldsToSave);
     }
 
     onCancel() {
@@ -69,8 +65,9 @@ export default class AnnotationForm extends Component {
         this.setState(AnnotationForm.stateFromProps(newProps));
     }
 
-    render() {
 
+    render() {
+        /*TODO KG hide comment when isLinkOnly*/
         return (
             <form className="annotator-widget">
                 <ul className="annotator-listing">
@@ -86,27 +83,29 @@ export default class AnnotationForm extends Component {
                     </li>
                     <li className="annotator-item">
                         <textarea
-                            placeholder="Komentarz"
+                            name="comment"
                             value={this.state.comment}
-                            onChange={this.handleCommentChange.bind(this)}
+                            onChange={this.handleInputChange}
                             disabled={this.state.isLinkOnly}
-                        {/*TODO hide when isLinkOnly*/}
+                            placeholder="Komentarz"
                         />
                     </li>
                     <li className="annotator-item">
                         <input
                             type="text"
-                            placeholder="Link źródła"
+                            name="link"
                             value={this.state.link}
-                            onChange={this.handleLinkChange.bind(this)}
+                            onChange={this.handleInputChange}
+                            placeholder="Link źródła"
                         />
                     </li>
                     <li className="annotator-item">
                         <input
                             type="text"
-                            placeholder="Tytuł źródła"
+                            name="linkTitle"
                             value={this.state.linkTitle}
-                            onChange={this.handleLinkTitleChange.bind(this)}
+                            onChange={this.handleInputChange}
+                            placeholder="Tytuł źródła"
                         />
                     </li>
 
