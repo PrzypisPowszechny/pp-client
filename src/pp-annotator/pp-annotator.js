@@ -6,14 +6,6 @@ import { util, ui as PPUI } from 'annotator';
 const { editor, highlighter, textselector, viewer } = PPUI;
 const { gettext: _t } = util;
 
-
-/* TODO cleanup
-const annotationFactory = require('annotator').ui.annotationFactory;
-const addPermissionsCheckboxes = require('annotator').ui.addPermissionsCheckboxes;
-const injectDynamicStyle = require('annotator').ui.injectDynamicStyle;
-const removeDynamicStyle = require('annotator').ui.removeDynamicStyle;
-*/
-
 /**
  * trim strips whitespace from either end of a string.
  *
@@ -142,7 +134,8 @@ export function ui(options) {
                 s.editor.load(annotation, s.interactionPoint)
                     .then(function (annotation) {
                         app.annotations.create(annotation);
-                    });
+                    })
+                    .catch((reason) => {}); // When the annotation form is cancelled
 
             },
             beforeRequestCreate: function (annotation) {
@@ -179,7 +172,8 @@ export function ui(options) {
                 s.editor.load(annotation, s.interactionPoint)
                     .then(function (annotation) {
                         app.annotations.update(annotation);
-                    });
+                    })
+                    .catch((reason) => {}); // When the annotation form is cancelled
             },
             onDelete: function (ann) {
                 app.annotations['delete'](ann);

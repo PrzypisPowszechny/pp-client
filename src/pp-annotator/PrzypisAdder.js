@@ -170,8 +170,8 @@ PrzypisAdder.template = `
 
 // Configuration options
 PrzypisAdder.options = {
-  // Callback, called when the user clicks the adder when an
-  // annotation is loaded.
+  // Callback, called when the user clicks the "create annotation" option on the adder
   beginAnnotationCreate: null,
+  // Callback, called when the user clicks the "create request" option on the adder
   beforeRequestCreate: null
 };

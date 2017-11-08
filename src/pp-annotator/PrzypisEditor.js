@@ -47,7 +47,7 @@ export default class PrzypisEditor extends Widget {
   }
 
   /**
-   * When save button is clicked, react form field value dictionary will be passed to this function
+   * When save button is clicked, React form field value dictionary will be passed to this function
    */
   save = (fields) => {
     // Load field values from component props
@@ -73,8 +73,6 @@ export default class PrzypisEditor extends Widget {
   /**
    * Public: Cancels the editing process, discarding any edits made to the
    * annotation.
-   *
-   * Returns itself.
    */
   cancel = () => {
     if (this.promiseResultContainer) {
