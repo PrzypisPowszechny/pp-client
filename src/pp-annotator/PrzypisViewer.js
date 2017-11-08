@@ -62,9 +62,6 @@ export default class PrzypisViewer extends Widget {
     //
     //   # Creates a new viewer, adds a custom field and displays an annotation.
     //   viewer = new Viewer()
-    //   viewer.addField({
-    //     load: someLoadCallback
-    //   })
     //   viewer.load(annotation)
     //
     // Returns a new Viewer instance.
@@ -87,14 +84,6 @@ export default class PrzypisViewer extends Widget {
         };
 
         var self = this;
-
-        if (this.options.defaultFields) {
-            this.addField({
-                load: function (field, annotation) {
-                    $(field).html(self.render(annotation));
-                }
-            });
-        }
 
         if (typeof this.options.onEdit !== 'function') {
             throw new TypeError("onEdit callback must be a function");
@@ -279,40 +268,6 @@ export default class PrzypisViewer extends Widget {
         }
 
         return item;
-    }
-
-    // Public: Adds an addional field to an annotation view. A callback can be
-    // provided to update the view on load.
-    //
-    // options - An options Object. Options are as follows:
-    //           load - Callback Function called when the view is loaded with an
-    //                  annotation. Recieves a newly created clone of an item
-    //                  and the annotation to be displayed (it will be called
-    //                  once for each annotation being loaded).
-    //
-    // Examples
-    //
-    //   # Display a user name.
-    //   viewer.addField({
-    //     # This is called when the viewer is loaded.
-    //     load: (field, annotation) ->
-    //       field = $(field)
-    //
-    //       if annotation.user
-    //         field.text(annotation.user) # Display the user
-    //       else
-    //         field.remove()              # Do not display the field.
-    //   })
-    //
-    // Returns itself.
-    addField = (options) => {
-        var field = $.extend({
-            load: function () {}
-        }, options);
-
-        field.element = $('<div />')[0];
-        this.fields.push(field);
-        return this;
     }
 
     // Event callback: called when the edit button is clicked.
