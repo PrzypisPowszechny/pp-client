@@ -1,5 +1,5 @@
-import { PrzypisEditor } from './editor';
 import { PrzypisAdder } from './adder';
+import PrzypisEditor from './PrzypisEditor';
 
 import { util, ui as PPUI } from 'annotator';
 
