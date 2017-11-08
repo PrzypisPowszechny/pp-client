@@ -142,7 +142,8 @@ export function ui(options) {
                 s.editor.load(annotation, s.interactionPoint)
                     .then(function (annotation) {
                         app.annotations.create(annotation);
-                    });
+                    })
+                    .catch((reason) => {}); // When the annotation form is cancelled
 
             },
             beforeRequestCreate: function (annotation) {
@@ -179,7 +180,8 @@ export function ui(options) {
                 s.editor.load(annotation, s.interactionPoint)
                     .then(function (annotation) {
                         app.annotations.update(annotation);
-                    });
+                    })
+                    .catch((reason) => {}); // When the annotation form is cancelled
             },
             onDelete: function (ann) {
                 app.annotations['delete'](ann);
