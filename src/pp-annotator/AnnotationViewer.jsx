@@ -10,18 +10,18 @@ export default class AnnotationViewer extends Component {
     }
 
     render() {
-        console.log(this.props);
         return (
             //Analogous to annotator.Viewer.itemTemplate
             <li className="annotator-annotation annotator-item">
                 <span className="annotator-controls">
-
                     <button type="button"
                             title="Edit"
-                            className="annotator-edit">Edit</button>
+                            className="annotator-edit"
+                            onClick={(e) => this.props.callbacks.onEdit(e, this.props.annotation)}>Edit</button>
                     <button type="button"
                             title="Delete"
-                            className="annotator-delete">Delete</button>
+                            className="annotator-delete"
+                            onClick={(e) => this.props.callbacks.onDelete(e, this.props.annotation)}>Delete</button>
                 </span>
                 <div>
                     {this.props.annotation.fields.comment}

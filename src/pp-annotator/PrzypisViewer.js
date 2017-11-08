@@ -131,12 +131,6 @@ export default class PrzypisViewer extends Widget {
         }
 
         this.element
-            .on("click." + this.NS, '.annotator-edit', function (e) {
-                self._onEditClick(e);
-            })
-            .on("click." + this.NS, '.annotator-delete', function (e) {
-                self._onDeleteClick(e);
-            })
             .on("mouseenter." + this.NS, function () {
                 self._clearHideTimer();
             })
@@ -188,8 +182,14 @@ export default class PrzypisViewer extends Widget {
 
 
     update = (annotations) => {
+        // Callbacks to pass to React component
+        const callbacks = {
+            onEdit: this._onEditClick,
+            onDelete: this._onDeleteClick,
+        };
+
         ReactDOM.render(
-          <AnnotationMultipleViewer annotations={this.annotations} onEdit={this._onEditClick} onDelete={this._onDeleteClick}/>,
+          <AnnotationMultipleViewer annotations={this.annotations} callbacks={callbacks}/>,
           document.getElementById('react-annotation-viewer-slot')
         );
     }
@@ -286,12 +286,9 @@ export default class PrzypisViewer extends Widget {
     // event - An Event object.
     //
     // Returns nothing.
-    _onEditClick = (event) => {
-        var item = $(event.target)
-            .parents('.annotator-annotation')
-            .data('annotation');
+    _onEditClick = (event, annotation) => {
         this.hide();
-        this.options.onEdit(item);
+        this.options.onEdit(annotation);
     }
 
     // Event callback: called when the delete button is clicked.
@@ -299,12 +296,9 @@ export default class PrzypisViewer extends Widget {
     // event - An Event object.
     //
     // Returns nothing.
-    _onDeleteClick = (event)=>  {
-        var item = $(event.target)
-            .parents('.annotator-annotation')
-            .data('annotation');
+    _onDeleteClick = (event, annotation)=>  {
         this.hide();
-        this.options.onDelete(item);
+        this.options.onDelete(annotation);
     }
 
     // Event callback: called when a user triggers `mouseover` on a highlight
