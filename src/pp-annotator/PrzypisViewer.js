@@ -9,50 +9,6 @@ const { widget: { Widget } } = ui;
 
 const { $ } = util;
 
-// Private: simple parser for hypermedia link structure
-//
-// Examples:
-//
-//   links = [
-//     {
-//       rel: 'alternate',
-//       href: 'http://example.com/pages/14.json',
-//       type: 'application/json'
-//     },
-//     {
-//       rel: 'prev':
-//       href: 'http://example.com/pages/13'
-//     }
-//   ]
-//
-//   parseLinks(links, 'alternate')
-//   # => [{rel: 'alternate', href: 'http://...', ... }]
-//   parseLinks(links, 'alternate', {type: 'text/html'})
-//   # => []
-//
-function parseLinks(data, rel, cond) {
-    cond = $.extend({}, cond, {rel: rel});
-
-    var results = [];
-    for (var i = 0, len = data.length; i < len; i++) {
-        var d = data[i],
-            match = true;
-
-        for (var k in cond) {
-            if (cond.hasOwnProperty(k) && d[k] !== cond[k]) {
-                match = false;
-                break;
-            }
-        }
-
-        if (match) {
-            results.push(d);
-        }
-    }
-
-    return results;
-}
-
 
 // Public: Creates an element for viewing annotations.
 export default class PrzypisViewer extends Widget {
@@ -72,20 +28,11 @@ export default class PrzypisViewer extends Widget {
     constructor(options) {
         super(options);
 
-        this.itemTemplate = PrzypisViewer.itemTemplate;
-        this.fields = [];
         this.annotations = [];
         this.hideTimer = null;
         this.hideTimerDfd = null;
         this.hideTimerActivity = null;
         this.mouseDown = false;
-        this.render = function (annotation) {
-            if (annotation.text) {
-                return util.escapeHtml(annotation.text);
-            } else {
-                return "<i>" + 'No comment' + "</i>";
-            }
-        };
 
         var self = this;
 
@@ -160,7 +107,7 @@ export default class PrzypisViewer extends Widget {
     //   viewer.show({top: '100px', left: '80px'})
     //
     // Returns nothing.
-    show = (position) => {
+    show (position) {
         if (typeof position !== 'undefined' && position !== null) {
             this.element.css({
                 top: position.top,
@@ -177,7 +124,7 @@ export default class PrzypisViewer extends Widget {
             controls.removeClass(self.classes.showControls);
         }, 500);
 
-        Widget.prototype.show.call(this);
+        super.show();
     }
 
 
@@ -189,7 +136,7 @@ export default class PrzypisViewer extends Widget {
         };
 
         ReactDOM.render(
-          <AnnotationMultipleViewer annotations={this.annotations} callbacks={callbacks}/>,
+          <AnnotationMultipleViewer annotations={annotations} callbacks={callbacks}/>,
           document.getElementById('react-annotation-viewer-slot')
         );
     }
@@ -205,80 +152,8 @@ export default class PrzypisViewer extends Widget {
     // Returns nothing.
     load = (annotations, position) => {
         this.annotations = annotations || [];
-
         this.update(annotations);
-
-        // for (var i = 0, len = this.annotations.length; i < len; i++) {
-        //     var annotation = this.annotations[i];
-        //     this._annotationItem(annotation)
-        //       .appendTo(list)
-        //       .data('annotation', annotation);
-        // }
         this.show(position);
-    }
-
-    // Public: Set the annotation renderer.
-    //
-    // renderer - A function that accepts an annotation and returns HTML.
-    //
-    // Returns nothing.
-    setRenderer = (renderer) => {
-        this.render = renderer;
-    }
-
-    // Private: create the list item for a single annotation
-    _annotationItem = (annotation) => {
-        var item = $(this.itemTemplate).clone();
-
-        var controls = item.find('.annotator-controls'),
-            link = controls.find('.annotator-link'),
-            edit = controls.find('.annotator-edit'),
-            del  = controls.find('.annotator-delete');
-
-        var links = parseLinks(
-            annotation.links || [],
-            'alternate',
-            {'type': 'text/html'}
-        );
-        var hasValidLink = (links.length > 0 &&
-                            typeof links[0].href !== 'undefined' &&
-                            links[0].href !== null);
-
-        if (hasValidLink) {
-            link.attr('href', links[0].href);
-        } else {
-            link.remove();
-        }
-
-        var controller = {};
-        if (this.options.permitEdit(annotation)) {
-            controller.showEdit = function () {
-                edit.removeAttr('disabled');
-            };
-            controller.hideEdit = function () {
-                edit.attr('disabled', 'disabled');
-            };
-        } else {
-            edit.remove();
-        }
-        if (this.options.permitDelete(annotation)) {
-            controller.showDelete = function () {
-                del.removeAttr('disabled');
-            };
-            controller.hideDelete = function () {
-                del.attr('disabled', 'disabled');
-            };
-        } else {
-            del.remove();
-        }
-
-        for (var i = 0, len = this.fields.length; i < len; i++) {
-            var field = this.fields[i];
-            var element = $(field.element).clone().appendTo(item)[0];
-            field.load(element, annotation, controller);
-        }
-
-        return item;
     }
 
     // Event callback: called when the edit button is clicked.
@@ -403,7 +278,6 @@ PrzypisViewer.classes = {
 PrzypisViewer.template = [
     '<div class="annotator-outer annotator-viewer annotator-hide">',
     '  <div id="react-annotation-viewer-slot"></div>',
-    // '  <ul class="annotator-widget annotator-listing"></ul>',
     '</div>'
 ].join('\n');
 
@@ -438,53 +312,4 @@ PrzypisViewer.options = {
     // Callback, called when the user clicks the delete button for an
     // annotation.
     onDelete: function () {}
-};
-
-
-// standalone is a module that uses the Viewer to display an viewer widget in
-// response to some viewer action (such as mousing over an annotator highlight
-// element).
-exports.standalone = function standalone(options) {
-    var widget;
-
-    if (typeof options === 'undefined' || options === null) {
-        options = {};
-    }
-
-    return {
-        start: function (app) {
-            var ident = app.registry.getUtility('identityPolicy');
-            var authz = app.registry.getUtility('authorizationPolicy');
-
-            // Set default handlers for what happens when the user clicks the
-            // edit and delete buttons:
-            if (typeof options.onEdit === 'undefined') {
-                options.onEdit = function (annotation) {
-                    app.annotations.update(annotation);
-                };
-            }
-            if (typeof options.onDelete === 'undefined') {
-                options.onDelete = function (annotation) {
-                    app.annotations['delete'](annotation);
-                };
-            }
-
-            // Set default handlers that determine whether the edit and delete
-            // buttons are shown in the viewer:
-            if (typeof options.permitEdit === 'undefined') {
-                options.permitEdit = function (annotation) {
-                    return authz.permits('update', annotation, ident.who());
-                };
-            }
-            if (typeof options.permitDelete === 'undefined') {
-                options.permitDelete = function (annotation) {
-                    return authz.permits('delete', annotation, ident.who());
-                };
-            }
-
-            widget = new exports.Viewer(options);
-        },
-
-        destroy: function () { widget.destroy(); }
-    };
 };
