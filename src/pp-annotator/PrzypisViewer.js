@@ -1,3 +1,7 @@
+import React from 'react';
+import ReactDOM from "react-dom";
+
+import AnnotationMultipleViewer from './AnnotationMultipleViewer.jsx';
 
 import { ui, util } from 'annotator';
 
@@ -141,7 +145,7 @@ export default class PrzypisViewer extends Widget {
             });
     }
 
-    destroy = () => {
+    destroy() {
         if (this.options.autoViewHighlights) {
             $(this.options.autoViewHighlights).off("." + this.NS);
             $(this.document.body).off("." + this.NS);
@@ -182,6 +186,14 @@ export default class PrzypisViewer extends Widget {
         Widget.prototype.show.call(this);
     }
 
+
+    update = (annotations) => {
+        ReactDOM.render(
+          <AnnotationMultipleViewer annotations={this.annotations} onEdit={this._onEditClick} onDelete={this._onDeleteClick}/>,
+          document.getElementById('react-annotation-viewer-slot')
+        );
+    }
+
     // Public: Load annotations into the viewer and show it.
     //
     // annotation - An Array of annotations.
@@ -194,15 +206,14 @@ export default class PrzypisViewer extends Widget {
     load = (annotations, position) => {
         this.annotations = annotations || [];
 
-        var list = this.element.find('ul:first').empty();
+        this.update(annotations);
 
-        for (var i = 0, len = this.annotations.length; i < len; i++) {
-            var annotation = this.annotations[i];
-            this._annotationItem(annotation)
-              .appendTo(list)
-              .data('annotation', annotation);
-        }
-        console.log(position);
+        // for (var i = 0, len = this.annotations.length; i < len; i++) {
+        //     var annotation = this.annotations[i];
+        //     this._annotationItem(annotation)
+        //       .appendTo(list)
+        //       .data('annotation', annotation);
+        // }
         this.show(position);
     }
 
@@ -397,24 +408,9 @@ PrzypisViewer.classes = {
 // HTML templates for this.widget and this.item properties.
 PrzypisViewer.template = [
     '<div class="annotator-outer annotator-viewer annotator-hide">',
-    '  <ul class="annotator-widget annotator-listing"></ul>',
+    '  <div id="react-annotation-viewer-slot"></div>',
+    // '  <ul class="annotator-widget annotator-listing"></ul>',
     '</div>'
-].join('\n');
-
-PrzypisViewer.itemTemplate = [
-    '<li class="annotator-annotation annotator-item">',
-    '  <span class="annotator-controls">',
-    '    <a href="#"',
-    '       title="' + 'View as webpage' + '"',
-    '       class="annotator-link">' + 'View as webpage' + '</a>',
-    '    <button type="button"',
-    '            title="' + 'Edit' + '"',
-    '            class="annotator-edit">' + 'Edit' + '</button>',
-    '    <button type="button"',
-    '            title="' + 'Delete' + '"',
-    '            class="annotator-delete">' + 'Delete' + '</button>',
-    '  </span>',
-    '</li>'
 ].join('\n');
 
 // Configuration options
