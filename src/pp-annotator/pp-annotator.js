@@ -1,5 +1,6 @@
-import PrzypisEditor from './PrzypisEditor';
+import PrzypisEditor from './form/PrzypisEditor';
 import PrzypisAdder from './PrzypisAdder';
+import PrzypisViewer from './viewer/PrzypisViewer';
 
 import { util, ui as PPUI } from 'annotator';
 
@@ -164,7 +165,7 @@ export function ui(options) {
             }
         });
 
-        s.viewer = new viewer.Viewer({
+        s.viewer = new PrzypisViewer({
             onEdit: function (annotation) {
                 // Copy the interaction point from the shown viewer:
                 s.interactionPoint = util.$(s.viewer.element).css(['top', 'left']);

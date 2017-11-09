@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { annotationPriorities} from '../consts.js'
 
 function sliceKeys(dictionary, keys) {
     let result = {};
@@ -9,7 +10,7 @@ function sliceKeys(dictionary, keys) {
 }
 
 const savedFields = [
-    // 'type', TODO
+    'annotationPriority',
     'comment',
     'link',
     'linkTitle',
@@ -30,7 +31,7 @@ export default class AnnotationForm extends Component {
     static stateFromProps(props) {
         const fields = props.fields;
         return {
-            // type: fields.type || 'NORMAL', TODO
+            annotationPriority: fields.annotationPriority || annotationPriorities.NORMAL,
             comment: fields.comment || '',
             link: fields.link || '',
             linkTitle: fields.linkTitle || '',
@@ -64,7 +65,6 @@ export default class AnnotationForm extends Component {
     componentWillReceiveProps(newProps) {
         this.setState(AnnotationForm.stateFromProps(newProps));
     }
-
 
     render() {
         /*TODO KG hide comment when isLinkOnly*/
