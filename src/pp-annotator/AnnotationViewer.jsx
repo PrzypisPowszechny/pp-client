@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import annotationTypes from './consts.js'
 
 export default class AnnotationViewer extends Component {
     constructor(props) {
@@ -33,7 +34,19 @@ export default class AnnotationViewer extends Component {
                             onClick={(e) => this.props.callbacks.onDelete(e, this.props.annotation)}>Delete</button>
                 </span>
                 <div>
+                    {this.props.annotation.fields.annotationPriority}
+                </div>
+                <div>
                     {this.props.annotation.fields.comment}
+                </div>
+                <div>
+                    {this.props.annotation.fields.link}
+                </div>
+                <div>
+                    {this.props.annotation.fields.linkTitle}
+                </div>
+                <div>
+                    {this.props.annotation.fields.isLinkOnly}
                 </div>
             </li>
         );
