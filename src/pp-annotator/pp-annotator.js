@@ -1,6 +1,6 @@
-import PrzypisEditor from './PrzypisEditor';
+import PrzypisEditor from './form/PrzypisEditor';
 import PrzypisAdder from './PrzypisAdder';
-import PrzypisViewer from './PrzypisViewer';
+import PrzypisViewer from './viewer/PrzypisViewer';
 
 import { util, ui as PPUI } from 'annotator';
 

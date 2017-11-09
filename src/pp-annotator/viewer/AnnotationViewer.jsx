@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import annotationTypes from './consts.js'
+import annotationTypes from '../consts.js'
 
 export default class AnnotationViewer extends Component {
     constructor(props) {

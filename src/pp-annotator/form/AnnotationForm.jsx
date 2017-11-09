@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { annotationPriorities} from './consts.js'
+import { annotationPriorities} from '../consts.js'
 
 function sliceKeys(dictionary, keys) {
     let result = {};
