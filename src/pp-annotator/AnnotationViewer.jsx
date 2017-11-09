@@ -5,15 +5,24 @@ export default class AnnotationViewer extends Component {
         super(props);
 
         this.state = {
-            //TODO KG use component's state to keep expanding feedback buttons state?
+            initialView: true
+            //TODO KG use also component's state to keep feedback buttons expansion state?
         }
+    }
+
+    componentWillReceiveProps() {
+        // Set timeout after which edit buttons disappear
+        this.setState({initialView: true});
+        setTimeout(
+            () => this.setState({initialView: false}), 500
+        );
     }
 
     render() {
         return (
             //Analogous to annotator.Viewer.itemTemplate
             <li className="annotator-annotation annotator-item">
-                <span className="annotator-controls">
+                <span className={"annotator-controls " + (this.state.initialView ? "annotator-visible" : "")}>
                     <button type="button"
                             title="Edit"
                             className="annotator-edit"

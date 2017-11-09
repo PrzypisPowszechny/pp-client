@@ -115,15 +115,6 @@ export default class PrzypisViewer extends Widget {
             });
         }
 
-        var controls = this.element
-            .find('.annotator-controls')
-            .addClass(this.classes.showControls);
-
-        var self = this;
-        setTimeout(function () {
-            controls.removeClass(self.classes.showControls);
-        }, 500);
-
         super.show();
     }
 
