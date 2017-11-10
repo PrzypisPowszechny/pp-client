@@ -2,6 +2,8 @@ import annotator from 'annotator';
 
 import { ui as PPUI } from './pp-annotator/pp-annotator';
 
+require("./index.css");
+
 console.log("Przypis script working!");
 
 // will run only in browser environment
