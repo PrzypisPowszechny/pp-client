@@ -267,7 +267,7 @@ PrzypisViewer.classes = {
 
 // HTML templates for this.widget and this.item properties.
 PrzypisViewer.template = [
-    '<div class="annotator-outer annotator-viewer annotator-hide">',
+    '<div class="annotator-outer pp-viewer annotator-hide">',
     '  <div id="react-annotation-viewer-slot"></div>',
     '</div>'
 ].join('\n');

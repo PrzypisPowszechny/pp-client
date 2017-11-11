@@ -21,34 +21,42 @@ export default class AnnotationViewer extends Component {
 
     render() {
         return (
-            //Analogous to annotator.Viewer.itemTemplate
-            <li className="annotator-annotation annotator-item">
-                <span className={"annotator-controls " + (this.state.initialView ? "annotator-visible" : "")}>
+            <div className="pp-annotation pp-item">
+                <div className={"pp-controls " + (this.state.initialView ? "pp-visible" : "")}>
                     <button type="button"
                             title="Edit"
-                            className="annotator-edit"
+                            className="pp-edit"
                             onClick={(e) => this.props.callbacks.onEdit(e, this.props.annotation)}>Edit</button>
                     <button type="button"
                             title="Delete"
-                            className="annotator-delete"
+                            className="pp-delete"
                             onClick={(e) => this.props.callbacks.onDelete(e, this.props.annotation)}>Delete</button>
-                </span>
-                <div>
+                </div>
+
+		<div className="pp-view-head-bar">
+                <div className="pp-view-comment-priority">
                     {this.props.annotation.fields.annotationPriority}
                 </div>
-                <div>
+		<div className="pp-view-comment-date">
+			01.01.1999
+		</div>
+		</div>
+
+                <div className="pp-view-comment">
                     {this.props.annotation.fields.comment}
                 </div>
-                <div>
-                    {this.props.annotation.fields.link}
-                </div>
-                <div>
-                    {this.props.annotation.fields.linkTitle}
-                </div>
+
+		<div className="pp-view-link-bar">
+			<span className="pp-view-link">
+			<a href={this.props.annotation.fields.link}>
+				{this.props.annotation.fields.linkTitle}
+			</a>
+			</span>
+		</div>
                 <div>
                     {this.props.annotation.fields.isLinkOnly}
                 </div>
-            </li>
+            </div>
         );
     }
 }
