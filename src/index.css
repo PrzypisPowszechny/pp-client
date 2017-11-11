@@ -4,12 +4,142 @@
 	border-radius: 0px;
 
 	min-width: 500px;
-	border-color: rgb(210, 212, 210);
+	border: 2px solid rgb(210, 212, 210);
+	color: rgb(0, 0, 0);
 }
+
 .annotator-widget::after {
 	/* The downward triangle below widget. */
 
 	left: 250px;
 	
 	/* TODO! new spritesheet need from the UX team. (eg. this triangle) */
+}
+
+/* -- PP Viewer -- */
+/*
+ * The *font sizes* are currently 2x compared to design specs.
+ */
+.pp-annotation {
+	height: 136px;
+	font-size: 14px; /* for most of UI text */
+}
+
+/* --- Viewer head bar --- */
+.pp-view-head-bar {
+	margin-top: 4px;
+	margin-right: 3%; /* the same margin as comment, for the date */
+	clear: both; /* push up controls */
+}
+
+.pp-view-comment-priority {
+	margin-left: -2px; /* cover the border */
+	width: 100px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	float: left;
+
+	background-color: rgb(86, 121, 176);
+	color: rgb(255, 255, 255);
+	text-transform: uppercase;
+}
+
+.pp-view-comment-date {
+	float: right;
+	color: rgb(86, 121, 176);
+}
+
+/* --- Viewer comment display --- */
+.pp-view-comment {
+	width: 94%;
+	margin-left: 3%;
+	min-height: 48px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	clear: both;
+
+	font-size: 18px;
+	color: rgb(0, 0, 0);
+}
+
+/* --- Viewer link bar --- */
+.pp-view-link-bar {
+	width: 94%;
+	margin-left: 3%;
+
+	/* upper line */
+	border-top: 1px solid rgb(210, 212, 210);
+
+	color: rgb(136, 136, 136);
+
+	line-height: 2em;
+}
+
+.pp-view-link {
+	color: rgb(136, 136, 136);
+	text-transform: uppercase;
+}
+
+/* --- Viewer controls. --- */
+.pp-viewer .pp-controls button {
+	/* TODO replace with our own spritesheet, this path is atrocious */
+	background-image: url(../node_modules/annotator/img/annotator-glyph-sprite.png?embed);
+	background-repeat: no-repeat;
+}
+
+.pp-viewer .pp-controls {
+	position: relative;
+	top: 5px;
+	right: 5px;
+	padding-left: 5px;
+	float: right;
+
+	min-height: 20px;
+	clear: both;
+}
+
+.pp-viewer li:hover .pp-controls,
+.pp-viewer li .pp-controls.pp-visible {
+	opacity: 1;
+}
+
+.pp-viewer .pp-controls button,
+.pp-viewer .pp-controls a {
+	cursor: pointer;
+	display: inline-block;
+	width: 13px;
+	height: 13px;
+	margin-left: 2px;
+	border: none;
+	text-indent: -900em;
+	background-color: transparent;
+	outline: none;
+}
+
+.pp-viewer .pp-controls button:hover,
+.pp-viewer .pp-controls button:focus,
+.pp-viewer .pp-controls a:hover,
+.pp-viewer .pp-controls a:focus {
+	opacity: 0.9;
+}
+
+.pp-viewer .pp-controls button:active,
+.pp-viewer .pp-controls a:active {
+	opacity: 1;
+}
+
+.pp-viewer .pp-controls button[disabled] {
+	display: none;
+}
+
+.pp-viewer .pp-controls .pp-edit {
+	background-position: 0 -60px;
+}
+
+.pp-viewer .pp-controls .pp-delete {
+	background-position: 0 -75px;
+}
+
+.pp-viewer .pp-controls .pp-link {
+	background-position: 0 -270px;
 }
