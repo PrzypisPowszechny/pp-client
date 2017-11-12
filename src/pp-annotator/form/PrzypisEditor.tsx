@@ -5,6 +5,7 @@ import AnnotationForm from './AnnotationForm';
 
 import { util, ui as AnnotatorUI } from 'annotator';
 import { mover, resizer } from "./editor-utils";
+import IAnnotation, { IAnnotationFields } from '../i-annotation';
 
 const { $ } = util;
 const { widget: { Widget } } = AnnotatorUI;
@@ -28,9 +29,7 @@ export default class PrzypisEditor extends Widget {
   </div>`;
 
   fields: string[];
-  annotation: {
-    fields?;
-  }
+  annotation: IAnnotation;
   promiseResultContainer?: {
     resolve;
     reject;
@@ -46,7 +45,7 @@ export default class PrzypisEditor extends Widget {
     super(options);
 
     this.fields = [];
-    this.annotation = {};
+    this.annotation = {}
 
     // jquery mouse action listeners from annotator module have been left out;
     // see annotator.ui.editor's constructor
@@ -72,7 +71,7 @@ export default class PrzypisEditor extends Widget {
   /**
    * When save button is clicked, React form field value dictionary will be passed to this function
    */
-  save = (fields) => {
+  save = (fields: IAnnotationFields) => {
     // Load field values from component props
     this.annotation.fields = fields;
 
@@ -88,7 +87,7 @@ export default class PrzypisEditor extends Widget {
    */
   updateForm = (fields) => {
     ReactDOM.render(
-      <AnnotationForm fields={fields || {}} onSave={this.save} onCancel={this.cancel}/>,
+      <AnnotationForm id={this.annotation.id} fields={fields || {}} onSave={this.save} onCancel={this.cancel}/>,
       document.getElementById('react-form-slot')
     );
   }

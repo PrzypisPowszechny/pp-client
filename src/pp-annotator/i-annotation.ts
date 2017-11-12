@@ -1,5 +1,6 @@
 export default interface IAnnotation {
-  fields: IAnnotationFields
+  id?: number;
+  fields?: IAnnotationFields
 }
 
 export interface IAnnotationFields {

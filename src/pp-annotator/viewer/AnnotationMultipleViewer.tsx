@@ -1,8 +1,14 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 
-import AnnotationViewer from './AnnotationViewer.jsx';
+import AnnotationViewer, { ICallbacks }from './AnnotationViewer.jsx';
+import IAnnotation from '../i-annotation';
 
-export default class AnnotationMultipleViewer extends Component {
+interface IAnnotationMultipleViewerProps {
+    annotations: IAnnotation[];
+    callbacks: ICallbacks;
+}
+
+export default class AnnotationMultipleViewer extends React.Component<IAnnotationMultipleViewerProps, {}> {
     constructor(props) {
         super(props);
     }
