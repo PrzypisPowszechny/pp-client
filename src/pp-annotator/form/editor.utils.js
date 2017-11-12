@@ -4,22 +4,6 @@ import { util } from 'annotator';
 // The same dependencies as annotator's for consistency (at least for now)
 const { $ } = util;
 
-// TODO remove?
-// const NS = "przypis-editor";
-
-
-/* TODO remove?
-// preventEventDefault copied from annotator.ui.editor
-function preventEventDefault(event) {
-    if (typeof event !== 'undefined' &&
-        event !== null &&
-        typeof event.preventDefault === 'function') {
-        event.preventDefault();
-    }
-}
-*/
-
-
 // ANNOTATOR FUNCTIONS (copied from annotator.ui.editor)
 
 /**

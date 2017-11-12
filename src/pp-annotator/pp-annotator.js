@@ -1,18 +1,11 @@
-import PrzypisEditor from './PrzypisEditor';
+import PrzypisEditor from './form/PrzypisEditor';
 import PrzypisAdder from './PrzypisAdder';
+import PrzypisViewer from './viewer/PrzypisViewer';
 
 import { util, ui as PPUI } from 'annotator';
 
 const { editor, highlighter, textselector, viewer } = PPUI;
 const { gettext: _t } = util;
-
-
-/* TODO cleanup
-const annotationFactory = require('annotator').ui.annotationFactory;
-const addPermissionsCheckboxes = require('annotator').ui.addPermissionsCheckboxes;
-const injectDynamicStyle = require('annotator').ui.injectDynamicStyle;
-const removeDynamicStyle = require('annotator').ui.removeDynamicStyle;
-*/
 
 /**
  * trim strips whitespace from either end of a string.
@@ -142,7 +135,8 @@ export function ui(options) {
                 s.editor.load(annotation, s.interactionPoint)
                     .then(function (annotation) {
                         app.annotations.create(annotation);
-                    });
+                    })
+                    .catch((reason) => {}); // When the annotation form is cancelled
 
             },
             beforeRequestCreate: function (annotation) {
@@ -171,7 +165,7 @@ export function ui(options) {
             }
         });
 
-        s.viewer = new viewer.Viewer({
+        s.viewer = new PrzypisViewer({
             onEdit: function (annotation) {
                 // Copy the interaction point from the shown viewer:
                 s.interactionPoint = util.$(s.viewer.element).css(['top', 'left']);
@@ -179,7 +173,8 @@ export function ui(options) {
                 s.editor.load(annotation, s.interactionPoint)
                     .then(function (annotation) {
                         app.annotations.update(annotation);
-                    });
+                    })
+                    .catch((reason) => {}); // When the annotation form is cancelled
             },
             onDelete: function (ann) {
                 app.annotations['delete'](ann);

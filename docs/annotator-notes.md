@@ -13,7 +13,7 @@ When called, all modules' "start"/"destroy" functions are called.
 #Modules:
 
 
-**ui** - responsuble for all possible visible content, the most important
+**ui** - responsuble for all possible visible content, the most important (most of the annotator)
 
 **ui.adder** - the pen icon that appears after text selection
 
@@ -33,14 +33,16 @@ When called, all modules' "start"/"destroy" functions are called.
 
 #Annotation lifecycle:
 
+(TODO incomplete)
+
 When App.start() is called, by default annotations are not loaded 
 (storeStorageAdapter.load is not called).
 
-An annotation is created in the "onSelection" event of TextSelector (consisting only of quote and ranges).
+An annotation is created on the "onSelection" event of TextSelector (consisting only of quote and ranges).
 
-When the adder is clicked, its "onCreate" callback is fired, which calls the storage.create
-The annotation object consists of
+Further annotation information comes from the user input.
 
+An annotation object consists of:
 - id
 - quote - the whole selected text (extending across many html nodes) 
 with some special characters to mark breaks between nodes
