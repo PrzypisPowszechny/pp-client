@@ -12,7 +12,10 @@ const { $ } = util;
 
 // Public: Creates an element for viewing annotations.
 export default class PrzypisViewer extends Widget {
-  NS = 'annotator-viewer';
+    static get nameSpace() {
+        return 'annotator-viewer';
+    }
+
 
     // Public: Creates an instance of the Viewer object.
     //
@@ -34,8 +37,6 @@ export default class PrzypisViewer extends Widget {
         this.hideTimerActivity = null;
         this.mouseDown = false;
 
-        var self = this;
-
         if (typeof this.options.onEdit !== 'function') {
             throw new TypeError("onEdit callback must be a function");
         }
@@ -49,49 +50,51 @@ export default class PrzypisViewer extends Widget {
             throw new TypeError("permitDelete callback must be a function");
         }
 
+        let self = this;
+
         if (this.options.autoViewHighlights) {
             this.document = this.options.autoViewHighlights.ownerDocument;
 
             $(this.options.autoViewHighlights)
-                .on("mouseover." + this.NS, '.annotator-hl', function (event) {
+                .on("mouseover." + this.nameSpace, '.annotator-hl', function (event) {
                     // If there are many overlapping highlights, still only
                     // call _onHighlightMouseover once.
                     if (event.target === this) {
                         self._onHighlightMouseover(event);
                     }
                 })
-                .on("mouseleave." + this.NS, '.annotator-hl', function () {
+                .on("mouseleave." + this.nameSpace, '.annotator-hl', function () {
                     self._startHideTimer();
                 });
 
             $(this.document.body)
-                .on("mousedown." + this.NS, function (e) {
+                .on("mousedown." + this.nameSpace, (e) => {
                     if (e.which === 1) {
-                        self.mouseDown = true;
+                        this.mouseDown = true;
                     }
                 })
-                .on("mouseup." + this.NS, function (e) {
+                .on("mouseup." + this.nameSpace, (e) => {
                     if (e.which === 1) {
-                        self.mouseDown = false;
+                        this.mouseDown = false;
                     }
                 });
         }
 
         this.element
-            .on("mouseenter." + this.NS, function () {
+            .on("mouseenter." + this.nameSpace, function () {
                 self._clearHideTimer();
             })
-            .on("mouseleave." + this.NS, function () {
+            .on("mouseleave." + this.nameSpace, function () {
                 self._startHideTimer();
             });
     }
 
     destroy() {
         if (this.options.autoViewHighlights) {
-            $(this.options.autoViewHighlights).off("." + this.NS);
-            $(this.document.body).off("." + this.NS);
+            $(this.options.autoViewHighlights).off("." + this.nameSpace);
+            $(this.document.body).off("." + this.nameSpace);
         }
-        this.element.off("." + this.NS);
+        this.element.off("." + this.nameSpace);
         super.destroy();
     }
 
@@ -118,7 +121,9 @@ export default class PrzypisViewer extends Widget {
         super.show();
     }
 
-
+    /**
+    * Renders (or updates, if already rendered) React component within the PrzypisViewer html container
+    */
     update = (annotations) => {
         // Callbacks to pass to React component
         const callbacks = {
@@ -130,7 +135,7 @@ export default class PrzypisViewer extends Widget {
           <AnnotationMultipleViewer annotations={annotations} callbacks={callbacks}/>,
           document.getElementById('react-annotation-viewer-slot')
         );
-    }
+    };
 
     // Public: Load annotations into the viewer and show it.
     //
@@ -145,7 +150,7 @@ export default class PrzypisViewer extends Widget {
         this.annotations = annotations || [];
         this.update(annotations);
         this.show(position);
-    }
+    };
 
     // Event callback: called when the edit button is clicked.
     //
@@ -155,7 +160,7 @@ export default class PrzypisViewer extends Widget {
     _onEditClick = (event, annotation) => {
         this.hide();
         this.options.onEdit(annotation);
-    }
+    };
 
     // Event callback: called when the delete button is clicked.
     //
@@ -165,7 +170,7 @@ export default class PrzypisViewer extends Widget {
     _onDeleteClick = (event, annotation)=>  {
         this.hide();
         this.options.onDelete(annotation);
-    }
+    };
 
     // Event callback: called when a user triggers `mouseover` on a highlight
     // element.
@@ -180,10 +185,9 @@ export default class PrzypisViewer extends Widget {
             return;
         }
 
-        var self = this;
         this._startHideTimer(true)
-            .done(function () {
-                var annotations = $(event.target)
+            .done(() => {
+                let annotations = $(event.target)
                     .parents('.annotator-hl')
                     .addBack()
                     .map(function (_, elem) {
@@ -192,9 +196,9 @@ export default class PrzypisViewer extends Widget {
                     .toArray();
 
                 // Now show the viewer with the wanted annotations
-                self.load(annotations, util.mousePosition(event));
+                this.load(annotations, util.mousePosition(event));
             });
-    }
+    };
 
     // Starts the hide timer. This returns a promise that is resolved when the
     // viewer has been hidden. If the viewer is already hidden, the promise will
@@ -206,6 +210,12 @@ export default class PrzypisViewer extends Widget {
     //
     // Returns a Promise.
     _startHideTimer = (activity) => {
+
+        /*todo KG
+        This part is copied straight from annotator.Viewer and might not be very consistent with other code;
+        We should consider refactoring it and making it more explicit if we need to modify it
+        */
+
         if (typeof activity === 'undefined' || activity === null) {
             activity = false;
         }
@@ -222,7 +232,7 @@ export default class PrzypisViewer extends Widget {
             }
         }
 
-        var timeout;
+        let timeout;
         if (activity) {
             timeout = this.options.activityDelay;
         } else {
@@ -236,11 +246,10 @@ export default class PrzypisViewer extends Widget {
             this.hideTimerDfd.resolve();
             this.hideTimerActivity = null;
         } else {
-            var self = this;
-            this.hideTimer = setTimeout(function () {
-                self.hide();
-                self.hideTimerDfd.resolve();
-                self.hideTimer = null;
+            this.hideTimer = setTimeout(() => {
+                this.hide();
+                this.hideTimerDfd.resolve();
+                this.hideTimer = null;
             }, timeout);
             this.hideTimerActivity = Boolean(activity);
         }
@@ -259,6 +268,8 @@ export default class PrzypisViewer extends Widget {
         this.hideTimerActivity = null;
     }
 }
+
+
 
 // Classes for toggling annotator state.
 PrzypisViewer.classes = {
