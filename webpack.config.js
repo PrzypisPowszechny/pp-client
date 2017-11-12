@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const { CheckerPlugin } = require('awesome-typescript-loader');
 
 const BUILD_DIR = path.resolve(__dirname, 'public');
 const APP_DIR = path.resolve(__dirname, 'src');
@@ -52,6 +53,7 @@ const config = {
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
     }),
+    new CheckerPlugin(),
   ],
 };
 
