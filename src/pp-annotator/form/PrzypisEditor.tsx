@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from "react-dom";
 
-import AnnotationForm from './AnnotationForm.jsx';
+import AnnotationForm from './AnnotationForm';
 
 import { util, ui as AnnotatorUI } from 'annotator';
 import { mover, resizer } from "./editor-utils";

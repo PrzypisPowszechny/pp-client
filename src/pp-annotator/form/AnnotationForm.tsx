@@ -1,13 +1,5 @@
-import React, { Component } from 'react';
-import { annotationPriorities} from '../consts'
-
-function sliceKeys(dictionary, keys) {
-    let result = {};
-    keys.forEach(function(key) {
-        result[key] = dictionary[key];
-    });
-    return result;
-}
+import * as React from 'react';
+import { annotationPriorities } from '../consts'
 
 const savedFields = [
     'annotationPriority',
@@ -17,7 +9,33 @@ const savedFields = [
     'isLinkOnly'
 ];
 
-export default class AnnotationForm extends Component {
+interface IAnnotationFormProps {
+    onSave(fields: IAnnotationFormState): void;
+    onCancel(): void;
+    fields: IAnnotationFormState;
+}
+
+interface IAnnotationFormState {
+    annotationPriority: number;
+    comment: string;
+    link: string;
+    linkTitle: string;
+    isLinkOnly: boolean;
+}
+
+function sliceKeys(dictionary, keys) {
+    let result = {};
+    keys.forEach(function(key) {
+        result[key] = dictionary[key];
+    });
+    return result;
+}
+
+function getFormState(obj) {
+    return sliceKeys(obj, savedFields) as IAnnotationFormState;
+}
+
+export default class AnnotationForm extends React.Component<IAnnotationFormProps, IAnnotationFormState>{
     constructor(props) {
         super(props);
 
@@ -28,7 +46,7 @@ export default class AnnotationForm extends Component {
         this.onCancel = this.onCancel.bind(this);
     }
 
-    static stateFromProps(props) {
+    static stateFromProps(props: IAnnotationFormProps): IAnnotationFormState {
         const fields = props.fields;
         return {
             annotationPriority: fields.annotationPriority || annotationPriorities.NORMAL,
@@ -51,7 +69,7 @@ export default class AnnotationForm extends Component {
     }
 
     onSave() {
-        const fieldsToSave = sliceKeys(this.state, savedFields);
+        const fieldsToSave = getFormState(this.state);
         if(this.state.isLinkOnly) {
             fieldsToSave.comment = '';
         }
