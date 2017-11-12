@@ -8,7 +8,8 @@
     "jsx": "^0.9.89",
     "lodash": "^4.17.4",
     "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react-dom": "^16.0.0",
+    "source-map-loader": "^0.2.3"
   },
   "devDependencies": {
     "@types/react": "^16.0.22",
