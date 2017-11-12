@@ -1,10 +1,10 @@
-import React from 'react';
-import ReactDOM from "react-dom";
+import * as React from 'react';
+import * as ReactDOM from "react-dom";
 
 import AnnotationForm from './AnnotationForm.jsx';
 
 import { util, ui as AnnotatorUI } from 'annotator';
-import { mover, resizer } from "./editor.utils";
+import { mover, resizer } from "./editor-utils";
 
 const { $ } = util;
 const { widget: { Widget } } = AnnotatorUI;
@@ -15,12 +15,35 @@ const { widget: { Widget } } = AnnotatorUI;
  *
  * Css and show/hide functionality of the outer editor container is nevertheless inherited.
  */
+
 export default class PrzypisEditor extends Widget {
+  static classes = {
+    hide: 'annotator-hide',
+    focus: 'annotator-focus',
+    invert: Widget.classes.invert,
+  };
+  static template = `
+  <div class="annotator-outer annotator-editor annotator-hide">
+    <div id="react-form-slot"></div>
+  </div>`;
+
+  fields: string[];
+  annotation: {
+    fields?;
+  }
+  promiseResultContainer?: {
+    resolve;
+    reject;
+  }
+  resizer: {
+    destroy: () => void;
+  }
+  mover: {
+    destroy: () => void;
+  }
+
   constructor(options) {
     super(options);
-
-    this.onSave = this.options.onSave;
-    this.onCancel = this.options.onCancel;
 
     this.fields = [];
     this.annotation = {};
@@ -105,7 +128,7 @@ export default class PrzypisEditor extends Widget {
 
     this.element
       .find('.annotator-save')
-      .addClass(this.classes.focus);
+      .addClass(PrzypisEditor.classes.focus);
 
     super.show();
 
@@ -118,7 +141,7 @@ export default class PrzypisEditor extends Widget {
   /**
    * Override parent attach function to render React form
    */
-  attach() {
+  attach = () => {
     // Call parent function (renders PrzypisEditor.template)
     super.attach();
     this.updateForm({});
@@ -141,7 +164,7 @@ export default class PrzypisEditor extends Widget {
 
     // Find the first/last item element depending on orientation
     let cornerItem;
-    if (this.element.hasClass(this.classes.invert.y)) {
+    if (this.element.hasClass(PrzypisEditor.classes.invert.y)) {
       cornerItem = this.element.find('.annotator-item:last');
     } else {
       cornerItem = this.element.find('.annotator-item:first');
@@ -156,30 +179,10 @@ export default class PrzypisEditor extends Widget {
       resizeHandle = this.element.find('.annotator-resize')[0];
 
     this.resizer = resizer(textarea, resizeHandle, {
-      invertedX: () => this.element.hasClass(this.classes.invert.x),
-      invertedY: () => this.element.hasClass(this.classes.invert.y),
+      invertedX: () => this.element.hasClass(PrzypisEditor.classes.invert.x),
+      invertedY: () => this.element.hasClass(PrzypisEditor.classes.invert.y),
     });
 
     this.mover = mover(this.element[0], controls);
   }
 }
-
-/*
- Unfortunately Widget constructor is written in such a way, that we must provide these values here.
- Otherwise (if e.g. initialized as class properties or in constructor) they'd be initialized *after*
- calling Widget constructor, which is too late (these values are used inside Widget's constructor).
-
- src:
- https://stackoverflow.com/questions/44109220/javascript-class-instance-initialization-and-inheritance
- https://stackoverflow.com/questions/43595943/why-are-derived-class-property-values-not-seen-in-the-base-class-constructor
-*/
-PrzypisEditor.classes = {
-  hide: 'annotator-hide',
-  focus: 'annotator-focus',
-};
-
-PrzypisEditor.template = `
-<div class="annotator-outer annotator-editor annotator-hide">
-  <div id="react-form-slot"></div>
-</div>
-`;

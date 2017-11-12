@@ -12,6 +12,7 @@
     "source-map-loader": "^0.2.3"
   },
   "devDependencies": {
+    "@types/jquery": "^3.2.16",
     "@types/react": "^16.0.22",
     "@types/react-dom": "^16.0.3",
     "awesome-typescript-loader": "^3.3.0",
