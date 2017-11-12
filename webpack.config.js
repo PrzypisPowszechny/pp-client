@@ -10,8 +10,14 @@ const config = {
     path: BUILD_DIR,
     filename: 'bundle.js'
   },
+  devtool: "source-map",
+  resolve: {
+    extensions: [".ts", ".tsx", ".js", ".json"],
+  },
   module: {
     loaders: [
+      { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
+      { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
       {
         test: /\.jsx?/,
         include: APP_DIR,
