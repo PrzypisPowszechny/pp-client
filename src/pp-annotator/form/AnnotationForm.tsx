@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { annotationPriorities } from '../consts'
+import IAnnotation, { IAnnotationFields } from '../i-annotation';
 
 const savedFields = [
     'annotationPriority',
@@ -9,19 +10,12 @@ const savedFields = [
     'isLinkOnly'
 ];
 
-interface IAnnotationFormProps {
+interface IAnnotationFormProps extends IAnnotation {
     onSave(fields: IAnnotationFormState): void;
     onCancel(): void;
-    fields: IAnnotationFormState;
 }
 
-interface IAnnotationFormState {
-    annotationPriority: number;
-    comment: string;
-    link: string;
-    linkTitle: string;
-    isLinkOnly: boolean;
-}
+type IAnnotationFormState = IAnnotationFields;
 
 function sliceKeys(dictionary, keys) {
     let result = {};

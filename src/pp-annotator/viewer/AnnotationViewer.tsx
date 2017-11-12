@@ -1,7 +1,19 @@
-import React, {Component} from 'react';
-import annotationTypes from '../consts'
+import * as React from 'react';
+import IAnnotation from '../i-annotation';
 
-export default class AnnotationViewer extends Component {
+interface IAnnotatorViewerProps {
+    annotation: IAnnotation;
+    callbacks: {
+        onEdit(e: React.MouseEvent<HTMLButtonElement>, annotation: IAnnotation): void;
+        onDelete(e: React.MouseEvent<HTMLButtonElement>, annotation: IAnnotation): void;
+    }
+}
+
+interface IAnnotatorViewerState {
+    initialView: boolean;
+}
+
+export default class AnnotationViewer extends React.Component<IAnnotatorViewerProps, IAnnotatorViewerState> {
     constructor(props) {
         super(props);
 
