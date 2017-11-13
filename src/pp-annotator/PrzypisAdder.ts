@@ -1,4 +1,4 @@
-import _ from 'lodash/core.min';
+import * as _ from 'lodash';
 import { ui, util } from 'annotator';
 import IAnnotation from './i-annotation';
 
@@ -31,16 +31,16 @@ export default class PrzypisAdder extends Widget {
     this.ignoreMouseup = false;
     this.annotation = null;
 
-    this.beginAnnotationCreate = PrzypisAdder.options.beginAnnotationCreate;
-    this.beforeRequestCreate = PrzypisAdder.options.beforeRequestCreate;
+    this.beginAnnotationCreate = PrzypisAdder.options.beginAnnotationCreate || options.beginAnnotationCreate;
+    this.beforeRequestCreate = PrzypisAdder.options.beforeRequestCreate || options.beforeRequestCreate;
 
     const clickTag = this.getNSTag(`click.`);
     const mouseDownTag = this.getNSTag(`mousedown.`);
     const mouseUpTag = this.getNSTag(`mouseup.`);
 
     this.element
-      .on(clickTag, 'button', this.onClick)
-      .on(mouseDownTag, 'button', this.onMouseDown);
+      .on(clickTag, 'button', this.onClick.bind(this))
+      .on(mouseDownTag, 'button', this.onMouseDown.bind(this));
 
     this.document = this.element[0].ownerDocument;
     $(this.document.body).on(mouseUpTag, this.onMouseUp);
@@ -69,7 +69,7 @@ export default class PrzypisAdder extends Widget {
    * @param annotation an annotation Object to load.
    * @param position an Object specifying the position in which to show the editor (optional).
    */
-  load = (annotation, position) => {
+  load(annotation, position) {
     this.annotation = annotation;
     this.show(position);
   }
@@ -100,7 +100,7 @@ export default class PrzypisAdder extends Widget {
    *
    * @param event a mousedown Event object
    */
-  onMouseDown = (event) => {
+  onMouseDown(event) {
     // Do nothing for right-clicks, middle-clicks, etc.
     if (event.which > 1) {
       return;
@@ -117,7 +117,7 @@ export default class PrzypisAdder extends Widget {
    *
    * @param event a mouseup Event object
    */
-  onMouseUp = (event) => {
+  onMouseUp(event) {
     // Do nothing for right-clicks, middle-clicks, etc.
     if (event.which > 1) {
       return;
@@ -139,7 +139,7 @@ export default class PrzypisAdder extends Widget {
    *
    * Returns nothing.
    */
-  onClick = (event) => {
+  onClick(event) {
     // Do nothing for right-clicks, middle-clicks, etc.
     if (event.which > 1) {
       return;
