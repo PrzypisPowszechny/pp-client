@@ -1,4 +1,17 @@
 declare module 'annotator' {
+  export const App: {
+    new (): AppInstance;
+  }
+
+  export interface AppInstance {
+    include(obj: any);
+    start(): void;
+  }
+
+  export namespace storage {
+    export const debug;
+  }
+
   export namespace util {
     export const $: JQueryStatic;
   }
