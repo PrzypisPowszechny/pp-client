@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from "react-dom";
 
-import AnnotationMultipleViewer from './AnnotationMultipleViewer.jsx';
+import AnnotationMultipleViewer from './AnnotationMultipleViewer';
 
 import { ui, util } from 'annotator';
 import IAnnotation from '../i-annotation';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import AnnotationViewer, { ICallbacks }from './AnnotationViewer.jsx';
+import AnnotationViewer, { ICallbacks }from './AnnotationViewer';
 import IAnnotation from '../i-annotation';
 
 interface IAnnotationMultipleViewerProps {
