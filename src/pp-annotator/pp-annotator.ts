@@ -76,7 +76,7 @@ function injectDynamicStyle() {
         ':not(annotator-filter)';
 
     // use the maximum z-index in the page
-    let max = maxZIndex(util.$(global.document.body).find(sel).get());
+    let max = maxZIndex(util.$(document.body).find(sel).get());
 
     // but don't go smaller than 1010, because this isn't bulletproof --
     // dynamic elements in the page (notifications, dialogs, etc.) may well
@@ -113,7 +113,7 @@ export function ui(options) {
         options = {};
     }
 
-    options.element = options.element || global.document.body;
+    options.element = options.element || document.body;
     options.editorExtensions = options.editorExtensions || [];
     options.viewerExtensions = options.viewerExtensions || [];
 
@@ -123,7 +123,12 @@ export function ui(options) {
 
     // Object to hold local state
     const s = {
-        interactionPoint: null
+        interactionPoint: null,
+        adder: null,
+        editor: null,
+        highlighter: null,
+        textselector: null,
+        viewer: null,
     };
 
     function start(app) {

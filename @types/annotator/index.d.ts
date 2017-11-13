@@ -15,9 +15,17 @@ declare module 'annotator' {
   export namespace util {
     export const $: JQueryStatic;
     export function mousePosition(event);
+    export namespace gettext {
+      export const _t;
+    }
   }
 
   export namespace ui {
+
+    let editor;
+    let highlighter;
+    let textselector;
+    let viewer;
 
     export namespace widget {
 
