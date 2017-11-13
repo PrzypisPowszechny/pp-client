@@ -1,5 +1,6 @@
 import _ from 'lodash/core.min';
 import { ui, util } from 'annotator';
+import IAnnotation from './i-annotation';
 
 const { widget: { Widget } } = ui;
 
@@ -16,14 +17,22 @@ const { $ } = util;
 export default class PrzypisAdder extends Widget {
   NS = 'przypis-adder';
 
+  ignoreMouseup: boolean;
+  annotation: IAnnotation | null;
+  beginAnnotationCreate;
+  beforeRequestCreate;
+  document: Document;
+
+  static options;
+
   constructor(options) {
     super(options);
 
     this.ignoreMouseup = false;
     this.annotation = null;
 
-    this.beginAnnotationCreate = this.options.beginAnnotationCreate;
-    this.beforeRequestCreate = this.options.beforeRequestCreate;
+    this.beginAnnotationCreate = PrzypisAdder.options.beginAnnotationCreate;
+    this.beforeRequestCreate = PrzypisAdder.options.beforeRequestCreate;
 
     const clickTag = this.getNSTag(`click.`);
     const mouseDownTag = this.getNSTag(`mousedown.`);
@@ -41,7 +50,7 @@ export default class PrzypisAdder extends Widget {
     return `${tag}${this.NS}`;
   }
 
-  destroy = () => {
+  destroy() {
     const offTag = this.getNSTag(`.`);
 
     this.element.off(offTag);
@@ -75,7 +84,7 @@ export default class PrzypisAdder extends Widget {
    *
    * @param position an Object specifying the position in which to show the editor (optional).
    */
-  show = (position) => {
+  show(position) {
     if (position) {
       this.element.css({
         top: position.top,
