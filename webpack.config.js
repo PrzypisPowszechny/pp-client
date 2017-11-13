@@ -20,23 +20,6 @@ const config = {
       { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
       { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
       {
-        test: /\.jsx?/,
-        include: APP_DIR,
-        exclude: /node_modules/,
-        loaders: [
-          {
-            loader: 'babel-loader',
-            options: {
-              presets: ['es2015', 'react'],
-              plugins: [
-                'transform-object-rest-spread',
-                'transform-class-properties'
-              ]
-            }
-          }
-        ]
-      },
-      {
         test: /\.css$/,
         loader: "style-loader!css-loader"
       },
