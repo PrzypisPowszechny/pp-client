@@ -1,9 +1,10 @@
-import React from 'react';
-import ReactDOM from "react-dom";
+import * as React from 'react';
+import * as ReactDOM from "react-dom";
 
 import AnnotationMultipleViewer from './AnnotationMultipleViewer.jsx';
 
 import { ui, util } from 'annotator';
+import IAnnotation from '../i-annotation';
 
 const { widget: { Widget } } = ui;
 
@@ -15,7 +16,13 @@ export default class PrzypisViewer extends Widget {
     static get nameSpace() {
         return 'annotator-viewer';
     }
-
+    annotations: IAnnotation[];
+    hideTimer;
+    hideTimerDfd;
+    hideTimerActivity;
+    mouseDown: boolean;
+    options;
+    document;
 
     // Public: Creates an instance of the Viewer object.
     //
@@ -56,24 +63,24 @@ export default class PrzypisViewer extends Widget {
             this.document = this.options.autoViewHighlights.ownerDocument;
 
             $(this.options.autoViewHighlights)
-                .on("mouseover." + this.nameSpace, '.annotator-hl', function (event) {
+                .on("mouseover." + PrzypisViewer.nameSpace, '.annotator-hl', function (event) {
                     // If there are many overlapping highlights, still only
                     // call _onHighlightMouseover once.
                     if (event.target === this) {
                         self._onHighlightMouseover(event);
                     }
                 })
-                .on("mouseleave." + this.nameSpace, '.annotator-hl', function () {
+                .on("mouseleave." + PrzypisViewer.nameSpace, '.annotator-hl', function () {
                     self._startHideTimer();
                 });
 
             $(this.document.body)
-                .on("mousedown." + this.nameSpace, (e) => {
+                .on("mousedown." + PrzypisViewer.nameSpace, (e) => {
                     if (e.which === 1) {
                         this.mouseDown = true;
                     }
                 })
-                .on("mouseup." + this.nameSpace, (e) => {
+                .on("mouseup." + PrzypisViewer.nameSpace, (e) => {
                     if (e.which === 1) {
                         this.mouseDown = false;
                     }
@@ -81,20 +88,20 @@ export default class PrzypisViewer extends Widget {
         }
 
         this.element
-            .on("mouseenter." + this.nameSpace, function () {
+            .on("mouseenter." + PrzypisViewer.nameSpace, function () {
                 self._clearHideTimer();
             })
-            .on("mouseleave." + this.nameSpace, function () {
+            .on("mouseleave." + PrzypisViewer.nameSpace, function () {
                 self._startHideTimer();
             });
     }
 
     destroy() {
         if (this.options.autoViewHighlights) {
-            $(this.options.autoViewHighlights).off("." + this.nameSpace);
-            $(this.document.body).off("." + this.nameSpace);
+            $(this.options.autoViewHighlights).off("." + PrzypisViewer.nameSpace);
+            $(this.document.body).off("." + PrzypisViewer.nameSpace);
         }
-        this.element.off("." + this.nameSpace);
+        this.element.off("." + PrzypisViewer.nameSpace);
         super.destroy();
     }
 
@@ -209,7 +216,7 @@ export default class PrzypisViewer extends Widget {
     //            opposed to merely mousing off the current one). Default: false
     //
     // Returns a Promise.
-    _startHideTimer = (activity) => {
+    _startHideTimer = (activity?) => {
 
         /*todo KG
         This part is copied straight from annotator.Viewer and might not be very consistent with other code;
@@ -272,9 +279,9 @@ export default class PrzypisViewer extends Widget {
 
 
 // Classes for toggling annotator state.
-PrzypisViewer.classes = {
+Object.assign(PrzypisViewer.classes, {
     showControls: 'annotator-visible'
-};
+});
 
 // HTML templates for this.widget and this.item properties.
 PrzypisViewer.template = [
@@ -284,7 +291,7 @@ PrzypisViewer.template = [
 ].join('\n');
 
 // Configuration options
-PrzypisViewer.options = {
+Object.assign(PrzypisViewer.options, {
     // Add the default field(s) to the viewer.
     defaultFields: true,
 
@@ -314,4 +321,4 @@ PrzypisViewer.options = {
     // Callback, called when the user clicks the delete button for an
     // annotation.
     onDelete: function () {}
-};
+});

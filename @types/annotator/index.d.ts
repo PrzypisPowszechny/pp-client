@@ -14,6 +14,7 @@ declare module 'annotator' {
 
   export namespace util {
     export const $: JQueryStatic;
+    export function mousePosition(event);
   }
 
   export namespace ui {
@@ -21,7 +22,7 @@ declare module 'annotator' {
     export namespace widget {
 
       export interface IWidgetOptions {
-
+        appendTo: 'string';
       }
 
       export class Widget {
@@ -33,10 +34,14 @@ declare module 'annotator' {
             y: string;
           }
         };
+        static template: string;
+        static options: IWidgetOptions;
         constructor(options: IWidgetOptions);
-        show: (position?) => void;
-        hide: () => void;
-        attach: () => void;
+        show(position?): void;
+        hide(): void;
+        attach(): void;
+        destroy(): void;
+        isShown(): boolean;
       }
 
     }

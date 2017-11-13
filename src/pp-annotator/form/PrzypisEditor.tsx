@@ -117,7 +117,7 @@ export default class PrzypisEditor extends Widget {
    *
    * Returns nothing.
    */
-  show = (position) => {
+  show(position) {
     if (position) {
       this.element.css({
         top: position.top,
@@ -140,7 +140,7 @@ export default class PrzypisEditor extends Widget {
   /**
    * Override parent attach function to render React form
    */
-  attach = () => {
+  attach() {
     // Call parent function (renders PrzypisEditor.template)
     super.attach();
     this.updateForm({});
