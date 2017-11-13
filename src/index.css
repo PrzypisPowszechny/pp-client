@@ -1,3 +1,13 @@
+@font-face {
+    font-family: 'Open Sans Light';
+    src: url('../assets/OpenSans-Light.ttf'); 
+}
+
+@font-face {
+    font-family: 'Open Sans SemiBold';
+    src: url('../assets/OpenSans-SemiBold.ttf'); 
+}
+
 /* Widgets are both the adder and the viewer. */
 .annotator-widget {
 	/* reset annotator.js's styling */
@@ -40,12 +50,14 @@
 	float: left;
 
 	background-color: rgb(86, 121, 176);
+	font-family: 'Open Sans SemiBold';
 	color: rgb(255, 255, 255);
 	text-transform: uppercase;
 }
 
 .pp-view-comment-date {
 	float: right;
+	font-family: 'Open Sans Light';
 	color: rgb(86, 121, 176);
 }
 
@@ -58,6 +70,7 @@
 	padding-bottom: 6px;
 	clear: both;
 
+	font-family: 'Open Sans Light';
 	font-size: 18px;
 	color: rgb(0, 0, 0);
 }
@@ -76,6 +89,7 @@
 }
 
 .pp-view-link {
+	font-family: 'Open Sans SemiBold';
 	color: rgb(136, 136, 136);
 	text-transform: uppercase;
 }
