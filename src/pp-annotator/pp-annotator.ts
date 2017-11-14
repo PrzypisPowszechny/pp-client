@@ -2,17 +2,17 @@ import PrzypisEditor from './form/PrzypisEditor';
 import PrzypisAdder from './PrzypisAdder';
 import PrzypisViewer from './viewer/PrzypisViewer';
 
-import { util, ui as PPUI } from 'annotator';
 
-const { editor, highlighter, textselector, viewer } = PPUI;
-const { gettext: _t } = util;
+import * as annotator from 'annotator';
+const { util, ui: PPUI } = annotator;
+const { highlighter, textselector } = PPUI;
 
 /**
  * trim strips whitespace from either end of a string.
  *
  * This usually exists in native code, but not in IE8.
  */
-function trim(s) {
+function trim(s: string) {
     if (typeof String.prototype.trim === 'function') {
         return String.prototype.trim.call(s);
     } else {
@@ -141,10 +141,10 @@ export function ui(options) {
                     .then(function (annotation) {
                         app.annotations.create(annotation);
                     })
-                    .catch((reason) => {}); // When the annotation form is cancelled
+                    .catch(() => {}); // When the annotation form is cancelled
 
             },
-            beforeRequestCreate: function (annotation) {
+            beforeRequestCreate: function () {
                 //TODO what happens when the adder's request button is clicked
             }
         });
@@ -179,7 +179,7 @@ export function ui(options) {
                     .then(function (annotation) {
                         app.annotations.update(annotation);
                     })
-                    .catch((reason) => {}); // When the annotation form is cancelled
+                    .catch(() => {}); // When the annotation form is cancelled
             },
             onDelete: function (ann) {
                 app.annotations['delete'](ann);

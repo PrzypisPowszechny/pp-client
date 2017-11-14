@@ -164,7 +164,7 @@ export default class PrzypisViewer extends Widget {
     // event - An Event object.
     //
     // Returns nothing.
-    _onEditClick = (event, annotation) => {
+    _onEditClick = (_, annotation) => {
         this.hide();
         this.options.onEdit(annotation);
     };
@@ -174,7 +174,7 @@ export default class PrzypisViewer extends Widget {
     // event - An Event object.
     //
     // Returns nothing.
-    _onDeleteClick = (event, annotation)=>  {
+    _onDeleteClick = (_, annotation)=>  {
         this.hide();
         this.options.onDelete(annotation);
     };
