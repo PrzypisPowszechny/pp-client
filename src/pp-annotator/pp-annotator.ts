@@ -213,8 +213,6 @@ export function ui(options?:{
         }
         s.adder.attach();
         s.editor.attach();
-        s.highlighter.attach();
-        s.textselector.attach();
         s.viewer.attach();
         injectDynamicStyle();
     }
