@@ -5,7 +5,6 @@ import AnnotationMultipleViewer from './AnnotationMultipleViewer';
 
 import * as annotator from 'annotator';
 import IAnnotation from '../i-annotation';
-import IPosition from '../i-position';
 
 const { ui, util } = annotator;
 const { widget: { Widget } } = ui;
@@ -134,7 +133,7 @@ export default class PrzypisViewer extends Widget {
     //   viewer.show({top: '100px', left: '80px'})
     //
     // Returns nothing.
-    show (position: IPosition) {
+    show (position: annotator.util.IPosition) {
         if (typeof position !== 'undefined' && position !== null) {
             this.element.css({
                 top: position.top,
@@ -170,7 +169,7 @@ export default class PrzypisViewer extends Widget {
     //   viewer.load([annotation1, annotation2, annotation3])
     //
     // Returns nothing.
-    load = (annotations: IAnnotation[], position: IPosition) => {
+    load = (annotations: IAnnotation[], position: annotator.util.IPosition) => {
         this.annotations = annotations || [];
         this.update(annotations);
         this.show(position);

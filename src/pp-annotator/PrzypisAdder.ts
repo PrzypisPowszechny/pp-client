@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
 import * as annotator from 'annotator';
-import IPosition from './i-position';
 
 const { ui, util } = annotator;
 const { widget: { Widget } } = ui;
@@ -76,7 +75,7 @@ export default class PrzypisAdder extends Widget {
    * @param annotation an annotation Object to load.
    * @param position an Object specifying the position in which to show the editor (optional).
    */
-  load(annotation: annotator.IAnnotation, position: IPosition) {
+  load(annotation: annotator.IAnnotation, position: annotator.util.IPosition) {
     this.annotation = annotation;
     this.show(position);
   }
@@ -91,7 +90,7 @@ export default class PrzypisAdder extends Widget {
    *
    * @param position an Object specifying the position in which to show the editor (optional).
    */
-  show(position?: IPosition) {
+  show(position?: annotator.util.IPosition) {
     if (position) {
       this.element.css({
         top: position.top,

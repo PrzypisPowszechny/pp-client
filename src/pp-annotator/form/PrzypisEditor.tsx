@@ -7,7 +7,6 @@ import * as annotator from 'annotator';
 import { util, ui as AnnotatorUI } from 'annotator';
 import { mover, resizer } from "./editor-utils";
 import IAnnotation, { IAnnotationFields } from '../i-annotation';
-import IPosition from '../i-position';
 
 const { $ } = util;
 const { widget: { Widget } } = AnnotatorUI;
@@ -57,7 +56,7 @@ export default class PrzypisEditor extends Widget {
    * Returns an unresolved Promise that will be resolved when the save/cancel button is clicked.
    * If load function is waited upon, it will finish only when the save/cancel button is clicked.
    */
-  load = (annotation: annotator.IAnnotation, position: IPosition) => {
+  load = (annotation: annotator.IAnnotation, position: util.IPosition) => {
     this.annotation = annotation;
     this.updateForm(annotation.fields || {});
 
@@ -122,7 +121,7 @@ export default class PrzypisEditor extends Widget {
    *
    * Returns nothing.
    */
-  show(position: IPosition) {
+  show(position: util.IPosition) {
     if (position) {
       this.element.css({
         top: position.top,

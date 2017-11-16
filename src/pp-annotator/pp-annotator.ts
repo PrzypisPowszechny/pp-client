@@ -109,10 +109,7 @@ function removeDynamicStyle() {
 }
 
 interface IState {
-    interactionPoint: {
-        top: number;
-        left: number;
-    } | null;
+    interactionPoint: annotator.util.IPosition | null;
     adder: PrzypisAdder;
     editor: PrzypisEditor;
     highlighter: annotator.ui.highlighter.Highlighter;

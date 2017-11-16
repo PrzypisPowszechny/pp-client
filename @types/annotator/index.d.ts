@@ -35,19 +35,17 @@ declare module 'annotator' {
 
   export namespace util {
     export const $: JQueryStatic;
-    export function mousePosition(event: JQuery.Event): {
+    export interface IPosition {
       top: number;
       left: number;
-    };
+    }
+    export function mousePosition(event: JQuery.Event): IPosition
   }
 
   export namespace ui {
 
     export interface IAnnotationLoader extends widget.Widget {
-      load(ann: IAnnotation, position: {
-        top: number,
-        left: number,
-      }): JQuery.Deferred<IAnnotation>;
+      load(ann: IAnnotation, position: util.IPosition): JQuery.Deferred<IAnnotation>;
     }
 
     export namespace highlighter {
@@ -90,10 +88,7 @@ declare module 'annotator' {
         static template: string;
         static options: IWidgetOptions;
         constructor(options: IWidgetOptions);
-        show(position?: {
-          top: number;
-          left: number;
-        }): void;
+        show(position?: util.IPosition): void;
         hide(): void;
         attach(): void;
         destroy(): void;

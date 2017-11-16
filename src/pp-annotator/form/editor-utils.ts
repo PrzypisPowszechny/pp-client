@@ -1,6 +1,5 @@
 // Annotator base classes
 import { util } from 'annotator';
-import IPosition from '../i-position';
 
 // The same dependencies as annotator's for consistency (at least for now)
 const { $ } = util;
@@ -29,7 +28,7 @@ interface IVec2 {
  * accumulated and passed to the next mousemove event.
  */
 export function dragTracker(handle: Node, callback: (delta: IVec2) => boolean) {
-    let lastPos: IPosition | null = null,
+    let lastPos: util.IPosition | null = null,
         throttled = false;
 
     // Event handler for mousemove
