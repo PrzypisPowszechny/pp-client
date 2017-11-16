@@ -4,6 +4,7 @@ import PrzypisViewer from './viewer/PrzypisViewer';
 
 
 import * as annotator from 'annotator';
+import { AppInstance } from 'annotator';
 const { util, ui: PPUI } = annotator;
 const { highlighter, textselector } = PPUI;
 
@@ -25,7 +26,7 @@ function trim(s: string) {
  * annotationFactory returns a function that can be used to construct an
  * annotation from a list of selected ranges.
  */
-function annotationFactory(contextEl, ignoreSelector) {
+function annotationFactory(contextEl: Element, ignoreSelector: string) {
     return function (ranges) {
         const text = [],
             serializedRanges = [];
@@ -46,7 +47,7 @@ function annotationFactory(contextEl, ignoreSelector) {
 /**
  * maxZIndex returns the maximum z-index of all elements in the provided set.
  */
-function maxZIndex(elements) {
+function maxZIndex(elements: Element[]) {
     let max = -1;
     for (let i = 0, len = elements.length; i < len; i++) {
         const $el = util.$(elements[i]);
@@ -105,33 +106,43 @@ function removeDynamicStyle() {
     util.$('#annotator-dynamic-style').remove();
 }
 
+interface IState {
+    interactionPoint?: {
+        top: number;
+        left: number;
+    }
+    adder?: annotator.ui.widget.Widget;
+    editor?: annotator.ui.widget.Widget;
+    highlighter?: typeof annotator.ui.highlighter.Highlighter;
+    textselector?: typeof annotator.ui.textselector.TextSelector;
+    viewer?: annotator.ui.widget.Widget;
+}
+
 /**
  * pp annotator ui module (almost unchanged annotator.ui.main)
  */
-export function ui(options) {
+export function ui(options?:{
+    element?: Element;
+    editorExtensions?: {}[];
+    viewerExtensions?: {}[];
+}) {
     if (typeof options === 'undefined' || options === null) {
         options = {};
     }
 
-    options.element = options.element || document.body;
-    options.editorExtensions = options.editorExtensions || [];
-    options.viewerExtensions = options.viewerExtensions || [];
+    const element = options.element || document.body;
+    const editorExtensions = options.editorExtensions || [];
+    const viewerExtensions = options.viewerExtensions || [];
+
 
     // Local helpers
     console.log(typeof (annotationFactory));
-    const makeAnnotation = annotationFactory(options.element, '.annotator-hl');
+    const makeAnnotation = annotationFactory(element, '.annotator-hl');
 
     // Object to hold local state
-    const s = {
-        interactionPoint: null,
-        adder: null,
-        editor: null,
-        highlighter: null,
-        textselector: null,
-        viewer: null,
-    };
+    const s: IState = {};
 
-    function start(app) {
+    function start(app: AppInstance) {
         const ident = app.registry.getUtility('identityPolicy');
         const authz = app.registry.getUtility('authorizationPolicy');
 
@@ -152,13 +163,13 @@ export function ui(options) {
 
         //Use PrzypisEditor instead of standard annotator.ui.Editor
         s.editor = new PrzypisEditor({
-            extensions: options.editorExtensions
+            extensions: editorExtensions
         });
         s.editor.attach();
 
-        s.highlighter = new highlighter.Highlighter(options.element);
+        s.highlighter = new highlighter.Highlighter(element);
 
-        s.textselector = new textselector.TextSelector(options.element, {
+        s.textselector = new textselector.TextSelector(element, {
             onSelection: function (ranges, event) {
                 if (ranges.length > 0) {
                     const annotation = makeAnnotation(ranges);
@@ -190,8 +201,8 @@ export function ui(options) {
             permitDelete: function (ann) {
                 return authz.permits('delete', ann, ident.who());
             },
-            autoViewHighlights: options.element,
-            extensions: options.viewerExtensions
+            autoViewHighlights: element,
+            extensions: viewerExtensions
         });
         s.viewer.attach();
 

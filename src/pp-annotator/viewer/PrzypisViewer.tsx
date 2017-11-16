@@ -3,13 +3,25 @@ import * as ReactDOM from "react-dom";
 
 import AnnotationMultipleViewer from './AnnotationMultipleViewer';
 
-import { ui, util } from 'annotator';
+import * as annotator from 'annotator';
 import IAnnotation from '../i-annotation';
+import IPosition from '../i-position';
 
+const { ui, util } = annotator;
 const { widget: { Widget } } = ui;
 
 const { $ } = util;
 
+interface IPrzypisViewerOptions extends annotator.ui.widget.IWidgetOptions {
+    defaultFields?: boolean;
+    inactivityDelay?: number;
+    activityDelay?: number;
+    permitEdit?: () => boolean;
+    permitDelete?: () => boolean;
+    autoViewHighlights?: Node;
+    onEdit?: (annotation: IAnnotation) => void;
+    onDelete?: (annotation: IAnnotation) => void;
+}
 
 // Public: Creates an element for viewing annotations.
 export default class PrzypisViewer extends Widget {
@@ -17,12 +29,14 @@ export default class PrzypisViewer extends Widget {
         return 'annotator-viewer';
     }
     annotations: IAnnotation[];
-    hideTimer;
-    hideTimerDfd;
-    hideTimerActivity;
+    hideTimer: number | null;
+    hideTimerDfd: JQuery.Deferred<any> | null;
+    hideTimerActivity: boolean;
     mouseDown: boolean;
-    options;
-    document;
+    options: IPrzypisViewerOptions;
+    document: Document;
+    onEditCallback: (annotation: IAnnotation) => void;
+    onDeleteCallback: (annotation: IAnnotation) => void;
 
     // Public: Creates an instance of the Viewer object.
     //
@@ -35,13 +49,13 @@ export default class PrzypisViewer extends Widget {
     //   viewer.load(annotation)
     //
     // Returns a new Viewer instance.
-    constructor(options) {
+    constructor(options: IPrzypisViewerOptions) {
         super(options);
 
         this.annotations = [];
         this.hideTimer = null;
         this.hideTimerDfd = null;
-        this.hideTimerActivity = null;
+        this.hideTimerActivity = false;
         this.mouseDown = false;
 
         if (typeof this.options.onEdit !== 'function') {
@@ -57,6 +71,9 @@ export default class PrzypisViewer extends Widget {
             throw new TypeError("permitDelete callback must be a function");
         }
 
+        this.onEditCallback = this.options.onEdit;
+        this.onDeleteCallback = this.options.onDelete;
+
         let self = this;
 
         if (this.options.autoViewHighlights) {
@@ -71,7 +88,7 @@ export default class PrzypisViewer extends Widget {
                     }
                 })
                 .on("mouseleave." + PrzypisViewer.nameSpace, '.annotator-hl', function () {
-                    self._startHideTimer();
+                    self._startHideTimer(false);
                 });
 
             $(this.document.body)
@@ -92,7 +109,7 @@ export default class PrzypisViewer extends Widget {
                 self._clearHideTimer();
             })
             .on("mouseleave." + PrzypisViewer.nameSpace, function () {
-                self._startHideTimer();
+                self._startHideTimer(false);
             });
     }
 
@@ -117,7 +134,7 @@ export default class PrzypisViewer extends Widget {
     //   viewer.show({top: '100px', left: '80px'})
     //
     // Returns nothing.
-    show (position) {
+    show (position: IPosition) {
         if (typeof position !== 'undefined' && position !== null) {
             this.element.css({
                 top: position.top,
@@ -131,7 +148,7 @@ export default class PrzypisViewer extends Widget {
     /**
     * Renders (or updates, if already rendered) React component within the PrzypisViewer html container
     */
-    update = (annotations) => {
+    update = (annotations: IAnnotation[]) => {
         // Callbacks to pass to React component
         const callbacks = {
             onEdit: this._onEditClick,
@@ -153,7 +170,7 @@ export default class PrzypisViewer extends Widget {
     //   viewer.load([annotation1, annotation2, annotation3])
     //
     // Returns nothing.
-    load = (annotations, position) => {
+    load = (annotations: IAnnotation[], position: IPosition) => {
         this.annotations = annotations || [];
         this.update(annotations);
         this.show(position);
@@ -164,9 +181,9 @@ export default class PrzypisViewer extends Widget {
     // event - An Event object.
     //
     // Returns nothing.
-    _onEditClick = (_, annotation) => {
+    _onEditClick = (_: any, annotation: IAnnotation) => {
         this.hide();
-        this.options.onEdit(annotation);
+        this.onEditCallback(annotation);
     };
 
     // Event callback: called when the delete button is clicked.
@@ -174,9 +191,9 @@ export default class PrzypisViewer extends Widget {
     // event - An Event object.
     //
     // Returns nothing.
-    _onDeleteClick = (_, annotation)=>  {
+    _onDeleteClick = (_: any, annotation: IAnnotation)=>  {
         this.hide();
-        this.options.onDelete(annotation);
+        this.onDeleteCallback(annotation);
     };
 
     // Event callback: called when a user triggers `mouseover` on a highlight
@@ -185,25 +202,24 @@ export default class PrzypisViewer extends Widget {
     // event - An Event object.
     //
     // Returns nothing.
-    _onHighlightMouseover = (event) => {
+    _onHighlightMouseover = (event: JQuery.Event) => {
         // If the mouse button is currently depressed, we're probably trying to
         // make a selection, so we shouldn't show the viewer.
         if (this.mouseDown) {
             return;
         }
-
         this._startHideTimer(true)
             .done(() => {
                 let annotations = $(event.target)
                     .parents('.annotator-hl')
                     .addBack()
-                    .map(function (_, elem) {
+                    .map( (_, elem) => {
                         return $(elem).data("annotation");
                     })
                     .toArray();
 
                 // Now show the viewer with the wanted annotations
-                this.load(annotations, util.mousePosition(event));
+                this.load(((annotations as any) as IAnnotation[]), util.mousePosition(event));
             });
     };
 
@@ -216,21 +232,23 @@ export default class PrzypisViewer extends Widget {
     //            opposed to merely mousing off the current one). Default: false
     //
     // Returns a Promise.
-    _startHideTimer = (activity?) => {
+    _startHideTimer = (activity: boolean) => {
 
         /*todo KG
         This part is copied straight from annotator.Viewer and might not be very consistent with other code;
         We should consider refactoring it and making it more explicit if we need to modify it
         */
 
-        if (typeof activity === 'undefined' || activity === null) {
+        if (typeof activity === 'undefined' || activity === null || activity === false) {
             activity = false;
         }
 
         // If timer has already been set, use that one.
         if (this.hideTimer) {
             if (activity === false || this.hideTimerActivity === activity) {
-                return this.hideTimerDfd;
+                // the code is so spaghetti that we just have to assert
+                // typescript this will not be null here
+                return (this.hideTimerDfd as JQuery.Deferred<any>).promise();
             } else {
                 // The pending timeout is an inactivity timeout, so likely to be
                 // too slow. Clear the pending timeout and start a new (shorter)
@@ -251,11 +269,13 @@ export default class PrzypisViewer extends Widget {
         if (!this.isShown()) {
             this.hideTimer = null;
             this.hideTimerDfd.resolve();
-            this.hideTimerActivity = null;
+            this.hideTimerActivity = false;
         } else {
             this.hideTimer = setTimeout(() => {
                 this.hide();
-                this.hideTimerDfd.resolve();
+                if (this.hideTimerDfd) {
+                    this.hideTimerDfd.resolve();
+                }
                 this.hideTimer = null;
             }, timeout);
             this.hideTimerActivity = Boolean(activity);
@@ -269,10 +289,13 @@ export default class PrzypisViewer extends Widget {
     //
     // Returns nothing.
     _clearHideTimer = () => {
+        if (!this.hideTimer || !this.hideTimerDfd || this.hideTimerActivity) {
+            throw new Error('Expected timer to be initialized!');
+        }
         clearTimeout(this.hideTimer);
         this.hideTimer = null;
         this.hideTimerDfd.reject();
-        this.hideTimerActivity = null;
+        this.hideTimerActivity = false;
     }
 }
 

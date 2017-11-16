@@ -9,13 +9,13 @@ interface IAnnotationMultipleViewerProps {
 }
 
 export default class AnnotationMultipleViewer extends React.Component<IAnnotationMultipleViewerProps, {}> {
-    constructor(props) {
+    constructor(props: IAnnotationMultipleViewerProps) {
         super(props);
     }
 
     renderItems() {
         return this.props.annotations.map((annotation) =>
-            <AnnotationViewer key={annotation.id} annotation={annotation} callbacks={this.props.callbacks} />
+            <AnnotationViewer key={annotation.id || 0} annotation={annotation} callbacks={this.props.callbacks} />
         );
     }
 

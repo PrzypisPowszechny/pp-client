@@ -17,7 +17,7 @@ export interface ICallbacks {
 }
 
 export default class AnnotationViewer extends React.Component<IAnnotatorViewerProps, IAnnotatorViewerState> {
-    constructor(props) {
+    constructor(props: IAnnotatorViewerProps) {
         super(props);
 
         this.state = {
@@ -49,19 +49,19 @@ export default class AnnotationViewer extends React.Component<IAnnotatorViewerPr
                             onClick={(e) => this.props.callbacks.onDelete(e, this.props.annotation)}>Delete</button>
                 </span>
                 <div>
-                    {this.props.annotation.fields.annotationPriority}
+                    {(this.props.annotation.fields || {}).annotationPriority}
                 </div>
                 <div>
-                    {this.props.annotation.fields.comment}
+                    {(this.props.annotation.fields || {}).comment}
                 </div>
                 <div>
-                    {this.props.annotation.fields.link}
+                    {(this.props.annotation.fields || {}).link}
                 </div>
                 <div>
-                    {this.props.annotation.fields.linkTitle}
+                    {(this.props.annotation.fields || {}).linkTitle}
                 </div>
                 <div>
-                    {this.props.annotation.fields.isLinkOnly}
+                    {(this.props.annotation.fields || {}).isLinkOnly}
                 </div>
             </li>
         );

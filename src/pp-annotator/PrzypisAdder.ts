@@ -1,7 +1,9 @@
 import * as _ from 'lodash';
-import { ui, util } from 'annotator';
+import * as annotator from 'annotator';
 import IAnnotation from './i-annotation';
+import IPosition from './i-position';
 
+const { ui, util } = annotator;
 const { widget: { Widget } } = ui;
 
 // annotator jquery for consistency
@@ -14,18 +16,24 @@ const { $ } = util;
  * PrzypisAdder is for the most part a copy of annotator.Adder, except with two buttons, thus:
  * onCreate callback replaced with beginAnnotationCreate and beforeRequestCreate
  */
+
+interface IPrzypisAdderOptions extends annotator.ui.widget.IWidgetOptions {
+  beginAnnotationCreate?: (annotation: IAnnotation, e: JQuery.Event) => void;
+  beforeRequestCreate?: (annotation: IAnnotation, e: JQuery.Event) => void;
+}
+
 export default class PrzypisAdder extends Widget {
   NS = 'przypis-adder';
 
   ignoreMouseup: boolean;
   annotation: IAnnotation | null;
-  beginAnnotationCreate;
-  beforeRequestCreate;
+  beginAnnotationCreate: IPrzypisAdderOptions["beginAnnotationCreate"];
+  beforeRequestCreate: IPrzypisAdderOptions["beforeRequestCreate"];
   document: Document;
 
-  static options;
+  static options: IPrzypisAdderOptions;
 
-  constructor(options) {
+  constructor(options: IPrzypisAdderOptions) {
     super(options);
 
     this.ignoreMouseup = false;
@@ -46,7 +54,7 @@ export default class PrzypisAdder extends Widget {
     $(this.document.body).on(mouseUpTag, this.onMouseUp);
   }
 
-  getNSTag = (tag) => {
+  getNSTag = (tag: string) => {
     return `${tag}${this.NS}`;
   }
 
@@ -69,7 +77,7 @@ export default class PrzypisAdder extends Widget {
    * @param annotation an annotation Object to load.
    * @param position an Object specifying the position in which to show the editor (optional).
    */
-  load(annotation, position) {
+  load(annotation: IAnnotation, position: IPosition) {
     this.annotation = annotation;
     this.show(position);
   }
@@ -84,7 +92,7 @@ export default class PrzypisAdder extends Widget {
    *
    * @param position an Object specifying the position in which to show the editor (optional).
    */
-  show(position) {
+  show(position?: IPosition) {
     if (position) {
       this.element.css({
         top: position.top,
@@ -100,7 +108,7 @@ export default class PrzypisAdder extends Widget {
    *
    * @param event a mousedown Event object
    */
-  onMouseDown(event) {
+  onMouseDown(event: JQuery.Event) {
     // Do nothing for right-clicks, middle-clicks, etc.
     if (event.which > 1) {
       return;
@@ -117,7 +125,7 @@ export default class PrzypisAdder extends Widget {
    *
    * @param event a mouseup Event object
    */
-  onMouseUp(event) {
+  onMouseUp(event: JQuery.Event) {
     // Do nothing for right-clicks, middle-clicks, etc.
     if (event.which > 1) {
       return;
@@ -139,7 +147,7 @@ export default class PrzypisAdder extends Widget {
    *
    * Returns nothing.
    */
-  onClick(event) {
+  onClick(event: JQuery.Event) {
     // Do nothing for right-clicks, middle-clicks, etc.
     if (event.which > 1) {
       return;
@@ -180,7 +188,7 @@ PrzypisAdder.template = `
 // Configuration options
 PrzypisAdder.options = {
   // Callback, called when the user clicks the "create annotation" option on the adder
-  beginAnnotationCreate: null,
+  beginAnnotationCreate: undefined,
   // Callback, called when the user clicks the "create request" option on the adder
-  beforeRequestCreate: null
+  beforeRequestCreate: undefined,
 };

@@ -3,9 +3,11 @@ import * as ReactDOM from "react-dom";
 
 import AnnotationForm from './AnnotationForm';
 
+import * as annotator from 'annotator';
 import { util, ui as AnnotatorUI } from 'annotator';
 import { mover, resizer } from "./editor-utils";
 import IAnnotation, { IAnnotationFields } from '../i-annotation';
+import IPosition from '../i-position';
 
 const { $ } = util;
 const { widget: { Widget } } = AnnotatorUI;
@@ -31,8 +33,8 @@ export default class PrzypisEditor extends Widget {
   fields: string[];
   annotation: IAnnotation;
   promiseResultContainer?: {
-    resolve;
-    reject;
+    resolve: (annotation: IAnnotation) => void;
+    reject: (error: string) => void;
   }
   resizer: {
     destroy: () => void;
@@ -41,7 +43,7 @@ export default class PrzypisEditor extends Widget {
     destroy: () => void;
   }
 
-  constructor(options) {
+  constructor(options: annotator.ui.widget.IWidgetOptions) {
     super(options);
 
     this.fields = [];
@@ -55,9 +57,9 @@ export default class PrzypisEditor extends Widget {
    * Returns an unresolved Promise that will be resolved when the save/cancel button is clicked.
    * If load function is waited upon, it will finish only when the save/cancel button is clicked.
    */
-  load = (annotation, position) => {
+  load = (annotation: IAnnotation, position: IPosition) => {
     this.annotation = annotation;
-    this.updateForm(annotation.fields);
+    this.updateForm(annotation.fields || {});
 
     return new Promise((resolve, reject) => {
       this.promiseResultContainer = {
@@ -85,7 +87,7 @@ export default class PrzypisEditor extends Widget {
   /**
    * Renders (or updates, if already rendered) React component within the Editor html container
    */
-  updateForm = (fields) => {
+  updateForm = (fields: IAnnotationFields) => {
     ReactDOM.render(
       <AnnotationForm id={this.annotation.id} fields={fields || {}} onSave={this.save} onCancel={this.cancel}/>,
       document.getElementById('react-form-slot')
@@ -117,7 +119,7 @@ export default class PrzypisEditor extends Widget {
    *
    * Returns nothing.
    */
-  show(position) {
+  show(position: IPosition) {
     if (position) {
       this.element.css({
         top: position.top,

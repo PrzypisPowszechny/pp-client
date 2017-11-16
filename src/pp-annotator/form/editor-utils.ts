@@ -1,8 +1,14 @@
 // Annotator base classes
 import { util } from 'annotator';
+import IPosition from '../i-position';
 
 // The same dependencies as annotator's for consistency (at least for now)
 const { $ } = util;
+
+interface IVec2 {
+    x: number;
+    y: number;
+}
 
 // ANNOTATOR FUNCTIONS (copied from annotator.ui.editor)
 
@@ -22,12 +28,12 @@ const { $ } = util;
  * the movement is not tracked, then the amount the mouse has moved will be
  * accumulated and passed to the next mousemove event.
  */
-export function dragTracker(handle, callback) {
-    let lastPos = null,
+export function dragTracker(handle: Node, callback: (delta: IVec2) => boolean) {
+    let lastPos: IPosition | null = null,
         throttled = false;
 
     // Event handler for mousemove
-    function mouseMove(e) {
+    function mouseMove(e: JQuery.Event) {
         if (throttled || lastPos === null) {
             return;
         }
@@ -68,7 +74,7 @@ export function dragTracker(handle, callback) {
     }
 
     // Event handler for mousedown -- starts drag tracking
-    function mouseDown(e) {
+    function mouseDown(e: JQuery.Event) {
         if (e.target !== handle) {
             return;
         }
@@ -115,7 +121,10 @@ export function dragTracker(handle, callback) {
  * inverted. Useful if the drag handle is at the bottom of the
  * element, and so dragging down means "grow the element"
  */
-export function resizer(element, handle, options) {
+export function resizer(element: Element, handle: Node, options: {
+   invertedX?: () => boolean;
+   invertedY?: () => boolean;
+}) {
     const $el = $(element);
     if (typeof options === 'undefined' || options === null) {
         options = {};
@@ -123,7 +132,7 @@ export function resizer(element, handle, options) {
 
     // Translate the delta supplied by dragTracker into a delta that takes
     // account of the invertedX and invertedY callbacks if defined.
-    function translate(delta) {
+    function translate(delta: IVec2) {
         let directionX = 1,
             directionY = -1;
 
@@ -141,16 +150,16 @@ export function resizer(element, handle, options) {
     }
 
     // Callback for dragTracker
-    function resize(delta) {
+    function resize(delta: IVec2) {
         const height = $el.height(),
             width = $el.width(),
             translated = translate(delta);
 
         if (Math.abs(translated.x) > 0) {
-            $el.width(width + translated.x);
+            $el.width(width || 0 + translated.x);
         }
         if (Math.abs(translated.y) > 0) {
-            $el.height(height + translated.y);
+            $el.height(height || 0 + translated.y);
         }
 
         // Did the element dimensions actually change? If not, then we've
@@ -170,12 +179,13 @@ export function resizer(element, handle, options) {
  * element - DOM Element to move
  * handle - DOM Element to use as a move handle
  */
-export function mover(element, handle) {
-    function move(delta) {
+export function mover(element: Element, handle: Node) {
+    function move(delta: IVec2) {
         $(element).css({
             top: parseInt($(element).css('top'), 10) + delta.y,
             left: parseInt($(element).css('left'), 10) + delta.x
         });
+        return false;
     }
 
     // We return the dragTracker object in order to expose its methods.

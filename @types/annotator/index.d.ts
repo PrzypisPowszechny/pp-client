@@ -6,6 +6,13 @@ declare module 'annotator' {
   export interface AppInstance {
     include(obj: any): void;
     start(): void;
+    registry: registry.Registry;
+  }
+
+  export namespace registry {
+    export class Registry {
+      getUtility(utilityName: string): any;
+    }
   }
 
   export namespace storage {
@@ -14,7 +21,7 @@ declare module 'annotator' {
 
   export namespace util {
     export const $: JQueryStatic;
-    export function mousePosition(event: JQueryMouseEventObject): {
+    export function mousePosition(event: JQuery.Event): {
       top: number;
       left: number;
     };
@@ -24,13 +31,13 @@ declare module 'annotator' {
 
     export namespace highlighter {
       export const Highlighter: {
-        new (element: HTMLElement): {}
+        new (element: Element): {}
       }
     }
     export namespace textselector {
       export const TextSelector: {
-        new (element: HTMLElement, options: {
-          onSelection(ranges, event): void;
+        new (element: Element, options: {
+          onSelection(ranges: Array<{}>, event: JQuery.Event): void;
         }): {};
       }
     }
@@ -38,7 +45,7 @@ declare module 'annotator' {
     export namespace widget {
 
       export interface IWidgetOptions {
-        appendTo: 'string';
+        appendTo?: 'string';
       }
 
       export interface IWidgetConstructor {
@@ -57,7 +64,10 @@ declare module 'annotator' {
         static template: string;
         static options: IWidgetOptions;
         constructor(options: IWidgetOptions);
-        show(position?): void;
+        show(position?: {
+          top: number;
+          left: number;
+        }): void;
         hide(): void;
         attach(): void;
         destroy(): void;

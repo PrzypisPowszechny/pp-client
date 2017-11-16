@@ -17,20 +17,22 @@ interface IAnnotationFormProps extends IAnnotation {
 
 type IAnnotationFormState = IAnnotationFields;
 
-function sliceKeys(dictionary, keys) {
-    let result = {};
+function sliceKeys(dictionary: any, keys: string[]) {
+    let result: {
+        [x: string]: any;
+    }= {};
     keys.forEach(function(key) {
         result[key] = dictionary[key];
     });
     return result;
 }
 
-function getFormState(obj) {
+function getFormState(obj: any) {
     return sliceKeys(obj, savedFields) as IAnnotationFormState;
 }
 
 export default class AnnotationForm extends React.Component<IAnnotationFormProps, IAnnotationFormState>{
-    constructor(props) {
+    constructor(props: IAnnotationFormProps) {
         super(props);
 
         this.state = AnnotationForm.stateFromProps(props);
@@ -41,7 +43,7 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
     }
 
     static stateFromProps(props: IAnnotationFormProps): IAnnotationFormState {
-        const fields = props.fields;
+        const fields = props.fields || {};
         return {
             annotationPriority: fields.annotationPriority || annotationPriorities.NORMAL,
             comment: fields.comment || '',
@@ -51,15 +53,15 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
         };
     }
 
-    handleInputChange(event) {
-        const target = event.target;
+    handleInputChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+        const target = e.currentTarget;
         const name = target.name;
         this.setState({[name]: target.value});
     }
 
 
-    handleIsLinkOnlyChange(event) {
-        this.setState({isLinkOnly: event.target.checked});
+    handleIsLinkOnlyChange(e: React.ChangeEvent<HTMLInputElement>) {
+        this.setState({isLinkOnly: e.currentTarget.checked});
     }
 
     onSave() {
@@ -74,7 +76,7 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
         this.props.onCancel();
     }
 
-    componentWillReceiveProps(newProps) {
+    componentWillReceiveProps(newProps: IAnnotationFormProps) {
         this.setState(AnnotationForm.stateFromProps(newProps));
     }
 

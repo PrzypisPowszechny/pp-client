@@ -4,9 +4,9 @@ export default interface IAnnotation {
 }
 
 export interface IAnnotationFields {
-  annotationPriority: number;
-  comment: string;
-  link: string;
-  linkTitle: string;
-  isLinkOnly: boolean;
+  annotationPriority?: number;
+  comment?: string;
+  link?: string;
+  linkTitle?: string;
+  isLinkOnly?: boolean;
 }
