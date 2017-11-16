@@ -1,6 +1,7 @@
-export default interface IAnnotation {
-  id?: number;
-  fields?: IAnnotationFields
+import * as annotator from 'annotator';
+
+export default interface IAnnotation extends annotator.IAnnotation {
+  fields: IAnnotationFields
 }
 
 export interface IAnnotationFields {

@@ -16,11 +16,11 @@ interface IPrzypisViewerOptions extends annotator.ui.widget.IWidgetOptions {
     defaultFields?: boolean;
     inactivityDelay?: number;
     activityDelay?: number;
-    permitEdit?: () => boolean;
-    permitDelete?: () => boolean;
+    permitEdit?: (ann?: annotator.IAnnotation) => boolean;
+    permitDelete?: (ann?: annotator.IAnnotation) => boolean;
     autoViewHighlights?: Node;
-    onEdit?: (annotation: IAnnotation) => void;
-    onDelete?: (annotation: IAnnotation) => void;
+    onEdit?: (annotation: annotator.IAnnotation) => void;
+    onDelete?: (annotation: annotator.IAnnotation) => void;
 }
 
 // Public: Creates an element for viewing annotations.
@@ -35,8 +35,8 @@ export default class PrzypisViewer extends Widget {
     mouseDown: boolean;
     options: IPrzypisViewerOptions;
     document: Document;
-    onEditCallback: (annotation: IAnnotation) => void;
-    onDeleteCallback: (annotation: IAnnotation) => void;
+    onEditCallback: (annotation: annotator.IAnnotation) => void;
+    onDeleteCallback: (annotation: annotator.IAnnotation) => void;
 
     // Public: Creates an instance of the Viewer object.
     //
@@ -181,7 +181,7 @@ export default class PrzypisViewer extends Widget {
     // event - An Event object.
     //
     // Returns nothing.
-    _onEditClick = (_: any, annotation: IAnnotation) => {
+    _onEditClick = (_: any, annotation: annotator.IAnnotation) => {
         this.hide();
         this.onEditCallback(annotation);
     };
@@ -191,7 +191,7 @@ export default class PrzypisViewer extends Widget {
     // event - An Event object.
     //
     // Returns nothing.
-    _onDeleteClick = (_: any, annotation: IAnnotation)=>  {
+    _onDeleteClick = (_: any, annotation: annotator.IAnnotation)=>  {
         this.hide();
         this.onDeleteCallback(annotation);
     };

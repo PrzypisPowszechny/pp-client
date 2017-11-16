@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { annotationPriorities } from '../consts'
-import IAnnotation, { IAnnotationFields } from '../i-annotation';
+import { IAnnotationFields } from '../i-annotation';
 
 const savedFields = [
     'annotationPriority',
@@ -10,7 +10,9 @@ const savedFields = [
     'isLinkOnly'
 ];
 
-interface IAnnotationFormProps extends IAnnotation {
+interface IAnnotationFormProps {
+    id: number;
+    fields: IAnnotationFields;
     onSave(fields: IAnnotationFormState): void;
     onCancel(): void;
 }

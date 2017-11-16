@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
 import * as annotator from 'annotator';
-import IAnnotation from './i-annotation';
 import IPosition from './i-position';
 
 const { ui, util } = annotator;
@@ -18,15 +17,15 @@ const { $ } = util;
  */
 
 interface IPrzypisAdderOptions extends annotator.ui.widget.IWidgetOptions {
-  beginAnnotationCreate?: (annotation: IAnnotation, e: JQuery.Event) => void;
-  beforeRequestCreate?: (annotation: IAnnotation, e: JQuery.Event) => void;
+  beginAnnotationCreate?: (annotation: annotator.IAnnotation, e: JQuery.Event) => void;
+  beforeRequestCreate?: (annotation: annotator.IAnnotation, e: JQuery.Event) => void;
 }
 
 export default class PrzypisAdder extends Widget {
   NS = 'przypis-adder';
 
   ignoreMouseup: boolean;
-  annotation: IAnnotation | null;
+  annotation: annotator.IAnnotation | null;
   beginAnnotationCreate: IPrzypisAdderOptions["beginAnnotationCreate"];
   beforeRequestCreate: IPrzypisAdderOptions["beforeRequestCreate"];
   document: Document;
@@ -77,7 +76,7 @@ export default class PrzypisAdder extends Widget {
    * @param annotation an annotation Object to load.
    * @param position an Object specifying the position in which to show the editor (optional).
    */
-  load(annotation: IAnnotation, position: IPosition) {
+  load(annotation: annotator.IAnnotation, position: IPosition) {
     this.annotation = annotation;
     this.show(position);
   }

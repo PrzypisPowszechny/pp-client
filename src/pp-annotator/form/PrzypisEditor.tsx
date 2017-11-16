@@ -31,9 +31,9 @@ export default class PrzypisEditor extends Widget {
   </div>`;
 
   fields: string[];
-  annotation: IAnnotation;
+  annotation: IAnnotation | null;
   promiseResultContainer?: {
-    resolve: (annotation: IAnnotation) => void;
+    resolve: (annotation: annotator.IAnnotation) => void;
     reject: (error: string) => void;
   }
   resizer: {
@@ -47,7 +47,7 @@ export default class PrzypisEditor extends Widget {
     super(options);
 
     this.fields = [];
-    this.annotation = {}
+    this.annotation = null;
 
     // jquery mouse action listeners from annotator module have been left out;
     // see annotator.ui.editor's constructor
@@ -57,11 +57,11 @@ export default class PrzypisEditor extends Widget {
    * Returns an unresolved Promise that will be resolved when the save/cancel button is clicked.
    * If load function is waited upon, it will finish only when the save/cancel button is clicked.
    */
-  load = (annotation: IAnnotation, position: IPosition) => {
+  load = (annotation: annotator.IAnnotation, position: IPosition) => {
     this.annotation = annotation;
     this.updateForm(annotation.fields || {});
 
-    return new Promise((resolve, reject) => {
+    return new Promise<IAnnotation>((resolve, reject) => {
       this.promiseResultContainer = {
         resolve,
         reject
@@ -75,6 +75,9 @@ export default class PrzypisEditor extends Widget {
    */
   save = (fields: IAnnotationFields) => {
     // Load field values from component props
+    if (this.annotation === null) {
+      throw new Error('Annotation not loaded!');
+    }
     this.annotation.fields = fields;
 
     // Resolve deferred promise; will result in asynchronous user input
@@ -89,7 +92,7 @@ export default class PrzypisEditor extends Widget {
    */
   updateForm = (fields: IAnnotationFields) => {
     ReactDOM.render(
-      <AnnotationForm id={this.annotation.id} fields={fields || {}} onSave={this.save} onCancel={this.cancel}/>,
+      <AnnotationForm id={this.annotation? this.annotation.id || 0 : 0} fields={fields || {}} onSave={this.save} onCancel={this.cancel}/>,
       document.getElementById('react-form-slot')
     );
   }

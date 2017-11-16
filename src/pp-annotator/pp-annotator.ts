@@ -27,7 +27,7 @@ function trim(s: string) {
  * annotation from a list of selected ranges.
  */
 function annotationFactory(contextEl: Element, ignoreSelector: string) {
-    return function (ranges) {
+    return function (ranges: JQuery.PlainObject) {
         const text = [],
             serializedRanges = [];
 
@@ -38,8 +38,10 @@ function annotationFactory(contextEl: Element, ignoreSelector: string) {
         }
 
         return {
+            id: 0,
             quote: text.join(' / '),
             ranges: serializedRanges,
+            fields: {}
         };
     };
 }
@@ -107,15 +109,15 @@ function removeDynamicStyle() {
 }
 
 interface IState {
-    interactionPoint?: {
+    interactionPoint: {
         top: number;
         left: number;
-    }
-    adder?: annotator.ui.widget.Widget;
-    editor?: annotator.ui.widget.Widget;
-    highlighter?: typeof annotator.ui.highlighter.Highlighter;
-    textselector?: typeof annotator.ui.textselector.TextSelector;
-    viewer?: annotator.ui.widget.Widget;
+    } | null;
+    adder: PrzypisAdder;
+    editor: PrzypisEditor;
+    highlighter: annotator.ui.highlighter.Highlighter;
+    textselector: annotator.ui.textselector.TextSelector;
+    viewer: PrzypisViewer;
 }
 
 /**
@@ -139,80 +141,93 @@ export function ui(options?:{
     console.log(typeof (annotationFactory));
     const makeAnnotation = annotationFactory(element, '.annotator-hl');
 
-    // Object to hold local state
-    const s: IState = {};
+    let s: IState | undefined;
 
     function start(app: AppInstance) {
         const ident = app.registry.getUtility('identityPolicy');
         const authz = app.registry.getUtility('authorizationPolicy');
 
-        s.adder = new PrzypisAdder({
-            beginAnnotationCreate: function (annotation) {
-                s.editor.load(annotation, s.interactionPoint)
-                    .then(function (annotation) {
-                        app.annotations.create(annotation);
-                    })
-                    .catch(() => {}); // When the annotation form is cancelled
+        s = {
+            interactionPoint: null,
+            adder: new PrzypisAdder({
+                beginAnnotationCreate: function (annotation) {
+                    if (!s) {
+                        throw new Error('App not initialized!');
+                    }
+                    if (s.interactionPoint === null) {
+                        throw new Error('Interaction point is null!');
+                    }
+                    s.editor.load(annotation, s.interactionPoint)
+                        .then(function (annotation) {
+                            app.annotations.create(annotation);
+                        })
+                        .catch(() => {}); // When the annotation form is cancelled
 
-            },
-            beforeRequestCreate: function () {
-                //TODO what happens when the adder's request button is clicked
-            }
-        });
-        s.adder.attach();
-
-        //Use PrzypisEditor instead of standard annotator.ui.Editor
-        s.editor = new PrzypisEditor({
-            extensions: editorExtensions
-        });
-        s.editor.attach();
-
-        s.highlighter = new highlighter.Highlighter(element);
-
-        s.textselector = new textselector.TextSelector(element, {
-            onSelection: function (ranges, event) {
-                if (ranges.length > 0) {
-                    const annotation = makeAnnotation(ranges);
-                    s.interactionPoint = util.mousePosition(event);
-                    s.adder.load(annotation, s.interactionPoint);
-                } else {
-                    s.adder.hide();
+                },
+                beforeRequestCreate: function () {
+                    //TODO what happens when the adder's request button is clicked
                 }
-            }
-        });
+            }),
+            editor: new PrzypisEditor({
+                extensions: editorExtensions
+            }),
+            highlighter: new highlighter.Highlighter(element),
+            textselector: new textselector.TextSelector(element, {
+                onSelection: function (ranges, event) {
+                    if (!s) {
+                        throw new Error('App not initialized!');
+                    }
+                    if (ranges.length > 0) {
+                        const annotation = makeAnnotation(ranges);
+                        s.interactionPoint = util.mousePosition(event);
+                        s.adder.load(annotation, s.interactionPoint);
+                    } else {
+                        s.adder.hide();
+                    }
+                }
+            }),
+            viewer: new PrzypisViewer({
+                onEdit: function (annotation) {
+                    if (!s) {
+                        throw new Error('App is not initialized!');
+                    }
+                    // Copy the interaction point from the shown viewer:
+                    const interactionPoint = util.$(s.viewer.element).css(['top', 'left']);
+                    s.interactionPoint = ((interactionPoint as any) as {top: number, left: number});
 
-        s.viewer = new PrzypisViewer({
-            onEdit: function (annotation) {
-                // Copy the interaction point from the shown viewer:
-                s.interactionPoint = util.$(s.viewer.element).css(['top', 'left']);
-
-                s.editor.load(annotation, s.interactionPoint)
-                    .then(function (annotation) {
-                        app.annotations.update(annotation);
-                    })
-                    .catch(() => {}); // When the annotation form is cancelled
-            },
-            onDelete: function (ann) {
-                app.annotations['delete'](ann);
-            },
-            permitEdit: function (ann) {
-                return authz.permits('update', ann, ident.who());
-            },
-            permitDelete: function (ann) {
-                return authz.permits('delete', ann, ident.who());
-            },
-            autoViewHighlights: element,
-            extensions: viewerExtensions
-        });
+                    s.editor.load(annotation, s.interactionPoint)
+                        .then(function (annotation) {
+                            app.annotations.update(annotation);
+                        })
+                        .catch(() => {}); // When the annotation form is cancelled
+                },
+                onDelete: function (ann) {
+                    app.annotations['delete'](ann);
+                },
+                permitEdit: function (ann) {
+                    return authz.permits('update', ann, ident.who());
+                },
+                permitDelete: function (ann) {
+                    return authz.permits('delete', ann, ident.who());
+                },
+                autoViewHighlights: element,
+                extensions: viewerExtensions
+            })
+        }
+        s.adder.attach();
+        s.editor.attach();
+        s.highlighter.attach();
+        s.textselector.attach();
         s.viewer.attach();
-
         injectDynamicStyle();
     }
-
     return {
         start: start,
 
         destroy: function () {
+            if(!s) {
+                throw new Error('App not initialized!')
+            }
             s.adder.destroy();
             s.editor.destroy();
             s.highlighter.destroy();
@@ -221,16 +236,28 @@ export function ui(options?:{
             removeDynamicStyle();
         },
 
-        annotationsLoaded: function (anns) {
+        annotationsLoaded: function (anns: annotator.IAnnotation[]) {
+            if(!s) {
+                throw new Error('App not initialized!')
+            }
             s.highlighter.drawAll(anns);
         },
-        annotationCreated: function (ann) {
+        annotationCreated: function (ann: annotator.IAnnotation) {
+            if(!s) {
+                throw new Error('App not initialized!')
+            }
             s.highlighter.draw(ann);
         },
-        annotationDeleted: function (ann) {
+        annotationDeleted: function (ann: annotator.IAnnotation) {
+            if(!s) {
+                throw new Error('App not initialized!')
+            }
             s.highlighter.undraw(ann);
         },
-        annotationUpdated: function (ann) {
+        annotationUpdated: function (ann: annotator.IAnnotation) {
+            if(!s) {
+                throw new Error('App not initialized!')
+            }
             s.highlighter.redraw(ann);
         },
 

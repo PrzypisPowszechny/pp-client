@@ -3,10 +3,24 @@ declare module 'annotator' {
     new (): AppInstance;
   }
 
+  export interface IAnnotation {
+    id: number;
+    quote: string;
+    ranges: any[]; // TODO type this better
+    fields: {
+      [x: string]: any;
+    }
+  }
+
   export interface AppInstance {
     include(obj: any): void;
     start(): void;
     registry: registry.Registry;
+    annotations: {
+      create(ann: IAnnotation): void;
+      update(ann: IAnnotation): void;
+      delete(ann: IAnnotation): void;
+    }
   }
 
   export namespace registry {
@@ -29,16 +43,27 @@ declare module 'annotator' {
 
   export namespace ui {
 
+    export interface IAnnotationLoader extends widget.Widget {
+      load(ann: IAnnotation, position: {
+        top: number,
+        left: number,
+      }): JQuery.Deferred<IAnnotation>;
+    }
+
     export namespace highlighter {
-      export const Highlighter: {
-        new (element: Element): {}
+      export class Highlighter extends widget.Widget {
+        constructor (element: Element);
+        drawAll(anns: IAnnotation[]): void;
+        draw(ann: IAnnotation): void;
+        undraw(ann: IAnnotation): void;
+        redraw(ann: IAnnotation): void;
       }
     }
     export namespace textselector {
-      export const TextSelector: {
-        new (element: Element, options: {
+      export class TextSelector extends widget.Widget {
+        constructor(element: Element, options: {
           onSelection(ranges: Array<{}>, event: JQuery.Event): void;
-        }): {};
+        });
       }
     }
 
@@ -46,6 +71,7 @@ declare module 'annotator' {
 
       export interface IWidgetOptions {
         appendTo?: 'string';
+        extensions?: {}[];
       }
 
       export interface IWidgetConstructor {
