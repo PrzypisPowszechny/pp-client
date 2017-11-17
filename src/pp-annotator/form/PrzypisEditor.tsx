@@ -56,7 +56,7 @@ export default class PrzypisEditor extends Widget {
    * Returns an unresolved Promise that will be resolved when the save/cancel button is clicked.
    * If load function is waited upon, it will finish only when the save/cancel button is clicked.
    */
-  load = (annotation: annotator.IAnnotation, position: util.IPosition) => {
+  load(annotation: annotator.IAnnotation, position: util.IPosition) {
     this.annotation = annotation;
     this.updateForm(annotation.fields || {});
 
@@ -72,7 +72,7 @@ export default class PrzypisEditor extends Widget {
   /**
    * When save button is clicked, React form field value dictionary will be passed to this function
    */
-  save = (fields: IAnnotationFields) => {
+  save(fields: IAnnotationFields) {
     // Load field values from component props
     if (this.annotation === null) {
       throw new Error('Annotation not loaded!');
@@ -89,8 +89,7 @@ export default class PrzypisEditor extends Widget {
   /**
    * Renders (or updates, if already rendered) React component within the Editor html container
    */
-  updateForm = (fields: IAnnotationFields) => {
-    debugger;
+  updateForm(fields: IAnnotationFields) {
     ReactDOM.render(
       <AnnotationForm id={this.annotation? this.annotation.id || 0 : 0} fields={fields || {}} onSave={this.save} onCancel={this.cancel}/>,
       document.getElementById('react-form-slot')
@@ -101,7 +100,7 @@ export default class PrzypisEditor extends Widget {
    * Public: Cancels the editing process, discarding any edits made to the
    * annotation.
    */
-  cancel = () => {
+  cancel() {
     if (this.promiseResultContainer) {
       this.promiseResultContainer.reject('editing cancelled');
     }

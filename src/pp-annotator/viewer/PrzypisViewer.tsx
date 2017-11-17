@@ -146,7 +146,7 @@ export default class PrzypisViewer extends Widget {
     /**
     * Renders (or updates, if already rendered) React component within the PrzypisViewer html container
     */
-    update = (annotations: IAnnotation[]) => {
+    update(annotations: IAnnotation[]) {
         // Callbacks to pass to React component
         const callbacks = {
             onEdit: this._onEditClick,
@@ -168,7 +168,7 @@ export default class PrzypisViewer extends Widget {
     //   viewer.load([annotation1, annotation2, annotation3])
     //
     // Returns nothing.
-    load = (annotations: IAnnotation[], position: annotator.util.IPosition) => {
+    load(annotations: IAnnotation[], position: annotator.util.IPosition) {
         this.annotations = annotations || [];
         this.update(annotations);
         this.show(position);
@@ -179,7 +179,7 @@ export default class PrzypisViewer extends Widget {
     // event - An Event object.
     //
     // Returns nothing.
-    _onEditClick = (_: any, annotation: annotator.IAnnotation) => {
+    _onEditClick(_: any, annotation: annotator.IAnnotation) {
         this.hide();
         this.onEditCallback(annotation);
     };
@@ -189,7 +189,7 @@ export default class PrzypisViewer extends Widget {
     // event - An Event object.
     //
     // Returns nothing.
-    _onDeleteClick = (_: any, annotation: annotator.IAnnotation)=>  {
+    _onDeleteClick(_: any, annotation: annotator.IAnnotation) {
         this.hide();
         this.onDeleteCallback(annotation);
     };
@@ -200,7 +200,7 @@ export default class PrzypisViewer extends Widget {
     // event - An Event object.
     //
     // Returns nothing.
-    _onHighlightMouseover = (event: JQuery.Event) => {
+    _onHighlightMouseover(event: JQuery.Event) {
         // If the mouse button is currently depressed, we're probably trying to
         // make a selection, so we shouldn't show the viewer.
         if (this.mouseDown) {
@@ -228,7 +228,7 @@ export default class PrzypisViewer extends Widget {
     //            opposed to merely mousing off the current one). Default: false
     //
     // Returns a Promise.
-    _startHideTimer = (activity: boolean) => {
+    _startHideTimer(activity: boolean) {
 
         /*todo KG
         This part is copied straight from annotator.Viewer and might not be very consistent with other code;
@@ -280,7 +280,7 @@ export default class PrzypisViewer extends Widget {
     // call to _startHideTimer.
     //
     // Returns nothing.
-    _clearHideTimer = () => {
+    _clearHideTimer() {
         if (!this.hideTimer || !this.hideTimerDfd || this.hideTimerActivity) {
             throw new Error('Expected timer to be initialized!');
         }

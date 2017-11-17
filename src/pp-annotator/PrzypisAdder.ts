@@ -52,7 +52,7 @@ export default class PrzypisAdder extends Widget {
     $(this.document.body).on(mouseUpTag, this.onMouseUp);
   }
 
-  getNSTag = (tag: string) => {
+  getNSTag(tag: string) {
     return `${tag}${this.NS}`;
   }
 
