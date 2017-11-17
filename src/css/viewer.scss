@@ -1,0 +1,145 @@
+@import 'common';
+
+/* -- PP Viewer -- */
+/*
+ * The *font sizes* are currently 2x compared to design specs.
+ */
+.pp-annotation {
+	height: 136px;
+	font-size: 14px; /* for most of UI text */
+}
+
+/* --- Viewer head bar --- */
+.pp-view-head-bar {
+	margin-top: 4px;
+	margin-right: 15px; /* the same margin as comment, for the date */
+	clear: both; /* push up controls */
+}
+
+.pp-view-comment-priority {
+	margin-left: -2px; /* cover the border */
+	width: 100px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-left: 21px; /* indent the type indication */
+	float: left;
+
+	background-color: rgb(86, 121, 176);
+	font-family: 'Open Sans SemiBold';
+	color: rgb(255, 255, 255);
+	text-transform: uppercase;
+}
+
+.pp-view-comment-date {
+	float: right;
+	font-family: 'Open Sans Light';
+	color: rgb(86, 121, 176);
+}
+
+/* --- Viewer comment display --- */
+.pp-view-comment {
+	width: 470px;
+	margin-left: 15px;
+	min-height: 48px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	clear: both;
+
+	font-family: 'Open Sans Light';
+	font-size: 18px;
+	color: rgb(0, 0, 0);
+}
+
+/* --- Viewer link bar --- */
+.pp-view-link-bar {
+	width: 470px;
+	margin-left: 15px;
+
+	/* upper line */
+	border-top: 1px solid rgb(210, 212, 210);
+
+	color: rgb(136, 136, 136);
+
+	line-height: 2em;
+}
+
+.pp-view-link {
+	font-family: 'Open Sans SemiBold';
+	color: rgb(136, 136, 136);
+	text-transform: uppercase;
+}
+
+/* --- Viewer controls. --- */
+
+.pp-viewer {
+
+	.pp-controls {
+		position: relative;
+		top: 5px;
+		right: 5px;
+		padding-left: 5px;
+		float: right;
+
+		min-height: 20px;
+		clear: both;
+
+		button {
+			/* TODO replace with our own spritesheet, this path is atrocious */
+			background-image: url(../../node_modules/annotator/img/annotator-glyph-sprite.png?embed);
+			background-repeat: no-repeat;
+		}
+	}
+
+	li:hover .pp-controls,
+	li .pp-controls.pp-visible {
+		opacity: 1;
+	}
+
+	.pp-controls button,
+	.pp-controls a {
+		cursor: pointer;
+		display: inline-block;
+		width: 13px;
+		height: 13px;
+		margin-left: 2px;
+		border: none;
+		text-indent: -900em;
+		background-color: transparent;
+		outline: none;
+	}
+
+	.pp-controls button:hover,
+	.pp-controls button:focus,
+	.pp-controls a:hover,
+	.pp-controls a:focus {
+		opacity: 0.9;
+	}
+
+	.pp-controls button:active,
+	.pp-controls a:active {
+		opacity: 1;
+	}
+
+	.pp-controls button[disabled] {
+		display: none;
+	}
+
+	.pp-controls .pp-edit {
+		background-position: 0 -60px;
+	}
+
+	.pp-controls .pp-delete {
+		background-position: 0 -75px;
+	}
+
+	.pp-controls .pp-link {
+		background-position: 0 -270px;
+	}
+
+}
+
+
+
+
+
+

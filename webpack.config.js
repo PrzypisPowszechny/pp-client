@@ -7,6 +7,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const BUILD_DIR = path.resolve(__dirname, 'dist');
 
 const config = {
+  cache: false,
   entry: "./src/index.ts",
   output: {
     path: BUILD_DIR,
@@ -25,7 +26,7 @@ const config = {
       },
       {
         test: /\.scss$/,
-        loaders: ['style', 'css', 'sass']
+        loaders: ['style-loader', 'css-loader', 'sass-loader']
       },
       {
         test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,

@@ -3,6 +3,8 @@ import { AnnotationPriorities } from '../consts';
 import {IAnnotationFields, AnnotationViewModel} from '../annotation';
 
 const savedFields = ['priority', 'comment', 'referenceLink', 'referenceLinkTitle'];
+import '../../css/viewer.scss';
+
 
 export interface IAnnotationFormProps {
   id: number;

@@ -1,0 +1,27 @@
+@font-face {
+    font-family: 'Open Sans Light';
+    src: url('../../assets/OpenSans-Light.ttf');
+}
+
+@font-face {
+    font-family: 'Open Sans SemiBold';
+    src: url('../../assets/OpenSans-SemiBold.ttf');
+}
+
+/* Widgets are both the adder and the viewer. */
+.annotator-widget {
+	/* reset annotator.js's styling */
+	border-radius: 0px;
+
+	min-width: 500px;
+	border: 2px solid rgb(210, 212, 210);
+	color: rgb(0, 0, 0);
+}
+
+.annotator-widget::after {
+	/* The downward triangle below widget. */
+
+	left: 250px;
+
+	/* TODO! new spritesheet need from the UX team. (eg. this triangle) */
+}

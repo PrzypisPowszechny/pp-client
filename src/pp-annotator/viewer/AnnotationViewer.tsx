@@ -58,7 +58,7 @@ export default class AnnotationViewer extends React.Component<
 
 		<div className="pp-view-head-bar">
                 <div className="pp-view-comment-priority">
-                    {this.props.annotation.priority}
+                    {priority}
                 </div>
 		<div className="pp-view-comment-date">
 			01.01.1999
@@ -66,13 +66,13 @@ export default class AnnotationViewer extends React.Component<
 		</div>
 
                 <div className="pp-view-comment">
-                    {this.props.annotation.comment}
+                    {comment}
                 </div>
 
 		<div className="pp-view-link-bar">
 			<span className="pp-view-link">
-			<a href={this.props.annotation.referenceLink}>
-				{this.props.annotation.referenceLinkTitle}
+			<a href={referenceLink}>
+				{referenceLinkTitle}
 			</a>
 			</span>
 		</div>
