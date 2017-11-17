@@ -157,12 +157,9 @@ export function ui(options?: {
           if (s.interactionPoint === null) {
             throw new Error('Interaction point is null!');
           }
-          s.editor
-            .load(annotation, s.interactionPoint)
-            .then(resultAnnotation => {
-              app.annotations.create(resultAnnotation);
-            })
-            .catch(() => undefined); // When the annotation form is cancelled
+          s.editor.load(annotation, s.interactionPoint,
+              resultAnnotation => app.annotations.create(resultAnnotation)
+            );
         },
         beforeRequestCreate() {
           // TODO what happens when the adder's request button is clicked
@@ -195,21 +192,18 @@ export function ui(options?: {
           const interactionPoint = util.$(s.viewer.element).css(['top', 'left']);
           s.interactionPoint = (interactionPoint as any) as { top: number; left: number };
 
-          s.editor
-            .load(annotation, s.interactionPoint)
-            .then(resultAnnotation => {
-              app.annotations.update(resultAnnotation);
-            })
-            .catch(() => undefined); // When the annotation form is cancelled
+          s.editor.load(annotation, s.interactionPoint,
+              resultAnnotation => app.annotations.update(resultAnnotation)
+            );
         },
-        onDelete(ann) {
-          app.annotations.delete(ann);
+        onDelete(annotation) {
+          app.annotations.delete(annotation);
         },
-        permitEdit(ann) {
-          return authz.permits('update', ann, ident.who());
+        permitEdit(annotation) {
+          return authz.permits('update', annotation, ident.who());
         },
-        permitDelete(ann) {
-          return authz.permits('delete', ann, ident.who());
+        permitDelete(annotation) {
+          return authz.permits('delete', annotation, ident.who());
         },
         autoViewHighlights: element,
         extensions: viewerExtensions

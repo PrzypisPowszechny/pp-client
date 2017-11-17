@@ -5,7 +5,7 @@ import AnnotationForm from './AnnotationForm';
 
 import * as annotator from 'annotator';
 import { ui as AnnotatorUI, util } from 'annotator';
-import IAnnotation, { IAnnotationFields } from '../i-annotation';
+import IAnnotation from '../i-annotation';
 import { mover, resizer } from './editor-utils';
 
 const { $ } = util;
@@ -41,6 +41,8 @@ export default class PrzypisEditor extends Widget {
   private mover: {
     destroy: () => void;
   };
+
+  private saveAction: (annotation: IAnnotation) => any;
 
   constructor(options: annotator.ui.widget.IWidgetOptions) {
     super(options);
@@ -85,68 +87,57 @@ export default class PrzypisEditor extends Widget {
   }
 
   /**
-   * Override parent attach function to render React form
+   * Loads the annotation and displays the edit window
+   * Returns an unresolved Promise that will be resolved/rejected when the save/cancel button is clicked.
    */
-  public attach() {
-    // Call parent function (renders PrzypisEditor.template)
-    super.attach();
-    this.updateForm({});
-  }
-
-  /**
-   * Returns an unresolved Promise that will be resolved when the save/cancel button is clicked.
-   * If load function is waited upon, it will finish only when the save/cancel button is clicked.
-   */
-  public load(annotation: annotator.IAnnotation, position: util.IPosition) {
+  public load(annotation: annotator.IAnnotation,
+              position: util.IPosition,
+              saveAction: (annotation: IAnnotation) => any) {
     this.annotation = annotation;
-    this.updateForm(annotation.fields || {});
+    this.saveAction = saveAction.bind(this);
+    this.updateForm(annotation);
+    this.show(position);
 
     return new Promise<IAnnotation>((resolve, reject) => {
       this.promiseResultContainer = {
         resolve,
         reject
       };
-      this.show(position);
     });
   }
 
-  /**
-   * When save button is clicked, React form field value dictionary will be passed to this function
-   */
-  private save(fields: IAnnotationFields) {
-    // Load field values from component props
-    if (this.annotation === null) {
-      throw new Error('Annotation not loaded!');
-    }
-    this.annotation.fields = fields;
-
-    // Resolve deferred promise; will result in asynchronous user input
-    if (this.promiseResultContainer) {
-      this.promiseResultContainer.resolve(this.annotation);
-    }
-    this.hide();
-  }
-
-  /**
+    /**
    * Renders (or updates, if already rendered) React component within the Editor html container
    */
-  private updateForm(fields: IAnnotationFields) {
+  private updateForm(annotation: IAnnotation) {
     ReactDOM.render(
       <AnnotationForm
         id={this.annotation ? this.annotation.id || 0 : 0}
-        fields={fields || {}}
-        onSave={this.save.bind(this)}
-        onCancel={this.cancel.bind(this)}
+        annotation={annotation}
+        saveAction={this.saveAction}
+        onSave={this.onSave}
+        onCancel={this.onCancel}
       />,
       document.getElementById('react-form-slot')
     );
   }
 
   /**
+   * When save button is clicked, React form field value dictionary will be passed to this function
+   */
+  private onSave() {
+    // Resolve deferred promise; will result in asynchronous user input
+    if (this.promiseResultContainer) {
+      this.promiseResultContainer.resolve(this.annotation as IAnnotation);
+    }
+    this.hide();
+  }
+
+  /**
    * Public: Cancels the editing process, discarding any edits made to the
    * annotation.
    */
-  private cancel() {
+  private onCancel() {
     if (this.promiseResultContainer) {
       this.promiseResultContainer.reject('editing cancelled');
     }
