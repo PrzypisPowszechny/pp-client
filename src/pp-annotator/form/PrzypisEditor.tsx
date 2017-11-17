@@ -135,8 +135,8 @@ export default class PrzypisEditor extends Widget {
       <AnnotationForm
         id={this.annotation ? this.annotation.id || 0 : 0}
         fields={fields || {}}
-        onSave={this.save}
-        onCancel={this.cancel}
+        onSave={this.save.bind(this)}
+        onCancel={this.cancel.bind(this)}
       />,
       document.getElementById('react-form-slot')
     );

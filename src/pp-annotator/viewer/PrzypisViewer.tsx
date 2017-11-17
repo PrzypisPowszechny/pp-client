@@ -164,8 +164,8 @@ export default class PrzypisViewer extends Widget {
   private update(annotations: IAnnotation[]) {
     // Callbacks to pass to React component
     const callbacks = {
-      onEdit: this._onEditClick,
-      onDelete: this._onDeleteClick
+      onEdit: this._onEditClick.bind(this),
+      onDelete: this._onDeleteClick.bind(this)
     };
 
     ReactDOM.render(
