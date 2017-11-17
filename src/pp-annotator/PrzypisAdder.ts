@@ -1,5 +1,5 @@
-import * as _ from 'lodash';
 import * as annotator from 'annotator';
+import * as _ from 'lodash';
 
 const { ui, util } = annotator;
 const { widget: { Widget } } = ui;
@@ -21,15 +21,18 @@ interface IPrzypisAdderOptions extends annotator.ui.widget.IWidgetOptions {
 }
 
 export default class PrzypisAdder extends Widget {
-  NS = 'przypis-adder';
+  public static options: IPrzypisAdderOptions = {};
+  private static NS = 'przypis-adder';
 
-  ignoreMouseup: boolean;
-  annotation: annotator.IAnnotation | null;
-  beginAnnotationCreate: IPrzypisAdderOptions["beginAnnotationCreate"];
-  beforeRequestCreate: IPrzypisAdderOptions["beforeRequestCreate"];
-  document: Document;
+  private static getNSTag(tag: string) {
+    return `${tag}${PrzypisAdder.NS}`;
+  }
 
-  static options: IPrzypisAdderOptions = {};
+  private ignoreMouseup: boolean;
+  private annotation: annotator.IAnnotation | null;
+  private beginAnnotationCreate: IPrzypisAdderOptions['beginAnnotationCreate'];
+  private beforeRequestCreate: IPrzypisAdderOptions['beforeRequestCreate'];
+  private document: Document;
 
   constructor(options: IPrzypisAdderOptions) {
     super(options);
@@ -37,12 +40,14 @@ export default class PrzypisAdder extends Widget {
     this.ignoreMouseup = false;
     this.annotation = null;
 
-    this.beginAnnotationCreate = PrzypisAdder.options.beginAnnotationCreate || options.beginAnnotationCreate;
-    this.beforeRequestCreate = PrzypisAdder.options.beforeRequestCreate || options.beforeRequestCreate;
+    this.beginAnnotationCreate =
+      PrzypisAdder.options.beginAnnotationCreate || options.beginAnnotationCreate;
+    this.beforeRequestCreate =
+      PrzypisAdder.options.beforeRequestCreate || options.beforeRequestCreate;
 
-    const clickTag = this.getNSTag(`click.`);
-    const mouseDownTag = this.getNSTag(`mousedown.`);
-    const mouseUpTag = this.getNSTag(`mouseup.`);
+    const clickTag = PrzypisAdder.getNSTag(`click.`);
+    const mouseDownTag = PrzypisAdder.getNSTag(`mousedown.`);
+    const mouseUpTag = PrzypisAdder.getNSTag(`mouseup.`);
 
     this.element
       .on(clickTag, 'button', this.onClick.bind(this))
@@ -52,12 +57,29 @@ export default class PrzypisAdder extends Widget {
     $(this.document.body).on(mouseUpTag, this.onMouseUp);
   }
 
-  getNSTag(tag: string) {
-    return `${tag}${this.NS}`;
+  /**
+   * Public: Show the adder.
+   *
+   * Examples
+   *  adder.show()
+   *  adder.hide()
+   *  adder.show({top: '100px', left: '80px'})
+   *
+   * @param position an Object specifying the position in which to show the editor (optional).
+   */
+  public show(position?: annotator.util.IPosition) {
+    if (position) {
+      this.element.css({
+        left: position.left,
+        top: position.top
+      });
+    }
+
+    super.show();
   }
 
-  destroy() {
-    const offTag = this.getNSTag(`.`);
+  public destroy() {
+    const offTag = PrzypisAdder.getNSTag(`.`);
 
     this.element.off(offTag);
     $(this.document.body).off(offTag);
@@ -75,30 +97,9 @@ export default class PrzypisAdder extends Widget {
    * @param annotation an annotation Object to load.
    * @param position an Object specifying the position in which to show the editor (optional).
    */
-  load(annotation: annotator.IAnnotation, position: annotator.util.IPosition) {
+  public load(annotation: annotator.IAnnotation, position: annotator.util.IPosition) {
     this.annotation = annotation;
     this.show(position);
-  }
-
-  /**
-   * Public: Show the adder.
-   *
-   * Examples
-   *  adder.show()
-   *  adder.hide()
-   *  adder.show({top: '100px', left: '80px'})
-   *
-   * @param position an Object specifying the position in which to show the editor (optional).
-   */
-  show(position?: annotator.util.IPosition) {
-    if (position) {
-      this.element.css({
-        top: position.top,
-        left: position.left
-      });
-    }
-
-    super.show();
   }
 
   /**
@@ -106,7 +107,7 @@ export default class PrzypisAdder extends Widget {
    *
    * @param event a mousedown Event object
    */
-  onMouseDown(event: JQuery.Event) {
+  private onMouseDown(event: JQuery.Event) {
     // Do nothing for right-clicks, middle-clicks, etc.
     if (event.which > 1) {
       return;
@@ -123,7 +124,7 @@ export default class PrzypisAdder extends Widget {
    *
    * @param event a mouseup Event object
    */
-  onMouseUp(event: JQuery.Event) {
+  private onMouseUp(event: JQuery.Event) {
     // Do nothing for right-clicks, middle-clicks, etc.
     if (event.which > 1) {
       return;
@@ -135,7 +136,6 @@ export default class PrzypisAdder extends Widget {
     }
   }
 
-
   /**
    * Event callback: called when the adder is clicked. The click event is used
    * as well as the mousedown so that we get the :active state on the adder
@@ -145,7 +145,7 @@ export default class PrzypisAdder extends Widget {
    *
    * Returns nothing.
    */
-  onClick(event: JQuery.Event) {
+  private onClick(event: JQuery.Event) {
     // Do nothing for right-clicks, middle-clicks, etc.
     if (event.which > 1) {
       return;
@@ -159,12 +159,18 @@ export default class PrzypisAdder extends Widget {
 
     if (this.annotation) {
       // create annotation button clicked
-      if (event.target === this.element.find(".create-annotation")[0] && _.isFunction(this.beginAnnotationCreate)) {
+      if (
+        event.target === this.element.find('.create-annotation')[0] &&
+        _.isFunction(this.beginAnnotationCreate)
+      ) {
         this.beginAnnotationCreate(this.annotation, event);
       }
 
       // create request button clicked
-      if (event.target === this.element.find(".create-request")[0] && _.isFunction(this.beforeRequestCreate)) {
+      if (
+        event.target === this.element.find('.create-request')[0] &&
+        _.isFunction(this.beforeRequestCreate)
+      ) {
         this.beforeRequestCreate(this.annotation, event);
       }
     }

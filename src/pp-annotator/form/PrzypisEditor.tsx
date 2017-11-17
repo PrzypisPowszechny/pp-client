@@ -1,12 +1,12 @@
 import * as React from 'react';
-import * as ReactDOM from "react-dom";
+import * as ReactDOM from 'react-dom';
 
 import AnnotationForm from './AnnotationForm';
 
 import * as annotator from 'annotator';
-import { util, ui as AnnotatorUI } from 'annotator';
-import { mover, resizer } from "./editor-utils";
+import { ui as AnnotatorUI, util } from 'annotator';
 import IAnnotation, { IAnnotationFields } from '../i-annotation';
+import { mover, resizer } from './editor-utils';
 
 const { $ } = util;
 const { widget: { Widget } } = AnnotatorUI;
@@ -19,28 +19,28 @@ const { widget: { Widget } } = AnnotatorUI;
  */
 
 export default class PrzypisEditor extends Widget {
-  static classes = {
+  public static classes = {
     hide: 'annotator-hide',
     focus: 'annotator-focus',
-    invert: Widget.classes.invert,
+    invert: Widget.classes.invert
   };
-  static template = `
+  public static template = `
   <div class="annotator-outer annotator-editor annotator-hide">
     <div id="react-form-slot"></div>
   </div>`;
 
-  fields: string[];
-  annotation: IAnnotation | null;
-  promiseResultContainer?: {
+  public fields: string[];
+  private annotation: IAnnotation | null;
+  private promiseResultContainer?: {
     resolve: (annotation: annotator.IAnnotation) => void;
     reject: (error: string) => void;
-  }
-  resizer: {
+  };
+  private resizer: {
     destroy: () => void;
-  }
-  mover: {
+  };
+  private mover: {
     destroy: () => void;
-  }
+  };
 
   constructor(options: annotator.ui.widget.IWidgetOptions) {
     super(options);
@@ -50,61 +50,6 @@ export default class PrzypisEditor extends Widget {
 
     // jquery mouse action listeners from annotator module have been left out;
     // see annotator.ui.editor's constructor
-  }
-
-  /**
-   * Returns an unresolved Promise that will be resolved when the save/cancel button is clicked.
-   * If load function is waited upon, it will finish only when the save/cancel button is clicked.
-   */
-  load(annotation: annotator.IAnnotation, position: util.IPosition) {
-    this.annotation = annotation;
-    this.updateForm(annotation.fields || {});
-
-    return new Promise<IAnnotation>((resolve, reject) => {
-      this.promiseResultContainer = {
-        resolve,
-        reject
-      };
-      this.show(position);
-    });
-  }
-
-  /**
-   * When save button is clicked, React form field value dictionary will be passed to this function
-   */
-  save(fields: IAnnotationFields) {
-    // Load field values from component props
-    if (this.annotation === null) {
-      throw new Error('Annotation not loaded!');
-    }
-    this.annotation.fields = fields;
-
-    // Resolve deferred promise; will result in asynchronous user input
-    if (this.promiseResultContainer) {
-      this.promiseResultContainer.resolve(this.annotation);
-    }
-    this.hide();
-  }
-
-  /**
-   * Renders (or updates, if already rendered) React component within the Editor html container
-   */
-  updateForm(fields: IAnnotationFields) {
-    ReactDOM.render(
-      <AnnotationForm id={this.annotation? this.annotation.id || 0 : 0} fields={fields || {}} onSave={this.save} onCancel={this.cancel}/>,
-      document.getElementById('react-form-slot')
-    );
-  }
-
-  /**
-   * Public: Cancels the editing process, discarding any edits made to the
-   * annotation.
-   */
-  cancel() {
-    if (this.promiseResultContainer) {
-      this.promiseResultContainer.reject('editing cancelled');
-    }
-    this.hide();
   }
 
   /**
@@ -121,8 +66,7 @@ export default class PrzypisEditor extends Widget {
    *
    * Returns nothing.
    */
-  show(position: util.IPosition) {
-    debugger;
+  public show(position: util.IPosition) {
     if (position) {
       this.element.css({
         top: position.top,
@@ -130,14 +74,12 @@ export default class PrzypisEditor extends Widget {
       });
     }
 
-    this.element
-      .find('.annotator-save')
-      .addClass(PrzypisEditor.classes.focus);
+    this.element.find('.annotator-save').addClass(PrzypisEditor.classes.focus);
 
     super.show();
 
     // give main textarea focus
-    this.element.find(":input:first").focus();
+    this.element.find(':input:first').focus();
 
     this.setupDraggables();
   }
@@ -145,10 +87,70 @@ export default class PrzypisEditor extends Widget {
   /**
    * Override parent attach function to render React form
    */
-  attach() {
+  public attach() {
     // Call parent function (renders PrzypisEditor.template)
     super.attach();
     this.updateForm({});
+  }
+
+  /**
+   * Returns an unresolved Promise that will be resolved when the save/cancel button is clicked.
+   * If load function is waited upon, it will finish only when the save/cancel button is clicked.
+   */
+  public load(annotation: annotator.IAnnotation, position: util.IPosition) {
+    this.annotation = annotation;
+    this.updateForm(annotation.fields || {});
+
+    return new Promise<IAnnotation>((resolve, reject) => {
+      this.promiseResultContainer = {
+        resolve,
+        reject
+      };
+      this.show(position);
+    });
+  }
+
+  /**
+   * When save button is clicked, React form field value dictionary will be passed to this function
+   */
+  private save(fields: IAnnotationFields) {
+    // Load field values from component props
+    if (this.annotation === null) {
+      throw new Error('Annotation not loaded!');
+    }
+    this.annotation.fields = fields;
+
+    // Resolve deferred promise; will result in asynchronous user input
+    if (this.promiseResultContainer) {
+      this.promiseResultContainer.resolve(this.annotation);
+    }
+    this.hide();
+  }
+
+  /**
+   * Renders (or updates, if already rendered) React component within the Editor html container
+   */
+  private updateForm(fields: IAnnotationFields) {
+    ReactDOM.render(
+      <AnnotationForm
+        id={this.annotation ? this.annotation.id || 0 : 0}
+        fields={fields || {}}
+        onSave={this.save}
+        onCancel={this.cancel}
+      />,
+      document.getElementById('react-form-slot')
+    );
+  }
+
+  /**
+   * Public: Cancels the editing process, discarding any edits made to the
+   * annotation.
+   */
+  private cancel() {
+    if (this.promiseResultContainer) {
+      this.promiseResultContainer.reject('editing cancelled');
+    }
+    this.hide();
   }
 
   /**
@@ -156,7 +158,7 @@ export default class PrzypisEditor extends Widget {
    *
    * Returns nothing.
    */
-  setupDraggables() {
+  private setupDraggables() {
     if (this.resizer) {
       this.resizer.destroy();
     }
@@ -178,13 +180,15 @@ export default class PrzypisEditor extends Widget {
       $('<span class="annotator-resize"></span>').appendTo(cornerItem);
     }
 
-    const controls = this.element.find('.annotator-controls')[0],
-      textarea = this.element.find('textarea:first')[0],
-      resizeHandle = this.element.find('.annotator-resize')[0];
+    const [controls, textarea, resizeHandle] = [
+      '.annotator-controls',
+      'textarea:first',
+      '.annotator-resize'
+    ].map(x => this.element.find(x)[0]);
 
     this.resizer = resizer(textarea, resizeHandle, {
       invertedX: () => this.element.hasClass(PrzypisEditor.classes.invert.x),
-      invertedY: () => this.element.hasClass(PrzypisEditor.classes.invert.y),
+      invertedY: () => this.element.hasClass(PrzypisEditor.classes.invert.y)
     });
 
     this.mover = mover(this.element[0], controls);

@@ -1,8 +1,8 @@
 import * as annotator from 'annotator';
 
 export default interface IAnnotation extends annotator.IAnnotation {
-  fields: IAnnotationFields
-}
+  fields: IAnnotationFields;
+};
 
 export interface IAnnotationFields {
   annotationPriority?: number;

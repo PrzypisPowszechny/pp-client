@@ -1,30 +1,35 @@
 import * as React from 'react';
 
-import AnnotationViewer, { ICallbacks }from './AnnotationViewer';
 import IAnnotation from '../i-annotation';
+import AnnotationViewer, { ICallbacks } from './AnnotationViewer';
 
 interface IAnnotationMultipleViewerProps {
-    annotations: IAnnotation[];
-    callbacks: ICallbacks;
+  annotations: IAnnotation[];
+  callbacks: ICallbacks;
 }
 
-export default class AnnotationMultipleViewer extends React.Component<IAnnotationMultipleViewerProps, {}> {
-    constructor(props: IAnnotationMultipleViewerProps) {
-        super(props);
-    }
+export default class AnnotationMultipleViewer extends React.Component<
+  IAnnotationMultipleViewerProps,
+  {}
+> {
+  constructor(props: IAnnotationMultipleViewerProps) {
+    super(props);
+  }
 
-    renderItems() {
-        return this.props.annotations.map((annotation) =>
-            <AnnotationViewer key={annotation.id || 0} annotation={annotation} callbacks={this.props.callbacks} />
-        );
-    }
+  public renderItems() {
+    return this.props.annotations.map(annotation => (
+      <AnnotationViewer
+        key={annotation.id || 0}
+        annotation={annotation}
+        callbacks={this.props.callbacks}
+      />
+    ));
+  }
 
-    render() {
-        return (
-            //The inner part of annotator.Viewer.template
-            <ul className="annotator-widget annotator-listing">
-                {this.renderItems()}
-            </ul>
-        );
-    }
+  public render() {
+    return (
+      // The inner part of annotator.Viewer.template
+      <ul className="annotator-widget annotator-listing">{this.renderItems()}</ul>
+    );
+  }
 }

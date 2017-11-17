@@ -5,8 +5,8 @@ import { util } from 'annotator';
 const { $ } = util;
 
 interface IVec2 {
-    x: number;
-    y: number;
+  x: number;
+  y: number;
 }
 
 // ANNOTATOR FUNCTIONS (copied from annotator.ui.editor)
@@ -28,78 +28,77 @@ interface IVec2 {
  * accumulated and passed to the next mousemove event.
  */
 export function dragTracker(handle: Node, callback: (delta: IVec2) => boolean) {
-    let lastPos: util.IPosition | null = null,
-        throttled = false;
+  let lastPos: util.IPosition | null = null;
+  let throttled = false;
 
-    // Event handler for mousemove
-    function mouseMove(e: JQuery.Event) {
-        if (throttled || lastPos === null) {
-            return;
-        }
-
-        const delta = {
-            y: e.pageY - lastPos.top,
-            x: e.pageX - lastPos.left
-        };
-
-        let trackLastMove = true;
-        // The callback function can return false to indicate that the tracker
-        // shouldn't keep updating the last position. This can be used to
-        // implement "walls" beyond which (for example) resizing has no effect.
-        if (typeof callback === 'function') {
-            trackLastMove = callback(delta);
-        }
-
-        if (trackLastMove !== false) {
-            lastPos = {
-                top: e.pageY,
-                left: e.pageX
-            };
-        }
-
-        // Throttle repeated mousemove events
-        throttled = true;
-        setTimeout(function () {
-            throttled = false;
-        }, 1000 / 60);
+  // Event handler for mousemove
+  function mouseMove(e: JQuery.Event) {
+    if (throttled || lastPos === null) {
+      return;
     }
 
-    // Event handler for mouseup
-    function mouseUp() {
-        lastPos = null;
-        $(handle.ownerDocument)
-            .off('mouseup', mouseUp)
-            .off('mousemove', mouseMove);
+    const delta = {
+      y: e.pageY - lastPos.top,
+      x: e.pageX - lastPos.left
+    };
+
+    let trackLastMove = true;
+    // The callback function can return false to indicate that the tracker
+    // shouldn't keep updating the last position. This can be used to
+    // implement "walls" beyond which (for example) resizing has no effect.
+    if (typeof callback === 'function') {
+      trackLastMove = callback(delta);
     }
 
-    // Event handler for mousedown -- starts drag tracking
-    function mouseDown(e: JQuery.Event) {
-        if (e.target !== handle) {
-            return;
-        }
-
-        lastPos = {
-            top: e.pageY,
-            left: e.pageX
-        };
-
-        $(handle.ownerDocument)
-            .on('mouseup', mouseUp)
-            .on('mousemove', mouseMove);
-
-        e.preventDefault();
+    if (trackLastMove !== false) {
+      lastPos = {
+        top: e.pageY,
+        left: e.pageX
+      };
     }
 
-    // Public: turn off drag tracking for this dragTracker object.
-    function destroy() {
-        $(handle).off('mousedown', mouseDown);
+    // Throttle repeated mousemove events
+    throttled = true;
+    setTimeout(() => {
+      throttled = false;
+    }, 1000 / 60);
+  }
+
+  // Event handler for mouseup
+  function mouseUp() {
+    lastPos = null;
+    $(handle.ownerDocument)
+      .off('mouseup', mouseUp)
+      .off('mousemove', mouseMove);
+  }
+
+  // Event handler for mousedown -- starts drag tracking
+  function mouseDown(e: JQuery.Event) {
+    if (e.target !== handle) {
+      return;
     }
 
-    $(handle).on('mousedown', mouseDown);
+    lastPos = {
+      top: e.pageY,
+      left: e.pageX
+    };
 
-    return { destroy: destroy };
+    $(handle.ownerDocument)
+      .on('mouseup', mouseUp)
+      .on('mousemove', mouseMove);
+
+    e.preventDefault();
+  }
+
+  // Public: turn off drag tracking for this dragTracker object.
+  function destroy() {
+    $(handle).off('mousedown', mouseDown);
+  }
+
+  $(handle).on('mousedown', mouseDown);
+
+  return { destroy };
 }
-
 
 /**
  * resizer is a component that uses a dragTracker under the hood to track the
@@ -120,56 +119,59 @@ export function dragTracker(handle: Node, callback: (delta: IVec2) => boolean) {
  * inverted. Useful if the drag handle is at the bottom of the
  * element, and so dragging down means "grow the element"
  */
-export function resizer(element: Element, handle: Node, options: {
-   invertedX?: () => boolean;
-   invertedY?: () => boolean;
-}) {
-    const $el = $(element);
-    if (typeof options === 'undefined' || options === null) {
-        options = {};
+export function resizer(
+  element: Element,
+  handle: Node,
+  options: {
+    invertedX?: () => boolean;
+    invertedY?: () => boolean;
+  }
+) {
+  const $el = $(element);
+  if (typeof options === 'undefined' || options === null) {
+    options = {};
+  }
+
+  // Translate the delta supplied by dragTracker into a delta that takes
+  // account of the invertedX and invertedY callbacks if defined.
+  function translate(delta: IVec2) {
+    let directionX = 1;
+    let directionY = -1;
+
+    if (typeof options.invertedX === 'function' && options.invertedX()) {
+      directionX = -1;
+    }
+    if (typeof options.invertedY === 'function' && options.invertedY()) {
+      directionY = 1;
     }
 
-    // Translate the delta supplied by dragTracker into a delta that takes
-    // account of the invertedX and invertedY callbacks if defined.
-    function translate(delta: IVec2) {
-        let directionX = 1,
-            directionY = -1;
+    return {
+      x: delta.x * directionX,
+      y: delta.y * directionY
+    };
+  }
 
-        if (typeof options.invertedX === 'function' && options.invertedX()) {
-            directionX = -1;
-        }
-        if (typeof options.invertedY === 'function' && options.invertedY()) {
-            directionY = 1;
-        }
+  // Callback for dragTracker
+  function resize(delta: IVec2) {
+    const height = $el.height();
+    const width = $el.width();
+    const translated = translate(delta);
 
-        return {
-            x: delta.x * directionX,
-            y: delta.y * directionY
-        };
+    if (Math.abs(translated.x) > 0) {
+      $el.width(width || 0 + translated.x);
+    }
+    if (Math.abs(translated.y) > 0) {
+      $el.height(height || 0 + translated.y);
     }
 
-    // Callback for dragTracker
-    function resize(delta: IVec2) {
-        const height = $el.height(),
-            width = $el.width(),
-            translated = translate(delta);
+    // Did the element dimensions actually change? If not, then we've
+    // reached the minimum size, and we shouldn't track
+    return $el.height() !== height || $el.width() !== width;
+  }
 
-        if (Math.abs(translated.x) > 0) {
-            $el.width(width || 0 + translated.x);
-        }
-        if (Math.abs(translated.y) > 0) {
-            $el.height(height || 0 + translated.y);
-        }
-
-        // Did the element dimensions actually change? If not, then we've
-        // reached the minimum size, and we shouldn't track
-        return ($el.height() !== height || $el.width() !== width);
-    }
-
-    // We return the dragTracker object in order to expose its methods.
-    return dragTracker(handle, resize);
+  // We return the dragTracker object in order to expose its methods.
+  return dragTracker(handle, resize);
 }
-
 
 /**
  * mover is a component that uses a dragTracker under the hood to track the
@@ -179,14 +181,14 @@ export function resizer(element: Element, handle: Node, options: {
  * handle - DOM Element to use as a move handle
  */
 export function mover(element: Element, handle: Node) {
-    function move(delta: IVec2) {
-        $(element).css({
-            top: parseInt($(element).css('top'), 10) + delta.y,
-            left: parseInt($(element).css('left'), 10) + delta.x
-        });
-        return false;
-    }
+  function move(delta: IVec2) {
+    $(element).css({
+      top: parseInt($(element).css('top'), 10) + delta.y,
+      left: parseInt($(element).css('left'), 10) + delta.x
+    });
+    return false;
+  }
 
-    // We return the dragTracker object in order to expose its methods.
-    return dragTracker(handle, move);
+  // We return the dragTracker object in order to expose its methods.
+  return dragTracker(handle, move);
 }
