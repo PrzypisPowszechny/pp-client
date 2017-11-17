@@ -29,7 +29,7 @@ export default class PrzypisAdder extends Widget {
   beforeRequestCreate: IPrzypisAdderOptions["beforeRequestCreate"];
   document: Document;
 
-  static options: IPrzypisAdderOptions;
+  static options: IPrzypisAdderOptions = {};
 
   constructor(options: IPrzypisAdderOptions) {
     super(options);
@@ -182,11 +182,3 @@ PrzypisAdder.template = `
   <button type="button" class="create-annotation">Dodaj przypis</button>
   <button type="button" class="create-request">Poproś o źródło</button>
 </div>`;
-
-// Configuration options
-PrzypisAdder.options = {
-  // Callback, called when the user clicks the "create annotation" option on the adder
-  beginAnnotationCreate: undefined,
-  // Callback, called when the user clicks the "create request" option on the adder
-  beforeRequestCreate: undefined,
-};

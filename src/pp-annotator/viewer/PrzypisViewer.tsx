@@ -24,9 +24,8 @@ interface IPrzypisViewerOptions extends annotator.ui.widget.IWidgetOptions {
 
 // Public: Creates an element for viewing annotations.
 export default class PrzypisViewer extends Widget {
-    static get nameSpace() {
-        return 'annotator-viewer';
-    }
+    static nameSpace = 'annotator-viewer';
+
     annotations: IAnnotation[];
     hideTimer: number | null;
     hideTimerDfd: JQuery.Deferred<any> | null;
@@ -212,9 +211,7 @@ export default class PrzypisViewer extends Widget {
                 let annotations = $(event.target)
                     .parents('.annotator-hl')
                     .addBack()
-                    .map( (_, elem) => {
-                        return $(elem).data("annotation");
-                    })
+                    .map((_, elem) => $(elem).data("annotation"))
                     .toArray();
 
                 // Now show the viewer with the wanted annotations
@@ -237,10 +234,6 @@ export default class PrzypisViewer extends Widget {
         This part is copied straight from annotator.Viewer and might not be very consistent with other code;
         We should consider refactoring it and making it more explicit if we need to modify it
         */
-
-        if (typeof activity === 'undefined' || activity === null || activity === false) {
-            activity = false;
-        }
 
         // If timer has already been set, use that one.
         if (this.hideTimer) {

@@ -90,6 +90,7 @@ export default class PrzypisEditor extends Widget {
    * Renders (or updates, if already rendered) React component within the Editor html container
    */
   updateForm = (fields: IAnnotationFields) => {
+    debugger;
     ReactDOM.render(
       <AnnotationForm id={this.annotation? this.annotation.id || 0 : 0} fields={fields || {}} onSave={this.save} onCancel={this.cancel}/>,
       document.getElementById('react-form-slot')
@@ -122,6 +123,7 @@ export default class PrzypisEditor extends Widget {
    * Returns nothing.
    */
   show(position: util.IPosition) {
+    debugger;
     if (position) {
       this.element.css({
         top: position.top,
