@@ -144,7 +144,7 @@ export default class AnnotationForm extends React.Component<
         } else {
           this.props.onSave(event);
         }
-      });
+      })
 
   }
 

@@ -31,10 +31,7 @@ export default class PrzypisEditor extends Widget {
 
   public fields: string[];
   private annotation: IAnnotation | null;
-  private promiseResultContainer?: {
-    resolve: (annotation: annotator.IAnnotation) => void;
-    reject: (error: string) => void;
-  };
+
   private resizer: {
     destroy: () => void;
   };
@@ -97,13 +94,6 @@ export default class PrzypisEditor extends Widget {
     this.saveAction = saveAction;
     this.updateForm(annotation);
     this.show(position);
-
-    return new Promise<IAnnotation>((resolve, reject) => {
-      this.promiseResultContainer = {
-        resolve,
-        reject
-      };
-    });
   }
 
     /**
@@ -127,9 +117,6 @@ export default class PrzypisEditor extends Widget {
    */
   private onSave() {
     // Resolve deferred promise; will result in asynchronous user input
-    if (this.promiseResultContainer) {
-      this.promiseResultContainer.resolve(this.annotation as IAnnotation);
-    }
     this.hide();
   }
 
@@ -138,9 +125,6 @@ export default class PrzypisEditor extends Widget {
    * annotation.
    */
   private onCancel() {
-    if (this.promiseResultContainer) {
-      this.promiseResultContainer.reject('editing cancelled');
-    }
     this.hide();
   }
 
