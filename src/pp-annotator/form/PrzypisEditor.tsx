@@ -94,7 +94,7 @@ export default class PrzypisEditor extends Widget {
               position: util.IPosition,
               saveAction: (annotation: IAnnotation) => any) {
     this.annotation = annotation;
-    this.saveAction = saveAction.bind(this);
+    this.saveAction = saveAction;
     this.updateForm(annotation);
     this.show(position);
 
@@ -115,8 +115,8 @@ export default class PrzypisEditor extends Widget {
         id={this.annotation ? this.annotation.id || 0 : 0}
         annotation={annotation}
         saveAction={this.saveAction}
-        onSave={this.onSave}
-        onCancel={this.onCancel}
+        onSave={this.onSave.bind(this)}
+        onCancel={this.onCancel.bind(this)}
       />,
       document.getElementById('react-form-slot')
     );

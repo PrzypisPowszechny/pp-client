@@ -159,7 +159,7 @@ export function ui(options?: {
           }
           s.editor.load(annotation, s.interactionPoint,
               resultAnnotation => app.annotations.create(resultAnnotation)
-            );
+            ).catch(() => undefined); // catch cancel action
         },
         beforeRequestCreate() {
           // TODO what happens when the adder's request button is clicked
@@ -194,7 +194,7 @@ export function ui(options?: {
 
           s.editor.load(annotation, s.interactionPoint,
               resultAnnotation => app.annotations.update(resultAnnotation)
-            );
+            ).catch(() => undefined); // catch cancel action
         },
         onDelete(annotation) {
           app.annotations.delete(annotation);
