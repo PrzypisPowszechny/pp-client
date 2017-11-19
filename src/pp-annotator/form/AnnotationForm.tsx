@@ -1,17 +1,18 @@
 import * as React from 'react';
 import { annotationPriorities } from '../consts';
-import { IAnnotationFields } from '../i-annotation';
+import IAnnotation, { IAnnotationFields } from '../i-annotation';
 
 const savedFields = ['annotationPriority', 'comment', 'link', 'linkTitle', 'isLinkOnly'];
 
-interface IAnnotationFormProps {
+export interface IAnnotationFormProps {
   id: number;
-  fields: IAnnotationFields;
-  onSave(fields: IAnnotationFormState): void;
-  onCancel(): void;
+  annotation: IAnnotation;
+  saveAction(annotation: IAnnotation): any;
+  onSave(e: any): any;
+  onCancel(e: any): any;
 }
 
-type IAnnotationFormState = IAnnotationFields;
+export type IAnnotationFormState = IAnnotationFields;
 
 function sliceKeys(dictionary: any, keys: string[]) {
   const result: {
@@ -31,8 +32,9 @@ export default class AnnotationForm extends React.Component<
   IAnnotationFormProps,
   IAnnotationFormState
 > {
+
   private static stateFromProps(props: IAnnotationFormProps): IAnnotationFormState {
-    const fields = props.fields || {};
+    const fields = props.annotation.fields || {};
     return {
       annotationPriority: fields.annotationPriority || annotationPriorities.NORMAL,
       comment: fields.comment || '',
@@ -41,9 +43,9 @@ export default class AnnotationForm extends React.Component<
       isLinkOnly: fields.isLinkOnly || false
     };
   }
+
   constructor(props: IAnnotationFormProps) {
     super(props);
-
     this.state = AnnotationForm.stateFromProps(props);
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -98,11 +100,11 @@ export default class AnnotationForm extends React.Component<
           {/*
                    TODO I guess it'd better to use buttons here, to avoid problems with href value moving the view to top
                     */}
-          <a href="#" className="annotator-cancel" onClick={this.props.onCancel}>
+          <a href="#" className="annotator-cancel" onClick={(e) => this.onCancel(e)}>
             {' '}
             Anuluj{' '}
           </a>
-          <a href="#" className="annotator-save annotator-focus" onClick={this.onSave}>
+          <a href="#" className="annotator-save annotator-focus" onClick={(e) => this.onSave(e)}>
             {' '}
             Zapisz{' '}
           </a>
@@ -125,15 +127,28 @@ export default class AnnotationForm extends React.Component<
     this.setState({ isLinkOnly: e.currentTarget.checked });
   }
 
-  private onSave() {
+  private onSave(event: any) {
     const fieldsToSave = getFormState(this.state);
     if (this.state.isLinkOnly) {
       fieldsToSave.comment = '';
     }
-    this.props.onSave(fieldsToSave);
+    this.props.annotation.fields = fieldsToSave;
+    const result = this.props.saveAction(this.props.annotation);
+
+    Promise.resolve(result)     // it will work whether result is a Promise or a value
+      .then((result) => {
+        const errors = result.errors;
+        if (errors) {
+          //TODO handle form validation messages here
+
+        } else {
+          this.props.onSave(event);
+        }
+      })
+
   }
 
-  private onCancel() {
-    this.props.onCancel();
+  private onCancel(event: any) {
+    this.props.onCancel(event);
   }
 }
