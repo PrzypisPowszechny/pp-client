@@ -1,3 +1,8 @@
+[![CircleCI master](https://circleci.com/gh/PrzypisPowszechny/pp-client/tree/master.svg?style=shield)]()
+[![CircleCI master](https://circleci.com/gh/PrzypisPowszechny/pp-client/tree/develop.svg?style=shield)]()
+
+
+
 ## Prerequisites
 
 ### Node.js setup
@@ -22,7 +27,7 @@ As for now, a bare-bones version is configured. First, build the app
 using:
 ```
 npm run dev
-``` 
+```
 It launches webpack in watch mode, so every change will be rebuilt live.
 
 
