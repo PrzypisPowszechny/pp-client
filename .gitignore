@@ -1,3 +1,5 @@
 node_modules
-src/public
+public/bundle.js
 .idea
+.DS_Store
+dist
