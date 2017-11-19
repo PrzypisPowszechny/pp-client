@@ -134,13 +134,18 @@ export default class AnnotationForm extends React.Component<
     }
     this.props.annotation.fields = fieldsToSave;
     const result = this.props.saveAction(this.props.annotation);
-    const errors = result.errors;
-    if (!errors) {
-      //TODO handle form validation messages here
-    }
-    else {
-      this.props.onSave(event);
-    }
+
+    Promise.resolve(result)     // it will work whether result is a Promise or a value
+      .then((result) => {
+        const errors = result.errors;
+        if (errors) {
+          //TODO handle form validation messages here
+
+        } else {
+          this.props.onSave(event);
+        }
+      });
+
   }
 
   private onCancel(event: any) {
