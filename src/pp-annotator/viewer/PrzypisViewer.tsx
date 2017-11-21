@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom';
 import annotator from 'annotator';
 
 import AnnotationMultipleViewer from './AnnotationMultipleViewer';
-
-import IAnnotation from '../i-annotation';
+import {AnnotationViewModel} from "../annotation";
 
 const { ui, util } = annotator;
 const { widget: { Widget } } = ui;
@@ -15,26 +14,26 @@ interface IPrzypisViewerOptions extends annotator.ui.widget.IWidgetOptions {
   defaultFields?: boolean;
   inactivityDelay?: number;
   activityDelay?: number;
-  permitEdit?: (ann?: annotator.IAnnotation) => boolean;
-  permitDelete?: (ann?: annotator.IAnnotation) => boolean;
+  permitEdit?: (ann?: AnnotationViewModel) => boolean;
+  permitDelete?: (ann?: AnnotationViewModel) => boolean;
   autoViewHighlights?: Node;
-  onEdit?: (annotation: annotator.IAnnotation) => void;
-  onDelete?: (annotation: annotator.IAnnotation) => void;
+  onEdit?: (annotation: AnnotationViewModel) => void;
+  onDelete?: (annotation: AnnotationViewModel) => void;
 }
 
 // Public: Creates an element for viewing annotations.
 export default class PrzypisViewer extends Widget {
   private static nameSpace = 'annotator-viewer';
 
-  public annotations: IAnnotation[];
+  public annotations: AnnotationViewModel[];
   private hideTimer: number | null;
   private hideTimerDfd: JQuery.Deferred<any> | null;
   private hideTimerActivity: boolean;
   private mouseDown: boolean;
   private options: IPrzypisViewerOptions;
   private document: Document;
-  private onEditCallback: (annotation: annotator.IAnnotation) => void;
-  private onDeleteCallback: (annotation: annotator.IAnnotation) => void;
+  private onEditCallback: (annotation: AnnotationViewModel) => void;
+  private onDeleteCallback: (annotation: AnnotationViewModel) => void;
 
   // Public: Creates an instance of the Viewer object.
   //
@@ -152,7 +151,7 @@ export default class PrzypisViewer extends Widget {
   //   viewer.load([annotation1, annotation2, annotation3])
   //
   // Returns nothing.
-  public load(annotations: IAnnotation[], position: annotator.util.IPosition) {
+  public load(annotations: AnnotationViewModel[], position: annotator.util.IPosition) {
     this.annotations = annotations || [];
     this.update(annotations);
     this.show(position);
@@ -161,7 +160,7 @@ export default class PrzypisViewer extends Widget {
   /**
    * Renders (or updates, if already rendered) React component within the PrzypisViewer html container
    */
-  private update(annotations: IAnnotation[]) {
+  private update(annotations: AnnotationViewModel[]) {
     // Callbacks to pass to React component
     const callbacks = {
       onEdit: this._onEditClick.bind(this),
@@ -179,7 +178,7 @@ export default class PrzypisViewer extends Widget {
   // event - An Event object.
   //
   // Returns nothing.
-  private _onEditClick(_: any, annotation: annotator.IAnnotation) {
+  private _onEditClick(_: any, annotation: AnnotationViewModel) {
     this.hide();
     this.onEditCallback(annotation);
   }
@@ -189,7 +188,7 @@ export default class PrzypisViewer extends Widget {
   // event - An Event object.
   //
   // Returns nothing.
-  private _onDeleteClick(_: any, annotation: annotator.IAnnotation) {
+  private _onDeleteClick(_: any, annotation: AnnotationViewModel) {
     this.hide();
     this.onDeleteCallback(annotation);
   }
@@ -214,7 +213,7 @@ export default class PrzypisViewer extends Widget {
         .toArray();
 
       // Now show the viewer with the wanted annotations
-      this.load((annotations as any) as IAnnotation[], util.mousePosition(event));
+      this.load((annotations as any) as AnnotationViewModel[], util.mousePosition(event));
     });
   }
 

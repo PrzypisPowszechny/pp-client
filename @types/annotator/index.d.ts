@@ -3,10 +3,10 @@ declare module 'annotator' {
     new (): IAppInstance;
   };
 
+  // A basic type, used as an API model as well as withing the client application
   export interface IAnnotation {
-    id: number;
+    ranges: any[];
     quote: string;
-    ranges: any[]; // TODO type this better
   }
 
   export interface IAppInstance {
@@ -41,7 +41,7 @@ declare module 'annotator' {
 
   export namespace ui {
     export interface IAnnotationLoader extends widget.Widget {
-      load(ann: IAnnotation, position: util.IPosition): JQuery.Deferred<IAnnotation>;
+      load(ann: any, position: util.IPosition): JQuery.Deferred<any>;
     }
 
     export namespace highlighter {

@@ -1,9 +1,9 @@
 import React from 'react';
-import IAnnotation from '../i-annotation';
+import {AnnotationViewModel} from "../annotation";
 
 interface IAnnotatorViewerProps {
   key: number;
-  annotation: IAnnotation;
+  annotation: AnnotationViewModel;
   callbacks: ICallbacks;
 }
 
@@ -12,8 +12,8 @@ interface IAnnotatorViewerState {
 }
 
 export interface ICallbacks {
-  onEdit(e: React.MouseEvent<HTMLButtonElement>, annotation: IAnnotation): void;
-  onDelete(e: React.MouseEvent<HTMLButtonElement>, annotation: IAnnotation): void;
+  onEdit(e: React.MouseEvent<HTMLButtonElement>, annotation: AnnotationViewModel): void;
+  onDelete(e: React.MouseEvent<HTMLButtonElement>, annotation: AnnotationViewModel): void;
 }
 
 export default class AnnotationViewer extends React.Component<

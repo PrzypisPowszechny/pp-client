@@ -1,13 +1,13 @@
 import React from 'react';
 import { AnnotationPriorities } from '../consts';
-import IAnnotation, { IAnnotationFields } from '../i-annotation';
+import {IAnnotationFields, AnnotationViewModel} from '../annotation';
 
 const savedFields = ['priority', 'comment', 'link', 'linkTitle'];
 
 export interface IAnnotationFormProps {
   id: number;
-  annotation: IAnnotation;
-  saveAction(annotation: IAnnotation): any;
+  annotation: AnnotationViewModel;
+  saveAction(annotation: AnnotationViewModel): any;
   onSave(e: any): any;
   onCancel(e: any): any;
 }
@@ -30,7 +30,7 @@ function getFormState(obj: any) {
 
 export default class AnnotationForm extends React.Component<
   IAnnotationFormProps,
-  IAnnotationFormState
+  Partial<IAnnotationFormState>
 > {
 
   private static stateFromProps(props: IAnnotationFormProps): IAnnotationFormState {
