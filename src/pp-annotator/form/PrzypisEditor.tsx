@@ -29,7 +29,6 @@ export default class PrzypisEditor extends Widget {
     <div id="react-form-slot"></div>
   </div>`;
 
-  public fields: string[];
   private annotation: IAnnotation | null;
 
   private resizer: {
@@ -44,7 +43,6 @@ export default class PrzypisEditor extends Widget {
   constructor(options: annotator.ui.widget.IWidgetOptions) {
     super(options);
 
-    this.fields = [];
     this.annotation = null;
 
     // jquery mouse action listeners from annotator module have been left out;

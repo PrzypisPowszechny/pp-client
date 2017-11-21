@@ -1,8 +1,7 @@
 import annotator from 'annotator';
 
-export default interface IAnnotation extends annotator.IAnnotation {
+export interface IAnnotationBase extends annotator.IAnnotation {
   url?: string;
-  fields: IAnnotationFields;
 };
 
 export interface IAnnotationFields {
@@ -11,4 +10,8 @@ export interface IAnnotationFields {
   link?: string;
   linkTitle?: string;
   isLinkOnly?: boolean;
-}
+};
+
+type IAnnotation = IAnnotationBase & IAnnotationFields;
+
+export default IAnnotation;

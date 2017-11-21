@@ -7,9 +7,6 @@ declare module 'annotator' {
     id: number;
     quote: string;
     ranges: any[]; // TODO type this better
-    fields: {
-      [x: string]: any;
-    };
   }
 
   export interface IAppInstance {

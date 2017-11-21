@@ -41,7 +41,6 @@ function annotationFactory(contextEl: Element, ignoreSelector: string) {
       url: window.location.href,
       quote: text.join(' / '),
       ranges: serializedRanges,
-      fields: {}
     };
   };
 }

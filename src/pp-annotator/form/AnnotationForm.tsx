@@ -35,13 +35,13 @@ export default class AnnotationForm extends React.Component<
 > {
 
   private static stateFromProps(props: IAnnotationFormProps): IAnnotationFormState {
-    const fields = props.annotation.fields || {};
+    const annotation = props.annotation;
     return {
-      annotationPriority: fields.annotationPriority || annotationPriorities.NORMAL,
-      comment: fields.comment || '',
-      link: fields.link || '',
-      linkTitle: fields.linkTitle || '',
-      isLinkOnly: fields.isLinkOnly || false
+      annotationPriority: annotation.annotationPriority || annotationPriorities.NORMAL,
+      comment: annotation.comment || '',
+      link: annotation.link || '',
+      linkTitle: annotation.linkTitle || '',
+      isLinkOnly: annotation.isLinkOnly || false
     };
   }
 
@@ -133,7 +133,7 @@ export default class AnnotationForm extends React.Component<
     if (this.state.isLinkOnly) {
       fieldsToSave.comment = '';
     }
-    this.props.annotation.fields = fieldsToSave;
+    Object.assign(this.props.annotation, fieldsToSave);
     const result = this.props.saveAction(this.props.annotation);
 
     Promise.resolve(result)     // it will work whether result is a Promise or a value
