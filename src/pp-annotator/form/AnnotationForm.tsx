@@ -3,7 +3,7 @@ import React from 'react';
 import { annotationPriorities } from '../consts';
 import IAnnotation, { IAnnotationFields } from '../i-annotation';
 
-const savedFields = ['annotationPriority', 'comment', 'link', 'linkTitle', 'isLinkOnly'];
+const savedFields = ['annotationPriority', 'comment', 'link', 'linkTitle'];
 
 export interface IAnnotationFormProps {
   id: number;
@@ -41,7 +41,6 @@ export default class AnnotationForm extends React.Component<
       comment: annotation.comment || '',
       link: annotation.link || '',
       linkTitle: annotation.linkTitle || '',
-      isLinkOnly: annotation.isLinkOnly || false
     };
   }
 
@@ -55,26 +54,14 @@ export default class AnnotationForm extends React.Component<
   }
 
   public render() {
-    /*TODO KG hide comment when isLinkOnly*/
     return (
       <form className="annotator-widget">
         <ul className="annotator-listing">
-          <li>
-            <label>
-              <input
-                type="checkbox"
-                checked={this.state.isLinkOnly}
-                onChange={this.handleIsLinkOnlyChange.bind(this)}
-              />
-              Brak komentarza
-            </label>
-          </li>
           <li className="annotator-item">
             <textarea
               name="comment"
               value={this.state.comment}
               onChange={this.handleInputChange}
-              disabled={this.state.isLinkOnly}
               placeholder="Komentarz"
             />
           </li>
@@ -124,16 +111,8 @@ export default class AnnotationForm extends React.Component<
     this.setState({ [name]: target.value });
   }
 
-  private handleIsLinkOnlyChange(e: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ isLinkOnly: e.currentTarget.checked });
-  }
-
   private onSave(event: any) {
-    const fieldsToSave = getFormState(this.state);
-    if (this.state.isLinkOnly) {
-      fieldsToSave.comment = '';
-    }
-    Object.assign(this.props.annotation, fieldsToSave);
+    Object.assign(this.props.annotation, getFormState(this.state));
     const result = this.props.saveAction(this.props.annotation);
 
     Promise.resolve(result)     // it will work whether result is a Promise or a value

@@ -63,7 +63,6 @@ export default class AnnotationViewer extends React.Component<
         <div>{this.props.annotation.comment}</div>
         <div>{this.props.annotation.link}</div>
         <div>{this.props.annotation.linkTitle}</div>
-        <div>{this.props.annotation.isLinkOnly}</div>
       </li>
     );
   }

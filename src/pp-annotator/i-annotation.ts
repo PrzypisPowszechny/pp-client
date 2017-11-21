@@ -9,7 +9,6 @@ export interface IAnnotationFields {
   comment?: string;
   link?: string;
   linkTitle?: string;
-  isLinkOnly?: boolean;
 };
 
 type IAnnotation = IAnnotationBase & IAnnotationFields;
