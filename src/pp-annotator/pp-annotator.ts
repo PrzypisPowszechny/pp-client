@@ -4,6 +4,7 @@ import PrzypisEditor from './form/PrzypisEditor';
 import PrzypisAdder from './PrzypisAdder';
 import PrzypisViewer from './viewer/PrzypisViewer';
 
+import IAnnotation from './i-annotation';
 const { util, ui: PPUI } = annotator;
 const { highlighter, textselector } = PPUI;
 
@@ -37,6 +38,7 @@ function annotationFactory(contextEl: Element, ignoreSelector: string) {
 
     return {
       id: 0,
+      url: window.location.href,
       quote: text.join(' / '),
       ranges: serializedRanges,
       fields: {}
@@ -158,7 +160,7 @@ export function ui(options?: {
             throw new Error('Interaction point is null!');
           }
           s.editor.load(annotation, s.interactionPoint,
-              resultAnnotation => app.annotations.create(resultAnnotation)
+              (resultAnnotation: IAnnotation) => app.annotations.create(resultAnnotation)
             );
         },
         beforeRequestCreate() {
@@ -193,7 +195,7 @@ export function ui(options?: {
           s.interactionPoint = (interactionPoint as any) as { top: number; left: number };
 
           s.editor.load(annotation, s.interactionPoint,
-              resultAnnotation => app.annotations.update(resultAnnotation)
+              (resultAnnotation: IAnnotation) => app.annotations.update(resultAnnotation)
             );
         },
         onDelete(annotation) {
@@ -228,7 +230,10 @@ export function ui(options?: {
       s.viewer.destroy();
       removeDynamicStyle();
     },
-
+    beforeAnnotationUpdated(ann: IAnnotation) {
+      console.log("Hej!")
+      ann.url = window.location.href
+    },
     annotationsLoaded(anns: annotator.IAnnotation[]) {
       if (!s) {
         throw new Error('App not initialized!');

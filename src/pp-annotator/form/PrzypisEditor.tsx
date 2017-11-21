@@ -87,7 +87,7 @@ export default class PrzypisEditor extends Widget {
    * Loads the annotation and displays the edit window
    * Returns an unresolved Promise that will be resolved/rejected when the save/cancel button is clicked.
    */
-  public load(annotation: annotator.IAnnotation,
+  public load(annotation: IAnnotation,
               position: util.IPosition,
               saveAction: (annotation: IAnnotation) => any) {
     this.annotation = annotation;

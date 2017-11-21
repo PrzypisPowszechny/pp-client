@@ -1,6 +1,7 @@
 import annotator from 'annotator';
 
 export default interface IAnnotation extends annotator.IAnnotation {
+  url?: string;
   fields: IAnnotationFields;
 };
 
