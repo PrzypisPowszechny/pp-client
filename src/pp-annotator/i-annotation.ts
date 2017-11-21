@@ -1,15 +1,17 @@
+
 import annotator from 'annotator';
+import {AnnotationPriorities} from "./consts";
 
 export interface IAnnotationBase extends annotator.IAnnotation {
   url?: string;
-};
+}
 
 export interface IAnnotationFields {
-  annotationPriority?: number;
+  priority?: AnnotationPriorities;
   comment?: string;
   link?: string;
   linkTitle?: string;
-};
+}
 
 type IAnnotation = IAnnotationBase & IAnnotationFields;
 

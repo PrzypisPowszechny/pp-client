@@ -59,7 +59,7 @@ export default class AnnotationViewer extends React.Component<
             Delete
           </button>
         </span>
-        <div>{this.props.annotation.annotationPriority}</div>
+        <div>{this.props.annotation.priority}</div>
         <div>{this.props.annotation.comment}</div>
         <div>{this.props.annotation.link}</div>
         <div>{this.props.annotation.linkTitle}</div>

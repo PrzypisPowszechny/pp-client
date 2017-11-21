@@ -1,9 +1,8 @@
 import React from 'react';
-
-import { annotationPriorities } from '../consts';
+import { AnnotationPriorities } from '../consts';
 import IAnnotation, { IAnnotationFields } from '../i-annotation';
 
-const savedFields = ['annotationPriority', 'comment', 'link', 'linkTitle'];
+const savedFields = ['priority', 'comment', 'link', 'linkTitle'];
 
 export interface IAnnotationFormProps {
   id: number;
@@ -37,7 +36,7 @@ export default class AnnotationForm extends React.Component<
   private static stateFromProps(props: IAnnotationFormProps): IAnnotationFormState {
     const annotation = props.annotation;
     return {
-      annotationPriority: annotation.annotationPriority || annotationPriorities.NORMAL,
+      priority: annotation.priority || AnnotationPriorities.NORMAL,
       comment: annotation.comment || '',
       link: annotation.link || '',
       linkTitle: annotation.linkTitle || '',

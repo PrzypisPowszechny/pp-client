@@ -1,5 +1,5 @@
-export const annotationPriorities = {
-  NORMAL: 1,
-  WARNING: 2,
-  ALERT: 3
-};
+export enum AnnotationPriorities {
+  NORMAL='NORMAL',
+  WARNING='WARNING',
+  ALERT='ALERT'
+}
