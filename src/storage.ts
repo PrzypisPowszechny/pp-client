@@ -208,7 +208,7 @@ export class HttpStorage implements annotator.storage.IAnnotationStorage{
      * :param string value: The header value.
      */
     public setHeader(key: string, value: any) {
-        HttpStorage.options.headers[key] = value;
+        this.options.headers[key] = value;
     };
 
     /*
@@ -286,7 +286,7 @@ export class HttpStorage implements annotator.storage.IAnnotationStorage{
 
         opts = $.extend(opts, {
             data: data,
-            contentType: "application/json; charset=utf-8"
+            contentType: "text/plain; charset=UTF-8"
         });
         return opts;
     };
