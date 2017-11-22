@@ -1,6 +1,7 @@
 import annotator from 'annotator';
 
 import { ui as PPUI } from './pp-annotator/pp-annotator';
+import {debug} from "./storage";
 
 console.log('Przypis script working!'); // tslint:disable-line
 
@@ -8,12 +9,6 @@ console.log('Przypis script working!'); // tslint:disable-line
 if (typeof window !== 'undefined') {
   const annotatorApp = new annotator.App();
   annotatorApp.include(PPUI);
-  annotatorApp.include(annotator.storage.debug);
-  // annotatorApp.include(annotator.storage.http, {
-  //   prefix: 'http://localhost:8000',
-  //     headers: {
-  //       'Content-Type': 'text/plain; charset=UTF-8'
-  //     }
-  // });
+  annotatorApp.include(debug);
   annotatorApp.start();
 }
