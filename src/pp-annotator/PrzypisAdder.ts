@@ -1,5 +1,5 @@
-import * as annotator from 'annotator';
-import * as _ from 'lodash';
+import annotator from 'annotator';
+import _ from 'lodash';
 
 const { ui, util } = annotator;
 const { widget: { Widget } } = ui;

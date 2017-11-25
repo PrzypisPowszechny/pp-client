@@ -1,6 +1,6 @@
 node_modules
-public/bundle.js*
+dist
 .idea
 .DS_Store
-dist
 .awcache
+

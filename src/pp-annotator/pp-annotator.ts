@@ -1,9 +1,9 @@
+import annotator, { IAppInstance } from 'annotator';
+
 import PrzypisEditor from './form/PrzypisEditor';
 import PrzypisAdder from './PrzypisAdder';
 import PrzypisViewer from './viewer/PrzypisViewer';
 
-import * as annotator from 'annotator';
-import { IAppInstance } from 'annotator';
 const { util, ui: PPUI } = annotator;
 const { highlighter, textselector } = PPUI;
 

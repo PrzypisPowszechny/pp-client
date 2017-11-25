@@ -23,11 +23,9 @@ npm install
 
 ## Development
 
-As for now, a bare-bones version is configured. First, build the app
-using:
+Just type the following command to launch a localhost with injected bundle
 ```
-npm run dev
+npm start
 ```
-It launches webpack in watch mode, so every change will be rebuilt live.
-
-
+It uses `webpack-dev-server`, so every change is rebuilt live and the page is reloaded.
+HMR (Hot Module Replacement) is enabled.

@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React from 'react';
+
 import { annotationPriorities } from '../consts';
 import IAnnotation, { IAnnotationFields } from '../i-annotation';
 

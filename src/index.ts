@@ -1,4 +1,4 @@
-import * as annotator from 'annotator';
+import annotator from 'annotator';
 
 import { ui as PPUI } from './pp-annotator/pp-annotator';
 
