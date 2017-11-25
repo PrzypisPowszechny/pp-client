@@ -35,12 +35,13 @@
     "uglifyjs-webpack-plugin": "^1.1.1",
     "url-loader": "^0.6.2",
     "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.9.4"
+    "webpack-dev-server": "^2.9.4",
+    "webpack-merge": "^4.1.1"
   },
   "scripts": {
-    "build": "webpack -p",
-    "start": "webpack-dev-server",
-    "lint": "./node_modules/.bin/tslint --project tsconfig.json",
+    "build": "webpack -p --config config/webpack.prod.js",
+    "start": "webpack-dev-server --config config/webpack.dev.js",
+    "lint": "tslint --project tsconfig.json",
     "lint-fix": "npm run lint -- --fix"
   },
   "repository": {

@@ -1,9 +1,7 @@
 const path = require('path');
 
-const webpack = require('webpack');
 const { CheckerPlugin } = require('awesome-typescript-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const BUILD_DIR = path.resolve(__dirname, 'dist');
@@ -12,9 +10,8 @@ const config = {
   entry: "./src/index.ts",
   output: {
     path: BUILD_DIR,
-    filename: 'bundle.js'
+    filename: '[name].bundle.js'
   },
-  devtool: 'inline-source-map',
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json"],
   },
@@ -36,24 +33,13 @@ const config = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
-    new UglifyJsPlugin({
-      sourceMap: true,
-    }),
+    new CleanWebpackPlugin([BUILD_DIR]),
     new CheckerPlugin(),
     new HtmlWebpackPlugin({
       title: 'Przypis testowa pusta strona',
       template: 'src/test.html',
     }),
-    new webpack.NamedModulesPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
   ],
-  devServer: {
-    contentBase: './dist',
-    inline: true,
-    open: true,
-    hot: true,
-  }
 };
 
 module.exports = config;
