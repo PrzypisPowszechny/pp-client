@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import IAnnotation from '../i-annotation';
 
 interface IAnnotatorViewerProps {

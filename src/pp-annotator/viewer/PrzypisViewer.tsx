@@ -1,9 +1,9 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import annotator from 'annotator';
 
 import AnnotationMultipleViewer from './AnnotationMultipleViewer';
 
-import * as annotator from 'annotator';
 import IAnnotation from '../i-annotation';
 
 const { ui, util } = annotator;

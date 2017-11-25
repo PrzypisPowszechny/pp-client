@@ -1,4 +1,4 @@
-import * as annotator from 'annotator';
+import annotator from 'annotator';
 
 export default interface IAnnotation extends annotator.IAnnotation {
   fields: IAnnotationFields;
