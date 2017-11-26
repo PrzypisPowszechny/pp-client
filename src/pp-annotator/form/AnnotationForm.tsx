@@ -2,7 +2,7 @@ import React from 'react';
 import { AnnotationPriorities } from '../consts';
 import {IAnnotationFields, AnnotationViewModel} from '../annotation';
 
-const savedFields = ['priority', 'comment', 'link', 'linkTitle'];
+const savedFields = ['priority', 'comment', 'referenceLink', 'referenceLinkTitle'];
 
 export interface IAnnotationFormProps {
   id: number;
@@ -38,8 +38,8 @@ export default class AnnotationForm extends React.Component<
     return {
       priority: annotation.priority || AnnotationPriorities.NORMAL,
       comment: annotation.comment || '',
-      link: annotation.link || '',
-      linkTitle: annotation.linkTitle || '',
+      referenceLink: annotation.referenceLink || '',
+      referenceLinkTitle: annotation.referenceLinkTitle || '',
     };
   }
 
@@ -67,8 +67,8 @@ export default class AnnotationForm extends React.Component<
           <li className="annotator-item">
             <input
               type="text"
-              name="link"
-              value={this.state.link}
+              name="referenceLink"
+              value={this.state.referenceLink}
               onChange={this.handleInputChange}
               placeholder="Link źródła"
             />
@@ -76,8 +76,8 @@ export default class AnnotationForm extends React.Component<
           <li className="annotator-item">
             <input
               type="text"
-              name="linkTitle"
-              value={this.state.linkTitle}
+              name="referenceLinkTitle"
+              value={this.state.referenceLinkTitle}
               onChange={this.handleInputChange}
               placeholder="Tytuł źródła"
             />

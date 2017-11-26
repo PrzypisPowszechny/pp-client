@@ -9,8 +9,8 @@ export interface IAnnotationBase extends annotator.IAnnotation {
 export interface IAnnotationFields {
     priority: AnnotationPriorities;
     comment: string;
-    link: string;
-    linkTitle: string;
+    referenceLink: string;
+    referenceLinkTitle: string;
 }
 
 //Annotation data sent to the server
@@ -25,8 +25,8 @@ export interface IAnnotationAPIModel {
 
     priority?: AnnotationPriorities;
     comment?: string;
-    link?: string;
-    link_title?: string;
+    reference_link?: string;
+    reference_link_title?: string;
 
     objection?: boolean;
     objection_count?: number;
@@ -44,8 +44,8 @@ export class AnnotationViewModel implements IAnnotationForm, annotator.IAnnotati
 
     public priority: AnnotationPriorities;
     public comment: string;
-    public link: string;
-    public linkTitle: string;
+    public referenceLink: string;
+    public referenceLinkTitle: string;
 
     // Fields viewed / modified by the user
     public objection: boolean;
@@ -62,8 +62,8 @@ export class AnnotationViewModel implements IAnnotationForm, annotator.IAnnotati
         this.id = model.id || 0;
         this.priority = model.priority || AnnotationPriorities.NORMAL;
         this.comment = model.comment || '';
-        this.link = model.link || '';
-        this.linkTitle = model.link_title || '';
+        this.referenceLink = model.reference_link || '';
+        this.referenceLinkTitle = model.reference_link_title || '';
         this.objection = model.objection || false;
         this.objectionCount = model.objection_count || 0;
         this.useful = model.useful || false;
@@ -87,8 +87,8 @@ export class AnnotationViewModel implements IAnnotationForm, annotator.IAnnotati
         
             priority: viewModel.priority,
             comment: viewModel.comment,
-            link: viewModel.link,
-            link_title: viewModel.linkTitle
+            reference_link: viewModel.referenceLink,
+            reference_link_title: viewModel.referenceLinkTitle
         }
     }
 }

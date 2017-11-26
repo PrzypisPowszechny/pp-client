@@ -39,8 +39,8 @@ export default class AnnotationViewer extends React.Component<
       const {
           priority,
           comment,
-          link,
-          linkTitle
+          referenceLink,
+          referenceLinkTitle
         } = this.props.annotation;
 
     return (
@@ -68,8 +68,8 @@ export default class AnnotationViewer extends React.Component<
         </span>
         <div>{priority}</div>
         <div>{comment}</div>
-        <div>{link}</div>
-        <div>{linkTitle}</div>
+        <div>{referenceLink}</div>
+        <div>{referenceLinkTitle}</div>
       </li>
     );
   }
