@@ -71,7 +71,7 @@ export const debug = function () {
  *     app.include(annotator.storage.noop);
  *
  */
-export const noop = function () {
+export function noop () {
     return {
         create: function (annotation: any) {
             if (typeof annotation.id === 'undefined' ||
@@ -464,7 +464,7 @@ export class HttpStorage implements annotator.storage.IAnnotationStorage{
  *   Configuration options. For available options see
  *   :attr:`~annotator.storage.HttpStorage.options`.
  */
-export const http = function(options: annotator.storage.HttpStorageOptions) {
+export function http(options: annotator.storage.HttpStorageOptions) {
     // This gets overridden on app start
     let notify: (msg: string, msgType: string) => any;
 
@@ -680,5 +680,3 @@ export class StorageAdapter {
             });
     };
 }
-
-exports.StorageAdapter = StorageAdapter;
