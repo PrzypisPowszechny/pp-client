@@ -36,6 +36,13 @@ export default class AnnotationViewer extends React.Component<
   }
 
   public render() {
+      const {
+          priority,
+          comment,
+          link,
+          linkTitle
+        } = this.props.annotation;
+
     return (
       // Analogous to annotator.Viewer.itemTemplate
       <li className="annotator-annotation annotator-item">
@@ -59,10 +66,10 @@ export default class AnnotationViewer extends React.Component<
             Delete
           </button>
         </span>
-        <div>{this.props.annotation.priority}</div>
-        <div>{this.props.annotation.comment}</div>
-        <div>{this.props.annotation.link}</div>
-        <div>{this.props.annotation.linkTitle}</div>
+        <div>{priority}</div>
+        <div>{comment}</div>
+        <div>{link}</div>
+        <div>{linkTitle}</div>
       </li>
     );
   }

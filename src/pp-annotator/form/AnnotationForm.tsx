@@ -111,6 +111,7 @@ export default class AnnotationForm extends React.Component<
   }
 
   private onSave(event: any) {
+    // Copy form fields onto (much larger) view model before executing saveAction
     Object.assign(this.props.annotation, getFormState(this.state));
     const result = this.props.saveAction(this.props.annotation);
 
