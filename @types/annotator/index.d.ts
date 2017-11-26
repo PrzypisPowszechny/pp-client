@@ -11,11 +11,8 @@ declare module 'annotator' {
 
   export interface IAppInstance {
     registry: registry.Registry;
-    annotations: {
-      create(ann: IAnnotation): void;
-      update(ann: IAnnotation): void;
-      delete(ann: IAnnotation): void;
-    };
+    notify: (message: string, severity: string) => any;
+    annotations: storage.IAnnotationStorage;
     include(obj: any): void;
     start(): void;
   }
@@ -23,15 +20,41 @@ declare module 'annotator' {
   export namespace registry {
     export class Registry {
       public getUtility(utilityName: string): any;
+      public registerUtility(component: any, iface: string): void; //TODO type better
     }
   }
 
   export namespace storage {
+    export interface IAnnotationXHR extends JQuery.jqXHR{
+      _action?: string;
+      _id?: number | string;
+    }
+
+    export interface HttpStorageOptions {
+      emulateHTTP?: boolean;
+      emulateJSON?: boolean;
+      headers?: any;
+      prefix?: string;
+      onError?(msg:string, xhr: IAnnotationXHR): any;
+      urls?: any;
+    }
+
+    export interface IAnnotationStorage {
+      create(ann: any): void;
+      update(ann: any): void;
+      delete(ann: any): void;
+      query(ann: any): void;
+    }
+
     export const debug: {};
+    export const noop: {};
+    export const http: {};
   }
 
   export namespace util {
     export const $: JQueryStatic;
+    export const Promise: any;
+    export const gettext: any
     export interface IPosition {
       top: number;
       left: number;
