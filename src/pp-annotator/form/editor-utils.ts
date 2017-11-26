@@ -186,7 +186,7 @@ export function mover(element: Element, handle: Node) {
       top: parseInt($(element).css('top'), 10) + delta.y,
       left: parseInt($(element).css('left'), 10) + delta.x
     });
-    return false;
+    return true;
   }
 
   // We return the dragTracker object in order to expose its methods.
