@@ -1,9 +1,9 @@
 import React from 'react';
-import IAnnotation from '../i-annotation';
+import {AnnotationViewModel} from "../annotation";
 
 interface IAnnotatorViewerProps {
   key: number;
-  annotation: IAnnotation;
+  annotation: AnnotationViewModel;
   callbacks: ICallbacks;
 }
 
@@ -12,8 +12,8 @@ interface IAnnotatorViewerState {
 }
 
 export interface ICallbacks {
-  onEdit(e: React.MouseEvent<HTMLButtonElement>, annotation: IAnnotation): void;
-  onDelete(e: React.MouseEvent<HTMLButtonElement>, annotation: IAnnotation): void;
+  onEdit(e: React.MouseEvent<HTMLButtonElement>, annotation: AnnotationViewModel): void;
+  onDelete(e: React.MouseEvent<HTMLButtonElement>, annotation: AnnotationViewModel): void;
 }
 
 export default class AnnotationViewer extends React.Component<
@@ -36,6 +36,13 @@ export default class AnnotationViewer extends React.Component<
   }
 
   public render() {
+      const {
+          priority,
+          comment,
+          referenceLink,
+          referenceLinkTitle
+        } = this.props.annotation;
+
     return (
       // Analogous to annotator.Viewer.itemTemplate
       <li className="annotator-annotation annotator-item">
@@ -59,11 +66,10 @@ export default class AnnotationViewer extends React.Component<
             Delete
           </button>
         </span>
-        <div>{this.props.annotation.fields.annotationPriority}</div>
-        <div>{this.props.annotation.fields.comment}</div>
-        <div>{this.props.annotation.fields.link}</div>
-        <div>{this.props.annotation.fields.linkTitle}</div>
-        <div>{this.props.annotation.fields.isLinkOnly}</div>
+        <div>{priority}</div>
+        <div>{comment}</div>
+        <div>{referenceLink}</div>
+        <div>{referenceLinkTitle}</div>
       </li>
     );
   }

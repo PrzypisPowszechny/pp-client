@@ -1,14 +1,13 @@
 import React from 'react';
+import { AnnotationPriorities } from '../consts';
+import {IAnnotationFields, AnnotationViewModel} from '../annotation';
 
-import { annotationPriorities } from '../consts';
-import IAnnotation, { IAnnotationFields } from '../i-annotation';
-
-const savedFields = ['annotationPriority', 'comment', 'link', 'linkTitle', 'isLinkOnly'];
+const savedFields = ['priority', 'comment', 'referenceLink', 'referenceLinkTitle'];
 
 export interface IAnnotationFormProps {
   id: number;
-  annotation: IAnnotation;
-  saveAction(annotation: IAnnotation): any;
+  annotation: AnnotationViewModel;
+  saveAction(annotation: AnnotationViewModel): any;
   onSave(e: any): any;
   onCancel(e: any): any;
 }
@@ -31,17 +30,16 @@ function getFormState(obj: any) {
 
 export default class AnnotationForm extends React.Component<
   IAnnotationFormProps,
-  IAnnotationFormState
+  Partial<IAnnotationFormState>
 > {
 
   private static stateFromProps(props: IAnnotationFormProps): IAnnotationFormState {
-    const fields = props.annotation.fields || {};
+    const annotation = props.annotation;
     return {
-      annotationPriority: fields.annotationPriority || annotationPriorities.NORMAL,
-      comment: fields.comment || '',
-      link: fields.link || '',
-      linkTitle: fields.linkTitle || '',
-      isLinkOnly: fields.isLinkOnly || false
+      priority: annotation.priority || AnnotationPriorities.NORMAL,
+      comment: annotation.comment || '',
+      referenceLink: annotation.referenceLink || '',
+      referenceLinkTitle: annotation.referenceLinkTitle || '',
     };
   }
 
@@ -55,34 +53,22 @@ export default class AnnotationForm extends React.Component<
   }
 
   public render() {
-    /*TODO KG hide comment when isLinkOnly*/
     return (
       <form className="annotator-widget">
         <ul className="annotator-listing">
-          <li>
-            <label>
-              <input
-                type="checkbox"
-                checked={this.state.isLinkOnly}
-                onChange={this.handleIsLinkOnlyChange.bind(this)}
-              />
-              Brak komentarza
-            </label>
-          </li>
           <li className="annotator-item">
             <textarea
               name="comment"
               value={this.state.comment}
               onChange={this.handleInputChange}
-              disabled={this.state.isLinkOnly}
               placeholder="Komentarz"
             />
           </li>
           <li className="annotator-item">
             <input
               type="text"
-              name="link"
-              value={this.state.link}
+              name="referenceLink"
+              value={this.state.referenceLink}
               onChange={this.handleInputChange}
               placeholder="Link źródła"
             />
@@ -90,8 +76,8 @@ export default class AnnotationForm extends React.Component<
           <li className="annotator-item">
             <input
               type="text"
-              name="linkTitle"
-              value={this.state.linkTitle}
+              name="referenceLinkTitle"
+              value={this.state.referenceLinkTitle}
               onChange={this.handleInputChange}
               placeholder="Tytuł źródła"
             />
@@ -124,16 +110,9 @@ export default class AnnotationForm extends React.Component<
     this.setState({ [name]: target.value });
   }
 
-  private handleIsLinkOnlyChange(e: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ isLinkOnly: e.currentTarget.checked });
-  }
-
   private onSave(event: any) {
-    const fieldsToSave = getFormState(this.state);
-    if (this.state.isLinkOnly) {
-      fieldsToSave.comment = '';
-    }
-    this.props.annotation.fields = fieldsToSave;
+    // Copy form fields onto (much larger) view model before executing saveAction
+    Object.assign(this.props.annotation, getFormState(this.state));
     const result = this.props.saveAction(this.props.annotation);
 
     Promise.resolve(result)     // it will work whether result is a Promise or a value

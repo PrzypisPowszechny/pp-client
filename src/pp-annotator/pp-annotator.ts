@@ -1,9 +1,9 @@
-import annotator, { IAppInstance } from 'annotator';
+import annotator, { IAppInstance, IAnnotation } from 'annotator';
 
 import PrzypisEditor from './form/PrzypisEditor';
 import PrzypisAdder from './PrzypisAdder';
 import PrzypisViewer from './viewer/PrzypisViewer';
-
+import {AnnotationViewModel, IAnnotationAPIModel} from "./annotation";
 const { util, ui: PPUI } = annotator;
 const { highlighter, textselector } = PPUI;
 
@@ -21,10 +21,10 @@ function trim(s: string) {
 }
 
 /**
- * annotationFactory returns a function that can be used to construct an
+ * rangesParser returns a function that can be used to construct an
  * annotation from a list of selected ranges.
  */
-function annotationFactory(contextEl: Element, ignoreSelector: string) {
+function rangesParser(contextEl: Element, ignoreSelector: string) {
   return (ranges: JQuery.PlainObject) => {
     const text = [];
     const serializedRanges = [];
@@ -36,10 +36,8 @@ function annotationFactory(contextEl: Element, ignoreSelector: string) {
     }
 
     return {
-      id: 0,
       quote: text.join(' / '),
       ranges: serializedRanges,
-      fields: {}
     };
   };
 }
@@ -120,6 +118,7 @@ interface IState {
   highlighter: annotator.ui.highlighter.Highlighter;
   textselector: annotator.ui.textselector.TextSelector;
   viewer: PrzypisViewer;
+  embeddedHighlights: {[id: number]: AnnotationViewModel};
 }
 
 /**
@@ -139,7 +138,7 @@ export function ui(options?: {
   const viewerExtensions = options.viewerExtensions || [];
 
   // Local helpers
-  const makeAnnotation = annotationFactory(element, '.annotator-hl');
+  const parseRanges = rangesParser(element, '.annotator-hl');
 
   let s: IState | undefined;
 
@@ -148,6 +147,7 @@ export function ui(options?: {
     const authz = app.registry.getUtility('authorizationPolicy');
 
     s = {
+      embeddedHighlights: {},
       interactionPoint: null,
       adder: new PrzypisAdder({
         beginAnnotationCreate(annotation) {
@@ -158,7 +158,10 @@ export function ui(options?: {
             throw new Error('Interaction point is null!');
           }
           s.editor.load(annotation, s.interactionPoint,
-              resultAnnotation => app.annotations.create(resultAnnotation)
+              (resultAnnotation: AnnotationViewModel) =>
+                  app.annotations.create(
+                      AnnotationViewModel.toModel(resultAnnotation) as IAnnotation
+                  )
             );
         },
         beforeRequestCreate() {
@@ -174,8 +177,10 @@ export function ui(options?: {
           if (!s) {
             throw new Error('App not initialized!');
           }
+
           if (ranges.length > 0) {
-            const annotation = makeAnnotation(ranges);
+            const url = window.location.href;
+            const annotation = AnnotationViewModel.fromSelection(parseRanges(ranges), url);
             s.interactionPoint = util.mousePosition(event);
             s.adder.load(annotation, s.interactionPoint);
           } else {
@@ -193,7 +198,8 @@ export function ui(options?: {
           s.interactionPoint = (interactionPoint as any) as { top: number; left: number };
 
           s.editor.load(annotation, s.interactionPoint,
-              resultAnnotation => app.annotations.update(resultAnnotation)
+              (resultAnnotation: AnnotationViewModel) =>
+                  app.annotations.update(AnnotationViewModel.toModel(resultAnnotation) as IAnnotation)
             );
         },
         onDelete(annotation) {
@@ -228,30 +234,38 @@ export function ui(options?: {
       s.viewer.destroy();
       removeDynamicStyle();
     },
+    annotationsLoaded(anns: IAnnotationAPIModel[]) {
+      if (!s) {
+        throw new Error('App not initialized!');
+      }
 
-    annotationsLoaded(anns: annotator.IAnnotation[]) {
-      if (!s) {
-        throw new Error('App not initialized!');
+      const annVieModels = anns.map((ann) => new AnnotationViewModel(ann));
+      s.embeddedHighlights = {};
+      for (let viewModel of annVieModels) {
+        s.embeddedHighlights[viewModel.id] = viewModel;
       }
-      s.highlighter.drawAll(anns);
+      s.highlighter.drawAll(anns as IAnnotation[]);
     },
-    annotationCreated(ann: annotator.IAnnotation) {
+    annotationCreated(ann: IAnnotationAPIModel) {
       if (!s) {
         throw new Error('App not initialized!');
       }
-      s.highlighter.draw(ann);
+      const viewModel = new AnnotationViewModel(ann);
+      s.embeddedHighlights[viewModel.id] = viewModel;
+      s.highlighter.draw(viewModel);
     },
-    annotationDeleted(ann: annotator.IAnnotation) {
+    annotationDeleted(ann: IAnnotationAPIModel) {
       if (!s) {
         throw new Error('App not initialized!');
       }
-      s.highlighter.undraw(ann);
+      console.log(s.embeddedHighlights[ann.id as number])
+      s.highlighter.undraw(s.embeddedHighlights[ann.id as number]);
     },
-    annotationUpdated(ann: annotator.IAnnotation) {
+    annotationUpdated(ann: IAnnotationAPIModel) {
       if (!s) {
         throw new Error('App not initialized!');
       }
-      s.highlighter.redraw(ann);
+      s.highlighter.redraw(s.embeddedHighlights[ann.id as number]);
     }
   };
 }

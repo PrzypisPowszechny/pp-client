@@ -1,10 +1,10 @@
 import React from 'react';
 
-import IAnnotation from '../i-annotation';
 import AnnotationViewer, { ICallbacks } from './AnnotationViewer';
+import {AnnotationViewModel} from "../annotation";
 
 interface IAnnotationMultipleViewerProps {
-  annotations: IAnnotation[];
+  annotations: AnnotationViewModel[];
   callbacks: ICallbacks;
 }
 

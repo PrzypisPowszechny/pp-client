@@ -5,8 +5,8 @@ import AnnotationForm from './AnnotationForm';
 
 import * as annotator from 'annotator';
 import { ui as AnnotatorUI, util } from 'annotator';
-import IAnnotation from '../i-annotation';
 import { mover, resizer } from './editor-utils';
+import {AnnotationViewModel} from "../annotation";
 
 const { $ } = util;
 const { widget: { Widget } } = AnnotatorUI;
@@ -29,8 +29,7 @@ export default class PrzypisEditor extends Widget {
     <div id="react-form-slot"></div>
   </div>`;
 
-  public fields: string[];
-  private annotation: IAnnotation | null;
+  private annotation: AnnotationViewModel | null;
 
   private resizer: {
     destroy: () => void;
@@ -39,12 +38,11 @@ export default class PrzypisEditor extends Widget {
     destroy: () => void;
   };
 
-  private saveAction: (annotation: IAnnotation) => any;
+  private saveAction: (annotation: AnnotationViewModel) => any;
 
   constructor(options: annotator.ui.widget.IWidgetOptions) {
     super(options);
 
-    this.fields = [];
     this.annotation = null;
 
     // jquery mouse action listeners from annotator module have been left out;
@@ -87,9 +85,9 @@ export default class PrzypisEditor extends Widget {
    * Loads the annotation and displays the edit window
    * Returns an unresolved Promise that will be resolved/rejected when the save/cancel button is clicked.
    */
-  public load(annotation: annotator.IAnnotation,
+  public load(annotation: AnnotationViewModel,
               position: util.IPosition,
-              saveAction: (annotation: IAnnotation) => any) {
+              saveAction: (annotation: AnnotationViewModel) => any) {
     this.annotation = annotation;
     this.saveAction = saveAction;
     this.updateForm(annotation);
@@ -99,7 +97,7 @@ export default class PrzypisEditor extends Widget {
     /**
    * Renders (or updates, if already rendered) React component within the Editor html container
    */
-  private updateForm(annotation: IAnnotation) {
+  private updateForm(annotation: AnnotationViewModel) {
     ReactDOM.render(
       <AnnotationForm
         id={this.annotation ? this.annotation.id || 0 : 0}
