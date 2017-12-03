@@ -56,8 +56,8 @@ export default class AnnotationForm extends React.Component<
 
   public render() {
     return (
-      <form className="pp-widget">
-        <ul className="annotator-listing">
+      <div className="pp-widget">
+        <ul className="pp-listing">
           <li className="annotator-item">
             <textarea
               name="comment"
@@ -98,7 +98,7 @@ export default class AnnotationForm extends React.Component<
             Zapisz{' '}
           </a>
         </div>
-      </form>
+      </div>
     );
   }
 
