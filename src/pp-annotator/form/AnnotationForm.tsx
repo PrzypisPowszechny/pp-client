@@ -3,7 +3,9 @@ import { AnnotationPriorities } from '../consts';
 import {IAnnotationFields, AnnotationViewModel} from '../annotation';
 
 const savedFields = ['priority', 'comment', 'referenceLink', 'referenceLinkTitle'];
-import '../../css/viewer.scss';
+import '../../css/editor.scss';
+import PriorityButton from "./PriorityButton";
+import PriorityButton from "./PriorityButton";
 
 
 export interface IAnnotationFormProps {
@@ -55,13 +57,36 @@ export default class AnnotationForm extends React.Component<
   }
 
   public render() {
+      const {
+          priority,
+          comment,
+          referenceLink,
+          referenceLinkTitle
+      } = this.state;
+
     return (
       <div className="pp-widget">
+        <div className="pp-editor-head-bar">
+            <div className={"pp-editor-priority" + (priority=='NORMAL' ? ' selected' : '')}>
+                przypis
+            </div>
+          <div className={"pp-editor-priority" + (priority=='WARNING' ? ' selected' : '')}>
+                przypis
+            </div>
+          <div className={"pp-editor-priority" + (priority=='ALERT' ? ' selected' : '')}>
+                przypis
+            </div>
+
+
+        </div>
+          <div className="pp-close">
+          <i>X</i>
+        </div>
         <ul className="pp-listing">
           <li className="annotator-item">
             <textarea
               name="comment"
-              value={this.state.comment}
+              value={comment}
               onChange={this.handleInputChange}
               placeholder="Komentarz"
             />
@@ -70,7 +95,7 @@ export default class AnnotationForm extends React.Component<
             <input
               type="text"
               name="referenceLink"
-              value={this.state.referenceLink}
+              value={referenceLink}
               onChange={this.handleInputChange}
               placeholder="Link źródła"
             />
@@ -79,7 +104,7 @@ export default class AnnotationForm extends React.Component<
             <input
               type="text"
               name="referenceLinkTitle"
-              value={this.state.referenceLinkTitle}
+              value={referenceLinkTitle}
               onChange={this.handleInputChange}
               placeholder="Tytuł źródła"
             />

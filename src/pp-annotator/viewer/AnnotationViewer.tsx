@@ -1,5 +1,6 @@
 import React from 'react';
 import {AnnotationViewModel} from "../annotation";
+import '../../css/viewer.scss'
 
 interface IAnnotatorViewerProps {
   key: number;

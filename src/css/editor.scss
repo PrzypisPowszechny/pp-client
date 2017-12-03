@@ -1,0 +1,50 @@
+@import 'common';
+
+/* -- PP Editor -- */
+
+/* --- Viewer head bar --- */
+.pp-editor-head-bar {
+	margin-top: 4px;
+	margin-right: 15px; /* the same margin as comment, for the date */
+	clear: both; /* push up controls */
+
+	:first-child {
+		margin-left: -2px; /* cover the border */
+	}
+
+	:nth-child(1):hover {
+		background-color: #5679B0;
+	}
+	:nth-child(2):hover {
+		background-color: #FDE300;
+	}
+	:nth-child(3):hover {
+		background-color: #F7AB00;
+	}
+}
+
+.pp-editor-priority {
+	display: inline-block;
+	margin: 0 2px;
+	width: 68px;
+	height: 12px;
+	line-height: 12px;
+	padding: 3px 11px;
+
+  	text-align: center;
+	color: rgb(255, 255, 255);
+	font-family: 'Open Sans SemiBold';
+	font-size: 11px;
+	text-transform: uppercase;
+
+	background-color: #D8DADA;
+	cursor: pointer;
+
+
+}
+
+.pp-close {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
