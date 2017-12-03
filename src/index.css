@@ -1,3 +1,10 @@
+.annotator-hl {
+	background: #5679B0;
+	background: rgba(86, 121, 176, 0.3);
+	/* just so it doesn't get overwritten in ancient IE, if original annotator supports them */
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#5679B0, endColorstr=#5679B0)"; /* 0.3 == 4D in MS filters */
+}
+
 @font-face {
     font-family: 'Open Sans Light';
     src: url('../assets/OpenSans-Light.ttf'); 
@@ -13,15 +20,15 @@
 	/* reset annotator.js's styling */
 	border-radius: 0px;
 
-	min-width: 500px;
-	border: 2px solid rgb(210, 212, 210);
+	min-width: 450px;
+	border: 1px solid rgb(210, 212, 210);
 	color: rgb(0, 0, 0);
 }
 
 .annotator-widget::after {
 	/* The downward triangle below widget. */
 
-	left: 250px;
+	left: 214px;
 	
 	/* TODO! new spritesheet need from the UX team. (eg. this triangle) */
 }
@@ -32,19 +39,21 @@
  */
 .pp-annotation {
 	height: 136px;
-	font-size: 14px; /* for most of UI text */
+	font-size: 11px; /* for most of UI text */
 }
 
 /* --- Viewer head bar --- */
 .pp-view-head-bar {
 	margin-top: 4px;
-	margin-right: 15px; /* the same margin as comment, for the date */
+	margin-right: 28px; /* the same margin as comment, for the date */
 	clear: both; /* push up controls */
+	height: 21px;
+	font-size: 11px;
 }
 
 .pp-view-comment-priority {
 	margin-left: -2px; /* cover the border */
-	width: 100px;
+	width: 68px;
 	padding-top: 3px;
 	padding-bottom: 3px;
 	padding-left: 21px; /* indent the type indication */
@@ -64,22 +73,22 @@
 
 /* --- Viewer comment display --- */
 .pp-view-comment {
-	width: 470px;
-	margin-left: 15px;
+	width: 428px;
+	margin-left: 11px;
 	min-height: 48px;
 	padding-top: 6px;
 	padding-bottom: 6px;
 	clear: both;
 
 	font-family: 'Open Sans Light';
-	font-size: 18px;
+	font-size: 14px;
 	color: rgb(0, 0, 0);
 }
 
 /* --- Viewer link bar --- */
 .pp-view-link-bar {
-	width: 470px;
-	margin-left: 15px;
+	width: 428px;
+	margin-left: 11px;
 
 	/* upper line */
 	border-top: 1px solid rgb(210, 212, 210);
