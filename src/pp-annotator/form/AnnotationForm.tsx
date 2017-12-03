@@ -56,7 +56,7 @@ export default class AnnotationForm extends React.Component<
 
   public render() {
     return (
-      <form className="annotator-widget">
+      <form className="pp-widget">
         <ul className="annotator-listing">
           <li className="annotator-item">
             <textarea

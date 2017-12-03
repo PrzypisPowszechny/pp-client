@@ -1,27 +1,116 @@
 @font-face {
-    font-family: 'Open Sans Light';
-    src: url('../../assets/OpenSans-Light.ttf');
+  font-family: 'Open Sans Light';
+  src: url('../../assets/OpenSans-Light.ttf');
 }
 
 @font-face {
-    font-family: 'Open Sans SemiBold';
-    src: url('../../assets/OpenSans-SemiBold.ttf');
+  font-family: 'Open Sans SemiBold';
+  src: url('../../assets/OpenSans-SemiBold.ttf');
+}
+
+/*
+Annotator's styles adaptation process:
+we do NOT use annotation-filter, so ignore its styles
+
+"pp-ized" components: (those most probably do not need any more styles-copying from annotator)
+pp-widget
+pp-outer
+
+
+TODO to copy (and "pp-ize"):
+annotator-notice (if we want it)
+
+TODO annotator classes cannot be changed as they belong to annotator's source:
+annotator-invert-X
+annotator-invert-Y
+.annotator-editor
+ */
+
+.pp-outer {
+  width: 0;
+  height: 0;
+}
+
+//KG Copied from annotator:
+/* if you change the list of classes for which z-index is set,
+       you should update setupDynamicStyle() in annotator.ui.main */
+.pp-outer,
+.pp-widget {
+  position: absolute;
+  z-index: 1020;
 }
 
 /* Widgets are both the adder and the viewer. */
-.annotator-widget {
-	/* reset annotator.js's styling */
-	border-radius: 0px;
+.pp-widget {
+  /* reset annotator.js's styling */
+  margin: 0;
+  padding: 0;
+  left: -18px;
+  bottom: 15px;
+  min-width: 500px;
+  border: 2px solid rgb(210, 212, 210);
+  //todo border as mixin
+  //todo consult border-radius with KS
+  border-radius: 0;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
 
-	min-width: 500px;
-	border: 2px solid rgb(210, 212, 210);
-	color: rgb(0, 0, 0);
+  color: rgb(0, 0, 0);
+
+  //todo adjust the shadow to match specs
+  -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  -o-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-.annotator-widget::after {
-	/* The downward triangle below widget. */
+.pp-widget strong {
+  font-weight: bold;
+}
 
-	left: 250px;
+.pp-widget::after {
+  /* The downward triangle below widget. */
 
-	/* TODO! new spritesheet need from the UX team. (eg. this triangle) */
+  //KG todo replace the annotator's triangle with our own
+  background-image: url(../../node_modules/annotator/img/annotator-glyph-sprite.png?embed); // TODO path
+  background-repeat: no-repeat;
+
+  content: "";
+  display: block;
+  width: 18px;
+  height: 10px;
+  background-position: 0 0;
+  position: absolute;
+  bottom: -10px;
+  left: 8px;
+
+}
+
+/*
+When window is horizontally or vertically inverted
+ */
+.annotator-invert-x .pp-widget {
+  left: auto;
+  right: -18px;
+}
+
+.annotator-invert-y .pp-widget {
+  bottom: auto;
+  top: 8px;
+}
+
+.annotator-invert-x .pp-widget:after {
+  left: auto;
+  right: 8px;
+}
+
+.annotator-invert-y .pp-widget:after {
+  background-position: 0 -15px;
+  bottom: auto;
+  top: -9px;
+}
+
+.annotator-editor .annotator-invert-y .pp-widget:after {
+  background-position: 0 -45px;
+  height: 11px;
 }
