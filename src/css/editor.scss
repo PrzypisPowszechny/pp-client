@@ -2,10 +2,15 @@
 
 /* -- PP Editor -- */
 
+$editor-width: 450px;
+
+.pp-editor .pp-widget {
+	width: $editor-width;
+	background-color: white;
+}
 /* --- Viewer head bar --- */
 .pp-editor-head-bar {
-	margin-top: 4px;
-	margin-right: 15px; /* the same margin as comment, for the date */
+	margin: 10.5px 0;
 	clear: both; /* push up controls */
 
 	:first-child {
@@ -47,4 +52,79 @@
 	position: absolute;
 	right: 0;
 	top: 0;
+}
+
+
+.pp-editor .editor-input{
+	padding: 0;
+	margin: 0;
+	position: relative;
+
+	input, textarea {
+		display: block;
+		margin: 0;
+		padding: 10px 8px;
+		border: 1px solid #D8DADA;
+		outline: none;
+
+		font-family: "Open Sans Light";
+		font-size: 13px;
+		color: #000000;
+
+		background: none;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		-o-box-sizing: border-box;
+		box-sizing: border-box;
+		resize: none;
+	}
+
+	textarea {
+		width: $editor-width - 31.5px;
+		margin: 0 21px 0 10.5px;
+		padding-top: 8px;
+		padding-bottom: 12px;
+		max-lines: 2;
+
+		-webkit-border-radius: 5px 5px 0 0;
+		-moz-border-radius: 5px 5px 0 0;
+		-o-border-radius: 5px 5px 0 0;
+		border-radius: 5px 5px 0 0;
+
+	}
+
+	textarea:focus {
+		border: 1px dashed #888888;
+		background: none;
+	}
+}
+
+
+
+// TODO review: copied from original annotator.css (and adapted to pp-editor & editor-input)
+/* --- scrollbar --- */
+// KG it's better than the default scrollbar, so we might want to make use of these
+// I leave it here until we decide we don't
+.pp-editor .editor-input textarea::-webkit-scrollbar {
+	height: 8px;
+	width: 8px;
+}
+
+.pp-editor .editor-input textarea::-webkit-scrollbar-track-piece {
+	margin: 13px 0 3px;
+	background-color: #e5e5e5;
+	-webkit-border-radius: 4px;
+}
+
+.pp-editor .editor-input textarea::-webkit-scrollbar-thumb:vertical {
+	height: 25px;
+	background-color: #ccc;
+	-webkit-border-radius: 4px;
+	-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.pp-editor .editor-input textarea::-webkit-scrollbar-thumb:horizontal {
+	width: 25px;
+	background-color: #ccc;
+	-webkit-border-radius: 4px;
 }

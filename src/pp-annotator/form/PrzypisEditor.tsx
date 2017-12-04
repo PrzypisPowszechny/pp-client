@@ -25,7 +25,7 @@ export default class PrzypisEditor extends Widget {
     invert: Widget.classes.invert
   };
   public static template = `
-  <div class="pp-outer annotator-editor annotator-hide">
+  <div class="pp-outer pp-editor annotator-hide">
     <div id="react-form-slot"></div>
   </div>`;
 

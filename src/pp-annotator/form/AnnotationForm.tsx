@@ -83,34 +83,24 @@ export default class AnnotationForm extends React.Component<
           <div className="pp-close">
           <i>X</i>
         </div>
-        <ul className="pp-listing">
-          <li className="annotator-item">
-            <textarea
-              name="comment"
-              value={comment}
-              onChange={this.handleInputChange}
-              placeholder="Komentarz"
-            />
-          </li>
-          <li className="annotator-item">
-            <input
-              type="text"
-              name="referenceLink"
-              value={referenceLink}
-              onChange={this.handleInputChange}
-              placeholder="Link źródła"
-            />
-          </li>
-          <li className="annotator-item">
-            <input
-              type="text"
-              name="referenceLinkTitle"
-              value={referenceLinkTitle}
-              onChange={this.handleInputChange}
-              placeholder="Tytuł źródła"
-            />
-          </li>
-        </ul>
+        <div className="editor-input">
+          <textarea
+            name="comment"
+            value={comment}
+            onChange={this.handleInputChange}
+            placeholder="Dodaj treść przypisu"
+          />
+        </div>
+        {/*TODO move to bottom bar*/}
+        {/*<div className="editor-input">*/}
+          {/*<input*/}
+            {/*type="text"*/}
+            {/*name="referenceLink"*/}
+            {/*value={referenceLink}*/}
+            {/*onChange={this.handleInputChange}*/}
+            {/*placeholder="Wklej link do źródła"*/}
+          {/*/>*/}
+        {/*</div>*/}
         <div className="annotator-controls">
           {/*
                    TODO I guess it'd better to use buttons here, to avoid problems with href value moving the view to top
