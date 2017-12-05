@@ -83,7 +83,7 @@ export default class AnnotationForm extends React.Component<
           <div className="pp-close">
           <i>X</i>
         </div>
-        <div className="editor-input">
+        <div className="editor-input pp-comment">
           <textarea
             name="comment"
             value={comment}
@@ -91,28 +91,27 @@ export default class AnnotationForm extends React.Component<
             placeholder="Dodaj treść przypisu"
           />
         </div>
-        {/*TODO move to bottom bar*/}
-        {/*<div className="editor-input">*/}
-          {/*<input*/}
-            {/*type="text"*/}
-            {/*name="referenceLink"*/}
-            {/*value={referenceLink}*/}
-            {/*onChange={this.handleInputChange}*/}
-            {/*placeholder="Wklej link do źródła"*/}
-          {/*/>*/}
-        {/*</div>*/}
-        <div className="annotator-controls">
-          {/*
-                   TODO I guess it'd better to use buttons here, to avoid problems with href value moving the view to top
-                    */}
-          <a href="#" className="annotator-cancel" onClick={(e) => this.onCancel(e)}>
-            {' '}
-            Anuluj{' '}
-          </a>
-          <a href="#" className="annotator-save annotator-focus" onClick={(e) => this.onSave(e)}>
-            {' '}
-            Zapisz{' '}
-          </a>
+        <div className="pp-bottom-bar">
+            <div className="editor-input pp-reference-link">
+            <input
+              type="text"
+              name="referenceLink"
+              value={referenceLink}
+              onChange={this.handleInputChange}
+              placeholder="Wklej link do źródła"
+            />
+          </div>
+          <div className="pp-mover-area"></div>
+          <div className="pp-controls">
+            <button className="pp-cancel" onClick={(e) => this.onCancel(e)}>
+              {' '}
+              Anuluj{' '}
+            </button>
+            <button className="pp-save annotator-focus" onClick={(e) => this.onSave(e)}>
+              {' '}
+              Zapisz{' '}
+            </button>
+          </div>
         </div>
       </div>
     );

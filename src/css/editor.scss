@@ -3,6 +3,9 @@
 /* -- PP Editor -- */
 
 $editor-width: 450px;
+$normal-ref-color: #5679B0;
+$warning-ref-color: #FDE300;
+$alert-ref-color: #F7AB00;
 
 .pp-editor .pp-widget {
 	width: $editor-width;
@@ -18,13 +21,13 @@ $editor-width: 450px;
 	}
 
 	:nth-child(1):hover {
-		background-color: #5679B0;
+		background-color: $normal-ref-color;
 	}
 	:nth-child(2):hover {
-		background-color: #FDE300;
+		background-color: $warning-ref-color;
 	}
 	:nth-child(3):hover {
-		background-color: #F7AB00;
+		background-color: $alert-ref-color;
 	}
 }
 
@@ -55,47 +58,100 @@ $editor-width: 450px;
 }
 
 
-.pp-editor .editor-input{
-	padding: 0;
-	margin: 0;
-	position: relative;
+.pp-editor {
 
-	input, textarea {
+	// fields: comment, referenceLink
+	.editor-input {
 		display: block;
+		padding: 0;
 		margin: 0;
-		padding: 10px 8px;
-		border: 1px solid #D8DADA;
-		outline: none;
+		position: relative;
 
-		font-family: "Open Sans Light";
-		font-size: 13px;
-		color: #000000;
+		input, textarea {
+			border: 1px solid #D8DADA;
+			outline: none;
+			font-family: "Open Sans Light";
+			font-size: 13px;
+			color: #000000;
 
-		background: none;
-		-webkit-box-sizing: border-box;
-		-moz-box-sizing: border-box;
-		-o-box-sizing: border-box;
-		box-sizing: border-box;
-		resize: none;
+			background: none;
+			resize: none;
+		}
+
+		input:hover, input:focus,
+		textarea:hover, textarea:focus {
+			border: 1px dashed #888888;
+			background: none;
+		}
+
+		textarea {
+
+
+			//todo adjust border radius with KS
+			-webkit-border-radius: 5px 5px 0 0;
+			-moz-border-radius: 5px 5px 0 0;
+			-o-border-radius: 5px 5px 0 0;
+			border-radius: 5px 5px 0 0;
+
+		}
+
+
 	}
 
-	textarea {
-		width: $editor-width - 31.5px;
-		margin: 0 21px 0 10.5px;
-		padding-top: 8px;
-		padding-bottom: 12px;
-		max-lines: 2;
-
-		-webkit-border-radius: 5px 5px 0 0;
-		-moz-border-radius: 5px 5px 0 0;
-		-o-border-radius: 5px 5px 0 0;
-		border-radius: 5px 5px 0 0;
-
+	.pp-comment {
+		textarea {
+			padding: 6px;
+			width: $editor-width - 31.5px - 12px;
+			margin: 0 21px 0 10.5px;
+			height: 3.2em; // number of lines
+		}
 	}
 
-	textarea:focus {
-		border: 1px dashed #888888;
-		background: none;
+	.pp-bottom-bar {
+		margin: 10.5px 0;
+
+		.pp-reference-link {
+			display: inline-block;
+			width: 55%;
+			input {
+				margin: 0 10.5px;
+				padding: 2px;
+				width: $editor-width / 2;
+			}
+		}
+
+		.pp-mover-area {
+			display: inline-block;
+			width: 15%;
+			line-height: 1;
+			min-height: 1em;
+		}
+
+		.pp-controls {
+			display: inline-block;
+			width: 30%;
+
+			button {
+			// reset default button stylez
+			border: none;
+			outline: none;
+			background: none;
+			padding: 10px;
+			cursor: pointer;
+			font-family: 'Open Sans SemiBold';
+			font-size: 13px;
+
+		    }
+
+            :first-child {
+              color: #888888;
+			}
+
+            :nth-child(2) {
+              color: $normal-ref-color;
+			}
+		}
+
 	}
 }
 
