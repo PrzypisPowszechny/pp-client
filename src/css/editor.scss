@@ -108,21 +108,69 @@ $alert-ref-color: #F7AB00;
 	}
 
 	.pp-bottom-bar {
-		margin: 10.5px 0;
+		margin: 10.5px 10.5px;
+        font-size: 13px;
 
 		.pp-reference-link {
 			display: inline-block;
-			width: 55%;
+			width: 60%;
+            //box-sizing: border-box;
 			input {
-				margin: 0 10.5px;
-				padding: 2px;
+				padding: 0;
+                height: 1.5em;
+                vertical-align: top;
 				width: $editor-width / 2;
 			}
 		}
+        .pp-reference-link.annotator-hide {
+            display: none;
+        }
+
+        .pp-link-box {
+            display: inline-block;
+            border: 1px solid #D8DADA;
+            margin: 0;
+            height: 1.5em;
+            width: 1.5em;
+            vertical-align: top;
+            position: relative;
+        }
+
+        .pp-link-box .pp-close {
+            display: none;
+        }
+
+        .pp-link-box:hover .pp-close {
+              display: block;
+              width: 0;
+              height: 0;
+              // Manually chose what looked best; might be improved though...
+              position: absolute;
+              right: 0.1em;
+              top: -0.7em;
+        }
+
+        .pp-reference-link-title {
+            display: inline-block;
+            padding: 0;
+            width: 60%;
+            box-sizing: border-box;
+            input {
+                padding: 0;
+                height: 1.5em;
+                width: $editor-width / 2 - 15px;
+                vertical-align: top;
+
+            }
+        }
+        .pp-reference-link-title.annotator-hide {
+            display: none;
+        }
+
 
 		.pp-mover-area {
 			display: inline-block;
-			width: 15%;
+			width: 10%;
 			line-height: 1;
 			min-height: 1em;
 		}
@@ -133,22 +181,23 @@ $alert-ref-color: #F7AB00;
 
 			button {
 			// reset default button stylez
-			border: none;
-			outline: none;
-			background: none;
-			padding: 10px;
-			cursor: pointer;
-			font-family: 'Open Sans SemiBold';
-			font-size: 13px;
+                border: none;
+                outline: none;
+                background: none;
+                padding: 0 10px;
+                height: 1.5em;
+                cursor: pointer;
+                font-family: 'Open Sans SemiBold';
+                font-size: 13px;
 
 		    }
 
             :first-child {
-              color: #888888;
+                color: #888888;
 			}
 
             :nth-child(2) {
-              color: $normal-ref-color;
+                color: $normal-ref-color;
 			}
 		}
 

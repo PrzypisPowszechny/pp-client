@@ -17,7 +17,9 @@ export interface IAnnotationFormProps {
   onCancel(e: any): any;
 }
 
-export type IAnnotationFormState = IAnnotationFields;
+export interface IAnnotationFormState extends IAnnotationFields {
+  linkFilledIn: boolean;
+}
 
 function sliceKeys(dictionary: any, keys: string[]) {
   const result: {
@@ -45,6 +47,7 @@ export default class AnnotationForm extends React.Component<
       comment: annotation.comment || '',
       referenceLink: annotation.referenceLink || '',
       referenceLinkTitle: annotation.referenceLinkTitle || '',
+      linkFilledIn: !!annotation.referenceLink
     };
   }
 
@@ -53,6 +56,7 @@ export default class AnnotationForm extends React.Component<
     this.state = AnnotationForm.stateFromProps(props);
 
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleReferenceLinkChange = this.handleReferenceLinkChange.bind(this);
     this.onSave = this.onSave.bind(this);
     this.onCancel = this.onCancel.bind(this);
   }
@@ -62,7 +66,8 @@ export default class AnnotationForm extends React.Component<
           priority,
           comment,
           referenceLink,
-          referenceLinkTitle
+          referenceLinkTitle,
+          linkFilledIn
       } = this.state;
 
     return (
@@ -80,8 +85,8 @@ export default class AnnotationForm extends React.Component<
 
 
         </div>
-          <div className="pp-close">
-          <i>X</i>
+        <div className="pp-close">
+        <i>X</i>
         </div>
         <div className="editor-input pp-comment">
           <textarea
@@ -92,24 +97,34 @@ export default class AnnotationForm extends React.Component<
           />
         </div>
         <div className="pp-bottom-bar">
-            <div className="editor-input pp-reference-link">
+          <div className={"editor-input pp-reference-link" + (linkFilledIn ? " annotator-hide" : "")}>
             <input
               type="text"
               name="referenceLink"
               value={referenceLink}
-              onChange={this.handleInputChange}
+              onChange={this.handleReferenceLinkChange}
               placeholder="Wklej link do źródła"
+            />
+          </div>
+          <div className={"editor-input pp-reference-link-title" + (linkFilledIn ? "" : " annotator-hide")}>
+            <div className="pp-link-box">
+              <div className="pp-close">x</div>
+            </div>
+            <input
+              type="text"
+              name="referenceLinkTitle"
+              value={referenceLinkTitle}
+              onChange={this.handleInputChange}
+              placeholder="Wpisz tytuł źródła"
             />
           </div>
           <div className="pp-mover-area"></div>
           <div className="pp-controls">
             <button className="pp-cancel" onClick={(e) => this.onCancel(e)}>
-              {' '}
-              Anuluj{' '}
+              {' '}Anuluj{' '}
             </button>
             <button className="pp-save annotator-focus" onClick={(e) => this.onSave(e)}>
-              {' '}
-              Zapisz{' '}
+              {' '}Zapisz{' '}
             </button>
           </div>
         </div>
@@ -125,6 +140,15 @@ export default class AnnotationForm extends React.Component<
     const target = e.currentTarget;
     const name = target.name;
     this.setState({ [name]: target.value });
+  }
+
+  private handleReferenceLinkChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    const target = e.currentTarget;
+    if (target.value.length > 5) {
+      this.setState({linkFilledIn: true})
+    }
+    this.setState({[target.name]: target.value });
+
   }
 
   private onSave(event: any) {
