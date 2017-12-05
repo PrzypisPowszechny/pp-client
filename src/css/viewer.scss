@@ -6,19 +6,21 @@
  */
 .pp-annotation {
 	height: 136px;
-	font-size: 14px; /* for most of UI text */
+	font-size: 11px; /* for most of UI text */
 }
 
 /* --- Viewer head bar --- */
 .pp-view-head-bar {
 	margin-top: 4px;
-	margin-right: 15px; /* the same margin as comment, for the date */
+	margin-right: 28px; /* the same margin as comment, for the date */
 	clear: both; /* push up controls */
+	height: 21px;
+	font-size: 11px;
 }
 
 .pp-view-comment-priority {
 	margin-left: -2px; /* cover the border */
-	width: 100px;
+	width: 68px;
 	padding-top: 3px;
 	padding-bottom: 3px;
 	padding-left: 21px; /* indent the type indication */
@@ -38,22 +40,22 @@
 
 /* --- Viewer comment display --- */
 .pp-view-comment {
-	width: 470px;
-	margin-left: 15px;
+	width: 428px;
+	margin-left: 11px;
 	min-height: 48px;
 	padding-top: 6px;
 	padding-bottom: 6px;
 	clear: both;
 
 	font-family: 'Open Sans Light';
-	font-size: 18px;
+	font-size: 14px;
 	color: rgb(0, 0, 0);
 }
 
 /* --- Viewer link bar --- */
 .pp-view-link-bar {
-	width: 470px;
-	margin-left: 15px;
+	width: 428px;
+	margin-left: 11px;
 
 	/* upper line */
 	border-top: 1px solid rgb(210, 212, 210);

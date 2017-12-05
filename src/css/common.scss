@@ -8,6 +8,13 @@
   src: url('../../assets/OpenSans-SemiBold.ttf');
 }
 
+.annotator-hl {
+	background: #5679B0;
+	background: rgba(86, 121, 176, 0.3);
+	/* just so it doesn't get overwritten in ancient IE, if original annotator supports them */
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#5679B0, endColorstr=#5679B0)"; /* 0.3 == 4D in MS filters */
+}
+
 /*
 Annotator's styles adaptation process:
 we do NOT use annotation-filter, so ignore its styles
@@ -47,8 +54,8 @@ annotator-invert-Y
   padding: 0;
   left: -18px;
   bottom: 15px;
-  min-width: 500px;
-  border: 2px solid rgb(210, 212, 210);
+  min-width: 450px;
+  border: 1px solid rgb(210, 212, 210);
   //todo border as mixin
   //todo consult border-radius with KS
   border-radius: 0;
