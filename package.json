@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "annotator": "^2.0.0-alpha.3",
+    "jquery": "^3.2.1",
     "jsx": "^0.9.89",
     "lodash": "^4.17.4",
     "react": "^16.1.1",
@@ -28,6 +29,7 @@
     "prettier": "^1.8.2",
     "s": "^0.1.1",
     "sass-loader": "^6.0.6",
+    "semantic-ui": "^2.2.13",
     "source-map-loader": "^0.2.3",
     "style-loader": "^0.19.0",
     "tslint": "^5.8.0",

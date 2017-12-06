@@ -2,6 +2,10 @@ import React from 'react';
 import {AnnotationViewModel} from "../annotation";
 import '../../css/viewer.scss'
 
+// Add Semantic-ui packages
+import 'semantic-ui/dist/semantic.css';
+import 'semantic-ui/dist/semantic.js';
+
 interface IAnnotatorViewerProps {
   key: number;
   annotation: AnnotationViewModel;

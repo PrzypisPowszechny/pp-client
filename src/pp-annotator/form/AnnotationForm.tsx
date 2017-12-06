@@ -4,9 +4,10 @@ import {IAnnotationFields, AnnotationViewModel} from '../annotation';
 
 const savedFields = ['priority', 'comment', 'referenceLink', 'referenceLinkTitle'];
 import '../../css/editor.scss';
-import PriorityButton from "./PriorityButton";
-import PriorityButton from "./PriorityButton";
 
+// Add Semantic-ui packages
+import 'semantic-ui/dist/semantic.css';
+import 'semantic-ui/dist/semantic.js';
 
 export interface IAnnotationFormProps {
   id: number;

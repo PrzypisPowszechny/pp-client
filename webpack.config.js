@@ -3,6 +3,7 @@ const path = require('path');
 const { CheckerPlugin } = require('awesome-typescript-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const webpack = require('webpack');
 
 const BUILD_DIR = path.resolve(__dirname, 'dist');
 
@@ -44,6 +45,12 @@ const config = {
       title: 'Przypis testowa pusta strona',
       template: 'src/test.html',
     }),
+    new webpack.ProvidePlugin({
+            jQuery: 'jquery',
+                $: 'jquery',
+                jquery: 'jquery'
+    })
+
   ],
 };
 
