@@ -3,13 +3,12 @@ import ReactDOM from 'react-dom';
 
 import AnnotationForm from './AnnotationForm';
 
-import * as annotator from 'annotator';
-import { ui as AnnotatorUI, util } from 'annotator';
+import annotator, { ui, util } from 'annotator';
 import { mover, resizer } from './editor-utils';
-import {AnnotationViewModel} from "../annotation";
+import { AnnotationViewModel } from '../annotation';
 
 const { $ } = util;
-const { widget: { Widget } } = AnnotatorUI;
+const { widget: { Widget } } = ui;
 
 /**
  * annotator.ui.editor.Editor extension
@@ -17,14 +16,13 @@ const { widget: { Widget } } = AnnotatorUI;
  *
  * Css and show/hide functionality of the outer editor container is nevertheless inherited.
  */
-
 export default class PrzypisEditor extends Widget {
-  public static classes = {
+  static classes = {
+    ...Widget.classes,
     hide: 'annotator-hide',
     focus: 'annotator-focus',
-    invert: Widget.classes.invert
   };
-  public static template = `
+  static template = `
   <div class="annotator-outer annotator-editor annotator-hide">
     <div id="react-form-slot"></div>
   </div>`;
@@ -63,11 +61,11 @@ export default class PrzypisEditor extends Widget {
    *
    * Returns nothing.
    */
-  public show(position: util.IPosition) {
+  show(position: util.IPosition) {
     if (position) {
       this.element.css({
         top: position.top,
-        left: position.left
+        left: position.left,
       });
     }
 
@@ -85,16 +83,16 @@ export default class PrzypisEditor extends Widget {
    * Loads the annotation and displays the edit window
    * Returns an unresolved Promise that will be resolved/rejected when the save/cancel button is clicked.
    */
-  public load(annotation: AnnotationViewModel,
-              position: util.IPosition,
-              saveAction: (annotation: AnnotationViewModel) => any) {
+  load(annotation: AnnotationViewModel,
+       position: util.IPosition,
+       saveAction: (annotation: AnnotationViewModel) => any) {
     this.annotation = annotation;
     this.saveAction = saveAction;
     this.updateForm(annotation);
     this.show(position);
   }
 
-    /**
+  /**
    * Renders (or updates, if already rendered) React component within the Editor html container
    */
   private updateForm(annotation: AnnotationViewModel) {
@@ -103,17 +101,17 @@ export default class PrzypisEditor extends Widget {
         id={this.annotation ? this.annotation.id || 0 : 0}
         annotation={annotation}
         saveAction={this.saveAction}
-        onSave={this.onSave.bind(this)}
-        onCancel={this.onCancel.bind(this)}
+        onSave={this.onSave}
+        onCancel={this.onCancel}
       />,
-      document.getElementById('react-form-slot')
+      document.getElementById('react-form-slot'),
     );
   }
 
   /**
    * When save button is clicked, React form field value dictionary will be passed to this function
    */
-  private onSave() {
+  private onSave = () => {
     // Resolve deferred promise; will result in asynchronous user input
     this.hide();
   }
@@ -122,7 +120,7 @@ export default class PrzypisEditor extends Widget {
    * Public: Cancels the editing process, discarding any edits made to the
    * annotation.
    */
-  private onCancel() {
+  private onCancel = () => {
     this.hide();
   }
 
@@ -143,7 +141,7 @@ export default class PrzypisEditor extends Widget {
 
     // Find the first/last item element depending on orientation
     let cornerItem;
-    if (this.element.hasClass(PrzypisEditor.classes.invert.y)) {
+    if (this.element.hasClass(Widget.classes.invert.y)) {
       cornerItem = this.element.find('.annotator-item:last');
     } else {
       cornerItem = this.element.find('.annotator-item:first');
@@ -156,12 +154,12 @@ export default class PrzypisEditor extends Widget {
     const [controls, textarea, resizeHandle] = [
       '.annotator-controls',
       'textarea:first',
-      '.annotator-resize'
-    ].map(x => this.element.find(x)[0]);
+      '.annotator-resize',
+    ].map((x) => this.element.find(x)[0]);
 
     this.resizer = resizer(textarea, resizeHandle, {
-      invertedX: () => this.element.hasClass(PrzypisEditor.classes.invert.x),
-      invertedY: () => this.element.hasClass(PrzypisEditor.classes.invert.y)
+      invertedX: () => this.element.hasClass(Widget.classes.invert.x),
+      invertedY: () => this.element.hasClass(Widget.classes.invert.y),
     });
 
     this.mover = mover(this.element[0], controls);

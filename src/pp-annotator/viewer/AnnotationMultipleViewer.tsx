@@ -1,23 +1,20 @@
 import React from 'react';
 
 import AnnotationViewer, { ICallbacks } from './AnnotationViewer';
-import {AnnotationViewModel} from "../annotation";
+import { AnnotationViewModel } from '../annotation';
 
 interface IAnnotationMultipleViewerProps {
   annotations: AnnotationViewModel[];
   callbacks: ICallbacks;
 }
 
-export default class AnnotationMultipleViewer extends React.Component<
-  IAnnotationMultipleViewerProps,
-  {}
-> {
+export default class AnnotationMultipleViewer extends React.Component<IAnnotationMultipleViewerProps, {}> {
   constructor(props: IAnnotationMultipleViewerProps) {
     super(props);
   }
 
-  public renderItems() {
-    return this.props.annotations.map(annotation => (
+  renderItems() {
+    return this.props.annotations.map((annotation) => (
       <AnnotationViewer
         key={annotation.id || 0}
         annotation={annotation}
@@ -26,7 +23,7 @@ export default class AnnotationMultipleViewer extends React.Component<
     ));
   }
 
-  public render() {
+  render() {
     return (
       // The inner part of annotator.Viewer.template
       <ul className="annotator-widget annotator-listing">{this.renderItems()}</ul>

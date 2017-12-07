@@ -1,3 +1,4 @@
+/* tslint:disable: max-classes-per-file */
 declare module 'annotator' {
   export const App: {
     new (): IAppInstance;
@@ -19,24 +20,24 @@ declare module 'annotator' {
 
   export namespace registry {
     export class Registry {
-      public getUtility(utilityName: string): any;
-      public registerUtility(component: any, iface: string): void; //TODO type better
+      getUtility(utilityName: string): any;
+      registerUtility(component: any, iface: string): void; // TODO type better
     }
   }
 
   export namespace storage {
-    export interface IAnnotationXHR extends JQuery.jqXHR{
+    export interface IAnnotationXHR extends JQuery.jqXHR {
       _action?: string;
       _id?: number | string;
     }
 
-    export interface HttpStorageOptions {
+    export interface IHttpStorageOptions {
       emulateHTTP?: boolean;
       emulateJSON?: boolean;
       headers?: any;
       prefix?: string;
-      onError?(msg:string, xhr: IAnnotationXHR): any;
       urls?: any;
+      onError?(msg: string, xhr: IAnnotationXHR): any;
     }
 
     export interface IAnnotationStorage {
@@ -54,7 +55,7 @@ declare module 'annotator' {
   export namespace util {
     export const $: JQueryStatic;
     export const Promise: any;
-    export const gettext: any
+    export const gettext: any;
     export interface IPosition {
       top: number;
       left: number;
@@ -70,10 +71,10 @@ declare module 'annotator' {
     export namespace highlighter {
       export class Highlighter extends widget.Widget {
         constructor(element: Element);
-        public drawAll(anns: IAnnotation[]): void;
-        public draw(ann: IAnnotation): void;
-        public undraw(ann: IAnnotation): void;
-        public redraw(ann: IAnnotation): void;
+        drawAll(anns: IAnnotation[]): void;
+        draw(ann: IAnnotation): void;
+        undraw(ann: IAnnotation): void;
+        redraw(ann: IAnnotation): void;
       }
     }
     export namespace textselector {
@@ -82,7 +83,7 @@ declare module 'annotator' {
           element: Element,
           options: {
             onSelection(ranges: Array<{}>, event: JQuery.Event): void;
-          }
+          },
         );
       }
     }
@@ -98,22 +99,23 @@ declare module 'annotator' {
       }
 
       export class Widget {
-        public static classes: {
+        static classes: {
           hide: string;
           invert: {
             x: string;
             y: string;
           };
+          [key: string]: any;
         };
-        public static template: string;
-        public static options: IWidgetOptions;
-        public element: JQuery;
+        static template: string;
+        static options: IWidgetOptions;
+        element: JQuery;
         constructor(options: IWidgetOptions);
-        public show(position?: util.IPosition): void;
-        public hide(): void;
-        public attach(): void;
-        public destroy(): void;
-        public isShown(): boolean;
+        show(position?: util.IPosition): void;
+        hide(): void;
+        attach(): void;
+        destroy(): void;
+        isShown(): boolean;
       }
     }
   }

@@ -39,7 +39,7 @@ export function dragTracker(handle: Node, callback: (delta: IVec2) => boolean) {
 
     const delta = {
       y: e.pageY - lastPos.top,
-      x: e.pageX - lastPos.left
+      x: e.pageX - lastPos.left,
     };
 
     let trackLastMove = true;
@@ -53,7 +53,7 @@ export function dragTracker(handle: Node, callback: (delta: IVec2) => boolean) {
     if (trackLastMove !== false) {
       lastPos = {
         top: e.pageY,
-        left: e.pageX
+        left: e.pageX,
       };
     }
 
@@ -80,7 +80,7 @@ export function dragTracker(handle: Node, callback: (delta: IVec2) => boolean) {
 
     lastPos = {
       top: e.pageY,
-      left: e.pageX
+      left: e.pageX,
     };
 
     $(handle.ownerDocument)
@@ -119,14 +119,12 @@ export function dragTracker(handle: Node, callback: (delta: IVec2) => boolean) {
  * inverted. Useful if the drag handle is at the bottom of the
  * element, and so dragging down means "grow the element"
  */
-export function resizer(
-  element: Element,
-  handle: Node,
-  options: {
-    invertedX?: () => boolean;
-    invertedY?: () => boolean;
-  }
-) {
+export function resizer(element: Element,
+                        handle: Node,
+                        options: {
+                          invertedX?: () => boolean;
+                          invertedY?: () => boolean;
+                        }) {
   const $el = $(element);
   if (typeof options === 'undefined' || options === null) {
     options = {};
@@ -147,7 +145,7 @@ export function resizer(
 
     return {
       x: delta.x * directionX,
-      y: delta.y * directionY
+      y: delta.y * directionY,
     };
   }
 
@@ -184,7 +182,7 @@ export function mover(element: Element, handle: Node) {
   function move(delta: IVec2) {
     $(element).css({
       top: parseInt($(element).css('top'), 10) + delta.y,
-      left: parseInt($(element).css('left'), 10) + delta.x
+      left: parseInt($(element).css('left'), 10) + delta.x,
     });
     return true;
   }
