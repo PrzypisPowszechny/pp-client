@@ -1,9 +1,11 @@
 {
   "extends": [
     "tslint:recommended",
-    "tslint-react"
+    "tslint-react",
+    "tslint-eslint-rules"
   ],
   "rules": {
+    "arrow-parens": false,
     "arrow-return-shorthand": true,
     "max-classes-per-file": [
       true,
@@ -16,6 +18,7 @@
     "no-unnecessary-callback-wrapper": true,
     "object-literal-sort-keys": false,
     "ordered-imports": false,
+    "ter-arrow-parens": [true, "as-needed", { "requireForBlockBody": true }],
     "trailing-comma": [
       true,
       {
