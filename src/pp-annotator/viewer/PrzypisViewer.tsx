@@ -1,11 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import annotator from 'annotator';
+import annotator, { ui, util } from 'annotator';
 
 import AnnotationMultipleViewer from './AnnotationMultipleViewer';
-import {AnnotationViewModel} from "../annotation";
+import { AnnotationViewModel } from '../annotation';
 
-const { ui, util } = annotator;
 const { widget: { Widget } } = ui;
 
 const { $ } = util;
@@ -23,9 +22,13 @@ interface IPrzypisViewerOptions extends annotator.ui.widget.IWidgetOptions {
 
 // Public: Creates an element for viewing annotations.
 export default class PrzypisViewer extends Widget {
-  private static nameSpace = 'annotator-viewer';
+  static nameSpace = 'annotator-viewer';
+  static classes = {
+    ...Widget.classes,
+    showControls: 'annotator-visible',
+  };
 
-  public annotations: AnnotationViewModel[];
+  annotations: AnnotationViewModel[];
   private hideTimer: number | null;
   private hideTimerDfd: JQuery.Deferred<any> | null;
   private hideTimerActivity: boolean;
@@ -77,24 +80,24 @@ export default class PrzypisViewer extends Widget {
       this.document = this.options.autoViewHighlights.ownerDocument;
 
       $(this.options.autoViewHighlights)
-        .on('mouseover.' + PrzypisViewer.nameSpace, '.annotator-hl', function(event) {
+        .on('mouseover.' + PrzypisViewer.nameSpace, '.annotator-hl', function onMouseOver(event) {
           // If there are many overlapping highlights, still only
-          // call _onHighlightMouseover once.
+          // call onHighlightMouseover once.
           if (event.target === this) {
-            self._onHighlightMouseover(event);
+            self.onHighlightMouseover(event);
           }
         })
         .on('mouseleave.' + PrzypisViewer.nameSpace, '.annotator-hl', () => {
-          self._startHideTimer(false);
+          self.startHideTimer(false);
         });
 
       $(this.document.body)
-        .on('mousedown.' + PrzypisViewer.nameSpace, e => {
+        .on('mousedown.' + PrzypisViewer.nameSpace, (e) => {
           if (e.which === 1) {
             this.mouseDown = true;
           }
         })
-        .on('mouseup.' + PrzypisViewer.nameSpace, e => {
+        .on('mouseup.' + PrzypisViewer.nameSpace, (e) => {
           if (e.which === 1) {
             this.mouseDown = false;
           }
@@ -103,14 +106,14 @@ export default class PrzypisViewer extends Widget {
 
     this.element
       .on('mouseenter.' + PrzypisViewer.nameSpace, () => {
-        self._clearHideTimer();
+        self.clearHideTimer();
       })
       .on('mouseleave.' + PrzypisViewer.nameSpace, () => {
-        self._startHideTimer(false);
+        self.startHideTimer(false);
       });
   }
 
-  public destroy() {
+  destroy() {
     if (this.options.autoViewHighlights) {
       $(this.options.autoViewHighlights).off('.' + PrzypisViewer.nameSpace);
       $(this.document.body).off('.' + PrzypisViewer.nameSpace);
@@ -131,11 +134,11 @@ export default class PrzypisViewer extends Widget {
   //   viewer.show({top: '100px', left: '80px'})
   //
   // Returns nothing.
-  public show(position: annotator.util.IPosition) {
+  show(position: annotator.util.IPosition) {
     if (typeof position !== 'undefined' && position !== null) {
       this.element.css({
         top: position.top,
-        left: position.left
+        left: position.left,
       });
     }
 
@@ -151,7 +154,7 @@ export default class PrzypisViewer extends Widget {
   //   viewer.load([annotation1, annotation2, annotation3])
   //
   // Returns nothing.
-  public load(annotations: AnnotationViewModel[], position: annotator.util.IPosition) {
+  load(annotations: AnnotationViewModel[], position: annotator.util.IPosition) {
     this.annotations = annotations || [];
     this.update(annotations);
     this.show(position);
@@ -160,35 +163,25 @@ export default class PrzypisViewer extends Widget {
   /**
    * Renders (or updates, if already rendered) React component within the PrzypisViewer html container
    */
-  private update(annotations: AnnotationViewModel[]) {
+  update(annotations: AnnotationViewModel[]) {
     // Callbacks to pass to React component
     const callbacks = {
-      onEdit: this._onEditClick.bind(this),
-      onDelete: this._onDeleteClick.bind(this)
+      onEdit: this.onEditClick,
+      onDelete: this.onDeleteClick,
     };
 
     ReactDOM.render(
-      <AnnotationMultipleViewer annotations={annotations} callbacks={callbacks} />,
-      document.getElementById('react-annotation-viewer-slot')
+      <AnnotationMultipleViewer annotations={annotations} callbacks={callbacks}/>,
+      document.getElementById('react-annotation-viewer-slot'),
     );
   }
 
-  // Event callback: called when the edit button is clicked.
-  //
-  // event - An Event object.
-  //
-  // Returns nothing.
-  private _onEditClick(_: any, annotation: AnnotationViewModel) {
+  onEditClick = (_: any, annotation: AnnotationViewModel) => {
     this.hide();
     this.onEditCallback(annotation);
   }
 
-  // Event callback: called when the delete button is clicked.
-  //
-  // event - An Event object.
-  //
-  // Returns nothing.
-  private _onDeleteClick(_: any, annotation: AnnotationViewModel) {
+  onDeleteClick = (_: any, annotation: AnnotationViewModel) => {
     this.hide();
     this.onDeleteCallback(annotation);
   }
@@ -199,13 +192,13 @@ export default class PrzypisViewer extends Widget {
   // event - An Event object.
   //
   // Returns nothing.
-  private _onHighlightMouseover(event: JQuery.Event) {
+  onHighlightMouseover(event: JQuery.Event) {
     // If the mouse button is currently depressed, we're probably trying to
     // make a selection, so we shouldn't show the viewer.
     if (this.mouseDown) {
       return;
     }
-    this._startHideTimer(true).done(() => {
+    this.startHideTimer(true).done(() => {
       const annotations = $(event.target)
         .parents('.annotator-hl')
         .addBack()
@@ -226,11 +219,11 @@ export default class PrzypisViewer extends Widget {
   //            opposed to merely mousing off the current one). Default: false
   //
   // Returns a Promise.
-  private _startHideTimer(activity: boolean) {
+  startHideTimer(activity: boolean) {
     /*todo KG
-        This part is copied straight from annotator.Viewer and might not be very consistent with other code;
-        We should consider refactoring it and making it more explicit if we need to modify it
-        */
+     This part is copied straight from annotator.Viewer and might not be very consistent with other code;
+     We should consider refactoring it and making it more explicit if we need to modify it
+     */
 
     // If timer has already been set, use that one.
     if (this.hideTimer) {
@@ -242,7 +235,7 @@ export default class PrzypisViewer extends Widget {
         // The pending timeout is an inactivity timeout, so likely to be
         // too slow. Clear the pending timeout and start a new (shorter)
         // one!
-        this._clearHideTimer();
+        this.clearHideTimer();
       }
     }
 
@@ -274,10 +267,10 @@ export default class PrzypisViewer extends Widget {
   }
 
   // Clears the hide timer. Also rejects any promise returned by a previous
-  // call to _startHideTimer.
+  // call to startHideTimer.
   //
   // Returns nothing.
-  private _clearHideTimer() {
+  clearHideTimer() {
     if (!this.hideTimer || !this.hideTimerDfd || this.hideTimerActivity) {
       throw new Error('Expected timer to be initialized!');
     }
@@ -288,16 +281,11 @@ export default class PrzypisViewer extends Widget {
   }
 }
 
-// Classes for toggling annotator state.
-Object.assign(PrzypisViewer.classes, {
-  showControls: 'annotator-visible'
-});
-
 // HTML templates for this.widget and this.item properties.
 PrzypisViewer.template = [
   '<div class="annotator-outer annotator-viewer annotator-hide">',
   '  <div id="react-annotation-viewer-slot"></div>',
-  '</div>'
+  '</div>',
 ].join('\n');
 
 // Configuration options
@@ -334,5 +322,5 @@ Object.assign(PrzypisViewer.options, {
 
   // Callback, called when the user clicks the delete button for an
   // annotation.
-  onDelete: () => undefined
+  onDelete: () => undefined,
 });

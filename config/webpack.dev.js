@@ -7,9 +7,10 @@ module.exports = merge(common, {
   devtool: 'inline-source-map',
   devServer: {
     contentBase: '/dist',
+    compress: true,
     inline: true,
-    open: true,
     hot: true,
+    overlay: true,
   },
   plugins: [
     new webpack.NamedModulesPlugin(),

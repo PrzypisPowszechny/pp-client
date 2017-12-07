@@ -10,27 +10,28 @@ const config = {
   entry: "./src/index.ts",
   output: {
     path: BUILD_DIR,
-    filename: '[name].bundle.js'
+    filename: '[name].bundle.js',
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json"],
   },
   module: {
     loaders: [
+      { test: /\.tsx?$/, enforce: 'pre', loader: 'tslint-loader', },
       { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
-      { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
+      // { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
       {
         test: /\.css$/,
-        loader: "style-loader!css-loader"
+        loader: "style-loader!css-loader",
       },
       {
         test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
         loader: 'url-loader',
         options: {
-          limit: 10000
-        }
-      }
-    ]
+          limit: 10000,
+        },
+      },
+    ],
   },
   plugins: [
     new CleanWebpackPlugin([BUILD_DIR]),

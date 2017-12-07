@@ -1,6 +1,6 @@
 import React from 'react';
 import { AnnotationPriorities } from '../consts';
-import {IAnnotationFields, AnnotationViewModel} from '../annotation';
+import { IAnnotationFields, AnnotationViewModel } from '../annotation';
 
 const savedFields = ['priority', 'comment', 'referenceLink', 'referenceLinkTitle'];
 
@@ -18,7 +18,7 @@ function sliceKeys(dictionary: any, keys: string[]) {
   const result: {
     [x: string]: any;
   } = {};
-  keys.forEach(key => {
+  keys.forEach((key) => {
     result[key] = dictionary[key];
   });
   return result;
@@ -28,10 +28,8 @@ function getFormState(obj: any) {
   return sliceKeys(obj, savedFields) as IAnnotationFormState;
 }
 
-export default class AnnotationForm extends React.Component<
-  IAnnotationFormProps,
-  Partial<IAnnotationFormState>
-> {
+export default class AnnotationForm extends React.Component<IAnnotationFormProps,
+  Partial<IAnnotationFormState>> {
 
   private static stateFromProps(props: IAnnotationFormProps): IAnnotationFormState {
     const annotation = props.annotation;
@@ -52,7 +50,7 @@ export default class AnnotationForm extends React.Component<
     this.onCancel = this.onCancel.bind(this);
   }
 
-  public render() {
+  render() {
     return (
       <form className="annotator-widget">
         <ul className="annotator-listing">
@@ -84,14 +82,12 @@ export default class AnnotationForm extends React.Component<
           </li>
         </ul>
         <div className="annotator-controls">
-          {/*
-                   TODO I guess it'd better to use buttons here, to avoid problems with href value moving the view to top
-                    */}
-          <a href="#" className="annotator-cancel" onClick={(e) => this.onCancel(e)}>
+          {/*TODO I guess it'd better to use buttons here, to avoid problems with href value moving the view to top*/}
+          <a href="#" className="annotator-cancel" onClick={this.onCancel}>
             {' '}
             Anuluj{' '}
           </a>
-          <a href="#" className="annotator-save annotator-focus" onClick={(e) => this.onSave(e)}>
+          <a href="#" className="annotator-save annotator-focus" onClick={this.onSave}>
             {' '}
             Zapisz{' '}
           </a>
@@ -100,7 +96,7 @@ export default class AnnotationForm extends React.Component<
     );
   }
 
-  public componentWillReceiveProps(newProps: IAnnotationFormProps) {
+  componentWillReceiveProps(newProps: IAnnotationFormProps) {
     this.setState(AnnotationForm.stateFromProps(newProps));
   }
 
@@ -116,16 +112,15 @@ export default class AnnotationForm extends React.Component<
     const result = this.props.saveAction(this.props.annotation);
 
     Promise.resolve(result)     // it will work whether result is a Promise or a value
-      .then((result) => {
-        const errors = result.errors;
+      .then((res) => {
+        const errors = res.errors;
         if (errors) {
-          //TODO handle form validation messages here
+          // TODO handle form validation messages here
 
         } else {
           this.props.onSave(event);
         }
-      })
-
+      });
   }
 
   private onCancel(event: any) {

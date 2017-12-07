@@ -1,7 +1,7 @@
 import annotator from 'annotator';
 
 import { ui as PPUI } from './pp-annotator/pp-annotator';
-import {debug} from "./storage";
+import { debug } from './pp-annotator/old-storage/storage';
 
 console.log('Przypis script working!'); // tslint:disable-line
 

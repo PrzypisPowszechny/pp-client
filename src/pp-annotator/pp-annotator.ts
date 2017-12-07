@@ -3,7 +3,8 @@ import annotator, { IAppInstance, IAnnotation } from 'annotator';
 import PrzypisEditor from './form/PrzypisEditor';
 import PrzypisAdder from './PrzypisAdder';
 import PrzypisViewer from './viewer/PrzypisViewer';
-import {AnnotationViewModel, IAnnotationAPIModel} from "./annotation";
+import IAnnotationAPIModel, { AnnotationViewModel } from './annotation';
+
 const { util, ui: PPUI } = annotator;
 const { highlighter, textselector } = PPUI;
 
@@ -76,12 +77,7 @@ function injectDynamicStyle() {
     ':not(annotator-filter)';
 
   // use the maximum z-index in the page
-  let max = maxZIndex(
-    util
-      .$(document.body)
-      .find(sel)
-      .get()
-  );
+  let max = maxZIndex(util.$(document.body).find(sel).get());
 
   // but don't go smaller than 1010, because this isn't bulletproof --
   // dynamic elements in the page (notifications, dialogs, etc.) may well
@@ -94,7 +90,7 @@ function injectDynamicStyle() {
     '}',
     '.annotator-filter {',
     '  z-index: ' + (max + 10) + ';',
-    '}'
+    '}',
   ].join('\n');
 
   util
@@ -118,7 +114,7 @@ interface IState {
   highlighter: annotator.ui.highlighter.Highlighter;
   textselector: annotator.ui.textselector.TextSelector;
   viewer: PrzypisViewer;
-  embeddedHighlights: {[id: number]: AnnotationViewModel};
+  embeddedHighlights: { [id: number]: AnnotationViewModel };
 }
 
 /**
@@ -158,18 +154,18 @@ export function ui(options?: {
             throw new Error('Interaction point is null!');
           }
           s.editor.load(annotation, s.interactionPoint,
-              (resultAnnotation: AnnotationViewModel) =>
-                  app.annotations.create(
-                      AnnotationViewModel.toModel(resultAnnotation) as IAnnotation
-                  )
-            );
+            (resultAnnotation: AnnotationViewModel) =>
+              app.annotations.create(
+                AnnotationViewModel.toModel(resultAnnotation) as IAnnotation,
+              ),
+          );
         },
         beforeRequestCreate() {
           // TODO what happens when the adder's request button is clicked
-        }
+        },
       }),
       editor: new PrzypisEditor({
-        extensions: editorExtensions
+        extensions: editorExtensions,
       }),
       highlighter: new highlighter.Highlighter(element),
       textselector: new textselector.TextSelector(element, {
@@ -186,7 +182,7 @@ export function ui(options?: {
           } else {
             s.adder.hide();
           }
-        }
+        },
       }),
       viewer: new PrzypisViewer({
         onEdit(annotation) {
@@ -198,9 +194,9 @@ export function ui(options?: {
           s.interactionPoint = (interactionPoint as any) as { top: number; left: number };
 
           s.editor.load(annotation, s.interactionPoint,
-              (resultAnnotation: AnnotationViewModel) =>
-                  app.annotations.update(AnnotationViewModel.toModel(resultAnnotation) as IAnnotation)
-            );
+            (resultAnnotation: AnnotationViewModel) =>
+              app.annotations.update(AnnotationViewModel.toModel(resultAnnotation) as IAnnotation),
+          );
         },
         onDelete(annotation) {
           app.annotations.delete(annotation);
@@ -212,14 +208,15 @@ export function ui(options?: {
           return authz.permits('delete', annotation, ident.who());
         },
         autoViewHighlights: element,
-        extensions: viewerExtensions
-      })
+        extensions: viewerExtensions,
+      }),
     };
     s.adder.attach();
     s.editor.attach();
     s.viewer.attach();
     injectDynamicStyle();
   }
+
   return {
     start,
 
@@ -234,6 +231,7 @@ export function ui(options?: {
       s.viewer.destroy();
       removeDynamicStyle();
     },
+
     annotationsLoaded(anns: IAnnotationAPIModel[]) {
       if (!s) {
         throw new Error('App not initialized!');
@@ -241,11 +239,12 @@ export function ui(options?: {
 
       const annVieModels = anns.map((ann) => new AnnotationViewModel(ann));
       s.embeddedHighlights = {};
-      for (let viewModel of annVieModels) {
+      for (const viewModel of annVieModels) {
         s.embeddedHighlights[viewModel.id] = viewModel;
       }
       s.highlighter.drawAll(anns as IAnnotation[]);
     },
+
     annotationCreated(ann: IAnnotationAPIModel) {
       if (!s) {
         throw new Error('App not initialized!');
@@ -254,18 +253,20 @@ export function ui(options?: {
       s.embeddedHighlights[viewModel.id] = viewModel;
       s.highlighter.draw(viewModel);
     },
+
     annotationDeleted(ann: IAnnotationAPIModel) {
       if (!s) {
         throw new Error('App not initialized!');
       }
-      console.log(s.embeddedHighlights[ann.id as number])
+      console.log(s.embeddedHighlights[ann.id as number]);
       s.highlighter.undraw(s.embeddedHighlights[ann.id as number]);
     },
+
     annotationUpdated(ann: IAnnotationAPIModel) {
       if (!s) {
         throw new Error('App not initialized!');
       }
       s.highlighter.redraw(s.embeddedHighlights[ann.id as number]);
-    }
+    },
   };
 }

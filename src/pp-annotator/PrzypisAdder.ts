@@ -1,6 +1,6 @@
 import annotator from 'annotator';
 import _ from 'lodash';
-import {AnnotationViewModel} from "./annotation";
+import { AnnotationViewModel } from './annotation';
 
 const { ui, util } = annotator;
 const { widget: { Widget } } = ui;
@@ -22,7 +22,16 @@ interface IPrzypisAdderOptions extends annotator.ui.widget.IWidgetOptions {
 }
 
 export default class PrzypisAdder extends Widget {
-  public static options: IPrzypisAdderOptions = {};
+  static options: IPrzypisAdderOptions = {};
+
+  // original annotator style removed (bare buttons)
+  // '<div class="annotator-adder annotator-hide">',
+  static template = `
+  <div class="annotator-hide">
+    <button type="button" class="create-annotation">Dodaj przypis</button>
+    <button type="button" class="create-request">Poproś o źródło</button>
+  </div>`;
+
   private static NS = 'przypis-adder';
 
   private static getNSTag(tag: string) {
@@ -68,18 +77,18 @@ export default class PrzypisAdder extends Widget {
    *
    * @param position an Object specifying the position in which to show the editor (optional).
    */
-  public show(position?: annotator.util.IPosition) {
+  show(position?: annotator.util.IPosition) {
     if (position) {
       this.element.css({
         left: position.left,
-        top: position.top
+        top: position.top,
       });
     }
 
     super.show();
   }
 
-  public destroy() {
+  destroy() {
     const offTag = PrzypisAdder.getNSTag(`.`);
 
     this.element.off(offTag);
@@ -98,7 +107,7 @@ export default class PrzypisAdder extends Widget {
    * @param annotation an annotation Object to load.
    * @param position an Object specifying the position in which to show the editor (optional).
    */
-  public load(annotation: AnnotationViewModel, position: annotator.util.IPosition) {
+  load(annotation: AnnotationViewModel, position: annotator.util.IPosition) {
     this.annotation = annotation;
     this.show(position);
   }
@@ -177,15 +186,3 @@ export default class PrzypisAdder extends Widget {
     }
   }
 }
-
-/*
- Same case as described in PrzypisEditor
- */
-
-// original annotator style removed (bare buttons)
-// '<div class="annotator-adder annotator-hide">',
-PrzypisAdder.template = `
-<div class="annotator-hide">
-  <button type="button" class="create-annotation">Dodaj przypis</button>
-  <button type="button" class="create-request">Poproś o źródło</button>
-</div>`;
