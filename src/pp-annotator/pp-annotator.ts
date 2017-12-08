@@ -237,7 +237,7 @@ export function ui(options?: {
         throw new Error('App not initialized!');
       }
 
-      const annVieModels = anns.map((ann) => new AnnotationViewModel(ann));
+      const annVieModels = anns.map(ann => new AnnotationViewModel(ann));
       s.embeddedHighlights = {};
       for (const viewModel of annVieModels) {
         s.embeddedHighlights[viewModel.id] = viewModel;

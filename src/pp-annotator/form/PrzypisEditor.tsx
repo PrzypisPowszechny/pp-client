@@ -155,7 +155,7 @@ export default class PrzypisEditor extends Widget {
       '.annotator-controls',
       'textarea:first',
       '.annotator-resize',
-    ].map((x) => this.element.find(x)[0]);
+    ].map(x => this.element.find(x)[0]);
 
     this.resizer = resizer(textarea, resizeHandle, {
       invertedX: () => this.element.hasClass(Widget.classes.invert.x),
