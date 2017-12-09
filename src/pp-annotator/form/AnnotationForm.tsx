@@ -73,20 +73,18 @@ export default class AnnotationForm extends React.Component<
     return (
       <div className="pp-widget">
         <div className="pp-editor-head-bar">
-            <div className={"pp-editor-priority" + (priority=='NORMAL' ? ' selected' : '')}>
+            <button className={"pp-editor-priority" + (priority=='NORMAL' ? ' selected' : '')}>
                 przypis
-            </div>
-          <div className={"pp-editor-priority" + (priority=='WARNING' ? ' selected' : '')}>
+            </button>
+          <button className={"pp-editor-priority" + (priority=='WARNING' ? ' selected' : '')}>
                 przypis
-            </div>
-          <div className={"pp-editor-priority" + (priority=='ALERT' ? ' selected' : '')}>
+            </button>
+          <button className={"pp-editor-priority" + (priority=='ALERT' ? ' selected' : '')}>
                 przypis
-            </div>
-
-
+            </button>
         </div>
         <div className="pp-close">
-        <i>X</i>
+          <i>X</i>
         </div>
         <div className="editor-input pp-comment">
           <textarea

@@ -14,10 +14,11 @@ $alert-ref-color: #F7AB00;
 /* --- Viewer head bar --- */
 .pp-editor-head-bar {
 	margin: 10.5px 0;
+    line-height: 100%; // semantic-ui default would make the div too tall by default
 	clear: both; /* push up controls */
 
 	:first-child {
-		margin-left: -2px; /* cover the border */
+		margin-left: -1px; /* cover the border */
 	}
 
 	:nth-child(1):hover {
@@ -33,10 +34,11 @@ $alert-ref-color: #F7AB00;
 
 .pp-editor-priority {
 	display: inline-block;
-	margin: 0 2px;
 	width: 68px;
-	height: 12px;
 	line-height: 12px;
+	margin: 0 2px;
+	border: none;
+	outline: none;
 	padding: 3px 11px;
 
   	text-align: center;
