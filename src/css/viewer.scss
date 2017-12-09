@@ -12,10 +12,10 @@
 /* --- Viewer head bar --- */
 .pp-view-head-bar {
 	margin-top: 4px;
-	margin-right: 28px; /* the same margin as comment, for the date */
 	clear: both; /* push up controls */
 	height: 21px;
 	font-size: 11px;
+	margin-right: $widget_inner_margin;
 }
 
 .pp-view-comment-priority {
@@ -40,8 +40,8 @@
 
 /* --- Viewer comment display --- */
 .pp-view-comment {
-	width: 428px;
-	margin-left: 11px;
+	width: $widget_inner_width;
+	margin-left: $widget_inner_margin;
 	min-height: 48px;
 	padding-top: 6px;
 	padding-bottom: 6px;
@@ -55,7 +55,7 @@
 /* --- Viewer link bar --- */
 .pp-view-link-bar {
 	width: 428px;
-	margin-left: 11px;
+	margin-left: $widget_inner_margin;
 
 	/* upper line */
 	border-top: 1px solid rgb(210, 212, 210);
@@ -74,70 +74,14 @@
 /* --- Viewer controls. --- */
 
 .pp-viewer {
-
 	.pp-controls {
-		position: relative;
-		top: 5px;
-		right: 5px;
-		padding-left: 5px;
 		float: right;
-
-		min-height: 20px;
-		clear: both;
-
-		button {
-			/* TODO replace with our own spritesheet, this path is atrocious */
-			background-image: url(../../node_modules/annotator/img/annotator-glyph-sprite.png?embed);
-			background-repeat: no-repeat;
-		}
-	}
-
-	li:hover .pp-controls,
-	li .pp-controls.pp-visible {
-		opacity: 1;
-	}
-
-	.pp-controls button,
-	.pp-controls a {
-		cursor: pointer;
-		display: inline-block;
-		width: 13px;
-		height: 13px;
-		margin-left: 2px;
-		border: none;
-		text-indent: -900em;
-		background-color: transparent;
-		outline: none;
-	}
-
-	.pp-controls button:hover,
-	.pp-controls button:focus,
-	.pp-controls a:hover,
-	.pp-controls a:focus {
-		opacity: 0.9;
-	}
-
-	.pp-controls button:active,
-	.pp-controls a:active {
-		opacity: 1;
+		padding-right: 5px;
 	}
 
 	.pp-controls button[disabled] {
 		display: none;
 	}
-
-	.pp-controls .pp-edit {
-		background-position: 0 -60px;
-	}
-
-	.pp-controls .pp-delete {
-		background-position: 0 -75px;
-	}
-
-	.pp-controls .pp-link {
-		background-position: 0 -270px;
-	}
-
 }
 
 

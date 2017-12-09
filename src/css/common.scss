@@ -33,6 +33,10 @@ annotator-invert-Y
 .annotator-editor
  */
 
+$widget_box_width: 450px;
+$widget_inner_width: 428px;
+$widget_inner_margin: ($widget_box_width - $widget_inner_width) / 2;
+
 .pp-outer {
   width: 0;
   height: 0;
@@ -54,7 +58,7 @@ annotator-invert-Y
   padding: 0;
   left: -18px;
   bottom: 15px;
-  min-width: 450px;
+  min-width: $widget_box_width;
   border: 1px solid rgb(210, 212, 210);
   //todo border as mixin
   //todo consult border-radius with KS
