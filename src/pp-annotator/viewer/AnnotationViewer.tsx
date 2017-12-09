@@ -51,14 +51,20 @@ export default class AnnotationViewer extends React.Component<
     return (
             <div className="pp-annotation pp-item">
                 <div className={"pp-controls " + (this.state.initialView ? "pp-visible" : "")}>
+		<div className="ui icon basic buttons">
                     <button type="button"
                             title="Edit"
-                            className="pp-edit"
-                            onClick={(e) => this.props.callbacks.onEdit(e, this.props.annotation)}>Edit</button>
+                            className="pp-edit ui basic button"
+                            onClick={(e) => this.props.callbacks.onEdit(e, this.props.annotation)}>
+		    <i className="edit icon"></i>
+		    </button>
                     <button type="button"
                             title="Delete"
-                            className="pp-delete"
-                            onClick={(e) => this.props.callbacks.onDelete(e, this.props.annotation)}>Delete</button>
+                            className="pp-delete ui basic button"
+                            onClick={(e) => this.props.callbacks.onDelete(e, this.props.annotation)}>
+		    <i className="trash icon"></i>
+		    </button>
+                </div>
                 </div>
 
 		<div className="pp-view-head-bar">
