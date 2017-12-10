@@ -8,134 +8,148 @@ $warning-ref-color: #FDE300;
 $alert-ref-color: #F7AB00;
 
 .pp-editor .pp-widget {
-	width: $editor-width;
-	background-color: white;
+    width: $editor-width;
+    background-color: white;
 }
 /* --- Viewer head bar --- */
 .pp-editor-head-bar {
-	margin: 10.5px 0;
-    line-height: 100%; // semantic-ui default would make the div too tall by default
-	clear: both; /* push up controls */
+    font-size: 11px;
+    margin: 10.5px 0;
+    clear: both; /* push up controls */
+    line-height:1em;
 
-	:first-child {
-		margin-left: -1px; /* cover the border */
-	}
+    :first-child {
+        margin-left: -1px; /* cover the border */
+    }
 
-	:nth-child(1):hover {
-		background-color: $normal-ref-color;
-	}
-	:nth-child(2):hover {
-		background-color: $warning-ref-color;
-	}
-	:nth-child(3):hover {
-		background-color: $alert-ref-color;
-	}
+    :nth-child(1):hover {
+        background-color: $normal-ref-color;
+    }
+    :nth-child(2):hover {
+        background-color: $warning-ref-color;
+    }
+    :nth-child(3):hover {
+        background-color: $alert-ref-color;
+    }
 }
 
 .pp-editor-priority {
-	display: inline-block;
-	width: 68px;
-	line-height: 12px;
-	margin: 0 2px;
-	border: none;
-	outline: none;
-	padding: 3px 11px;
+    display: inline-block;
+    width: 68px;
+    margin: 0 2px;
+    border: none;
+    outline: none;
+    padding: 3px 11px;
+    line-height: 1em;
 
-  	text-align: center;
-	color: rgb(255, 255, 255);
-	font-family: 'Open Sans SemiBold';
-	font-size: 11px;
-	text-transform: uppercase;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    font-family: 'Open Sans SemiBold';
+    font-size: 11px;
+    text-transform: uppercase;
 
-	background-color: #D8DADA;
-	cursor: pointer;
-
+    background-color: #D8DADA;
+    cursor: pointer;
 
 }
 
 .pp-close {
-	position: absolute;
-	right: 0;
-	top: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #888888;
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
 }
 
 
 .pp-editor {
 
-	// fields: comment, referenceLink
-	.editor-input {
-		display: block;
-		padding: 0;
-		margin: 0;
-		position: relative;
+    // fields: comment, referenceLink
+    .editor-input {
+        display: block;
+        padding: 0;
+        margin: 0;
+        position: relative;
 
-		input, textarea {
-			border: 1px solid #D8DADA;
-			outline: none;
-			font-family: "Open Sans Light";
-			font-size: 13px;
-			color: #000000;
+        input, textarea {
+            border: 1px solid #D8DADA;
+            outline: none;
+            font-family: "Open Sans Light";
+            font-size: 13px;
+            color: #000000;
 
-			background: none;
-			resize: none;
-		}
+            background: none;
+            resize: none;
+        }
 
-		input:hover, input:focus,
-		textarea:hover, textarea:focus {
-			border: 1px dashed #888888;
-			background: none;
-		}
+        input:hover, input:focus,
+        textarea:hover, textarea:focus {
+            border: 1px dashed #888888;
+            background: none;
+        }
 
-		textarea {
-
-
-			//todo adjust border radius with KS
-			-webkit-border-radius: 5px 5px 0 0;
-			-moz-border-radius: 5px 5px 0 0;
-			-o-border-radius: 5px 5px 0 0;
-			border-radius: 5px 5px 0 0;
-
-		}
+        textarea {
 
 
-	}
+            //todo adjust border radius with KS
+            -webkit-border-radius: 5px 5px 0 0;
+            -moz-border-radius: 5px 5px 0 0;
+            -o-border-radius: 5px 5px 0 0;
+            border-radius: 5px 5px 0 0;
 
-	.pp-comment {
-		textarea {
-			padding: 6px;
-			width: $editor-width - 31.5px - 12px;
-			margin: 0 21px 0 10.5px;
-			height: 3.2em; // number of lines
-		}
-	}
+        }
 
-	.pp-bottom-bar {
-		margin: 10.5px 10.5px;
+
+    }
+
+    .pp-comment {
+        overflow: auto;
+
+        textarea {
+            box-sizing: content-box;
+            float: left;
+            padding: 6px;
+            width: $editor-width - 31.5px - 12px;
+            margin: 0 21px 0 10.5px;
+            line-height: 1.2em;
+            height: 3.6em; // number of lines
+        }
+    }
+
+    .pp-bottom-bar {
+        margin: 10.5px 10.5px;
         font-size: 13px;
 
-		.pp-reference-link {
-			display: inline-block;
-			width: 60%;
-            //box-sizing: border-box;
-			input {
-				padding: 0;
+        .pp-reference-link {
+            display: inline-block;
+            width: 60%;
+            input {
+                padding: 0;
                 height: 1.5em;
                 vertical-align: top;
-				width: $editor-width / 2;
-			}
-		}
+                width: $editor-width / 2;
+            }
+        }
         .pp-reference-link.annotator-hide {
             display: none;
         }
 
         .pp-link-box {
+            position: relative;
             display: inline-block;
             border: 1px solid #D8DADA;
             margin: 0;
             height: 1.5em;
             width: 1.5em;
+            text-align: center;
             vertical-align: top;
-            position: relative;
+
+            .linkify.icon {
+            margin: 0;
+          }
         }
 
         .pp-link-box .pp-close {
@@ -156,33 +170,30 @@ $alert-ref-color: #F7AB00;
             display: inline-block;
             padding: 0;
             width: 60%;
-            box-sizing: border-box;
             input {
                 padding: 0;
                 height: 1.5em;
                 width: $editor-width / 2 - 15px;
-                vertical-align: top;
-
             }
         }
         .pp-reference-link-title.annotator-hide {
             display: none;
         }
 
+        // the bottom area used for dragging
+        .pp-mover-area {
+            display: inline-block;
+            width: 10%;
+            line-height: 1;
+            min-height: 1em;
+        }
 
-		.pp-mover-area {
-			display: inline-block;
-			width: 10%;
-			line-height: 1;
-			min-height: 1em;
-		}
+        .pp-controls {
+            display: inline-block;
+            width: 30%;
 
-		.pp-controls {
-			display: inline-block;
-			width: 30%;
-
-			button {
-			// reset default button stylez
+            button {
+            // reset default button stylez
                 border: none;
                 outline: none;
                 background: none;
@@ -192,18 +203,18 @@ $alert-ref-color: #F7AB00;
                 font-family: 'Open Sans SemiBold';
                 font-size: 13px;
 
-		    }
+            }
 
             :first-child {
                 color: #888888;
-			}
+            }
 
             :nth-child(2) {
                 color: $normal-ref-color;
-			}
-		}
+            }
+        }
 
-	}
+    }
 }
 
 
@@ -212,26 +223,27 @@ $alert-ref-color: #F7AB00;
 /* --- scrollbar --- */
 // KG it's better than the default scrollbar, so we might want to make use of these
 // I leave it here until we decide we don't
+
 .pp-editor .editor-input textarea::-webkit-scrollbar {
-	height: 8px;
-	width: 8px;
+    height: 8px;
+    width: 8px;
 }
 
 .pp-editor .editor-input textarea::-webkit-scrollbar-track-piece {
-	margin: 13px 0 3px;
-	background-color: #e5e5e5;
-	-webkit-border-radius: 4px;
+    margin: 13px 0 3px;
+    background-color: #e5e5e5;
+    -webkit-border-radius: 4px;
 }
 
 .pp-editor .editor-input textarea::-webkit-scrollbar-thumb:vertical {
-	height: 25px;
-	background-color: #ccc;
-	-webkit-border-radius: 4px;
-	-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    height: 25px;
+    background-color: #ccc;
+    -webkit-border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
 .pp-editor .editor-input textarea::-webkit-scrollbar-thumb:horizontal {
-	width: 25px;
-	background-color: #ccc;
-	-webkit-border-radius: 4px;
+    width: 25px;
+    background-color: #ccc;
+    -webkit-border-radius: 4px;
 }

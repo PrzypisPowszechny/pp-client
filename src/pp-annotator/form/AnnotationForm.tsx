@@ -61,6 +61,14 @@ export default class AnnotationForm extends React.Component<
     this.onCancel = this.onCancel.bind(this);
   }
 
+  public componentWillUpdate(_nextProps: IAnnotationFormProps, nextState: Partial<IAnnotationFormState>) {
+    // Whenever referenceLink is empty, linkFilledIn must always be false.
+    if(!nextState.referenceLink) {
+      nextState.linkFilledIn = false;
+      nextState.referenceLinkTitle = '';
+    }
+  }
+
   public render() {
       const {
           priority,
@@ -83,8 +91,11 @@ export default class AnnotationForm extends React.Component<
                 przypis
             </button>
         </div>
-        <div className="pp-close">
-          <i>X</i>
+        <div
+            className="pp-close"
+             onClick={(e) => this.onCancel(e)}
+        >
+          <i className="remove icon"></i>
         </div>
         <div className="editor-input pp-comment">
           <textarea
@@ -105,9 +116,16 @@ export default class AnnotationForm extends React.Component<
             />
           </div>
           <div className={"editor-input pp-reference-link-title" + (linkFilledIn ? "" : " annotator-hide")}>
-            <div className="pp-link-box">
-              <div className="pp-close">x</div>
-            </div>
+            <span className="pp-link-box">
+              <i className="linkify icon"></i>
+              <button
+                  className="pp-close"
+                  onClick={() => {this.setState({referenceLink: ''}); console.log(this.state.referenceLink)}}
+              >
+                <i className="remove circle icon"></i>
+              </button>
+
+            </span>
             <input
               type="text"
               name="referenceLinkTitle"
