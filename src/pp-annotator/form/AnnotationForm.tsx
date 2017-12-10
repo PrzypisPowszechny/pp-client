@@ -81,15 +81,28 @@ export default class AnnotationForm extends React.Component<
     return (
       <div className="pp-widget">
         <div className="pp-editor-head-bar">
-            <button className={"pp-editor-priority" + (priority=='NORMAL' ? ' selected' : '')}>
+            {/*KG todo could probably be neater if done with sth like PriorityButton component*/}
+            <button
+                className={"pp-editor-priority" + (priority=='NORMAL' ? ' selected' : '')}
+                onClick={() => this.setState({priority: 'NORMAL'})}
+            >
                 przypis
             </button>
-          <button className={"pp-editor-priority" + (priority=='WARNING' ? ' selected' : '')}>
+          <button
+              className={"pp-editor-priority" + (priority=='WARNING' ? ' selected' : '')}
+              onClick={() => this.setState({priority: 'WARNING'})}
+          >
                 przypis
             </button>
-          <button className={"pp-editor-priority" + (priority=='ALERT' ? ' selected' : '')}>
+          <button
+              className={"pp-editor-priority" + (priority=='ALERT' ? ' selected' : '')}
+              onClick={() => this.setState({priority: 'ALERT'})}
+          >
                 przypis
             </button>
+          <div className="priority-help">
+            <i className="help circle icon"></i>
+          </div>
         </div>
         <div
             className="pp-close"
@@ -106,33 +119,37 @@ export default class AnnotationForm extends React.Component<
           />
         </div>
         <div className="pp-bottom-bar">
-          <div className={"editor-input pp-reference-link" + (linkFilledIn ? " annotator-hide" : "")}>
-            <input
-              type="text"
-              name="referenceLink"
-              value={referenceLink}
-              onChange={this.handleReferenceLinkChange}
-              placeholder="Wklej link do źródła"
-            />
-          </div>
-          <div className={"editor-input pp-reference-link-title" + (linkFilledIn ? "" : " annotator-hide")}>
-            <span className="pp-link-box">
-              <i className="linkify icon"></i>
-              <button
-                  className="pp-close"
-                  onClick={() => {this.setState({referenceLink: ''}); console.log(this.state.referenceLink)}}
-              >
-                <i className="remove circle icon"></i>
-              </button>
-
-            </span>
-            <input
-              type="text"
-              name="referenceLinkTitle"
-              value={referenceLinkTitle}
-              onChange={this.handleInputChange}
-              placeholder="Wpisz tytuł źródła"
-            />
+          <div className="pp-link-form">
+            <div className={"editor-input pp-reference-link" + (linkFilledIn ? " annotator-hide" : "")}>
+              <input
+                type="text"
+                name="referenceLink"
+                value={referenceLink}
+                onChange={this.handleReferenceLinkChange}
+                placeholder="Wklej link do źródła"
+              />
+            </div>
+            <div className={"editor-input pp-reference-link-title" + (linkFilledIn ? "" : " annotator-hide")}>
+              <span className="pp-link-box">
+                <i className="linkify icon"></i>
+                <button
+                    className="pp-close"
+                    onClick={() => {this.setState({referenceLink: ''}); console.log(this.state.referenceLink)}}
+                >
+                  <i className="remove circle icon"></i>
+                </button>
+              </span>
+              <input
+                type="text"
+                name="referenceLinkTitle"
+                value={referenceLinkTitle}
+                onChange={this.handleInputChange}
+                placeholder="Wpisz tytuł źródła"
+              />
+              <div className="link-help">
+                <i className="help circle icon"></i>
+              </div>
+            </div>
           </div>
           <div className="pp-mover-area"></div>
           <div className="pp-controls">

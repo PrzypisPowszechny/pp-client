@@ -11,6 +11,7 @@ $alert-ref-color: #F7AB00;
     width: $editor-width;
     background-color: white;
 }
+
 /* --- Viewer head bar --- */
 .pp-editor-head-bar {
     font-size: 11px;
@@ -18,17 +19,21 @@ $alert-ref-color: #F7AB00;
     clear: both; /* push up controls */
     line-height:1em;
 
-    :first-child {
+    > :nth-child(1){
         margin-left: -1px; /* cover the border */
     }
 
-    :nth-child(1):hover {
+    > :nth-child(1):hover,
+    > :nth-child(1).selected
+    {
         background-color: $normal-ref-color;
     }
-    :nth-child(2):hover {
+    > :nth-child(2):hover,
+    > :nth-child(2).selected {
         background-color: $warning-ref-color;
     }
-    :nth-child(3):hover {
+    > :nth-child(3):hover,
+    > :nth-child(3).selected {
         background-color: $alert-ref-color;
     }
 }
@@ -92,8 +97,6 @@ $alert-ref-color: #F7AB00;
         }
 
         textarea {
-
-
             //todo adjust border radius with KS
             -webkit-border-radius: 5px 5px 0 0;
             -moz-border-radius: 5px 5px 0 0;
@@ -123,13 +126,23 @@ $alert-ref-color: #F7AB00;
         margin: 10.5px 10.5px;
         font-size: 13px;
 
-        .pp-reference-link {
+        button,
+        div,
+        input {
+          vertical-align: top;
+        }
+
+        .pp-link-form {
             display: inline-block;
             width: 60%;
+            padding: 0;
+
+        }
+
+        .pp-reference-link {
             input {
-                padding: 0;
+                padding: 0 4px;
                 height: 1.5em;
-                vertical-align: top;
                 width: $editor-width / 2;
             }
         }
@@ -143,10 +156,8 @@ $alert-ref-color: #F7AB00;
             border: 1px solid #D8DADA;
             margin: 0;
             height: 1.5em;
-            width: 1.5em;
+            width: 18px;
             text-align: center;
-            vertical-align: top;
-
             .linkify.icon {
             margin: 0;
           }
@@ -167,18 +178,27 @@ $alert-ref-color: #F7AB00;
         }
 
         .pp-reference-link-title {
-            display: inline-block;
-            padding: 0;
-            width: 60%;
             input {
-                padding: 0;
+                padding: 0 4px;
                 height: 1.5em;
-                width: $editor-width / 2 - 15px;
+                width: $editor-width / 2 - 18px;
             }
         }
         .pp-reference-link-title.annotator-hide {
             display: none;
         }
+
+        .pp-reference-link-title .link-help {
+            display: none;
+        }
+
+        .pp-reference-link-title:hover .link-help,
+        .pp-reference-link-title input:focus + .link-help
+        {
+            display: inline-block;
+        }
+
+
 
         // the bottom area used for dragging
         .pp-mover-area {
@@ -193,7 +213,7 @@ $alert-ref-color: #F7AB00;
             width: 30%;
 
             button {
-            // reset default button stylez
+            // reset default button styles
                 border: none;
                 outline: none;
                 background: none;
@@ -217,6 +237,21 @@ $alert-ref-color: #F7AB00;
     }
 }
 
+/* --- Help windows --- */
+.pp-editor {
+    .priority-help,
+    .link-help {
+        display: inline-block;
+        border: none;
+        outline: none;
+
+        color: #888888;
+        background: none;
+        margin-left: 5px;
+        font-size: 15px;
+        cursor: pointer; // todo not sure
+    }
+}
 
 
 // TODO review: copied from original annotator.css (and adapted to pp-editor & editor-input)
