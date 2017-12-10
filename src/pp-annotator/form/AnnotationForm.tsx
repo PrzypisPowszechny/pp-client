@@ -83,20 +83,20 @@ export default class AnnotationForm extends React.Component<
         <div className="pp-editor-head-bar">
             {/*KG todo could probably be neater if done with sth like PriorityButton component*/}
             <button
-                className={"pp-editor-priority" + (priority=='NORMAL' ? ' selected' : '')}
-                onClick={() => this.setState({priority: 'NORMAL'})}
+                className={"pp-editor-priority" + (priority == AnnotationPriorities.NORMAL ? ' selected' : '')}
+                onClick={() => this.setState({priority: AnnotationPriorities.NORMAL})}
             >
                 przypis
             </button>
           <button
-              className={"pp-editor-priority" + (priority=='WARNING' ? ' selected' : '')}
-              onClick={() => this.setState({priority: 'WARNING'})}
+              className={"pp-editor-priority" + (priority == AnnotationPriorities.WARNING ? ' selected' : '')}
+              onClick={() => this.setState({priority: AnnotationPriorities.WARNING})}
           >
                 przypis
             </button>
           <button
-              className={"pp-editor-priority" + (priority=='ALERT' ? ' selected' : '')}
-              onClick={() => this.setState({priority: 'ALERT'})}
+              className={"pp-editor-priority" + (priority == AnnotationPriorities.ALERT ? ' selected' : '')}
+              onClick={() => this.setState({priority: AnnotationPriorities.ALERT})}
           >
                 przypis
             </button>
