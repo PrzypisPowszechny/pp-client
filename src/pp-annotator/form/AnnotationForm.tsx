@@ -126,6 +126,7 @@ export default class AnnotationForm extends React.Component<
                 name="referenceLink"
                 value={referenceLink}
                 onChange={this.handleReferenceLinkChange}
+                onPaste={this.handleReferenceLinkChange}
                 placeholder="Wklej link do źródła"
               />
             </div>
@@ -134,7 +135,7 @@ export default class AnnotationForm extends React.Component<
                 <i className="linkify icon"></i>
                 <button
                     className="pp-close"
-                    onClick={() => {this.setState({referenceLink: ''}); console.log(this.state.referenceLink)}}
+                    onClick={() => this.setState({referenceLink: ''})}
                 >
                   <i className="remove circle icon"></i>
                 </button>
@@ -175,13 +176,19 @@ export default class AnnotationForm extends React.Component<
     this.setState({ [name]: target.value });
   }
 
-  private handleReferenceLinkChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+  private handleReferenceLinkChange(e: React.ChangeEvent<HTMLInputElement> | React.ClipboardEvent<HTMLInputElement>) {
+    // A joint handler for change & paste events
     const target = e.currentTarget;
-    if (target.value.length > 5) {
-      this.setState({linkFilledIn: true})
+    const stateChange: Partial<IAnnotationFormState> = {};
+    if (e.type === 'paste') {
+      stateChange.linkFilledIn = true;
+      stateChange.referenceLink = (e as React.ClipboardEvent<HTMLInputElement>).clipboardData.getData('Text');
     }
-    this.setState({[target.name]: target.value });
-
+    else if (e.type === 'change') {
+      stateChange.referenceLink = target.value;
+      // todo? allow for link manual char-by-char typing
+    }
+    this.setState(stateChange);
   }
 
   private onSave(event: any) {

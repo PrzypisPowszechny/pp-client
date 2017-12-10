@@ -179,6 +179,7 @@ $alert-ref-color: #F7AB00;
 
         .pp-reference-link-title {
             input {
+                border-left: none;
                 padding: 0 4px;
                 height: 1.5em;
                 width: $editor-width / 2 - 18px;
