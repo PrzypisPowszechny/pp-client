@@ -1,7 +1,9 @@
-import IStorage from './Storage.interface';
 import IAnnotation from './Annotation.interface';
+import Registry from '../modules/Registry';
+import IStorage from './Storage.interface';
+import IModule from '../modules/Module.interface';
 
-export default class DebugStorage implements IStorage {
+export default class DebugStorage implements IStorage, IModule {
   annotations: IAnnotation[] = [];
 
   create(data: any): any {
@@ -10,11 +12,11 @@ export default class DebugStorage implements IStorage {
   }
 
   update(id: number, data: IAnnotation): IAnnotation[] {
-    this.remove(id);
+    this.delete(id);
     return this.create(data);
   }
 
-  remove(id: number): IAnnotation[] {
+  delete(id: number): IAnnotation[] {
     this.annotations = [
       ...this.annotations.filter(ann => ann.id !== id),
     ];
@@ -22,8 +24,11 @@ export default class DebugStorage implements IStorage {
     return this.annotations;
   }
 
-  get(id: number): any {
+  query(id: number): any {
     return this.annotations.find(annotation => annotation.id === id);
   }
 
+  configure(registry: Registry) {
+    registry.registerUtility(this, 'storage');
+  }
 }
