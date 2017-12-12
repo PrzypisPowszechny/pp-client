@@ -514,10 +514,10 @@ export class StorageAdapter {
    *
    * ::
    *
-   *     registry.on('beforeAnnotationCreated', function (annotation) {
+   *     modules.on('beforeAnnotationCreated', function (annotation) {
    *         annotation.myProperty = 'This is a custom property';
    *     });
-   *     registry.create({}); // Resolves to {myProperty: "This is a…"}
+   *     modules.create({}); // Resolves to {myProperty: "This is a…"}
    *
    *
    * :param Object annotation: An object from which to create an annotation.
@@ -551,11 +551,11 @@ export class StorageAdapter {
    * ::
    *
    *     annotation = {tags: 'apples oranges pears'};
-   *     registry.on('beforeAnnotationUpdated', function (annotation) {
+   *     modules.on('beforeAnnotationUpdated', function (annotation) {
    *         // validate or modify a property.
    *         annotation.tags = annotation.tags.split(' ')
    *     });
-   *     registry.update(annotation)
+   *     modules.update(annotation)
    *     // => Resolves to {tags: ["apples", "oranges", "pears"]}
    *
    * :param Object annotation: An annotation object to update.

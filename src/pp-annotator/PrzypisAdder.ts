@@ -77,7 +77,7 @@ export default class PrzypisAdder extends Widget {
    *
    * @param position an Object specifying the position in which to show the editor (optional).
    */
-  show(position?: annotator.util.IPosition) {
+  show(position?: annotator.util.IPosition | null) {
     if (position) {
       this.element.css({
         left: position.left,
@@ -107,7 +107,7 @@ export default class PrzypisAdder extends Widget {
    * @param annotation an annotation Object to load.
    * @param position an Object specifying the position in which to show the editor (optional).
    */
-  load(annotation: AnnotationViewModel, position: annotator.util.IPosition) {
+  load(annotation: AnnotationViewModel, position: annotator.util.IPosition | null) {
     this.annotation = annotation;
     this.show(position);
   }

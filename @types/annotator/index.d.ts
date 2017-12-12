@@ -1,9 +1,5 @@
 /* tslint:disable: max-classes-per-file */
 declare module 'annotator' {
-  export const App: {
-    new (): IAppInstance;
-  };
-
   // A basic type, used as an API model as well as withing the client application
   export interface IAnnotation {
     ranges: any[];

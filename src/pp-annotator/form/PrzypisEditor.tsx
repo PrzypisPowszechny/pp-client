@@ -61,7 +61,7 @@ export default class PrzypisEditor extends Widget {
    *
    * Returns nothing.
    */
-  show(position: util.IPosition) {
+  show(position?: util.IPosition | null) {
     if (position) {
       this.element.css({
         top: position.top,
@@ -84,7 +84,7 @@ export default class PrzypisEditor extends Widget {
    * Returns an unresolved Promise that will be resolved/rejected when the save/cancel button is clicked.
    */
   load(annotation: AnnotationViewModel,
-       position: util.IPosition,
+       position: util.IPosition | null,
        saveAction: (annotation: AnnotationViewModel) => any) {
     this.annotation = annotation;
     this.saveAction = saveAction;
