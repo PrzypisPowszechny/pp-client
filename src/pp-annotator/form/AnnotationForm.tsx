@@ -1,10 +1,9 @@
 import React from 'react';
 import { AnnotationPriorities } from '../consts';
 import {IAnnotationFields, AnnotationViewModel} from '../annotation';
-
-const savedFields = ['priority', 'comment', 'referenceLink', 'referenceLinkTitle'];
 import '../../css/editor.scss';
 
+const savedFields = ['priority', 'comment', 'referenceLink', 'referenceLinkTitle'];
 // Add Semantic-ui packages
 import 'semantic-ui/dist/semantic.css';
 import 'semantic-ui/dist/semantic.js';
@@ -67,6 +66,15 @@ export default class AnnotationForm extends React.Component<
       nextState.linkFilledIn = false;
       nextState.referenceLinkTitle = '';
     }
+  }
+
+  public saveButtonClass() {
+    const priorityToClass = {
+      [AnnotationPriorities.NORMAL]: 'priority-normal',
+      [AnnotationPriorities.WARNING]: 'priority-warning',
+      [AnnotationPriorities.ALERT]: 'priority-alert',
+    };
+    return priorityToClass[this.state.priority || AnnotationPriorities.NORMAL];
   }
 
   public render() {
@@ -166,7 +174,7 @@ export default class AnnotationForm extends React.Component<
               <button className="pp-cancel" onClick={(e) => this.onCancel(e)}>
                 {' '}Anuluj{' '}
               </button>
-              <button className="pp-save annotator-focus" onClick={(e) => this.onSave(e)}>
+              <button className={"pp-save annotator-focus " + this.saveButtonClass()} onClick={(e) => this.onSave(e)}>
                 {' '}Zapisz{' '}
               </button>
             </div>

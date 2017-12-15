@@ -211,14 +211,17 @@ $editor-font-size: 13px;
                 height: 1.5em;
                 cursor: pointer;
                 font-family: $bold-font-family;
-            }
-
-            :first-child {
                 color: #888888;
             }
 
-            :nth-child(2) {
-                color: $normal-ref-color;
+            .priority-normal {
+                color: darken($normal-ref-color, 5%);
+            }
+            .priority-warning {
+                color: darken($warning-ref-color, 10%);
+            }
+            .priority-alert {
+                color: darken($alert-ref-color, 5%);
             }
         }
 
