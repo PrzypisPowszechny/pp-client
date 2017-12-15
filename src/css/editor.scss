@@ -120,6 +120,7 @@ $editor-font-size: 13px;
     .pp-bottom-bar {
         margin: 10.5px 10.5px;
 
+        // KG very rough; I leave it so as this part is about to change anyway
         * {
             vertical-align: top;
         }
@@ -128,7 +129,6 @@ $editor-font-size: 13px;
             display: inline-block;
             width: 60%;
             padding: 0;
-
         }
 
         .pp-reference-link {
@@ -136,6 +136,10 @@ $editor-font-size: 13px;
                 padding: 0 4px;
                 height: 1.5em;
                 width: $editor-width / 2;
+            }
+            .pp-error-msg {
+                left: 0;
+                top: 15px;
             }
         }
         .pp-reference-link.pp-hide {
@@ -228,8 +232,12 @@ $editor-font-size: 13px;
     }
 }
 
-/* --- Help windows --- */
 .pp-editor {
+    .pp-error-msg {
+        position: absolute !important; // override semantic-ui defaults
+        z-index: $tooltip-z-index;
+    }
+
     /* all cross-style close buttons */
     .pp-close {
         position: absolute;
@@ -244,6 +252,7 @@ $editor-font-size: 13px;
         cursor: pointer;
     }
 
+    /* --- Help windows --- */
     .priority-help,
     .link-help {
         display: inline-block;

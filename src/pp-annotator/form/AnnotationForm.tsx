@@ -18,6 +18,7 @@ export interface IAnnotationFormProps {
 
 export interface IAnnotationFormState extends IAnnotationFields {
   linkFilledIn: boolean;
+  referenceLinkError: string;
 }
 
 function sliceKeys(dictionary: any, keys: string[]) {
@@ -45,6 +46,7 @@ export default class AnnotationForm extends React.Component<
       priority: annotation.priority || AnnotationPriorities.NORMAL,
       comment: annotation.comment || '',
       referenceLink: annotation.referenceLink || '',
+      referenceLinkError: '',
       referenceLinkTitle: annotation.referenceLinkTitle || '',
       linkFilledIn: !!annotation.referenceLink
     };
@@ -65,6 +67,10 @@ export default class AnnotationForm extends React.Component<
     if(!nextState.referenceLink) {
       nextState.linkFilledIn = false;
       nextState.referenceLinkTitle = '';
+    }
+    // Whenever link is changed, eradicate the error message
+    if(nextState.referenceLink) {
+      nextState.referenceLinkError = '';
     }
   }
 
@@ -137,7 +143,7 @@ export default class AnnotationForm extends React.Component<
           </div>
           <div className="pp-bottom-bar">
             <div className="pp-link-form">
-              <div className={"editor-input pp-reference-link" + (linkFilledIn ? " pp-hide" : "")}>
+              <div className={"editor-input pp-reference-link" + (linkFilledIn ? " pp-hide" : "") + (this.state.referenceLinkError ? ' ui input error' : '')}>
                 <input
                     type="text"
                     name="referenceLink"
@@ -146,6 +152,9 @@ export default class AnnotationForm extends React.Component<
                     onPaste={this.handleReferenceLinkChange}
                     placeholder="Wklej link do źródła"
                 />
+                <div className={"pp-error-msg ui pointing red basic label large" + (this.state.referenceLinkError ? '' : ' pp-hide')}>
+                  {this.state.referenceLinkError}
+                </div>
               </div>
               <div className={"editor-input pp-reference-link-title" + (linkFilledIn ? "" : " pp-hide")}>
               <span className="pp-link-box">
@@ -208,21 +217,30 @@ export default class AnnotationForm extends React.Component<
     this.setState(stateChange);
   }
 
+  private validateForm(): boolean {
+    if (!this.state.referenceLink) {
+      this.setState({referenceLinkError: 'Musisz podać źródło, jeśli chcesz dodać przypis!'});
+      return false;
+    }
+    return true;
+  }
+
   private onSave(event: any) {
     // Copy form fields onto (much larger) view model before executing saveAction
     Object.assign(this.props.annotation, getFormState(this.state));
-    const result = this.props.saveAction(this.props.annotation);
+    if (this.validateForm()) {
+      const result = this.props.saveAction(this.props.annotation);
+      Promise.resolve(result)     // it will work whether result is a Promise or a value
+          .then((result) => {
+            const errors = result.errors;
+            if (errors) {
+              //TODO handle form validation messages here
 
-    Promise.resolve(result)     // it will work whether result is a Promise or a value
-      .then((result) => {
-        const errors = result.errors;
-        if (errors) {
-          //TODO handle form validation messages here
-
-        } else {
-          this.props.onSave(event);
-        }
-      })
+            } else {
+              this.props.onSave(event);
+            }
+          })
+    }
 
   }
 

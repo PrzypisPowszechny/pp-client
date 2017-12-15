@@ -41,7 +41,7 @@ $widget_inner_width: 428px;
 $widget_inner_margin: ($widget_box_width - $widget_inner_width) / 2;
 
 .pp-hide {
-  display: none;
+  display: none !important; //override semantic-ui
 }
 
 .pp-outer {
