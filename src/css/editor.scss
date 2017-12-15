@@ -3,98 +3,92 @@
 /* -- PP Editor -- */
 
 $editor-width: 450px;
+$editor-font-size: 13px;
+
 $normal-ref-color: #5679B0;
 $warning-ref-color: #FDE300;
 $alert-ref-color: #F7AB00;
 
+$light-font-family: "Open Sans Light";
+$bold-font-family: "Open Sans SemiBold";
+
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+}
+
+;
+
 .pp-editor .pp-widget {
     width: $editor-width;
     background-color: white;
+    font-size: $editor-font-size;
+    font-family: $light-font-family;
 }
 
-/* --- Viewer head bar --- */
-.pp-editor-head-bar {
+/* --- Editor head bar --- */
+.pp-editor .pp-editor-head-bar {
     padding: 0 21px 0 10.5px;
     margin: 5px 0 10.5px 0;
-    font-size: 11px;
-    clear: both; /* push up controls */
-    line-height:1em;
 
     .priority-header {
         display: inline-block;
-        font-family: 'Open Sans SemiBold';
-        font-size: 13px;
+        font-family: $bold-font-family;
         margin: 10.5px 0 7px 0;
     }
-
-    .priority-normal,
-    .priority-warning {
+    /* priority buttons */
+    .pp-editor-priority {
         display: inline-block;
+        width: calc(100% - 10px);
+        border: none;
+        outline: none;
+        margin: 0;
+        padding: 3px 11px;
+        line-height: 1em;
+
+        text-align: center;
+        color: rgb(255, 255, 255);
+        font-family: $bold-font-family;
+        text-transform: uppercase;
+
+        background-color: #D8DADA;
+        cursor: pointer;
+    }
+    /* priority-specific style */
+    .priority-normal, .priority-warning, .priority-alert {
+        display: inline-block;
+    }
+    .priority-normal {
         width: 33%;
+        :hover,
+        .selected {
+            background-color: $normal-ref-color;
+        }
     }
-    .priority-alert {
-        display: inline-block;
-        width: 34%;
-    }
-
     .priority-warning {
         text-align: center;
+        width: 34%;
+
+        :hover,
+        .selected {
+            background-color: $warning-ref-color;
+        }
     }
     .priority-alert {
+        width: 33%;
         text-align: right;
-    }
 
-    .priority-normal :hover,
-    .priority-normal .selected {
-        background-color: $normal-ref-color;
+        :hover,
+        .selected {
+            background-color: $alert-ref-color;
+        }
     }
-
-    .priority-warning :hover,
-    .priority-warning .selected {
-        background-color: $warning-ref-color;
-    }
-
-    .priority-alert :hover,
-    .priority-alert .selected {
-        background-color: $alert-ref-color;
-    }
-
 }
-
-.pp-editor-priority {
-    display: inline-block;
-    width: calc(100% - 10px);
-    border: none;
-    outline: none;
-    margin: 0;
-    padding: 3px 11px;
-    line-height: 1em;
-
-    text-align: center;
-    color: rgb(255, 255, 255);
-    font-family: 'Open Sans SemiBold';
-    font-size: 13px;
-    text-transform: uppercase;
-
-    background-color: #D8DADA;
-    cursor: pointer;
-}
-
-.pp-close {
-    position: absolute;
-    right: 0;
-    top: 0;
-    color: #888888;
-    background: none;
-    border: none;
-    outline: none;
-    cursor: pointer;
-}
-
 
 .pp-editor {
-
-    // fields: comment, referenceLink
+    /* fields: comment, referenceLink */
     .editor-input {
         display: block;
         padding: 0;
@@ -104,8 +98,6 @@ $alert-ref-color: #F7AB00;
         input, textarea {
             border: 1px solid #D8DADA;
             outline: none;
-            font-family: "Open Sans Light";
-            font-size: 13px;
             color: #000000;
 
             background: none;
@@ -120,38 +112,31 @@ $alert-ref-color: #F7AB00;
 
         textarea {
             //todo adjust border radius with KS
-            -webkit-border-radius: 5px 5px 0 0;
-            -moz-border-radius: 5px 5px 0 0;
-            -o-border-radius: 5px 5px 0 0;
-            border-radius: 5px 5px 0 0;
-
+            @include border-radius(5px 5px 0 0);
         }
-
 
     }
 
+    /* comment field */
     .pp-comment {
+        padding: 0 21px 0 10.5px;
         overflow: auto;
 
-        textarea {
+        :first-child {
             box-sizing: content-box;
             float: left;
             padding: 6px;
             width: $editor-width - 31.5px - 12px;
-            margin: 0 21px 0 10.5px;
             line-height: 1.2em;
-            height: 3.6em; // number of lines
+            height: 3 * 1.2em; // number of lines
         }
     }
 
     .pp-bottom-bar {
         margin: 10.5px 10.5px;
-        font-size: 13px;
 
-        button,
-        div,
-        input {
-          vertical-align: top;
+        * {
+            vertical-align: top;
         }
 
         .pp-link-form {
@@ -181,8 +166,8 @@ $alert-ref-color: #F7AB00;
             width: 18px;
             text-align: center;
             .linkify.icon {
-            margin: 0;
-          }
+                margin: 0;
+            }
         }
 
         .pp-link-box .pp-close {
@@ -190,13 +175,13 @@ $alert-ref-color: #F7AB00;
         }
 
         .pp-link-box:hover .pp-close {
-              display: block;
-              width: 0;
-              height: 0;
-              // Manually chose what looked best; might be improved though...
-              position: absolute;
-              right: 0.1em;
-              top: -0.7em;
+            display: block;
+            width: 0;
+            height: 0;
+            // Manually chose what looked best; might be improved though...
+            position: absolute;
+            right: 0.1em;
+            top: -0.7em;
         }
 
         .pp-reference-link-title {
@@ -216,12 +201,9 @@ $alert-ref-color: #F7AB00;
         }
 
         .pp-reference-link-title:hover .link-help,
-        .pp-reference-link-title input:focus + .link-help
-        {
+        .pp-reference-link-title input:focus + .link-help {
             display: inline-block;
         }
-
-
 
         // the bottom area used for dragging
         .pp-mover-area {
@@ -236,16 +218,14 @@ $alert-ref-color: #F7AB00;
             width: 30%;
 
             button {
-            // reset default button styles
+                // reset default button styles
                 border: none;
                 outline: none;
                 background: none;
                 padding: 0 10px;
                 height: 1.5em;
                 cursor: pointer;
-                font-family: 'Open Sans SemiBold';
-                font-size: 13px;
-
+                font-family: $bold-font-family;
             }
 
             :first-child {
@@ -262,20 +242,35 @@ $alert-ref-color: #F7AB00;
 
 /* --- Help windows --- */
 .pp-editor {
-    .priority-help,
-    .link-help {
-        display: inline-block;
+    /* all cross-style close buttons */
+    .pp-close {
+        position: absolute;
+        right: 0;
+        top: 0;
+
         border: none;
         outline: none;
 
         color: #888888;
         background: none;
+        cursor: pointer;
+    }
+
+    .priority-help,
+    .link-help {
+        display: inline-block;
+
         margin-left: 5px;
+        border: none;
+        outline: none;
+
         font-size: 15px;
+        color: #888888;
+
+        background: none;
         cursor: pointer; // todo not sure
     }
 }
-
 
 // TODO review: copied from original annotator.css (and adapted to pp-editor & editor-input)
 /* --- scrollbar --- */
