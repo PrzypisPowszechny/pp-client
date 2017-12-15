@@ -129,7 +129,7 @@ export default class AnnotationForm extends React.Component<
           </div>
           <div className="pp-bottom-bar">
             <div className="pp-link-form">
-              <div className={"editor-input pp-reference-link" + (linkFilledIn ? " annotator-hide" : "")}>
+              <div className={"editor-input pp-reference-link" + (linkFilledIn ? " pp-hide" : "")}>
                 <input
                     type="text"
                     name="referenceLink"
@@ -139,7 +139,7 @@ export default class AnnotationForm extends React.Component<
                     placeholder="Wklej link do źródła"
                 />
               </div>
-              <div className={"editor-input pp-reference-link-title" + (linkFilledIn ? "" : " annotator-hide")}>
+              <div className={"editor-input pp-reference-link-title" + (linkFilledIn ? "" : " pp-hide")}>
               <span className="pp-link-box">
                 <i className="linkify icon"></i>
                 <button

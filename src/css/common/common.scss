@@ -40,6 +40,10 @@ $widget_box_width: 450px;
 $widget_inner_width: 428px;
 $widget_inner_margin: ($widget_box_width - $widget_inner_width) / 2;
 
+.pp-hide {
+  display: none;
+}
+
 .pp-outer {
   width: 0;
   height: 0;

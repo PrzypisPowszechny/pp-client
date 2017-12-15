@@ -20,12 +20,12 @@ const { widget: { Widget } } = AnnotatorUI;
 
 export default class PrzypisEditor extends Widget {
   public static classes = {
-    hide: 'annotator-hide',
+    hide: 'pp-hide',
     focus: 'annotator-focus',
     invert: Widget.classes.invert
   };
   public static template = `
-  <div class="pp-outer pp-editor annotator-hide">
+  <div class="pp-outer pp-editor pp-hide">
     <div id="react-form-slot"></div>
   </div>`;
 
