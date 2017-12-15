@@ -14,48 +14,70 @@ $alert-ref-color: #F7AB00;
 
 /* --- Viewer head bar --- */
 .pp-editor-head-bar {
+    padding: 0 21px 0 10.5px;
+    margin: 5px 0 10.5px 0;
     font-size: 11px;
-    margin: 10.5px 0;
     clear: both; /* push up controls */
     line-height:1em;
 
-    > :nth-child(1){
-        margin-left: -1px; /* cover the border */
+    .priority-header {
+        display: inline-block;
+        font-family: 'Open Sans SemiBold';
+        font-size: 13px;
+        margin: 10.5px 0 7px 0;
     }
 
-    > :nth-child(1):hover,
-    > :nth-child(1).selected
-    {
+    .priority-normal,
+    .priority-warning {
+        display: inline-block;
+        width: 33%;
+    }
+    .priority-alert {
+        display: inline-block;
+        width: 34%;
+    }
+
+    .priority-warning {
+        text-align: center;
+    }
+    .priority-alert {
+        text-align: right;
+    }
+
+    .priority-normal :hover,
+    .priority-normal .selected {
         background-color: $normal-ref-color;
     }
-    > :nth-child(2):hover,
-    > :nth-child(2).selected {
+
+    .priority-warning :hover,
+    .priority-warning .selected {
         background-color: $warning-ref-color;
     }
-    > :nth-child(3):hover,
-    > :nth-child(3).selected {
+
+    .priority-alert :hover,
+    .priority-alert .selected {
         background-color: $alert-ref-color;
     }
+
 }
 
 .pp-editor-priority {
     display: inline-block;
-    width: 68px;
-    margin: 0 2px;
+    width: calc(100% - 10px);
     border: none;
     outline: none;
+    margin: 0;
     padding: 3px 11px;
     line-height: 1em;
 
     text-align: center;
     color: rgb(255, 255, 255);
     font-family: 'Open Sans SemiBold';
-    font-size: 11px;
+    font-size: 13px;
     text-transform: uppercase;
 
     background-color: #D8DADA;
     cursor: pointer;
-
 }
 
 .pp-close {

@@ -79,58 +79,67 @@ export default class AnnotationForm extends React.Component<
       } = this.state;
 
     return (
-      <div className="pp-widget">
-        <div className="pp-editor-head-bar">
-            {/*KG todo could probably be neater if done with sth like PriorityButton component*/}
-            <button
-                className={"pp-editor-priority" + (priority == AnnotationPriorities.NORMAL ? ' selected' : '')}
-                onClick={() => this.setState({priority: AnnotationPriorities.NORMAL})}
-            >
-                przypis
-            </button>
-          <button
-              className={"pp-editor-priority" + (priority == AnnotationPriorities.WARNING ? ' selected' : '')}
-              onClick={() => this.setState({priority: AnnotationPriorities.WARNING})}
-          >
-                przypis
-            </button>
-          <button
-              className={"pp-editor-priority" + (priority == AnnotationPriorities.ALERT ? ' selected' : '')}
-              onClick={() => this.setState({priority: AnnotationPriorities.ALERT})}
-          >
-                przypis
-            </button>
-          <div className="priority-help">
-            <i className="help circle icon"></i>
-          </div>
-        </div>
-        <div
-            className="pp-close"
-             onClick={(e) => this.onCancel(e)}
-        >
-          <i className="remove icon"></i>
-        </div>
-        <div className="editor-input pp-comment">
-          <textarea
-            name="comment"
-            value={comment}
-            onChange={this.handleInputChange}
-            placeholder="Dodaj treść przypisu"
-          />
-        </div>
-        <div className="pp-bottom-bar">
-          <div className="pp-link-form">
-            <div className={"editor-input pp-reference-link" + (linkFilledIn ? " annotator-hide" : "")}>
-              <input
-                type="text"
-                name="referenceLink"
-                value={referenceLink}
-                onChange={this.handleReferenceLinkChange}
-                onPaste={this.handleReferenceLinkChange}
-                placeholder="Wklej link do źródła"
-              />
+        <div className="pp-widget">
+          <div className="pp-editor-head-bar">
+            <label className="priority-header"> Wybierz priorytet </label>
+            <div className="priority-help">
+              <i className="help circle icon"></i>
             </div>
-            <div className={"editor-input pp-reference-link-title" + (linkFilledIn ? "" : " annotator-hide")}>
+            <br/>
+            {/*KG todo could probably be neater if done with sth like PriorityButton component*/}
+            <div className="priority-normal">
+              <button
+                  className={"pp-editor-priority" + (priority == AnnotationPriorities.NORMAL ? ' selected' : '')}
+                  onClick={() => this.setState({priority: AnnotationPriorities.NORMAL})}
+              >
+                niebieski
+              </button>
+            </div>
+            <div className="priority-warning">
+              <button
+                  className={"pp-editor-priority" + (priority == AnnotationPriorities.WARNING ? ' selected' : '')}
+                  onClick={() => this.setState({priority: AnnotationPriorities.WARNING})}
+              >
+                żółty
+              </button>
+            </div>
+            <div className="priority-alert">
+              <button
+                  className={"pp-editor-priority" + (priority == AnnotationPriorities.ALERT ? ' selected' : '')}
+                  onClick={() => this.setState({priority: AnnotationPriorities.ALERT})}
+              >
+                pomarańczowy
+              </button>
+            </div>
+
+          </div>
+          <div
+              className="pp-close"
+              onClick={(e) => this.onCancel(e)}
+          >
+            <i className="remove icon"></i>
+          </div>
+          <div className="editor-input pp-comment">
+          <textarea
+              name="comment"
+              value={comment}
+              onChange={this.handleInputChange}
+              placeholder="Dodaj treść przypisu"
+          />
+          </div>
+          <div className="pp-bottom-bar">
+            <div className="pp-link-form">
+              <div className={"editor-input pp-reference-link" + (linkFilledIn ? " annotator-hide" : "")}>
+                <input
+                    type="text"
+                    name="referenceLink"
+                    value={referenceLink}
+                    onChange={this.handleReferenceLinkChange}
+                    onPaste={this.handleReferenceLinkChange}
+                    placeholder="Wklej link do źródła"
+                />
+              </div>
+              <div className={"editor-input pp-reference-link-title" + (linkFilledIn ? "" : " annotator-hide")}>
               <span className="pp-link-box">
                 <i className="linkify icon"></i>
                 <button
@@ -140,29 +149,29 @@ export default class AnnotationForm extends React.Component<
                   <i className="remove circle icon"></i>
                 </button>
               </span>
-              <input
-                type="text"
-                name="referenceLinkTitle"
-                value={referenceLinkTitle}
-                onChange={this.handleInputChange}
-                placeholder="Wpisz tytuł źródła"
-              />
-              <div className="link-help">
-                <i className="help circle icon"></i>
+                <input
+                    type="text"
+                    name="referenceLinkTitle"
+                    value={referenceLinkTitle}
+                    onChange={this.handleInputChange}
+                    placeholder="Wpisz tytuł źródła"
+                />
+                <div className="link-help">
+                  <i className="help circle icon"></i>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="pp-mover-area"></div>
-          <div className="pp-controls">
-            <button className="pp-cancel" onClick={(e) => this.onCancel(e)}>
-              {' '}Anuluj{' '}
-            </button>
-            <button className="pp-save annotator-focus" onClick={(e) => this.onSave(e)}>
-              {' '}Zapisz{' '}
-            </button>
+            <div className="pp-mover-area"></div>
+            <div className="pp-controls">
+              <button className="pp-cancel" onClick={(e) => this.onCancel(e)}>
+                {' '}Anuluj{' '}
+              </button>
+              <button className="pp-save annotator-focus" onClick={(e) => this.onSave(e)}>
+                {' '}Zapisz{' '}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
     );
   }
 
