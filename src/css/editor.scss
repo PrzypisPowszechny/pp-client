@@ -1,26 +1,11 @@
-@import 'common';
+@import 'common/common';
 
-/* -- PP Editor -- */
 
 $editor-width: 450px;
 $editor-font-size: 13px;
 
-$normal-ref-color: #5679B0;
-$warning-ref-color: #FDE300;
-$alert-ref-color: #F7AB00;
 
-$light-font-family: "Open Sans Light";
-$bold-font-family: "Open Sans SemiBold";
-
-@mixin border-radius($radius) {
-    -webkit-border-radius: $radius;
-    -moz-border-radius: $radius;
-    -ms-border-radius: $radius;
-    border-radius: $radius;
-}
-
-;
-
+/* -- PP Editor -- */
 .pp-editor .pp-widget {
     width: $editor-width;
     background-color: white;
