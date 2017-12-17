@@ -257,7 +257,6 @@ export default class PPUI implements IModule {
     if (!this.state) {
       throw new Error('App not initialized!');
     }
-    console.log(this.state.embeddedHighlights[ann.id as number]);
     this.state.highlighter.undraw(this.state.embeddedHighlights[ann.id as number]);
   }
 
