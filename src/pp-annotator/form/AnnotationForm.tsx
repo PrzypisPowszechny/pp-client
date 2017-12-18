@@ -2,6 +2,7 @@ import React from 'react';
 import { AnnotationPriorities } from '../consts';
 import {IAnnotationFields, AnnotationViewModel} from '../annotation';
 import '../../css/editor.scss';
+import { Header, Popup, Grid } from 'semantic-ui-react'
 
 const savedFields = ['priority', 'comment', 'referenceLink', 'referenceLinkTitle'];
 // Add Semantic-ui packages
@@ -96,9 +97,26 @@ export default class AnnotationForm extends React.Component<
         <div className="pp-widget">
           <div className="pp-editor-head-bar">
             <label className="priority-header"> Wybierz priorytet </label>
-            <div className="priority-help">
-              <i className="help circle icon"></i>
-            </div>
+            <Popup
+              on="click"
+              hideOnScroll
+              trigger={<div className="priority-help"> <i className="help circle icon"></i> </div>}
+              flowing
+              hoverable
+            >
+              {/*TODO just an instruction stub*/}
+              <Grid centered divided columns={3}>
+                <Grid.Column textAlign='center'>
+                  <Header as='h4'>Niebieski przypis</Header>
+                </Grid.Column>
+                <Grid.Column textAlign='center'>
+                  <Header as='h4'>Żółty przypis</Header>
+                </Grid.Column>
+                <Grid.Column textAlign='center'>
+                  <Header as='h4'>Pomarańczowy przypis</Header>
+                </Grid.Column>
+              </Grid>
+            </Popup>
             <br/>
             {/*KG todo could probably be neater if done with sth like PriorityButton component*/}
             <div className="priority-normal">
@@ -173,9 +191,17 @@ export default class AnnotationForm extends React.Component<
                     onChange={this.handleInputChange}
                     placeholder="Wpisz tytuł źródła"
                 />
-                <div className="link-help">
-                  <i className="help circle icon"></i>
-                </div>
+                <Popup
+                  on="click"
+                  hideOnScroll
+                  trigger={<div className="link-help"> <i className="help circle icon"></i> </div>}
+                  flowing
+                  hoverable
+                >
+                  {/*TODO*/}
+                </Popup>
+
+
               </div>
             </div>
             <div className="pp-mover-area"></div>
