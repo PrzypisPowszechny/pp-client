@@ -14,7 +14,7 @@ export default class AnnotationMultipleViewer extends React.Component<IAnnotatio
   }
 
   renderItems() {
-    return this.props.annotations.map((annotation) => (
+    return this.props.annotations.map(annotation => (
       <AnnotationViewer
         key={annotation.id || 0}
         annotation={annotation}

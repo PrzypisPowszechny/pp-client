@@ -61,7 +61,7 @@ export default class PrzypisEditor extends Widget {
    *
    * Returns nothing.
    */
-  show(position: util.IPosition) {
+  show(position?: util.IPosition | null) {
     if (position) {
       this.element.css({
         top: position.top,
@@ -84,7 +84,7 @@ export default class PrzypisEditor extends Widget {
    * Returns an unresolved Promise that will be resolved/rejected when the save/cancel button is clicked.
    */
   load(annotation: AnnotationViewModel,
-       position: util.IPosition,
+       position: util.IPosition | null,
        saveAction: (annotation: AnnotationViewModel) => any) {
     this.annotation = annotation;
     this.saveAction = saveAction;
@@ -155,7 +155,7 @@ export default class PrzypisEditor extends Widget {
       '.annotator-controls',
       'textarea:first',
       '.annotator-resize',
-    ].map((x) => this.element.find(x)[0]);
+    ].map(x => this.element.find(x)[0]);
 
     this.resizer = resizer(textarea, resizeHandle, {
       invertedX: () => this.element.hasClass(Widget.classes.invert.x),

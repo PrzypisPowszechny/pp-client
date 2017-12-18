@@ -1,12 +1,13 @@
-import annotator, { IAppInstance, IAnnotation } from 'annotator';
+import annotator, { IAnnotation, ui, util } from 'annotator';
 
-import PrzypisEditor from './form/PrzypisEditor';
-import PrzypisAdder from './PrzypisAdder';
-import PrzypisViewer from './viewer/PrzypisViewer';
-import IAnnotationAPIModel, { AnnotationViewModel } from './annotation';
+import PrzypisEditor from '../form/PrzypisEditor';
+import PrzypisAdder from '../PrzypisAdder';
+import PrzypisViewer from '../viewer/PrzypisViewer';
+import IAnnotationAPIModel, { AnnotationViewModel } from '../annotation';
+import App from 'src/pp-annotator/modules/App';
+import IModule from 'src/pp-annotator/modules/Module.interface';
 
-const { util, ui: PPUI } = annotator;
-const { highlighter, textselector } = PPUI;
+const { highlighter, textselector } = ui;
 
 /**
  * trim strips whitespace from either end of a string.
@@ -117,43 +118,50 @@ interface IState {
   embeddedHighlights: { [id: number]: AnnotationViewModel };
 }
 
-/**
- * pp annotator ui module (almost unchanged annotator.ui.main)
- */
-export function ui(options?: {
+interface IOptions {
   element?: Element;
   editorExtensions?: Array<{}>;
   viewerExtensions?: Array<{}>;
-}) {
-  if (typeof options === 'undefined' || options === null) {
-    options = {};
+}
+
+/**
+ * pp annotator ui module (almost unchanged annotator.ui.main)
+ */
+export default class PPUI implements IModule {
+  state: IState | undefined;
+  editorExtensions: any;
+  viewerExtensions: any;
+  parseRanges: any;
+  element: any;
+
+  constructor(options?: IOptions) {
+    if (typeof options === 'undefined' || options === null) {
+      options = {};
+    }
+
+    this.element = options.element || document.body;
+    this.editorExtensions = options.editorExtensions || [];
+    this.viewerExtensions = options.viewerExtensions || [];
+
+    // Local helpers
+    this.parseRanges = rangesParser(this.element, '.annotator-hl');
   }
 
-  const element = options.element || document.body;
-  const editorExtensions = options.editorExtensions || [];
-  const viewerExtensions = options.viewerExtensions || [];
+  start(app: App) {
+    const parseRanges = this.parseRanges;
 
-  // Local helpers
-  const parseRanges = rangesParser(element, '.annotator-hl');
-
-  let s: IState | undefined;
-
-  function start(app: IAppInstance) {
-    const ident = app.registry.getUtility('identityPolicy');
-    const authz = app.registry.getUtility('authorizationPolicy');
-
-    s = {
+    const state: IState = this.state = {
       embeddedHighlights: {},
       interactionPoint: null,
       adder: new PrzypisAdder({
         beginAnnotationCreate(annotation) {
-          if (!s) {
+          if (!state) {
             throw new Error('App not initialized!');
           }
-          if (s.interactionPoint === null) {
+          if (state.interactionPoint === null) {
             throw new Error('Interaction point is null!');
           }
-          s.editor.load(annotation, s.interactionPoint,
+          state.editor.load(annotation, state.interactionPoint,
             (resultAnnotation: AnnotationViewModel) =>
               app.annotations.create(
                 AnnotationViewModel.toModel(resultAnnotation) as IAnnotation,
@@ -165,35 +173,35 @@ export function ui(options?: {
         },
       }),
       editor: new PrzypisEditor({
-        extensions: editorExtensions,
+        extensions: this.editorExtensions,
       }),
-      highlighter: new highlighter.Highlighter(element),
-      textselector: new textselector.TextSelector(element, {
+      highlighter: new highlighter.Highlighter(this.element),
+      textselector: new textselector.TextSelector(this.element, {
         onSelection(ranges, event) {
-          if (!s) {
+          if (!state) {
             throw new Error('App not initialized!');
           }
 
           if (ranges.length > 0) {
             const url = window.location.href;
             const annotation = AnnotationViewModel.fromSelection(parseRanges(ranges), url);
-            s.interactionPoint = util.mousePosition(event);
-            s.adder.load(annotation, s.interactionPoint);
+            state.interactionPoint = util.mousePosition(event);
+            state.adder.load(annotation, state.interactionPoint);
           } else {
-            s.adder.hide();
+            state.adder.hide();
           }
         },
       }),
       viewer: new PrzypisViewer({
         onEdit(annotation) {
-          if (!s) {
+          if (!state) {
             throw new Error('App is not initialized!');
           }
           // Copy the interaction point from the shown viewer:
-          const interactionPoint = util.$(s.viewer.element).css(['top', 'left']);
-          s.interactionPoint = (interactionPoint as any) as { top: number; left: number };
+          const interactionPoint = util.$(state.viewer.element).css(['top', 'left']);
+          state.interactionPoint = (interactionPoint as any) as { top: number; left: number };
 
-          s.editor.load(annotation, s.interactionPoint,
+          state.editor.load(annotation, state.interactionPoint,
             (resultAnnotation: AnnotationViewModel) =>
               app.annotations.update(AnnotationViewModel.toModel(resultAnnotation) as IAnnotation),
           );
@@ -201,72 +209,61 @@ export function ui(options?: {
         onDelete(annotation) {
           app.annotations.delete(annotation);
         },
-        permitEdit(annotation) {
-          return authz.permits('update', annotation, ident.who());
-        },
-        permitDelete(annotation) {
-          return authz.permits('delete', annotation, ident.who());
-        },
-        autoViewHighlights: element,
-        extensions: viewerExtensions,
+        autoViewHighlights: this.element,
+        extensions: this.viewerExtensions,
       }),
     };
-    s.adder.attach();
-    s.editor.attach();
-    s.viewer.attach();
+    this.state.adder.attach();
+    this.state.editor.attach();
+    this.state.viewer.attach();
     injectDynamicStyle();
   }
 
-  return {
-    start,
+  destroy() {
+    if (!this.state) {
+      throw new Error('App not initialized!');
+    }
+    this.state.adder.destroy();
+    this.state.editor.destroy();
+    this.state.highlighter.destroy();
+    this.state.textselector.destroy();
+    this.state.viewer.destroy();
+    removeDynamicStyle();
+  }
 
-    destroy() {
-      if (!s) {
-        throw new Error('App not initialized!');
-      }
-      s.adder.destroy();
-      s.editor.destroy();
-      s.highlighter.destroy();
-      s.textselector.destroy();
-      s.viewer.destroy();
-      removeDynamicStyle();
-    },
+  annotationsLoaded(anns: IAnnotationAPIModel[]) {
+    if (!this.state) {
+      throw new Error('App not initialized!');
+    }
 
-    annotationsLoaded(anns: IAnnotationAPIModel[]) {
-      if (!s) {
-        throw new Error('App not initialized!');
-      }
+    const annVieModels = anns.map(ann => new AnnotationViewModel(ann));
+    this.state.embeddedHighlights = {};
+    for (const viewModel of annVieModels) {
+      this.state.embeddedHighlights[viewModel.id] = viewModel;
+    }
+    this.state.highlighter.drawAll(anns as IAnnotation[]);
+  }
 
-      const annVieModels = anns.map((ann) => new AnnotationViewModel(ann));
-      s.embeddedHighlights = {};
-      for (const viewModel of annVieModels) {
-        s.embeddedHighlights[viewModel.id] = viewModel;
-      }
-      s.highlighter.drawAll(anns as IAnnotation[]);
-    },
+  annotationCreated(ann: IAnnotationAPIModel) {
+    if (!this.state) {
+      throw new Error('App not initialized!');
+    }
+    const viewModel = new AnnotationViewModel(ann);
+    this.state.embeddedHighlights[viewModel.id] = viewModel;
+    this.state.highlighter.draw(viewModel);
+  }
 
-    annotationCreated(ann: IAnnotationAPIModel) {
-      if (!s) {
-        throw new Error('App not initialized!');
-      }
-      const viewModel = new AnnotationViewModel(ann);
-      s.embeddedHighlights[viewModel.id] = viewModel;
-      s.highlighter.draw(viewModel);
-    },
+  annotationDeleted(ann: IAnnotationAPIModel) {
+    if (!this.state) {
+      throw new Error('App not initialized!');
+    }
+    this.state.highlighter.undraw(this.state.embeddedHighlights[ann.id as number]);
+  }
 
-    annotationDeleted(ann: IAnnotationAPIModel) {
-      if (!s) {
-        throw new Error('App not initialized!');
-      }
-      console.log(s.embeddedHighlights[ann.id as number]);
-      s.highlighter.undraw(s.embeddedHighlights[ann.id as number]);
-    },
-
-    annotationUpdated(ann: IAnnotationAPIModel) {
-      if (!s) {
-        throw new Error('App not initialized!');
-      }
-      s.highlighter.redraw(s.embeddedHighlights[ann.id as number]);
-    },
-  };
+  annotationUpdated(ann: IAnnotationAPIModel) {
+    if (!this.state) {
+      throw new Error('App not initialized!');
+    }
+    this.state.highlighter.redraw(this.state.embeddedHighlights[ann.id as number]);
+  }
 }
