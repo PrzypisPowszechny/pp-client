@@ -17,7 +17,7 @@ export default class DebugStorage implements IStorage, IModule {
   }
 
   create(annotation: IAnnotation): IAnnotation {
-    if (annotation.id === undefined) {
+    if (!annotation.id) {
       annotation.id = generateId();
     }
     this.trace('create', annotation);
