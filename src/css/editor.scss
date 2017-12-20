@@ -96,10 +96,11 @@ $editor-font-size: 13px;
     .editor-input {
         display: block;
         padding: 0;
-        margin: 0;
         position: relative;
+        margin: 0 21px 10.5px 10.5px;
 
         input, textarea {
+            width: 100%;
             border: 1px solid #D8DADA;
             outline: none;
             color: #000000;
@@ -123,95 +124,65 @@ $editor-font-size: 13px;
 
     /* comment field */
     .pp-comment {
-        padding: 0 21px 0 10.5px;
         overflow: auto;
 
-        :first-child {
-            box-sizing: content-box;
+        textarea {
             float: left;
             padding: 6px;
-            width: $editor-width - 31.5px - 12px;
+            width: 100%;
             line-height: 1.2em;
-            height: 3 * 1.2em; // number of lines
+            height: calc(3*1.2em + 13px); // 3 lines
+        }
+    }
+
+    .pp-reference-link {
+        input {
+                padding: 0 4px 0 2em;
+                height: 1.5em;
+                //width: $editor-width / 2;
+            }
+            .pp-error-msg {
+                left: 0;
+                top: 15px;
+            }
+
+        .input-icon {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2em;
         }
     }
 
     .pp-bottom-bar {
         margin: 10.5px 10.5px;
 
-        // KG very rough; I leave it so as this part is about to change anyway
-        * {
-            vertical-align: top;
-        }
-
-        .pp-link-form {
+        .editor-input.pp-reference-link-title {
             display: inline-block;
             width: 60%;
             padding: 0;
-        }
-
-        .pp-reference-link {
-            input {
-                padding: 0 4px;
-                height: 1.5em;
-                width: $editor-width / 2;
-            }
-            .pp-error-msg {
-                left: 0;
-                top: 15px;
-            }
-        }
-        .pp-reference-link.pp-hide {
-            display: none;
-        }
-
-        .pp-link-box {
-            position: relative;
-            display: inline-block;
-            border: 1px solid #D8DADA;
             margin: 0;
-            height: 1.5em;
-            width: 18px;
-            text-align: center;
-            .linkify.icon {
-                margin: 0;
-            }
-        }
 
-        .pp-link-box .pp-close {
-            display: none;
-        }
-
-        .pp-link-box:hover .pp-close {
-            display: block;
-            width: 0;
-            height: 0;
-            // Manually chose what looked best; might be improved though...
-            position: absolute;
-            right: 0.1em;
-            top: -0.7em;
-        }
-
-        .pp-reference-link-title {
             input {
-                border-left: none;
-                padding: 0 4px;
+                padding: 0 4px 0 2em;
                 height: 1.5em;
                 width: $editor-width / 2 - 18px;
             }
-        }
-        .pp-reference-link-title.pp-hide {
-            display: none;
+
+            .input-icon {
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 2em;
+            }
+
+            .link-help {
+                display: inline-block;
+            }
         }
 
-        .pp-reference-link-title .link-help {
-            display: none;
-        }
-
-        .pp-reference-link-title:hover .link-help,
-        .pp-reference-link-title input:focus + .link-help {
-            display: inline-block;
-        }
 
         // the bottom area used for dragging
         .pp-mover-area {

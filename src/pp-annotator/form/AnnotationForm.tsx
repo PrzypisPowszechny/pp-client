@@ -18,7 +18,6 @@ export interface IAnnotationFormProps {
 }
 
 export interface IAnnotationFormState extends IAnnotationFields {
-  linkFilledIn: boolean;
   referenceLinkError: string;
   noCommentModalOpen: boolean;
 }
@@ -52,7 +51,6 @@ export default class AnnotationForm extends React.Component<
       referenceLink: annotation.referenceLink || '',
       referenceLinkError: '',
       referenceLinkTitle: annotation.referenceLinkTitle || '',
-      linkFilledIn: !!annotation.referenceLink,
       noCommentModalOpen: false
     };
   }
@@ -62,18 +60,12 @@ export default class AnnotationForm extends React.Component<
     this.state = AnnotationForm.stateFromProps(props);
 
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleReferenceLinkChange = this.handleReferenceLinkChange.bind(this);
     this.onSave = this.onSave.bind(this);
     this.executeSave = this.executeSave.bind(this);
     this.onCancel = this.onCancel.bind(this);
   }
 
   public componentWillUpdate(_nextProps: IAnnotationFormProps, nextState: Partial<IAnnotationFormState>) {
-    // Whenever referenceLink is empty, linkFilledIn must always be false.
-    if(!nextState.referenceLink) {
-      nextState.linkFilledIn = false;
-      nextState.referenceLinkTitle = '';
-    }
     // Whenever link is changed, eradicate the error message
     if(nextState.referenceLink) {
       nextState.referenceLinkError = '';
@@ -89,6 +81,7 @@ export default class AnnotationForm extends React.Component<
     return priorityToClass[this.state.priority || AnnotationPriorities.NORMAL];
   }
 
+  // A modal displayed when user tries to save the form with comment field empty
   public renderNoCommentModal() {
       this.noCommentModal = (
           <Modal
@@ -124,7 +117,6 @@ export default class AnnotationForm extends React.Component<
           comment,
           referenceLink,
           referenceLinkTitle,
-          linkFilledIn
       } = this.state;
 
     return (
@@ -193,52 +185,39 @@ export default class AnnotationForm extends React.Component<
               placeholder="Dodaj treść przypisu"
           />
           </div>
+          <div className={"editor-input pp-reference-link" + (this.state.referenceLinkError ? ' ui input error' : '')}>
+            <input
+                type="text"
+                name="referenceLink"
+                value={referenceLink}
+                onChange={this.handleInputChange}
+                placeholder="Wklej link do źródła"
+            />
+            <i className="input-icon linkify icon"></i>
+            <div
+                className={"pp-error-msg ui pointing red basic label large" + (this.state.referenceLinkError ? '' : ' pp-hide')}>
+              {this.state.referenceLinkError}
+            </div>
+          </div>
           <div className="pp-bottom-bar">
-            <div className="pp-link-form">
-              <div
-                  className={"editor-input pp-reference-link" + (linkFilledIn ? " pp-hide" : "") + (this.state.referenceLinkError ? ' ui input error' : '')}>
-                <input
-                    type="text"
-                    name="referenceLink"
-                    value={referenceLink}
-                    onChange={this.handleReferenceLinkChange}
-                    onPaste={this.handleReferenceLinkChange}
-                    placeholder="Wklej link do źródła"
-                />
-                <div
-                    className={"pp-error-msg ui pointing red basic label large" + (this.state.referenceLinkError ? '' : ' pp-hide')}>
-                  {this.state.referenceLinkError}
-                </div>
-              </div>
-              <div className={"editor-input pp-reference-link-title" + (linkFilledIn ? "" : " pp-hide")}>
-              <span className="pp-link-box">
-                <i className="linkify icon"></i>
-                <button
-                    className="pp-close"
-                    onClick={() => this.setState({referenceLink: ''})}
-                >
-                  <i className="remove circle icon"></i>
-                </button>
-              </span>
-                <input
-                    type="text"
-                    name="referenceLinkTitle"
-                    value={referenceLinkTitle}
-                    onChange={this.handleInputChange}
-                    placeholder="Wpisz tytuł źródła"
-                />
-                <Popup
-                    on="click"
-                    hideOnScroll
-                    trigger={<div className="link-help"> <i className="help circle icon"></i> </div>}
-                    flowing
-                    hoverable
-                >
-                  {/*TODO*/}
-                </Popup>
-
-
-              </div>
+            <div className={"editor-input pp-reference-link-title"}>
+              <input
+                  type="text"
+                  name="referenceLinkTitle"
+                  value={referenceLinkTitle}
+                  onChange={this.handleInputChange}
+                  placeholder="Wpisz tytuł źródła"
+              />
+              <i className="input-icon tags icon"></i>
+              <Popup
+                  on="click"
+                  hideOnScroll
+                  trigger={<div className="link-help"> <i className="help circle icon"></i> </div>}
+                  flowing
+                  hoverable
+              >
+                {/*TODO*/}
+              </Popup>
             </div>
             <div className="pp-mover-area"></div>
             <div className="pp-controls">
@@ -263,21 +242,6 @@ export default class AnnotationForm extends React.Component<
     const target = e.currentTarget;
     const name = target.name;
     this.setState({ [name]: target.value });
-  }
-
-  private handleReferenceLinkChange(e: React.ChangeEvent<HTMLInputElement> | React.ClipboardEvent<HTMLInputElement>) {
-    // A joint handler for change & paste events
-    const target = e.currentTarget;
-    const stateChange: Partial<IAnnotationFormState> = {};
-    if (e.type === 'paste') {
-      stateChange.linkFilledIn = true;
-      stateChange.referenceLink = (e as React.ClipboardEvent<HTMLInputElement>).clipboardData.getData('Text');
-    }
-    else if (e.type === 'change') {
-      stateChange.referenceLink = target.value;
-      // todo? allow for link manual char-by-char typing
-    }
-    this.setState(stateChange);
   }
 
   private validateForm(): boolean {
