@@ -2,7 +2,7 @@ import React from 'react';
 import { AnnotationPriorities } from '../consts';
 import {IAnnotationFields, AnnotationViewModel} from '../annotation';
 import '../../css/editor.scss';
-import { Header, Popup, Grid } from 'semantic-ui-react'
+import { Header, Popup, Grid, Modal} from 'semantic-ui-react'
 
 const savedFields = ['priority', 'comment', 'referenceLink', 'referenceLinkTitle'];
 // Add Semantic-ui packages
@@ -20,6 +20,7 @@ export interface IAnnotationFormProps {
 export interface IAnnotationFormState extends IAnnotationFields {
   linkFilledIn: boolean;
   referenceLinkError: string;
+  noCommentModalOpen: boolean;
 }
 
 function sliceKeys(dictionary: any, keys: string[]) {
@@ -41,6 +42,8 @@ export default class AnnotationForm extends React.Component<
   Partial<IAnnotationFormState>
 > {
 
+  private noCommentModal: Modal;
+
   private static stateFromProps(props: IAnnotationFormProps): IAnnotationFormState {
     const annotation = props.annotation;
     return {
@@ -49,7 +52,8 @@ export default class AnnotationForm extends React.Component<
       referenceLink: annotation.referenceLink || '',
       referenceLinkError: '',
       referenceLinkTitle: annotation.referenceLinkTitle || '',
-      linkFilledIn: !!annotation.referenceLink
+      linkFilledIn: !!annotation.referenceLink,
+      noCommentModalOpen: false
     };
   }
 
@@ -60,6 +64,7 @@ export default class AnnotationForm extends React.Component<
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleReferenceLinkChange = this.handleReferenceLinkChange.bind(this);
     this.onSave = this.onSave.bind(this);
+    this.executeSave = this.executeSave.bind(this);
     this.onCancel = this.onCancel.bind(this);
   }
 
@@ -84,6 +89,35 @@ export default class AnnotationForm extends React.Component<
     return priorityToClass[this.state.priority || AnnotationPriorities.NORMAL];
   }
 
+  public renderNoCommentModal() {
+      this.noCommentModal = (
+          <Modal
+              open={this.state.noCommentModalOpen}
+              size="mini"
+          >
+            <Modal.Content>
+              Czy na pewno chcesz dodać przypis bez treści?
+            </Modal.Content>
+            {/* Action buttons style from semantic-ui, probably temporary */}
+            <Modal.Actions>
+              <button
+                  className="ui button negative"
+                  onClick={() => this.setState({noCommentModalOpen: false})}
+              >
+                Anuluj
+              </button>
+              <button
+                  className="ui button"
+                  onClick={this.executeSave}
+              >
+                Zapisz
+              </button>
+            </Modal.Actions>
+          </Modal>
+      );
+      return this.noCommentModal;
+  }
+
   public render() {
       const {
           priority,
@@ -98,11 +132,11 @@ export default class AnnotationForm extends React.Component<
           <div className="pp-editor-head-bar">
             <label className="priority-header"> Wybierz priorytet </label>
             <Popup
-              on="click"
-              hideOnScroll
-              trigger={<div className="priority-help"> <i className="help circle icon"></i> </div>}
-              flowing
-              hoverable
+                on="click"
+                hideOnScroll
+                trigger={<div className="priority-help"> <i className="help circle icon"></i> </div>}
+                flowing
+                hoverable
             >
               {/*TODO just an instruction stub*/}
               <Grid centered divided columns={3}>
@@ -161,7 +195,8 @@ export default class AnnotationForm extends React.Component<
           </div>
           <div className="pp-bottom-bar">
             <div className="pp-link-form">
-              <div className={"editor-input pp-reference-link" + (linkFilledIn ? " pp-hide" : "") + (this.state.referenceLinkError ? ' ui input error' : '')}>
+              <div
+                  className={"editor-input pp-reference-link" + (linkFilledIn ? " pp-hide" : "") + (this.state.referenceLinkError ? ' ui input error' : '')}>
                 <input
                     type="text"
                     name="referenceLink"
@@ -170,7 +205,8 @@ export default class AnnotationForm extends React.Component<
                     onPaste={this.handleReferenceLinkChange}
                     placeholder="Wklej link do źródła"
                 />
-                <div className={"pp-error-msg ui pointing red basic label large" + (this.state.referenceLinkError ? '' : ' pp-hide')}>
+                <div
+                    className={"pp-error-msg ui pointing red basic label large" + (this.state.referenceLinkError ? '' : ' pp-hide')}>
                   {this.state.referenceLinkError}
                 </div>
               </div>
@@ -192,11 +228,11 @@ export default class AnnotationForm extends React.Component<
                     placeholder="Wpisz tytuł źródła"
                 />
                 <Popup
-                  on="click"
-                  hideOnScroll
-                  trigger={<div className="link-help"> <i className="help circle icon"></i> </div>}
-                  flowing
-                  hoverable
+                    on="click"
+                    hideOnScroll
+                    trigger={<div className="link-help"> <i className="help circle icon"></i> </div>}
+                    flowing
+                    hoverable
                 >
                   {/*TODO*/}
                 </Popup>
@@ -212,6 +248,7 @@ export default class AnnotationForm extends React.Component<
               <button className={"pp-save annotator-focus " + this.saveButtonClass()} onClick={(e) => this.onSave(e)}>
                 {' '}Zapisz{' '}
               </button>
+              {this.renderNoCommentModal()}
             </div>
           </div>
         </div>
@@ -254,8 +291,17 @@ export default class AnnotationForm extends React.Component<
   private onSave(event: any) {
     // Copy form fields onto (much larger) view model before executing saveAction
     Object.assign(this.props.annotation, getFormState(this.state));
-    if (this.validateForm()) {
-      const result = this.props.saveAction(this.props.annotation);
+    if (this.validateForm()) { // if form values are correct
+      if (!this.state.comment) { // if comment field is empty, display the modal
+        this.setState({noCommentModalOpen: true});
+        return;
+      }
+      this.executeSave(event);
+    }
+  }
+
+  private executeSave(event: any) {
+    const result = this.props.saveAction(this.props.annotation);
       Promise.resolve(result)     // it will work whether result is a Promise or a value
           .then((result) => {
             const errors = result.errors;
@@ -265,9 +311,8 @@ export default class AnnotationForm extends React.Component<
             } else {
               this.props.onSave(event);
             }
-          })
-    }
-
+          });
+    this.setState({noCommentModalOpen: false});
   }
 
   private onCancel(event: any) {
