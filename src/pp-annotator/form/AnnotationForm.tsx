@@ -122,7 +122,7 @@ export default class AnnotationForm extends React.Component<
     return (
         <div className="pp-widget">
           <div className="pp-editor-head-bar">
-            <label className="priority-header"> Wybierz priorytet </label>
+            <label className="priority-header"> Co dodajesz? </label>
             <Popup
                 on="click"
                 hideOnScroll
@@ -150,7 +150,7 @@ export default class AnnotationForm extends React.Component<
                   className={"pp-editor-priority" + (priority == AnnotationPriorities.NORMAL ? ' selected' : '')}
                   onClick={() => this.setState({priority: AnnotationPriorities.NORMAL})}
               >
-                niebieski
+                dodatkowa informacja
               </button>
             </div>
             <div className="priority-warning">
@@ -158,7 +158,7 @@ export default class AnnotationForm extends React.Component<
                   className={"pp-editor-priority" + (priority == AnnotationPriorities.WARNING ? ' selected' : '')}
                   onClick={() => this.setState({priority: AnnotationPriorities.WARNING})}
               >
-                żółty
+                wyjaśnienie
               </button>
             </div>
             <div className="priority-alert">
@@ -166,7 +166,7 @@ export default class AnnotationForm extends React.Component<
                   className={"pp-editor-priority" + (priority == AnnotationPriorities.ALERT ? ' selected' : '')}
                   onClick={() => this.setState({priority: AnnotationPriorities.ALERT})}
               >
-                pomarańczowy
+                sprostowanie błędu
               </button>
             </div>
 

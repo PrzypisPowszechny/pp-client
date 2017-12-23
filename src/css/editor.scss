@@ -50,7 +50,7 @@ $editor-font-size: 13px;
         outline: none;
         margin: 0;
         padding: 3px 11px;
-        line-height: 1em;
+        height: 3em;
 
         text-align: center;
         color: rgb(255, 255, 255);
@@ -60,9 +60,10 @@ $editor-font-size: 13px;
         background-color: #D8DADA;
         cursor: pointer;
     }
-    /* priority-specific style */
+    /* priority-specific styles */
     .priority-normal, .priority-warning, .priority-alert {
         display: inline-block;
+        vertical-align: top; //align all buttons at the same level regardless of the number of lines inside
     }
     .priority-normal {
         width: 33%;
