@@ -7,15 +7,6 @@ import {AnnotationViewModel, IAnnotationAPIModel} from "./annotation";
 const { util, ui: PPUI } = annotator;
 const { highlighter, textselector } = PPUI;
 
-
-
-// import * as $ from 'jquery';
-// import * as $ from 'jquery/dist/jquery.js';
-// import 'jquery';
-// import jQuery from 'jquery';
-
-// import 'jquery/dist/jquery.js';
-
 /**
  * trim strips whitespace from either end of a string.
  *
@@ -65,8 +56,9 @@ function maxZIndex(elements: Element[]) {
       if (zIndex > max) {
         max = zIndex;
       }
+      }
     }
-  }
+
   return max;
 }
 
