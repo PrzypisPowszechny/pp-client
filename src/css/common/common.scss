@@ -33,7 +33,6 @@ annotator-notice (if we want it)
 TODO annotator classes cannot be changed as they belong to annotator's source:
 annotator-invert-X
 annotator-invert-Y
-.annotator-editor
  */
 
 $widget_box_width: 450px;
@@ -49,6 +48,12 @@ $widget_inner_margin: ($widget_box_width - $widget_inner_width) / 2;
   height: 0;
 }
 
+//semantic ui dimmer
+// WARNING: this is a temporary obviously fallacious setting that will influence dimmers on
+// ALL websites using semantic ui...
+.ui.dimmer {
+ background-color: rgba(0, 0, 0, 0.2);
+}
 //KG Copied from annotator:
 /* if you change the list of classes for which z-index is set,
        you should update setupDynamicStyle() in annotator.ui.main */
