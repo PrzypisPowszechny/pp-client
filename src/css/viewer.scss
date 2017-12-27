@@ -1,12 +1,14 @@
 @import 'common/common';
 
+$viewer-font-size: 11px;
+
 /* -- PP Viewer -- */
 /*
  * The *font sizes* are currently 2x compared to design specs.
  */
 .pp-annotation {
 	height: 136px;
-	font-size: 11px; /* for most of UI text */
+	font-size: $viewer-font-size; /* for most of UI text */
 }
 
 /* --- Viewer head bar --- */
@@ -14,8 +16,8 @@
 	margin-top: 4px;
 	clear: both; /* push up controls */
 	height: 21px;
-	font-size: 11px;
 	margin-right: $widget_inner_margin;
+	font-size: $viewer-font-size;
 }
 
 .pp-view-comment-priority {
@@ -27,14 +29,14 @@
 	float: left;
 
 	background-color: rgb(86, 121, 176);
-	font-family: 'Open Sans SemiBold';
+	font-family: $bold-font-family;
 	color: rgb(255, 255, 255);
 	text-transform: uppercase;
 }
 
 .pp-view-comment-date {
 	float: right;
-	font-family: 'Open Sans Light';
+	font-family: $light-font-family;
 	color: rgb(86, 121, 176);
 }
 
@@ -47,7 +49,7 @@
 	padding-bottom: 6px;
 	clear: both;
 
-	font-family: 'Open Sans Light';
+	font-family: $light-font-family;
 	font-size: 14px;
 	color: rgb(0, 0, 0);
 }
@@ -66,7 +68,7 @@
 }
 
 .pp-view-link {
-	font-family: 'Open Sans SemiBold';
+	font-family: $bold-font-family;
 	color: rgb(136, 136, 136);
 	text-transform: uppercase;
 }

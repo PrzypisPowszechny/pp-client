@@ -93,6 +93,7 @@ $editor-std-spacing: 15px;
     }
 }
 
+/* all form styles */
 .pp-editor {
     /* fields: comment, referenceLink */
     .editor-input {
@@ -144,10 +145,11 @@ $editor-std-spacing: 15px;
             padding: 0.5em;
             width: 100%;
             line-height: 1.2em;
-            height: calc(3*1.2em + 1.1em); // 3 lines
+            height: calc(3 * 1.2em + 1.1em); // 3 lines
         }
     }
 
+    /* reference link field */
     .pp-reference-link {
         input {
             padding-left: 2em;
@@ -165,93 +167,92 @@ $editor-std-spacing: 15px;
             width: 2em;
         }
     }
+}
 
-    .pp-bottom-bar {
-        margin: $editor-std-spacing 2*$editor-std-spacing $editor-std-spacing $editor-std-spacing;
+.pp-editor .pp-bottom-bar {
+    margin: $editor-std-spacing 2*$editor-std-spacing $editor-std-spacing $editor-std-spacing;
 
-        .editor-input.pp-reference-link-title {
-            display: inline-block;
-            width: 60%;
-            padding: 0;
-            margin: 0;
+    .editor-input.pp-reference-link-title {
+        display: inline-block;
+        width: 60%;
+        padding: 0;
+        margin: 0;
 
-            input {
-                padding-left: 2em;
-                width: $editor-width / 2 - 18px;
-            }
-
-            .input-icon {
-                display: block;
-                position: absolute;
-                top: 7px;
-                left: 0;
-                width: 2em;
-            }
-
-            .pp-error-msg {
-                left: 0;
-                top: 20px;
-            }
-
-            .link-help {
-                display: inline-block;
-            }
+        input {
+            padding-left: 2em;
+            width: $editor-width / 2 - 18px;
         }
 
-
-        // the bottom area used for dragging
-        .pp-mover-area {
-            display: inline-block;
-            width: 5%;
-            line-height: 1;
-            min-height: 1em;
+        .input-icon {
+            display: block;
+            position: absolute;
+            top: 7px;
+            left: 0;
+            width: 2em;
         }
 
-        .pp-controls {
-            display: inline-block;
-            width: 35%;
-            text-align: right;
-
-            button {
-                border: none;
-                outline: none;
-                background: none;
-                padding-left: 10px;
-                height: 1.5em;
-                cursor: pointer;
-                font-family: $bold-font-family;
-                font-size: $editor-font-size + 1px;
-                color: #888888;
-            }
-
-            button:hover {
-                color: darken(#888888, 8%);
-            }
-            // use priority-specific as a baseline and darken it so it presents well as a button
-            // for :hover, darken it even more (manually selected values)
-            .priority-normal {
-                color: darken($normal-ref-color, 5%);
-            }
-            .priority-normal:hover {
-                color: darken($normal-ref-color, 5% + 8%);
-            }
-            .priority-warning {
-                color: darken($warning-ref-color, 8%);
-            }
-            .priority-warning:hover {
-                color: darken($warning-ref-color, 8% + 4%);
-            }
-            .priority-alert {
-                color: darken($alert-ref-color, 5%);
-            }
-            .priority-alert:hover {
-                color: darken($alert-ref-color, 5% + 4%);
-            }
+        .pp-error-msg {
+            left: 0;
+            top: 20px;
         }
 
+        .link-help {
+            display: inline-block;
+        }
+    }
+
+    // the bottom area used for dragging
+    .pp-mover-area {
+        display: inline-block;
+        width: 5%;
+        line-height: 1;
+        min-height: 1em;
+    }
+
+    .pp-controls {
+        display: inline-block;
+        width: 35%;
+        text-align: right;
+
+        button {
+            border: none;
+            outline: none;
+            background: none;
+            padding-left: 10px;
+            height: 1.5em;
+            cursor: pointer;
+            font-family: $bold-font-family;
+            font-size: $editor-font-size + 1px;
+            color: #888888;
+        }
+
+        button:hover {
+            color: darken(#888888, 8%);
+        }
+        // use priority-specific as a baseline and darken it so it presents well as a button
+        // for :hover, darken it even more (manually selected values)
+        .priority-normal {
+            color: darken($normal-ref-color, 5%);
+        }
+        .priority-normal:hover {
+            color: darken($normal-ref-color, 5% + 8%);
+        }
+        .priority-warning {
+            color: darken($warning-ref-color, 8%);
+        }
+        .priority-warning:hover {
+            color: darken($warning-ref-color, 8% + 4%);
+        }
+        .priority-alert {
+            color: darken($alert-ref-color, 5%);
+        }
+        .priority-alert:hover {
+            color: darken($alert-ref-color, 5% + 4%);
+        }
     }
 }
 
+/* Some pp-editor embedded elements */
 .pp-editor {
     .pp-error-msg {
         position: absolute !important; // override semantic-ui defaults
