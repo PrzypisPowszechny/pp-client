@@ -150,11 +150,11 @@ $editor-std-spacing: 15px;
 
     .pp-reference-link {
         input {
-                padding-left: 2em;
-            }
+            padding-left: 2em;
+        }
         .pp-error-msg {
             left: 0;
-            top: 15px;
+            top: 20px;
         }
 
         .input-icon {
@@ -186,6 +186,11 @@ $editor-std-spacing: 15px;
                 top: 7px;
                 left: 0;
                 width: 2em;
+            }
+
+            .pp-error-msg {
+                left: 0;
+                top: 20px;
             }
 
             .link-help {

@@ -19,6 +19,7 @@ export interface IAnnotationFormProps {
 
 export interface IAnnotationFormState extends IAnnotationFields {
   referenceLinkError: string;
+  referenceLinkTitleError: string;
   noCommentModalOpen: boolean;
 }
 
@@ -51,6 +52,7 @@ export default class AnnotationForm extends React.Component<
       referenceLink: annotation.referenceLink || '',
       referenceLinkError: '',
       referenceLinkTitle: annotation.referenceLinkTitle || '',
+      referenceLinkTitleError: '',
       noCommentModalOpen: false
     };
   }
@@ -66,9 +68,12 @@ export default class AnnotationForm extends React.Component<
   }
 
   public componentWillUpdate(_nextProps: IAnnotationFormProps, nextState: Partial<IAnnotationFormState>) {
-    // Whenever link is changed, eradicate the error message
+    // Whenever the field has changed, eradicate the error message
     if(nextState.referenceLink) {
       nextState.referenceLinkError = '';
+    }
+    if(nextState.referenceLinkTitle) {
+      nextState.referenceLinkTitleError = '';
     }
   }
 
@@ -116,7 +121,9 @@ export default class AnnotationForm extends React.Component<
           priority,
           comment,
           referenceLink,
+          referenceLinkError,
           referenceLinkTitle,
+          referenceLinkTitleError,
       } = this.state;
 
     return (
@@ -187,17 +194,17 @@ export default class AnnotationForm extends React.Component<
           </div>
           <div className="editor-input pp-reference-link">
             <input
-                className={this.state.referenceLinkError ? ' error' : ''}
                 type="text"
                 name="referenceLink"
+                className={referenceLinkError ? ' error' : ''}
                 value={referenceLink}
                 onChange={this.handleInputChange}
                 placeholder="Wklej link do źródła"
             />
             <i className="input-icon linkify icon"></i>
             <div
-                className={"pp-error-msg ui pointing red basic label large" + (this.state.referenceLinkError ? '' : ' pp-hide')}>
-              {this.state.referenceLinkError}
+                className={"pp-error-msg ui pointing red basic label large" + (referenceLinkError ? '' : ' pp-hide')}>
+              {referenceLinkError}
             </div>
           </div>
           <div className="pp-bottom-bar">
@@ -205,11 +212,16 @@ export default class AnnotationForm extends React.Component<
               <input
                   type="text"
                   name="referenceLinkTitle"
+                  className={this.state.referenceLinkTitleError ? ' error' : ''}
                   value={referenceLinkTitle}
                   onChange={this.handleInputChange}
                   placeholder="Wpisz tytuł źródła"
               />
               <i className="input-icon tags icon"></i>
+              <div
+                className={"pp-error-msg ui pointing red basic label large" + (referenceLinkTitleError ? '' : ' pp-hide')}>
+                {referenceLinkTitleError}
+              </div>
               <Popup
                   on="click"
                   hideOnScroll
@@ -250,6 +262,11 @@ export default class AnnotationForm extends React.Component<
       this.setState({referenceLinkError: 'Musisz podać źródło, jeśli chcesz dodać przypis!'});
       return false;
     }
+    if (!this.state.referenceLinkTitle) {
+      this.setState({referenceLinkTitleError: 'Musisz podać tytuł źródła, jeśli chcesz dodać przypis!'});
+      return false;
+    }
+
     return true;
   }
 
