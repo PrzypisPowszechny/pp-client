@@ -185,8 +185,9 @@ export default class AnnotationForm extends React.Component<
               placeholder="Dodaj treść przypisu"
           />
           </div>
-          <div className={"editor-input pp-reference-link" + (this.state.referenceLinkError ? ' ui input error' : '')}>
+          <div className="editor-input pp-reference-link">
             <input
+                className={this.state.referenceLinkError ? ' error' : ''}
                 type="text"
                 name="referenceLink"
                 value={referenceLink}

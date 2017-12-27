@@ -113,15 +113,24 @@ $editor-std-spacing: 15px;
             resize: none;
         }
 
+        textarea {
+            //todo adjust border radius with KS
+            @include border-radius(5px 5px 0 0);
+        }
+
         input:hover, input:focus,
         textarea:hover, textarea:focus {
             border: 1px dashed #888888;
             background: none;
         }
 
-        textarea {
-            //todo adjust border radius with KS
-            @include border-radius(5px 5px 0 0);
+        // based on semantic-ui's .ui.input.error
+        input.error, textarea.error,
+        input.error:hover, textarea.error:hover,
+        input.error:focus, textarea.error:focus {
+            background-color: #fff6f6;
+            border-color: #e0b4b4;
+            color: #9f3a38;
         }
 
     }
