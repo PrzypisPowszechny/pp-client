@@ -6,6 +6,9 @@ import DebugStorage from './pp-annotator/api/DebugStorage';
 import PrzypisViewer from './pp-annotator/viewer/PrzypisViewer';
 import {AnnotationViewModel} from './pp-annotator/annotation';
 
+import PPSettings from './settings';
+declare const PP_SETTINGS: PPSettings; // global PP settings
+
 console.log('Przypis script working!'); // tslint:disable-line
 
 // will run only in browser environment
@@ -20,10 +23,10 @@ if (typeof window !== 'undefined') {
 
   /*
     MOCK FUNCTIONALITY for development purposes
-    Enabled in `config/webpack.dev.js`
+    Enabled in `config/app-settings.js`
    */
-  if (process.env.PP_DEV_MOCK_VIEWER) {
-    // IMPORTANT: very implementation dependent; whenever PrzypisViewer changes break it, consider simply removing it
+  if (PP_SETTINGS.MOCK_VIEWER) {
+    // IMPORTANT: very implementation dependent; whenever PrzypisViewer changes break it, consider simply dropping it
     const viewer = new PrzypisViewer({});
     viewer.attach();
 

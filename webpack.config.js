@@ -3,6 +3,10 @@ const path = require('path');
 const { CheckerPlugin } = require('awesome-typescript-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const webpack = require('webpack');
+
+// app-specific settings (enabled features etc.)
+const { appSettings } = require('./config/app-settings');
 
 const BUILD_DIR = path.resolve(__dirname, 'dist');
 
@@ -39,6 +43,10 @@ const config = {
     new HtmlWebpackPlugin({
       title: 'Przypis testowa pusta strona',
       template: 'src/test.html',
+    }),
+    new webpack.DefinePlugin({
+      // use appropriate (dev or production) PP settings
+      PP_SETTINGS: appSettings[process.env.NODE_ENV || 'dev']
     }),
   ],
 };
