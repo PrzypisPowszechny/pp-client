@@ -15,5 +15,8 @@ module.exports = merge(common, {
   plugins: [
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      'process.env.PP_DEV_MOCK_VIEWER': true,
+    }),
   ],
 });
