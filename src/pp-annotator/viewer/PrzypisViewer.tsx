@@ -172,7 +172,7 @@ export default class PrzypisViewer extends Widget {
 
     ReactDOM.render(
       <AnnotationMultipleViewer annotations={annotations} callbacks={callbacks}/>,
-      document.getElementById('react-annotation-viewer-slot'),
+        this.element.find('.react-annotation-viewer-slot')[0],
     );
   }
 
@@ -284,7 +284,7 @@ export default class PrzypisViewer extends Widget {
 // HTML templates for this.widget and this.item properties.
 PrzypisViewer.template = [
   '<div class="annotator-outer annotator-viewer annotator-hide">',
-  '  <div id="react-annotation-viewer-slot"></div>',
+  '  <div class="react-annotation-viewer-slot"></div>',
   '</div>',
 ].join('\n');
 
