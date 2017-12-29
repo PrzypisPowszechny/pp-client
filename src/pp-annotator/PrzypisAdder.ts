@@ -22,7 +22,7 @@ interface IPrzypisAdderOptions extends annotator.ui.widget.IWidgetOptions {
 }
 
 export default class PrzypisAdder extends Widget {
-  public static classes = {
+  static classes = {
     hide: 'pp-hide',
     focus: 'annotator-focus',
     invert: Widget.classes.invert,

@@ -77,13 +77,14 @@ export default class AnnotationForm extends React.Component<
     }
   }
 
-  public saveButtonClass() {
-    const priorityToClass = {
+  private static priorityToClass = {
       [AnnotationPriorities.NORMAL]: 'priority-normal',
       [AnnotationPriorities.WARNING]: 'priority-warning',
       [AnnotationPriorities.ALERT]: 'priority-alert',
-    };
-    return priorityToClass[this.state.priority || AnnotationPriorities.NORMAL];
+  };
+
+  public saveButtonClass() {
+    return AnnotationForm.priorityToClass[this.state.priority || AnnotationPriorities.NORMAL];
   }
 
   // A modal displayed when user tries to save the form with comment field empty
@@ -180,7 +181,7 @@ export default class AnnotationForm extends React.Component<
           </div>
           <div
               className="pp-close"
-              onClick={(e) => this.onCancel(e)}
+              onClick={this.onCancel}
           >
             <i className="remove icon"></i>
           </div>
@@ -234,10 +235,10 @@ export default class AnnotationForm extends React.Component<
             </div>
             <div className="pp-mover-area"></div>
             <div className="pp-controls">
-              <button className="pp-cancel" onClick={(e) => this.onCancel(e)}>
+              <button className="pp-cancel" onClick={this.onCancel}>
                 {' '}Anuluj{' '}
               </button>
-              <button className={"pp-save annotator-focus " + this.saveButtonClass()} onClick={(e) => this.onSave(e)}>
+              <button className={"pp-save annotator-focus " + this.saveButtonClass()} onClick={this.onSave}>
                 {' '}Zapisz{' '}
               </button>
               {this.renderNoCommentModal()}
