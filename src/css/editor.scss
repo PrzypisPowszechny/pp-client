@@ -30,7 +30,13 @@ $editor-std-spacing: 15px;
     width: $editor-width;
     background-color: white;
     font-size: $editor-font-size;
-    font-family: $light-font-family;
+    font-family: $font-family-preset;
+    font-weight: $font-light;
+
+    // override semantic ui styles
+    button, textarea, input, optgroup, select {
+        font-family: $font-family-preset;
+    }
 }
 
 /* --- Editor head bar --- */
@@ -40,7 +46,7 @@ $editor-std-spacing: 15px;
 
     .priority-header {
         display: inline-block;
-        font-family: $bold-font-family;
+        font-weight: $font-semi-bold;
         margin: 0 0 10px 0;
     }
     /* priority buttons */
@@ -55,7 +61,7 @@ $editor-std-spacing: 15px;
 
         text-align: center;
         color: rgb(255, 255, 255);
-        font-family: $bold-font-family;
+        font-weight: $font-semi-bold;
         text-transform: uppercase;
 
         background-color: #D8DADA;
@@ -108,7 +114,7 @@ $editor-std-spacing: 15px;
             border: 1px solid #D8DADA;
             outline: none;
             color: #000000;
-            font-family: $light-font-family;
+            font-weight: $font-light;
             line-height: 1em;
             background: none;
             resize: none;
@@ -221,7 +227,7 @@ $editor-std-spacing: 15px;
             padding-left: 10px;
             height: 1.5em;
             cursor: pointer;
-            font-family: $bold-font-family;
+            font-weight: $font-semi-bold;
             font-size: $editor-font-size + 1px;
             color: #888888;
         }

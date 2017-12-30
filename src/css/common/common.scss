@@ -1,14 +1,18 @@
 @import "mixins";
-@import "vars";
+@import "fonts";
+@import "colors";
+@import "z-index";
 
 @font-face {
-  font-family: 'Open Sans Light';
+  font-family: $font-open-sans;
   src: url('../../assets/OpenSans-Light.ttf');
+  font-weight: 300;
 }
 
 @font-face {
-  font-family: 'Open Sans SemiBold';
+  font-family: $font-open-sans;
   src: url('../../assets/OpenSans-SemiBold.ttf');
+  font-weight: 600;
 }
 
 .annotator-hl {

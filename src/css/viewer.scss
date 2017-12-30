@@ -29,14 +29,14 @@ $viewer-font-size: 11px;
 	float: left;
 
 	background-color: rgb(86, 121, 176);
-	font-family: $bold-font-family;
+	font-weight: $font-semi-bold;
 	color: rgb(255, 255, 255);
 	text-transform: uppercase;
 }
 
 .pp-view-comment-date {
 	float: right;
-	font-family: $light-font-family;
+	font-weight: $font-light;
 	color: rgb(86, 121, 176);
 }
 
@@ -49,7 +49,7 @@ $viewer-font-size: 11px;
 	padding-bottom: 6px;
 	clear: both;
 
-	font-family: $light-font-family;
+	font-weight: $font-light;
 	font-size: 14px;
 	color: rgb(0, 0, 0);
 }
@@ -68,7 +68,7 @@ $viewer-font-size: 11px;
 }
 
 .pp-view-link {
-	font-family: $bold-font-family;
+	font-weight: $font-semi-bold;
 	color: rgb(136, 136, 136);
 	text-transform: uppercase;
 }
@@ -85,9 +85,3 @@ $viewer-font-size: 11px;
 		display: none;
 	}
 }
-
-
-
-
-
-
