@@ -1,11 +1,18 @@
+@import "mixins";
+@import "fonts";
+@import "colors";
+@import "z-index";
+
 @font-face {
-  font-family: 'Open Sans Light';
+  font-family: $font-open-sans;
   src: url('../../assets/OpenSans-Light.ttf');
+  font-weight: 300;
 }
 
 @font-face {
-  font-family: 'Open Sans SemiBold';
+  font-family: $font-open-sans;
   src: url('../../assets/OpenSans-SemiBold.ttf');
+  font-weight: 600;
 }
 
 .annotator-hl {
@@ -30,25 +37,34 @@ annotator-notice (if we want it)
 TODO annotator classes cannot be changed as they belong to annotator's source:
 annotator-invert-X
 annotator-invert-Y
-.annotator-editor
  */
 
 $widget_box_width: 450px;
 $widget_inner_width: 428px;
 $widget_inner_margin: ($widget_box_width - $widget_inner_width) / 2;
 
+.pp-hide {
+  display: none !important; //override semantic-ui
+}
+
 .pp-outer {
   width: 0;
   height: 0;
 }
 
+//semantic ui dimmer
+// WARNING: this is a temporary obviously fallacious setting that will influence dimmers on
+// ALL websites using semantic ui...
+.ui.dimmer {
+ background-color: rgba(0, 0, 0, 0.2);
+}
 //KG Copied from annotator:
 /* if you change the list of classes for which z-index is set,
        you should update setupDynamicStyle() in annotator.ui.main */
 .pp-outer,
 .pp-widget {
   position: absolute;
-  z-index: 1020;
+  z-index: 10; // less than semantic ui modal's (1000)
 }
 
 /* Widgets are both the adder and the viewer. */
@@ -60,6 +76,7 @@ $widget_inner_margin: ($widget_box_width - $widget_inner_width) / 2;
   bottom: 15px;
   min-width: $widget_box_width;
   border: 1px solid rgb(210, 212, 210);
+
   //todo border as mixin
   //todo consult border-radius with KS
   border-radius: 0;

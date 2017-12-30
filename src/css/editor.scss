@@ -1,50 +1,326 @@
-@import 'common';
+@import 'common/common';
+
+
+$editor-width: 450px;
+$editor-font-size: 14px;
+$editor-std-spacing: 15px;
+
+/* -- PP Adder -- */
+.pp-adder {
+    position: absolute;
+    width: 140px;
+    height: 40px;
+    margin-left: -70px;
+    margin-top: -48px;
+
+    .create-annotation {
+        border-color: #2185D0 !important; // override semantic ui
+        color: #2185D0 !important; // override semantic ui
+        cursor: pointer;
+    }
+
+    .create-annotation:hover {
+        color: darken(#2185D0, 10%) !important; // override semantic ui
+    }
+}
+
 
 /* -- PP Editor -- */
+.pp-editor .pp-widget {
+    width: $editor-width;
+    background-color: white;
+    font-size: $editor-font-size;
+    font-family: $font-family-preset;
+    font-weight: $font-light;
 
-/* --- Viewer head bar --- */
-.pp-editor-head-bar {
-	margin-top: 4px;
-	margin-right: 15px; /* the same margin as comment, for the date */
-	clear: both; /* push up controls */
-
-	:first-child {
-		margin-left: -2px; /* cover the border */
-	}
-
-	:nth-child(1):hover {
-		background-color: #5679B0;
-	}
-	:nth-child(2):hover {
-		background-color: #FDE300;
-	}
-	:nth-child(3):hover {
-		background-color: #F7AB00;
-	}
+    // override semantic ui styles
+    button, textarea, input, optgroup, select {
+        font-family: $font-family-preset;
+    }
 }
 
-.pp-editor-priority {
-	display: inline-block;
-	margin: 0 2px;
-	width: 68px;
-	height: 12px;
-	line-height: 12px;
-	padding: 3px 11px;
+/* --- Editor head bar --- */
+.pp-editor .pp-editor-head-bar {
+    padding: 0 2*$editor-std-spacing 0 $editor-std-spacing;
+    margin: $editor-std-spacing 0 $editor-std-spacing 0;
 
-  	text-align: center;
-	color: rgb(255, 255, 255);
-	font-family: 'Open Sans SemiBold';
-	font-size: 11px;
-	text-transform: uppercase;
+    .priority-header {
+        display: inline-block;
+        font-weight: $font-semi-bold;
+        margin: 0 0 10px 0;
+    }
+    /* priority buttons */
+    .pp-editor-priority {
+        display: inline-block;
+        width: calc(100% - 10px);
+        border: none;
+        outline: none;
+        margin: 0;
+        padding: 3px 11px;
+        height: 3em;
 
-	background-color: #D8DADA;
-	cursor: pointer;
+        text-align: center;
+        color: rgb(255, 255, 255);
+        font-weight: $font-semi-bold;
+        text-transform: uppercase;
 
+        background-color: #D8DADA;
+        cursor: pointer;
+    }
+    /* priority-specific styles */
+    .priority-normal, .priority-warning, .priority-alert {
+        display: inline-block;
+        vertical-align: top; //align all buttons at the same level regardless of the number of lines inside
+    }
+    .priority-normal {
+        width: 33%;
+        :hover,
+        .selected {
+            background-color: $normal-ref-color;
+        }
+    }
+    .priority-warning {
+        text-align: center;
+        width: 34%;
 
+        :hover,
+        .selected {
+            background-color: $warning-ref-color;
+        }
+    }
+    .priority-alert {
+        width: 33%;
+        text-align: right;
+
+        :hover,
+        .selected {
+            background-color: $alert-ref-color;
+        }
+    }
 }
 
-.pp-close {
-	position: absolute;
-	right: 0;
-	top: 0;
+/* all form styles */
+.pp-editor {
+    /* fields: comment, referenceLink */
+    .editor-input {
+        display: block;
+        padding: 0;
+        position: relative;
+        margin: 0 2*$editor-std-spacing $editor-std-spacing $editor-std-spacing;
+
+        input, textarea {
+            padding: 0.5em;
+            width: 100%;
+            border: 1px solid #D8DADA;
+            outline: none;
+            color: #000000;
+            font-weight: $font-light;
+            line-height: 1em;
+            background: none;
+            resize: none;
+        }
+
+        textarea {
+            //todo adjust border radius with KS
+            @include border-radius(5px 5px 0 0);
+        }
+
+        input:hover, input:focus,
+        textarea:hover, textarea:focus {
+            border: 1px dashed #888888;
+            background: none;
+        }
+
+        // based on semantic-ui's .ui.input.error
+        input.error, textarea.error,
+        input.error:hover, textarea.error:hover,
+        input.error:focus, textarea.error:focus {
+            background-color: #fff6f6;
+            border-color: #e0b4b4;
+            color: #9f3a38;
+        }
+
+    }
+
+    /* comment field */
+    .pp-comment {
+        overflow: auto;
+
+        textarea {
+            float: left;
+            padding: 0.5em;
+            width: 100%;
+            line-height: 1.2em;
+            height: calc(3 * 1.2em + 1.1em); // 3 lines
+        }
+    }
+
+    /* reference link field */
+    .pp-reference-link {
+        input {
+            padding-left: 2em;
+        }
+        .pp-error-msg {
+            left: 0;
+            top: 20px;
+        }
+
+        .input-icon {
+            display: block;
+            position: absolute;
+            top: 7px;
+            left: 0;
+            width: 2em;
+        }
+    }
+}
+
+.pp-editor .pp-bottom-bar {
+    margin: $editor-std-spacing 2*$editor-std-spacing $editor-std-spacing $editor-std-spacing;
+
+    .editor-input.pp-reference-link-title {
+        display: inline-block;
+        width: 60%;
+        padding: 0;
+        margin: 0;
+
+        input {
+            padding-left: 2em;
+            width: $editor-width / 2 - 18px;
+        }
+
+        .input-icon {
+            display: block;
+            position: absolute;
+            top: 7px;
+            left: 0;
+            width: 2em;
+        }
+
+        .pp-error-msg {
+            left: 0;
+            top: 20px;
+        }
+
+        .link-help {
+            display: inline-block;
+        }
+    }
+
+    // the bottom area used for dragging
+    .pp-mover-area {
+        display: inline-block;
+        width: 5%;
+        line-height: 1;
+        min-height: 1em;
+    }
+
+    .pp-controls {
+        display: inline-block;
+        width: 35%;
+        text-align: right;
+
+        button {
+            border: none;
+            outline: none;
+            background: none;
+            padding-left: 10px;
+            height: 1.5em;
+            cursor: pointer;
+            font-weight: $font-semi-bold;
+            font-size: $editor-font-size + 1px;
+            color: #888888;
+        }
+
+        button:hover {
+            color: darken(#888888, 8%);
+        }
+        // use priority-specific as a baseline and darken it so it presents well as a button
+        // for :hover, darken it even more (manually selected values)
+        .priority-normal {
+            color: darken($normal-ref-color, 5%);
+        }
+        .priority-normal:hover {
+            color: darken($normal-ref-color, 5% + 8%);
+        }
+        .priority-warning {
+            color: darken($warning-ref-color, 8%);
+        }
+        .priority-warning:hover {
+            color: darken($warning-ref-color, 8% + 4%);
+        }
+        .priority-alert {
+            color: darken($alert-ref-color, 5%);
+        }
+        .priority-alert:hover {
+            color: darken($alert-ref-color, 5% + 4%);
+        }
+    }
+}
+
+/* Some pp-editor embedded elements */
+.pp-editor {
+    .pp-error-msg {
+        position: absolute !important; // override semantic-ui defaults
+        z-index: $tooltip-z-index;
+    }
+
+    /* all cross-style close buttons */
+    .pp-close {
+        position: absolute;
+        right: 0;
+        top: 0;
+
+        border: none;
+        outline: none;
+
+        color: #888888;
+        background: none;
+        cursor: pointer;
+    }
+
+    /* --- Help windows --- */
+    .priority-help,
+    .link-help {
+        display: inline-block;
+
+        margin-left: 5px;
+        border: none;
+        outline: none;
+
+        font-size: 17px;
+        color: #888888;
+
+        background: none;
+        cursor: pointer; // todo not sure
+    }
+}
+
+// TODO review: copied from original annotator.css (and adapted to pp-editor & editor-input)
+/* --- scrollbar --- */
+// KG it's better than the default scrollbar, so we might want to make use of these
+// I leave it here until we decide we don't
+
+.pp-editor .editor-input textarea::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+
+.pp-editor .editor-input textarea::-webkit-scrollbar-track-piece {
+    margin: 13px 0 3px;
+    background-color: #e5e5e5;
+    -webkit-border-radius: 4px;
+}
+
+.pp-editor .editor-input textarea::-webkit-scrollbar-thumb:vertical {
+    height: 25px;
+    background-color: #ccc;
+    -webkit-border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.pp-editor .editor-input textarea::-webkit-scrollbar-thumb:horizontal {
+    width: 25px;
+    background-color: #ccc;
+    -webkit-border-radius: 4px;
 }
