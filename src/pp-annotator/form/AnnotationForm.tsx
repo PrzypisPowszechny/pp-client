@@ -40,13 +40,13 @@ function getFormState(obj: any) {
 export default class AnnotationForm extends React.Component<IAnnotationFormProps,
   Partial<IAnnotationFormState>> {
 
-  protected static priorityToClass = {
+  static priorityToClass = {
       [AnnotationPriorities.NORMAL]: 'priority-normal',
       [AnnotationPriorities.WARNING]: 'priority-warning',
       [AnnotationPriorities.ALERT]: 'priority-alert',
   };
 
-  protected static stateFromProps(props: IAnnotationFormProps): IAnnotationFormState {
+  static stateFromProps(props: IAnnotationFormProps): IAnnotationFormState {
     const annotation = props.annotation;
     return {
       priority: annotation.priority || AnnotationPriorities.NORMAL,
@@ -59,7 +59,9 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
     };
   }
 
-  private noCommentModal: Modal;
+  noCommentModal: Modal;
+
+  commentInput: HTMLTextAreaElement;
 
   constructor(props: IAnnotationFormProps) {
     super(props);
@@ -69,6 +71,11 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
     this.onSave = this.onSave.bind(this);
     this.executeSave = this.executeSave.bind(this);
     this.onCancel = this.onCancel.bind(this);
+  }
+
+  componentDidMount() {
+    // Set focus after a tiny timeout; needed at least for Chrome
+    setTimeout(() => this.commentInput.focus(), 20);
   }
 
   componentWillUpdate(_nextProps: IAnnotationFormProps, nextState: Partial<IAnnotationFormState>) {
@@ -198,6 +205,7 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
               value={comment}
               onChange={this.handleInputChange}
               placeholder="Dodaj treść przypisu"
+              ref={(input) => { this.commentInput = input as HTMLTextAreaElement; }}
           />
           </div>
           <div className="editor-input pp-reference-link">

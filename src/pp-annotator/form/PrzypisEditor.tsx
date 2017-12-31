@@ -67,14 +67,7 @@ export default class PrzypisEditor extends Widget {
         left: position.left,
       });
     }
-
-    this.element.find('.annotator-save').addClass(PrzypisEditor.classes.focus);
-
     super.show();
-
-    // give main textarea focus
-    this.element.find(':input:first').focus();
-
     this.setupDraggables();
   }
 
