@@ -58,8 +58,9 @@ function maxZIndex(elements: Element[]) {
       if (zIndex > max) {
         max = zIndex;
       }
+      }
     }
-  }
+
   return max;
 }
 

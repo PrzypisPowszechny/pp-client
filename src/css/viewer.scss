@@ -1,0 +1,87 @@
+@import 'common/common';
+
+$viewer-font-size: 11px;
+
+/* -- PP Viewer -- */
+/*
+ * The *font sizes* are currently 2x compared to design specs.
+ */
+.pp-annotation {
+	height: 136px;
+	font-size: $viewer-font-size; /* for most of UI text */
+}
+
+/* --- Viewer head bar --- */
+.pp-view-head-bar {
+	margin-top: 4px;
+	clear: both; /* push up controls */
+	height: 21px;
+	margin-right: $widget_inner_margin;
+	font-size: $viewer-font-size;
+}
+
+.pp-view-comment-priority {
+	margin-left: -2px; /* cover the border */
+	width: 68px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-left: 21px; /* indent the type indication */
+	float: left;
+
+	background-color: rgb(86, 121, 176);
+	font-weight: $font-semi-bold;
+	color: rgb(255, 255, 255);
+	text-transform: uppercase;
+}
+
+.pp-view-comment-date {
+	float: right;
+	font-weight: $font-light;
+	color: rgb(86, 121, 176);
+}
+
+/* --- Viewer comment display --- */
+.pp-view-comment {
+	width: $widget_inner_width;
+	margin-left: $widget_inner_margin;
+	min-height: 48px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	clear: both;
+
+	font-weight: $font-light;
+	font-size: 14px;
+	color: rgb(0, 0, 0);
+}
+
+/* --- Viewer link bar --- */
+.pp-view-link-bar {
+	width: 428px;
+	margin-left: $widget_inner_margin;
+
+	/* upper line */
+	border-top: 1px solid rgb(210, 212, 210);
+
+	color: rgb(136, 136, 136);
+
+	line-height: 2em;
+}
+
+.pp-view-link {
+	font-weight: $font-semi-bold;
+	color: rgb(136, 136, 136);
+	text-transform: uppercase;
+}
+
+/* --- Viewer controls. --- */
+
+.pp-viewer {
+	.pp-controls {
+		float: right;
+		padding-right: 5px;
+	}
+
+	.pp-controls button[disabled] {
+		display: none;
+	}
+}

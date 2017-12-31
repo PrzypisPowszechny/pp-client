@@ -1,8 +1,13 @@
 import React from 'react';
 import { AnnotationPriorities } from '../consts';
-import { IAnnotationFields, AnnotationViewModel } from '../annotation';
+import {IAnnotationFields, AnnotationViewModel} from '../annotation';
+import '../../css/editor.scss';
+import { Header, Popup, Grid, Modal} from 'semantic-ui-react';
 
 const savedFields = ['priority', 'comment', 'referenceLink', 'referenceLinkTitle'];
+// Add Semantic-ui packages
+import 'semantic-ui/dist/semantic.css';
+import 'semantic-ui/dist/semantic.js';
 
 export interface IAnnotationFormProps {
   id: number;
@@ -12,7 +17,11 @@ export interface IAnnotationFormProps {
   onCancel(e: any): any;
 }
 
-export type IAnnotationFormState = IAnnotationFields;
+export interface IAnnotationFormState extends IAnnotationFields {
+  referenceLinkError: string;
+  referenceLinkTitleError: string;
+  noCommentModalOpen: boolean;
+}
 
 function sliceKeys(dictionary: any, keys: string[]) {
   const result: {
@@ -31,13 +40,18 @@ function getFormState(obj: any) {
 export default class AnnotationForm extends React.Component<IAnnotationFormProps,
   Partial<IAnnotationFormState>> {
 
+  private noCommentModal: Modal;
+
   private static stateFromProps(props: IAnnotationFormProps): IAnnotationFormState {
     const annotation = props.annotation;
     return {
       priority: annotation.priority || AnnotationPriorities.NORMAL,
       comment: annotation.comment || '',
       referenceLink: annotation.referenceLink || '',
+      referenceLinkError: '',
       referenceLinkTitle: annotation.referenceLinkTitle || '',
+      referenceLinkTitleError: '',
+      noCommentModalOpen: false,
     };
   }
 
@@ -47,52 +61,188 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.onSave = this.onSave.bind(this);
+    this.executeSave = this.executeSave.bind(this);
     this.onCancel = this.onCancel.bind(this);
   }
 
+  componentWillUpdate(_nextProps: IAnnotationFormProps, nextState: Partial<IAnnotationFormState>) {
+    // Whenever the field has changed, eradicate the error message
+    if (nextState.referenceLink) {
+      nextState.referenceLinkError = '';
+    }
+    if (nextState.referenceLinkTitle) {
+      nextState.referenceLinkTitleError = '';
+    }
+  }
+
+  private static priorityToClass = {
+      [AnnotationPriorities.NORMAL]: 'priority-normal',
+      [AnnotationPriorities.WARNING]: 'priority-warning',
+      [AnnotationPriorities.ALERT]: 'priority-alert',
+  };
+
+  saveButtonClass() {
+    return AnnotationForm.priorityToClass[this.state.priority || AnnotationPriorities.NORMAL];
+  }
+
+  // A modal displayed when user tries to save the form with comment field empty
+  renderNoCommentModal() {
+      this.noCommentModal = (
+          <Modal
+              open={this.state.noCommentModalOpen}
+              size="mini"
+          >
+            <Modal.Content>
+              Czy na pewno chcesz dodać przypis bez treści?
+            </Modal.Content>
+            {/* Action buttons style from semantic-ui, probably temporary */}
+            <Modal.Actions>
+              <button
+                  className="ui button negative"
+                  onClick={() => this.setState({noCommentModalOpen: false})}
+              >
+                Anuluj
+              </button>
+              <button
+                  className="ui button"
+                  onClick={this.executeSave}
+              >
+                Zapisz
+              </button>
+            </Modal.Actions>
+          </Modal>
+      );
+      return this.noCommentModal;
+  }
+
   render() {
-    return (
-      <form className="annotator-widget">
-        <ul className="annotator-listing">
-          <li className="annotator-item">
-            <textarea
+      const {
+          priority,
+          comment,
+          referenceLink,
+          referenceLinkError,
+          referenceLinkTitle,
+          referenceLinkTitleError,
+      } = this.state;
+
+      return (
+        <div className="pp-widget">
+          <div className="pp-editor-head-bar">
+            <label className="priority-header"> Co dodajesz? </label>
+            <Popup
+                on="click"
+                hideOnScroll
+                trigger={<div className="priority-help"> <i className="help circle icon"></i> </div>}
+                flowing
+                hoverable
+            >
+              {/*TODO just an instruction stub*/}
+              <Grid centered divided columns={3}>
+                <Grid.Column textAlign="center">
+                  <Header as="h4">Niebieski przypis</Header>
+                </Grid.Column>
+                <Grid.Column textAlign="center">
+                  <Header as="h4">Żółty przypis</Header>
+                </Grid.Column>
+                <Grid.Column textAlign="center">
+                  <Header as="h4">Pomarańczowy przypis</Header>
+                </Grid.Column>
+              </Grid>
+            </Popup>
+            <br/>
+            {/*KG todo could probably be neater if done with sth like PriorityButton component*/}
+            <div className="priority-normal">
+              <button
+                  className={'pp-editor-priority' + (priority == AnnotationPriorities.NORMAL ? ' selected' : '')}
+                  onClick={() => this.setState({priority: AnnotationPriorities.NORMAL})}
+              >
+                dodatkowa informacja
+              </button>
+            </div>
+            <div className="priority-warning">
+              <button
+                  className={'pp-editor-priority' + (priority == AnnotationPriorities.WARNING ? ' selected' : '')}
+                  onClick={() => this.setState({priority: AnnotationPriorities.WARNING})}
+              >
+                wyjaśnienie
+              </button>
+            </div>
+            <div className="priority-alert">
+              <button
+                  className={'pp-editor-priority' + (priority == AnnotationPriorities.ALERT ? ' selected' : '')}
+                  onClick={() => this.setState({priority: AnnotationPriorities.ALERT})}
+              >
+                sprostowanie błędu
+              </button>
+            </div>
+
+          </div>
+          <div
+              className="pp-close"
+              onClick={this.onCancel}
+          >
+            <i className="remove icon"></i>
+          </div>
+          <div className="editor-input pp-comment">
+          <textarea
               name="comment"
-              value={this.state.comment}
+              value={comment}
               onChange={this.handleInputChange}
-              placeholder="Komentarz"
-            />
-          </li>
-          <li className="annotator-item">
+              placeholder="Dodaj treść przypisu"
+          />
+          </div>
+          <div className="editor-input pp-reference-link">
             <input
-              type="text"
-              name="referenceLink"
-              value={this.state.referenceLink}
-              onChange={this.handleInputChange}
-              placeholder="Link źródła"
+                type="text"
+                name="referenceLink"
+                className={referenceLinkError ? ' error' : ''}
+                value={referenceLink}
+                onChange={this.handleInputChange}
+                placeholder="Wklej link do źródła"
             />
-          </li>
-          <li className="annotator-item">
-            <input
-              type="text"
-              name="referenceLinkTitle"
-              value={this.state.referenceLinkTitle}
-              onChange={this.handleInputChange}
-              placeholder="Tytuł źródła"
-            />
-          </li>
-        </ul>
-        <div className="annotator-controls">
-          {/*TODO I guess it'd better to use buttons here, to avoid problems with href value moving the view to top*/}
-          <a href="#" className="annotator-cancel" onClick={this.onCancel}>
-            {' '}
-            Anuluj{' '}
-          </a>
-          <a href="#" className="annotator-save annotator-focus" onClick={this.onSave}>
-            {' '}
-            Zapisz{' '}
-          </a>
+            <i className="input-icon linkify icon"></i>
+            <div
+                className={'pp-error-msg ui pointing red basic label large' + (referenceLinkError ? '' : ' pp-hide')}>
+              {referenceLinkError}
+            </div>
+          </div>
+          <div className="pp-bottom-bar">
+            <div className={'editor-input pp-reference-link-title'}>
+              <input
+                  type="text"
+                  name="referenceLinkTitle"
+                  className={this.state.referenceLinkTitleError ? ' error' : ''}
+                  value={referenceLinkTitle}
+                  onChange={this.handleInputChange}
+                  placeholder="Wpisz tytuł źródła"
+              />
+              <i className="input-icon tags icon"></i>
+              <div
+                className={'pp-error-msg ui pointing red basic label large' + (referenceLinkTitleError ? '' : ' pp-hide')}>
+                {referenceLinkTitleError}
+              </div>
+              <Popup
+                  on="click"
+                  hideOnScroll
+                  trigger={<div className="link-help"> <i className="help circle icon"></i> </div>}
+                  flowing
+                  hoverable
+              >
+                {/*TODO*/}
+              </Popup>
+            </div>
+            <div className="pp-mover-area"></div>
+            <div className="pp-controls">
+              <button className="pp-cancel" onClick={this.onCancel}>
+                {' '}Anuluj{' '}
+              </button>
+              <button className={'pp-save annotator-focus ' + this.saveButtonClass()} onClick={this.onSave}>
+                {' '}Zapisz{' '}
+              </button>
+              {this.renderNoCommentModal()}
+            </div>
+          </div>
         </div>
-      </form>
     );
   }
 
@@ -106,21 +256,44 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
     this.setState({ [name]: target.value });
   }
 
+  private validateForm(): boolean {
+    if (!this.state.referenceLink) {
+      this.setState({referenceLinkError: 'Musisz podać źródło, jeśli chcesz dodać przypis!'});
+      return false;
+    }
+    if (!this.state.referenceLinkTitle) {
+      this.setState({referenceLinkTitleError: 'Musisz podać tytuł źródła, jeśli chcesz dodać przypis!'});
+      return false;
+    }
+
+    return true;
+  }
+
   private onSave(event: any) {
     // Copy form fields onto (much larger) view model before executing saveAction
     Object.assign(this.props.annotation, getFormState(this.state));
+    if (this.validateForm()) { // if form values are correct
+      if (!this.state.comment) { // if comment field is empty, display the modal
+        this.setState({noCommentModalOpen: true});
+        return;
+      }
+      this.executeSave(event);
+    }
+  }
+
+  private executeSave(event: any) {
     const result = this.props.saveAction(this.props.annotation);
-
     Promise.resolve(result)     // it will work whether result is a Promise or a value
-      .then((res) => {
-        const errors = res.errors;
-        if (errors) {
-          // TODO handle form validation messages here
+          .then((result) => {
+            const errors = result.errors;
+            if (errors) {
+              //TODO handle form validation messages here
 
-        } else {
-          this.props.onSave(event);
-        }
-      });
+            } else {
+              this.props.onSave(event);
+            }
+          });
+    this.setState({noCommentModalOpen: false});
   }
 
   private onCancel(event: any) {

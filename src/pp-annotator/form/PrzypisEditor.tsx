@@ -19,11 +19,10 @@ const { widget: { Widget } } = ui;
 export default class PrzypisEditor extends Widget {
   static classes = {
     ...Widget.classes,
-    hide: 'annotator-hide',
-    focus: 'annotator-focus',
+    hide: 'pp-hide',
   };
   static template = `
-  <div class="annotator-outer annotator-editor annotator-hide">
+  <div class="pp-outer pp-editor pp-hide">
     <div id="react-form-slot"></div>
   </div>`;
 
@@ -137,6 +136,9 @@ export default class PrzypisEditor extends Widget {
       this.mover.destroy();
     }
 
+    //KG todo
+    // right now `annotator-resize` doesn't exist, so resizing is not set up;
+    // we might want to add it or remove the resizing part altogether
     this.element.find('.annotator-resize').remove();
 
     // Find the first/last item element depending on orientation
@@ -151,8 +153,8 @@ export default class PrzypisEditor extends Widget {
       $('<span class="annotator-resize"></span>').appendTo(cornerItem);
     }
 
-    const [controls, textarea, resizeHandle] = [
-      '.annotator-controls',
+    const [moverArea, textarea, resizeHandle] = [
+      '.pp-mover-area',
       'textarea:first',
       '.annotator-resize',
     ].map(x => this.element.find(x)[0]);
@@ -162,6 +164,6 @@ export default class PrzypisEditor extends Widget {
       invertedY: () => this.element.hasClass(Widget.classes.invert.y),
     });
 
-    this.mover = mover(this.element[0], controls);
+    this.mover = mover(this.element[0], moverArea);
   }
 }

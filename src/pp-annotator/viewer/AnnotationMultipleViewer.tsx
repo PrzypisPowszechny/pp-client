@@ -26,7 +26,7 @@ export default class AnnotationMultipleViewer extends React.Component<IAnnotatio
   render() {
     return (
       // The inner part of annotator.Viewer.template
-      <ul className="annotator-widget annotator-listing">{this.renderItems()}</ul>
+      <ul className="pp-widget annotator-listing">{this.renderItems()}</ul>
     );
   }
 }
