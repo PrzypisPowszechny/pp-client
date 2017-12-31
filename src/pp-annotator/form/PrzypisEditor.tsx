@@ -136,7 +136,7 @@ export default class PrzypisEditor extends Widget {
       this.mover.destroy();
     }
 
-    //KG todo
+    // KG todo
     // right now `annotator-resize` doesn't exist, so resizing is not set up;
     // we might want to add it or remove the resizing part altogether
     this.element.find('.annotator-resize').remove();

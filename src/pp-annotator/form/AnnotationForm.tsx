@@ -40,9 +40,13 @@ function getFormState(obj: any) {
 export default class AnnotationForm extends React.Component<IAnnotationFormProps,
   Partial<IAnnotationFormState>> {
 
-  private noCommentModal: Modal;
+  protected static priorityToClass = {
+      [AnnotationPriorities.NORMAL]: 'priority-normal',
+      [AnnotationPriorities.WARNING]: 'priority-warning',
+      [AnnotationPriorities.ALERT]: 'priority-alert',
+  };
 
-  private static stateFromProps(props: IAnnotationFormProps): IAnnotationFormState {
+  protected static stateFromProps(props: IAnnotationFormProps): IAnnotationFormState {
     const annotation = props.annotation;
     return {
       priority: annotation.priority || AnnotationPriorities.NORMAL,
@@ -54,6 +58,8 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
       noCommentModalOpen: false,
     };
   }
+
+  private noCommentModal: Modal;
 
   constructor(props: IAnnotationFormProps) {
     super(props);
@@ -75,13 +81,16 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
     }
   }
 
-  private static priorityToClass = {
-      [AnnotationPriorities.NORMAL]: 'priority-normal',
-      [AnnotationPriorities.WARNING]: 'priority-warning',
-      [AnnotationPriorities.ALERT]: 'priority-alert',
-  };
+  hideIfEmpty(value?: string): string {
+    if (!value) {
+      return ' pp-hide';
+    }
+    else {
+      return '';
+    }
+  }
 
-  saveButtonClass() {
+  saveButtonClass(): string {
     return AnnotationForm.priorityToClass[this.state.priority || AnnotationPriorities.NORMAL];
   }
 
@@ -131,13 +140,13 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
             <label className="priority-header"> Co dodajesz? </label>
             <Popup
                 on="click"
-                hideOnScroll
-                trigger={<div className="priority-help"> <i className="help circle icon"></i> </div>}
-                flowing
-                hoverable
+                hideOnScroll={true}
+                trigger={<div className="priority-help"> <i className="help circle icon"/> </div>}
+                flowing={true}
+                hoverable={true}
             >
               {/*TODO just an instruction stub*/}
-              <Grid centered divided columns={3}>
+              <Grid centered={true} divided={true} columns={3}>
                 <Grid.Column textAlign="center">
                   <Header as="h4">Niebieski przypis</Header>
                 </Grid.Column>
@@ -153,7 +162,7 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
             {/*KG todo could probably be neater if done with sth like PriorityButton component*/}
             <div className="priority-normal">
               <button
-                  className={'pp-editor-priority' + (priority == AnnotationPriorities.NORMAL ? ' selected' : '')}
+                  className={'pp-editor-priority' + (priority === AnnotationPriorities.NORMAL ? ' selected' : '')}
                   onClick={() => this.setState({priority: AnnotationPriorities.NORMAL})}
               >
                 dodatkowa informacja
@@ -161,7 +170,7 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
             </div>
             <div className="priority-warning">
               <button
-                  className={'pp-editor-priority' + (priority == AnnotationPriorities.WARNING ? ' selected' : '')}
+                  className={'pp-editor-priority' + (priority === AnnotationPriorities.WARNING ? ' selected' : '')}
                   onClick={() => this.setState({priority: AnnotationPriorities.WARNING})}
               >
                 wyjaśnienie
@@ -169,7 +178,7 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
             </div>
             <div className="priority-alert">
               <button
-                  className={'pp-editor-priority' + (priority == AnnotationPriorities.ALERT ? ' selected' : '')}
+                  className={'pp-editor-priority' + (priority === AnnotationPriorities.ALERT ? ' selected' : '')}
                   onClick={() => this.setState({priority: AnnotationPriorities.ALERT})}
               >
                 sprostowanie błędu
@@ -181,7 +190,7 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
               className="pp-close"
               onClick={this.onCancel}
           >
-            <i className="remove icon"></i>
+            <i className="remove icon"/>
           </div>
           <div className="editor-input pp-comment">
           <textarea
@@ -200,9 +209,10 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
                 onChange={this.handleInputChange}
                 placeholder="Wklej link do źródła"
             />
-            <i className="input-icon linkify icon"></i>
+            <i className="input-icon linkify icon"/>
             <div
-                className={'pp-error-msg ui pointing red basic label large' + (referenceLinkError ? '' : ' pp-hide')}>
+                className={'pp-error-msg ui pointing red basic label large' + this.hideIfEmpty(referenceLinkError)}
+            >
               {referenceLinkError}
             </div>
           </div>
@@ -216,22 +226,23 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
                   onChange={this.handleInputChange}
                   placeholder="Wpisz tytuł źródła"
               />
-              <i className="input-icon tags icon"></i>
+              <i className="input-icon tags icon"/>
               <div
-                className={'pp-error-msg ui pointing red basic label large' + (referenceLinkTitleError ? '' : ' pp-hide')}>
+                className={'pp-error-msg ui pointing red basic label large' + this.hideIfEmpty(referenceLinkTitleError)}
+              >
                 {referenceLinkTitleError}
               </div>
               <Popup
                   on="click"
-                  hideOnScroll
-                  trigger={<div className="link-help"> <i className="help circle icon"></i> </div>}
-                  flowing
-                  hoverable
+                  hideOnScroll={true}
+                  trigger={<div className="link-help"> <i className="help circle icon"/> </div>}
+                  flowing={true}
+                  hoverable={true}
               >
                 {/*TODO*/}
               </Popup>
             </div>
-            <div className="pp-mover-area"></div>
+            <div className="pp-mover-area"/>
             <div className="pp-controls">
               <button className="pp-cancel" onClick={this.onCancel}>
                 {' '}Anuluj{' '}
@@ -282,12 +293,12 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
   }
 
   private executeSave(event: any) {
-    const result = this.props.saveAction(this.props.annotation);
-    Promise.resolve(result)     // it will work whether result is a Promise or a value
+    const saveResult = this.props.saveAction(this.props.annotation);
+    Promise.resolve(saveResult)     // it will work whether result is a Promise or a value
           .then((result) => {
             const errors = result.errors;
             if (errors) {
-              //TODO handle form validation messages here
+              // TODO handle form validation messages here
 
             } else {
               this.props.onSave(event);

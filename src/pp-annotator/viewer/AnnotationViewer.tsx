@@ -61,32 +61,34 @@ export default class AnnotationViewer extends React.Component<
 
                     <div className={'pp-controls ' + (this.state.initialView ? 'pp-visible' : '')}>
                         <div className="ui icon basic mini buttons">
-                            <button type="button"
-                                    title="Edit"
-                                    className="pp-edit ui button"
-                                    onClick={(e) => this.props.callbacks.onEdit(e, this.props.annotation)}>
-                                <i className="edit icon"></i>
+                            <button
+                                type="button"
+                                title="Edit"
+                                className="pp-edit ui button"
+                                onClick={e => this.props.callbacks.onEdit(e, this.props.annotation)}
+                            >
+                                <i className="edit icon"/>
                             </button>
-                            <button type="button"
-                                    title="Delete"
-                                    className="pp-delete ui button"
-                                    onClick={(e) => this.props.callbacks.onDelete(e, this.props.annotation)}>
-                                <i className="trash icon"></i>
+                            <button
+                                type="button"
+                                title="Delete"
+                                className="pp-delete ui button"
+                                onClick={e => this.props.callbacks.onDelete(e, this.props.annotation)}
+                            >
+                                <i className="trash icon"/>
                             </button>
                         </div>
                     </div>
                 </div>
-
                 <div className="pp-view-comment">
                     {comment}
                 </div>
-
                 <div className="pp-view-link-bar">
-			<span className="pp-view-link">
-			<a href={referenceLink}>
-				{referenceLinkTitle}
-			</a>
-			</span>
+            <span className="pp-view-link">
+                <a href={referenceLink}>
+                    {referenceLinkTitle}
+                </a>
+            </span>
                 </div>
             </div>
         );

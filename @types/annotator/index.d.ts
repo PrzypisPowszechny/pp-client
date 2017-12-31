@@ -101,6 +101,7 @@ declare module 'annotator' {
             x: string;
             y: string;
           };
+          focus: string;
           [key: string]: any;
         };
         static template: string;
