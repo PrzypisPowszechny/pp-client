@@ -24,13 +24,18 @@ interface IPrzypisAdderOptions extends annotator.ui.widget.IWidgetOptions {
 export default class PrzypisAdder extends Widget {
   static options: IPrzypisAdderOptions = {};
 
-  // original annotator style removed (bare buttons)
-  // '<div class="annotator-adder annotator-hide">',
   static template = `
-  <div class="annotator-hide">
-    <button type="button" class="create-annotation">Dodaj przypis</button>
-    <button type="button" class="create-request">Poproś o źródło</button>
+  <div class="pp-adder pp-hide">
+    <button class="create-annotation ui basic pointing below label large">
+        <i class="write icon"></i>Dodaj przypis
+    </button>
   </div>`;
+
+  static classes = {
+    hide: 'pp-hide',
+    focus: 'annotator-focus',
+    invert: Widget.classes.invert,
+  };
 
   private static NS = 'przypis-adder';
 

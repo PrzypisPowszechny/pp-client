@@ -11,6 +11,7 @@ const { appSettings } = require('./config/app-settings');
 const BUILD_DIR = path.resolve(__dirname, 'dist');
 
 const config = {
+  cache: false,
   entry: "./src/index.ts",
   output: {
     path: BUILD_DIR,
@@ -27,6 +28,10 @@ const config = {
       {
         test: /\.css$/,
         loader: "style-loader!css-loader",
+      },
+      {
+        test: /\.scss$/,
+        loaders: ['style-loader', 'css-loader', 'sass-loader']
       },
       {
         test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
@@ -48,6 +53,11 @@ const config = {
       // use appropriate (dev or production) PP settings
       PP_SETTINGS: appSettings[process.env.NODE_ENV || 'dev']
     }),
+    new webpack.ProvidePlugin({
+            jQuery: 'jquery',
+                $: 'jquery',
+                jquery: 'jquery'
+    })
   ],
 };
 
