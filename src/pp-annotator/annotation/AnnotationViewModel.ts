@@ -1,5 +1,5 @@
 import annotator from 'annotator';
-import {AnnotationPriorities} from '../consts';
+import {AnnotationPriorities} from 'pp-annotator/consts';
 import IAnnotationAPIModel from './IAnnotationAPIModel';
 import {IAnnotationForm} from './annotation';
 

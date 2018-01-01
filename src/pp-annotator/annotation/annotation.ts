@@ -1,5 +1,5 @@
 import annotator from 'annotator';
-import {AnnotationPriorities} from '../consts';
+import {AnnotationPriorities} from 'pp-annotator/consts';
 
 /*
  We extend annotator module's universal annotation format (both view model and transmission model)

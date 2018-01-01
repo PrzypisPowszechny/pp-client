@@ -12,8 +12,15 @@
     "noUnusedParameters": true,
     "typeRoots": [
       "./@types",
-      "./node_modules/@types",
+      "./node_modules/@types"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+         "*",
+         "src/*"
       ]
+    }
   },
   "include": [
     "./src/**/*"
