@@ -1,13 +1,15 @@
 import React from 'react';
 import { AnnotationPriorities } from '../consts';
-import {IAnnotationFields, AnnotationViewModel} from '../annotation';
-import '../../css/editor.scss';
-import { Header, Popup, Grid, Modal} from 'semantic-ui-react';
+import AnnotationViewModel from '../annotation/AnnotationViewModel';
+import {IAnnotationEditableFields} from '../annotation/annotation';
+import {Header, Popup, Grid, Modal} from 'semantic-ui-react';
 
-const savedFields = ['priority', 'comment', 'referenceLink', 'referenceLinkTitle'];
-// Add Semantic-ui packages
+import '../../css/editor.scss';
+// import Semantic-ui packages
 import 'semantic-ui/dist/semantic.css';
 import 'semantic-ui/dist/semantic.js';
+
+const savedFields = ['priority', 'comment', 'referenceLink', 'referenceLinkTitle'];
 
 export interface IEditorContentProps {
   id: number;
@@ -17,7 +19,7 @@ export interface IEditorContentProps {
   onCancel(e: any): any;
 }
 
-export interface IEditorContentState extends IAnnotationFields {
+export interface IEditorContentState extends IAnnotationEditableFields {
   referenceLinkError: string;
   referenceLinkTitleError: string;
   noCommentModalOpen: boolean;
@@ -93,8 +95,7 @@ export default class EditorContent extends React.Component<
   hideIfEmpty(value?: string): string {
     if (!value) {
       return ' pp-hide';
-    }
-    else {
+    } else {
       return '';
     }
   }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { AnnotationViewModel } from '../annotation';
+import AnnotationViewModel from '../annotation/AnnotationViewModel';
 import ViewerContentItem, { ICallbacks } from './ViewerContentItem';
 
 interface IViewerContentProps {

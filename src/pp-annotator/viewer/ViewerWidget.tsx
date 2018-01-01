@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import annotator, { ui, util } from 'annotator';
 
-import { AnnotationViewModel } from '../annotation';
+import AnnotationViewModel from '../annotation/AnnotationViewModel';
 import ViewerContent from './ViewerContent';
 
 const { widget: { Widget } } = ui;

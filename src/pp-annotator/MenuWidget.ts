@@ -1,6 +1,6 @@
 import annotator from 'annotator';
 import _ from 'lodash';
-import { AnnotationViewModel } from './annotation';
+import AnnotationViewModel from './annotation/AnnotationViewModel';
 
 const { ui, util } = annotator;
 const { widget: { Widget } } = ui;

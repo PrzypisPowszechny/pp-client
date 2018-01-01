@@ -1,42 +1,9 @@
 import annotator from 'annotator';
-import { AnnotationPriorities } from './consts';
+import {AnnotationPriorities} from '../consts';
+import IAnnotationAPIModel from './IAnnotationAPIModel';
+import {IAnnotationForm} from './annotation';
 
-export interface IAnnotationBase extends annotator.IAnnotation {
-  url: string;
-}
-
-// Fields edited by the user in the form
-export interface IAnnotationFields {
-  priority: AnnotationPriorities;
-  comment: string;
-  referenceLink: string;
-  referenceLinkTitle: string;
-}
-
-// Annotation data sent to the server
-type IAnnotationForm = IAnnotationBase & IAnnotationFields;
-
-// Full flat API data model
-export interface IAnnotationAPIModel {
-  id?: number;
-  url?: string;
-  ranges?: any[];
-  quote?: string;
-
-  priority?: AnnotationPriorities;
-  comment?: string;
-  reference_link?: string;
-  reference_link_title?: string;
-
-  objection?: boolean;
-  objection_count?: number;
-  useful?: boolean;
-  useful_count?: number;
-}
-
-export default IAnnotationAPIModel;
-
-export class AnnotationViewModel implements IAnnotationForm, annotator.IAnnotation {
+export default class AnnotationViewModel implements IAnnotationForm, annotator.IAnnotation {
   static fromSelection(selection: annotator.IAnnotation, url: string) {
     const viewModel = new AnnotationViewModel();
     viewModel.url = url;

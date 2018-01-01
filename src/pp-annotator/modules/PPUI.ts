@@ -3,9 +3,10 @@ import annotator, { IAnnotation, ui, util } from 'annotator';
 import EditorWidget from '../editor/EditorWidget';
 import MenuWidget from '../MenuWidget';
 import ViewerWidget from '../viewer/ViewerWidget';
-import IAnnotationAPIModel, { AnnotationViewModel } from '../annotation';
-import App from 'src/pp-annotator/modules/App';
-import IModule from 'src/pp-annotator/modules/Module.interface';
+import AnnotationViewModel from '../annotation/AnnotationViewModel';
+import IAnnotationAPIModel from '../annotation/IAnnotationAPIModel';
+import App from './App';
+import IModule from './Module.interface';
 
 const { highlighter, textselector } = ui;
 

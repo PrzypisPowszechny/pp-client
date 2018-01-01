@@ -1,5 +1,5 @@
 import React from 'react';
-import {AnnotationViewModel} from '../annotation';
+import AnnotationViewModel from '../annotation/AnnotationViewModel';
 import '../../css/viewer.scss';
 
 // Add Semantic-ui packages

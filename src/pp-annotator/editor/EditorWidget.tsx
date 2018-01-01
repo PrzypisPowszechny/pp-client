@@ -5,7 +5,7 @@ import AnnotationForm from './EditorContent';
 
 import annotator, { ui, util } from 'annotator';
 import { mover, resizer } from './editor-utils';
-import { AnnotationViewModel } from '../annotation';
+import AnnotationViewModel from '../annotation/AnnotationViewModel';
 
 const { $ } = util;
 const { widget: { Widget } } = ui;
