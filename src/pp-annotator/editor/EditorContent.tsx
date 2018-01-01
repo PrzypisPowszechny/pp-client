@@ -63,7 +63,8 @@ export default class EditorContent extends React.Component<
     };
   }
 
-  noCommentModal: Modal;
+  noCommentModal: React.ReactNode;
+
 
   commentInput: HTMLTextAreaElement;
 
