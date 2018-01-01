@@ -1,6 +1,6 @@
 import annotator from 'annotator';
 import _ from 'lodash';
-import { AnnotationViewModel } from './annotation';
+import AnnotationViewModel from './annotation/AnnotationViewModel';
 
 const { ui, util } = annotator;
 const { widget: { Widget } } = ui;
@@ -12,17 +12,17 @@ const { $ } = util;
  * Adder shows and hides an annotation adder button that can be clicked on to
  * create an annotation.
  *
- * PrzypisAdder is for the most part a copy of annotator.Adder, except with two buttons, thus:
+ * MenuWidget is for the most part a copy of annotator.Adder, except with two buttons, thus:
  * onCreate callback replaced with beginAnnotationCreate and beforeRequestCreate
  */
 
-interface IPrzypisAdderOptions extends annotator.ui.widget.IWidgetOptions {
+interface IMenuWidgetOptions extends annotator.ui.widget.IWidgetOptions {
   beginAnnotationCreate?: (annotation: AnnotationViewModel, e: JQuery.Event) => void;
   beforeRequestCreate?: (annotation: AnnotationViewModel, e: JQuery.Event) => void;
 }
 
-export default class PrzypisAdder extends Widget {
-  static options: IPrzypisAdderOptions = {};
+export default class MenuWidget extends Widget {
+  static options: IMenuWidgetOptions = {};
 
   static template = `
   <div class="pp-adder pp-hide">
@@ -40,29 +40,29 @@ export default class PrzypisAdder extends Widget {
   private static NS = 'przypis-adder';
 
   private static getNSTag(tag: string) {
-    return `${tag}${PrzypisAdder.NS}`;
+    return `${tag}${MenuWidget.NS}`;
   }
 
   private ignoreMouseup: boolean;
   private annotation: AnnotationViewModel | null;
-  private beginAnnotationCreate: IPrzypisAdderOptions['beginAnnotationCreate'];
-  private beforeRequestCreate: IPrzypisAdderOptions['beforeRequestCreate'];
+  private beginAnnotationCreate: IMenuWidgetOptions['beginAnnotationCreate'];
+  private beforeRequestCreate: IMenuWidgetOptions['beforeRequestCreate'];
   private document: Document;
 
-  constructor(options: IPrzypisAdderOptions) {
+  constructor(options: IMenuWidgetOptions) {
     super(options);
 
     this.ignoreMouseup = false;
     this.annotation = null;
 
     this.beginAnnotationCreate =
-      PrzypisAdder.options.beginAnnotationCreate || options.beginAnnotationCreate;
+      MenuWidget.options.beginAnnotationCreate || options.beginAnnotationCreate;
     this.beforeRequestCreate =
-      PrzypisAdder.options.beforeRequestCreate || options.beforeRequestCreate;
+      MenuWidget.options.beforeRequestCreate || options.beforeRequestCreate;
 
-    const clickTag = PrzypisAdder.getNSTag(`click.`);
-    const mouseDownTag = PrzypisAdder.getNSTag(`mousedown.`);
-    const mouseUpTag = PrzypisAdder.getNSTag(`mouseup.`);
+    const clickTag = MenuWidget.getNSTag(`click.`);
+    const mouseDownTag = MenuWidget.getNSTag(`mousedown.`);
+    const mouseUpTag = MenuWidget.getNSTag(`mouseup.`);
 
     this.element
       .on(clickTag, 'button', this.onClick.bind(this))
@@ -94,7 +94,7 @@ export default class PrzypisAdder extends Widget {
   }
 
   destroy() {
-    const offTag = PrzypisAdder.getNSTag(`.`);
+    const offTag = MenuWidget.getNSTag(`.`);
 
     this.element.off(offTag);
     $(this.document.body).off(offTag);

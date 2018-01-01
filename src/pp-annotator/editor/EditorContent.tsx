@@ -1,15 +1,17 @@
 import React from 'react';
 import { AnnotationPriorities } from '../consts';
-import {IAnnotationFields, AnnotationViewModel} from '../annotation';
-import '../../css/editor.scss';
-import { Header, Popup, Grid, Modal} from 'semantic-ui-react';
+import AnnotationViewModel from '../annotation/AnnotationViewModel';
+import {IAnnotationEditableFields} from '../annotation/annotation';
+import {Header, Popup, Grid, Modal} from 'semantic-ui-react';
 
-const savedFields = ['priority', 'comment', 'referenceLink', 'referenceLinkTitle'];
-// Add Semantic-ui packages
+import '../../css/editor.scss';
+// import Semantic-ui packages
 import 'semantic-ui/dist/semantic.css';
 import 'semantic-ui/dist/semantic.js';
 
-export interface IAnnotationFormProps {
+const savedFields = ['priority', 'comment', 'referenceLink', 'referenceLinkTitle'];
+
+export interface IEditorContentProps {
   id: number;
   annotation: AnnotationViewModel;
   saveAction(annotation: AnnotationViewModel): any;
@@ -17,7 +19,7 @@ export interface IAnnotationFormProps {
   onCancel(e: any): any;
 }
 
-export interface IAnnotationFormState extends IAnnotationFields {
+export interface IEditorContentState extends IAnnotationEditableFields {
   referenceLinkError: string;
   referenceLinkTitleError: string;
   noCommentModalOpen: boolean;
@@ -34,11 +36,13 @@ function sliceKeys(dictionary: any, keys: string[]) {
 }
 
 function getFormState(obj: any) {
-  return sliceKeys(obj, savedFields) as IAnnotationFormState;
+  return sliceKeys(obj, savedFields) as IEditorContentState;
 }
 
-export default class AnnotationForm extends React.Component<IAnnotationFormProps,
-  Partial<IAnnotationFormState>> {
+export default class EditorContent extends React.Component<
+    IEditorContentProps,
+    Partial<IEditorContentState>
+    > {
 
   static priorityToClass = {
       [AnnotationPriorities.NORMAL]: 'priority-normal',
@@ -46,7 +50,7 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
       [AnnotationPriorities.ALERT]: 'priority-alert',
   };
 
-  static stateFromProps(props: IAnnotationFormProps): IAnnotationFormState {
+  static stateFromProps(props: IEditorContentProps): IEditorContentState {
     const annotation = props.annotation;
     return {
       priority: annotation.priority || AnnotationPriorities.NORMAL,
@@ -59,13 +63,14 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
     };
   }
 
-  noCommentModal: Modal;
+  noCommentModal: React.ReactNode;
+
 
   commentInput: HTMLTextAreaElement;
 
-  constructor(props: IAnnotationFormProps) {
+  constructor(props: IEditorContentProps) {
     super(props);
-    this.state = AnnotationForm.stateFromProps(props);
+    this.state = EditorContent.stateFromProps(props);
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.onSave = this.onSave.bind(this);
@@ -78,7 +83,7 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
     setTimeout(() => this.commentInput.focus(), 20);
   }
 
-  componentWillUpdate(_nextProps: IAnnotationFormProps, nextState: Partial<IAnnotationFormState>) {
+  componentWillUpdate(_nextProps: IEditorContentProps, nextState: Partial<IEditorContentState>) {
     // Whenever the field has changed, eradicate the error message
     if (nextState.referenceLink) {
       nextState.referenceLinkError = '';
@@ -91,14 +96,13 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
   hideIfEmpty(value?: string): string {
     if (!value) {
       return ' pp-hide';
-    }
-    else {
+    } else {
       return '';
     }
   }
 
   saveButtonClass(): string {
-    return AnnotationForm.priorityToClass[this.state.priority || AnnotationPriorities.NORMAL];
+    return EditorContent.priorityToClass[this.state.priority || AnnotationPriorities.NORMAL];
   }
 
   // A modal displayed when user tries to save the form with comment field empty
@@ -265,8 +269,8 @@ export default class AnnotationForm extends React.Component<IAnnotationFormProps
     );
   }
 
-  componentWillReceiveProps(newProps: IAnnotationFormProps) {
-    this.setState(AnnotationForm.stateFromProps(newProps));
+  componentWillReceiveProps(newProps: IEditorContentProps) {
+    this.setState(EditorContent.stateFromProps(newProps));
   }
 
   private handleInputChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {

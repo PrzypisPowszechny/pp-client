@@ -1,18 +1,18 @@
 import React from 'react';
-import {AnnotationViewModel} from '../annotation';
+import AnnotationViewModel from '../annotation/AnnotationViewModel';
 import '../../css/viewer.scss';
 
 // Add Semantic-ui packages
 import 'semantic-ui/dist/semantic.css';
 import 'semantic-ui/dist/semantic.js';
 
-interface IAnnotatorViewerProps {
+interface IViewerContentItemProps {
     key: number;
     annotation: AnnotationViewModel;
     callbacks: ICallbacks;
 }
 
-interface IAnnotatorViewerState {
+interface IViewerContentItemState {
     initialView: boolean;
 }
 
@@ -21,11 +21,11 @@ export interface ICallbacks {
     onDelete(e: React.MouseEvent<HTMLButtonElement>, annotation: AnnotationViewModel): void;
 }
 
-export default class AnnotationViewer extends React.Component<
-    IAnnotatorViewerProps,
-    IAnnotatorViewerState
+export default class ViewerContentItem extends React.Component<
+    IViewerContentItemProps,
+    IViewerContentItemState
     > {
-    constructor(props: IAnnotatorViewerProps) {
+    constructor(props: IViewerContentItemProps) {
         super(props);
 
         this.state = {

@@ -1,11 +1,12 @@
 import annotator, { IAnnotation, ui, util } from 'annotator';
 
-import PrzypisEditor from '../form/PrzypisEditor';
-import PrzypisAdder from '../PrzypisAdder';
-import PrzypisViewer from '../viewer/PrzypisViewer';
-import IAnnotationAPIModel, { AnnotationViewModel } from '../annotation';
-import App from 'src/pp-annotator/modules/App';
-import IModule from 'src/pp-annotator/modules/Module.interface';
+import EditorWidget from '../editor/EditorWidget';
+import MenuWidget from '../MenuWidget';
+import ViewerWidget from '../viewer/ViewerWidget';
+import AnnotationViewModel from '../annotation/AnnotationViewModel';
+import IAnnotationAPIModel from '../annotation/IAnnotationAPIModel';
+import App from './App';
+import IModule from './Module.interface';
 
 const { highlighter, textselector } = ui;
 
@@ -111,11 +112,11 @@ function removeDynamicStyle() {
 
 interface IState {
   interactionPoint: annotator.util.IPosition | null;
-  adder: PrzypisAdder;
-  editor: PrzypisEditor;
+  adder: MenuWidget;
+  editor: EditorWidget;
   highlighter: annotator.ui.highlighter.Highlighter;
   textselector: annotator.ui.textselector.TextSelector;
-  viewer: PrzypisViewer;
+  viewer: ViewerWidget;
   embeddedHighlights: { [id: number]: AnnotationViewModel };
 }
 
@@ -154,7 +155,7 @@ export default class PPUI implements IModule {
     const state: IState = this.state = {
       embeddedHighlights: {},
       interactionPoint: null,
-      adder: new PrzypisAdder({
+      adder: new MenuWidget({
         beginAnnotationCreate(annotation) {
           if (!state) {
             throw new Error('App not initialized!');
@@ -173,7 +174,7 @@ export default class PPUI implements IModule {
           // TODO what happens when the adder's request button is clicked
         },
       }),
-      editor: new PrzypisEditor({
+      editor: new EditorWidget({
         extensions: this.editorExtensions,
       }),
       highlighter: new highlighter.Highlighter(this.element),
@@ -193,7 +194,7 @@ export default class PPUI implements IModule {
           }
         },
       }),
-      viewer: new PrzypisViewer({
+      viewer: new ViewerWidget({
         onEdit(annotation) {
           if (!state) {
             throw new Error('App is not initialized!');

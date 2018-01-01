@@ -3,10 +3,10 @@ import PPUI from './pp-annotator/modules/PPUI';
 // import { debug } from './pp-annotator/legacy/old-storage';
 import DebugStorage from './pp-annotator/api/DebugStorage';
 
-import PrzypisViewer from './pp-annotator/viewer/PrzypisViewer';
-import {AnnotationViewModel} from './pp-annotator/annotation';
+import ViewerWidget from './pp-annotator/viewer/ViewerWidget';
+import AnnotationViewModel from './pp-annotator/annotation/AnnotationViewModel';
 
-import PPSettings from './settings';
+import PPSettings from './PPSettings.interface';
 declare const PP_SETTINGS: PPSettings; // global PP settings
 
 console.log('Przypis script working!'); // tslint:disable-line
@@ -26,8 +26,8 @@ if (typeof window !== 'undefined') {
     Enabled in `config/app-settings.js`
    */
   if (PP_SETTINGS.MOCK_VIEWER) {
-    // IMPORTANT: very implementation dependent; whenever PrzypisViewer changes break it, consider simply dropping it
-    const viewer = new PrzypisViewer({});
+    // IMPORTANT: very implementation dependent; whenever ViewerWidget changes break it, consider simply dropping it
+    const viewer = new ViewerWidget({});
     viewer.attach();
 
     const annotation = new AnnotationViewModel({});

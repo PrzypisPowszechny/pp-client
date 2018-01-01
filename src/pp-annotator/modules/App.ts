@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import IModule from 'src/pp-annotator/modules/Module.interface';
+import IModule from '../modules/Module.interface';
 import Registry from './Registry';
 import { StorageAdapter } from '../legacy/old-storage';
 import { storage } from 'annotator';

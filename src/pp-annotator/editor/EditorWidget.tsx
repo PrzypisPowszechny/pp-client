@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import AnnotationForm from './AnnotationForm';
+import AnnotationForm from './EditorContent';
 
 import annotator, { ui, util } from 'annotator';
 import { mover, resizer } from './editor-utils';
-import { AnnotationViewModel } from '../annotation';
+import AnnotationViewModel from '../annotation/AnnotationViewModel';
 
 const { $ } = util;
 const { widget: { Widget } } = ui;
@@ -16,7 +16,7 @@ const { widget: { Widget } } = ui;
  *
  * Css and show/hide functionality of the outer editor container is nevertheless inherited.
  */
-export default class PrzypisEditor extends Widget {
+export default class EditorWidget extends Widget {
   static classes = {
     ...Widget.classes,
     hide: 'pp-hide',

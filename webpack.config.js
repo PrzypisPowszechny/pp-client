@@ -19,6 +19,10 @@ const config = {
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json"],
+    modules: [
+      path.resolve('./src'),
+      path.resolve('./node_modules'),
+    ]
   },
   module: {
     loaders: [

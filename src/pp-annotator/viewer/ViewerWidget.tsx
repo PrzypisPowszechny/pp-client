@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import annotator, { ui, util } from 'annotator';
 
-import AnnotationMultipleViewer from './AnnotationMultipleViewer';
-import { AnnotationViewModel } from '../annotation';
+import AnnotationViewModel from '../annotation/AnnotationViewModel';
+import ViewerContent from './ViewerContent';
 
 const { widget: { Widget } } = ui;
 
@@ -21,7 +21,7 @@ interface IPrzypisViewerOptions extends annotator.ui.widget.IWidgetOptions {
 }
 
 // Public: Creates an element for viewing annotations.
-export default class PrzypisViewer extends Widget {
+export default class ViewerWidget extends Widget {
   static nameSpace = 'annotator-viewer';
   static classes = {
     ...Widget.classes,
@@ -80,24 +80,24 @@ export default class PrzypisViewer extends Widget {
       this.document = this.options.autoViewHighlights.ownerDocument;
 
       $(this.options.autoViewHighlights)
-        .on('mouseover.' + PrzypisViewer.nameSpace, '.annotator-hl', function onMouseOver(event) {
+        .on('mouseover.' + ViewerWidget.nameSpace, '.annotator-hl', function onMouseOver(event) {
           // If there are many overlapping highlights, still only
           // call onHighlightMouseover once.
           if (event.target === this) {
             self.onHighlightMouseover(event);
           }
         })
-        .on('mouseleave.' + PrzypisViewer.nameSpace, '.annotator-hl', () => {
+        .on('mouseleave.' + ViewerWidget.nameSpace, '.annotator-hl', () => {
           self.startHideTimer(false);
         });
 
       $(this.document.body)
-        .on('mousedown.' + PrzypisViewer.nameSpace, (e) => {
+        .on('mousedown.' + ViewerWidget.nameSpace, (e) => {
           if (e.which === 1) {
             this.mouseDown = true;
           }
         })
-        .on('mouseup.' + PrzypisViewer.nameSpace, (e) => {
+        .on('mouseup.' + ViewerWidget.nameSpace, (e) => {
           if (e.which === 1) {
             this.mouseDown = false;
           }
@@ -105,20 +105,20 @@ export default class PrzypisViewer extends Widget {
     }
 
     this.element
-      .on('mouseenter.' + PrzypisViewer.nameSpace, () => {
+      .on('mouseenter.' + ViewerWidget.nameSpace, () => {
         self.clearHideTimer();
       })
-      .on('mouseleave.' + PrzypisViewer.nameSpace, () => {
+      .on('mouseleave.' + ViewerWidget.nameSpace, () => {
         self.startHideTimer(false);
       });
   }
 
   destroy() {
     if (this.options.autoViewHighlights) {
-      $(this.options.autoViewHighlights).off('.' + PrzypisViewer.nameSpace);
-      $(this.document.body).off('.' + PrzypisViewer.nameSpace);
+      $(this.options.autoViewHighlights).off('.' + ViewerWidget.nameSpace);
+      $(this.document.body).off('.' + ViewerWidget.nameSpace);
     }
-    this.element.off('.' + PrzypisViewer.nameSpace);
+    this.element.off('.' + ViewerWidget.nameSpace);
     super.destroy();
   }
 
@@ -161,7 +161,7 @@ export default class PrzypisViewer extends Widget {
   }
 
   /**
-   * Renders (or updates, if already rendered) React component within the PrzypisViewer html container
+   * Renders (or updates, if already rendered) React component within the ViewerWidget html container
    */
   update(annotations: AnnotationViewModel[]) {
     // Callbacks to pass to React component
@@ -171,7 +171,7 @@ export default class PrzypisViewer extends Widget {
     };
 
     ReactDOM.render(
-      <AnnotationMultipleViewer annotations={annotations} callbacks={callbacks}/>,
+      <ViewerContent annotations={annotations} callbacks={callbacks}/>,
         this.element.find('.react-annotation-viewer-slot')[0],
     );
   }
@@ -282,14 +282,14 @@ export default class PrzypisViewer extends Widget {
 }
 
 // HTML templates for this.widget and this.item properties.
-PrzypisViewer.template = [
+ViewerWidget.template = [
   '<div class="pp-outer pp-viewer annotator-hide">',
   '  <div class="react-annotation-viewer-slot"></div>',
   '</div>',
 ].join('\n');
 
 // Configuration options
-Object.assign(PrzypisViewer.options, {
+Object.assign(ViewerWidget.options, {
   // Add the default field(s) to the viewer.
   defaultFields: true,
 

@@ -1,6 +1,6 @@
 /* tslint:disable: max-classes-per-file */
 declare module 'annotator' {
-  // A basic type, used as an API model as well as withing the client application
+  // A basic universal type, used as a data transmission model as well as within the client application
   export interface IAnnotation {
     ranges: any[];
     quote: string;
