@@ -13,6 +13,11 @@ li.pp-annotation {
 	list-style: none;
 	min-height: 136px;
 	font-size: $viewer-font-size; /* for most of UI text */
+
+    &:hover .pp-controls,
+    .pp-controls.pp-visible {
+        opacity: 1;
+    }
 }
 
 /* --- Viewer head bar --- */
@@ -46,6 +51,9 @@ li.pp-annotation {
 	.pp-controls {
 		float: right;
 		padding-right: 5px;
+
+        opacity: 0;
+        transition: opacity 0.2s ease-in;  // animate on opacity change
 	}
 
 	.pp-controls button[disabled] {
