@@ -32,8 +32,8 @@ if (typeof window !== 'undefined') {
 
     const annotation = new AnnotationViewModel({});
     // mock data to display
-    annotation.comment = 'Testowy komentarz';
-    annotation.referenceLinkTitle = 'Strona organizacji XYZ';
+    annotation.comment = 'Testowy komentarz '.repeat(10);
+    annotation.referenceLinkTitle = 'Strona organizacji XYZ '.repeat(3);
     const position = {
           top: 500,
           left: 200,

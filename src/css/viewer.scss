@@ -3,11 +3,14 @@
 $viewer-font-size: 11px;
 
 /* -- PP Viewer -- */
-/*
- * The *font sizes* are currently 2x compared to design specs.
- */
-.pp-annotation {
-	height: 136px;
+.pp-viewer .pp-widget {
+	background-color: white;
+}
+
+li.pp-annotation {
+    display: block;
+	list-style: none;
+	min-height: 136px;
 	font-size: $viewer-font-size; /* for most of UI text */
 }
 
@@ -21,12 +24,12 @@ $viewer-font-size: 11px;
 }
 
 .pp-view-comment-priority {
+	float: left;
 	margin-left: -2px; /* cover the border */
-	width: 68px;
 	padding-top: 3px;
 	padding-bottom: 3px;
-	padding-left: 21px; /* indent the type indication */
-	float: left;
+	padding-left: $widget_inner_margin + 2px; /* indent the type indication */
+	padding-right: $widget_inner_margin;
 
 	background-color: rgb(86, 121, 176);
 	font-weight: $font-semi-bold;
@@ -39,6 +42,18 @@ $viewer-font-size: 11px;
 	font-weight: $font-light;
 	color: rgb(86, 121, 176);
 }
+
+.pp-viewer {
+	.pp-controls {
+		float: right;
+		padding-right: 5px;
+	}
+
+	.pp-controls button[disabled] {
+		display: none;
+	}
+}
+
 
 /* --- Viewer comment display --- */
 .pp-view-comment {
@@ -54,10 +69,16 @@ $viewer-font-size: 11px;
 	color: rgb(0, 0, 0);
 }
 
-/* --- Viewer link bar --- */
-.pp-view-link-bar {
-	width: 428px;
+
+/* --- Viewer bottom bar --- */
+.pp-view-bottom-bar {
+	display: flex;
+	justify-content: space-between;
+    overflow: hidden;
+
+    padding-top: 5px;
 	margin-left: $widget_inner_margin;
+	margin-bottom: 5px;
 
 	/* upper line */
 	border-top: 1px solid rgb(210, 212, 210);
@@ -65,6 +86,13 @@ $viewer-font-size: 11px;
 	color: rgb(136, 136, 136);
 
 	line-height: 2em;
+	min-height: 40px;
+	max-height: 60px;
+}
+
+.pp-view-link-container {
+	max-width: 50%;
+	min-height: 100%;
 }
 
 .pp-view-link {
@@ -73,15 +101,12 @@ $viewer-font-size: 11px;
 	text-transform: uppercase;
 }
 
-/* --- Viewer controls. --- */
+.pp-view-ratings {
+	display: flex;
+	align-content: flex-start;
+	min-height: 100%;
 
-.pp-viewer {
-	.pp-controls {
-		float: right;
-		padding-right: 5px;
-	}
-
-	.pp-controls button[disabled] {
-		display: none;
-	}
+    a {
+        height: 30px;
+    }
 }

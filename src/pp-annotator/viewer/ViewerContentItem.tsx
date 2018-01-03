@@ -49,7 +49,7 @@ export default class ViewerContentItem extends React.Component<
         } = this.props.annotation;
 
         return (
-            <div className="pp-annotation pp-item">
+            <li className="pp-annotation pp-item">
                 <div className="pp-view-head-bar">
                     <div className="pp-view-comment-priority">
                         {priority}
@@ -83,14 +83,25 @@ export default class ViewerContentItem extends React.Component<
                 <div className="pp-view-comment">
                     {comment}
                 </div>
-                <div className="pp-view-link-bar">
-            <span className="pp-view-link">
-                <a href={referenceLink}>
-                    {referenceLinkTitle}
-                </a>
-            </span>
+                <div className="pp-view-bottom-bar">
+                    <div className="pp-view-link-container">
+                        <a className="pp-view-link" href={referenceLink}>
+                        {referenceLinkTitle}
+                        </a>
+                    </div>
+                    <div className="pp-view-ratings">
+                        {/* todo probably termporary buttons*/}
+                        <a className="ui label medium">
+                            Przydatne
+                            100
+                        </a>
+                        <a className="ui label medium">
+                            Sprzeciw
+                            23
+                        </a>
+                    </div>
                 </div>
-            </div>
+            </li>
         );
     }
 }
