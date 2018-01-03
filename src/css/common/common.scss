@@ -30,18 +30,14 @@ we do NOT use annotation-filter, so ignore its styles
 pp-widget
 pp-outer
 
-
-TODO to copy (and "pp-ize"):
-annotator-notice (if we want it)
-
 TODO annotator classes cannot be changed as they belong to annotator's source:
 annotator-invert-X
 annotator-invert-Y
  */
 
-$widget_box_width: 450px;
-$widget_inner_width: 428px;
-$widget_inner_margin: ($widget_box_width - $widget_inner_width) / 2;
+$widget-box-width: 450px;
+$widget-inner-width: 428px;
+$widget-inner-margin: ($widget-box-width - $widget-inner-width) / 2;
 
 .pp-hide {
   display: none !important; //override semantic-ui
@@ -74,7 +70,7 @@ $widget_inner_margin: ($widget_box_width - $widget_inner_width) / 2;
   padding: 0;
   left: -18px;
   bottom: 15px;
-  min-width: $widget_box_width;
+  min-width: $widget-box-width;
   border: 1px solid rgb(210, 212, 210);
 
   //todo border as mixin

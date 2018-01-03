@@ -5,6 +5,7 @@ $viewer-font-size: 11px;
 /* -- PP Viewer -- */
 .pp-viewer .pp-widget {
 	background-color: white;
+    padding: 5px $widget-inner-margin;
 }
 
 li.pp-annotation {
@@ -16,20 +17,18 @@ li.pp-annotation {
 
 /* --- Viewer head bar --- */
 .pp-view-head-bar {
-	margin-top: 4px;
+	padding-top: 4px;
 	clear: both; /* push up controls */
-	height: 21px;
-	margin-right: $widget_inner_margin;
 	font-size: $viewer-font-size;
 }
 
 .pp-view-comment-priority {
 	float: left;
-	margin-left: -2px; /* cover the border */
+	margin-left: -($widget-inner-margin + 1px); /* cover the border */
 	padding-top: 3px;
 	padding-bottom: 3px;
-	padding-left: $widget_inner_margin + 2px; /* indent the type indication */
-	padding-right: $widget_inner_margin;
+	padding-left: $widget-inner-margin + 2px; /* indent the type indication */
+	padding-right: $widget-inner-margin;
 
 	background-color: rgb(86, 121, 176);
 	font-weight: $font-semi-bold;
@@ -57,8 +56,7 @@ li.pp-annotation {
 
 /* --- Viewer comment display --- */
 .pp-view-comment {
-	width: $widget_inner_width;
-	margin-left: $widget_inner_margin;
+	width: $widget-inner-width;
 	min-height: 48px;
 	padding-top: 6px;
 	padding-bottom: 6px;
@@ -77,8 +75,6 @@ li.pp-annotation {
     overflow: hidden;
 
     padding-top: 5px;
-	margin-left: $widget_inner_margin;
-	margin-bottom: 5px;
 
 	/* upper line */
 	border-top: 1px solid rgb(210, 212, 210);
@@ -86,8 +82,8 @@ li.pp-annotation {
 	color: rgb(136, 136, 136);
 
 	line-height: 2em;
-	min-height: 40px;
-	max-height: 60px;
+	min-height: 30px;
+	max-height: 50px;
 }
 
 .pp-view-link-container {

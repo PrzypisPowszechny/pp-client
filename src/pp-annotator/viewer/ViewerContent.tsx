@@ -25,7 +25,7 @@ export default class ViewerContent extends React.Component<IViewerContentProps, 
 
   render() {
     return (
-      <ul className="pp-widget annotator-listing">
+      <ul className="pp-widget">
         {this.renderItems()}
       </ul>
     );
