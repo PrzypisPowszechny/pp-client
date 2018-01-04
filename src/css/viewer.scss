@@ -99,11 +99,13 @@ li.pp-annotation {
     .pp-view-bottom-bar {
         display: flex;
         justify-content: space-between;
-        min-height: 25px;
-        max-height: 45px;
-        overflow: hidden;
+        align-items: center;
 
-        padding-top: 5px;
+        min-height: 25px;
+        //max-height: 45px;
+        //overflow: hidden;
+
+        padding-top: 6px;  // = pp-viewer padding-bottom
 
         /* upper line */
         border-top: 1px solid rgb(210, 212, 210);
@@ -120,15 +122,20 @@ li.pp-annotation {
         font-weight: $font-semi-bold;
         color: rgb(136, 136, 136);
         text-transform: uppercase;
+        vertical-align: middle;
+
+        font-size: 12px;
+        line-height: 0.5em;
     }
 
     .pp-view-ratings {
         display: flex;
-        align-content: flex-start;
+        //align-content: flex-start;
+      align-items: center;
         min-height: 100%;
 
         a {
-            height: 30px;
+            //height: 30px;
             font-size: $viewer-font-size - 1px;
         }
     }
