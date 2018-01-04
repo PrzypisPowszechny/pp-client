@@ -171,7 +171,7 @@ export default class ViewerWidget extends Widget {
 
     ReactDOM.render(
       <ViewerContent annotations={annotations} callbacks={callbacks}/>,
-        this.element.find('.react-annotation-viewer-slot')[0],
+      this.element.get(0) // underlying DOM element
     );
   }
 
@@ -283,7 +283,6 @@ export default class ViewerWidget extends Widget {
 // HTML templates for this.widget and this.item properties.
 ViewerWidget.template = [
   '<div class="pp-outer pp-viewer pp-hide">',
-  '  <div class="react-annotation-viewer-slot"></div>',
   '</div>',
 ].join('\n');
 

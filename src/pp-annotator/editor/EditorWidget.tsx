@@ -23,7 +23,6 @@ export default class EditorWidget extends Widget {
   };
   static template = `
   <div class="pp-outer pp-editor pp-hide">
-    <div id="react-form-slot"></div>
   </div>`;
 
   private annotation: AnnotationViewModel | null;
@@ -96,7 +95,7 @@ export default class EditorWidget extends Widget {
         onSave={this.onSave}
         onCancel={this.onCancel}
       />,
-      document.getElementById('react-form-slot'),
+      this.element.get(0) // underlying DOM element
     );
   }
 
@@ -130,7 +129,7 @@ export default class EditorWidget extends Widget {
     }
 
     // KG todo
-    // right now `annotator-resize` doesn't exist, so resizing is not set up;
+    // right now `annotator-resize` as well `annotator-item` doesn't exist, so resizing is not set up;
     // we might want to add it or remove the resizing part altogether
     this.element.find('.annotator-resize').remove();
 
