@@ -49,7 +49,7 @@ export default class ViewerContentItem extends React.Component<
         } = this.props.annotation;
 
         return (
-            <li className="pp-annotation pp-item">
+            <li className="pp-annotation">
                 <div className="pp-view-head-bar">
                     <div className="pp-view-comment-priority">
                         {priority}
