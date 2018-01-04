@@ -60,24 +60,22 @@ export default class ViewerContentItem extends React.Component<
                     </div>
 
                     <div className={'pp-controls ' + (this.state.initialView ? 'pp-visible' : '')}>
-                        <div className="ui icon basic mini buttons">
-                            <button
-                                type="button"
-                                title="Edit"
-                                className="pp-edit ui button"
-                                onClick={e => this.props.callbacks.onEdit(e, this.props.annotation)}
-                            >
-                                <i className="edit icon"/>
-                            </button>
-                            <button
-                                type="button"
-                                title="Delete"
-                                className="pp-delete ui button"
-                                onClick={e => this.props.callbacks.onDelete(e, this.props.annotation)}
-                            >
-                                <i className="trash icon"/>
-                            </button>
-                        </div>
+                        <button
+                            type="button"
+                            title="Edit"
+                            className="pp-edit"
+                            onClick={e => this.props.callbacks.onEdit(e, this.props.annotation)}
+                        >
+                            <i className="edit icon"/>
+                        </button>
+                        <button
+                            type="button"
+                            title="Delete"
+                            className="pp-delete"
+                            onClick={e => this.props.callbacks.onDelete(e, this.props.annotation)}
+                        >
+                            <i className="trash icon"/>
+                        </button>
                     </div>
                 </div>
                 <div className="pp-view-comment">
