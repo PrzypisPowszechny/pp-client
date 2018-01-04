@@ -60,7 +60,6 @@ $widget-inner-margin: ($widget-box-width - $widget-inner-width) / 2;
 .pp-outer,
 .pp-widget {
   position: absolute;
-  z-index: 10; // less than semantic ui modal's (1000)
 }
 
 /* Widgets are both the adder and the viewer. */

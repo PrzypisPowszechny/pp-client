@@ -68,16 +68,21 @@ function maxZIndex(elements: Element[]) {
 /**
  * Helper function to inject CSS into the page that ensures Annotator elements
  * are displayed with the highest z-index.
+ * KG todo probably needs to account for some edge cases
  */
 function injectDynamicStyle() {
-  util.$('#annotator-dynamic-style').remove();
+  util.$('#pp-dynamic-style').remove();
 
-  const sel =
-    '*' +
-    ':not(annotator-adder)' +
-    ':not(annotator-outer)' +
-    ':not(annotator-notice)' +
-    ':not(annotator-filter)';
+  const classesToUp = [
+      '.pp-adder',
+      '.pp-viewer',
+      '.pp-editor',
+  ];
+  // Semantic UI's modal's z-index as for the actual version
+  const semanticUiModalZIndex = 1000;
+
+  const sel = '* ' +
+      classesToUp.map( cls => ':not(' + cls + ') ' );
 
   // use the maximum z-index in the page
   let max = maxZIndex(util.$(document.body).find(sel).get());
@@ -87,18 +92,24 @@ function injectDynamicStyle() {
   // have high z-indices that we can't catch using the above method.
   max = Math.max(max, 1000);
 
-  const rules = [
-    '.annotator-adder, .annotator-outer, .annotator-notice {',
-    '  z-index: ' + (max + 20) + ';',
-    '}',
-    '.annotator-filter {',
-    '  z-index: ' + (max + 10) + ';',
-    '}',
+  /*
+    KG: do not set absolute z-indexes, but rather increment them
+    to maintain relationships between many components' z-indexes
+  */
+  let rules = classesToUp.map(selector =>
+  selector + ' { z-index: ' + (parseInt(util.$(selector).first().css('z-index')) + max) as string + ' !important; }',
+  ).join('\n');
+
+  // Special hardwired rule for semantic ui's modals, that are not rendered yet;
+  rules += [
+    '.ui.modals.dimmer { ',
+    'z-index: ' + (semanticUiModalZIndex + max) + ' !important;',
+    '}'
   ].join('\n');
 
   util
     .$('<style>' + rules + '</style>')
-    .attr('id', 'annotator-dynamic-style')
+    .attr('id', 'pp-dynamic-style')
     .attr('type', 'text/css')
     .appendTo('head');
 }
@@ -107,7 +118,7 @@ function injectDynamicStyle() {
  * Helper function to remove dynamic stylesheets
  */
 function removeDynamicStyle() {
-  util.$('#annotator-dynamic-style').remove();
+  util.$('#pp-dynamic-style').remove();
 }
 
 interface IState {

@@ -3,6 +3,11 @@
 $viewer-font-size: 14px;
 
 /* -- PP Viewer -- */
+
+.pp-viewer {
+  z-index: $viewer-z-index;
+}
+
 .pp-viewer .pp-widget {
 	background-color: white;
     padding: 6px $widget-inner-margin;

@@ -1,1 +1,4 @@
-$tooltip-z-index: 10000;
+$any-widget-z-index: 10;
+$viewer-z-index: $any-widget-z-index + 10;
+$editor-z-index: $viewer-z-index + 10;
+$tooltip-z-index: max($viewer-z-index, $editor-z-index) + 10;

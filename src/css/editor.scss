@@ -8,6 +8,7 @@ $editor-std-spacing: 15px;
 /* -- PP Adder -- */
 .pp-adder {
     position: absolute;
+    z-index: $any-widget-z-index;
     width: 140px;
     height: 40px;
     margin-left: -70px;
@@ -24,6 +25,9 @@ $editor-std-spacing: 15px;
     }
 }
 
+.pp-editor {
+  z-index: $editor-z-index;
+}
 
 /* -- PP Editor -- */
 .pp-editor .pp-widget {
