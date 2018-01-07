@@ -1,32 +1,33 @@
 @import 'common/common';
 
-$viewer-font-size: 11px;
+$viewer-font-size: 14px;
 
 /* -- PP Viewer -- */
-/*
- * The *font sizes* are currently 2x compared to design specs.
- */
-.pp-annotation {
-	height: 136px;
+.pp-viewer .pp-widget {
+	background-color: white;
+    padding: 6px $widget-inner-margin;
+}
+
+li.pp-annotation {
+    display: block;
+	list-style: none;
 	font-size: $viewer-font-size; /* for most of UI text */
 }
 
 /* --- Viewer head bar --- */
 .pp-view-head-bar {
-	margin-top: 4px;
+	padding-top: 4px;
 	clear: both; /* push up controls */
-	height: 21px;
-	margin-right: $widget_inner_margin;
 	font-size: $viewer-font-size;
 }
 
 .pp-view-comment-priority {
-	margin-left: -2px; /* cover the border */
-	width: 68px;
+	float: left;
+	margin-left: -($widget-inner-margin + 1px); /* cover the border */
 	padding-top: 3px;
 	padding-bottom: 3px;
-	padding-left: 21px; /* indent the type indication */
-	float: left;
+	padding-left: $widget-inner-margin + 2px; /* indent the type indication */
+	padding-right: $widget-inner-margin;
 
 	background-color: rgb(86, 121, 176);
 	font-weight: $font-semi-bold;
@@ -35,53 +36,107 @@ $viewer-font-size: 11px;
 }
 
 .pp-view-comment-date {
+    margin-top: 3px;
 	float: right;
 	font-weight: $font-light;
+    font-size: $viewer-font-size - 2px;
 	color: rgb(86, 121, 176);
 }
 
-/* --- Viewer comment display --- */
-.pp-view-comment {
-	width: $widget_inner_width;
-	margin-left: $widget_inner_margin;
-	min-height: 48px;
-	padding-top: 6px;
-	padding-bottom: 6px;
-	clear: both;
+li.pp-annotation {
+    .pp-controls {
+        float: right;
+        padding-right: 5px;
+        opacity: 0;
+        transition: opacity 0.2s ease-in; // animate on opacity change
 
-	font-weight: $font-light;
-	font-size: 14px;
-	color: rgb(0, 0, 0);
+        button {
+            border: none;
+            outline: none;
+            background: none;
+            cursor: pointer;
+            padding: 5px;
+            font-size: $viewer-font-size + 2px;
+
+            i {
+                margin: 0;
+            }
+
+            &[disabled] {
+                display: none;
+            }
+        }
+    }
+
+    // both controls appearing/disappearing behaviour
+    &:hover .pp-controls,
+    .pp-controls.pp-visible {
+        opacity: 1;
+    }
+
+    // a single button hover behaviour
+    .pp-controls button:hover {
+        opacity: 0.8;
+    }
 }
 
-/* --- Viewer link bar --- */
-.pp-view-link-bar {
-	width: 428px;
-	margin-left: $widget_inner_margin;
+li.pp-annotation {
+    /* --- Viewer comment display --- */
+    .pp-view-comment {
+        width: $widget-inner-width;
+        min-height: 48px;
+        padding-top: 6px;
+        padding-bottom: 6px;
+        clear: both;
 
-	/* upper line */
-	border-top: 1px solid rgb(210, 212, 210);
+        font-weight: $font-light;
+        font-size: 14px;
+        color: rgb(0, 0, 0);
+    }
 
-	color: rgb(136, 136, 136);
 
-	line-height: 2em;
-}
+    /* --- Viewer bottom bar --- */
+    .pp-view-bottom-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
-.pp-view-link {
-	font-weight: $font-semi-bold;
-	color: rgb(136, 136, 136);
-	text-transform: uppercase;
-}
+        min-height: 25px;
+        //max-height: 45px;
+        //overflow: hidden;
 
-/* --- Viewer controls. --- */
+        padding-top: 6px;  // = pp-viewer padding-bottom
 
-.pp-viewer {
-	.pp-controls {
-		float: right;
-		padding-right: 5px;
-	}
+        /* upper line */
+        border-top: 1px solid rgb(210, 212, 210);
 
-	.pp-controls button[disabled] {
-		display: none;
-	}
+        color: rgb(136, 136, 136);
+    }
+
+    .pp-view-link-container {
+        max-width: 50%;
+        min-height: 100%;
+    }
+
+    .pp-view-link {
+        font-weight: $font-semi-bold;
+        color: rgb(136, 136, 136);
+        text-transform: uppercase;
+        vertical-align: middle;
+
+        font-size: 12px;
+        line-height: 0.5em;
+    }
+
+    .pp-view-ratings {
+        display: flex;
+        //align-content: flex-start;
+      align-items: center;
+        min-height: 100%;
+
+        a {
+            //height: 30px;
+            font-size: $viewer-font-size - 1px;
+        }
+    }
 }

@@ -22,10 +22,10 @@ interface IPrzypisViewerOptions extends annotator.ui.widget.IWidgetOptions {
 
 // Public: Creates an element for viewing annotations.
 export default class ViewerWidget extends Widget {
-  static nameSpace = 'annotator-viewer';
+  static nameSpace = 'pp-viewer';
   static classes = {
     ...Widget.classes,
-    showControls: 'annotator-visible',
+    hide: 'pp-hide'
   };
 
   annotations: AnnotationViewModel[];
@@ -141,7 +141,6 @@ export default class ViewerWidget extends Widget {
         left: position.left,
       });
     }
-
     super.show();
   }
 
@@ -172,7 +171,7 @@ export default class ViewerWidget extends Widget {
 
     ReactDOM.render(
       <ViewerContent annotations={annotations} callbacks={callbacks}/>,
-        this.element.find('.react-annotation-viewer-slot')[0],
+      this.element.get(0) // underlying DOM element
     );
   }
 
@@ -283,8 +282,7 @@ export default class ViewerWidget extends Widget {
 
 // HTML templates for this.widget and this.item properties.
 ViewerWidget.template = [
-  '<div class="pp-outer pp-viewer annotator-hide">',
-  '  <div class="react-annotation-viewer-slot"></div>',
+  '<div class="pp-outer pp-viewer pp-hide">',
   '</div>',
 ].join('\n');
 

@@ -49,7 +49,7 @@ export default class ViewerContentItem extends React.Component<
         } = this.props.annotation;
 
         return (
-            <div className="pp-annotation pp-item">
+            <li className="pp-annotation">
                 <div className="pp-view-head-bar">
                     <div className="pp-view-comment-priority">
                         {priority}
@@ -60,37 +60,46 @@ export default class ViewerContentItem extends React.Component<
                     </div>
 
                     <div className={'pp-controls ' + (this.state.initialView ? 'pp-visible' : '')}>
-                        <div className="ui icon basic mini buttons">
-                            <button
-                                type="button"
-                                title="Edit"
-                                className="pp-edit ui button"
-                                onClick={e => this.props.callbacks.onEdit(e, this.props.annotation)}
-                            >
-                                <i className="edit icon"/>
-                            </button>
-                            <button
-                                type="button"
-                                title="Delete"
-                                className="pp-delete ui button"
-                                onClick={e => this.props.callbacks.onDelete(e, this.props.annotation)}
-                            >
-                                <i className="trash icon"/>
-                            </button>
-                        </div>
+                        <button
+                            type="button"
+                            title="Edit"
+                            className="pp-edit"
+                            onClick={e => this.props.callbacks.onEdit(e, this.props.annotation)}
+                        >
+                            <i className="edit icon"/>
+                        </button>
+                        <button
+                            type="button"
+                            title="Delete"
+                            className="pp-delete"
+                            onClick={e => this.props.callbacks.onDelete(e, this.props.annotation)}
+                        >
+                            <i className="trash icon"/>
+                        </button>
                     </div>
                 </div>
                 <div className="pp-view-comment">
                     {comment}
                 </div>
-                <div className="pp-view-link-bar">
-            <span className="pp-view-link">
-                <a href={referenceLink}>
-                    {referenceLinkTitle}
-                </a>
-            </span>
+                <div className="pp-view-bottom-bar">
+                    <div className="pp-view-link-container">
+                        <a className="pp-view-link" href={referenceLink}>
+                        {referenceLinkTitle}
+                        </a>
+                    </div>
+                    <div className="pp-view-ratings">
+                        {/* todo probably termporary buttons*/}
+                        <a className="ui label medium">
+                            Przydatne
+                            100
+                        </a>
+                        <a className="ui label medium">
+                            Sprzeciw
+                            23
+                        </a>
+                    </div>
                 </div>
-            </div>
+            </li>
         );
     }
 }
