@@ -49,7 +49,24 @@ const config = {
         include: [
           localPath('src', 'pp-annotator')
         ],
-        use: ['style-loader', { loader: 'css-loader', options: { modules: true } }, 'sass-loader'],
+        use: [
+          'style-loader',
+          {
+            loader: 'typings-for-css-modules-loader',
+            options: {
+              modules: true,
+              camelCase: true,
+              namedExport: true,
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              includePaths: [
+                localPath('src'),
+              ],
+            },
+          }],
       },
       {
         test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
