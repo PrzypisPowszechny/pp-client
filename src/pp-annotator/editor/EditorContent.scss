@@ -1,0 +1,10 @@
+.self {
+
+  .header-buttons {
+    display: flex;
+
+    :not(:first-child):not(:last-child) {
+      margin: 0 12px;
+    }
+  }
+}

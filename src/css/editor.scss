@@ -49,54 +49,6 @@ $editor-std-spacing: 15px;
         font-weight: $font-semi-bold;
         margin: 0 0 10px 0;
     }
-    /* priority buttons */
-    .pp-editor-priority {
-        display: inline-block;
-        width: calc(100% - 10px);
-        border: none;
-        outline: none;
-        margin: 0;
-        padding: 3px 11px;
-        height: 3em;
-
-        text-align: center;
-        color: rgb(255, 255, 255);
-        font-weight: $font-semi-bold;
-        text-transform: uppercase;
-
-        background-color: #D8DADA;
-        cursor: pointer;
-    }
-    /* priority-specific styles */
-    .priority-normal, .priority-warning, .priority-alert {
-        display: inline-block;
-        vertical-align: top; //align all buttons at the same level regardless of the number of lines inside
-    }
-    .priority-normal {
-        width: 33%;
-        :hover,
-        .selected {
-            background-color: $normal-ref-color;
-        }
-    }
-    .priority-warning {
-        text-align: center;
-        width: 34%;
-
-        :hover,
-        .selected {
-            background-color: $warning-ref-color;
-        }
-    }
-    .priority-alert {
-        width: 33%;
-        text-align: right;
-
-        :hover,
-        .selected {
-            background-color: $alert-ref-color;
-        }
-    }
 }
 
 /* all form styles */

@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
+import { Header, Popup, Grid, Modal } from 'semantic-ui-react';
+
 import { AnnotationPriorities } from '../consts';
 import AnnotationViewModel from '../annotation/AnnotationViewModel';
 import { IAnnotationEditableFields } from '../annotation/annotation';
-import { Header, Popup, Grid, Modal } from 'semantic-ui-react';
 
 import '../../css/editor.scss';
 // import Semantic-ui packages
 import 'semantic-ui/dist/semantic.css';
 import 'semantic-ui/dist/semantic.js';
+
+import PriorityButton from './components/PriorityButton';
+
+import styles from './EditorContent.scss';
 
 const savedFields = ['priority', 'comment', 'referenceLink', 'referenceLinkTitle'];
 
@@ -23,6 +29,7 @@ export interface IEditorContentState extends IAnnotationEditableFields {
   referenceLinkError: string;
   referenceLinkTitleError: string;
   noCommentModalOpen: boolean;
+  [key: string]: any;
 }
 
 function sliceKeys(dictionary: any, keys: string[]) {
@@ -45,7 +52,7 @@ const priorityToClass = {
   [AnnotationPriorities.ALERT]: 'priority-alert',
 };
 
-export default class EditorContent extends Component<IEditorContentProps, Partial<IEditorContentState>> {
+export default class EditorContent extends Component<IEditorContentProps, IEditorContentState> {
 
   static stateFromProps(props: IEditorContentProps): IEditorContentState {
     const annotation = props.annotation;
@@ -97,25 +104,13 @@ export default class EditorContent extends Component<IEditorContentProps, Partia
   }
 
   saveButtonClass(): string {
-    return priorityToClass[this.state.priority || AnnotationPriorities.NORMAL];
+    return priorityToClass[this.state.priority];
   }
 
-  setPriority(priority: AnnotationPriorities) {
+  setPriority = (priority: AnnotationPriorities) => {
     this.setState({
       priority,
     });
-  }
-
-  setPriorityAlert = () => {
-    this.setPriority(AnnotationPriorities.ALERT);
-  }
-
-  setPriorityNormal = () => {
-    this.setPriority(AnnotationPriorities.NORMAL);
-  }
-
-  setPriorityWarning = () => {
-    this.setPriority(AnnotationPriorities.WARNING);
   }
 
   setModalOpen = () => {
@@ -165,7 +160,7 @@ export default class EditorContent extends Component<IEditorContentProps, Partia
     } = this.state;
 
     return (
-      <div className="pp-widget">
+      <div className={classNames('pp-widget', styles.self)}>
         <div className="pp-editor-head-bar">
           <label className="priority-header"> Co dodajesz? </label>
           <Popup
@@ -188,33 +183,17 @@ export default class EditorContent extends Component<IEditorContentProps, Partia
               </Grid.Column>
             </Grid>
           </Popup>
-          <br/>
-          {/*KG todo could probably be neater if done with sth like PriorityButton component*/}
-          <div className="priority-normal">
-            <button
-              className={'pp-editor-priority' + (priority === AnnotationPriorities.NORMAL ? ' selected' : '')}
-              onClick={this.setPriorityNormal}
-            >
+          <div className={styles.headerButtons}>
+            <PriorityButton type={AnnotationPriorities.NORMAL} onClick={this.setPriority} priority={priority}>
               dodatkowa informacja
-            </button>
-          </div>
-          <div className="priority-warning">
-            <button
-              className={'pp-editor-priority' + (priority === AnnotationPriorities.WARNING ? ' selected' : '')}
-              onClick={this.setPriorityWarning}
-            >
+            </PriorityButton>
+            <PriorityButton type={AnnotationPriorities.WARNING} onClick={this.setPriority} priority={priority}>
               wyjaśnienie
-            </button>
-          </div>
-          <div className="priority-alert">
-            <button
-              className={'pp-editor-priority' + (priority === AnnotationPriorities.ALERT ? ' selected' : '')}
-              onClick={this.setPriorityAlert}
-            >
+            </PriorityButton>
+            <PriorityButton type={AnnotationPriorities.ALERT} onClick={this.setPriority} priority={priority}>
               sprostowanie błędu
-            </button>
+            </PriorityButton>
           </div>
-
         </div>
         <div
           className="pp-close"
