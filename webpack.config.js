@@ -56,6 +56,7 @@ const config = {
             options: {
               modules: true,
               camelCase: true,
+              localIdentName: '[name]__[local]--[hash:base64:5]',
               namedExport: true,
             },
           },
