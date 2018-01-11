@@ -1,6 +1,5 @@
 import App from './pp-annotator/modules/App';
 import PPUI from './pp-annotator/modules/PPUI';
-// import { debug } from './pp-annotator/legacy/old-storage';
 import DebugStorage from './pp-annotator/api/DebugStorage';
 
 import ViewerWidget from './pp-annotator/viewer/ViewerWidget';
@@ -11,15 +10,12 @@ import 'css/viewer.scss';
 import 'css/editor.scss';
 
 import IPPSettings from './PPSettings.interface';
-declare const PP_SETTINGS: IPPSettings; // global PP settings
+declare const PP_SETTINGS: IPPSettings;
 
-console.log('Przypis script working!'); // tslint:disable-line
+console.log('Przypis script working!');
 
-// will run only in browser environment
-if (typeof window !== 'undefined') {
-  /*
-    Start the annotating functionality
-   */
+const isBrowser = typeof window !== 'undefined';
+if (isBrowser) {
   const annotatorApp = new App();
   annotatorApp.include(PPUI);
   annotatorApp.include(DebugStorage);
