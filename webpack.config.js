@@ -58,12 +58,11 @@ const config = {
         use: [
           'style-loader',
           {
-            loader: 'typings-for-css-modules-loader',
+            loader: 'css-loader',
             options: {
               modules: true,
               camelCase: true,
               localIdentName: '[name]__[local]--[hash:base64:5]',
-              namedExport: true,
             },
           },
           {
