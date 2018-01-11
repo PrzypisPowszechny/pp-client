@@ -6,8 +6,8 @@ import DebugStorage from './pp-annotator/api/DebugStorage';
 import ViewerWidget from './pp-annotator/viewer/ViewerWidget';
 import AnnotationViewModel from './pp-annotator/annotation/AnnotationViewModel';
 
-import PPSettings from './PPSettings.interface';
-declare const PP_SETTINGS: PPSettings; // global PP settings
+import IPPSettings from './PPSettings.interface';
+declare const PP_SETTINGS: IPPSettings; // global PP settings
 
 console.log('Przypis script working!'); // tslint:disable-line
 

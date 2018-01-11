@@ -1,3 +1,3 @@
-export default interface PPSettings {
+export default interface IPPSettings {
     MOCK_VIEWER: boolean;
 }
