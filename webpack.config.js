@@ -13,8 +13,10 @@ const BUILD_DIR = path.resolve(__dirname, 'dist');
 const localPath = (...args) => path.resolve(__dirname, ...args);
 
 const config = {
-  cache: false,
-  entry: "./src/index.ts",
+  entry: {
+    vendor: "./src/vendor.ts",
+    main: "./src/index.ts"
+  },
   output: {
     path: BUILD_DIR,
     filename: '[name].bundle.js',
