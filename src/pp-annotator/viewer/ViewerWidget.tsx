@@ -25,7 +25,7 @@ export default class ViewerWidget extends Widget {
   static nameSpace = 'pp-viewer';
   static classes = {
     ...Widget.classes,
-    hide: 'pp-hide'
+    hide: 'pp-hide',
   };
 
   annotations: AnnotationViewModel[];
@@ -171,7 +171,7 @@ export default class ViewerWidget extends Widget {
 
     ReactDOM.render(
       <ViewerContent annotations={annotations} callbacks={callbacks}/>,
-      this.element.get(0) // underlying DOM element
+      this.element.get(0), // underlying DOM element
     );
   }
 

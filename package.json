@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "annotator": "^2.0.0-alpha.3",
+    "classnames": "^2.2.5",
     "jquery": "^3.2.1",
     "jsx": "^0.9.89",
     "lodash": "^4.17.4",
@@ -13,6 +14,7 @@
     "semantic-ui-react": "^0.77.1"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.3",
     "@types/jquery": "^3.2.16",
     "@types/lodash": "^4.14.88",
     "@types/react": "^16.0.28",
@@ -38,6 +40,7 @@
     "tslint-loader": "^3.5.3",
     "tslint-react": "^3.2.0",
     "typescript": "^2.6.2",
+    "typings-for-css-modules-loader": "^1.7.0",
     "uglify-js": "^3.2.1",
     "uglifyjs-webpack-plugin": "^1.1.2",
     "url-loader": "^0.6.2",

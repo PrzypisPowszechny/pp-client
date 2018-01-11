@@ -95,7 +95,7 @@ export default class EditorWidget extends Widget {
         onSave={this.onSave}
         onCancel={this.onCancel}
       />,
-      this.element.get(0) // underlying DOM element
+      this.element.get(0), // underlying DOM element
     );
   }
 

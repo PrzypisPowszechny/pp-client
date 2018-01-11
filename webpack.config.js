@@ -10,6 +10,8 @@ const { appSettings } = require('./config/app-settings');
 
 const BUILD_DIR = path.resolve(__dirname, 'dist');
 
+const localPath = (...args) => path.resolve(__dirname, ...args);
+
 const config = {
   cache: false,
   entry: "./src/index.ts",
@@ -20,22 +22,52 @@ const config = {
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json"],
     modules: [
-      path.resolve('./src'),
-      path.resolve('./node_modules'),
+      localPath('src'),
+      localPath('node_modules'),
     ]
   },
   module: {
-    loaders: [
+    rules: [
       { test: /\.tsx?$/, enforce: 'pre', loader: 'tslint-loader', },
       { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
-      // { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
       {
+        /* CSS global styles */
         test: /\.css$/,
-        loader: "style-loader!css-loader",
+        use: ['style-loader', 'css-loader'],
       },
       {
+        /* SCSS global styles */
         test: /\.scss$/,
-        loaders: ['style-loader', 'css-loader', 'sass-loader']
+        include: [
+          localPath('src', 'css'),
+        ],
+        use: ['style-loader', 'css-loader', 'sass-loader'],
+      },
+      {
+        /* SCSS modules */
+        test: /\.scss$/,
+        include: [
+          localPath('src', 'pp-annotator')
+        ],
+        use: [
+          'style-loader',
+          {
+            loader: 'typings-for-css-modules-loader',
+            options: {
+              modules: true,
+              camelCase: true,
+              localIdentName: '[name]__[local]--[hash:base64:5]',
+              namedExport: true,
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              includePaths: [
+                localPath('src'),
+              ],
+            },
+          }],
       },
       {
         test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,

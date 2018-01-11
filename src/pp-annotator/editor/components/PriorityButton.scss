@@ -1,0 +1,41 @@
+@import 'css/common/colors';
+@import 'css/common/fonts';
+
+
+.self {
+  display: flex;
+  border: none;
+  outline: none;
+  margin: 0;
+  padding: 4px 12px;
+  height: 48px;
+
+  text-align: center;
+  color: white;
+  font-weight: $font-semi-bold;
+  text-transform: uppercase;
+
+  background-color: #D8DADA;
+  cursor: pointer;
+
+  &.normal {
+    &:hover,
+    &.selected {
+      background-color: $normal-ref-color;
+    }
+  }
+
+  &.warning {
+    &:hover,
+    &.selected {
+      background-color: $warning-ref-color;
+    }
+  }
+
+  &.alert {
+    &:hover,
+    &.selected {
+      background-color: $alert-ref-color;
+    }
+  }
+}
