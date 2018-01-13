@@ -6,11 +6,6 @@ import { AnnotationPriorities } from '../consts';
 import AnnotationViewModel from '../annotation/AnnotationViewModel';
 import { IAnnotationEditableFields } from '../annotation/annotation';
 
-import '../../css/editor.scss';
-// import Semantic-ui packages
-import 'semantic-ui/dist/semantic.css';
-import 'semantic-ui/dist/semantic.js';
-
 import PriorityButton from './components/PriorityButton';
 
 import styles from './EditorContent.scss';

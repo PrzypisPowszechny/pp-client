@@ -1,10 +1,5 @@
 import React from 'react';
 import AnnotationViewModel from '../annotation/AnnotationViewModel';
-import '../../css/viewer.scss';
-
-// Add Semantic-ui packages
-import 'semantic-ui/dist/semantic.css';
-import 'semantic-ui/dist/semantic.js';
 
 interface IViewerContentItemProps {
   key: number;
@@ -17,8 +12,8 @@ interface IViewerContentItemState {
 }
 
 export interface ICallbacks {
-  onEdit(e: React.MouseEvent<HTMLButtonElement>, annotation: AnnotationViewModel): void;
-  onDelete(e: React.MouseEvent<HTMLButtonElement>, annotation: AnnotationViewModel): void;
+  onEdit(e, annotation: AnnotationViewModel): void;
+  onDelete(e, annotation: AnnotationViewModel): void;
 }
 
 export default class ViewerContentItem extends React.Component<IViewerContentItemProps,
@@ -38,9 +33,9 @@ export default class ViewerContentItem extends React.Component<IViewerContentIte
     setTimeout(() => this.setState({ initialView: false }), 500);
   }
 
-  handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => this.props.callbacks.onEdit(e, this.props.annotation);
+  handleEdit = e => this.props.callbacks.onEdit(e, this.props.annotation);
 
-  handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => this.props.callbacks.onDelete(e, this.props.annotation);
+  handleDelete = e => this.props.callbacks.onDelete(e, this.props.annotation);
 
   render() {
     const {

@@ -2,10 +2,11 @@
   "compilerOptions": {
     "outDir": "./dist/",
     "sourceMap": true,
-    "module": "es2015",
-    "target": "es2015",
+    "alwaysStrict": true,
+    "noImplicitThis": true,
+    "module": "es6",
+    "target": "es6",
     "jsx": "react",
-    "strict": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true,
@@ -22,6 +23,7 @@
     }
   },
   "include": [
+    "./@types/styles.d.ts",
     "./src/**/*"
   ],
   "awesomeTypescriptLoaderOptions": {
