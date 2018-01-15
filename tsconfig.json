@@ -24,6 +24,7 @@
   },
   "include": [
     "./@types/styles.d.ts",
+    "./@types/json.d.ts",
     "./src/**/*"
   ],
   "awesomeTypescriptLoaderOptions": {

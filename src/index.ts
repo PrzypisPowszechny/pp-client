@@ -12,6 +12,9 @@ import 'css/editor.scss';
 import IPPSettings from './PPSettings.interface';
 declare const PP_SETTINGS: IPPSettings;
 
+// Optional file-input annotations
+import input_annotations from '../config/annotations.json';
+
 console.log('Przypis script working!');
 
 const isBrowser = typeof window !== 'undefined';
@@ -44,5 +47,22 @@ if (isBrowser) {
     viewer.element.removeClass(ViewerWidget.classes.hide);
     // turn off the mouseleave listeners so that windows does not disappear on cursor action
     viewer.element.off('mouseleave.' + ViewerWidget.nameSpace);
+  }
+
+  /*
+    Read annotations for UX research purposes from a file (only if the storage is local)
+   */
+  const storage = annotatorApp.registry.getUtility('storage');
+  if (PP_SETTINGS.READ_ANNOTATIONS_FROM_FILE && storage instanceof DebugStorage) {
+      let id = 1000;
+      for (const annotation of input_annotations) {
+        if (annotation.url === window.location.href) {
+          // Reassign annotation's id so it doesn't collide with the ids of the annotations added through application
+          annotation.id = id;
+          annotatorApp.annotations.create(annotation);
+          id += 1;
+        }
+      }
+      console.log('Loaded ' + input_annotations.length + ' annotations from the annotation file.');
   }
 }
