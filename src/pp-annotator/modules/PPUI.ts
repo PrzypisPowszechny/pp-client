@@ -174,9 +174,7 @@ export default class PPUI implements IModule {
           // TODO what happens when the adder's request button is clicked
         },
       }),
-      editor: new EditorWidget({
-        extensions: this.editorExtensions,
-      }),
+      editor: new EditorWidget(),
       highlighter: new highlighter.Highlighter(this.element),
       textselector: new textselector.TextSelector(this.element, {
         onSelection(ranges, event) {
@@ -212,7 +210,6 @@ export default class PPUI implements IModule {
           app.annotations.delete(annotation);
         },
         autoViewHighlights: this.element,
-        extensions: this.viewerExtensions,
       }),
     };
     this.state.adder.attach();

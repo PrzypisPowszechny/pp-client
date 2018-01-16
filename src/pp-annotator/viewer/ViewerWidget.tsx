@@ -49,8 +49,8 @@ export default class ViewerWidget extends Widget {
   //   viewer.load(annotation)
   //
   // Returns a new Viewer instance.
-  constructor(options: IPrzypisViewerOptions) {
-    super(options);
+  constructor(options?: IPrzypisViewerOptions) {
+    super(options || {});
 
     this.annotations = [];
     this.hideTimer = null;
