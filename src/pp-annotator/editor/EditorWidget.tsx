@@ -36,9 +36,8 @@ export default class EditorWidget extends Widget {
 
   private saveAction: (annotation: AnnotationViewModel) => any;
 
-  constructor(options: annotator.ui.widget.IWidgetOptions) {
-    super(options);
-
+  constructor(options?: annotator.ui.widget.IWidgetOptions) {
+    super(options || {});
     this.annotation = null;
 
     // jquery mouse action listeners from annotator module have been left out;
