@@ -63,7 +63,7 @@ $widget-inner-margin: ($widget-box-width - $widget-inner-width) / 2;
   z-index: 10; // less than semantic ui modal's (1000)
 }
 
-/* Widgets are both the adder and the viewer. */
+/* Widgets are both the menu and the viewer. */
 .pp-widget {
   /* reset annotator.js's styling */
   margin: 0;

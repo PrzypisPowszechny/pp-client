@@ -112,7 +112,7 @@ function removeDynamicStyle() {
 
 interface IState {
   interactionPoint: annotator.util.IPosition | null;
-  adder: MenuWidget;
+  menu: MenuWidget;
   editor: EditorWidget;
   highlighter: annotator.ui.highlighter.Highlighter;
   textselector: annotator.ui.textselector.TextSelector;
@@ -122,8 +122,6 @@ interface IState {
 
 interface IOptions {
   element?: Element;
-  editorExtensions?: Array<{}>;
-  viewerExtensions?: Array<{}>;
 }
 
 /**
@@ -131,8 +129,6 @@ interface IOptions {
  */
 export default class PPUI implements IModule {
   state: IState | undefined;
-  editorExtensions: any;
-  viewerExtensions: any;
   parseRanges: any;
   element: any;
 
@@ -140,10 +136,7 @@ export default class PPUI implements IModule {
     if (typeof options === 'undefined' || options === null) {
       options = {};
     }
-
     this.element = options.element || document.body;
-    this.editorExtensions = options.editorExtensions || [];
-    this.viewerExtensions = options.viewerExtensions || [];
 
     // Local helpers
     this.parseRanges = rangesParser(this.element, '.annotator-hl');
@@ -155,8 +148,25 @@ export default class PPUI implements IModule {
     /*
       State object declarations
      */
-    const editor = new EditorWidget();
-    const adder = new MenuWidget({
+    const highlighter = new annotator.ui.highlighter.Highlighter(this.element);
+    const textselector = new annotator.ui.textselector.TextSelector(this.element, {
+      onSelection(ranges, event) {
+        if (!state) {
+          throw new Error('App not initialized!');
+        }
+
+        if (!state.editor.isVisible && ranges.length > 0) {
+          const url = window.location.href;
+          const annotation = AnnotationViewModel.fromSelection(parseRanges(ranges), url);
+          state.interactionPoint = util.mousePosition(event);
+          state.menu.load(annotation, state.interactionPoint);
+        } else {
+          state.menu.hide();
+        }
+      },
+    });
+
+    const menu = new MenuWidget({
       beginAnnotationCreate(annotation) {
         if (!state) {
           throw new Error('App not initialized!');
@@ -170,27 +180,6 @@ export default class PPUI implements IModule {
               AnnotationViewModel.toModel(resultAnnotation) as IAnnotation,
             ),
         );
-      },
-      beforeRequestCreate() {
-        // TODO what happens when the adder's request button is clicked
-      },
-    });
-
-    const highlighter = new annotator.ui.highlighter.Highlighter(this.element);
-    const textselector = new annotator.ui.textselector.TextSelector(this.element, {
-      onSelection(ranges, event) {
-        if (!state) {
-          throw new Error('App not initialized!');
-        }
-
-        if (!editor.isVisible && ranges.length > 0) {
-          const url = window.location.href;
-          const annotation = AnnotationViewModel.fromSelection(parseRanges(ranges), url);
-          state.interactionPoint = util.mousePosition(event);
-          state.adder.load(annotation, state.interactionPoint);
-        } else {
-          state.adder.hide();
-        }
       },
     });
 
@@ -214,6 +203,8 @@ export default class PPUI implements IModule {
       autoViewHighlights: this.element,
     });
 
+    const editor = new EditorWidget();
+
     this.state = state = {
       // helper variables
       embeddedHighlights: {},
@@ -222,11 +213,11 @@ export default class PPUI implements IModule {
       highlighter,
       textselector,
       // Visible components
-      adder,
+      menu,
       editor,
       viewer,
     };
-    this.state.adder.attach();
+    this.state.menu.attach();
     this.state.editor.attach();
     this.state.viewer.attach();
     injectDynamicStyle();
@@ -236,10 +227,10 @@ export default class PPUI implements IModule {
     if (!this.state) {
       throw new Error('App not initialized!');
     }
-    this.state.adder.destroy();
-    this.state.editor.destroy();
     this.state.highlighter.destroy();
     this.state.textselector.destroy();
+    this.state.menu.destroy();
+    this.state.editor.destroy();
     this.state.viewer.destroy();
     removeDynamicStyle();
   }

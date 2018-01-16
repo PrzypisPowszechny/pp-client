@@ -9,7 +9,7 @@ const { widget: { Widget } } = ui;
 const { $ } = util;
 
 /**
- * Adder shows and hides an annotation adder button that can be clicked on to
+ * Adder shows and hides an annotation menu button that can be clicked on to
  * create an annotation.
  *
  * MenuWidget is for the most part a copy of annotator.Adder, except with two buttons, thus:
@@ -18,7 +18,6 @@ const { $ } = util;
 
 interface IMenuWidgetOptions extends annotator.ui.widget.IWidgetOptions {
   beginAnnotationCreate?: (annotation: AnnotationViewModel, e: JQuery.Event) => void;
-  beforeRequestCreate?: (annotation: AnnotationViewModel, e: JQuery.Event) => void;
 }
 
 export default class MenuWidget extends Widget {
@@ -46,19 +45,16 @@ export default class MenuWidget extends Widget {
   private ignoreMouseup: boolean;
   private annotation: AnnotationViewModel | null;
   private beginAnnotationCreate: IMenuWidgetOptions['beginAnnotationCreate'];
-  private beforeRequestCreate: IMenuWidgetOptions['beforeRequestCreate'];
   private document: Document;
 
-  constructor(options: IMenuWidgetOptions) {
-    super(options);
+  constructor(options?: IMenuWidgetOptions) {
+    super(options || {});
 
     this.ignoreMouseup = false;
     this.annotation = null;
 
     this.beginAnnotationCreate =
       MenuWidget.options.beginAnnotationCreate || options.beginAnnotationCreate;
-    this.beforeRequestCreate =
-      MenuWidget.options.beforeRequestCreate || options.beforeRequestCreate;
 
     const clickTag = MenuWidget.getNSTag(`click.`);
     const mouseDownTag = MenuWidget.getNSTag(`mousedown.`);
@@ -73,12 +69,12 @@ export default class MenuWidget extends Widget {
   }
 
   /**
-   * Public: Show the adder.
+   * Public: Show the menu.
    *
    * Examples
-   *  adder.show()
-   *  adder.hide()
-   *  adder.show({top: '100px', left: '80px'})
+   *  menu.show()
+   *  menu.hide()
+   *  menu.show({top: '100px', left: '80px'})
    *
    * @param position an Object specifying the position in which to show the editor (optional).
    */
@@ -103,10 +99,10 @@ export default class MenuWidget extends Widget {
   }
 
   /**
-   * Public: Load an annotation and show the adder.
+   * Public: Load an annotation and show the menu.
    *
-   * If the user clicks on the adder with an annotation loaded, the onCreate
-   * handler will be called. In this way, the adder can serve as an
+   * If the user clicks on the menu with an annotation loaded, the onCreate
+   * handler will be called. In this way, the menu can serve as an
    * intermediary step between making a selection and creating an annotation.
    *
    * @param annotation an annotation Object to load.
@@ -118,7 +114,7 @@ export default class MenuWidget extends Widget {
   }
 
   /**
-   * Event callback: called when the mouse button is pressed on the adder.
+   * Event callback: called when the mouse button is pressed on the menu.
    *
    * @param event a mousedown Event object
    */
@@ -152,8 +148,8 @@ export default class MenuWidget extends Widget {
   }
 
   /**
-   * Event callback: called when the adder is clicked. The click event is used
-   * as well as the mousedown so that we get the :active state on the adder
+   * Event callback: called when the menu is clicked. The click event is used
+   * as well as the mousedown so that we get the :active state on the menu
    * when clicked.
    *
    * event - A mousedown Event object
@@ -168,7 +164,7 @@ export default class MenuWidget extends Widget {
 
     event.preventDefault();
 
-    // Hide the adder
+    // Hide the menu
     this.hide();
     this.ignoreMouseup = false;
 
@@ -179,14 +175,6 @@ export default class MenuWidget extends Widget {
         _.isFunction(this.beginAnnotationCreate)
       ) {
         this.beginAnnotationCreate(this.annotation, event);
-      }
-
-      // create request button clicked
-      if (
-        event.target === this.element.find('.create-request')[0] &&
-        _.isFunction(this.beforeRequestCreate)
-      ) {
-        this.beforeRequestCreate(this.annotation, event);
       }
     }
   }
