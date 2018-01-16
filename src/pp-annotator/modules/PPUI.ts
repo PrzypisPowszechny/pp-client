@@ -1,4 +1,4 @@
-import annotator, { IAnnotation, ui, util } from 'annotator';
+import annotator, { IAnnotation, util } from 'annotator';
 
 import EditorWidget from '../editor/EditorWidget';
 import MenuWidget from '../MenuWidget';
@@ -8,7 +8,7 @@ import IAnnotationAPIModel from '../annotation/IAnnotationAPIModel';
 import App from './App';
 import IModule from './Module.interface';
 
-const { highlighter, textselector } = ui;
+// const { highlighter, textselector } = ui;
 
 /**
  * trim strips whitespace from either end of a string.
@@ -150,67 +150,81 @@ export default class PPUI implements IModule {
   }
 
   start(app: App) {
+    let state: IState;
     const parseRanges = this.parseRanges;
+    /*
+      State object declarations
+     */
+    const editor = new EditorWidget();
+    const adder = new MenuWidget({
+      beginAnnotationCreate(annotation) {
+        if (!state) {
+          throw new Error('App not initialized!');
+        }
+        if (state.interactionPoint === null) {
+          throw new Error('Interaction point is null!');
+        }
+        state.editor.load(annotation, state.interactionPoint,
+          (resultAnnotation: AnnotationViewModel) =>
+            app.annotations.create(
+              AnnotationViewModel.toModel(resultAnnotation) as IAnnotation,
+            ),
+        );
+      },
+      beforeRequestCreate() {
+        // TODO what happens when the adder's request button is clicked
+      },
+    });
 
-    const state: IState = this.state = {
+    const highlighter = new annotator.ui.highlighter.Highlighter(this.element);
+    const textselector = new annotator.ui.textselector.TextSelector(this.element, {
+      onSelection(ranges, event) {
+        if (!state) {
+          throw new Error('App not initialized!');
+        }
+
+        if (!editor.isVisible && ranges.length > 0) {
+          const url = window.location.href;
+          const annotation = AnnotationViewModel.fromSelection(parseRanges(ranges), url);
+          state.interactionPoint = util.mousePosition(event);
+          state.adder.load(annotation, state.interactionPoint);
+        } else {
+          state.adder.hide();
+        }
+      },
+    });
+
+    const viewer = new ViewerWidget({
+      onEdit(annotation) {
+        if (!state) {
+          throw new Error('App is not initialized!');
+        }
+        // Copy the interaction point from the shown viewer:
+        const interactionPoint = util.$(state.viewer.element).css(['top', 'left']);
+        state.interactionPoint = (interactionPoint as any) as { top: number; left: number };
+
+        state.editor.load(annotation, state.interactionPoint,
+          (resultAnnotation: AnnotationViewModel) =>
+            app.annotations.update(AnnotationViewModel.toModel(resultAnnotation) as IAnnotation),
+        );
+      },
+      onDelete(annotation) {
+        app.annotations.delete(annotation);
+      },
+      autoViewHighlights: this.element,
+    });
+
+    this.state = state = {
+      // helper variables
       embeddedHighlights: {},
       interactionPoint: null,
-      adder: new MenuWidget({
-        beginAnnotationCreate(annotation) {
-          if (!state) {
-            throw new Error('App not initialized!');
-          }
-          if (state.interactionPoint === null) {
-            throw new Error('Interaction point is null!');
-          }
-          state.editor.load(annotation, state.interactionPoint,
-            (resultAnnotation: AnnotationViewModel) =>
-              app.annotations.create(
-                AnnotationViewModel.toModel(resultAnnotation) as IAnnotation,
-              ),
-          );
-        },
-        beforeRequestCreate() {
-          // TODO what happens when the adder's request button is clicked
-        },
-      }),
-      editor: new EditorWidget(),
-      highlighter: new highlighter.Highlighter(this.element),
-      textselector: new textselector.TextSelector(this.element, {
-        onSelection(ranges, event) {
-          if (!state) {
-            throw new Error('App not initialized!');
-          }
-
-          if (ranges.length > 0) {
-            const url = window.location.href;
-            const annotation = AnnotationViewModel.fromSelection(parseRanges(ranges), url);
-            state.interactionPoint = util.mousePosition(event);
-            state.adder.load(annotation, state.interactionPoint);
-          } else {
-            state.adder.hide();
-          }
-        },
-      }),
-      viewer: new ViewerWidget({
-        onEdit(annotation) {
-          if (!state) {
-            throw new Error('App is not initialized!');
-          }
-          // Copy the interaction point from the shown viewer:
-          const interactionPoint = util.$(state.viewer.element).css(['top', 'left']);
-          state.interactionPoint = (interactionPoint as any) as { top: number; left: number };
-
-          state.editor.load(annotation, state.interactionPoint,
-            (resultAnnotation: AnnotationViewModel) =>
-              app.annotations.update(AnnotationViewModel.toModel(resultAnnotation) as IAnnotation),
-          );
-        },
-        onDelete(annotation) {
-          app.annotations.delete(annotation);
-        },
-        autoViewHighlights: this.element,
-      }),
+      // Highlighting and text selection detection
+      highlighter,
+      textselector,
+      // Visible components
+      adder,
+      editor,
+      viewer,
     };
     this.state.adder.attach();
     this.state.editor.attach();
