@@ -34,11 +34,22 @@ export default class EditorWidget extends Widget {
     destroy: () => void;
   };
 
+  /*
+    Note: visibility is mostly any Widget's domain.
+    Widget is an annotator module class and we're not "forking" it into ours just yet
+    TODO This should be done as soon as possible
+   */
+  private visible: boolean;
+  get isVisible(): boolean {
+    return this.visible;
+  }
+
   private saveAction: (annotation: AnnotationViewModel) => any;
 
   constructor(options?: annotator.ui.widget.IWidgetOptions) {
     super(options || {});
     this.annotation = null;
+    this.visible = false;
 
     // jquery mouse action listeners from annotator module have been left out;
     // see annotator.ui.editor's constructor
@@ -66,7 +77,16 @@ export default class EditorWidget extends Widget {
       });
     }
     super.show();
+    this.visible = true;
     this.setupDraggables();
+  }
+
+  /*
+    TODO: see the note at `visible` declaration
+   */
+  hide() {
+    super.hide();
+    this.visible = false;
   }
 
   /**
