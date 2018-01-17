@@ -37,6 +37,17 @@ export default class ViewerWidget extends Widget {
   private document: Document;
   private onEditCallback: (annotation: AnnotationViewModel) => void;
   private onDeleteCallback: (annotation: AnnotationViewModel) => void;
+  private position: annotator.util.IPosition;
+
+  /*
+    Note: visibility is mostly any Widget's domain.
+    Widget is an annotator module class and we're not "forking" it into ours just yet
+    TODO This should be done as soon as possible
+   */
+  private visible: boolean;
+  get isVisible(): boolean {
+    return this.visible;
+  }
 
   // Public: Creates an instance of the Viewer object.
   //
@@ -57,6 +68,8 @@ export default class ViewerWidget extends Widget {
     this.hideTimerDfd = null;
     this.hideTimerActivity = false;
     this.mouseDown = false;
+    this.visible = false;
+    this.position = null;
 
     if (typeof this.options.onEdit !== 'function') {
       throw new TypeError('onEdit callback must be a function');
@@ -142,6 +155,15 @@ export default class ViewerWidget extends Widget {
       });
     }
     super.show();
+    this.visible = true;
+  }
+
+  /*
+  TODO: see the note at `visible` declaration
+ */
+  hide() {
+    super.hide();
+    this.visible = false;
   }
 
   // Public: Load annotations into the viewer and show it.
@@ -157,6 +179,7 @@ export default class ViewerWidget extends Widget {
     this.annotations = annotations || [];
     this.update(annotations);
     this.show(position);
+    this.position = position;
   }
 
   /**
@@ -185,6 +208,24 @@ export default class ViewerWidget extends Widget {
     this.onDeleteCallback(annotation);
   }
 
+  areAnnotationsSame(annotationsOne: AnnotationViewModel[], annotationsTwo: AnnotationViewModel[]) {
+    function eqSet(as, bs) {
+      if (as.size !== bs.size) {
+        return false;
+      }
+      for (const a of as) {
+        if (!bs.has(a)) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    const idsOne = new Set(annotationsOne.map(ann => ann.id));
+    const idsTwo = new Set(annotationsTwo.map(ann => ann.id));
+    return eqSet(idsOne, idsTwo);
+  }
+
   // Event callback: called when a user triggers `mouseover` on a highlight
   // element.
   //
@@ -197,15 +238,24 @@ export default class ViewerWidget extends Widget {
     if (this.mouseDown) {
       return;
     }
+    // PP modification:
+    // If the window is already open or far away enough, don't display it again;
+    let mousePosition = util.mousePosition(event);
     this.startHideTimer(true).done(() => {
       const annotations = $(event.target)
         .parents('.annotator-hl')
         .addBack()
         .map((_, elem) => $(elem).data('annotation'))
         .toArray();
-
+      // If the annotations displayed the last time are the same, display the window at the very same position.
+      // Prevent window from wobbling, when the user briefly moves the pointer outside the highlighted area and returns
+      // todo: use some kind of timer so that the window "fixation" period lasts only a split second
+      // It's good enough for now, though
+      if (this.areAnnotationsSame((annotations as any) as AnnotationViewModel[], this.annotations)) {
+        mousePosition = this.position;
+      }
       // Now show the viewer with the wanted annotations
-      this.load((annotations as any) as AnnotationViewModel[], util.mousePosition(event));
+      this.load((annotations as any) as AnnotationViewModel[], mousePosition);
     });
   }
 
