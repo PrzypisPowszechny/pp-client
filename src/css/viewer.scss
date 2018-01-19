@@ -136,7 +136,15 @@ li.pp-annotation {
 
         a {
             //height: 30px;
+            display: flex;
+            justify-content: space-between;
             font-size: $viewer-font-size - 1px;
+            width: 110px;
+
+            .number {
+              opacity: 0.8;
+            }
+
         }
     }
 }

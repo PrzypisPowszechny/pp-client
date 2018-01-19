@@ -26,7 +26,7 @@ export default class MenuWidget extends Widget {
   static template = `
   <div class="pp-adder pp-hide">
     <button class="create-annotation ui basic pointing below label large">
-        <i class="write icon"></i>Dodaj przypis
+        <i class="plus icon"></i>Dodaj przypis
     </button>
   </div>`;
 
