@@ -2,7 +2,8 @@
 
 $editor-width: 450px;
 $editor-font-size: 14px;
-$editor-std-spacing: 15px;
+$editor-horizontal-spacing: 20px;
+$editor-vertical-spacing: 15px;
 
 /* -- PP Adder -- */
 .pp-adder {
@@ -39,58 +40,57 @@ $editor-std-spacing: 15px;
 
 /* --- Editor head bar --- */
 .pp-editor .pp-editor-head-bar {
-  padding: 0 2*$editor-std-spacing 0 $editor-std-spacing;
-  margin: $editor-std-spacing 0 $editor-std-spacing 0;
+    padding: 0 $editor-horizontal-spacing 0 $editor-horizontal-spacing;
+    margin: $editor-vertical-spacing 0 $editor-vertical-spacing 0;
 
-  .priority-header {
-    display: inline-block;
-    font-weight: $font-semi-bold;
-    margin: 0 0 10px 0;
-  }
+    .priority-header {
+        display: inline-block;
+        font-weight: $font-semi-bold;
+        margin: 0 0 10px 0;
+    }
 }
 
 /* all form styles */
 .pp-editor {
-  /* fields: comment, referenceLink */
-  .editor-input {
-    display: block;
-    padding: 0;
-    position: relative;
-    margin: 0 2*$editor-std-spacing $editor-std-spacing $editor-std-spacing;
+    /* fields: comment, referenceLink */
+    .editor-input {
+        display: block;
+        padding: 0;
+        position: relative;
+        margin: 0 $editor-horizontal-spacing $editor-vertical-spacing $editor-horizontal-spacing;
 
-    input, textarea {
-      padding: 0.5em;
-      width: 100%;
-      border: 1px solid #D8DADA;
-      outline: none;
-      color: #000000;
-      font-weight: $font-light;
-      line-height: 1em;
-      background: none;
-      resize: none;
+        input, textarea {
+            padding: 0.5em;
+            width: 100%;
+            border: 1px solid #D8DADA;
+            outline: none;
+            color: #000000;
+            font-weight: $font-light;
+            line-height: 1em;
+            background: none;
+            resize: none;
+        }
+
+        textarea {
+            //todo adjust border radius with KS
+            @include border-radius(5px 5px 0 0);
+        }
+
+        input:hover, input:focus,
+        textarea:hover, textarea:focus {
+            border: 1px dashed #888888;
+            background: none;
+        }
+
+        // based on semantic-ui's .ui.input.error
+        input.error, textarea.error,
+        input.error:hover, textarea.error:hover,
+        input.error:focus, textarea.error:focus {
+            background-color: #fff6f6;
+            border-color: #e0b4b4;
+            color: #9f3a38;
+        }
     }
-
-    textarea {
-      //todo adjust border radius with KS
-      @include border-radius(5px 5px 0 0);
-    }
-
-    input:hover, input:focus,
-    textarea:hover, textarea:focus {
-      border: 1px dashed #888888;
-      background: none;
-    }
-
-    // based on semantic-ui's .ui.input.error
-    input.error, textarea.error,
-    input.error:hover, textarea.error:hover,
-    input.error:focus, textarea.error:focus {
-      background-color: #fff6f6;
-      border-color: #e0b4b4;
-      color: #9f3a38;
-    }
-
-  }
 
   /* comment field */
   .pp-comment {
@@ -122,89 +122,80 @@ $editor-std-spacing: 15px;
       left: 0;
       width: 2em;
     }
+
   }
+
+
+    .pp-reference-link-title {
+
+        input {
+            padding-left: 2em;
+            width: 381px;
+        }
+
+        .input-icon {
+            display: block;
+            position: absolute;
+            top: 7px;
+            left: 0;
+            width: 2em;
+        }
+
+        .pp-error-msg {
+            left: 0;
+            top: 20px;
+        }
+
+        .link-help {
+            width: 20px;
+        }
+    }
 }
 
 .pp-editor .pp-bottom-bar {
-  margin: $editor-std-spacing 2*$editor-std-spacing $editor-std-spacing $editor-std-spacing;
+    margin: $editor-vertical-spacing $editor-horizontal-spacing $editor-vertical-spacing $editor-horizontal-spacing;
 
-  .editor-input.pp-reference-link-title {
-    display: inline-block;
-    width: 60%;
-    padding: 0;
-    margin: 0;
+    .pp-controls {
+        display: inline-block;
+        width: 100%;
+        text-align: right;
 
-    input {
-      padding-left: 2em;
-      width: $editor-width / 2 - 18px;
-    }
+        button {
+            border: none;
+            outline: none;
+            background: none;
+            padding-left: 10px;
+            height: 1.5em;
+            cursor: pointer;
+            font-weight: $font-semi-bold;
+            font-size: $editor-font-size + 1px;
+            color: #888888;
+        }
 
-    .input-icon {
-      display: block;
-      position: absolute;
-      top: 7px;
-      left: 0;
-      width: 2em;
-    }
+        button:hover {
+            color: darken(#888888, 8%);
+        }
+        // use priority-specific as a baseline and darken it so it presents well as a button
+        // for :hover, darken it even more (manually selected values)
+        .priority-normal {
+            color: darken($normal-ref-color, 5%);
+        }
+        .priority-normal:hover {
+            color: darken($normal-ref-color, 5% + 8%);
+        }
+        .priority-warning {
+            color: darken($warning-ref-color, 8%);
+        }
+        .priority-warning:hover {
+            color: darken($warning-ref-color, 8% + 4%);
+        }
+        .priority-alert {
+            color: darken($alert-ref-color, 5%);
+        }
+        .priority-alert:hover {
+            color: darken($alert-ref-color, 5% + 4%);
+        }
 
-    .pp-error-msg {
-      left: 0;
-      top: 20px;
-    }
-
-    .link-help {
-      display: inline-block;
-    }
-  }
-
-  // the bottom area used for dragging
-  .pp-mover-area {
-    display: inline-block;
-    width: 5%;
-    line-height: 1;
-    min-height: 1em;
-  }
-
-  .pp-controls {
-    display: inline-block;
-    width: 35%;
-    text-align: right;
-
-    button {
-      border: none;
-      outline: none;
-      background: none;
-      padding-left: 10px;
-      height: 1.5em;
-      cursor: pointer;
-      font-weight: $font-semi-bold;
-      font-size: $editor-font-size + 1px;
-      color: #888888;
-    }
-
-    button:hover {
-      color: darken(#888888, 8%);
-    }
-    // use priority-specific as a baseline and darken it so it presents well as a button
-    // for :hover, darken it even more (manually selected values)
-    .priority-normal {
-      color: darken($normal-ref-color, 5%);
-    }
-    .priority-normal:hover {
-      color: darken($normal-ref-color, 5% + 8%);
-    }
-    .priority-warning {
-      color: darken($warning-ref-color, 8%);
-    }
-    .priority-warning:hover {
-      color: darken($warning-ref-color, 8% + 4%);
-    }
-    .priority-alert {
-      color: darken($alert-ref-color, 5%);
-    }
-    .priority-alert:hover {
-      color: darken($alert-ref-color, 5% + 4%);
-    }
   }
 }
 
@@ -229,20 +220,32 @@ $editor-std-spacing: 15px;
     cursor: pointer;
   }
 
-  /* --- Help windows --- */
-  .priority-help,
-  .link-help {
-    display: inline-block;
+    // the bottom area used for dragging
+    .pp-mover-area {
+        display: inline-block;
+        width: 5%;
+        line-height: 1;
+        min-height: 1em;
 
-    margin-left: 5px;
-    border: none;
-    outline: none;
+        position: absolute;
+        right: 6px;
+        top: 0;
+    }
 
-    font-size: 17px;
-    color: #888888;
+    /* --- Help windows --- */
+    .priority-help,
+    .link-help {
+        display: inline-block;
 
-    background: none;
-    cursor: pointer; // todo not sure
+        margin-left: 7px;
+        border: none;
+        outline: none;
+
+        font-size: 17px;
+        color: #888888;
+
+        background: none;
+        cursor: pointer; // todo not sure
   }
 }
 
