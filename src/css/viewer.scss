@@ -131,8 +131,9 @@ li.pp-annotation {
     .pp-view-ratings {
         display: flex;
         //align-content: flex-start;
-      align-items: center;
+        align-items: center;
         min-height: 100%;
+        padding: 3px 0;
 
         a {
             //height: 30px;
