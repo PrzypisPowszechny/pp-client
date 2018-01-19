@@ -87,14 +87,13 @@ export default class ViewerContentItem extends React.Component<IViewerContentIte
             </a>
           </div>
           <div className="pp-view-ratings">
-            {/* todo probably termporary buttons*/}
             <a className="ui label medium">
               Przydatne
-              {usefulCount}
+              <span className="number">{usefulCount}</span>
             </a>
             <a className="ui label medium">
               Sprzeciw
-              {objectionCount}
+              <span className="number">{objectionCount}</span>
             </a>
           </div>
         </div>

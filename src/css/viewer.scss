@@ -81,61 +81,71 @@ li.pp-annotation {
 }
 
 li.pp-annotation {
-  /* --- Viewer comment display --- */
-  .pp-view-comment {
-    width: $widget-inner-width;
-    min-height: 48px;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    clear: both;
+    /* --- Viewer comment display --- */
+    .pp-view-comment {
+        width: $widget-inner-width;
+        min-height: 48px;
+        padding-top: 6px;
+        padding-bottom: 6px;
+        clear: both;
 
-    font-weight: $font-light;
-    font-size: 14px;
-    color: rgb(0, 0, 0);
-  }
-
-  /* --- Viewer bottom bar --- */
-  .pp-view-bottom-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    min-height: 25px;
-    //max-height: 45px;
-    //overflow: hidden;
-
-    padding-top: 6px; // = pp-viewer padding-bottom
-
-    /* upper line */
-    border-top: 1px solid rgb(210, 212, 210);
-
-    color: rgb(136, 136, 136);
-  }
-
-  .pp-view-link-container {
-    max-width: 50%;
-    min-height: 100%;
-  }
-
-  .pp-view-link {
-    font-weight: $font-semi-bold;
-    color: rgb(136, 136, 136);
-    text-transform: uppercase;
-    vertical-align: middle;
-
-    font-size: 12px;
-    line-height: 0.5em;
-  }
-
-  .pp-view-ratings {
-    display: flex;
-    //align-content: flex-start;
-    align-items: center;
-    min-height: 100%;
-
-    a {
-      //height: 30px;
-      font-size: $viewer-font-size - 1px;
+        font-weight: $font-light;
+        font-size: 14px;
+        color: rgb(0, 0, 0);
     }
-  }
+
+
+    /* --- Viewer bottom bar --- */
+    .pp-view-bottom-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        min-height: 25px;
+        //max-height: 45px;
+        //overflow: hidden;
+
+        padding-top: 6px;  // = pp-viewer padding-bottom
+
+        /* upper line */
+        border-top: 1px solid rgb(210, 212, 210);
+
+        color: rgb(136, 136, 136);
+    }
+
+    .pp-view-link-container {
+        max-width: 50%;
+        min-height: 100%;
+    }
+
+    .pp-view-link {
+        font-weight: $font-semi-bold;
+        color: rgb(136, 136, 136);
+        text-transform: uppercase;
+        vertical-align: middle;
+
+        font-size: 12px;
+        line-height: 0.5em;
+    }
+
+    .pp-view-ratings {
+        display: flex;
+        //align-content: flex-start;
+      align-items: center;
+        min-height: 100%;
+
+        a {
+            //height: 30px;
+            display: flex;
+            justify-content: space-between;
+            font-size: $viewer-font-size - 1px;
+            width: 110px;
+
+            .number {
+              opacity: 0.8;
+            }
+
+        }
+    }
+
 }
