@@ -196,6 +196,7 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
         >
           <i className="remove icon"/>
         </div>
+        <div className="pp-mover-area"/>
         <div className="editor-input pp-comment">
           <textarea
             name="comment"
@@ -221,33 +222,32 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
             {referenceLinkError}
           </div>
         </div>
-        <div className="pp-bottom-bar">
-          <div className={'editor-input pp-reference-link-title'}>
-            <input
+        <div className={'editor-input pp-reference-link-title'}>
+          <input
               type="text"
               name="referenceLinkTitle"
               className={this.state.referenceLinkTitleError ? ' error' : ''}
               value={referenceLinkTitle}
               onChange={this.handleInputChange}
               placeholder="Wpisz tytuł źródła"
-            />
-            <i className="input-icon tags icon"/>
-            <div
+          />
+          <i className="input-icon tags icon"/>
+          <div
               className={'pp-error-msg ui pointing red basic label large' + this.hideIfEmpty(referenceLinkTitleError)}
-            >
-              {referenceLinkTitleError}
-            </div>
-            <Popup
+          >
+            {referenceLinkTitleError}
+          </div>
+          <Popup
               on="click"
               hideOnScroll={true}
               trigger={<div className="link-help"><i className="help circle icon"/></div>}
               flowing={true}
               hoverable={true}
-            >
-              {/*TODO*/}
-            </Popup>
-          </div>
-          <div className="pp-mover-area"/>
+          >
+            {/*TODO*/}
+          </Popup>
+        </div>
+        <div className="pp-bottom-bar">
           <div className="pp-controls">
             <button className="pp-cancel" onClick={this.onCancel}>
               {' '}Anuluj{' '}
