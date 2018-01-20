@@ -3,3 +3,9 @@ export enum AnnotationPriorities {
   WARNING = 'WARNING',
   ALERT = 'ALERT',
 }
+
+export const annotationPrioritiesLabels = {
+  NORMAL: 'dodatkowa informacja',
+  WARNING: 'wyjaśnienie',
+  ALERT: 'sprostowanie błędu',
+};

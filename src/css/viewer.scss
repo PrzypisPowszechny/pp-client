@@ -33,6 +33,17 @@ li.pp-annotation {
 	font-weight: $font-semi-bold;
 	color: rgb(255, 255, 255);
 	text-transform: uppercase;
+
+    &.priority-normal {
+        background-color: $normal-ref-color;
+    }
+    &.priority-warning {
+        background-color: $warning-ref-color;
+    }
+    &.priority-alert {
+        background-color: $alert-ref-color;
+    }
+
 }
 
 .pp-view-comment-date {
