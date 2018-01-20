@@ -3,6 +3,9 @@ import Registry from '../modules/Registry';
 import IStorage from './Storage.interface';
 import IModule from '../modules/Module.interface';
 
+import IPPSettings from 'src/PPSettings.interface';
+declare const PP_SETTINGS: IPPSettings;
+
 // id generator function from old annotator storage
 const generateId = (() => {
   let counter = -1;
@@ -14,6 +17,11 @@ export default class DebugStorage implements IStorage, IModule {
 
   trace(action: string, data: any) {
     console.debug(`DebugStorage: invoking action ${action} on data: `, data);
+    // If some annotations are hardcoded, print an annotation json to facilitate copying it manually to the file
+    if (PP_SETTINGS.READ_ANNOTATIONS_FROM_FILE) {
+      console.debug('Annotation json:');
+      console.debug(JSON.stringify(data));
+    }
   }
 
   create(annotation: IAnnotation): IAnnotation {

@@ -1,0 +1,21 @@
+[
+  {
+    "id": 1,
+    "url": "http://localhost:8080/",
+    "ranges": [
+      {
+        "start": "/div[1]/p[10]",
+        "startOffset": 143,
+        "end": "/div[1]/p[10]",
+        "endOffset": 150
+      }
+    ],
+    "quote": "Testowy",
+    "priority": "NORMAL",
+    "comment": "Example annotation",
+    "reference_link": "ABC",
+    "reference_link_title": "tytuł",
+    "objection_count": 15,
+    "useful_count": 100
+  }
+]

@@ -23,7 +23,7 @@
     }
   },
   "include": [
-    "./@types/styles.d.ts",
+    "./@types/custom.d.ts",
     "./src/**/*"
   ],
   "awesomeTypescriptLoaderOptions": {
