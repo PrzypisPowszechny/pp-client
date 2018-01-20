@@ -14,6 +14,9 @@
     "priority": "NORMAL",
     "comment": "Example annotation",
     "reference_link": "ABC",
-    "reference_link_title": "tytuł"
+    "reference_link_title": "tytuł",
+    "objection_count": 15,
+    "useful_count": 100
+
   }
 ]

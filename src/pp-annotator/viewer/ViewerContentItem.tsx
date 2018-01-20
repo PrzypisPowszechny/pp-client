@@ -43,6 +43,8 @@ export default class ViewerContentItem extends React.Component<IViewerContentIte
       comment,
       referenceLink,
       referenceLinkTitle,
+      objectionCount,
+      usefulCount,
     } = this.props.annotation;
 
     return (
@@ -88,11 +90,11 @@ export default class ViewerContentItem extends React.Component<IViewerContentIte
             {/* todo probably termporary buttons*/}
             <a className="ui label medium">
               Przydatne
-              100
+              {usefulCount}
             </a>
             <a className="ui label medium">
               Sprzeciw
-              23
+              {objectionCount}
             </a>
           </div>
         </div>
