@@ -22,17 +22,29 @@ li.pp-annotation {
 }
 
 .pp-view-comment-priority {
-  float: left;
-  margin-left: -($widget-inner-margin + 1px); /* cover the border */
-  padding-top: 3px;
-  padding-bottom: 3px;
-  padding-left: $widget-inner-margin + 2px; /* indent the type indication */
-  padding-right: $widget-inner-margin;
 
-  background-color: rgb(86, 121, 176);
-  font-weight: $font-semi-bold;
-  color: rgb(255, 255, 255);
-  text-transform: uppercase;
+	float: left;
+	margin-left: -($widget-inner-margin + 1px); /* cover the border */
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-left: $widget-inner-margin + 2px; /* indent the type indication */
+	padding-right: $widget-inner-margin;
+
+	background-color: rgb(86, 121, 176);
+	font-weight: $font-semi-bold;
+	color: rgb(255, 255, 255);
+	text-transform: uppercase;
+
+    &.priority-normal {
+        background-color: $normal-ref-color;
+    }
+    &.priority-warning {
+        background-color: $warning-ref-color;
+    }
+    &.priority-alert {
+        background-color: $alert-ref-color;
+    }
+
 }
 
 .pp-view-comment-date {

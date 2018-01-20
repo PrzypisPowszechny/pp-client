@@ -1,5 +1,6 @@
 import React from 'react';
 import AnnotationViewModel from '../annotation/AnnotationViewModel';
+import {AnnotationPriorities, annotationPrioritiesLabels} from '../consts';
 
 interface IViewerContentItemProps {
   key: number;
@@ -37,6 +38,15 @@ export default class ViewerContentItem extends React.Component<IViewerContentIte
 
   handleDelete = e => this.props.callbacks.onDelete(e, this.props.annotation);
 
+  headerPriorityClass() {
+    const priorityToClass = {
+      [AnnotationPriorities.NORMAL]: 'priority-normal',
+      [AnnotationPriorities.WARNING]: 'priority-warning',
+      [AnnotationPriorities.ALERT]: 'priority-alert',
+    };
+    return priorityToClass[this.props.annotation.priority];
+  }
+
   render() {
     const {
       priority,
@@ -50,8 +60,8 @@ export default class ViewerContentItem extends React.Component<IViewerContentIte
     return (
       <li className="pp-annotation">
         <div className="pp-view-head-bar">
-          <div className="pp-view-comment-priority">
-            {priority}
+          <div className={'pp-view-comment-priority ' + this.headerPriorityClass()}>
+            {annotationPrioritiesLabels[priority]}
           </div>
 
           <div className="pp-view-comment-date">
@@ -100,4 +110,5 @@ export default class ViewerContentItem extends React.Component<IViewerContentIte
       </li>
     );
   }
+
 }

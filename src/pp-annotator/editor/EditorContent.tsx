@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import { Header, Popup, Grid, Modal } from 'semantic-ui-react';
 
-import { AnnotationPriorities } from '../consts';
+import {AnnotationPriorities, annotationPrioritiesLabels} from '../consts';
 import AnnotationViewModel from '../annotation/AnnotationViewModel';
 import { IAnnotationEditableFields } from '../annotation/annotation';
 
@@ -168,25 +168,25 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
             {/*TODO just an instruction stub*/}
             <Grid centered={true} divided={true} columns={3}>
               <Grid.Column textAlign="center">
-                <Header as="h4">Niebieski przypis</Header>
+                <Header as="h4">{annotationPrioritiesLabels.NORMAL}</Header>
               </Grid.Column>
               <Grid.Column textAlign="center">
-                <Header as="h4">Żółty przypis</Header>
+                <Header as="h4">{annotationPrioritiesLabels.WARNING}</Header>
               </Grid.Column>
               <Grid.Column textAlign="center">
-                <Header as="h4">Pomarańczowy przypis</Header>
+                <Header as="h4">{annotationPrioritiesLabels.ALERT}</Header>
               </Grid.Column>
             </Grid>
           </Popup>
           <div className={styles.headerButtons}>
             <PriorityButton type={AnnotationPriorities.NORMAL} onClick={this.setPriority} priority={priority}>
-              dodatkowa informacja
+              {annotationPrioritiesLabels.NORMAL}
             </PriorityButton>
             <PriorityButton type={AnnotationPriorities.WARNING} onClick={this.setPriority} priority={priority}>
-              wyjaśnienie
+              {annotationPrioritiesLabels.WARNING}
             </PriorityButton>
             <PriorityButton type={AnnotationPriorities.ALERT} onClick={this.setPriority} priority={priority}>
-              sprostowanie błędu
+              {annotationPrioritiesLabels.ALERT}
             </PriorityButton>
           </div>
         </div>
