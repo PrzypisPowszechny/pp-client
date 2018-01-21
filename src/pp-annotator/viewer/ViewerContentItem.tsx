@@ -1,6 +1,7 @@
 import React from 'react';
 import AnnotationViewModel from '../annotation/AnnotationViewModel';
 import {AnnotationPriorities, annotationPrioritiesLabels} from '../consts';
+import { Popup } from 'semantic-ui-react';
 
 interface IViewerContentItemProps {
   key: number;
@@ -56,20 +57,37 @@ export default class ViewerContentItem extends React.Component<
     return priorityToClass[this.props.annotation.priority];
   }
 
+  usefulButton() {
+    const {usefulCount} = this.props.annotation;
+    const {useful} = this.state;
+
+    return (
+      <a className={'ui label medium useful ' + (useful ? 'selected' : '')} onClick={this.toggleUseful}>
+        Przydatne
+        <span className="number">{usefulCount + (useful ? 1 : 0)}</span>
+      </a>
+    );
+  }
+
+  objectionButton() {
+    const {objectionCount} = this.props.annotation;
+    const {objection} = this.state;
+
+    return (
+      <a className={'ui label medium objection ' + (objection ? 'selected' : '')} onClick={this.toggleObjection}>
+        Sprzeciw
+        <span className="number">{objectionCount + (objection ? 1 : 0)}</span>
+      </a>
+    );
+  }
+
   render() {
     const {
       priority,
       comment,
       referenceLink,
       referenceLinkTitle,
-      usefulCount,
-      objectionCount,
     } = this.props.annotation;
-
-    const {
-      useful,
-      objection,
-    } = this.state;
 
     return (
       <li className="pp-annotation">
@@ -111,14 +129,22 @@ export default class ViewerContentItem extends React.Component<
             </a>
           </div>
           <div className="pp-view-ratings">
-            <a className={'ui label medium useful ' + (useful ? 'selected' : '')} onClick={this.toggleUseful}>
-              Przydatne
-              <span className="number">{usefulCount + (useful ? 1 : 0)}</span>
-            </a>
-            <a className={'ui label medium objection ' + (objection ? 'selected' : '')} onClick={this.toggleObjection}>
-              Sprzeciw
-              <span className="number">{objectionCount + (objection ? 1 : 0)}</span>
-            </a>
+            <Popup
+              trigger={this.usefulButton()}
+              size="small"
+              className="small-padding"
+              inverted={true}
+            >
+              TODO Lorem ipsum
+            </Popup>
+            <Popup
+              trigger={this.objectionButton()}
+              size="small"
+              className="small-padding"
+              inverted={true}
+            >
+              TODO Lorem ipsum
+            </Popup>
           </div>
         </div>
       </li>

@@ -167,3 +167,8 @@ li.pp-annotation {
     }
 
 }
+
+// Override default semantic ui popup padding
+.ui.popup.small-padding {
+    padding: 8px;
+}
