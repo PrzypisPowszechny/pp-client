@@ -10,6 +10,8 @@ interface IViewerContentItemProps {
 
 interface IViewerContentItemState {
   initialView: boolean;
+  useful: boolean;
+  objection: boolean;
 }
 
 export interface ICallbacks {
@@ -17,26 +19,33 @@ export interface ICallbacks {
   onDelete(e, annotation: AnnotationViewModel): void;
 }
 
-export default class ViewerContentItem extends React.Component<IViewerContentItemProps,
-  IViewerContentItemState> {
+export default class ViewerContentItem extends React.Component<
+  IViewerContentItemProps,
+  Partial<IViewerContentItemState>
+  > {
   constructor(props: IViewerContentItemProps) {
     super(props);
 
     this.state = {
       initialView: true,
-      // TODO KG use also component's state to keep feedback buttons expansion state?
+      useful: this.props.annotation.useful,
+      objection: this.props.annotation.objection,
     };
   }
 
   componentWillReceiveProps() {
     // Set timeout after which edit buttons disappear
-    this.setState({ initialView: true });
-    setTimeout(() => this.setState({ initialView: false }), 500);
+    this.setState({initialView: true});
+    setTimeout(() => this.setState({initialView: false}), 500);
   }
 
   handleEdit = e => this.props.callbacks.onEdit(e, this.props.annotation);
 
   handleDelete = e => this.props.callbacks.onDelete(e, this.props.annotation);
+
+  toggleUseful = e => this.setState({useful: !this.state.useful});
+
+  toggleObjection = e => this.setState({objection: !this.state.objection});
 
   headerPriorityClass() {
     const priorityToClass = {
@@ -53,9 +62,14 @@ export default class ViewerContentItem extends React.Component<IViewerContentIte
       comment,
       referenceLink,
       referenceLinkTitle,
-      objectionCount,
       usefulCount,
+      objectionCount,
     } = this.props.annotation;
+
+    const {
+      useful,
+      objection,
+    } = this.state;
 
     return (
       <li className="pp-annotation">
@@ -97,13 +111,13 @@ export default class ViewerContentItem extends React.Component<IViewerContentIte
             </a>
           </div>
           <div className="pp-view-ratings">
-            <a className="ui label medium">
+            <a className={'ui label medium useful ' + (useful ? 'selected' : '')} onClick={this.toggleUseful}>
               Przydatne
-              <span className="number">{usefulCount}</span>
+              <span className="number">{usefulCount + (useful ? 1 : 0)}</span>
             </a>
-            <a className="ui label medium">
+            <a className={'ui label medium objection ' + (objection ? 'selected' : '')} onClick={this.toggleObjection}>
               Sprzeciw
-              <span className="number">{objectionCount}</span>
+              <span className="number">{objectionCount + (objection ? 1 : 0)}</span>
             </a>
           </div>
         </div>
