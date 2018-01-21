@@ -142,13 +142,11 @@ li.pp-annotation {
 
     .pp-view-ratings {
         display: flex;
-        //align-content: flex-start;
         align-items: center;
         min-height: 100%;
         padding: 3px 0;
 
         a {
-            //height: 30px;
             display: flex;
             justify-content: space-between;
             font-size: $viewer-font-size - 1px;
@@ -158,6 +156,13 @@ li.pp-annotation {
               opacity: 0.8;
             }
 
+            &.useful.selected {
+                color: #2b9344;
+            }
+
+            &.objection.selected {
+                color: #ff6333;
+            }
         }
     }
 
