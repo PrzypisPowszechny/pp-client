@@ -1,7 +1,7 @@
 import React from 'react';
 import AnnotationViewModel from '../annotation/AnnotationViewModel';
 import {AnnotationPriorities, annotationPrioritiesLabels} from '../consts';
-import { Popup } from 'semantic-ui-react';
+import {Popup, Modal, Button} from 'semantic-ui-react';
 
 interface IViewerContentItemProps {
   key: number;
@@ -13,6 +13,7 @@ interface IViewerContentItemState {
   initialView: boolean;
   useful: boolean;
   objection: boolean;
+  confirmDeleteModalOpen: boolean;
 }
 
 export interface ICallbacks {
@@ -24,6 +25,7 @@ export default class ViewerContentItem extends React.Component<
   IViewerContentItemProps,
   Partial<IViewerContentItemState>
   > {
+
   constructor(props: IViewerContentItemProps) {
     super(props);
 
@@ -31,6 +33,7 @@ export default class ViewerContentItem extends React.Component<
       initialView: true,
       useful: this.props.annotation.useful,
       objection: this.props.annotation.objection,
+      confirmDeleteModalOpen: false,
     };
   }
 
@@ -42,7 +45,14 @@ export default class ViewerContentItem extends React.Component<
 
   handleEdit = e => this.props.callbacks.onEdit(e, this.props.annotation);
 
-  handleDelete = e => this.props.callbacks.onDelete(e, this.props.annotation);
+  setDeleteModalOpen = e => this.setState({confirmDeleteModalOpen: true});
+
+  setDeleteModalClosed = e => this.setState({confirmDeleteModalOpen: false});
+
+  handleDelete = (e) => {
+    this.setState({confirmDeleteModalOpen: false});
+    this.props.callbacks.onDelete(e, this.props.annotation);
+  }
 
   toggleUseful = e => this.setState({useful: !this.state.useful});
 
@@ -81,6 +91,24 @@ export default class ViewerContentItem extends React.Component<
     );
   }
 
+  renderDeleteModal() {
+    return (
+      <Modal size="mini" open={this.state.confirmDeleteModalOpen}>
+          <Modal.Content>
+            <p>Czy na pewno chcesz usunąć przypis?</p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button onClick={this.setDeleteModalClosed} negative={true}>
+              Nie
+            </Button>
+            <Button onClick={this.handleDelete} positive={true}>
+              Tak
+            </Button>
+          </Modal.Actions>
+        </Modal>
+    );
+  }
+
   render() {
     const {
       priority,
@@ -101,6 +129,7 @@ export default class ViewerContentItem extends React.Component<
           </div>
 
           <div className={'pp-controls ' + (this.state.initialView ? 'pp-visible' : '')}>
+            {this.renderDeleteModal()}
             <button
               type="button"
               title="Edit"
@@ -113,7 +142,7 @@ export default class ViewerContentItem extends React.Component<
               type="button"
               title="Delete"
               className="pp-delete"
-              onClick={this.handleDelete}
+              onClick={this.setDeleteModalOpen}
             >
               <i className="trash icon"/>
             </button>
