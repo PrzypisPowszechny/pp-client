@@ -1,0 +1,45 @@
+{
+  "manifest_version": 2,
+
+  "name": "Przypis Powszechny",
+  "description": "",
+  "version": "1.0",
+
+  "permissions": [
+    "activeTab",
+    "identity",
+    "identity.email",
+    "https://ajax.googleapis.com/"
+  ],
+  "oauth2": {
+    "client_id": "79553213007-8oueh36t82f23in0ig5qaomc1k05tnuu.apps.googleusercontent.com",
+    "scopes": ["profile"]
+  },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["main.bundle.js"]
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["vendor.bundle.js"]
+    }
+  ],
+  "browser_action": {
+//    "default_icon": "icon.png",
+    "default_popup": "popup.html",
+    "default_title": "Przypis Powszechny - wersja testowa"
+  },
+  "web_accessible_resources": [
+    "*.ttf",
+    "*.eot",
+    "*.svg",
+    "*.woff",
+    "*.woff2",
+    "*.png"
+  ]
+}
+
+
+

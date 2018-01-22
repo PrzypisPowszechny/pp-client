@@ -12,10 +12,14 @@ const BUILD_DIR = path.resolve(__dirname, 'dist');
 
 const localPath = (...args) => path.resolve(__dirname, ...args);
 
+console.log(__dirname);
+
 const config = {
   entry: {
     vendor: "./src/vendor.ts",
-    main: "./src/index.ts"
+    main: "./src/index.ts",
+    // Browser extension entry points
+    popup: "./src/browser-extension/popup.ts"
   },
   output: {
     path: BUILD_DIR,
@@ -48,6 +52,7 @@ const config = {
         test: /\.scss$/,
         include: [
           localPath('src', 'css'),
+          localPath('src', 'browser-extension'),
         ],
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
@@ -90,11 +95,14 @@ const config = {
     new HtmlWebpackPlugin({
       title: 'Przypis testowa pusta strona',
       template: 'src/test.html',
+      filename: 'index.html',
+      chunks: ['vendor', 'main']
     }),
     new webpack.DefinePlugin({
       // use appropriate (dev or production) PP settings
       PP_SETTINGS: appSettings[process.env.NODE_ENV || 'dev']
     }),
+    // JQuery is assumed by semantic ui, so we need to define it
     new webpack.ProvidePlugin({
       jQuery: 'jquery',
       $: 'jquery',

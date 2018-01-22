@@ -5,13 +5,15 @@
 
 @font-face {
   font-family: $font-open-sans;
-  src: url('../../assets/OpenSans-Light.ttf');
+    src: url('../../assets/OpenSans-SemiBold.ttf') format('ttf');
+
+  //src: url('../../assets/OpenSans-Light.ttf') format('ttf');
   font-weight: 300;
 }
 
 @font-face {
   font-family: $font-open-sans;
-  src: url('../../assets/OpenSans-SemiBold.ttf');
+  src: url('../../assets/OpenSans-SemiBold.ttf') format('ttf');
   font-weight: 600;
 }
 
