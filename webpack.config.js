@@ -12,8 +12,6 @@ const BUILD_DIR = path.resolve(__dirname, 'dist');
 
 const localPath = (...args) => path.resolve(__dirname, ...args);
 
-console.log(__dirname);
-
 const config = {
   entry: {
     vendor: "./src/vendor.ts",
