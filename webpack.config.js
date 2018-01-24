@@ -21,6 +21,7 @@ const config = {
   },
   output: {
     path: BUILD_DIR,
+    publicPath: 'chrome-extension://bdglamibdkblkcmmpikbofinedfplndj/',
     filename: '[name].bundle.js',
   },
   resolve: {
