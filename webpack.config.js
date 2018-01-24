@@ -14,10 +14,8 @@ const localPath = (...args) => path.resolve(__dirname, ...args);
 
 const config = {
   entry: {
-    vendor: "./src/vendor.ts",
     main: "./src/index.ts",
-    // Browser extension entry points
-    popup: "./src/browser-extension/popup.ts"
+    vendor: "./src/vendor.ts",
   },
   output: {
     path: BUILD_DIR,
@@ -94,7 +92,6 @@ const config = {
       title: 'Przypis testowa pusta strona',
       template: 'src/test.html',
       filename: 'index.html',
-      chunks: ['vendor', 'main']
     }),
     new webpack.DefinePlugin({
       // use appropriate (dev or production) PP settings
