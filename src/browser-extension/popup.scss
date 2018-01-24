@@ -1,4 +1,18 @@
 // Any styles to see if these styles are attached
+
+html, body {
+  height: 171px;
+}
 body {
-    background-color: blue;
+  min-width: 210px !important;
+}
+
+.pp-popup {
+  margin: 0 !important;
+  border: none !important;
+}
+
+
+.item {
+  font-size: 1em !important;
 }
