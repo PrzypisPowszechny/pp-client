@@ -48,7 +48,7 @@
   "scripts": {
     "build": "webpack -p --config config/webpack.prod.js",
     "start": "webpack-dev-server --config config/webpack.dev.js",
-    "build-dev-extension": "webpack --config config/browser-extension/webpack.dev.js",
+    "build-dev-extension": "webpack --config config/browser-extension/webpack.ext.dev.js",
     "lint": "tslint --project tsconfig.json",
     "lint-fix": "npm run lint -- --fix"
   },

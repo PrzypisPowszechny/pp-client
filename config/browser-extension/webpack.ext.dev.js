@@ -1,25 +1,27 @@
-const common = require('../../webpack.config');
+const path = require('path');
 
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const webpack = require('webpack');
+
+const common = require('../../webpack.config');
+
+const BUILD_DIR = path.resolve(__dirname, '..', '..', 'dist-ext');
 
 module.exports = merge(common, {
-  devtool: 'inline-source-map',
-  devServer: {
-    contentBase: '/dist',
-    compress: true,
-    inline: true,
-    hot: true,
-    overlay: true,
+  entry: {
+    popup: "./src/browser-extension/popup.ts",
+  },
+  output: {
+    path: BUILD_DIR,
+    publicPath: '/',
+    filename: '[name].bundle.js',
   },
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Przypis Powszechny -- pomoc',
       template: 'src/browser-extension/popup.html',
       filename: 'popup.html',
-      chunks: ['vendor', 'popup']
     }),
     new CopyWebpackPlugin([
       {

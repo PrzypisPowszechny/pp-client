@@ -8,9 +8,10 @@ const webpack = require('webpack');
 // app-specific settings (enabled features etc.)
 const { appSettings } = require('./config/app-settings');
 
-const BUILD_DIR = path.resolve(__dirname, 'dist');
-
 const localPath = (...args) => path.resolve(__dirname, ...args);
+
+const BUILD_DIR = localPath('dist');
+const EXT_DIR = localPath('dist-ext');
 
 const config = {
   entry: {
@@ -87,7 +88,7 @@ const config = {
     ],
   },
   plugins: [
-    new CleanWebpackPlugin([BUILD_DIR]),
+    new CleanWebpackPlugin([BUILD_DIR, EXT_DIR]),
     new HtmlWebpackPlugin({
       title: 'Przypis testowa pusta strona',
       template: 'src/test.html',
