@@ -1,17 +1,5 @@
 @import "variables";
 
-@font-face {
-  font-family: $font-open-sans;
-  src: url('/assets/OpenSans-Light.ttf') format('ttf');
-  font-weight: 300;
-}
-
-@font-face {
-  font-family: $font-open-sans;
-  src: url('/assets/OpenSans-SemiBold.ttf') format('ttf');
-  font-weight: 600;
-}
-
 .annotator-hl {
   background: #5679B0;
   background: rgba(86, 121, 176, 0.3);
@@ -90,7 +78,7 @@ annotator-invert-Y
   /* The downward triangle below widget. */
 
   //KG todo replace the annotator's triangle with our own
-  background: url('/node_modules/annotator/img/annotator-glyph-sprite.png') no-repeat 0 0;
+  background: url('~annotator/img/annotator-glyph-sprite.png') no-repeat 0 0;
   content: "";
   display: block;
   width: 18px;
