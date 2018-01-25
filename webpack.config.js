@@ -17,7 +17,7 @@ const config = {
     vendor: "./src/vendor.ts",
     main: "./src/index.ts",
     // Browser extension entry points
-    popup: "./src/browser-extension/popup.tsx"
+    popup: "./src/browser-extension/popup/popup.tsx"
   },
   output: {
     path: BUILD_DIR,
