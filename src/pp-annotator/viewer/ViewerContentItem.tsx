@@ -153,7 +153,7 @@ export default class ViewerContentItem extends React.Component<
         </div>
         <div className="pp-view-bottom-bar">
           <div className="pp-view-link-container">
-            <a className="pp-view-link" href={referenceLink}>
+            <a className="pp-view-link" href={referenceLink} target="_blank">
               {referenceLinkTitle}
             </a>
           </div>
