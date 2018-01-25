@@ -19,11 +19,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["main.bundle.js"]
-    },
-    {
-      "matches": ["<all_urls>"],
-      "js": ["vendor.bundle.js"]
+      "js": ["main.bundle.js", "vendor.bundle.js"]
     }
   ],
   "browser_action": {
@@ -32,11 +28,8 @@
     "default_title": "Przypis Powszechny - wersja testowa"
   },
   "web_accessible_resources": [
-    "*.ttf",
-    "*.eot",
+    "fonts/*",
     "*.svg",
-    "*.woff",
-    "*.woff2",
     "*.png"
   ]
 }

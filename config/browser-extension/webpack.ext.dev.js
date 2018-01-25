@@ -22,6 +22,7 @@ module.exports = merge(common, {
       title: 'Przypis Powszechny -- pomoc',
       template: 'src/browser-extension/popup.html',
       filename: 'popup.html',
+      chunks: ['vendor', 'popup'],
     }),
     new CopyWebpackPlugin([
       {
