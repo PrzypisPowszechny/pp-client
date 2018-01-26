@@ -1,0 +1,27 @@
+@import 'common/base';
+@import 'common/widget';
+
+/* -- PP Action menu -- */
+.pp-menu-widget {
+    position: absolute;
+    width: 140px;
+    height: 40px;
+    margin-left: -70px;
+    margin-top: -48px;
+
+    .create-annotation {
+        border-color: #2185D0 !important; // override semantic ui
+        color: #2185D0 !important; // override semantic ui
+        cursor: pointer;
+    }
+
+    .create-annotation:hover {
+        color: darken(#2185D0, 10%) !important; // override semantic ui
+    }
+
+    button {
+        font-family: $font-open-sans;
+        font-weight: $font-semi-bold;
+        font-size: 14px !important;
+    }
+}

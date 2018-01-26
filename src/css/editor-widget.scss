@@ -1,39 +1,13 @@
-@import 'common/common';
-
+@import 'common/base';
+@import 'common/widget';
 
 $editor-width: 450px;
 $editor-font-size: 14px;
 $editor-horizontal-spacing: 20px;
 $editor-vertical-spacing: 15px;
 
-/* -- PP Adder -- */
-.pp-adder {
-    position: absolute;
-    width: 140px;
-    height: 40px;
-    margin-left: -70px;
-    margin-top: -48px;
-
-    .create-annotation {
-        border-color: #2185D0 !important; // override semantic ui
-        color: #2185D0 !important; // override semantic ui
-        cursor: pointer;
-    }
-
-    .create-annotation:hover {
-        color: darken(#2185D0, 10%) !important; // override semantic ui
-    }
-
-    button {
-        font-family: $font-open-sans;
-        font-weight: $font-semi-bold;
-        font-size: $editor-font-size !important;
-    }
-}
-
-
 /* -- PP Editor -- */
-.pp-editor .pp-widget {
+.pp-editor-widget .pp-widget {
     width: $editor-width;
     background-color: white;
     font-size: $editor-font-size;
@@ -47,7 +21,7 @@ $editor-vertical-spacing: 15px;
 }
 
 /* --- Editor head bar --- */
-.pp-editor .pp-editor-head-bar {
+.pp-editor-widget .pp-editor-head-bar {
     padding: 0 $editor-horizontal-spacing 0 $editor-horizontal-spacing;
     margin: $editor-vertical-spacing 0 $editor-vertical-spacing 0;
 
@@ -64,7 +38,7 @@ $editor-vertical-spacing: 15px;
 }
 
 /* all form styles */
-.pp-editor {
+.pp-editor-widget {
     /* fields: comment, referenceLink */
     .editor-input {
         display: block;
@@ -165,10 +139,8 @@ $editor-vertical-spacing: 15px;
     }
 }
 
-.pp-editor .pp-bottom-bar {
+.pp-editor-widget .pp-bottom-bar {
     margin: $editor-vertical-spacing $editor-horizontal-spacing $editor-vertical-spacing $editor-horizontal-spacing;
-
-
 
     .pp-controls {
         display: inline-block;
@@ -213,8 +185,8 @@ $editor-vertical-spacing: 15px;
     }
 }
 
-/* Some pp-editor embedded elements */
-.pp-editor {
+/* Some pp-editor-widget embedded elements */
+.pp-editor-widget {
     .pp-error-msg {
         position: absolute !important; // override semantic-ui defaults
         z-index: $tooltip-z-index;
@@ -263,30 +235,30 @@ $editor-vertical-spacing: 15px;
     }
 }
 
-// TODO review: copied from original annotator.css (and adapted to pp-editor & editor-input)
+// TODO review: copied from original annotator.css (and adapted to pp-editor-widget & editor-input)
 /* --- scrollbar --- */
 // KG it's better than the default scrollbar, so we might want to make use of these
 // I leave it here until we decide we don't
 
-.pp-editor .editor-input textarea::-webkit-scrollbar {
+.pp-editor-widget .editor-input textarea::-webkit-scrollbar {
     height: 8px;
     width: 8px;
 }
 
-.pp-editor .editor-input textarea::-webkit-scrollbar-track-piece {
+.pp-editor-widget .editor-input textarea::-webkit-scrollbar-track-piece {
     margin: 13px 0 3px;
     background-color: #e5e5e5;
     -webkit-border-radius: 4px;
 }
 
-.pp-editor .editor-input textarea::-webkit-scrollbar-thumb:vertical {
+.pp-editor-widget .editor-input textarea::-webkit-scrollbar-thumb:vertical {
     height: 25px;
     background-color: #ccc;
     -webkit-border-radius: 4px;
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
-.pp-editor .editor-input textarea::-webkit-scrollbar-thumb:horizontal {
+.pp-editor-widget .editor-input textarea::-webkit-scrollbar-thumb:horizontal {
     width: 25px;
     background-color: #ccc;
     -webkit-border-radius: 4px;
