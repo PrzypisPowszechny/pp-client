@@ -22,7 +22,7 @@ interface IPrzypisViewerOptions extends annotator.ui.widget.IWidgetOptions {
 
 // Public: Creates an element for viewing annotations.
 export default class ViewerWidget extends Widget {
-  static nameSpace = 'pp-viewer';
+  static nameSpace = 'pp-viewer-widget';
   static classes = {
     ...Widget.classes,
     hide: 'pp-hide',
@@ -149,6 +149,7 @@ export default class ViewerWidget extends Widget {
   // Returns nothing.
   show(position: annotator.util.IPosition) {
     if (typeof position !== 'undefined' && position !== null) {
+      console.log(this.element);
       this.element.css({
         top: position.top,
         left: position.left,
@@ -332,7 +333,7 @@ export default class ViewerWidget extends Widget {
 
 // HTML templates for this.widget and this.item properties.
 ViewerWidget.template = [
-  '<div class="pp-ui pp-outer pp-viewer pp-hide">',
+  '<div class="pp-ui pp-outer pp-viewer-widget pp-hide">',
   '</div>',
 ].join('\n');
 

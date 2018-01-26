@@ -13,7 +13,7 @@
   Individual semantic-ui components outside any `pp-ui` container (such as modals)
   need to wear this class tag themselves
 */
-import 'css/pp-semantic-ui-reset.css';
+import './css/common/pp-semantic-ui-reset.scss';
 
 // Import selected components
 import 'semantic-ui-css/components/modal.js';

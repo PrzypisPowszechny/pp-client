@@ -24,7 +24,7 @@ export default class MenuWidget extends Widget {
   static options: IMenuWidgetOptions = {};
 
   static template = `
-  <div class="pp-adder pp-hide">
+  <div class="pp-ui pp-menu-widget pp-hide">
     <button class="create-annotation ui basic pointing below label large">
         <i class="plus icon"></i>Dodaj przypis
     </button>

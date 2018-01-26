@@ -1,51 +1,21 @@
-@import "variables";
+@import 'common/base';
+@import 'common/widget';
 
 $editor-width: 450px;
 $editor-font-size: 14px;
 $editor-horizontal-spacing: 20px;
 $editor-vertical-spacing: 15px;
 
-/* -- PP Adder -- */
-.pp-adder {
-    position: absolute;
-    width: 140px;
-    height: 40px;
-    margin-left: -70px;
-    margin-top: -48px;
-
-    .create-annotation {
-        border-color: #2185D0 !important; // override semantic ui
-        color: #2185D0 !important; // override semantic ui
-        cursor: pointer;
-    }
-
-    .create-annotation:hover {
-        color: darken(#2185D0, 10%) !important; // override semantic ui
-    }
-
-    button {
-        font-family: $font-family-preset;
-        font-weight: $font-semi-bold;
-        font-size: $editor-font-size !important;
-    }
-}
-
 /* -- PP Editor -- */
-.pp-editor .pp-widget {
-  width: $editor-width;
-  background-color: white;
-  font-size: $editor-font-size;
-  font-family: $font-family-preset;
-  font-weight: $font-light;
-
-  // override semantic ui styles
-  button, textarea, input, optgroup, select {
+.pp-editor-widget .pp-widget {
+    width: $editor-width;
+    background-color: white;
+    font-size: $editor-font-size;
     font-family: $font-family-preset;
-  }
 }
 
 /* --- Editor head bar --- */
-.pp-editor .pp-editor-head-bar {
+.pp-editor-widget .pp-editor-head-bar {
     padding: 0 $editor-horizontal-spacing 0 $editor-horizontal-spacing;
     margin: $editor-vertical-spacing 0 $editor-vertical-spacing 0;
 
@@ -62,7 +32,7 @@ $editor-vertical-spacing: 15px;
 }
 
 /* all form styles */
-.pp-editor {
+.pp-editor-widget {
     /* fields: comment, referenceLink */
     .editor-input {
         display: block;
@@ -104,39 +74,38 @@ $editor-vertical-spacing: 15px;
         }
     }
 
-  /* comment field */
-  .pp-comment {
-    overflow: auto;
+    /* comment field */
+    .pp-comment {
+        overflow: auto;
 
-    textarea {
-      float: left;
-      padding: 0.5em;
-      width: 100%;
-      line-height: 1.2em;
-      height: calc(3 * 1.2em + 1.1em); // 3 lines
-    }
-  }
-
-  /* reference link field */
-  .pp-reference-link {
-    input {
-      padding-left: 2em;
-    }
-    .pp-error-msg {
-      left: 0;
-      top: 20px;
+        textarea {
+            float: left;
+            padding: 0.5em;
+            width: 100%;
+            line-height: 1.2em;
+            height: calc(3 * 1.2em + 1.1em); // 3 lines
+        }
     }
 
-    .input-icon {
-        display: block;
-        position: absolute;
-        top: 9px;
-        left: 0;
-        width: 2em;
+    /* reference link field */
+    .pp-reference-link {
+        input {
+            padding-left: 2em;
+        }
+        .pp-error-msg {
+            left: 0;
+            top: 20px;
+        }
+
+        .input-icon {
+            display: block;
+            position: absolute;
+            top: 9px;
+            left: 0;
+            width: 2em;
+        }
+
     }
-
-  }
-
 
     .pp-reference-link-title {
 
@@ -164,7 +133,7 @@ $editor-vertical-spacing: 15px;
     }
 }
 
-.pp-editor .pp-bottom-bar {
+.pp-editor-widget .pp-bottom-bar {
     margin: $editor-vertical-spacing $editor-horizontal-spacing $editor-vertical-spacing $editor-horizontal-spacing;
 
     .pp-controls {
@@ -208,29 +177,29 @@ $editor-vertical-spacing: 15px;
             color: darken($alert-ref-color, 5% + 4%);
         }
 
-  }
+    }
 }
 
-/* Some pp-editor embedded elements */
-.pp-editor {
-  .pp-error-msg {
-    position: absolute !important; // override semantic-ui defaults
-    z-index: $tooltip-z-index;
-  }
+/* Some pp-editor-widget embedded elements */
+.pp-editor-widget {
+    .pp-error-msg {
+        position: absolute !important; // override semantic-ui defaults
+        z-index: $tooltip-z-index;
+    }
 
-  /* all cross-style close buttons */
-  .pp-close {
-    position: absolute;
-    right: 0;
-    top: 0;
+    /* all cross-style close buttons */
+    .pp-close {
+        position: absolute;
+        right: 0;
+        top: 0;
 
-    border: none;
-    outline: none;
+        border: none;
+        outline: none;
 
-    color: #888888;
-    background: none;
-    cursor: pointer;
-  }
+        color: #888888;
+        background: none;
+        cursor: pointer;
+    }
 
     // the bottom area used for dragging
     .pp-mover-area {
@@ -258,34 +227,34 @@ $editor-vertical-spacing: 15px;
 
         background: none;
         cursor: pointer; // todo not sure
-  }
+    }
 }
 
-// TODO review: copied from original annotator.css (and adapted to pp-editor & editor-input)
+// TODO review: copied from original annotator.css (and adapted to pp-editor-widget & editor-input)
 /* --- scrollbar --- */
 // KG it's better than the default scrollbar, so we might want to make use of these
 // I leave it here until we decide we don't
 
-.pp-editor .editor-input textarea::-webkit-scrollbar {
-  height: 8px;
-  width: 8px;
+.pp-editor-widget .editor-input textarea::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
 }
 
-.pp-editor .editor-input textarea::-webkit-scrollbar-track-piece {
-  margin: 13px 0 3px;
-  background-color: #e5e5e5;
-  -webkit-border-radius: 4px;
+.pp-editor-widget .editor-input textarea::-webkit-scrollbar-track-piece {
+    margin: 13px 0 3px;
+    background-color: #e5e5e5;
+    -webkit-border-radius: 4px;
 }
 
-.pp-editor .editor-input textarea::-webkit-scrollbar-thumb:vertical {
-  height: 25px;
-  background-color: #ccc;
-  -webkit-border-radius: 4px;
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+.pp-editor-widget .editor-input textarea::-webkit-scrollbar-thumb:vertical {
+    height: 25px;
+    background-color: #ccc;
+    -webkit-border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
-.pp-editor .editor-input textarea::-webkit-scrollbar-thumb:horizontal {
-  width: 25px;
-  background-color: #ccc;
-  -webkit-border-radius: 4px;
+.pp-editor-widget .editor-input textarea::-webkit-scrollbar-thumb:horizontal {
+    width: 25px;
+    background-color: #ccc;
+    -webkit-border-radius: 4px;
 }

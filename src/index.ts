@@ -5,10 +5,11 @@ import DebugStorage from './pp-annotator/api/DebugStorage';
 import ViewerWidget from './pp-annotator/viewer/ViewerWidget';
 import AnnotationViewModel from './pp-annotator/annotation/AnnotationViewModel';
 
-// import global files
-import 'css/global.scss';
-import 'css/viewer.scss';
-import 'css/editor.scss';
+// import styles
+import 'css/viewer-widget.scss';
+import 'css/editor-widget.scss';
+import 'css/menu-widget.scss';
+import 'css/selection.scss';
 
 import IPPSettings from './PPSettings.interface';
 declare const PP_SETTINGS: IPPSettings;
