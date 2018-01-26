@@ -1,0 +1,16 @@
+
+#{$pp-scope}.ui.popup,
+#{$pp-scope}.ui.modal {
+    font-family: $font-family-preset !important;
+    font-size: $default-font-size !important;
+}
+
+// Override default semantic ui popup padding
+#{$pp-scope}.ui.popup.small-padding {
+    padding: 8px;
+}
+
+// Override default semantic ui popup padding
+#{$pp-scope}.ui.popup.single-long-line {
+    max-width: 420px;
+}

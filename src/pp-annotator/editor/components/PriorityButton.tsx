@@ -18,6 +18,7 @@ export default class PriorityButton extends PureComponent<IPriorityButtonProps> 
 
   static defaultProps = {
     selected: false,
+    className: '',
   };
 
   priorities = {
@@ -58,7 +59,7 @@ export default class PriorityButton extends PureComponent<IPriorityButtonProps> 
       <Popup
         trigger={button}
         size="small"
-        className="small-padding"
+        className="pp-ui small-padding single-long-line"
         inverted={false}
       >
         {tooltipText}

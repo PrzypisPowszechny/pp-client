@@ -172,7 +172,7 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
               type={AnnotationPriorities.WARNING}
               onClick={this.setPriority}
               priority={priority}
-              tooltipText="Bez tego przypisu czytelnik może być wprowadzony w błąd"
+              tooltipText="Bez tego przypisu czytelnik może być wprowadzony w&nbsp;błąd"
             >
               {annotationPrioritiesLabels.WARNING}
             </PriorityButton>
@@ -180,7 +180,7 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
               type={AnnotationPriorities.ALERT}
               onClick={this.setPriority}
               priority={priority}
-              tooltipText="Bez tego przypisu tekst wprowadzi w błąd!"
+              tooltipText="Bez tego przypisu tekst wprowadzi w&nbsp;błąd!"
             >
               {annotationPrioritiesLabels.ALERT}
             </PriorityButton>
@@ -234,6 +234,7 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
             {referenceLinkTitleError}
           </div>
           <Popup
+              className="pp-ui small-padding"
               hideOnScroll={true}
               trigger={<div className="link-help"><i className="help circle icon"/></div>}
               flowing={true}
