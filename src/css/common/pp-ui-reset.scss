@@ -1,6 +1,5 @@
-/*
-  A styles reset that applies only to elements, with a `.pp-ui` parent.
-  We do not use global styles, so they do not break other websites' styles.
- */
+@import 'vars/scope';
 
-$pp-scope: ".pp-ui";
+#{$pp-scope} * {
+    margin: 0;
+}

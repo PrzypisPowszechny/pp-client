@@ -7,12 +7,11 @@
 // We only import specific components from semantic-ui, omitting the original semantic ui `reset` and `site` components.
 // For the package to work properly, we also need to fill the gap and provide a reset of our own,
 // but with limited scope so the browser extension does not break websites' styles.
-@import "pp-semantic-ui-reset";
-// New defaults/modifiers for some semantic-ui components
-@import "pp-semantic-ui-overrides";
-// We also insert our own base styles, but similarly limited in scope
+
+// We also insert our own base styles, but limited in scope to `pp-ui` class children (see inside)
 @import "pp-ui-reset";
-// Shameful overrides
+
+// Shameful overrides, potentially harmful for other websites
 @import "shame";
 
 /*

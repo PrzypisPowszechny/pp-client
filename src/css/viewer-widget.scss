@@ -1,10 +1,12 @@
-@import 'common/base';
-@import 'common/widget';
+@import "common/vars/size";
+@import "common/vars/colors";
+@import "common/vars/fonts";
 
-$viewer-font-size: 14px;
 
 /* -- PP Viewer -- */
 // TODO refactor
+
+$viewer-font-size: 14px;
 
 .pp-viewer-widget .pp-widget {
     background-color: white;
