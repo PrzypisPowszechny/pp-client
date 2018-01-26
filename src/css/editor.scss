@@ -7,21 +7,27 @@ $editor-vertical-spacing: 15px;
 
 /* -- PP Adder -- */
 .pp-adder {
-  position: absolute;
-  width: 140px;
-  height: 40px;
-  margin-left: -70px;
-  margin-top: -48px;
+    position: absolute;
+    width: 140px;
+    height: 40px;
+    margin-left: -70px;
+    margin-top: -48px;
 
-  .create-annotation {
-    border-color: #2185D0 !important; // override semantic ui
-    color: #2185D0 !important; // override semantic ui
-    cursor: pointer;
-  }
+    .create-annotation {
+        border-color: #2185D0 !important; // override semantic ui
+        color: #2185D0 !important; // override semantic ui
+        cursor: pointer;
+    }
 
-  .create-annotation:hover {
-    color: darken(#2185D0, 10%) !important; // override semantic ui
-  }
+    .create-annotation:hover {
+        color: darken(#2185D0, 10%) !important; // override semantic ui
+    }
+
+    button {
+        font-family: $font-family-preset;
+        font-weight: $font-semi-bold;
+        font-size: $editor-font-size !important;
+    }
 }
 
 /* -- PP Editor -- */
@@ -48,6 +54,11 @@ $editor-vertical-spacing: 15px;
         font-weight: $font-semi-bold;
         margin: 0 0 10px 0;
     }
+
+    //temporary solution
+    button {
+        font-size: 12px;
+    }
 }
 
 /* all form styles */
@@ -66,6 +77,7 @@ $editor-vertical-spacing: 15px;
             outline: none;
             color: #000000;
             font-weight: $font-light;
+            font-size: $editor-font-size;
             line-height: 1em;
             background: none;
             resize: none;
