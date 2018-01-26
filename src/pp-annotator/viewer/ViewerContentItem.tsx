@@ -93,19 +93,23 @@ export default class ViewerContentItem extends React.Component<
 
   renderDeleteModal() {
     return (
-      <Modal size="mini" open={this.state.confirmDeleteModalOpen}>
-          <Modal.Content>
-            <p>Czy na pewno chcesz usunąć przypis?</p>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button onClick={this.setDeleteModalClosed} negative={true}>
-              Nie
-            </Button>
-            <Button onClick={this.handleDelete} positive={true}>
-              Tak
-            </Button>
-          </Modal.Actions>
-        </Modal>
+      <Modal
+        size="mini"
+        className="pp-ui"
+        open={this.state.confirmDeleteModalOpen}
+      >
+        <Modal.Content>
+          <p>Czy na pewno chcesz usunąć przypis?</p>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button onClick={this.setDeleteModalClosed} negative={true}>
+            Nie
+          </Button>
+          <Button onClick={this.handleDelete} positive={true}>
+            Tak
+          </Button>
+        </Modal.Actions>
+      </Modal>
     );
   }
 

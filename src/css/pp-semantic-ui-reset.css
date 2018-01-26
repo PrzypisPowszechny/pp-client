@@ -1,0 +1,30 @@
+/*!
+  Based on:
+ * # Semantic UI 2.2.13 - Reset
+ * http://github.com/semantic-org/semantic-ui/
+ *
+ *
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ *
+ */
+
+/*
+  Semantic ui relies on a box-sizing reset to work, as noted in documentation here:
+  https://semantic-ui.com/globals/reset.html
+
+  For this reason, our semantic ui box sizing is localised to components
+  !!  with a `pp-ui`-class parent !!
+*/
+
+/* Border-Box */
+.pp-ui *,
+.pp-ui *:before,
+.pp-ui *:after {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+}
+.pp-ui {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
