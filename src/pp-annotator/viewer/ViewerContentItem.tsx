@@ -102,10 +102,10 @@ export default class ViewerContentItem extends React.Component<
           <p>Czy na pewno chcesz usunąć przypis?</p>
         </Modal.Content>
         <Modal.Actions>
-          <Button onClick={this.setDeleteModalClosed} negative={true}>
+          <Button onClick={this.setDeleteModalClosed} size="tiny" negative={true}>
             Nie
           </Button>
-          <Button onClick={this.handleDelete} positive={true}>
+          <Button onClick={this.handleDelete} size="tiny" positive={true}>
             Tak
           </Button>
         </Modal.Actions>

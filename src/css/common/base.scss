@@ -39,9 +39,17 @@ annotator-invert-Y
 
 #{$pp-scope} {
     font-family: $font-open-sans;
-    font-size: $default-font-size
+    font-size: $default-font-size;
 }
 
+#{$pp-scope} {
+
+    textarea,
+    input[type=text] {
+        font-family: $font-open-sans;
+        font-size: $default-font-size;
+    }
+}
 
 
 #{$pp-scope} {
@@ -56,3 +64,4 @@ annotator-invert-Y
 .pp-hide {
     display: none !important; //override semantic-ui
 }
+
