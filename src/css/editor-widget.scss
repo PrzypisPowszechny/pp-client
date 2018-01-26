@@ -26,11 +26,6 @@ $editor-vertical-spacing: 15px;
         font-weight: $font-semi-bold;
         margin: 0 0 10px 0;
     }
-
-    //temporary solution
-    button {
-        font-size: 12px;
-    }
 }
 
 /* all form styles */
@@ -49,7 +44,6 @@ $editor-vertical-spacing: 15px;
             outline: none;
             color: #000000;
             font-weight: $font-light;
-            font-size: $editor-font-size;
             line-height: 1em;
             background: none;
             resize: none;
@@ -185,6 +179,7 @@ $editor-vertical-spacing: 15px;
 /* Some pp-editor-widget embedded elements */
 .pp-editor-widget {
     .pp-error-msg {
+        font-size: 14px !important;
         position: absolute !important; // override semantic-ui defaults
         z-index: $tooltip-z-index;
     }
