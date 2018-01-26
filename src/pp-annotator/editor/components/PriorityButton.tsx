@@ -2,12 +2,14 @@ import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 
 import { AnnotationPriorities } from '../../consts';
+import {Popup} from 'semantic-ui-react';
 
 import styles from './PriorityButton.scss';
 
 interface IPriorityButtonProps {
   type: AnnotationPriorities;
   priority: AnnotationPriorities;
+  tooltipText: string;
   onClick: (priority: AnnotationPriorities) => void;
   children: React.ReactChild;
 }
@@ -38,18 +40,29 @@ export default class PriorityButton extends PureComponent<IPriorityButtonProps> 
       type,
       priority,
       children,
+      tooltipText,
     } = this.props;
 
     const selected = priority === type;
     const style = this.priorities[type];
-
-    return (
+    const button = (
       <button
         className={classNames(styles.self, style, { [styles.selected]: selected })}
         onClick={this.handleClick}
       >
         {children}
       </button>
+    );
+
+    return (
+      <Popup
+        trigger={button}
+        size="small"
+        className="small-padding"
+        inverted={false}
+      >
+        {tooltipText}
+      </Popup>
     );
   }
 }

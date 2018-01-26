@@ -180,13 +180,28 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
             </Grid>
           </Popup>
           <div className={styles.headerButtons}>
-            <PriorityButton type={AnnotationPriorities.NORMAL} onClick={this.setPriority} priority={priority}>
+            <PriorityButton
+              type={AnnotationPriorities.NORMAL}
+              onClick={this.setPriority}
+              priority={priority}
+              tooltipText="Lorem ipsum"
+            >
               {annotationPrioritiesLabels.NORMAL}
             </PriorityButton>
-            <PriorityButton type={AnnotationPriorities.WARNING} onClick={this.setPriority} priority={priority}>
+            <PriorityButton
+              type={AnnotationPriorities.WARNING}
+              onClick={this.setPriority}
+              priority={priority}
+              tooltipText="Lorem ipsum"
+            >
               {annotationPrioritiesLabels.WARNING}
             </PriorityButton>
-            <PriorityButton type={AnnotationPriorities.ALERT} onClick={this.setPriority} priority={priority}>
+            <PriorityButton
+              type={AnnotationPriorities.ALERT}
+              onClick={this.setPriority}
+              priority={priority}
+              tooltipText="Lorem ipsum"
+            >
               {annotationPrioritiesLabels.ALERT}
             </PriorityButton>
           </div>
