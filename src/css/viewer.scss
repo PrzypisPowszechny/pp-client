@@ -6,6 +6,7 @@ $viewer-font-size: 14px;
 .pp-viewer .pp-widget {
 	background-color: white;
     padding: 6px $widget-inner-margin;
+    font-family: $font-open-sans;
 }
 
 li.pp-annotation {
@@ -127,6 +128,7 @@ li.pp-annotation {
     .pp-view-link-container {
         max-width: 50%;
         min-height: 100%;
+        margin-right: 8px;
     }
 
     .pp-view-link {
@@ -169,4 +171,8 @@ li.pp-annotation {
 // Override default semantic ui popup padding
 .ui.popup.small-padding {
     padding: 8px;
+}
+
+.content {
+    font-family: $font-open-sans;
 }
