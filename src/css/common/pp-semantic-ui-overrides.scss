@@ -1,3 +1,6 @@
+@import 'vars/scope';
+@import 'vars/fonts';
+@import 'vars/size';
 
 #{$pp-scope}.ui.popup,
 #{$pp-scope}.ui.modal {

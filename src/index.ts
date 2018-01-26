@@ -6,6 +6,8 @@ import ViewerWidget from './pp-annotator/viewer/ViewerWidget';
 import AnnotationViewModel from './pp-annotator/annotation/AnnotationViewModel';
 
 // import styles
+import 'css/common/base.scss';
+import 'css/common/widget.scss';
 import 'css/viewer-widget.scss';
 import 'css/editor-widget.scss';
 import 'css/menu-widget.scss';

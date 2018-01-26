@@ -15,7 +15,13 @@
 */
 import './css/common/pp-semantic-ui-reset.scss';
 
-// Import selected components
+// New defaults/modifiers for some semantic-ui components
+import './css/common/pp-semantic-ui-overrides.scss';
+
+/*
+ Import selected components
+  */
+// modal
 import 'semantic-ui/dist/components/modal.js';
 import 'semantic-ui/dist/components/modal.css';
 
@@ -23,7 +29,6 @@ import 'semantic-ui/dist/components/icon.css';
 import 'semantic-ui/dist/components/button.css';
 import 'semantic-ui/dist/components/label.css';
 import 'semantic-ui/dist/components/dimmer.css';
-import 'semantic-ui/dist/components/modal.css';
 import 'semantic-ui/dist/components/popup.css';
 
 // Some marginal uses in modals

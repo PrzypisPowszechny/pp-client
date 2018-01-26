@@ -1,5 +1,7 @@
-@import 'common/base';
-@import 'common/widget';
+@import "common/vars/fonts";
+@import "common/vars/colors";
+@import "common/vars/z-index";
+@import "common/mixins";
 
 $editor-width: 450px;
 $editor-font-size: 14px;
