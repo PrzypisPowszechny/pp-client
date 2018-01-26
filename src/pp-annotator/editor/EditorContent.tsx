@@ -118,8 +118,9 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
   renderNoCommentModal() {
     this.noCommentModal = (
       <Modal
-        open={this.state.noCommentModalOpen}
         size="mini"
+        className="pp-ui"
+        open={this.state.noCommentModalOpen}
       >
         <Modal.Content>
           Czy na pewno chcesz dodać przypis bez treści?
