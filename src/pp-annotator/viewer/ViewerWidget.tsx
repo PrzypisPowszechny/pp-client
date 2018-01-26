@@ -332,7 +332,7 @@ export default class ViewerWidget extends Widget {
 
 // HTML templates for this.widget and this.item properties.
 ViewerWidget.template = [
-  '<div class="pp-outer pp-viewer pp-hide">',
+  '<div class="pp-ui pp-outer pp-viewer pp-hide">',
   '</div>',
 ].join('\n');
 
