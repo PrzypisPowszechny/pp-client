@@ -165,7 +165,7 @@ export default class ViewerContentItem extends React.Component<
             <Popup
               trigger={this.usefulButton()}
               size="small"
-              className="small-padding"
+              className="pp-ui small-padding"
               inverted={true}
             >
               Daj znać, że uważasz przypis za pomocny.
@@ -173,7 +173,7 @@ export default class ViewerContentItem extends React.Component<
             <Popup
               trigger={this.objectionButton()}
               size="small"
-              className="small-padding"
+              className="pp-ui small-padding"
               inverted={true}
             >
               Daj znać, jeśli uważasz, że przypis nie jest obiektywny.
