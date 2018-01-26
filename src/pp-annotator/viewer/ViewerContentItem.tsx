@@ -168,7 +168,7 @@ export default class ViewerContentItem extends React.Component<
               className="small-padding"
               inverted={true}
             >
-              TODO Lorem ipsum
+              Daj znać, że uważasz przypis za pomocny.
             </Popup>
             <Popup
               trigger={this.objectionButton()}
@@ -176,7 +176,7 @@ export default class ViewerContentItem extends React.Component<
               className="small-padding"
               inverted={true}
             >
-              TODO Lorem ipsum
+              Daj znać, jeśli uważasz, że przypis nie jest obiektywny.
             </Popup>
           </div>
         </div>

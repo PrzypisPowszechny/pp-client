@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import { Header, Popup, Grid, Modal } from 'semantic-ui-react';
+import { Popup, Modal } from 'semantic-ui-react';
 
 import {AnnotationPriorities, annotationPrioritiesLabels} from '../consts';
 import AnnotationViewModel from '../annotation/AnnotationViewModel';
@@ -159,26 +159,6 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
       <div className={classNames('pp-widget', styles.self)}>
         <div className="pp-editor-head-bar">
           <label className="priority-header"> Co dodajesz? </label>
-          <Popup
-            on="click"
-            hideOnScroll={true}
-            trigger={<div className="priority-help"><i className="help circle icon"/></div>}
-            flowing={true}
-            hoverable={true}
-          >
-            {/*TODO just an instruction stub*/}
-            <Grid centered={true} divided={true} columns={3}>
-              <Grid.Column textAlign="center">
-                <Header as="h4">{annotationPrioritiesLabels.NORMAL}</Header>
-              </Grid.Column>
-              <Grid.Column textAlign="center">
-                <Header as="h4">{annotationPrioritiesLabels.WARNING}</Header>
-              </Grid.Column>
-              <Grid.Column textAlign="center">
-                <Header as="h4">{annotationPrioritiesLabels.ALERT}</Header>
-              </Grid.Column>
-            </Grid>
-          </Popup>
           <div className={styles.headerButtons}>
             <PriorityButton
               type={AnnotationPriorities.NORMAL}
@@ -260,7 +240,7 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
               flowing={true}
               hoverable={true}
           >
-            {/*TODO*/}
+            np. <i>Treść ustawy</i>, <i>Wikipedia</i>,<br/> <i>Nagranie wypowiedzi ministra</i>
           </Popup>
         </div>
         <div className="pp-bottom-bar">
