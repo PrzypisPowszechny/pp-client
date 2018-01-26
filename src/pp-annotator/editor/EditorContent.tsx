@@ -164,7 +164,7 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
               type={AnnotationPriorities.NORMAL}
               onClick={this.setPriority}
               priority={priority}
-              tooltipText="Lorem ipsum"
+              tooltipText="Przypis nie jest niezbędny, ale może być użyteczny"
             >
               {annotationPrioritiesLabels.NORMAL}
             </PriorityButton>
@@ -172,7 +172,7 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
               type={AnnotationPriorities.WARNING}
               onClick={this.setPriority}
               priority={priority}
-              tooltipText="Lorem ipsum"
+              tooltipText="Bez tego przypisu czytelnik może być wprowadzony w błąd"
             >
               {annotationPrioritiesLabels.WARNING}
             </PriorityButton>
@@ -180,7 +180,7 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
               type={AnnotationPriorities.ALERT}
               onClick={this.setPriority}
               priority={priority}
-              tooltipText="Lorem ipsum"
+              tooltipText="Bez tego przypisu tekst wprowadzi w błąd!"
             >
               {annotationPrioritiesLabels.ALERT}
             </PriorityButton>
@@ -234,7 +234,6 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
             {referenceLinkTitleError}
           </div>
           <Popup
-              on="click"
               hideOnScroll={true}
               trigger={<div className="link-help"><i className="help circle icon"/></div>}
               flowing={true}
