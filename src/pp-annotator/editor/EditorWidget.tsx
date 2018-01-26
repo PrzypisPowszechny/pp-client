@@ -22,7 +22,7 @@ export default class EditorWidget extends Widget {
     hide: 'pp-hide',
   };
   static template = `
-  <div class="pp-outer pp-editor pp-hide">
+  <div class="pp-ui pp-outer pp-editor pp-hide">
   </div>`;
 
   private annotation: AnnotationViewModel | null;
