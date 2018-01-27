@@ -2,6 +2,8 @@ import React from 'react';
 import AnnotationViewModel from '../annotation/AnnotationViewModel';
 import {AnnotationPriorities, annotationPrioritiesLabels} from '../consts';
 import {Popup, Modal, Button} from 'semantic-ui-react';
+import moment from 'moment';
+import 'moment/locale/pl';
 
 interface IViewerContentItemProps {
   key: number;
@@ -119,7 +121,11 @@ export default class ViewerContentItem extends React.Component<
       comment,
       referenceLink,
       referenceLinkTitle,
+      createDate,
     } = this.props.annotation;
+
+    // Set date language
+    moment.locale('pl');
 
     return (
       <li className="pp-annotation">
@@ -129,7 +135,7 @@ export default class ViewerContentItem extends React.Component<
           </div>
 
           <div className="pp-view-comment-date">
-            01.01.1999
+            {createDate ? moment(createDate).fromNow() : ''}
           </div>
 
           <div className={'pp-controls ' + (this.state.initialView ? 'pp-visible' : '')}>

@@ -149,7 +149,6 @@ export default class ViewerWidget extends Widget {
   // Returns nothing.
   show(position: annotator.util.IPosition) {
     if (typeof position !== 'undefined' && position !== null) {
-      console.log(this.element);
       this.element.css({
         top: position.top,
         left: position.left,
