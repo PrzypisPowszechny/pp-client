@@ -2,9 +2,10 @@
 
   .header-buttons {
     display: flex;
+    justify-content: space-between;
 
-    :not(:first-child):not(:last-child) {
-      margin: 0 12px;
+    button {
+      width: 31%;
     }
   }
 }
