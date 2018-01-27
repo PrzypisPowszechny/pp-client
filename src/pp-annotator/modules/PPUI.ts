@@ -155,7 +155,7 @@ export default class PPUI implements IModule {
           throw new Error('App not initialized!');
         }
 
-        if (!state.editor.isVisible && ranges.length > 0) {
+        if (!state.editor.isShown() && ranges.length > 0) {
           const url = window.location.href;
           const annotation = AnnotationViewModel.fromSelection(parseRanges(ranges), url);
           state.interactionPoint = util.mousePosition(event);
