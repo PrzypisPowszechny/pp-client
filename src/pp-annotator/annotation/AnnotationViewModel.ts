@@ -30,6 +30,7 @@ export default class AnnotationViewModel implements IAnnotationForm, annotator.I
   quote: string;
   ranges: any[]; // TODO type this better
   url: string;
+  createDate: Date | null;
 
   priority: AnnotationPriorities;
   comment: string;
@@ -44,8 +45,12 @@ export default class AnnotationViewModel implements IAnnotationForm, annotator.I
 
   constructor(model?: IAnnotationAPIModel) {
     model = model || {};
-
     this.url = model.url || '';
+    if (model.create_date) {
+      this.createDate = new Date(model.create_date);
+    } else {
+      this.createDate = null;
+    }
     this.quote = model.quote || '';
     this.ranges = model.ranges || [];
     this.id = model.id || 0;

@@ -7,6 +7,7 @@ export interface IAnnotationAPIModel {
   url?: string;
   ranges?: any[];
   quote?: string;
+  create_date?: string;
 
   priority?: AnnotationPriorities;
   comment?: string;

@@ -57,6 +57,7 @@ li.pp-annotation {
     font-weight: $font-light;
     font-size: $viewer-font-size - 2px;
     color: rgb(86, 121, 176);
+    min-width: 30px;
 }
 
 li.pp-annotation {
