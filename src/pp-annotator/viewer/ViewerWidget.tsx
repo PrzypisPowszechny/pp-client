@@ -39,16 +39,6 @@ export default class ViewerWidget extends Widget {
   private onDeleteCallback: (annotation: AnnotationViewModel) => void;
   private position: annotator.util.IPosition;
 
-  /*
-    Note: visibility is mostly any Widget's domain.
-    Widget is an annotator module class and we're not "forking" it into ours just yet
-    TODO This should be done as soon as possible
-   */
-  private visible: boolean;
-  get isVisible(): boolean {
-    return this.visible;
-  }
-
   // Public: Creates an instance of the Viewer object.
   //
   // options - An Object containing options.
@@ -68,7 +58,6 @@ export default class ViewerWidget extends Widget {
     this.hideTimerDfd = null;
     this.hideTimerActivity = false;
     this.mouseDown = false;
-    this.visible = false;
 
     if (typeof this.options.onEdit !== 'function') {
       throw new TypeError('onEdit callback must be a function');
@@ -155,16 +144,6 @@ export default class ViewerWidget extends Widget {
     }
     super.show();
     this.position = position;
-    this.visible = true;
-  }
-
-  /*
-  TODO: see the note at `visible` declaration
- */
-  hide() {
-    // this.element.css('display', 'none');
-    super.hide();
-    this.visible = false;
   }
 
   // Public: Load annotations into the viewer and show it.
