@@ -69,7 +69,6 @@ export default class ViewerWidget extends Widget {
     this.hideTimerActivity = false;
     this.mouseDown = false;
     this.visible = false;
-    this.position = null;
 
     if (typeof this.options.onEdit !== 'function') {
       throw new TypeError('onEdit callback must be a function');
@@ -155,6 +154,7 @@ export default class ViewerWidget extends Widget {
       });
     }
     super.show();
+    this.position = position;
     this.visible = true;
   }
 
@@ -162,6 +162,7 @@ export default class ViewerWidget extends Widget {
   TODO: see the note at `visible` declaration
  */
   hide() {
+    // this.element.css('display', 'none');
     super.hide();
     this.visible = false;
   }
@@ -179,7 +180,6 @@ export default class ViewerWidget extends Widget {
     this.annotations = annotations || [];
     this.update(annotations);
     this.show(position);
-    this.position = position;
   }
 
   /**
@@ -233,29 +233,46 @@ export default class ViewerWidget extends Widget {
   //
   // Returns nothing.
   onHighlightMouseover(event: JQuery.Event) {
+    // KG: This is an improved version of annotator's `onHighlightMouseover`
+    // with a fix for a viewer-not-disappearing bug
+
     // If the mouse button is currently depressed, we're probably trying to
     // make a selection, so we shouldn't show the viewer.
     if (this.mouseDown) {
       return;
     }
-    // PP modification:
-    // If the window is already open or far away enough, don't display it again;
-    let mousePosition = util.mousePosition(event);
-    this.startHideTimer(true).done(() => {
-      const annotations = $(event.target)
+
+    // Get the annotations attached to the current highlight
+    const annotations = $(event.target)
         .parents('.annotator-hl')
         .addBack()
         .map((_, elem) => $(elem).data('annotation'))
         .toArray();
-      // If the annotations displayed the last time are the same, display the window at the very same position.
-      // Prevent window from wobbling, when the user briefly moves the pointer outside the highlighted area and returns
-      // todo: use some kind of timer so that the window "fixation" period lasts only a split second
-      // It's good enough for now, though
-      if (this.areAnnotationsSame((annotations as any) as AnnotationViewModel[], this.annotations)) {
-        mousePosition = this.position;
+
+    const theSameAnnotations = this.areAnnotationsSame((annotations as any) as AnnotationViewModel[], this.annotations);
+    // If the annotations are the same and the viewer is already visible, nothing should change;
+    // Clear hide timer, if it was set before
+
+    if (theSameAnnotations && this.isShown()) {
+      if (this.hideTimer) {
+        this.clearHideTimer();
       }
-      // Now show the viewer with the wanted annotations
-      this.load((annotations as any) as AnnotationViewModel[], mousePosition);
+      return;
+    }
+
+    // After a short timeout show the viewer with annotations over which the mouse hovered
+    this.startHideTimer(true).done(() => {
+      let position;
+      // If the annotations are the same as the last time the viewer was displayed, display it at the same position
+      // In many cases it will prevent it from wobbling, when the user hovers over the highlight
+      // just after the viewer disappeared
+      // todo (nice to have): limit this "position fixation" to just a short period of time
+      if (theSameAnnotations) {
+        position = this.position;
+      } else {
+        position = util.mousePosition(event);
+      }
+      this.load((annotations as any) as AnnotationViewModel[], position);
     });
   }
 
@@ -273,7 +290,6 @@ export default class ViewerWidget extends Widget {
      This part is copied straight from annotator.Viewer and might not be very consistent with other code;
      We should consider refactoring it and making it more explicit if we need to modify it
      */
-
     // If timer has already been set, use that one.
     if (this.hideTimer) {
       if (activity === false || this.hideTimerActivity === activity) {
@@ -323,6 +339,7 @@ export default class ViewerWidget extends Widget {
     if (!this.hideTimer || !this.hideTimerDfd || this.hideTimerActivity) {
       throw new Error('Expected timer to be initialized!');
     }
+
     clearTimeout(this.hideTimer);
     this.hideTimer = null;
     this.hideTimerDfd.reject();
