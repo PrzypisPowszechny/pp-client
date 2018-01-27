@@ -1,9 +1,9 @@
-@import 'css/common/colors';
-@import 'css/common/fonts';
+@import 'css/common/vars/colors';
+@import 'css/common/vars/fonts';
 
 
 .self {
-  display: flex;
+  display: block;
   border: none;
   outline: none;
   margin: 0;
@@ -14,6 +14,7 @@
   color: white;
   font-weight: $font-semi-bold;
   text-transform: uppercase;
+  font-size: 12px;
 
   background-color: #D8DADA;
   cursor: pointer;

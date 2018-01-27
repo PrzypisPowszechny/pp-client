@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import { Header, Popup, Grid, Modal } from 'semantic-ui-react';
+import { Popup, Modal } from 'semantic-ui-react';
 
-import { AnnotationPriorities } from '../consts';
+import {AnnotationPriorities, annotationPrioritiesLabels} from '../consts';
 import AnnotationViewModel from '../annotation/AnnotationViewModel';
 import { IAnnotationEditableFields } from '../annotation/annotation';
 
@@ -118,8 +118,9 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
   renderNoCommentModal() {
     this.noCommentModal = (
       <Modal
-        open={this.state.noCommentModalOpen}
         size="mini"
+        className="pp-ui"
+        open={this.state.noCommentModalOpen}
       >
         <Modal.Content>
           Czy na pewno chcesz dodać przypis bez treści?
@@ -158,35 +159,30 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
       <div className={classNames('pp-widget', styles.self)}>
         <div className="pp-editor-head-bar">
           <label className="priority-header"> Co dodajesz? </label>
-          <Popup
-            on="click"
-            hideOnScroll={true}
-            trigger={<div className="priority-help"><i className="help circle icon"/></div>}
-            flowing={true}
-            hoverable={true}
-          >
-            {/*TODO just an instruction stub*/}
-            <Grid centered={true} divided={true} columns={3}>
-              <Grid.Column textAlign="center">
-                <Header as="h4">Niebieski przypis</Header>
-              </Grid.Column>
-              <Grid.Column textAlign="center">
-                <Header as="h4">Żółty przypis</Header>
-              </Grid.Column>
-              <Grid.Column textAlign="center">
-                <Header as="h4">Pomarańczowy przypis</Header>
-              </Grid.Column>
-            </Grid>
-          </Popup>
           <div className={styles.headerButtons}>
-            <PriorityButton type={AnnotationPriorities.NORMAL} onClick={this.setPriority} priority={priority}>
-              dodatkowa informacja
+            <PriorityButton
+              type={AnnotationPriorities.NORMAL}
+              onClick={this.setPriority}
+              priority={priority}
+              tooltipText="Przypis nie jest niezbędny, ale może być użyteczny"
+            >
+              {annotationPrioritiesLabels.NORMAL}
             </PriorityButton>
-            <PriorityButton type={AnnotationPriorities.WARNING} onClick={this.setPriority} priority={priority}>
-              wyjaśnienie
+            <PriorityButton
+              type={AnnotationPriorities.WARNING}
+              onClick={this.setPriority}
+              priority={priority}
+              tooltipText="Bez tego przypisu czytelnik może być wprowadzony w&nbsp;błąd"
+            >
+              {annotationPrioritiesLabels.WARNING}
             </PriorityButton>
-            <PriorityButton type={AnnotationPriorities.ALERT} onClick={this.setPriority} priority={priority}>
-              sprostowanie błędu
+            <PriorityButton
+              type={AnnotationPriorities.ALERT}
+              onClick={this.setPriority}
+              priority={priority}
+              tooltipText="Bez tego przypisu tekst wprowadzi w&nbsp;błąd!"
+            >
+              {annotationPrioritiesLabels.ALERT}
             </PriorityButton>
           </div>
         </div>
@@ -196,6 +192,7 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
         >
           <i className="remove icon"/>
         </div>
+        <div className="pp-mover-area"/>
         <div className="editor-input pp-comment">
           <textarea
             name="comment"
@@ -221,33 +218,32 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
             {referenceLinkError}
           </div>
         </div>
-        <div className="pp-bottom-bar">
-          <div className={'editor-input pp-reference-link-title'}>
-            <input
+        <div className={'editor-input pp-reference-link-title'}>
+          <input
               type="text"
               name="referenceLinkTitle"
               className={this.state.referenceLinkTitleError ? ' error' : ''}
               value={referenceLinkTitle}
               onChange={this.handleInputChange}
               placeholder="Wpisz tytuł źródła"
-            />
-            <i className="input-icon tags icon"/>
-            <div
+          />
+          <i className="input-icon tags icon"/>
+          <div
               className={'pp-error-msg ui pointing red basic label large' + this.hideIfEmpty(referenceLinkTitleError)}
-            >
-              {referenceLinkTitleError}
-            </div>
-            <Popup
-              on="click"
+          >
+            {referenceLinkTitleError}
+          </div>
+          <Popup
+              className="pp-ui small-padding"
               hideOnScroll={true}
               trigger={<div className="link-help"><i className="help circle icon"/></div>}
               flowing={true}
               hoverable={true}
-            >
-              {/*TODO*/}
-            </Popup>
-          </div>
-          <div className="pp-mover-area"/>
+          >
+            np. <i>Treść ustawy</i>, <i>Wikipedia</i>,<br/> <i>Nagranie wypowiedzi ministra</i>
+          </Popup>
+        </div>
+        <div className="pp-bottom-bar">
           <div className="pp-controls">
             <button className="pp-cancel" onClick={this.onCancel}>
               {' '}Anuluj{' '}
