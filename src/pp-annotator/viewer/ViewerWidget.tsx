@@ -252,7 +252,6 @@ export default class ViewerWidget extends Widget {
     const theSameAnnotations = this.areAnnotationsSame((annotations as any) as AnnotationViewModel[], this.annotations);
     // If the annotations are the same and the viewer is already visible, nothing should change;
     // Clear hide timer, if it was set before
-
     if (theSameAnnotations && this.isShown()) {
       if (this.hideTimer) {
         this.clearHideTimer();
@@ -327,7 +326,6 @@ export default class ViewerWidget extends Widget {
       }, timeout);
       this.hideTimerActivity = Boolean(activity);
     }
-
     return this.hideTimerDfd.promise();
   }
 
@@ -336,13 +334,14 @@ export default class ViewerWidget extends Widget {
   //
   // Returns nothing.
   clearHideTimer() {
-    if (!this.hideTimer || !this.hideTimerDfd || this.hideTimerActivity) {
-      throw new Error('Expected timer to be initialized!');
+    if (this.hideTimer) {
+      clearTimeout(this.hideTimer);
     }
-
-    clearTimeout(this.hideTimer);
     this.hideTimer = null;
-    this.hideTimerDfd.reject();
+
+    if (this.hideTimerDfd) {
+      this.hideTimerDfd.reject();
+    }
     this.hideTimerActivity = false;
   }
 }
