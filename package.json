@@ -30,7 +30,7 @@
     "html-webpack-plugin": "^2.30.1",
     "node-sass": "^4.7.2",
     "sass-loader": "^6.0.6",
-    "semantic-ui": "^2.2.13",
+    "semantic-ui-css": "^2.2.12",
     "source-map-loader": "^0.2.3",
     "style-loader": "^0.19.1",
     "ts-loader": "^3.2.0",
@@ -48,7 +48,7 @@
   "scripts": {
     "build": "webpack -p --config config/webpack.prod.js",
     "start": "webpack-dev-server --config config/webpack.dev.js",
-    "build-dev-extension": "webpack --config config/browser-extension/webpack.dev.js",
+    "build-dev-extension": "webpack --config config/browser-extension/webpack.ext.dev.js",
     "lint": "tslint --project tsconfig.json",
     "lint-fix": "npm run lint -- --fix"
   },

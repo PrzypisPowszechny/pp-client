@@ -8,16 +8,15 @@ const webpack = require('webpack');
 // app-specific settings (enabled features etc.)
 const { appSettings } = require('./config/app-settings');
 
-const BUILD_DIR = path.resolve(__dirname, 'dist');
-
 const localPath = (...args) => path.resolve(__dirname, ...args);
+
+const BUILD_DIR = localPath('dist');
+const EXT_DIR = localPath('dist-ext');
 
 const config = {
   entry: {
-    vendor: "./src/vendor.ts",
     main: "./src/index.ts",
-    // Browser extension entry points
-    popup: "./src/browser-extension/popup.ts"
+    vendor: "./src/vendor.ts",
   },
   output: {
     path: BUILD_DIR,
@@ -81,21 +80,28 @@ const config = {
           }],
       },
       {
-        test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
+        test: /\.(png|jpg|gif|svg)$/,
         loader: 'url-loader',
         options: {
           limit: 10000,
         },
       },
+      {
+        test: /\.(eot|ttf|woff|woff2)$/,
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]',
+          outputPath: 'fonts/',
+        },
+      },
     ],
   },
   plugins: [
-    new CleanWebpackPlugin([BUILD_DIR]),
+    new CleanWebpackPlugin([BUILD_DIR, EXT_DIR]),
     new HtmlWebpackPlugin({
       title: 'Przypis testowa pusta strona',
       template: 'src/test.html',
       filename: 'index.html',
-      chunks: ['vendor', 'main']
     }),
     new webpack.DefinePlugin({
       // use appropriate (dev or production) PP settings

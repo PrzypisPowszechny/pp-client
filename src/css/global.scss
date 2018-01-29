@@ -1,25 +1,10 @@
-@import "mixins";
-@import "fonts";
-@import "colors";
-@import "z-index";
-
-@font-face {
-  font-family: $font-open-sans;
-  src: url('../../assets/OpenSans-Light.ttf') format('ttf');
-  font-weight: 300;
-}
-
-@font-face {
-  font-family: $font-open-sans;
-  src: url('../../assets/OpenSans-SemiBold.ttf') format('ttf');
-  font-weight: 600;
-}
+@import "variables";
 
 .annotator-hl {
-	background: #5679B0;
-	background: rgba(86, 121, 176, 0.3);
-	/* just so it doesn't get overwritten in ancient IE, if original annotator supports them */
-	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#5679B0, endColorstr=#5679B0)"; /* 0.3 == 4D in MS filters */
+  background: #5679B0;
+  background: rgba(86, 121, 176, 0.3);
+  /* just so it doesn't get overwritten in ancient IE, if original annotator supports them */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#5679B0, endColorstr=#5679B0)"; /* 0.3 == 4D in MS filters */
 }
 
 /*
@@ -35,10 +20,6 @@ annotator-invert-X
 annotator-invert-Y
  */
 
-$widget-box-width: 450px;
-$widget-inner-width: 428px;
-$widget-inner-margin: ($widget-box-width - $widget-inner-width) / 2;
-
 .pp-hide {
   display: none !important; //override semantic-ui
 }
@@ -52,8 +33,9 @@ $widget-inner-margin: ($widget-box-width - $widget-inner-width) / 2;
 // WARNING: this is a temporary obviously fallacious setting that will influence dimmers on
 // ALL websites using semantic ui...
 .ui.dimmer {
- background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.2);
 }
+
 //KG Copied from annotator:
 /* if you change the list of classes for which z-index is set,
        you should update setupDynamicStyle() in annotator.ui.main */
@@ -73,15 +55,15 @@ $widget-inner-margin: ($widget-box-width - $widget-inner-width) / 2;
   min-width: $widget-box-width;
   border: 1px solid rgb(210, 212, 210);
 
-  //todo border as mixin
-  //todo consult border-radius with KS
+  // todo border as mixin
+  // todo consult border-radius with KS
   border-radius: 0;
-  -webkit-border-radius: 0px;
-  -moz-border-radius: 0px;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
 
   color: rgb(0, 0, 0);
 
-  //todo adjust the shadow to match specs
+  // todo adjust the shadow to match specs
   -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   -o-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
@@ -96,14 +78,11 @@ $widget-inner-margin: ($widget-box-width - $widget-inner-width) / 2;
   /* The downward triangle below widget. */
 
   //KG todo replace the annotator's triangle with our own
-  background-image: url(../../node_modules/annotator/img/annotator-glyph-sprite.png?embed); // TODO path
-  background-repeat: no-repeat;
-
+  background: url('~annotator/img/annotator-glyph-sprite.png') no-repeat 0 0;
   content: "";
   display: block;
   width: 18px;
   height: 10px;
-  background-position: 0 0;
   position: absolute;
   bottom: -10px;
   left: 8px;
@@ -139,10 +118,9 @@ When window is horizontally or vertically inverted
   height: 11px;
 }
 
-.pp-widget .pp-listing
-{
-	padding: 0;
-	margin: 0;
-	list-style: none;
+.pp-widget .pp-listing {
+  padding: 0;
+  margin: 0;
+  list-style: none;
 }
 
