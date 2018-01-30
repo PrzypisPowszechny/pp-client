@@ -56,9 +56,17 @@ export default class ViewerContentItem extends React.Component<
     this.props.callbacks.onDelete(e, this.props.annotation);
   }
 
-  toggleUseful = e => this.setState({useful: !this.state.useful});
+  // A persistence mockup, to be removed as soon as we use a real persistence layer
+  toggleUseful = (e) => {
+    this.props.annotation.useful = !this.props.annotation.useful;
+    this.setState({useful: this.props.annotation.useful});
+  }
 
-  toggleObjection = e => this.setState({objection: !this.state.objection});
+  // A persistence mockup, to be removed as soon as we use a real persistence layer
+  toggleObjection = (e) => {
+    this.props.annotation.objection = !this.props.annotation.objection;
+    this.setState({objection: this.props.annotation.objection});
+  }
 
   headerPriorityClass() {
     const priorityToClass = {
