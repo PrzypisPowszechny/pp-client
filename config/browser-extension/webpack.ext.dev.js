@@ -20,14 +20,18 @@ module.exports = merge(common, {
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Przypis Powszechny -- pomoc',
-      template: 'src/browser-extension/popup.html',
+      template: 'src/browser-extension/popup/popup.html',
       filename: 'popup.html',
-      chunks: ['vendor', 'popup'],
+      chunks: ['popup']
     }),
     new CopyWebpackPlugin([
       {
         from: 'config/browser-extension/manifest.json',
         to: 'manifest.json'
+      },
+      {
+        from: 'src/browser-extension/help',
+        to: 'help'
       }
     ])
   ],
