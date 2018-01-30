@@ -14,7 +14,7 @@ module.exports = merge(common, {
   },
   output: {
     path: BUILD_DIR,
-    publicPath: '/',
+    publicPath: 'chrome-extension://hhjfhkdpnajfnekdaigmpahnnoccfaio/',
     filename: '[name].bundle.js',
   },
   plugins: [
