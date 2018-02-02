@@ -17,6 +17,7 @@
     "reference_link": "ABC",
     "reference_link_title": "tytuł",
     "objection_count": 15,
-    "useful_count": 100
+    "useful_count": 100,
+    "does_belong_to_user": false
   }
 ]

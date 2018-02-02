@@ -123,6 +123,34 @@ export default class ViewerContentItem extends React.Component<
     );
   }
 
+  renderControls() {
+    if (this.props.annotation.doesBelongToUser) {
+      return (
+        <div className={'pp-controls ' + (this.state.initialView ? 'pp-visible' : '')}>
+          {this.renderDeleteModal()}
+          <button
+            type="button"
+            title="Edit"
+            className="pp-edit"
+            onClick={this.handleEdit}
+          >
+            <i className="edit icon"/>
+          </button>
+          <button
+            type="button"
+            title="Delete"
+            className="pp-delete"
+            onClick={this.setDeleteModalOpen}
+          >
+            <i className="trash icon"/>
+          </button>
+        </div>
+      );
+    } else {
+      return '';
+    }
+  }
+
   render() {
     const {
       priority,
@@ -145,26 +173,7 @@ export default class ViewerContentItem extends React.Component<
           <div className="pp-view-comment-date">
             {createDate ? moment(createDate).fromNow() : ''}
           </div>
-
-          <div className={'pp-controls ' + (this.state.initialView ? 'pp-visible' : '')}>
-            {this.renderDeleteModal()}
-            <button
-              type="button"
-              title="Edit"
-              className="pp-edit"
-              onClick={this.handleEdit}
-            >
-              <i className="edit icon"/>
-            </button>
-            <button
-              type="button"
-              title="Delete"
-              className="pp-delete"
-              onClick={this.setDeleteModalOpen}
-            >
-              <i className="trash icon"/>
-            </button>
-          </div>
+          {this.renderControls()}
         </div>
         <div className="pp-view-comment">
           {comment}

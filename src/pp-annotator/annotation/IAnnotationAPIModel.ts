@@ -8,6 +8,7 @@ export interface IAnnotationAPIModel {
   ranges?: any[];
   quote?: string;
   create_date?: string;
+  does_belong_to_user?: boolean;
 
   priority?: AnnotationPriorities;
   comment?: string;
