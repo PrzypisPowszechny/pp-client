@@ -43,8 +43,8 @@ export default class AnnotationViewModel implements IAnnotationForm, annotator.I
   useful: boolean;
   usefulCount: number;
 
-  constructor(model?: IAnnotationAPIModel) {
-    model = model || {};
+  constructor(annotationAPIModel?: IAnnotationAPIModel) {
+    const model: any = annotationAPIModel || {};
     this.url = model.url || '';
     if (model.create_date) {
       this.createDate = new Date(model.create_date);

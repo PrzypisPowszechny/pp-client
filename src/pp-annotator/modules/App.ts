@@ -13,7 +13,7 @@ export default class App implements IModule {
   modules: IModule[] = [];
   registry: Registry = new Registry();
   started: boolean = false;
-  annotations: storage.IAnnotationStorage;
+  annotations: storage.IStorageAdapter;
 
   include(module: IConstructable<IModule | any>, options?: any) {
     const mod = new module(options);

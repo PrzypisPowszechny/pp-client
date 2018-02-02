@@ -1,4 +1,5 @@
 export default interface IAnnotation {
   id: number;
-  data: any;
+  // KG removed it, as I see no purpose of this field
+  // data: any;
 }

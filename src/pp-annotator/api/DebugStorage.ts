@@ -1,19 +1,19 @@
-import IAnnotation from './Annotation.interface';
 import Registry from '../modules/Registry';
 import IStorage from './Storage.interface';
 import IModule from '../modules/Module.interface';
 
 import IPPSettings from 'src/PPSettings.interface';
+import {IAnnotationAPIModel} from '../annotation/IAnnotationAPIModel';
 declare const PP_SETTINGS: IPPSettings;
 
 // id generator function from old annotator storage
 const generateId = (() => {
-  let counter = -1;
+  let counter = 0;
   return () => counter += 1;
 })();
 
 export default class DebugStorage implements IStorage, IModule {
-  annotations: IAnnotation[] = [];
+  annotations: IAnnotationAPIModel[] = [];
 
   trace(action: string, data: any) {
     console.debug(`DebugStorage: invoking action ${action} on data: `, data);
@@ -24,7 +24,7 @@ export default class DebugStorage implements IStorage, IModule {
     }
   }
 
-  create(annotation: IAnnotation): IAnnotation {
+  create(annotation: IAnnotationAPIModel): IAnnotationAPIModel {
     if (!annotation.id) {
       annotation.id = generateId();
     }
@@ -34,26 +34,26 @@ export default class DebugStorage implements IStorage, IModule {
     return annotation;
   }
 
-  update(annotation: IAnnotation): IAnnotation {
+  update(annotation: IAnnotationAPIModel): IAnnotationAPIModel {
     this.trace('update', annotation);
 
     this.delete(annotation);
     return this.create(annotation);
   }
 
-  delete(annotation: IAnnotation): IAnnotation {
+  delete(annotation: IAnnotationAPIModel): IAnnotationAPIModel {
     this.trace('delete', annotation);
-
     const deleted = this.query(annotation.id);
     this.annotations = this.annotations.filter(ann => ann.id !== annotation.id);
-
-    return deleted;
+    return deleted[0];
   }
 
-  query(id: string | number): IAnnotation {
-    this.trace('query', id);
-
-    return this.annotations.find(annotation => annotation.id === id) as IAnnotation;
+  query(id?: number): IAnnotationAPIModel[] {
+    if (id !== undefined) {
+      return this.annotations.filter(ann => ann.id === id);
+    }
+    // return all annotations
+    return this.annotations.slice();
   }
 
   configure(registry: Registry) {

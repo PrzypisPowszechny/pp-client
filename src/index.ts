@@ -18,7 +18,7 @@ declare const PP_SETTINGS: IPPSettings;
 
 // Optional external hardcoded annotations
 import input_annotations from '../config/annotations.json';
-
+import {IAnnotationAPIModel} from './pp-annotator/annotation/IAnnotationAPIModel';
 console.log('Przypis script working!');
 
 function startApp() {
@@ -31,10 +31,11 @@ function startApp() {
 
 function attachMockViewer() {
   // IMPORTANT: very implementation dependent; whenever ViewerWidget changes break it, consider simply dropping it
+  const mockViewerId = -10;
   const viewer = new ViewerWidget({});
   viewer.attach();
 
-  const annotation = new AnnotationViewModel({});
+  const annotation = new AnnotationViewModel({id: mockViewerId});
   // mock data to display
   annotation.comment = 'Testowy komentarz '.repeat(10);
   annotation.referenceLinkTitle = 'Strona organizacji XYZ '.repeat(3);
@@ -53,14 +54,17 @@ function attachMockViewer() {
 function attachAnnotationsFromFile(annotatorApp: App) {
   // Reassign annotations' ids starting from 1000
   // so they don't collide with the ids of the annotations created through the application
+  const annotations: IAnnotationAPIModel[] = [];
   let id = 1000;
   for (const annotation of input_annotations) {
     if (annotation.url === window.location.href) {
       annotation.id = id;
-      annotatorApp.annotations.create(annotation);
+      annotations.push(annotation);
       id += 1;
     }
   }
+  (annotatorApp.annotations.store as DebugStorage).annotations = annotations;
+  annotatorApp.annotations.load(); // load all annotations (injected above)
   console.log('Loaded ' + input_annotations.length + ' annotations from the annotation file.');
 }
 

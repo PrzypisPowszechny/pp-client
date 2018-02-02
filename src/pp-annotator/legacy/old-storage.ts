@@ -629,7 +629,7 @@ export class StorageAdapter {
   load(query: any) {
     return this.query(query)
       .then((data: any) => {
-        this.runHook('annotationsLoaded', [data.results]);
+        this.runHook('annotationsLoaded', [data]);
       });
   }
 

@@ -240,12 +240,12 @@ export default class PPUI implements IModule {
       throw new Error('App not initialized!');
     }
 
-    const annVieModels = anns.map(ann => new AnnotationViewModel(ann));
+    const annViewModels = anns.map(ann => new AnnotationViewModel(ann));
     this.state.embeddedHighlights = {};
-    for (const viewModel of annVieModels) {
+    for (const viewModel of annViewModels) {
       this.state.embeddedHighlights[viewModel.id] = viewModel;
     }
-    this.state.highlighter.drawAll(anns as IAnnotation[]);
+    this.state.highlighter.drawAll(annViewModels as IAnnotation[]);
   }
 
   annotationCreated(ann: IAnnotationAPIModel) {
