@@ -129,20 +129,52 @@ $editor-vertical-spacing: 15px;
     }
 }
 
+.pp-editor-widget .pp-mover-area .mover-icon {
+    display: none;
+    pointer-events: none;
+}
+
+.pp-editor-widget:hover .pp-mover-area .mover-icon {
+    display: block;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: -15px;
+    width: 18px;
+    content: url('../../assets/three-dots.svg');
+    opacity: 0.5;
+}
+
 .pp-editor-widget .pp-bottom-bar {
-    margin: $editor-vertical-spacing $editor-horizontal-spacing $editor-vertical-spacing $editor-horizontal-spacing;
+    margin: 0;
+    display: flex;
+    align-items: stretch;
+
+    // the bottom area used for dragging
+    // extend it to the very edges of the widget, so it is easy to hit
+    .pp-mover-area {
+        position: relative;
+        display: inline-block;
+        padding: 0 0 $editor-vertical-spacing $editor-horizontal-spacing;
+        width: 100%;
+        cursor: move;
+    }
 
     .pp-controls {
         display: inline-block;
-        width: 100%;
+        padding: 0 $editor-horizontal-spacing $editor-vertical-spacing 0;
+        min-width: 150px;
         text-align: right;
+        vertical-align: top;
 
         button {
             border: none;
             outline: none;
             background: none;
             padding-left: 10px;
-            height: 1.5em;
+            height: 25px;
             cursor: pointer;
             font-weight: $font-semi-bold;
             font-size: $editor-font-size + 1px;
@@ -196,18 +228,6 @@ $editor-vertical-spacing: 15px;
         color: #888888;
         background: none;
         cursor: pointer;
-    }
-
-    // the bottom area used for dragging
-    .pp-mover-area {
-        display: inline-block;
-        width: 5%;
-        line-height: 1;
-        min-height: 1em;
-
-        position: absolute;
-        right: 6px;
-        top: 0;
     }
 
     /* --- Help windows --- */

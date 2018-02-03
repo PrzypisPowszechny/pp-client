@@ -39,6 +39,7 @@ function attachMockViewer() {
   // mock data to display
   annotation.comment = 'Testowy komentarz '.repeat(10);
   annotation.referenceLinkTitle = 'Strona organizacji XYZ '.repeat(3);
+  annotation.doesBelongToUser = true;
   const position = {
     top: 500,
     left: 200,

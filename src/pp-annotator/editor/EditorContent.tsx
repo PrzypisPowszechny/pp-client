@@ -192,7 +192,6 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
         >
           <i className="remove icon"/>
         </div>
-        <div className="pp-mover-area"/>
         <div className="editor-input pp-comment">
           <textarea
             name="comment"
@@ -244,6 +243,9 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
           </Popup>
         </div>
         <div className="pp-bottom-bar">
+          <div className="pp-mover-area">
+            <img className="mover-icon"/>
+          </div>
           <div className="pp-controls">
             <button className="pp-cancel" onClick={this.onCancel}>
               {' '}Anuluj{' '}
