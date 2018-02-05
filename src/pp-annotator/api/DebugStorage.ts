@@ -28,6 +28,7 @@ export default class DebugStorage implements IStorage, IModule {
     if (!annotation.id) {
       annotation.id = generateId();
     }
+    annotation.create_date = new Date(Date.now()).toISOString();
     annotation.does_belong_to_user = true;
     this.trace('create', annotation);
 
