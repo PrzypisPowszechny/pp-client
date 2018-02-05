@@ -244,17 +244,17 @@ export default class EditorContent extends Component<IEditorContentProps, IEdito
         </div>
         <div className="pp-bottom-bar">
           <div className="pp-mover-area">
-            <img className="mover-icon"/>
+            <div className="pp-controls">
+              <button className="pp-cancel" onClick={this.onCancel}>
+                {' '}Anuluj{' '}
+              </button>
+              <button className={'pp-save annotator-focus ' + this.saveButtonClass()} onClick={this.onSave}>
+                {' '}Zapisz{' '}
+              </button>
+              {this.renderNoCommentModal()}
+            </div>
           </div>
-          <div className="pp-controls">
-            <button className="pp-cancel" onClick={this.onCancel}>
-              {' '}Anuluj{' '}
-            </button>
-            <button className={'pp-save annotator-focus ' + this.saveButtonClass()} onClick={this.onSave}>
-              {' '}Zapisz{' '}
-            </button>
-            {this.renderNoCommentModal()}
-          </div>
+          <img className="mover-icon"/>
         </div>
       </div>
     );
