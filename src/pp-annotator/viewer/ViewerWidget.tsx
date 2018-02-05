@@ -338,11 +338,11 @@ Object.assign(ViewerWidget.options, {
 
   // Time, in milliseconds, before the viewer is hidden when a user mouses off
   // the viewer.
-  inactivityDelay: 500,
+  inactivityDelay: 200,
 
   // Time, in milliseconds, before the viewer is updated when a user mouses
   // over another annotation.
-  activityDelay: 100,
+  activityDelay: 50,
 
   // Hook, passed an annotation, which determines if the viewer's "edit"
   // button is shown. If it is not a function, the button will not be shown.
