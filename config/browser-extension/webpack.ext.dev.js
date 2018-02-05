@@ -10,7 +10,7 @@ const BUILD_DIR = path.resolve(__dirname, '..', '..', 'dist-ext');
 
 module.exports = merge(common, {
   entry: {
-    popup: "./src/browser-extension/popup.ts",
+    popup: "./src/browser-extension/popup/popup.tsx",
   },
   output: {
     path: BUILD_DIR,
