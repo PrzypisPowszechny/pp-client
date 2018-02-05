@@ -6,6 +6,6 @@ export enum AnnotationPriorities {
 
 export const annotationPrioritiesLabels = {
   NORMAL: 'dodatkowa informacja',
-  WARNING: 'wyjaśnienie',
+  WARNING: 'doprecyzowanie',
   ALERT: 'sprostowanie błędu',
 };
