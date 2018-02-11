@@ -3,9 +3,10 @@
   .header-buttons {
     display: flex;
     justify-content: space-between;
+    flex: 1;
 
-    button {
-      width: 32%;
+    :not(:first-child):not(:last-child) {
+      margin: 0 10px;
     }
   }
 }

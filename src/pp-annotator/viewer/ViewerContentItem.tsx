@@ -3,7 +3,6 @@ import AnnotationViewModel from '../annotation/AnnotationViewModel';
 import {AnnotationPriorities, annotationPrioritiesLabels} from '../consts';
 import {Popup, Modal, Button} from 'semantic-ui-react';
 import moment from 'moment';
-import 'moment/locale/pl';
 
 interface IViewerContentItemProps {
   key: number;
