@@ -22,7 +22,7 @@ interface IPrzypisViewerOptions extends annotator.ui.widget.IWidgetOptions {
 
 // Public: Creates an element for viewing annotations.
 export default class ViewerWidget extends Widget {
-  static nameSpace = 'pp-viewer';
+  static nameSpace = 'pp-viewer-widget';
   static classes = {
     ...Widget.classes,
     hide: 'pp-hide',
@@ -37,6 +37,7 @@ export default class ViewerWidget extends Widget {
   private document: Document;
   private onEditCallback: (annotation: AnnotationViewModel) => void;
   private onDeleteCallback: (annotation: AnnotationViewModel) => void;
+  private position: annotator.util.IPosition;
 
   // Public: Creates an instance of the Viewer object.
   //
@@ -49,8 +50,8 @@ export default class ViewerWidget extends Widget {
   //   viewer.load(annotation)
   //
   // Returns a new Viewer instance.
-  constructor(options: IPrzypisViewerOptions) {
-    super(options);
+  constructor(options?: IPrzypisViewerOptions) {
+    super(options || {});
 
     this.annotations = [];
     this.hideTimer = null;
@@ -142,6 +143,7 @@ export default class ViewerWidget extends Widget {
       });
     }
     super.show();
+    this.position = position;
   }
 
   // Public: Load annotations into the viewer and show it.
@@ -185,6 +187,24 @@ export default class ViewerWidget extends Widget {
     this.onDeleteCallback(annotation);
   }
 
+  areAnnotationsSame(annotationsOne: AnnotationViewModel[], annotationsTwo: AnnotationViewModel[]) {
+    function eqSet(as, bs) {
+      if (as.size !== bs.size) {
+        return false;
+      }
+      for (const a of as) {
+        if (!bs.has(a)) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    const idsOne = new Set(annotationsOne.map(ann => ann.id));
+    const idsTwo = new Set(annotationsTwo.map(ann => ann.id));
+    return eqSet(idsOne, idsTwo);
+  }
+
   // Event callback: called when a user triggers `mouseover` on a highlight
   // element.
   //
@@ -192,20 +212,45 @@ export default class ViewerWidget extends Widget {
   //
   // Returns nothing.
   onHighlightMouseover(event: JQuery.Event) {
+    // KG: This is an improved version of annotator's `onHighlightMouseover`
+    // with a fix for a viewer-not-disappearing bug
+
     // If the mouse button is currently depressed, we're probably trying to
     // make a selection, so we shouldn't show the viewer.
     if (this.mouseDown) {
       return;
     }
-    this.startHideTimer(true).done(() => {
-      const annotations = $(event.target)
+
+    // Get the annotations attached to the current highlight
+    const annotations = $(event.target)
         .parents('.annotator-hl')
         .addBack()
         .map((_, elem) => $(elem).data('annotation'))
         .toArray();
 
-      // Now show the viewer with the wanted annotations
-      this.load((annotations as any) as AnnotationViewModel[], util.mousePosition(event));
+    const theSameAnnotations = this.areAnnotationsSame((annotations as any) as AnnotationViewModel[], this.annotations);
+    // If the annotations are the same and the viewer is already visible, nothing should change;
+    // Clear hide timer, if it was set before
+    if (theSameAnnotations && this.isShown()) {
+      if (this.hideTimer) {
+        this.clearHideTimer();
+      }
+      return;
+    }
+
+    // After a short timeout show the viewer with annotations over which the mouse hovered
+    this.startHideTimer(true).done(() => {
+      let position;
+      // If the annotations are the same as the last time the viewer was displayed, display it at the same position
+      // In many cases it will prevent it from wobbling, when the user hovers over the highlight
+      // just after the viewer disappeared
+      // todo (nice to have): limit this "position fixation" to just a short period of time
+      if (theSameAnnotations) {
+        position = this.position;
+      } else {
+        position = util.mousePosition(event);
+      }
+      this.load((annotations as any) as AnnotationViewModel[], position);
     });
   }
 
@@ -223,7 +268,6 @@ export default class ViewerWidget extends Widget {
      This part is copied straight from annotator.Viewer and might not be very consistent with other code;
      We should consider refactoring it and making it more explicit if we need to modify it
      */
-
     // If timer has already been set, use that one.
     if (this.hideTimer) {
       if (activity === false || this.hideTimerActivity === activity) {
@@ -261,7 +305,6 @@ export default class ViewerWidget extends Widget {
       }, timeout);
       this.hideTimerActivity = Boolean(activity);
     }
-
     return this.hideTimerDfd.promise();
   }
 
@@ -270,19 +313,21 @@ export default class ViewerWidget extends Widget {
   //
   // Returns nothing.
   clearHideTimer() {
-    if (!this.hideTimer || !this.hideTimerDfd || this.hideTimerActivity) {
-      throw new Error('Expected timer to be initialized!');
+    if (this.hideTimer) {
+      clearTimeout(this.hideTimer);
     }
-    clearTimeout(this.hideTimer);
     this.hideTimer = null;
-    this.hideTimerDfd.reject();
+
+    if (this.hideTimerDfd) {
+      this.hideTimerDfd.reject();
+    }
     this.hideTimerActivity = false;
   }
 }
 
 // HTML templates for this.widget and this.item properties.
 ViewerWidget.template = [
-  '<div class="pp-outer pp-viewer pp-hide">',
+  '<div class="pp-ui pp-outer pp-viewer-widget pp-hide">',
   '</div>',
 ].join('\n');
 
@@ -293,11 +338,11 @@ Object.assign(ViewerWidget.options, {
 
   // Time, in milliseconds, before the viewer is hidden when a user mouses off
   // the viewer.
-  inactivityDelay: 500,
+  inactivityDelay: 200,
 
   // Time, in milliseconds, before the viewer is updated when a user mouses
   // over another annotation.
-  activityDelay: 100,
+  activityDelay: 50,
 
   // Hook, passed an annotation, which determines if the viewer's "edit"
   // button is shown. If it is not a function, the button will not be shown.

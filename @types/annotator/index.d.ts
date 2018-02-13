@@ -40,7 +40,16 @@ declare module 'annotator' {
       create(ann: any): void;
       update(ann: any): void;
       delete(ann: any): void;
-      query(ann: any): void;
+      query(ann?: any): void;
+    }
+
+    export interface IStorageAdapter {
+      store: IAnnotationStorage;
+      create(ann: any): void;
+      update(ann: any): void;
+      delete(ann: any): void;
+      query(ann?: any): void;
+      load(ann?: any): void;
     }
 
     export const debug: {};

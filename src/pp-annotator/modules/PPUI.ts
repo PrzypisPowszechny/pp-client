@@ -1,4 +1,4 @@
-import annotator, { IAnnotation, ui, util } from 'annotator';
+import annotator, { IAnnotation, util } from 'annotator';
 
 import EditorWidget from '../editor/EditorWidget';
 import MenuWidget from '../MenuWidget';
@@ -8,7 +8,7 @@ import IAnnotationAPIModel from '../annotation/IAnnotationAPIModel';
 import App from './App';
 import IModule from './Module.interface';
 
-const { highlighter, textselector } = ui;
+// const { highlighter, textselector } = ui;
 
 /**
  * trim strips whitespace from either end of a string.
@@ -110,162 +110,155 @@ function removeDynamicStyle() {
   util.$('#annotator-dynamic-style').remove();
 }
 
-interface IState {
-  interactionPoint: annotator.util.IPosition | null;
-  adder: MenuWidget;
-  editor: EditorWidget;
-  highlighter: annotator.ui.highlighter.Highlighter;
-  textselector: annotator.ui.textselector.TextSelector;
-  viewer: ViewerWidget;
-  embeddedHighlights: { [id: number]: AnnotationViewModel };
-}
-
 interface IOptions {
   element?: Element;
-  editorExtensions?: Array<{}>;
-  viewerExtensions?: Array<{}>;
 }
 
 /**
  * pp annotator ui module (almost unchanged annotator.ui.main)
  */
 export default class PPUI implements IModule {
-  state: IState | undefined;
-  editorExtensions: any;
-  viewerExtensions: any;
-  parseRanges: any;
-  element: any;
+  readonly parseRanges: any;
+  readonly element: any;
+
+  // Application state variables
+  appStarted: boolean;
+  highlighter: annotator.ui.highlighter.Highlighter;
+  interactionPoint: annotator.util.IPosition | null;
+  menu: MenuWidget;
+  editor: EditorWidget;
+  textselector: annotator.ui.textselector.TextSelector;
+  viewer: ViewerWidget;
+  embeddedHighlights: { [id: number]: AnnotationViewModel };
 
   constructor(options?: IOptions) {
     if (typeof options === 'undefined' || options === null) {
       options = {};
     }
-
     this.element = options.element || document.body;
-    this.editorExtensions = options.editorExtensions || [];
-    this.viewerExtensions = options.viewerExtensions || [];
-
-    // Local helpers
     this.parseRanges = rangesParser(this.element, '.annotator-hl');
+    this.appStarted = false;
   }
 
   start(app: App) {
-    const parseRanges = this.parseRanges;
+    /*
+      Highlighting and text selection detection
+     */
+    this.highlighter = new annotator.ui.highlighter.Highlighter(this.element);
 
-    const state: IState = this.state = {
-      embeddedHighlights: {},
-      interactionPoint: null,
-      adder: new MenuWidget({
-        beginAnnotationCreate(annotation) {
-          if (!state) {
-            throw new Error('App not initialized!');
-          }
-          if (state.interactionPoint === null) {
-            throw new Error('Interaction point is null!');
-          }
-          state.editor.load(annotation, state.interactionPoint,
-            (resultAnnotation: AnnotationViewModel) =>
-              app.annotations.create(
-                AnnotationViewModel.toModel(resultAnnotation) as IAnnotation,
-              ),
-          );
-        },
-        beforeRequestCreate() {
-          // TODO what happens when the adder's request button is clicked
-        },
-      }),
-      editor: new EditorWidget({
-        extensions: this.editorExtensions,
-      }),
-      highlighter: new highlighter.Highlighter(this.element),
-      textselector: new textselector.TextSelector(this.element, {
-        onSelection(ranges, event) {
-          if (!state) {
-            throw new Error('App not initialized!');
-          }
+    this.textselector = new annotator.ui.textselector.TextSelector(this.element, {
+      onSelection: (ranges, event) => {
+        if (!this.appStarted) {
+          throw new Error('App not initialized!');
+        }
+        if (!this.editor.isShown() && ranges.length > 0) {
+          const url = window.location.href;
+          const annotation = AnnotationViewModel.fromSelection(this.parseRanges(ranges), url);
+          this.interactionPoint = util.mousePosition(event);
+          this.menu.load(annotation, this.interactionPoint);
+        } else {
+          this.menu.hide();
+        }
+      },
+    });
 
-          if (ranges.length > 0) {
-            const url = window.location.href;
-            const annotation = AnnotationViewModel.fromSelection(parseRanges(ranges), url);
-            state.interactionPoint = util.mousePosition(event);
-            state.adder.load(annotation, state.interactionPoint);
-          } else {
-            state.adder.hide();
-          }
-        },
-      }),
-      viewer: new ViewerWidget({
-        onEdit(annotation) {
-          if (!state) {
-            throw new Error('App is not initialized!');
-          }
-          // Copy the interaction point from the shown viewer:
-          const interactionPoint = util.$(state.viewer.element).css(['top', 'left']);
-          state.interactionPoint = (interactionPoint as any) as { top: number; left: number };
+    /*
+      Visible (embodied) components
+     */
+    this.menu = new MenuWidget({
+      beginAnnotationCreate: (annotation) => {
+        if (!this.appStarted) {
+          throw new Error('App not initialized!');
+        }
+        if (this.interactionPoint === null) {
+          throw new Error('Interaction point is null!');
+        }
+        this.editor.load(annotation, this.interactionPoint,
+          (resultAnnotation: AnnotationViewModel) =>
+            app.annotations.create(
+              AnnotationViewModel.toModel(resultAnnotation) as IAnnotation,
+            ),
+        );
+      },
+    });
 
-          state.editor.load(annotation, state.interactionPoint,
-            (resultAnnotation: AnnotationViewModel) =>
-              app.annotations.update(AnnotationViewModel.toModel(resultAnnotation) as IAnnotation),
-          );
-        },
-        onDelete(annotation) {
-          app.annotations.delete(annotation);
-        },
-        autoViewHighlights: this.element,
-        extensions: this.viewerExtensions,
-      }),
-    };
-    this.state.adder.attach();
-    this.state.editor.attach();
-    this.state.viewer.attach();
+    this.viewer = new ViewerWidget({
+      onEdit: (annotation) => {
+        if (!this.appStarted) {
+          throw new Error('App is not initialized!');
+        }
+        // Copy the interaction point from the shown viewer:
+        const interactionPoint = util.$(this.viewer.element).css(['top', 'left']);
+        this.interactionPoint = (interactionPoint as any) as { top: number; left: number };
+
+        this.editor.load(annotation, this.interactionPoint,
+          (resultAnnotation: AnnotationViewModel) =>
+            app.annotations.update(AnnotationViewModel.toModel(resultAnnotation) as IAnnotation),
+        );
+      },
+      onDelete(annotation) {
+        app.annotations.delete(annotation);
+      },
+      autoViewHighlights: this.element,
+    });
+
+    this.editor = new EditorWidget();
+
+    this.embeddedHighlights = {};
+    this.interactionPoint = null;
+
+    this.menu.attach();
+    this.editor.attach();
+    this.viewer.attach();
     injectDynamicStyle();
+    this.appStarted = true;
   }
 
   destroy() {
-    if (!this.state) {
+    if (!this.appStarted) {
       throw new Error('App not initialized!');
     }
-    this.state.adder.destroy();
-    this.state.editor.destroy();
-    this.state.highlighter.destroy();
-    this.state.textselector.destroy();
-    this.state.viewer.destroy();
+    this.highlighter.destroy();
+    this.textselector.destroy();
+    this.menu.destroy();
+    this.editor.destroy();
+    this.viewer.destroy();
     removeDynamicStyle();
   }
 
   annotationsLoaded(anns: IAnnotationAPIModel[]) {
-    if (!this.state) {
+    if (!this.appStarted) {
       throw new Error('App not initialized!');
     }
 
-    const annVieModels = anns.map(ann => new AnnotationViewModel(ann));
-    this.state.embeddedHighlights = {};
-    for (const viewModel of annVieModels) {
-      this.state.embeddedHighlights[viewModel.id] = viewModel;
+    const annViewModels = anns.map(ann => new AnnotationViewModel(ann));
+    this.embeddedHighlights = {};
+    for (const viewModel of annViewModels) {
+      this.embeddedHighlights[viewModel.id] = viewModel;
     }
-    this.state.highlighter.drawAll(anns as IAnnotation[]);
+    this.highlighter.drawAll(annViewModels as IAnnotation[]);
   }
 
   annotationCreated(ann: IAnnotationAPIModel) {
-    if (!this.state) {
+    if (!this.appStarted) {
       throw new Error('App not initialized!');
     }
     const viewModel = new AnnotationViewModel(ann);
-    this.state.embeddedHighlights[viewModel.id] = viewModel;
-    this.state.highlighter.draw(viewModel);
+    this.embeddedHighlights[viewModel.id] = viewModel;
+    this.highlighter.draw(viewModel);
   }
 
   annotationDeleted(ann: IAnnotationAPIModel) {
-    if (!this.state) {
+    if (!this.appStarted) {
       throw new Error('App not initialized!');
     }
-    this.state.highlighter.undraw(this.state.embeddedHighlights[ann.id as number]);
+    this.highlighter.undraw(this.embeddedHighlights[ann.id as number]);
   }
 
   annotationUpdated(ann: IAnnotationAPIModel) {
-    if (!this.state) {
+    if (!this.appStarted) {
       throw new Error('App not initialized!');
     }
-    this.state.highlighter.redraw(this.state.embeddedHighlights[ann.id as number]);
+    this.highlighter.redraw(this.embeddedHighlights[ann.id as number]);
   }
 }

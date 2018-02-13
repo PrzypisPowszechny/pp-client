@@ -1,8 +1,8 @@
-import IAnnotation from './Annotation.interface';
+import {IAnnotationAPIModel} from '../annotation/IAnnotationAPIModel';
 
 export default interface IStorage {
-  create(annotation: IAnnotation): IAnnotation;
-  update(annotation: IAnnotation): IAnnotation;
-  delete(annotation: IAnnotation): IAnnotation;
-  query(id: number): IAnnotation;
+  create(annotation: IAnnotationAPIModel): IAnnotationAPIModel;
+  update(annotation: IAnnotationAPIModel): IAnnotationAPIModel;
+  delete(annotation: IAnnotationAPIModel): IAnnotationAPIModel;
+  query(id?: number): IAnnotationAPIModel[];
 }

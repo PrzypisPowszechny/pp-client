@@ -30,6 +30,8 @@ export default class AnnotationViewModel implements IAnnotationForm, annotator.I
   quote: string;
   ranges: any[]; // TODO type this better
   url: string;
+  createDate: Date | null;
+  doesBelongToUser: boolean;
 
   priority: AnnotationPriorities;
   comment: string;
@@ -42,10 +44,15 @@ export default class AnnotationViewModel implements IAnnotationForm, annotator.I
   useful: boolean;
   usefulCount: number;
 
-  constructor(model?: IAnnotationAPIModel) {
-    model = model || {};
-
+  constructor(annotationAPIModel?: IAnnotationAPIModel) {
+    const model: any = annotationAPIModel || {};
     this.url = model.url || '';
+    if (model.create_date) {
+      this.createDate = new Date(model.create_date);
+    } else {
+      this.createDate = null;
+    }
+    this.doesBelongToUser = model.does_belong_to_user || false;
     this.quote = model.quote || '';
     this.ranges = model.ranges || [];
     this.id = model.id || 0;

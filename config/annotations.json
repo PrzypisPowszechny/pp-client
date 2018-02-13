@@ -11,11 +11,13 @@
       }
     ],
     "quote": "Testowy",
+    "create_date": "2018-01-27T01:23:00+0100",
     "priority": "NORMAL",
     "comment": "Example annotation",
     "reference_link": "ABC",
     "reference_link_title": "tytuł",
     "objection_count": 15,
-    "useful_count": 100
+    "useful_count": 100,
+    "does_belong_to_user": true
   }
 ]

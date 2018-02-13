@@ -9,6 +9,7 @@
     "jquery": "^3.2.1",
     "jsx": "^0.9.89",
     "lodash": "^4.17.4",
+    "moment": "^2.20.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "semantic-ui-react": "^0.77.2"
