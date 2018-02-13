@@ -6,7 +6,6 @@ import AnnotationViewModel from '../annotation/AnnotationViewModel';
 import ViewerContent from './ViewerContent';
 
 const { widget: { Widget } } = ui;
-
 const { $ } = util;
 
 interface IPrzypisViewerOptions extends annotator.ui.widget.IWidgetOptions {

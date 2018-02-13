@@ -34,10 +34,31 @@ const config = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: "ts-loader",
-        options: {
-          transpileOnly: true,
-        },
+        use: [
+          {
+            // use babel-loader (and not just ts-loader) to compile js to es5 and so to make uglify plugin work
+            loader: 'babel-loader',
+            options: {
+              cacheDirectory: true,
+              presets: [
+                "react",
+                [
+                  "es2015",
+                  {
+                    "modules": false
+                  }
+                ],
+                "es2016"
+              ]
+            }
+          },
+          {
+            loader: "ts-loader",
+            options: {
+              transpileOnly: true,
+            },
+          }
+        ],
         exclude: /node_modules/,
       },
       {
