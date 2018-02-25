@@ -2,7 +2,6 @@ const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const webpack = require('webpack');
 
 // app-specific settings (enabled features etc.)
@@ -134,12 +133,7 @@ const config = {
       jQuery: 'jquery',
       $: 'jquery',
       jquery: 'jquery'
-    }),
-    new ForkTsCheckerWebpackPlugin({
-      async: false,
-      watch: localPath('src'),
-      tslint: true,
-    }),
+    })
   ],
 };
 

@@ -1,7 +1,11 @@
+const path = require('path');
 const merge = require('webpack-merge');
 const common = require('../webpack.config');
-// const UglifyJsPlugin = require('webpack.optimize.UglifyJsPlugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin');
 const webpack = require('webpack');
+
+const localPath = (...args) => path.resolve(__dirname, ...args);
 
 module.exports = merge(common, {
   devtool: 'inline-source-map',
@@ -15,5 +19,13 @@ module.exports = merge(common, {
   plugins: [
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
+    new ForkTsCheckerWebpackPlugin({
+      async: true,
+      watch: localPath('src'),
+      tslint: true,
+    }),
+    new ForkTsCheckerNotifierWebpackPlugin({
+      excludeWarnings: true
+    })
   ],
 });

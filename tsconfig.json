@@ -3,13 +3,11 @@
     "outDir": "./dist/",
     "sourceMap": true,
     "alwaysStrict": true,
-    "noImplicitThis": true,
     "module": "es6",
     "target": "es2015",
     "jsx": "react",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "noUnusedLocals": true,
     "typeRoots": [
       "./@types",
       "./node_modules/@types"
@@ -20,14 +18,12 @@
          "*",
          "src/*"
       ]
-    }
+    },
+    "noImplicitThis": true,
+    "noUnusedLocals": true
   },
   "include": [
     "./@types/custom.d.ts",
     "./src/**/*"
-  ],
-  "awesomeTypescriptLoaderOptions": {
-    "useBabel": true,
-    "useCache": true
-  }
+  ]
 }
