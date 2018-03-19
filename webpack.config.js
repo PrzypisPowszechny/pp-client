@@ -2,7 +2,6 @@ const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const webpack = require('webpack');
 
 // app-specific settings (enabled features etc.)
@@ -34,10 +33,31 @@ const config = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: "ts-loader",
-        options: {
-          transpileOnly: true,
-        },
+        use: [
+          {
+            // use babel-loader (and not just ts-loader) to compile js to es5 and so to make uglify plugin work
+            loader: 'babel-loader',
+            options: {
+              cacheDirectory: true,
+              presets: [
+                "react",
+                [
+                  "es2015",
+                  {
+                    "modules": false
+                  }
+                ],
+                "es2016"
+              ]
+            }
+          },
+          {
+            loader: "ts-loader",
+            options: {
+              transpileOnly: true,
+            },
+          }
+        ],
         exclude: /node_modules/,
       },
       {
@@ -113,12 +133,7 @@ const config = {
       jQuery: 'jquery',
       $: 'jquery',
       jquery: 'jquery'
-    }),
-    new ForkTsCheckerWebpackPlugin({
-      async: false,
-      watch: localPath('src'),
-      tslint: true,
-    }),
+    })
   ],
 };
 
