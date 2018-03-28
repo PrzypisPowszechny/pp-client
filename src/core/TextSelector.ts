@@ -64,6 +64,10 @@ export default class TextSelector {
 
     for (let i = 0; i < selection.rangeCount; i++) {
       const r = selection.getRangeAt(i);
+      /*
+        TODO we could try to remove the dependency on `Range` (xpath-range) library, but that
+        would require writing our own tool for this kind of logic
+       */
       const browserRange = new Range.BrowserRange(r);
       const normedRange = browserRange.normalize().limit(this.element);
 
