@@ -1,6 +1,6 @@
 exports.appSettings = {
   development: {
-    MOCK_VIEWER: true,
+    MOCK_VIEWER: false,
     READ_ANNOTATIONS_FROM_FILE: false
   },
   production: {

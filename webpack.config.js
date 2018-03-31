@@ -70,7 +70,7 @@ const config = (env, argv) => ({
         test: /\.scss$/,
         include: [
           localPath('src', 'css'),
-          localPath('src', 'browser-extension'),
+          localPath('src', 'browser-extension')
         ],
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
@@ -78,7 +78,8 @@ const config = (env, argv) => ({
         /* SCSS modules */
         test: /\.scss$/,
         include: [
-          localPath('src', 'pp-annotator')
+          localPath('src', 'pp-annotator'),
+          localPath('src', 'components')
         ],
         use: [
           'style-loader',
