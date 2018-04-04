@@ -20,7 +20,7 @@
       ]
     },
     "noImplicitThis": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": false
   },
   "include": [
     "./@types/custom.d.ts",

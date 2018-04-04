@@ -78,8 +78,8 @@ const config = (env, argv) => ({
         /* SCSS modules */
         test: /\.scss$/,
         include: [
-          localPath('src', 'pp-annotator'),
-          localPath('src', 'components')
+          localPath('src', 'components'),
+          localPath('src', 'containers'),
         ],
         use: [
           'style-loader',

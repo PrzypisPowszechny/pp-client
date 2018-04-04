@@ -26,7 +26,6 @@ export default class Widget extends React.Component<
   static classes = {
     invertedX: 'inverted-x',
     invertedY: 'inverted-y',
-    visible: 'visible',
   };
 
   static defaultProps = {
@@ -42,29 +41,43 @@ export default class Widget extends React.Component<
     return classNames(
       this.props.className,
       {
-        [Widget.classes.visible]: this.props.visible,
         [Widget.classes.invertedX]: this.props.invertedX,
         [Widget.classes.invertedY]: this.props.invertedY,
       }
     );
   }
 
+  setLocationStyle() {
+    const widget = this.rootElement.current;
+    if (widget) {
+      widget.style.left = this.props.locationX + 'px';
+      widget.style.top = this.props.locationY + 'px';
+    }
+  }
+
   componentDidMount() {
-    console.log(this.rootElement);
-    console.log(this.props.locationX);
-    console.log(this.props.locationY);
-    this.rootElement.current.style.left = this.props.locationX +'px'
-    this.rootElement.current.style.top = this.props.locationY + 'px'
+    // invoked on the first render
+    this.setLocationStyle();
+  }
+
+  componentDidUpdate() {
+    // invoked on all but the first render
+    this.setLocationStyle();
   }
 
   render() {
-    return (
-      <div
-        className={this.getClassNames()}
-        ref={this.rootElement}
-      >
-        {this.props.children}
-      </div>
-    );
+    if (this.props.visible) {
+      return (
+        <div
+          className={this.getClassNames()}
+          ref={this.rootElement}
+        >
+          {this.props.children}
+        </div>
+      );
+    }
+    else {
+      return null;
+    }
   }
 }
