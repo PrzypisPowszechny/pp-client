@@ -6,7 +6,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const localPath = (...args) => path.resolve(__dirname, ...args);
 
-module.exports = merge(common, {
+module.exports = (env, argv) => merge(common(env, argv), {
   plugins: [
      new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,

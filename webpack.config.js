@@ -12,7 +12,7 @@ const localPath = (...args) => path.resolve(__dirname, ...args);
 const BUILD_DIR = localPath('dist');
 const EXT_DIR = localPath('dist-ext');
 
-const config = {
+const config = (env, argv) => ({
   entry: {
     main: "./src/index.ts",
     vendor: "./src/vendor.ts",
@@ -126,7 +126,7 @@ const config = {
     }),
     new webpack.DefinePlugin({
       // use appropriate (dev or production) PP settings
-      PP_SETTINGS: appSettings[process.env.NODE_ENV || 'dev']
+      PP_SETTINGS: appSettings[argv.mode]
     }),
     // JQuery is assumed by semantic ui, so we need to define it
     new webpack.ProvidePlugin({
@@ -135,6 +135,6 @@ const config = {
       jquery: 'jquery'
     })
   ],
-};
+});
 
 module.exports = config;
