@@ -13,10 +13,6 @@
   Individual semantic-ui components outside any `pp-ui` container (such as modals)
   need to wear this class tag themselves
 */
-import './css/common/pp-semantic-ui-reset.scss';
-
-// New defaults/modifiers for some semantic-ui components
-import './css/common/pp-semantic-ui-overrides.scss';
 
 /*
  Import selected components
@@ -37,3 +33,4 @@ import 'semantic-ui-css/components/grid.css';
 
 // Set language for momentjs time display
 import 'moment/locale/pl';
+
