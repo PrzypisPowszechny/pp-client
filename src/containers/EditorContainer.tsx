@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Editor from '../components/editor/Editor';
+import {IEditorState} from "../reducers/editor";
 
 interface IEditorContainerProps {
-  editor: any;
+  editor?: IEditorState;
 }
 
 @connect(state => ({
@@ -29,4 +30,4 @@ class EditorContainer extends React.Component<
 
 }
 
-export default EditorContainer
+export default EditorContainer;

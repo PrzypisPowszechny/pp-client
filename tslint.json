@@ -28,11 +28,6 @@
         "multiline": "always"
       }
     ],
-    "quotemark": [
-      true,
-      "single",
-      "jsx-double",
-      "avoid-escape"
-    ]
+    "quotemark": [false]
   }
 }

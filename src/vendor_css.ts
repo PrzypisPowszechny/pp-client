@@ -33,4 +33,3 @@ import 'semantic-ui-css/components/grid.css';
 
 // Set language for momentjs time display
 import 'moment/locale/pl';
-

@@ -16,13 +16,6 @@ export default class Widget extends React.Component<
   Partial<IWidgetProps>
   > {
 
-  rootElement: any;
-
-  constructor(props: IWidgetProps) {
-    super(props);
-    this.rootElement = React.createRef();
-  }
-
   static classes = {
     invertedX: 'inverted-x',
     invertedY: 'inverted-y',
@@ -37,13 +30,21 @@ export default class Widget extends React.Component<
     className: '',
   };
 
+  rootElement: any;
+
+  constructor(props: IWidgetProps) {
+    super(props);
+    this.rootElement = React.createRef();
+  }
+
+
   getClassNames() {
     return classNames(
       this.props.className,
       {
         [Widget.classes.invertedX]: this.props.invertedX,
         [Widget.classes.invertedY]: this.props.invertedY,
-      }
+      },
     );
   }
 
@@ -75,8 +76,7 @@ export default class Widget extends React.Component<
           {this.props.children}
         </div>
       );
-    }
-    else {
+    } else {
       return null;
     }
   }

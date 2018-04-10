@@ -14,7 +14,7 @@ const EXT_DIR = localPath('dist-ext');
 
 const config = (env, argv) => ({
   entry: {
-    main: "./src/index.ts",
+    main: "./src/index.tsx",
     vendor_css: "./src/vendor_css.ts"
   },
   output: {

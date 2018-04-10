@@ -1,9 +1,3 @@
-// import IPPSettings from './PPSettings.interface';
-// declare const PP_SETTINGS: IPPSettings;
-
-// import Widget from "./components/Widget";
-// import Editor from "./containers/editor/Editor";
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
@@ -11,11 +5,17 @@ import store from './store';
 import App from "./containers/App";
 import {showEditor, hideEditor, setEditor} from "./actions/index";
 
-console.log('Przypis script working!');
+// TODO uncomment when restored
+// import './css/common/pp-semantic-ui-reset.scss';
 
-// function sleep(ms) {
-//   return new Promise(resolve => setTimeout(resolve, ms));
-// }
+// New defaults/modifiers for some semantic-ui components
+// TODO uncomment when restored
+// import './css/common/pp-semantic-ui-overrides.scss';
+
+// import IPPSettings from './PPSettings.interface';
+// declare const PP_SETTINGS: IPPSettings;
+
+console.log('Przypis script working!');
 
 function injectApp() {
   const documentContainer = document.createElement('div');
@@ -26,9 +26,9 @@ function injectApp() {
     <Provider store={store}>
       <App />
     </Provider>,
-    documentContainer
+    documentContainer,
   );
-  store.dispatch(setEditor(true, 100, 200))
+  store.dispatch(setEditor(true, 100, 200));
 
 }
 

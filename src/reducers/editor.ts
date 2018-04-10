@@ -1,16 +1,12 @@
 import {
   EDITOR_VISIBLE_CHANGE,
 } from 'actions/consts';
+import {IEditorVisibleChangeAction} from "../actions/index";
 
-export interface EditorVisibleChangeAction {
-  type: string,
-  payload: {
-    visible: boolean;
-    location?: {
-      x: number;
-      y: number;
-    }
-  }
+export interface IEditorState {
+  visible: boolean;
+  location: {x: number; y: number};
+  inverted: {x: boolean; y: boolean};
 }
 
 const initialState = {
@@ -22,15 +18,15 @@ const initialState = {
   inverted: {
     x: false,
     y: false,
-  }
+  },
 };
 
 function isInverted(x: number, y: number) {
   return [false, false];
 }
 
-export default function editor(state=initialState, action: EditorVisibleChangeAction) {
-  switch(action.type) {
+export default function editor(state = initialState, action: IEditorVisibleChangeAction) {
+  switch (action.type) {
     case EDITOR_VISIBLE_CHANGE:
       const location = action.payload.location || state.location;
       const inverted = isInverted(location.x, location.y);
@@ -43,7 +39,7 @@ export default function editor(state=initialState, action: EditorVisibleChangeAc
           inverted: {
             x: inverted[0],
             y: inverted[1],
-          }
+          },
       });
     default:
       return state;

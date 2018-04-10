@@ -2,22 +2,33 @@ import {
     EDITOR_VISIBLE_CHANGE,
 } from "./consts";
 
+export interface IEditorVisibleChangeAction {
+  type: string;
+  payload: {
+    visible: boolean;
+    location?: {
+      x: number;
+      y: number;
+    }
+  };
+}
+
 export const showEditor = () => {
     return {
         type: EDITOR_VISIBLE_CHANGE,
         payload: {
-            visible: true
-        }
-    }
+            visible: true,
+        },
+    };
 };
 
 export const hideEditor = () => {
     return {
         type: EDITOR_VISIBLE_CHANGE,
         payload: {
-            visible: false
-        }
-    }
+            visible: false,
+        },
+    };
 };
 
 export const setEditor = (visible, x, y) => {
@@ -27,8 +38,8 @@ export const setEditor = (visible, x, y) => {
             visible,
             location: {
                 x,
-                y
-            }
-        }
-    }
+                y,
+            },
+        },
+    };
 };
