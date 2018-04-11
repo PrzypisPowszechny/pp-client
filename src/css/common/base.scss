@@ -1,0 +1,53 @@
+// Variables and mixins
+@import "mixins";
+@import "vars/colors";
+@import "vars/fonts";
+@import "vars/size";
+@import "vars/z-index";
+// We only import specific components from semantic-ui, omitting the original semantic ui `reset` and `site` components.
+// For the package to work properly, we also need to fill the gap and provide a reset of our own,
+// but with limited scope so the browser extension does not break websites' styles.
+
+// We also insert our own base styles, but limited in scope to `pp-ui` class children (see inside)
+@import "pp-ui-reset";
+
+// Shameful overrides, potentially harmful for other websites
+@import "shame";
+
+/*
+NOTE:
+We still rely a little bit on the annotator module's styles, but we're in the process of removing it
+
+todo these annotator classes cannot be renamed yet as they still belong to annotator's source:
+annotator-invert-X
+annotator-invert-Y
+ */
+
+#{$pp-scope} {
+    font-family: $font-family-preset;
+    font-size: $default-font-size;
+}
+
+#{$pp-scope} {
+
+    textarea,
+    input[type=text] {
+        font-family: $font-family-preset;
+        font-size: $default-font-size;
+    }
+}
+
+
+#{$pp-scope} {
+    a {
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: none;
+    }
+}
+
+.pp-hide {
+    display: none !important; //override semantic-ui
+}
+

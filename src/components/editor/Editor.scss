@@ -1,8 +1,18 @@
 .self {
+    // TODO remove
     position: absolute;
-
     background-color: white;
     width: 300px;
     height: 200px;
     border: 1px solid blue;
+
+  .header-buttons {
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+
+    :not(:first-child):not(:last-child) {
+      margin: 0 10px;
+    }
+  }
 }
