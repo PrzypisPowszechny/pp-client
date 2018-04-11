@@ -4,6 +4,7 @@ import {Provider} from 'react-redux';
 import store from './store';
 import App from "./containers/App";
 import {showEditor, hideEditor, setEditor} from "./actions/index";
+import TextSelector from "./core/TextSelector";
 
 // TODO uncomment when restored
 // import './css/common/pp-semantic-ui-reset.scss';
@@ -35,4 +36,11 @@ function injectApp() {
 const isBrowser = typeof window !== 'undefined';
 if (isBrowser) {
   injectApp();
+  const textSelector = new TextSelector(document.body, handleSelect);
+}
+
+
+function handleSelect(data, event) {
+  console.log('data: ', data);
+  console.log('event: ', event);
 }

@@ -1,5 +1,6 @@
 import { Range } from 'xpath-range';
 import $ from 'jquery';
+import {rangesParser} from "./utils";
 
 const TEXTSELECTOR_NS = 'annotator-textselector';
 
@@ -136,7 +137,9 @@ export default class TextSelector {
       }
     }
 
-    this.onSelection(selectedRanges, event);
+    const parseRanges = rangesParser(this.element, '.annotator-hl')
+
+    this.onSelection(parseRanges(selectedRanges), event);
   }
 
   nullSelection = () => {

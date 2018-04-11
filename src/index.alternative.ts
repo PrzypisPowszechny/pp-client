@@ -13,14 +13,14 @@ init();
 
 function init() {
   const textSelector = new TextSelector(document.body, handleSelect);
-  const highlighter = new Highlighter(document.body, null);
+  //const highlighter = new Highlighter(document.body, null);
 
   console.log(textSelector);
-  console.log(highlighter);
+  //console.log(highlighter);
 
   window.przypis = {
     textSelector,
-    highlighter,
+    //highlighter,
     utils,
   };
 }
