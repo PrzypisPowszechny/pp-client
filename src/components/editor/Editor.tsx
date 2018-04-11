@@ -77,10 +77,7 @@ class Editor extends React.Component<
     this.setState(Editor.stateFromProps(newProps));
   }
 
-  // TODO KG debug; it probably doesn't always work
   componentDidMount() {
-    // Set focus after a tiny timeout; needed at least for Chrome
-    setTimeout(() => this.commentInput.focus(), 20);
   }
 
   setPriority = (priority: AnnotationPriorities) => {
@@ -218,6 +215,7 @@ class Editor extends React.Component<
         </div>
         <div className="editor-input pp-comment">
           <textarea
+            autoFocus={true}
             name="comment"
             value={comment}
             onChange={this.handleInputChange}
