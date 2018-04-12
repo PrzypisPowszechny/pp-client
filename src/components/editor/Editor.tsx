@@ -7,7 +7,6 @@ import {AnnotationPriorities, annotationPrioritiesLabels} from "../consts";
 import {Modal, Popup} from "semantic-ui-react";
 import PriorityButton from "./priority-button/PriorityButton";
 
-
 interface IEditorProps {
   visible?: boolean;
   invertedX: boolean;
@@ -28,12 +27,6 @@ export interface IEditorState {
   noCommentModalOpen: boolean;
 }
 
-const priorityToClass = {
-  [AnnotationPriorities.NORMAL]: 'priority-normal',
-  [AnnotationPriorities.WARNING]: 'priority-warning',
-  [AnnotationPriorities.ALERT]: 'priority-alert',
-};
-
 class Editor extends React.Component<
   IEditorProps,
   Partial<IEditorProps>
@@ -46,6 +39,12 @@ class Editor extends React.Component<
     locationX: 0,
     locationY: 0,
     annotation: null
+  };
+
+  static priorityToClass = {
+    [AnnotationPriorities.NORMAL]: styles.priorityNormal,
+    [AnnotationPriorities.WARNING]: styles.priorityWarning,
+    [AnnotationPriorities.ALERT]: styles.priorityAlert,
   };
 
   isNewAnnotation() {
@@ -66,8 +65,6 @@ class Editor extends React.Component<
     };
   }
 
-  commentInput: HTMLTextAreaElement;
-
   constructor(props: IEditorProps) {
     super(props);
     this.state = Editor.stateFromProps(props);
@@ -75,6 +72,16 @@ class Editor extends React.Component<
 
   componentWillReceiveProps(newProps: IEditorProps) {
     this.setState(Editor.stateFromProps(newProps));
+  }
+
+  componentWillUpdate(nextProps: IEditorProps, nextState: Partial<IEditorState>) {
+    // Whenever the field has changed, eradicate the error message
+    if (nextState.referenceLink) {
+      nextState.referenceLinkError = '';
+    }
+    if (nextState.referenceLinkTitle) {
+      nextState.referenceLinkTitleError = '';
+    }
   }
 
   componentDidMount() {
@@ -107,25 +114,31 @@ class Editor extends React.Component<
       this.setState({ referenceLinkTitleError: 'Musisz podać tytuł źródła, jeśli chcesz dodać przypis!' });
       return false;
     }
-
     return true;
   }
 
-  saveButtonClass(): string {
-    return priorityToClass[this.state.priority];
+  private saveButtonClass(): string {
+    return Editor.priorityToClass[this.state.priority];
   }
 
-  private onSave(event: any) {
-    this.executeSave();
-     // TODO
-  }
+  private onSave = (event: any) => {
+    //TODO copied from old_src; review
+    if (this.validateForm()) { // if form values are correct
+      if (!this.state.comment) { // if comment field is empty, display the modal
+        this.setState({ noCommentModalOpen: true });
+        return;
+      }
+      this.executeSave(event);
+    }
+  };
 
-  private onCancel(event: any) {
+  private onCancel = (event: any) => {
     // TODO
-  }
+  };
 
-  executeSave = () => {
-     //TODO
+  private executeSave = (event: any) => {
+    // TODO
+     console.log(this.props.annotation);
   };
 
   // A modal displayed when user tries to save the form with comment field empty
@@ -168,7 +181,8 @@ class Editor extends React.Component<
       referenceLinkTitle,
       referenceLinkTitleError,
     } = this.state;
-
+    console.log(referenceLinkError);
+    console.log(referenceLinkError == '');
     return (
       <Widget
         className={classNames("pp-ui", styles.self)}
@@ -178,8 +192,8 @@ class Editor extends React.Component<
         locationX={this.props.locationX}
         locationY={this.props.locationY}
       >
-        <div className="pp-editor-head-bar">
-          <label className="priority-header"> Co dodajesz? </label>
+        <div className={styles.headBar}>
+          <label className={styles.priorityHeader}> Co dodajesz? </label>
           <div className={styles.headerButtons}>
             <PriorityButton
               type={AnnotationPriorities.NORMAL}
@@ -208,77 +222,76 @@ class Editor extends React.Component<
           </div>
         </div>
         <div
-          className="pp-close"
+          className={styles.close}
           onClick={this.onCancel}
         >
           <i className="remove icon"/>
         </div>
-        <div className="editor-input pp-comment">
+        <div className={classNames(styles.editorInput, styles.comment)}>
           <textarea
             autoFocus={true}
             name="comment"
             value={comment}
             onChange={this.handleInputChange}
             placeholder="Dodaj treść przypisu"
-            ref={(input) => { this.commentInput = input as HTMLTextAreaElement; }}
           />
         </div>
-        <div className="editor-input pp-reference-link">
+        <div className={classNames(styles.editorInput, styles.referenceLink)}>
           <input
             type="text"
             name="referenceLink"
-            className={referenceLinkError ? ' error' : ''}
+            className={referenceLinkError ? styles.error : ''}
             value={referenceLink}
             onChange={this.handleInputChange}
             placeholder="Wklej link do źródła"
           />
-          <i className="input-icon linkify icon"/>
+          <i className={classNames(styles.inputIcon, 'linkify', 'icon')}/>
           <div
-            className={classNames('pp-error-msg', 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { 'pp-hide': referenceLinkError})}
+            className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
+              { [styles.hide]: referenceLinkError == ''})}
           >
             {referenceLinkError}
           </div>
         </div>
-        <div className={'editor-input pp-reference-link-title'}>
+        <div className={classNames(styles.editorInput, styles.referenceLinkTitle)}>
           <input
               type="text"
               name="referenceLinkTitle"
-              className={this.state.referenceLinkTitleError ? ' error' : ''}
+              className={referenceLinkTitleError ? styles.error : ''}
               value={referenceLinkTitle}
               onChange={this.handleInputChange}
               placeholder="Wpisz tytuł źródła"
           />
-          <i className="input-icon tags icon"/>
+          <i className={classNames(styles.inputIcon, 'tags', 'icon')}/>
           <div
-              className={classNames('pp-error-msg', 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { 'pp-hide': referenceLinkTitleError})}
+              className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
+              { [styles.hide]: referenceLinkTitleError == ''})}
               >
             {referenceLinkTitleError}
           </div>
           <Popup
               className="pp-ui small-padding"
               hideOnScroll={true}
-              trigger={<div className="link-help"><i className="help circle icon"/></div>}
+              trigger={<div className={styles.linkHelp}><i className="help circle icon"/></div>}
               flowing={true}
               hoverable={true}
           >
             np. <i>Treść ustawy</i>, <i>Wikipedia</i>,<br/> <i>Nagranie wypowiedzi ministra</i>
           </Popup>
         </div>
-        <div className="pp-bottom-bar">
-          <div className="pp-mover-area">
-            <div className="pp-controls">
-              <button className="pp-cancel" onClick={this.onCancel}>
+        <div className={styles.bottomBar}>
+          <div className={styles.moverArea}>
+            <div className={styles.controls}>
+              <button className={styles.cancel} onClick={this.onCancel}>
                 {' '}Anuluj{' '}
               </button>
-              <button className={'pp-save annotator-focus ' + this.saveButtonClass()} onClick={this.onSave}>
+              <button className={classNames(styles.save, this.saveButtonClass())} onClick={this.onSave}>
                 {' '}Zapisz{' '}
               </button>
               {this.renderNoCommentModal()}
             </div>
           </div>
-          <img className="mover-icon"/>
+          <img className={styles.moverIcon}/>
         </div>
       </Widget>
     );

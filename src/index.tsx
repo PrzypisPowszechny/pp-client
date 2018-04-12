@@ -6,12 +6,12 @@ import App from "./containers/App";
 import {showEditor, hideEditor, setEditor} from "./actions/index";
 import TextSelector from "./core/TextSelector";
 
-// TODO uncomment when restored
-// import './css/common/pp-semantic-ui-reset.scss';
 
+import './css/common/base.scss';
+// semantic-ui minimum defaults for semantic-ui to work
+import './css/common/pp-semantic-ui-reset.scss';
 // New defaults/modifiers for some semantic-ui components
-// TODO uncomment when restored
-// import './css/common/pp-semantic-ui-overrides.scss';
+import './css/common/pp-semantic-ui-overrides.scss';
 
 // import IPPSettings from './PPSettings.interface';
 // declare const PP_SETTINGS: IPPSettings;
@@ -29,7 +29,7 @@ function injectApp() {
     </Provider>,
     documentContainer,
   );
-  store.dispatch(setEditor(true, 100, 200));
+  store.dispatch(setEditor(true, 300, 500));
 
 }
 

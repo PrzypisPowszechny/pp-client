@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import styles from './Widget.scss';
 
 interface IWidgetProps {
   visible: boolean;
@@ -38,8 +39,9 @@ export default class Widget extends React.Component<
   }
 
 
-  getClassNames() {
+  getInnerClassNames() {
     return classNames(
+      styles.inner,
       this.props.className,
       {
         [Widget.classes.invertedX]: this.props.invertedX,
@@ -67,15 +69,17 @@ export default class Widget extends React.Component<
   }
 
   render() {
-    if (this.props.visible) {
-      return (
-        <div
-          className={this.getClassNames()}
-          ref={this.rootElement}
-        >
-          {this.props.children}
+    return (
+      <div
+        className={styles.self}
+        ref={this.rootElement}
+      >
+        <div className={this.getInnerClassNames()}>
+        {this.props.children}
         </div>
-      );
+      </div>
+    );
+    if (this.props.visible) {
     } else {
       return null;
     }
