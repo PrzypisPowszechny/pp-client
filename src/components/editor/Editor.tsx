@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import Widget from '../Widget';
+import Widget from '../widget/Widget';
 import styles from './Editor.scss';
 import AnnotationViewModel from './AnnotationViewModel';
 import {AnnotationPriorities, annotationPrioritiesLabels} from "../consts";
@@ -180,8 +180,7 @@ class Editor extends React.Component<
       referenceLinkTitle,
       referenceLinkTitleError,
     } = this.state;
-    console.log(referenceLinkError);
-    console.log(referenceLinkError == '');
+
     return (
       <Widget
         className={classNames("pp-ui", styles.self)}

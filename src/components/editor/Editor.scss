@@ -28,6 +28,10 @@ $editor-vertical-spacing: 15px;
     background-color: white;
     font-size: $editor-font-size;
     font-family: $font-family-preset;
+
+    border: 1px solid rgb(210, 212, 210);
+    border-radius: 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* --- Editor head bar --- */
