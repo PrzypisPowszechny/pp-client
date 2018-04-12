@@ -1,8 +1,8 @@
-import annotator from 'annotator';
 import {AnnotationPriorities} from '../consts';
-import {IAnnotationForm} from './annotation';
 
-export default class AnnotationViewModel implements IAnnotationForm, annotator.IAnnotation {
+// ViewModel ported from old_src
+// TODO probably replace it with an api data model
+export default class AnnotationViewModel {
 
   id: number;
   quote: string;

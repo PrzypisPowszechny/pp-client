@@ -8,7 +8,7 @@ import {Modal, Popup} from "semantic-ui-react";
 import PriorityButton from "./priority-button/PriorityButton";
 
 interface IEditorProps {
-  visible?: boolean;
+  visible: boolean;
   invertedX: boolean;
   invertedY: boolean;
   locationX: number;
@@ -28,8 +28,8 @@ export interface IEditorState {
 }
 
 class Editor extends React.Component<
-  IEditorProps,
-  Partial<IEditorProps>
+  Partial<IEditorProps>,
+  Partial<IEditorState>
   > {
 
   static defaultProps = {
@@ -143,7 +143,7 @@ class Editor extends React.Component<
 
   // A modal displayed when user tries to save the form with comment field empty
   renderNoCommentModal() {
-    this.noCommentModal = (
+    return (
       <Modal
         size="mini"
         className="pp-ui"
@@ -169,7 +169,6 @@ class Editor extends React.Component<
         </Modal.Actions>
       </Modal>
     );
-    return this.noCommentModal;
   }
 
   render() {

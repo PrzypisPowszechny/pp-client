@@ -9,12 +9,12 @@ interface IWidgetProps {
   locationX: number;
   locationY: number;
   className: string;
-  children: React.ReactChild;
+  children: React.ReactChild[];
 }
 
 export default class Widget extends React.Component<
-  IWidgetProps,
-  Partial<IWidgetProps>
+  Partial<IWidgetProps>,
+  {}
   > {
 
   static classes = {
@@ -69,7 +69,8 @@ export default class Widget extends React.Component<
   }
 
   render() {
-    return (
+    if (this.props.visible) {
+      return (
       <div
         className={styles.self}
         ref={this.rootElement}
@@ -79,7 +80,6 @@ export default class Widget extends React.Component<
         </div>
       </div>
     );
-    if (this.props.visible) {
     } else {
       return null;
     }
