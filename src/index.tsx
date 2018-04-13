@@ -12,6 +12,10 @@ import './css/common/pp-semantic-ui-reset.scss';
 // New defaults/modifiers for some semantic-ui components
 import './css/common/pp-semantic-ui-overrides.scss';
 
+import './css/selection.scss';
+
+import Highlighter from './core/Highlighter';
+
 // import IPPSettings from './PPSettings.interface';
 // declare const PP_SETTINGS: IPPSettings;
 
@@ -35,10 +39,13 @@ function injectApp() {
 const isBrowser = typeof window !== 'undefined';
 if (isBrowser) {
   injectApp();
-  const textSelector = new TextSelector(document.body, handleSelect);
+  window.textSelector = new TextSelector(document.body, handleSelect);
+  window.highlighter = new Highlighter(document.body, null);
 }
 
 function handleSelect(data, event) {
   console.log('data: ', data);
   console.log('event: ', event);
+  window.highlighter.draw(data);
+  // window.highlighter.undraw(data);
 }

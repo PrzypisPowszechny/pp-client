@@ -1,4 +1,7 @@
 import { Range } from 'xpath-range';
+// More on xpath-range here: https://github.com/opengovfoundation/xpath-range
+// Wondering what's inside? See https://github.com/opengovfoundation/xpath-range/blob/master/src/range.coffee#L227
+
 import $ from 'jquery';
 import {rangesParser} from "./utils";
 
@@ -71,7 +74,6 @@ export default class TextSelector {
        */
       const browserRange = new Range.BrowserRange(r);
       const normedRange = browserRange.normalize().limit(this.element);
-
       /*
        If the new range falls fully outside our this.element, we should
        add it back to the document but not return it from this method.
@@ -106,7 +108,7 @@ export default class TextSelector {
 
   /**
    * Event callback: called when the mouse button is released. Checks to see if a
-   * selection has been made and if so displays the adder.
+   * selection has been made
    *
    * event - A mouseup Event object.
    *
@@ -137,7 +139,7 @@ export default class TextSelector {
       }
     }
 
-    const parseRanges = rangesParser(this.element, '.annotator-hl');
+    const parseRanges = rangesParser(this.element, 'annotator-hl');
 
     this.onSelection(parseRanges(selectedRanges), event);
   }
