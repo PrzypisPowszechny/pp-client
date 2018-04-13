@@ -4,6 +4,7 @@ import { Range } from 'xpath-range';
 
 import $ from 'jquery';
 import {rangesParser} from "./utils";
+import {PPHighlightClass} from "../consts";
 
 const TEXTSELECTOR_NS = 'annotator-textselector';
 
@@ -130,8 +131,8 @@ export default class TextSelector {
         commonAncestor: { container },
       } = selectedRange;
 
-      if ($(container).hasClass('annotator-hl')) {
-        container = $(container).parents('[class!=annotator-hl]')[0];
+      if ($(container).hasClass(PPHighlightClass)) {
+        container = $(container).parents(`[class!=${PPHighlightClass}]`)[0];
       }
       if (isAnnotator(container)) {
         this.nullSelection();
@@ -139,7 +140,7 @@ export default class TextSelector {
       }
     }
 
-    const parseRanges = rangesParser(this.element, 'annotator-hl');
+    const parseRanges = rangesParser(this.element, PPHighlightClass);
 
     this.onSelection(parseRanges(selectedRanges), event);
   }

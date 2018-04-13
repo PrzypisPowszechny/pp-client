@@ -1,5 +1,6 @@
 import { Range } from 'xpath-range';
 import $ from 'jquery';
+import {PPHighlightClass} from "../consts";
 
 /**
  * highlightRange wraps the DOM Nodes within the provided range with a highlight
@@ -10,7 +11,7 @@ import $ from 'jquery';
  *
  * Returns an array of highlight Elements.
  */
-function highlightRange(normedRange, cssClass = 'annotator-hl') {
+function highlightRange(normedRange, cssClass) {
   const white = /^\s*$/;
 
   /*
@@ -68,7 +69,7 @@ export default class Highlighter {
 
   static defaultOptions = {
     // The CSS class to apply to drawn highlights
-    highlightClass: 'annotator-hl',
+    highlightClass: PPHighlightClass,
     // Number of annotations to draw at once
     chunkSize: 10,
     // Time (in ms) to pause between drawing chunks of annotations
