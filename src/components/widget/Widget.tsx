@@ -9,7 +9,7 @@ interface IWidgetProps {
   locationX: number;
   locationY: number;
   className: string;
-  children: React.ReactChild[];
+  children: React.ReactChild | React.ReactChild[];
 }
 
 export default class Widget extends React.Component<
@@ -37,7 +37,6 @@ export default class Widget extends React.Component<
     super(props);
     this.rootElement = React.createRef();
   }
-
 
   getInnerClassNames() {
     return classNames(

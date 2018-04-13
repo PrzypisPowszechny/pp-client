@@ -137,7 +137,7 @@ export default class TextSelector {
       }
     }
 
-    const parseRanges = rangesParser(this.element, '.annotator-hl')
+    const parseRanges = rangesParser(this.element, '.annotator-hl');
 
     this.onSelection(parseRanges(selectedRanges), event);
   }

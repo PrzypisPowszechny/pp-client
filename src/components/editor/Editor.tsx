@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import Widget from '../widget/Widget';
 import styles from './Editor.scss';
-import AnnotationViewModel from './AnnotationViewModel';
+import AnnotationViewModel from '../../models/AnnotationViewModel';
 import {AnnotationPriorities, annotationPrioritiesLabels} from "../consts";
 import {Modal, Popup} from "semantic-ui-react";
 import PriorityButton from "./priority-button/PriorityButton";
@@ -38,7 +38,7 @@ class Editor extends React.Component<
     invertedY: false,
     locationX: 0,
     locationY: 0,
-    annotation: null
+    annotation: null,
   };
 
   static priorityToClass = {
@@ -48,7 +48,7 @@ class Editor extends React.Component<
   };
 
   isNewAnnotation() {
-    return this.props.annotation.id == 0
+    return this.props.annotation.id == 0;
   }
 
   static stateFromProps(props: IEditorProps): IEditorState {
@@ -91,19 +91,19 @@ class Editor extends React.Component<
     this.setState({
       priority,
     });
-  };
+  }
 
   setModalOpen = () => {
     this.setState({
       noCommentModalOpen: false,
     });
-  };
+  }
 
   handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const target = e.currentTarget;
     const name = target.name;
     this.setState({ [name]: target.value });
-  };
+  }
 
    private validateForm(): boolean {
     if (!this.state.referenceLink) {
@@ -130,16 +130,16 @@ class Editor extends React.Component<
       }
       this.executeSave(event);
     }
-  };
+  }
 
   private onCancel = (event: any) => {
     // TODO
-  };
+  }
 
   private executeSave = (event: any) => {
     // TODO
      console.log(this.props.annotation);
-  };
+  }
 
   // A modal displayed when user tries to save the form with comment field empty
   renderNoCommentModal() {
@@ -181,7 +181,7 @@ class Editor extends React.Component<
       referenceLinkTitleError,
     } = this.state;
 
-    return (
+     return (
       <Widget
         className={classNames("pp-ui", styles.self)}
         visible={this.props.visible}

@@ -6,7 +6,6 @@ import App from "./containers/App";
 import {showEditor, hideEditor, setEditor} from "./actions/index";
 import TextSelector from "./core/TextSelector";
 
-
 import './css/common/base.scss';
 // semantic-ui minimum defaults for semantic-ui to work
 import './css/common/pp-semantic-ui-reset.scss';
@@ -38,7 +37,6 @@ if (isBrowser) {
   injectApp();
   const textSelector = new TextSelector(document.body, handleSelect);
 }
-
 
 function handleSelect(data, event) {
   console.log('data: ', data);

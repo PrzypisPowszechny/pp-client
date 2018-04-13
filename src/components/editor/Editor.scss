@@ -8,20 +8,6 @@ $editor-font-size: 14px;
 $editor-horizontal-spacing: 20px;
 $editor-vertical-spacing: 15px;
 
-.hide {
-  display: none !important;
-}
-
-.header-buttons {
-  display: flex;
-  justify-content: space-between;
-  flex: 1;
-
-  :not(:first-child):not(:last-child) {
-    margin: 0 10px;
-  }
-}
-
 /* -- PP Editor -- */
 .self {
     width: $editor-width;
@@ -29,9 +15,7 @@ $editor-vertical-spacing: 15px;
     font-size: $editor-font-size;
     font-family: $font-family-preset;
 
-    border: 1px solid rgb(210, 212, 210);
-    border-radius: 0;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    @include pp-widget-edge();
 }
 
 /* --- Editor head bar --- */
@@ -46,6 +30,15 @@ $editor-vertical-spacing: 15px;
     }
 }
 
+.header-buttons {
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+
+  :not(:first-child):not(:last-child) {
+    margin: 0 10px;
+  }
+}
 
 /* fields: comment, referenceLink */
 .editor-input {
@@ -67,8 +60,7 @@ $editor-vertical-spacing: 15px;
   }
 
   textarea {
-    //todo adjust border radius with KS
-    @include border-radius(5px 5px 0 0);
+    border-radius: 5px 5px 0 0;
   }
 
   input:hover, input:focus,
@@ -294,4 +286,8 @@ $editor-vertical-spacing: 15px;
     width: 25px;
     background-color: #ccc;
     -webkit-border-radius: 4px;
+}
+
+.hide {
+  display: none !important;
 }
