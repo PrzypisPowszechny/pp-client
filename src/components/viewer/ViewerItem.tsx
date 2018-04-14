@@ -1,10 +1,12 @@
 import React from 'react';
 import classNames from 'classnames';
-import {AnnotationPriorities, annotationPrioritiesLabels} from '../consts';
-import {Popup, Modal, Button} from 'semantic-ui-react';
 import moment from 'moment';
+import { Popup, Modal, Button } from 'semantic-ui-react';
+
+import AnnotationViewModel from 'models/AnnotationViewModel';
+
+import { AnnotationPriorities, annotationPrioritiesLabels } from '../consts';
 import styles from './Viewer.scss';
-import AnnotationViewModel from "../../models/AnnotationViewModel";
 
 interface IViewerItemProps {
   key: number;
@@ -18,17 +20,14 @@ interface IViewerItemState {
   confirmDeleteModalOpen: boolean;
 }
 
-export default class ViewerItem extends React.Component<
-  IViewerItemProps,
-  Partial<IViewerItemState>
-  > {
+export default class ViewerItem extends React.Component<IViewerItemProps, Partial<IViewerItemState>> {
 
   static editControlDisappearTimeout = 500;
 
   constructor(props: IViewerItemProps) {
     super(props);
 
-    //TODO move useful/objection from this component's state to global state
+    // TODO move useful/objection from this component's state to global state
     this.state = {
       initialView: true,
       useful: this.props.annotation.useful,
@@ -40,43 +39,43 @@ export default class ViewerItem extends React.Component<
 
   componentWillReceiveProps() {
     // Set timeout after which edit buttons disappear
-    this.setState({initialView: true});
+    this.setState({ initialView: true });
     this.setControlDisappearTimeout();
   }
 
   setControlDisappearTimeout() {
     setTimeout(
-      () => this.setState({initialView: false}),
+      () => this.setState({ initialView: false }),
       ViewerItem.editControlDisappearTimeout,
     );
   }
 
   handleEdit = (e) => {
-    //TODO
+    // TODO
     console.log('edit');
     console.log(this.props.annotation);
   }
 
-  setDeleteModalOpen = (e) => this.setState({confirmDeleteModalOpen: true});
+  setDeleteModalOpen = e => this.setState({ confirmDeleteModalOpen: true });
 
-  setDeleteModalClosed = (e) => this.setState({confirmDeleteModalOpen: false});
+  setDeleteModalClosed = e => this.setState({ confirmDeleteModalOpen: false });
 
   handleDelete = (e) => {
-    this.setState({confirmDeleteModalOpen: false});
-    //TODO
+    this.setState({ confirmDeleteModalOpen: false });
+    // TODO
     console.log('delete');
     console.log(this.props.annotation);
   }
 
   toggleUseful = (e) => {
-    //TODO
-    this.setState({useful: !this.state.useful});
+    // TODO
+    this.setState({ useful: !this.state.useful });
   }
 
   // NOTE: objection will be removed in this version, stays here only so as not to disrupt the current codebase
   toggleObjection = (e) => {
-    //TODO
-    this.setState({objection: !this.state.objection});
+    // TODO
+    this.setState({ objection: !this.state.objection });
   }
 
   headerPriorityClass() {
@@ -89,17 +88,18 @@ export default class ViewerItem extends React.Component<
   }
 
   usefulButton() {
-    const {usefulCount} = this.props.annotation;
-    const {useful} = this.state;
+    const { usefulCount } = this.props.annotation;
+    const { useful } = this.state;
 
     console.log(useful);
     console.log(usefulCount);
 
     return (
       <a
-        className={classNames('ui', 'label', 'medium', styles.useful, {[styles.selected]: useful})}
-        onClick={this.toggleUseful}>
-          Przydatne
+        className={classNames('ui', 'label', 'medium', styles.useful, { [styles.selected]: useful })}
+        onClick={this.toggleUseful}
+      >
+        Przydatne
         <span className={styles.number}>{usefulCount + (useful ? 1 : 0)}</span>
       </a>
     );
@@ -107,13 +107,14 @@ export default class ViewerItem extends React.Component<
 
   // NOTE: objection will be removed in this version, stays here only so as not to disrupt the current codebase
   objectionButton() {
-    const {objectionCount} = this.props.annotation;
-    const {objection} = this.state;
+    const { objectionCount } = this.props.annotation;
+    const { objection } = this.state;
 
     return (
       <a
-        className={classNames('ui', 'label', 'medium', styles.objection, {[styles.selected]: objection})}
-        onClick={this.toggleObjection}>
+        className={classNames('ui', 'label', 'medium', styles.objection, { [styles.selected]: objection })}
+        onClick={this.toggleObjection}
+      >
         Sprzeciw
         <span className={styles.number}>{objectionCount + (objection ? 1 : 0)}</span>
       </a>
@@ -145,21 +146,21 @@ export default class ViewerItem extends React.Component<
   renderControls() {
     if (this.props.annotation.doesBelongToUser) {
       return (
-        <div className={classNames(styles.controls, {[styles.visible]: this.state.initialView})}>
+        <div className={classNames(styles.controls, { [styles.visible]: this.state.initialView })}>
           {this.renderDeleteModal()}
           <button
             type="button"
             title="Edit"
             onClick={this.handleEdit}
           >
-            <i className="edit icon"/>
+            <i className="edit icon" />
           </button>
           <button
             type="button"
             title="Delete"
             onClick={this.setDeleteModalOpen}
           >
-            <i className="trash icon"/>
+            <i className="trash icon" />
           </button>
         </div>
       );

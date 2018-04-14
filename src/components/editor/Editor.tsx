@@ -1,11 +1,14 @@
 import React from 'react';
 import classNames from 'classnames';
-import Widget from '../widget/Widget';
+import { Modal, Popup } from 'semantic-ui-react';
+
+import AnnotationViewModel from 'models/AnnotationViewModel';
+
+import Widget from 'components/widget';
+import { AnnotationPriorities, annotationPrioritiesLabels } from '../consts';
+
+import PriorityButton from './priority-button/PriorityButton';
 import styles from './Editor.scss';
-import AnnotationViewModel from '../../models/AnnotationViewModel';
-import {AnnotationPriorities, annotationPrioritiesLabels} from "../consts";
-import {Modal, Popup} from "semantic-ui-react";
-import PriorityButton from "./priority-button/PriorityButton";
 
 interface IEditorProps {
   visible: boolean;
@@ -27,10 +30,7 @@ export interface IEditorState {
   noCommentModalOpen: boolean;
 }
 
-class Editor extends React.Component<
-  Partial<IEditorProps>,
-  Partial<IEditorState>
-  > {
+class Editor extends React.Component<Partial<IEditorProps>, Partial<IEditorState>> {
 
   static defaultProps = {
     visible: true,
@@ -46,10 +46,6 @@ class Editor extends React.Component<
     [AnnotationPriorities.WARNING]: styles.priorityWarning,
     [AnnotationPriorities.ALERT]: styles.priorityAlert,
   };
-
-  isNewAnnotation() {
-    return this.props.annotation.id == 0;
-  }
 
   static stateFromProps(props: IEditorProps): IEditorState {
     // TODO perhaps replace AnnotationViewModel with AnnotationModel
@@ -84,9 +80,6 @@ class Editor extends React.Component<
     }
   }
 
-  componentDidMount() {
-  }
-
   setPriority = (priority: AnnotationPriorities) => {
     this.setState({
       priority,
@@ -105,7 +98,7 @@ class Editor extends React.Component<
     this.setState({ [name]: target.value });
   }
 
-   private validateForm(): boolean {
+  private validateForm(): boolean {
     if (!this.state.referenceLink) {
       this.setState({ referenceLinkError: 'Musisz podać źródło, jeśli chcesz dodać przypis!' });
       return false;
@@ -122,7 +115,7 @@ class Editor extends React.Component<
   }
 
   private onSave = (event: any) => {
-    //TODO copied from old_src; review
+    // TODO copied from old_src; review
     if (this.validateForm()) { // if form values are correct
       if (!this.state.comment) { // if comment field is empty, display the modal
         this.setState({ noCommentModalOpen: true });
@@ -138,7 +131,7 @@ class Editor extends React.Component<
 
   private executeSave = (event: any) => {
     // TODO
-     console.log(this.props.annotation);
+    console.log(this.props.annotation);
   }
 
   // A modal displayed when user tries to save the form with comment field empty
@@ -172,7 +165,7 @@ class Editor extends React.Component<
   }
 
   render() {
-     const {
+    const {
       priority,
       comment,
       referenceLink,
@@ -181,9 +174,9 @@ class Editor extends React.Component<
       referenceLinkTitleError,
     } = this.state;
 
-     return (
+    return (
       <Widget
-        className={classNames("pp-ui", styles.self)}
+        className={classNames('pp-ui', styles.self)}
         visible={this.props.visible}
         invertedX={this.props.invertedX}
         invertedY={this.props.invertedY}
@@ -223,7 +216,7 @@ class Editor extends React.Component<
           className={styles.close}
           onClick={this.onCancel}
         >
-          <i className="remove icon"/>
+          <i className="remove icon" />
         </div>
         <div className={classNames(styles.editorInput, styles.comment)}>
           <textarea
@@ -243,38 +236,38 @@ class Editor extends React.Component<
             onChange={this.handleInputChange}
             placeholder="Wklej link do źródła"
           />
-          <i className={classNames(styles.inputIcon, 'linkify', 'icon')}/>
+          <i className={classNames(styles.inputIcon, 'linkify', 'icon')} />
           <div
             className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { [styles.hide]: referenceLinkError == ''})}
+              { [styles.hide]: referenceLinkError === '' })}
           >
             {referenceLinkError}
           </div>
         </div>
         <div className={classNames(styles.editorInput, styles.referenceLinkTitle)}>
           <input
-              type="text"
-              name="referenceLinkTitle"
-              className={referenceLinkTitleError ? styles.error : ''}
-              value={referenceLinkTitle}
-              onChange={this.handleInputChange}
-              placeholder="Wpisz tytuł źródła"
+            type="text"
+            name="referenceLinkTitle"
+            className={referenceLinkTitleError ? styles.error : ''}
+            value={referenceLinkTitle}
+            onChange={this.handleInputChange}
+            placeholder="Wpisz tytuł źródła"
           />
-          <i className={classNames(styles.inputIcon, 'tags', 'icon')}/>
+          <i className={classNames(styles.inputIcon, 'tags', 'icon')} />
           <div
-              className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { [styles.hide]: referenceLinkTitleError == ''})}
-              >
+            className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
+              { [styles.hide]: referenceLinkTitleError === '' })}
+          >
             {referenceLinkTitleError}
           </div>
           <Popup
-              className="pp-ui small-padding"
-              hideOnScroll={true}
-              trigger={<div className={styles.linkHelp}><i className="help circle icon"/></div>}
-              flowing={true}
-              hoverable={true}
+            className="pp-ui small-padding"
+            hideOnScroll={true}
+            trigger={<div className={styles.linkHelp}><i className="help circle icon" /></div>}
+            flowing={true}
+            hoverable={true}
           >
-            np. <i>Treść ustawy</i>, <i>Wikipedia</i>,<br/> <i>Nagranie wypowiedzi ministra</i>
+            np. <i>Treść ustawy</i>, <i>Wikipedia</i>,<br /> <i>Nagranie wypowiedzi ministra</i>
           </Popup>
         </div>
         <div className={styles.bottomBar}>
@@ -289,7 +282,7 @@ class Editor extends React.Component<
               {this.renderNoCommentModal()}
             </div>
           </div>
-          <img className={styles.moverIcon}/>
+          <img className={styles.moverIcon} />
         </div>
       </Widget>
     );

@@ -1,7 +1,9 @@
 import React from 'react';
 import classNames from 'classnames';
+
+import Widget from 'components/widget';
+
 import styles from './Menu.scss';
-import Widget from "../widget/Widget";
 
 interface IMenuProps {
   visible: boolean;
@@ -9,10 +11,7 @@ interface IMenuProps {
   locationY: number;
 }
 
-export default class Menu extends React.Component<
-  Partial<IMenuProps>,
-  {}
-  > {
+export default class Menu extends React.Component<Partial<IMenuProps>, {}> {
 
   static defaultProps = {
     visible: true,
@@ -32,7 +31,7 @@ export default class Menu extends React.Component<
   render() {
     return (
       <Widget
-        className={classNames("pp-ui", styles.self)}
+        className={classNames('pp-ui', styles.self)}
         visible={this.props.visible}
         locationX={this.props.locationX}
         locationY={this.props.locationY}
@@ -41,8 +40,8 @@ export default class Menu extends React.Component<
           className={classNames(styles.createAnnotation, 'ui', 'basic', 'pointing', 'below', 'label', 'large')}
           onClick={this.onClick}
         >
-          <i className="plus icon"></i>
-            Dodaj przypis
+          <i className="plus icon" />
+          Dodaj przypis
         </button>
       </Widget>
     );

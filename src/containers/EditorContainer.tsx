@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Editor from '../components/editor/Editor';
 import { IEditorState } from 'store/editor';
+
+import Editor from 'components/editor';
 
 interface IEditorContainerProps {
   editor?: IEditorState;
@@ -10,10 +11,7 @@ interface IEditorContainerProps {
 @connect(state => ({
   editor: state.editor,
 }))
-class EditorContainer extends React.Component<
-  IEditorContainerProps,
-  {}
-  > {
+class EditorContainer extends React.Component<IEditorContainerProps, {}> {
 
   render() {
     const editor = this.props.editor;
@@ -27,7 +25,6 @@ class EditorContainer extends React.Component<
       />
     );
   }
-
 }
 
 export default EditorContainer;
