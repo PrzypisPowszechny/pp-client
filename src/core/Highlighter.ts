@@ -41,7 +41,7 @@ function highlightRange(normedRange, cssClass) {
  */
 function reanchorRange(range, rootElement) {
   try {
-    return (Range.sniff(range)).normalize(rootElement);
+    return Range.sniff(range).normalize(rootElement);
   } catch (e) {
     if (!(e instanceof Range.RangeError)) {
       // Oh Javascript, why you so crap? This will lose the traceback.
@@ -53,6 +53,21 @@ function reanchorRange(range, rootElement) {
     */
   }
   return null;
+}
+
+export interface IHighlightRegistry {
+  [id: string]: {
+    normedId: string;
+    range: Range.SerializedRange;
+    annotationData: any;
+    highlightElements: HTMLElement[];
+  };
+}
+
+interface IHighlightDrawArgs {
+  id: number|string;
+  range: Range.SerializedRange;
+  annotationData: any;
 }
 
 /**
@@ -70,14 +85,23 @@ export default class Highlighter {
   static defaultOptions = {
     // The CSS class to apply to drawn highlights
     highlightClass: PPHighlightClass,
+    highlightIdAttr: 'highlight-id',
     // Number of annotations to draw at once
     chunkSize: 10,
     // Time (in ms) to pause between drawing chunks of annotations
     chunkDelay: 10,
+
+    namespace: 'PPHighlighter',
+
   };
+
+  static coerceId(id: number | string) {
+    return id.toString();
+  }
 
   element;
   options;
+  highlightRegistry: IHighlightRegistry;
 
   constructor(element, options) {
     this.element = element;
@@ -85,15 +109,7 @@ export default class Highlighter {
       ...Highlighter.defaultOptions,
       ...options,
     };
-  }
-
-  destroy = () => {
-    $(this.element)
-      .find('.' + this.options.highlightClass)
-      .each((_, el) => {
-        $(el).contents().insertBefore(el);
-        $(el).remove();
-      });
+    this.highlightRegistry = {};
   }
 
   /**
@@ -103,14 +119,14 @@ export default class Highlighter {
    *
    * Returns nothing.
    */
-  drawAll = (annotations) => {
+  drawAll = (annotations: IHighlightDrawArgs[]) => {
     return new Promise((resolve) => {
       let highlights = [];
 
       const loader = (annList = []) => {
         const now = annList.splice(0, this.options.chunkSize);
         for (const el of now) {
-          highlights = highlights.concat(this.draw(el));
+          highlights = highlights.concat(this.draw(el.id, el.range, el.annotationData));
         }
 
         // If there are more to do, do them after a delay
@@ -134,38 +150,46 @@ export default class Highlighter {
    *
    *  Returns an Array of drawn highlight elements.
    */
-  draw = (annotation) => {
-    const normedRanges = [];
+  draw = (id: number|string, range: Range.SerializedRange, annotationData: any) => {
+    const normedRange = reanchorRange(range, this.element);
+    const highlightElements = highlightRange(normedRange, this.options.highlightClass);
+    const normedId = Highlighter.coerceId(id);
 
-    for (const range of annotation.ranges) {
-      const r = reanchorRange(range, this.element);
-      if (r !== null) {
-        normedRanges.push(r);
-      }
+    // If this is has a highlight already, first remove it from DOM
+    if (normedId in this.highlightRegistry) {
+      this.undraw(normedId);
     }
+    const annotationRecord = {
+      normedId,
+      range,
+      annotationData,
+      highlightElements,
+    };
+    this.highlightRegistry[normedId] = annotationRecord;
+    $(highlightElements).attr(this.options.highlightIdAttr, normedId);
+    return Object.assign({}, annotationRecord);
+  }
 
-    if (!annotation._local) {
-      annotation._local = {};
-    }
-    if (!annotation._local.highlights) {
-      annotation._local.highlights = [];
-    }
-
-    for (const normed of normedRanges) {
-      annotation._local.highlights.push(...highlightRange(normed, this.options.highlightClass));
-    }
-
-    const highlightedElements = $(annotation._local.highlights);
-    // TODO is this necessary?
-    // Save the annotation data on each highlighter element.
-    highlightedElements.data('annotation', annotation);
-
-    // Add a data attribute for annotation id if the annotation has one
-    if (annotation.id) {
-      highlightedElements.attr('data-annotation-id', annotation.id);
-    }
-
-    return annotation._local.highlights;
+  /**
+   * Set a handler for events related to highlight elements
+   *
+   * event - HTML event to subscribe to such as mouseover, mouseleave, etc...
+   */
+  onHighlightEvent = (
+    event: string,
+    handler: (e: any, annotationData: any) => void,
+  ) => {
+    $(this.element)
+      .on(event + '.' + this.options.nameSpace, '.' + this.options.highlightClass, (e) => {
+        const highlightElement = e.target;
+        if (highlightElement) {
+          const highlightId = $(highlightElement).attr(this.options.highlightIdAttr);
+          // console.log(highlightId);
+          // console.log(this.highlightRegistry);
+          const data = this.highlightRegistry[highlightId.toString()];
+          handler(e, data.annotationData);
+        }
+      });
   }
 
   /**
@@ -175,19 +199,16 @@ export default class Highlighter {
    *
    * Returns nothing.
    */
-  undraw = (annotation) => {
-    const highlights = annotation._local && annotation._local.highlights;
+  undraw = (id: number|string) => {
+    const normedId = Highlighter.coerceId(id);
+    const data = this.highlightRegistry[normedId];
 
-    if (!highlights) {
-      return;
-    }
-
-    for (const highlight of highlights) {
+    for (const highlight of data.highlightElements) {
       if (highlight.parentNode !== null) {
-        $(highlight).replaceWith(highlight.childNodes);
+        $(highlight).replaceWith(highlight.childNodes as any); // ugly "as any" type fix (no idea what's wrong)
       }
     }
-    delete annotation._local.highlights;
+    delete this.highlightRegistry[normedId];
   }
 
   /**
@@ -197,8 +218,17 @@ export default class Highlighter {
    *
    * Returns the list of newly-drawn highlights.
    */
-  redraw = (annotation) => {
-    this.undraw(annotation);
-    return this.draw(annotation);
+  redraw = (id: number|string, range: Range.SerializedRange, annotationData: any) => {
+    this.undraw(id);
+    return this.draw(id, range, annotationData);
+  }
+
+  destroy = () => {
+    $(this.element)
+      .find('.' + this.options.highlightClass)
+      .each((_, el) => {
+        $(el).contents().insertBefore(el);
+        $(el).remove();
+      });
   }
 }

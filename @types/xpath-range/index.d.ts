@@ -1,10 +1,10 @@
 // Based on https://github.com/opengovfoundation/xpath-range/blob/master/src/range.coffee#L227
 
+/* tslint:disable: max-classes-per-file */
 declare module 'xpath-range' {
   export namespace Range {
 
-    export const RangeError {
-    }
+    export const RangeError;
 
     export class BrowserRange {
 
@@ -33,7 +33,7 @@ declare module 'xpath-range' {
        */
 
       text(): string;
-      normalize(): NormalizedRange;
+      normalize(Element): NormalizedRange;
       limit(element: Element);
     }
 
@@ -43,9 +43,9 @@ declare module 'xpath-range' {
       end: string;
       endOffset: number;
 
-      normalize(): NormalizedRange;
+      normalize(Element): NormalizedRange;
     }
 
-    export function sniff(range: BrowserRange | NormalizedRange | SerializedRange): | NormalizedRange | SerializedRange;
+    export function sniff(range: BrowserRange | NormalizedRange | SerializedRange): NormalizedRange | SerializedRange;
   }
 }

@@ -15,6 +15,7 @@ import './css/common/pp-semantic-ui-overrides.scss';
 import './css/selection.scss';
 
 import Highlighter from './core/Highlighter';
+import {Range} from "xpath-range";
 
 // import IPPSettings from './PPSettings.interface';
 // declare const PP_SETTINGS: IPPSettings;
@@ -27,7 +28,6 @@ declare global {
     highlighter: Highlighter;
   }
 }
-
 
 function injectApp() {
   const documentContainer = document.createElement('div');
@@ -49,13 +49,25 @@ if (isBrowser) {
   injectApp();
   window.textSelector = new TextSelector(document.body, handleSelect);
   window.highlighter = new Highlighter(document.body, null);
+  window.highlighter.onHighlightEvent('mouseover', (e, annotationData) => {
+    console.log(e);
+    console.log(annotationData);
+  });
 }
 
-function handleSelect(data, event) {
+function handleSelect(data: Range.SerializedRange[], event) {
   console.log('data: ', data);
   console.log('event: ', event);
   if (data) {
-    window.highlighter.draw(data);
+    if (data.length === 1) {
+      console.log(data);
+      window.highlighter.draw(1, data[0], {test: 'test'});
+
+      // setTimeout(() => window.highlighter.undraw(1), 1000);
+    } else {
+      console.log('PP: more than one selected range is not supported');
+    }
+
   }
   // window.highlighter.undraw(data);
 }

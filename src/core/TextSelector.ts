@@ -7,6 +7,15 @@ import {PPHighlightClass} from "../consts";
 
 const TEXTSELECTOR_NS = 'annotator-textselector';
 
+/*
+ * IMPORTANT NOTE on SELECTION RANGES
+ * We leave annotator's TextSelector more or less as it is;
+ * It can handle all kinds of selection (also multi-range selection). Although our application further assumes that
+ * no more than one range can be selected for an annotation, there is no reason to stop supporting it at such an early
+ * stage. If we ever stumble across multi-range selections it will be clear based on  TextSelectors output
+ * (rather than exceptions).
+ */
+
 /**
  * isAnnotator determines if the provided element is part of Annotator. Useful
  * for ignoring mouse actions on the annotator elements.
@@ -137,28 +146,33 @@ export default class TextSelector {
       }
     }
 
-    this.onSelection(TextSelector.serializeRanges(this.element, PPHighlightClass, selectedRanges), event);
+    const serializedRanges = [];
+    for (let i = 0, len = selectedRanges.length; i < len; i++) {
+      const serializedRange = selectedRanges[i].serialize(this.element, PPHighlightClass);
+      serializedRanges.push(serializedRange);
+    }
+
+    this.onSelection(serializedRanges, event);
   }
 
   nullSelection = () => {
     this.onSelection(null, event);
   }
 
-
-  static serializeRanges = (contextEl: Element, ignoreSelector: string, ranges: Range.NormalizedRange[]) => {
-    const text = [];
-    const serializedRanges = [];
-
-    for (let i = 0, len = ranges.length; i < len; i++) {
-      const r = ranges[i];
-      text.push(r.text().trim());
-      serializedRanges.push(r.serialize(contextEl, ignoreSelector));
-    }
-
-    return {
-      quote: text.join(' / '),
-      ranges: serializedRanges,
-    };
-  }
+  // static serializeRanges = (contextEl: Element, ignoreSelector: string, ranges: Range.NormalizedRange[]) => {
+  //   const text = [];
+  //   const serializedRanges = [];
+  //
+  //   for (let i = 0, len = ranges.length; i < len; i++) {
+  //     const r = ranges[i];
+  //     text.push(r.text().trim());
+  //     serializedRanges.push(r.serialize(contextEl, ignoreSelector));
+  //   }
+  //
+  //   return {
+  //     quote: text.join(' / '),
+  //     ranges: serializedRanges,
+  //   };
+  // }
 
 }
