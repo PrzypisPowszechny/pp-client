@@ -3,19 +3,20 @@
 declare module 'xpath-range' {
   export namespace Range {
 
-    export class Range {
-      startContainer: Text;
-      startOffset: number;
-      endContainer: Text;
-      endOffset: number;
+    export const RangeError {
     }
 
     export class BrowserRange {
+
+      constructor(range: any);
+
       commonAncestorContainer: Element;
       startContainer: Text;
       startOffset: number;
       endContainer: Text;
       endOffset: number;
+
+      normalize(): void;
     }
 
     export class NormalizedRange {
@@ -38,5 +39,7 @@ declare module 'xpath-range' {
       end: string;
       endOffset: number;
     }
+
+    export function sniff(range: BrowserRange | NormalizedRange | SerializedRange): | NormalizedRange | SerializedRange;
   }
 }

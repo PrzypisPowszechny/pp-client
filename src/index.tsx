@@ -21,6 +21,14 @@ import Highlighter from './core/Highlighter';
 
 console.log('Przypis script working!');
 
+declare global {
+  interface Window {
+    textSelector: TextSelector;
+    highlighter: Highlighter;
+  }
+}
+
+
 function injectApp() {
   const documentContainer = document.createElement('div');
   documentContainer.id = 'pp-document-container';
