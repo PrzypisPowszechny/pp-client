@@ -1,7 +1,7 @@
 import {
   EDITOR_VISIBLE_CHANGE,
-} from 'actions/consts';
-import {IEditorVisibleChangeAction} from "../actions/index";
+  IEditorVisibleChangeAction,
+} from './actions';
 
 export interface IEditorState {
   visible: boolean;

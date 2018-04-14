@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import store from './store';
 import App from "./containers/App";
-import {showEditor, hideEditor, setEditor} from "./actions/index";
 import { initializeCoreHandlers } from 'core/bootstrap';
 
 import './css/common/base.scss';
@@ -25,8 +24,6 @@ function injectApp() {
     </Provider>,
     documentContainer,
   );
-  store.dispatch(setEditor(true, 300, 500));
-
 }
 
 const isBrowser = typeof window !== 'undefined';
