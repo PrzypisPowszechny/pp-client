@@ -1,6 +1,7 @@
 import { Range } from 'xpath-range';
 import $ from 'jquery';
-import {rangesParser} from "./utils";
+import { rangesParser } from './utils';
+import { IAnnotation } from 'annotator';
 
 const TEXTSELECTOR_NS = 'annotator-textselector';
 
@@ -17,6 +18,8 @@ function isAnnotator(element) {
   return (elAndParents.filter('[class^=annotator-]').length !== 0);
 }
 
+export type SelectionCallback = (selection: IAnnotation, event: any) => void;
+
 /**
  * TextSelector monitors a document (or a specific element) for text selections
  * and can notify another object of a selection event
@@ -25,9 +28,9 @@ export default class TextSelector {
 
   document;
   element;
-  onSelection;
+  onSelection: SelectionCallback;
 
-  constructor(element, onSelection) {
+  constructor(element, onSelection: SelectionCallback) {
     this.element = element;
     this.onSelection = onSelection;
 
@@ -66,8 +69,8 @@ export default class TextSelector {
     for (let i = 0; i < selection.rangeCount; i++) {
       const r = selection.getRangeAt(i);
       /*
-        TODO we could try to remove the dependency on `Range` (xpath-range) library, but that
-        would require writing our own tool for this kind of logic
+       TODO we could try to remove the dependency on `Range` (xpath-range) library, but that
+       would require writing our own tool for this kind of logic
        */
       const browserRange = new Range.BrowserRange(r);
       const normedRange = browserRange.normalize().limit(this.element);
@@ -118,7 +121,6 @@ export default class TextSelector {
     const selectedRanges = this.captureDocumentSelection();
 
     if (selectedRanges.length === 0) {
-      this.nullSelection();
       return;
     }
 
@@ -132,7 +134,6 @@ export default class TextSelector {
         container = $(container).parents('[class!=annotator-hl]')[0];
       }
       if (isAnnotator(container)) {
-        this.nullSelection();
         return;
       }
     }
@@ -140,9 +141,5 @@ export default class TextSelector {
     const parseRanges = rangesParser(this.element, '.annotator-hl');
 
     this.onSelection(parseRanges(selectedRanges), event);
-  }
-
-  nullSelection = () => {
-    this.onSelection([], event);
   }
 }
