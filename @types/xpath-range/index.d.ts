@@ -16,7 +16,7 @@ declare module 'xpath-range' {
       endContainer: Text;
       endOffset: number;
 
-      normalize(): void;
+      normalize(): NormalizedRange;
     }
 
     export class NormalizedRange {
@@ -31,6 +31,10 @@ declare module 'xpath-range' {
           elements injected by the annotator". In other words, element no to account for when calculating selection
           offset (e.g. volatile spans created by other annotations)
        */
+
+      text(): string;
+      normalize(): NormalizedRange;
+      limit(element: Element);
     }
 
     export class SerializedRange {
@@ -38,6 +42,8 @@ declare module 'xpath-range' {
       startOffset: number;
       end: string;
       endOffset: number;
+
+      normalize(): NormalizedRange;
     }
 
     export function sniff(range: BrowserRange | NormalizedRange | SerializedRange): | NormalizedRange | SerializedRange;

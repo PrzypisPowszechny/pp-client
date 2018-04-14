@@ -3,7 +3,6 @@ import { Range } from 'xpath-range';
 // Wondering what's inside? See https://github.com/opengovfoundation/xpath-range/blob/master/src/range.coffee#L227
 
 import $ from 'jquery';
-import {rangesParser} from "./utils";
 import {PPHighlightClass} from "../consts";
 
 const TEXTSELECTOR_NS = 'annotator-textselector';
@@ -140,12 +139,28 @@ export default class TextSelector {
       }
     }
 
-    const parseRanges = rangesParser(this.element, PPHighlightClass);
-
-    this.onSelection(parseRanges(selectedRanges), event);
+    this.onSelection(TextSelector.serializeRanges(this.element, PPHighlightClass, selectedRanges), event);
   }
 
   nullSelection = () => {
     this.onSelection([], event);
   }
+
+
+  static serializeRanges = (contextEl: Element, ignoreSelector: string, ranges: Range.NormalizedRange[]) => {
+    const text = [];
+    const serializedRanges = [];
+
+    for (let i = 0, len = ranges.length; i < len; i++) {
+      const r = ranges[i];
+      text.push(r.text().trim());
+      serializedRanges.push(r.serialize(contextEl, ignoreSelector));
+    }
+
+    return {
+      quote: text.join(' / '),
+      ranges: serializedRanges,
+    };
+  }
+
 }

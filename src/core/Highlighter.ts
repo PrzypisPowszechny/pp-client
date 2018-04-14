@@ -41,7 +41,7 @@ function highlightRange(normedRange, cssClass) {
  */
 function reanchorRange(range, rootElement) {
   try {
-    return Range.sniff(range).normalize(rootElement);
+    return (Range.sniff(range)).normalize(rootElement);
   } catch (e) {
     if (!(e instanceof Range.RangeError)) {
       // Oh Javascript, why you so crap? This will lose the traceback.

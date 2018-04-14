@@ -1,5 +1,4 @@
 import { Highlighter, TextSelector } from 'core';
-import * as utils from 'core/utils';
 
 console.log('hi there!');
 
@@ -20,8 +19,7 @@ function init() {
 
   window.przypis = {
     textSelector,
-    //highlighter,
-    utils,
+    //highlighter
   };
 }
 
