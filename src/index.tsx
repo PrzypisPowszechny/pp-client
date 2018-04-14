@@ -54,6 +54,8 @@ if (isBrowser) {
 function handleSelect(data, event) {
   console.log('data: ', data);
   console.log('event: ', event);
-  window.highlighter.draw(data);
+  if (data) {
+    window.highlighter.draw(data);
+  }
   // window.highlighter.undraw(data);
 }

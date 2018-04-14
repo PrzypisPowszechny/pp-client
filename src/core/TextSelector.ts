@@ -17,7 +17,7 @@ const TEXTSELECTOR_NS = 'annotator-textselector';
  */
 function isAnnotator(element) {
   const elAndParents = $(element).parents().addBack();
-  return (elAndParents.filter('[class^=annotator-]').length !== 0);
+  return (elAndParents.filter('.pp-ui').length !== 0);
 }
 
 /**
@@ -119,6 +119,7 @@ export default class TextSelector {
     // Get the currently selected ranges.
     const selectedRanges = this.captureDocumentSelection();
 
+    console.log(selectedRanges);
     if (selectedRanges.length === 0) {
       this.nullSelection();
       return;
@@ -126,10 +127,7 @@ export default class TextSelector {
 
     // Don't show the adder if the selection was of a part of Annotator itself.
     for (const selectedRange of selectedRanges) {
-      let {
-        commonAncestor: { container },
-      } = selectedRange;
-
+      let container = selectedRange.commonAncestor;
       if ($(container).hasClass(PPHighlightClass)) {
         container = $(container).parents(`[class!=${PPHighlightClass}]`)[0];
       }
@@ -143,7 +141,7 @@ export default class TextSelector {
   }
 
   nullSelection = () => {
-    this.onSelection([], event);
+    this.onSelection(null, event);
   }
 
 
