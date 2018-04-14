@@ -1,9 +1,11 @@
 import React from 'react';
 import classNames from 'classnames';
-import Widget from '../widget/Widget';
+
+import Widget from 'components/widget';
+import AnnotationViewModel from 'models/AnnotationViewModel';
+
 import ViewerItem from './ViewerItem';
 import styles from './Viewer.scss';
-import AnnotationViewModel from "../../models/AnnotationViewModel";
 
 interface IViewerProps {
   visible: boolean;
@@ -14,10 +16,7 @@ interface IViewerProps {
   annotations: AnnotationViewModel[];
 }
 
-export default class Viewer extends React.Component<
-  Partial<IViewerProps>,
-  {}
-  > {
+export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
 
   static defaultProps = {
     visible: true,
