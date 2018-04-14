@@ -1,9 +1,20 @@
 import { Range } from 'xpath-range';
+// More on xpath-range here: https://github.com/opengovfoundation/xpath-range
+// Wondering what's inside? See https://github.com/opengovfoundation/xpath-range/blob/master/src/range.coffee#L227
+
 import $ from 'jquery';
-import { rangesParser } from './utils';
-import { IAnnotation } from 'annotator';
+import {PPHighlightClass} from "../consts";
 
 const TEXTSELECTOR_NS = 'annotator-textselector';
+
+/*
+ * IMPORTANT NOTE on SELECTION RANGES
+ * We leave annotator's TextSelector more or less as it is;
+ * It can handle all kinds of selection (also multi-range selection). Although our application further assumes that
+ * no more than one range can be selected for an annotation, there is no reason to stop supporting it at such an early
+ * stage. If we ever stumble across multi-range selections it will be clear based on  TextSelectors output
+ * (rather than exceptions).
+ */
 
 /**
  * isAnnotator determines if the provided element is part of Annotator. Useful
@@ -15,10 +26,10 @@ const TEXTSELECTOR_NS = 'annotator-textselector';
  */
 function isAnnotator(element) {
   const elAndParents = $(element).parents().addBack();
-  return (elAndParents.filter('[class^=annotator-]').length !== 0);
+  return (elAndParents.filter('.pp-ui').length !== 0);
 }
 
-export type SelectionCallback = (selection: IAnnotation, event: any) => void;
+export type SelectionCallback = (selection: Range.SerializedRange[], event: any) => void;
 
 /**
  * TextSelector monitors a document (or a specific element) for text selections
@@ -74,7 +85,6 @@ export default class TextSelector {
        */
       const browserRange = new Range.BrowserRange(r);
       const normedRange = browserRange.normalize().limit(this.element);
-
       /*
        If the new range falls fully outside our this.element, we should
        add it back to the document but not return it from this method.
@@ -109,7 +119,7 @@ export default class TextSelector {
 
   /**
    * Event callback: called when the mouse button is released. Checks to see if a
-   * selection has been made and if so displays the adder.
+   * selection has been made
    *
    * event - A mouseup Event object.
    *
@@ -120,26 +130,28 @@ export default class TextSelector {
     // Get the currently selected ranges.
     const selectedRanges = this.captureDocumentSelection();
 
+    console.log(selectedRanges);
     if (selectedRanges.length === 0) {
       return;
     }
 
     // Don't show the adder if the selection was of a part of Annotator itself.
     for (const selectedRange of selectedRanges) {
-      let {
-        commonAncestor: { container },
-      } = selectedRange;
-
-      if ($(container).hasClass('annotator-hl')) {
-        container = $(container).parents('[class!=annotator-hl]')[0];
+      let container = selectedRange.commonAncestor;
+      if ($(container).hasClass(PPHighlightClass)) {
+        container = $(container).parents(`[class!=${PPHighlightClass}]`)[0];
       }
       if (isAnnotator(container)) {
         return;
       }
     }
 
-    const parseRanges = rangesParser(this.element, '.annotator-hl');
+    const serializedRanges = [];
+    for (let i = 0, len = selectedRanges.length; i < len; i++) {
+      const serializedRange = selectedRanges[i].serialize(this.element, '.' + PPHighlightClass);
+      serializedRanges.push(serializedRange);
+    }
 
-    this.onSelection(parseRanges(selectedRanges), event);
+    this.onSelection(serializedRanges, event);
   }
 }

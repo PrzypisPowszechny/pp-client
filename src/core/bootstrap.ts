@@ -1,6 +1,7 @@
 import { Highlighter, TextSelector } from './index';
 import store from 'store';
 import { textSelectedAction } from 'store/actions';
+import {Range} from "xpath-range";
 
 let handlers;
 
@@ -18,6 +19,10 @@ export function deinitializeCoreHandlers() {
   // ...?
 }
 
-function textSelectorCallback(selection, event) {
-  store.dispatch(textSelectedAction(selection));
+function textSelectorCallback(selection: Range.SerializedRange[], event) {
+  if (selection.length === 1) {
+    store.dispatch(textSelectedAction(selection));
+  } else {
+    console.log('PP: more than one selected range is not supported');
+  }
 }
