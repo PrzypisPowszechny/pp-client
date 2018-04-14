@@ -148,7 +148,7 @@ export default class TextSelector {
 
     const serializedRanges = [];
     for (let i = 0, len = selectedRanges.length; i < len; i++) {
-      const serializedRange = selectedRanges[i].serialize(this.element, PPHighlightClass);
+      const serializedRange = selectedRanges[i].serialize(this.element, '.' + PPHighlightClass);
       serializedRanges.push(serializedRange);
     }
 
@@ -158,21 +158,5 @@ export default class TextSelector {
   nullSelection = () => {
     this.onSelection(null, event);
   }
-
-  // static serializeRanges = (contextEl: Element, ignoreSelector: string, ranges: Range.NormalizedRange[]) => {
-  //   const text = [];
-  //   const serializedRanges = [];
-  //
-  //   for (let i = 0, len = ranges.length; i < len; i++) {
-  //     const r = ranges[i];
-  //     text.push(r.text().trim());
-  //     serializedRanges.push(r.serialize(contextEl, ignoreSelector));
-  //   }
-  //
-  //   return {
-  //     quote: text.join(' / '),
-  //     ranges: serializedRanges,
-  //   };
-  // }
 
 }
