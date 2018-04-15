@@ -7,7 +7,7 @@ import AnnotationViewModel from '../../models/AnnotationViewModel';
 import {AnnotationPriorities, annotationPrioritiesLabels} from "../consts";
 import {Modal, Popup} from "semantic-ui-react";
 import PriorityButton from "./priority-button/PriorityButton";
-import {DragTracker, IVec2, mover} from "utils/move";
+import {DragTracker, IVec2} from "utils/move";
 
 interface IEditorProps {
   visible: boolean;
@@ -15,7 +15,7 @@ interface IEditorProps {
   invertedY: boolean;
   locationX: number;
   locationY: number;
-
+  calculateInverted: boolean;
   form: IEditorForm;
   editor: any;
 }
@@ -30,6 +30,8 @@ export interface IEditorForm {
 export interface IEditorState extends IEditorForm {
   locationX: number;
   locationY: number;
+  calculateInverted: boolean;
+  isDragged: boolean;
   referenceLinkError: string;
   referenceLinkTitleError: string;
   noCommentModalOpen: boolean;
@@ -54,9 +56,10 @@ function annotationForm(annotation?: AnnotationViewModel): IEditorForm {
   }
   return {
     editor: state.editor,
+    calculateInverted: true,
     form,
   };
-})
+}, null, null, { withRef: true })
 class Editor extends React.Component<
   Partial<IEditorProps>,
   Partial<IEditorState>
@@ -64,8 +67,6 @@ class Editor extends React.Component<
 
   static defaultProps = {
     visible: true,
-    invertedX: false,
-    invertedY: false,
     locationX: 0,
     locationY: 0,
   };
@@ -77,10 +78,13 @@ class Editor extends React.Component<
   };
 
   static stateFromProps(props: IEditorProps): IEditorState {
+    console.log(props);
     return {
       ...props.form,
       locationX: props.editor.location.x,
       locationY: props.editor.location.y,
+      calculateInverted: props.calculateInverted,
+      isDragged: false,
       referenceLinkError: '',
       referenceLinkTitleError: '',
       noCommentModalOpen: false,
@@ -112,8 +116,7 @@ class Editor extends React.Component<
     }
   }
 
-  onMove = (delta: IVec2) => {
-    // console.log(this.props.onEditorDrag);
+  onDrag = (delta: IVec2) => {
     this.setState({
       locationX: this.state.locationX + delta.x,
       locationY: this.state.locationY + delta.y,
@@ -121,25 +124,40 @@ class Editor extends React.Component<
     return true;
   }
 
-  setupMover() {
-    const rootElement = this.rootElement.current.rootElement.current;
+  onMouseUp = () => {
+    this.setState({ isDragged: false });
+  }
+
+  onMouseDown = (e: Event) => {
+    this.setState({ isDragged: true });
+  }
+
+  setupDragTracker() {
+    // TODO improve widget div ref extraction
+    const rootElement = this.rootElement.current.rootElement;
     const moverElement = this.moverElement.current;
     if (rootElement && moverElement) {
       if (this.dragTracker) {
         this.dragTracker.destroy();
       }
-      this.dragTracker = new DragTracker(moverElement, this.onMove);
+      this.dragTracker = new DragTracker(moverElement, this.onMouseDown, this.onDrag, this.onMouseUp);
     }
   }
 
   componentDidMount() {
-    // invoked on the first render only
-    this.setupMover();
+    // called on the first render only
+    this.setupDragTracker();
+    if (this.state.calculateInverted) {
+      this.setState({calculateInverted: false});
+    }
   }
 
   componentDidUpdate() {
-    // invoked on all but the first render
-    this.setupMover();
+    // called on all but the first render
+    this.setupDragTracker();
+    if (this.state.calculateInverted) {
+      this.setState({calculateInverted: false});
+    }
   }
 
   isNewAnnotation() {
@@ -197,7 +215,6 @@ class Editor extends React.Component<
 
   executeSave = (event: any) => {
     // TODO
-     console.log(this.props.annotation);
   }
 
   // A modal displayed when user tries to save the form with comment field empty
@@ -234,6 +251,7 @@ class Editor extends React.Component<
     const {
       locationX,
       locationY,
+      calculateInverted,
       priority,
       comment,
       referenceLink,
@@ -244,18 +262,15 @@ class Editor extends React.Component<
 
     const {
       visible,
-      invertedX,
-      invertedY,
     } = this.props.editor;
 
     return (
       <Widget
         className={classNames("pp-ui", styles.self)}
         visible={visible}
-        invertedX={invertedX}
-        invertedY={invertedY}
         locationX={locationX}
         locationY={locationY}
+        calculateInverted={calculateInverted}
         ref={this.rootElement}
       >
         <div className={styles.headBar}>

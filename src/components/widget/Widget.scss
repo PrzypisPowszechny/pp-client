@@ -64,6 +64,9 @@ When window is horizontally or vertically inverted
     top: -9px;
 }
 
+.inner:global(.calculate-inverted) {
+    visibility: hidden;
+}
 //TODO
 //.annotator-editor .invert-y .pp-widget:after {
 //    background-position: 0 -45px;

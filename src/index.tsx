@@ -31,5 +31,6 @@ const isBrowser = typeof window !== 'undefined';
 if (isBrowser) {
   initializeCoreHandlers();
   injectApp();
-  store.dispatch(showEditorNewAnnotation(500, 500));
+  store.dispatch(showEditorNewAnnotation(650, 500));
+  // setTimeout(() => store.dispatch(showEditorNewAnnotation(650, 500)), 4000);
 }

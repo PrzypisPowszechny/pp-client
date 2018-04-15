@@ -33,13 +33,21 @@ export class DragTracker {
   lastPos: IPosition;
   throttled: boolean;
   handle: Node;
-  callback: (IVec2) => boolean;
+  downCallback: (Event) => void;
+  moveCallback: (IVec2) => boolean;
+  upCallback: () => void;
 
-  constructor(handle: Node, callback: (delta: IVec2) => boolean) {
+  constructor(handle: Node,
+              downCallback: (e: Event) => void,
+              moveCallback: (delta: IVec2) => boolean,
+              upCallback: () => void,
+  ) {
     this.lastPos = null;
     this.throttled = false;
     this.handle = handle;
-    this.callback = callback;
+    this.downCallback = downCallback;
+    this.moveCallback = moveCallback;
+    this.upCallback = upCallback;
 
     this.mouseDown = this.mouseDown.bind(this);
     this.mouseUp = this.mouseUp.bind(this);
@@ -63,8 +71,8 @@ export class DragTracker {
     // The callback function can return false to indicate that the tracker
     // shouldn't keep updating the last position. This can be used to
     // implement "walls" beyond which (for example) resizing has no effect.
-    if (typeof this.callback === 'function') {
-      trackLastMove = this.callback(delta);
+    if (typeof this.moveCallback === 'function') {
+      trackLastMove = this.moveCallback(delta);
     }
 
     if (trackLastMove !== false) {
@@ -87,6 +95,9 @@ export class DragTracker {
     $(this.handle.ownerDocument)
       .off('mouseup', this.mouseUp)
       .off('mousemove', this.mouseMove);
+    if (typeof this.upCallback === 'function') {
+      this.upCallback();
+    }
   }
 
   // Event handler for mousedown -- starts drag tracking
@@ -105,31 +116,14 @@ export class DragTracker {
       .on('mousemove', this.mouseMove);
 
     e.preventDefault();
+
+    if (typeof this.downCallback === 'function') {
+      this.downCallback(e);
+    }
   }
 
   // Public: turn off drag tracking for this dragTracker object.
   destroy() {
     $(this.handle).off('mousedown', this.mouseDown);
   }
-}
-
-/**
- * mover is a component that uses a dragTracker under the hood to track the
- * dragging of a handle element, using that motion to move another element.
- *
- * element - DOM Element to move
- * handle - DOM Element to use as a move handle
- */
-export function mover(element: Element, handle: Node) {
-  function move(delta: IVec2) {
-    // console.log('heeej');
-    $(element).css({
-      top: parseInt($(element).css('top'), 10) + delta.y,
-      left: parseInt($(element).css('left'), 10) + delta.x,
-    });
-    return true;
-  }
-
-  // We return the dragTracker object in order to expose its methods.
-  return new DragTracker(handle, move);
 }
