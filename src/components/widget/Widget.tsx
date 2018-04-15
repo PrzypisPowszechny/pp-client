@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {RefObject} from 'react';
 import classNames from 'classnames';
 import styles from './Widget.scss';
 
@@ -31,7 +31,7 @@ export default class Widget extends React.Component<
     className: '',
   };
 
-  rootElement: any;
+  rootElement: RefObject<{}>;
 
   constructor(props: IWidgetProps) {
     super(props);

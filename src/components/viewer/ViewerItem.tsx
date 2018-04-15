@@ -91,10 +91,6 @@ export default class ViewerItem extends React.Component<
   usefulButton() {
     const {usefulCount} = this.props.annotation;
     const {useful} = this.state;
-
-    console.log(useful);
-    console.log(usefulCount);
-
     return (
       <a
         className={classNames('ui', 'label', 'medium', styles.useful, {[styles.selected]: useful})}

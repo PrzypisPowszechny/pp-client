@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {RefObject} from 'react';
+import { connect } from 'react-redux';
 import classNames from 'classnames';
 import Widget from '../widget/Widget';
 import styles from './Editor.scss';
@@ -6,6 +7,7 @@ import AnnotationViewModel from '../../models/AnnotationViewModel';
 import {AnnotationPriorities, annotationPrioritiesLabels} from "../consts";
 import {Modal, Popup} from "semantic-ui-react";
 import PriorityButton from "./priority-button/PriorityButton";
+import {DragTracker, IVec2, mover} from "utils/move";
 
 interface IEditorProps {
   visible: boolean;
@@ -13,20 +15,48 @@ interface IEditorProps {
   invertedY: boolean;
   locationX: number;
   locationY: number;
-  annotation: AnnotationViewModel;
+
+  form: IEditorForm;
+  editor: any;
 }
 
-export interface IEditorState {
+export interface IEditorForm {
   priority: AnnotationPriorities;
   comment: string;
   referenceLink: string;
   referenceLinkTitle: string;
+}
 
+export interface IEditorState extends IEditorForm {
+  locationX: number;
+  locationY: number;
   referenceLinkError: string;
   referenceLinkTitleError: string;
   noCommentModalOpen: boolean;
 }
 
+function annotationForm(annotation?: AnnotationViewModel): IEditorForm {
+  const model: any = annotation || {};
+  return {
+    priority: model.priority || AnnotationPriorities.NORMAL,
+    comment: model.comment || '',
+    referenceLink: model.referenceLink || '',
+    referenceLinkTitle: model.referenceLinkTitle || '',
+  };
+}
+
+@connect((state) => {
+  let form;
+  if (state.annotationId) {
+    form = annotationForm();
+  } else {
+    form = annotationForm(state.annotations.find(x => x.id === state.editor.annotationId));
+  }
+  return {
+    editor: state.editor,
+    form,
+  };
+})
 class Editor extends React.Component<
   Partial<IEditorProps>,
   Partial<IEditorState>
@@ -38,7 +68,6 @@ class Editor extends React.Component<
     invertedY: false,
     locationX: 0,
     locationY: 0,
-    annotation: null,
   };
 
   static priorityToClass = {
@@ -47,27 +76,26 @@ class Editor extends React.Component<
     [AnnotationPriorities.ALERT]: styles.priorityAlert,
   };
 
-  isNewAnnotation() {
-    return this.props.annotation.id == 0;
-  }
-
   static stateFromProps(props: IEditorProps): IEditorState {
-    // TODO perhaps replace AnnotationViewModel with AnnotationModel
-    const annotation = props.annotation || new AnnotationViewModel();
     return {
-      priority: annotation.priority || AnnotationPriorities.NORMAL,
-      comment: annotation.comment || '',
-      referenceLink: annotation.referenceLink || '',
+      ...props.form,
+      locationX: props.editor.location.x,
+      locationY: props.editor.location.y,
       referenceLinkError: '',
-      referenceLinkTitle: annotation.referenceLinkTitle || '',
       referenceLinkTitleError: '',
       noCommentModalOpen: false,
     };
   }
 
+  rootElement: RefObject<Widget>;
+  moverElement: RefObject<HTMLDivElement>;
+  dragTracker: DragTracker;
+
   constructor(props: IEditorProps) {
     super(props);
     this.state = Editor.stateFromProps(props);
+    this.rootElement = React.createRef();
+    this.moverElement = React.createRef();
   }
 
   componentWillReceiveProps(newProps: IEditorProps) {
@@ -84,7 +112,38 @@ class Editor extends React.Component<
     }
   }
 
+  onMove = (delta: IVec2) => {
+    // console.log(this.props.onEditorDrag);
+    this.setState({
+      locationX: this.state.locationX + delta.x,
+      locationY: this.state.locationY + delta.y,
+    });
+    return true;
+  }
+
+  setupMover() {
+    const rootElement = this.rootElement.current.rootElement.current;
+    const moverElement = this.moverElement.current;
+    if (rootElement && moverElement) {
+      if (this.dragTracker) {
+        this.dragTracker.destroy();
+      }
+      this.dragTracker = new DragTracker(moverElement, this.onMove);
+    }
+  }
+
   componentDidMount() {
+    // invoked on the first render only
+    this.setupMover();
+  }
+
+  componentDidUpdate() {
+    // invoked on all but the first render
+    this.setupMover();
+  }
+
+  isNewAnnotation() {
+    return this.props.editor.annotationId !== null;
   }
 
   setPriority = (priority: AnnotationPriorities) => {
@@ -105,7 +164,7 @@ class Editor extends React.Component<
     this.setState({ [name]: target.value });
   }
 
-   private validateForm(): boolean {
+   validateForm(): boolean {
     if (!this.state.referenceLink) {
       this.setState({ referenceLinkError: 'Musisz podać źródło, jeśli chcesz dodać przypis!' });
       return false;
@@ -117,12 +176,12 @@ class Editor extends React.Component<
     return true;
   }
 
-  private saveButtonClass(): string {
+  saveButtonClass(): string {
     return Editor.priorityToClass[this.state.priority];
   }
 
-  private onSave = (event: any) => {
-    //TODO copied from old_src; review
+  onSave = (event: any) => {
+    // copied from old_src; TODO review
     if (this.validateForm()) { // if form values are correct
       if (!this.state.comment) { // if comment field is empty, display the modal
         this.setState({ noCommentModalOpen: true });
@@ -132,11 +191,11 @@ class Editor extends React.Component<
     }
   }
 
-  private onCancel = (event: any) => {
+  onCancel = (event: any) => {
     // TODO
   }
 
-  private executeSave = (event: any) => {
+  executeSave = (event: any) => {
     // TODO
      console.log(this.props.annotation);
   }
@@ -172,7 +231,9 @@ class Editor extends React.Component<
   }
 
   render() {
-     const {
+    const {
+      locationX,
+      locationY,
       priority,
       comment,
       referenceLink,
@@ -181,14 +242,21 @@ class Editor extends React.Component<
       referenceLinkTitleError,
     } = this.state;
 
-     return (
+    const {
+      visible,
+      invertedX,
+      invertedY,
+    } = this.props.editor;
+
+    return (
       <Widget
         className={classNames("pp-ui", styles.self)}
-        visible={this.props.visible}
-        invertedX={this.props.invertedX}
-        invertedY={this.props.invertedY}
-        locationX={this.props.locationX}
-        locationY={this.props.locationY}
+        visible={visible}
+        invertedX={invertedX}
+        invertedY={invertedY}
+        locationX={locationX}
+        locationY={locationY}
+        ref={this.rootElement}
       >
         <div className={styles.headBar}>
           <label className={styles.priorityHeader}> Co dodajesz? </label>
@@ -246,7 +314,7 @@ class Editor extends React.Component<
           <i className={classNames(styles.inputIcon, 'linkify', 'icon')}/>
           <div
             className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { [styles.hide]: referenceLinkError == ''})}
+              { [styles.hide]: referenceLinkError === ''})}
           >
             {referenceLinkError}
           </div>
@@ -263,7 +331,7 @@ class Editor extends React.Component<
           <i className={classNames(styles.inputIcon, 'tags', 'icon')}/>
           <div
               className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { [styles.hide]: referenceLinkTitleError == ''})}
+              { [styles.hide]: referenceLinkTitleError === ''})}
               >
             {referenceLinkTitleError}
           </div>
@@ -278,7 +346,10 @@ class Editor extends React.Component<
           </Popup>
         </div>
         <div className={styles.bottomBar}>
-          <div className={styles.moverArea}>
+          <div
+            className={styles.moverArea}
+            ref={this.moverElement}
+          >
             <div className={styles.controls}>
               <button className={styles.cancel} onClick={this.onCancel}>
                 {' '}Anuluj{' '}
