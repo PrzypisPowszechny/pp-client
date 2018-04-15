@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
 import Widget from '../widget/Widget';
 import styles from './Editor.scss';
 import AnnotationViewModel from '../../models/AnnotationViewModel';
@@ -13,20 +14,45 @@ interface IEditorProps {
   invertedY: boolean;
   locationX: number;
   locationY: number;
-  annotation: AnnotationViewModel;
+  form: IEditorForm;
+  editor
 }
 
-export interface IEditorState {
+export interface IEditorForm {
   priority: AnnotationPriorities;
   comment: string;
   referenceLink: string;
   referenceLinkTitle: string;
+}
 
+export interface IEditorState extends IEditorForm {
   referenceLinkError: string;
   referenceLinkTitleError: string;
   noCommentModalOpen: boolean;
 }
 
+function annotationForm(annotation?: AnnotationViewModel): IEditorForm {
+  const model: any = annotation || {};
+  return {
+    priority: model.priority || AnnotationPriorities.NORMAL,
+    comment: model.comment || '',
+    referenceLink: model.referenceLink || '',
+    referenceLinkTitle: model.referenceLinkTitle || '',
+  };
+}
+
+@connect((state) => {
+  let form;
+  if (state.annotationId) {
+    form = annotationForm();
+  } else {
+    form = annotationForm(state.annotations.find(x => x.id === state.editor.annotationId));
+  }
+  return {
+    editor: state.editor,
+    form,
+  };
+})
 class Editor extends React.Component<
   Partial<IEditorProps>,
   Partial<IEditorState>
@@ -38,7 +64,6 @@ class Editor extends React.Component<
     invertedY: false,
     locationX: 0,
     locationY: 0,
-    annotation: null,
   };
 
   static priorityToClass = {
@@ -47,19 +72,10 @@ class Editor extends React.Component<
     [AnnotationPriorities.ALERT]: styles.priorityAlert,
   };
 
-  isNewAnnotation() {
-    return this.props.annotation.id == 0;
-  }
-
   static stateFromProps(props: IEditorProps): IEditorState {
-    // TODO perhaps replace AnnotationViewModel with AnnotationModel
-    const annotation = props.annotation || new AnnotationViewModel();
     return {
-      priority: annotation.priority || AnnotationPriorities.NORMAL,
-      comment: annotation.comment || '',
-      referenceLink: annotation.referenceLink || '',
+      ...props.form,
       referenceLinkError: '',
-      referenceLinkTitle: annotation.referenceLinkTitle || '',
       referenceLinkTitleError: '',
       noCommentModalOpen: false,
     };
@@ -68,6 +84,10 @@ class Editor extends React.Component<
   constructor(props: IEditorProps) {
     super(props);
     this.state = Editor.stateFromProps(props);
+  }
+
+  isNewAnnotation() {
+    return this.props.editor.annotationId === 0;
   }
 
   componentWillReceiveProps(newProps: IEditorProps) {
@@ -122,7 +142,7 @@ class Editor extends React.Component<
   }
 
   private onSave = (event: any) => {
-    //TODO copied from old_src; review
+    // TODO copied from old_src; review
     if (this.validateForm()) { // if form values are correct
       if (!this.state.comment) { // if comment field is empty, display the modal
         this.setState({ noCommentModalOpen: true });
@@ -172,7 +192,7 @@ class Editor extends React.Component<
   }
 
   render() {
-     const {
+    const {
       priority,
       comment,
       referenceLink,
@@ -181,14 +201,23 @@ class Editor extends React.Component<
       referenceLinkTitleError,
     } = this.state;
 
-     return (
+    const {
+      visible,
+      invertedX,
+      invertedY,
+    } = this.props.editor;
+
+    const locationX = this.props.editor.location.x;
+    const locationY = this.props.editor.location.y;
+
+    return (
       <Widget
         className={classNames("pp-ui", styles.self)}
-        visible={this.props.visible}
-        invertedX={this.props.invertedX}
-        invertedY={this.props.invertedY}
-        locationX={this.props.locationX}
-        locationY={this.props.locationY}
+        visible={visible}
+        invertedX={invertedX}
+        invertedY={invertedY}
+        locationX={locationX}
+        locationY={locationY}
       >
         <div className={styles.headBar}>
           <label className={styles.priorityHeader}> Co dodajesz? </label>

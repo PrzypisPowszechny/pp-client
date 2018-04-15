@@ -1,9 +1,8 @@
 import React from 'react';
-
-import EditorContainer from "../containers/EditorContainer";
 import Menu from "../components/menu/Menu";
 import Viewer from "../components/viewer/Viewer";
 import AnnotationViewModel from "../models/AnnotationViewModel";
+import Editor from "../components/editor/Editor";
 
 export default function App() {
 
@@ -15,7 +14,7 @@ export default function App() {
 
   return (
     <div>
-      <EditorContainer />
+      <Editor />
       <Menu
         visible={true}
         locationX={150}

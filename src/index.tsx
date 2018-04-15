@@ -10,6 +10,7 @@ import './css/common/base.scss';
 import './css/common/pp-semantic-ui-reset.scss';
 // New defaults/modifiers for some semantic-ui components
 import './css/common/pp-semantic-ui-overrides.scss';
+import {showEditorNewAnnotation} from "./store/editor/actions";
 
 console.log('Przypis script working!');
 
@@ -30,4 +31,5 @@ const isBrowser = typeof window !== 'undefined';
 if (isBrowser) {
   initializeCoreHandlers();
   injectApp();
+  store.dispatch(showEditorNewAnnotation(500, 500));
 }
