@@ -23,6 +23,6 @@ function textSelectorCallback(selection: Range.SerializedRange[], event) {
   if (selection.length === 1) {
     store.dispatch(textSelectedAction(selection));
   } else {
-    console.log('PP: more than one selected range is not supported');
+    console.warn('PP: more than one selected range is not supported');
   }
 }

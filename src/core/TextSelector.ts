@@ -130,7 +130,6 @@ export default class TextSelector {
     // Get the currently selected ranges.
     const selectedRanges = this.captureDocumentSelection();
 
-    console.log(selectedRanges);
     if (selectedRanges.length === 0) {
       return;
     }
@@ -147,8 +146,8 @@ export default class TextSelector {
     }
 
     const serializedRanges = [];
-    for (let i = 0, len = selectedRanges.length; i < len; i++) {
-      const serializedRange = selectedRanges[i].serialize(this.element, '.' + PPHighlightClass);
+    for (const range of selectedRanges) {
+      const serializedRange = range.serialize(this.element, '.' + PPHighlightClass);
       serializedRanges.push(serializedRange);
     }
 

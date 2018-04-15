@@ -92,7 +92,6 @@ export default class Highlighter {
     chunkDelay: 10,
 
     namespace: 'PPHighlighter',
-
   };
 
   static coerceId(id: number | string) {
@@ -184,8 +183,6 @@ export default class Highlighter {
         const highlightElement = e.target;
         if (highlightElement) {
           const highlightId = $(highlightElement).attr(this.options.highlightIdAttr);
-          // console.log(highlightId);
-          // console.log(this.highlightRegistry);
           const data = this.highlightRegistry[highlightId.toString()];
           handler(e, data.annotationData);
         }

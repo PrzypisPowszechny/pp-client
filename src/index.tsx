@@ -13,6 +13,8 @@ import './css/common/pp-semantic-ui-reset.scss';
 // New defaults/modifiers for some semantic-ui components
 import './css/common/pp-semantic-ui-overrides.scss';
 
+import './css/selection.scss';
+
 console.log('Przypis script working!');
 
 function injectApp() {

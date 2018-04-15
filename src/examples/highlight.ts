@@ -1,8 +1,11 @@
 import {Range} from "xpath-range";
 import {TextSelector, Highlighter} from "core/index";
 
+import 'css/selection.scss';
+
 /*
  * Example of selection becoming a highlight;
+ * This module can be selected as the application entry point
  */
 
 declare global {
@@ -15,7 +18,6 @@ declare global {
 function initializeHighlightPlayground() {
   initializeCoreHandlers();
 }
-
 
 function initializeCoreHandlers() {
   window.textSelector = new TextSelector(document.body, handleSelect);
@@ -40,4 +42,9 @@ function handleSelect(data: Range.SerializedRange[], event) {
     }
 
   }
+}
+
+const isBrowser = typeof window !== 'undefined';
+if (isBrowser) {
+  initializeHighlightPlayground();
 }
