@@ -29,6 +29,6 @@
         "multiline": "always"
       }
     ],
-    "quotemark": [false]
+    "quotemark": [true, "single", "jsx-double"]
   }
 }
