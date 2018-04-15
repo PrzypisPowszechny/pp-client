@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-interface IVec2 {
+export interface IVec2 {
   x: number;
   y: number;
 }
@@ -122,6 +122,7 @@ export class DragTracker {
  */
 export function mover(element: Element, handle: Node) {
   function move(delta: IVec2) {
+    // console.log('heeej');
     $(element).css({
       top: parseInt($(element).css('top'), 10) + delta.y,
       left: parseInt($(element).css('left'), 10) + delta.x,

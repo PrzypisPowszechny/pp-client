@@ -22,6 +22,7 @@ const initialState = {
     y: false,
   },
   annotationId: null,
+
 };
 
 function isInverted(x: number, y: number) {

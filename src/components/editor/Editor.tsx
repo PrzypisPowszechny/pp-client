@@ -1,12 +1,13 @@
-import React from 'react';
-import classNames from 'classnames';
+import React, {RefObject} from 'react';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 import Widget from '../widget/Widget';
 import styles from './Editor.scss';
 import AnnotationViewModel from '../../models/AnnotationViewModel';
 import {AnnotationPriorities, annotationPrioritiesLabels} from "../consts";
 import {Modal, Popup} from "semantic-ui-react";
 import PriorityButton from "./priority-button/PriorityButton";
+import {DragTracker, IVec2, mover} from "utils/move";
 
 interface IEditorProps {
   visible: boolean;
@@ -14,8 +15,9 @@ interface IEditorProps {
   invertedY: boolean;
   locationX: number;
   locationY: number;
+
   form: IEditorForm;
-  editor
+  editor: any;
 }
 
 export interface IEditorForm {
@@ -26,6 +28,8 @@ export interface IEditorForm {
 }
 
 export interface IEditorState extends IEditorForm {
+  locationX: number;
+  locationY: number;
   referenceLinkError: string;
   referenceLinkTitleError: string;
   noCommentModalOpen: boolean;
@@ -75,19 +79,23 @@ class Editor extends React.Component<
   static stateFromProps(props: IEditorProps): IEditorState {
     return {
       ...props.form,
+      locationX: props.editor.location.x,
+      locationY: props.editor.location.y,
       referenceLinkError: '',
       referenceLinkTitleError: '',
       noCommentModalOpen: false,
     };
   }
 
+  rootElement: RefObject<Widget>;
+  moverElement: RefObject<HTMLDivElement>;
+  dragTracker: DragTracker;
+
   constructor(props: IEditorProps) {
     super(props);
     this.state = Editor.stateFromProps(props);
-  }
-
-  isNewAnnotation() {
-    return this.props.editor.annotationId === 0;
+    this.rootElement = React.createRef();
+    this.moverElement = React.createRef();
   }
 
   componentWillReceiveProps(newProps: IEditorProps) {
@@ -104,7 +112,38 @@ class Editor extends React.Component<
     }
   }
 
+  onMove = (delta: IVec2) => {
+    // console.log(this.props.onEditorDrag);
+    this.setState({
+      locationX: this.state.locationX + delta.x,
+      locationY: this.state.locationY + delta.y,
+    });
+    return true;
+  }
+
+  setupMover() {
+    const rootElement = this.rootElement.current.rootElement.current;
+    const moverElement = this.moverElement.current;
+    if (rootElement && moverElement) {
+      if (this.dragTracker) {
+        this.dragTracker.destroy();
+      }
+      this.dragTracker = new DragTracker(moverElement, this.onMove);
+    }
+  }
+
   componentDidMount() {
+    // invoked on the first render only
+    this.setupMover();
+  }
+
+  componentDidUpdate() {
+    // invoked on all but the first render
+    this.setupMover();
+  }
+
+  isNewAnnotation() {
+    return this.props.editor.annotationId !== null;
   }
 
   setPriority = (priority: AnnotationPriorities) => {
@@ -125,7 +164,7 @@ class Editor extends React.Component<
     this.setState({ [name]: target.value });
   }
 
-   private validateForm(): boolean {
+   validateForm(): boolean {
     if (!this.state.referenceLink) {
       this.setState({ referenceLinkError: 'Musisz podać źródło, jeśli chcesz dodać przypis!' });
       return false;
@@ -137,12 +176,12 @@ class Editor extends React.Component<
     return true;
   }
 
-  private saveButtonClass(): string {
+  saveButtonClass(): string {
     return Editor.priorityToClass[this.state.priority];
   }
 
-  private onSave = (event: any) => {
-    // TODO copied from old_src; review
+  onSave = (event: any) => {
+    // copied from old_src; TODO review
     if (this.validateForm()) { // if form values are correct
       if (!this.state.comment) { // if comment field is empty, display the modal
         this.setState({ noCommentModalOpen: true });
@@ -152,11 +191,11 @@ class Editor extends React.Component<
     }
   }
 
-  private onCancel = (event: any) => {
+  onCancel = (event: any) => {
     // TODO
   }
 
-  private executeSave = (event: any) => {
+  executeSave = (event: any) => {
     // TODO
      console.log(this.props.annotation);
   }
@@ -193,6 +232,8 @@ class Editor extends React.Component<
 
   render() {
     const {
+      locationX,
+      locationY,
       priority,
       comment,
       referenceLink,
@@ -207,9 +248,6 @@ class Editor extends React.Component<
       invertedY,
     } = this.props.editor;
 
-    const locationX = this.props.editor.location.x;
-    const locationY = this.props.editor.location.y;
-
     return (
       <Widget
         className={classNames("pp-ui", styles.self)}
@@ -218,6 +256,7 @@ class Editor extends React.Component<
         invertedY={invertedY}
         locationX={locationX}
         locationY={locationY}
+        ref={this.rootElement}
       >
         <div className={styles.headBar}>
           <label className={styles.priorityHeader}> Co dodajesz? </label>
@@ -275,7 +314,7 @@ class Editor extends React.Component<
           <i className={classNames(styles.inputIcon, 'linkify', 'icon')}/>
           <div
             className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { [styles.hide]: referenceLinkError == ''})}
+              { [styles.hide]: referenceLinkError === ''})}
           >
             {referenceLinkError}
           </div>
@@ -292,7 +331,7 @@ class Editor extends React.Component<
           <i className={classNames(styles.inputIcon, 'tags', 'icon')}/>
           <div
               className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { [styles.hide]: referenceLinkTitleError == ''})}
+              { [styles.hide]: referenceLinkTitleError === ''})}
               >
             {referenceLinkTitleError}
           </div>
@@ -307,7 +346,10 @@ class Editor extends React.Component<
           </Popup>
         </div>
         <div className={styles.bottomBar}>
-          <div className={styles.moverArea}>
+          <div
+            className={styles.moverArea}
+            ref={this.moverElement}
+          >
             <div className={styles.controls}>
               <button className={styles.cancel} onClick={this.onCancel}>
                 {' '}Anuluj{' '}
