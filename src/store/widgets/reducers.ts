@@ -10,8 +10,8 @@ export interface IWidgetState {
 }
 
 export interface WidgetReducer {
-  editor: IWidgetState,
-  menu: IWidgetState,
+  editor: IWidgetState;
+  menu: IWidgetState;
 }
 
 const initialWidgetState = {

@@ -1,5 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import classNames from 'classnames';
+
+import { selectMenuState } from 'store/selectors';
 
 import Widget from 'components/widget';
 
@@ -11,6 +14,19 @@ interface IMenuProps {
   locationY: number;
 }
 
+@connect((state) => {
+  const {
+    visible,
+    locationX,
+    locationY,
+  } = selectMenuState(state);
+
+  return {
+    visible,
+    locationX,
+    locationY,
+  };
+})
 export default class Menu extends React.Component<Partial<IMenuProps>, {}> {
 
   static defaultProps = {

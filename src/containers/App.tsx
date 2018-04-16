@@ -16,12 +16,8 @@ export default function App() {
 
   return (
     <div>
-      <EditorContainer />
-      <Menu
-        visible={true}
-        locationX={150}
-        locationY={300}
-      />
+      <Editor />
+      <Menu />
       <Viewer
         locationX={100}
         locationY={700}

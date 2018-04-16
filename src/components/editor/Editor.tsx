@@ -1,12 +1,14 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { Modal, Popup } from 'semantic-ui-react';
 
 import AnnotationViewModel from 'models/AnnotationViewModel';
+import { selectEditorState } from 'store/selectors';
 
 import Widget from 'components/widget';
-import { AnnotationPriorities, annotationPrioritiesLabels } from '../consts';
 
+import { AnnotationPriorities, annotationPrioritiesLabels } from '../consts';
 import PriorityButton from './priority-button/PriorityButton';
 import styles from './Editor.scss';
 
@@ -30,6 +32,23 @@ export interface IEditorState {
   noCommentModalOpen: boolean;
 }
 
+@connect((state) => {
+  const {
+    invertedX,
+    invertedY,
+    locationX,
+    locationY,
+    visible,
+  } = selectEditorState(state);
+
+  return {
+    invertedX,
+    invertedY,
+    locationX,
+    locationY,
+    visible,
+  };
+})
 class Editor extends React.Component<Partial<IEditorProps>, Partial<IEditorState>> {
 
   static defaultProps = {
