@@ -1,5 +1,5 @@
-import {Range} from "xpath-range";
-import {TextSelector, Highlighter} from "core/index";
+import { Range } from 'xpath-range';
+import { TextSelector, Highlighter } from 'core/index';
 
 import 'css/selection.scss';
 
@@ -34,7 +34,7 @@ function handleSelect(data: Range.SerializedRange[], event) {
   if (data) {
     if (data.length === 1) {
       console.log(data);
-      window.highlighter.draw(1, data[0], {test: 'test'});
+      window.highlighter.draw(1, data[0], { test: 'test' });
 
       // setTimeout(() => window.highlighter.undraw(1), 1000);
     } else {

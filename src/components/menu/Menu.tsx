@@ -23,7 +23,7 @@ export default class Menu extends React.Component<Partial<IMenuProps>, {}> {
     super(props);
   }
 
-  private onClick(event: any) {
+  onClick(event: any) {
     // TODO
     console.log(event);
   }

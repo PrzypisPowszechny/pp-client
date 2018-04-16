@@ -98,7 +98,7 @@ class Editor extends React.Component<Partial<IEditorProps>, Partial<IEditorState
     this.setState({ [name]: target.value });
   }
 
-  private validateForm(): boolean {
+  validateForm(): boolean {
     if (!this.state.referenceLink) {
       this.setState({ referenceLinkError: 'Musisz podać źródło, jeśli chcesz dodać przypis!' });
       return false;
@@ -110,11 +110,11 @@ class Editor extends React.Component<Partial<IEditorProps>, Partial<IEditorState
     return true;
   }
 
-  private saveButtonClass(): string {
+  saveButtonClass(): string {
     return Editor.priorityToClass[this.state.priority];
   }
 
-  private onSave = (event: any) => {
+  onSave = (event: any) => {
     // TODO copied from old_src; review
     if (this.validateForm()) { // if form values are correct
       if (!this.state.comment) { // if comment field is empty, display the modal
@@ -125,11 +125,11 @@ class Editor extends React.Component<Partial<IEditorProps>, Partial<IEditorState
     }
   }
 
-  private onCancel = (event: any) => {
+  onCancel = (event: any) => {
     // TODO
   }
 
-  private executeSave = (event: any) => {
+  executeSave = (event: any) => {
     // TODO
     console.log(this.props.annotation);
   }

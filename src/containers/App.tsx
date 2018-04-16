@@ -2,9 +2,9 @@ import React from 'react';
 
 import AnnotationViewModel from 'models/AnnotationViewModel';
 
-import Menu from 'components/menu/Menu';
-import Viewer from 'components/viewer/Viewer';
-import EditorContainer from 'containers/EditorContainer';
+import Editor from 'components/editor';
+import Menu from 'components/menu';
+import Viewer from 'components/viewer';
 
 export default function App() {
 
