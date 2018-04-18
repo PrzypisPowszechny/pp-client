@@ -8,7 +8,7 @@ const common = require('../../webpack.config');
 
 const BUILD_DIR = path.resolve(__dirname, '..', '..', 'dist-ext');
 
-module.exports = merge(common, {
+module.exports = (env, argv) => merge(common(env, argv), {
   entry: {
     popup: "./src/browser-extension/popup/popup.tsx",
   },

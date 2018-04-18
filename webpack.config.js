@@ -12,10 +12,10 @@ const localPath = (...args) => path.resolve(__dirname, ...args);
 const BUILD_DIR = localPath('dist');
 const EXT_DIR = localPath('dist-ext');
 
-const config = {
+const config = (env, argv) => ({
   entry: {
-    main: "./src/index.ts",
-    vendor: "./src/vendor.ts",
+    main: "./src/index.tsx",
+    vendor_css: "./src/vendor_css.ts"
   },
   output: {
     path: BUILD_DIR,
@@ -70,7 +70,7 @@ const config = {
         test: /\.scss$/,
         include: [
           localPath('src', 'css'),
-          localPath('src', 'browser-extension'),
+          localPath('src', 'browser-extension')
         ],
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
@@ -78,7 +78,8 @@ const config = {
         /* SCSS modules */
         test: /\.scss$/,
         include: [
-          localPath('src', 'pp-annotator')
+          localPath('src', 'components'),
+          localPath('src', 'containers'),
         ],
         use: [
           'style-loader',
@@ -117,6 +118,29 @@ const config = {
       },
     ],
   },
+  // default settings
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+      minSize: 30000,
+      minChunks: 1,
+      maxAsyncRequests: 5,
+      maxInitialRequests: 3,
+      automaticNameDelimiter: '~',
+      name: true,
+      cacheGroups: {
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true
+        },
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10
+        }
+      }
+    }
+  },
   plugins: [
     new CleanWebpackPlugin([BUILD_DIR, EXT_DIR]),
     new HtmlWebpackPlugin({
@@ -126,7 +150,7 @@ const config = {
     }),
     new webpack.DefinePlugin({
       // use appropriate (dev or production) PP settings
-      PP_SETTINGS: appSettings[process.env.NODE_ENV || 'dev']
+      PP_SETTINGS: appSettings[argv.mode]
     }),
     // JQuery is assumed by semantic ui, so we need to define it
     new webpack.ProvidePlugin({
@@ -135,6 +159,6 @@ const config = {
       jquery: 'jquery'
     })
   ],
-};
+});
 
 module.exports = config;

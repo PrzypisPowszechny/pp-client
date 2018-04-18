@@ -8,6 +8,7 @@
   "rules": {
     "arrow-parens": false,
     "arrow-return-shorthand": true,
+    "interface-name": false,
     "jsx-no-multiline-js": false,
     "max-classes-per-file": [
       true,
@@ -28,11 +29,6 @@
         "multiline": "always"
       }
     ],
-    "quotemark": [
-      true,
-      "single",
-      "jsx-double",
-      "avoid-escape"
-    ]
+    "quotemark": [true, "single", "jsx-double"]
   }
 }
