@@ -2,9 +2,9 @@ import React from 'react';
 
 import AnnotationViewModel from 'models/AnnotationViewModel';
 
-import Menu from 'components/menu/Menu';
-import Viewer from 'components/viewer/Viewer';
-import EditorContainer from 'containers/EditorContainer';
+import Editor from 'components/editor';
+import Menu from 'components/menu';
+import Viewer from 'components/viewer';
 
 export default function App() {
 
@@ -16,12 +16,8 @@ export default function App() {
 
   return (
     <div>
-      <EditorContainer />
-      <Menu
-        visible={true}
-        locationX={150}
-        locationY={300}
-      />
+      <Editor />
+      <Menu />
       <Viewer
         locationX={100}
         locationY={700}

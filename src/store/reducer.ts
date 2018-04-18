@@ -1,8 +1,13 @@
 import { combineReducers } from 'redux';
-import editor from './editor/reducers';
-import selector from './selector/reducers';
+import widgets, { WidgetReducer } from './widgets/reducers';
+import textSelector from './textSelector/reducers';
 
-export default combineReducers({
-  editor,
-  selector,
+export interface IStore {
+  widgets: WidgetReducer;
+  textSelector: any;
+}
+
+export default combineReducers<IStore>({
+  widgets,
+  textSelector,
 });

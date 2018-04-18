@@ -2,7 +2,7 @@ import { TEXT_SELECTED } from './actions';
 
 const initialState = {};
 
-export default function selector(state = initialState, action) {
+export default function textSelector(state = initialState, action) {
   switch (action.type) {
     case TEXT_SELECTED:
       console.log('Handle text selected action, data: ', action.data);

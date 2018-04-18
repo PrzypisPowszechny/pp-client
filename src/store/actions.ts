@@ -1,2 +1,2 @@
-export * from './editor/actions';
-export * from './selector/actions';
+export * from './widgets/actions';
+export * from './textSelector/actions';

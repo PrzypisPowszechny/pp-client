@@ -1,4 +1,5 @@
 export const EDITOR_VISIBLE_CHANGE = 'EDITOR_VISIBLE_CHANGE';
+export const MENU_WIDGET_CHANGE = 'MENU_WIDGET_CHANGE';
 
 export interface IEditorVisibleChangeAction {
   type: string;
@@ -10,6 +11,19 @@ export interface IEditorVisibleChangeAction {
     }
   };
 }
+
+export const showMenu = (visible, { x, y }) => {
+  return {
+    type: MENU_WIDGET_CHANGE,
+    payload: {
+      visible: true,
+      location: {
+        x,
+        y,
+      },
+    },
+  };
+};
 
 export const showEditor = () => {
   return {

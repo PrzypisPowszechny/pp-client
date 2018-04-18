@@ -1,6 +1,6 @@
 import { Range } from 'xpath-range';
 import $ from 'jquery';
-import {PPHighlightClass} from "../consts";
+import { PPHighlightClass } from 'consts';
 
 /**
  * highlightRange wraps the DOM Nodes within the provided range with a highlight
@@ -20,7 +20,7 @@ function highlightRange(normedRange, cssClass) {
    subset of nodes such as table rows and lists. This does mean that there
    may be the odd abandoned whitespace node in a paragraph that is skipped
    but better than breaking table layouts.
-  */
+   */
   const nodes = normedRange.textNodes();
   const results = [];
   for (const node of nodes) {
@@ -50,7 +50,7 @@ function reanchorRange(range, rootElement) {
     /*
      Otherwise, we simply swallow the error. Callers are responsible
      for only trying to draw valid annotations.
-    */
+     */
   }
   return null;
 }
@@ -65,7 +65,7 @@ export interface IHighlightRegistry {
 }
 
 interface IHighlightDrawArgs {
-  id: number|string;
+  id: number | string;
   range: Range.SerializedRange;
   annotationData: any;
 }
@@ -149,7 +149,7 @@ export default class Highlighter {
    *
    *  Returns an Array of drawn highlight elements.
    */
-  draw = (id: number|string, range: Range.SerializedRange, annotationData: any) => {
+  draw = (id: number | string, range: Range.SerializedRange, annotationData: any) => {
     const normedRange = reanchorRange(range, this.element);
     const highlightElements = highlightRange(normedRange, this.options.highlightClass);
     const normedId = Highlighter.coerceId(id);
@@ -196,7 +196,7 @@ export default class Highlighter {
    *
    * Returns nothing.
    */
-  undraw = (id: number|string) => {
+  undraw = (id: number | string) => {
     const normedId = Highlighter.coerceId(id);
     const data = this.highlightRegistry[normedId];
 
@@ -215,7 +215,7 @@ export default class Highlighter {
    *
    * Returns the list of newly-drawn highlights.
    */
-  redraw = (id: number|string, range: Range.SerializedRange, annotationData: any) => {
+  redraw = (id: number | string, range: Range.SerializedRange, annotationData: any) => {
     this.undraw(id);
     return this.draw(id, range, annotationData);
   }
