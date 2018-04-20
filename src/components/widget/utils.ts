@@ -1,5 +1,4 @@
 
-
 export function isInverted(widget, window) {
     // console.log('orientation');
     // TODO replace annotator jQuery with pure js

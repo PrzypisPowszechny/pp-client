@@ -10,6 +10,11 @@ interface IWidgetProps {
   locationY: number;
   invertedX: boolean;
   invertedY: boolean;
+  /*
+   * calculateInverted - (overwrites invertedX and invertedY)
+   * if true, the widget horizontal or vertical inversion will be calculated based on the window location
+   * after the component is rendered for the first time after prop change
+   */
   calculateInverted: boolean;
   className: string;
   children: React.ReactChild | React.ReactChild[];
@@ -23,15 +28,13 @@ interface IWidgetState {
 
 export default class Widget extends React.Component<Partial<IWidgetProps>,
   Partial<IWidgetState>> {
-  // `invertedX` and `invertedY` can be specified as props
-  // every time the component receives new props and  `calculateInverted` is true, `invertedX` and `invertedY`
-  // will be calculated based on the locationX and locationY props so the component is fully visible in the window
-
-  static classes = {
-    invertedX: 'invert-x',
-    invertedY: 'invert-y',
-    calculateInverted: 'calculate-inverted',
-  };
+  /* every time the component receives new props and  `calculateInverted` is true, `invertedX` and `invertedY`
+   * will be calculated based on the `locationX` and `locationY` props so the component is fully visible in the window
+   *
+   * NOTE:
+   * This isn't a maintainable solution in the long run
+   * It should be changed in the future, whenever the Widget/Editor behaviour needs to be extended
+   */
 
   static defaultProps = {
     visible: true,
@@ -43,7 +46,7 @@ export default class Widget extends React.Component<Partial<IWidgetProps>,
     className: '',
   };
 
-  static newState(props: IWidgetProps) {
+  static stateFromProps(props: IWidgetProps) {
     /*
      * If calculateInverted prop is set to true, invertedX and invertedY are set to false, so the initial measurements
      * may take place after the first render
@@ -61,16 +64,18 @@ export default class Widget extends React.Component<Partial<IWidgetProps>,
     };
   }
 
-  rootElement;
-  innerElement;
+  rootElement: RefObject<HTMLDivElement>;
+  innerElement: RefObject<HTMLDivElement>;
 
   constructor(props: IWidgetProps) {
     super(props);
-    this.state = Widget.newState(props);
+    this.state = Widget.stateFromProps(props);
+    this.rootElement = React.createRef();
+    this.innerElement = React.createRef();
   }
 
   componentWillReceiveProps(props: IWidgetProps) {
-    this.setState(Widget.newState(props));
+    this.setState(Widget.stateFromProps(props));
   }
 
   getInnerClassNames() {
@@ -78,15 +83,15 @@ export default class Widget extends React.Component<Partial<IWidgetProps>,
       styles.inner,
       this.props.className,
       {
-        [Widget.classes.invertedX]: this.state.invertedX,
-        [Widget.classes.invertedY]: this.state.invertedY,
-        [Widget.classes.calculateInverted]: this.state.calculateInverted,
+        [styles.invertX]: this.state.invertedX,
+        [styles.invertY]: this.state.invertedY,
+        [styles.calculateInverted]: this.state.calculateInverted,
       },
     );
   }
 
   setLocationStyle() {
-    const widget = this.rootElement;
+    const widget = this.rootElement.current;
     if (widget) {
       widget.style.left = this.props.locationX + 'px';
       widget.style.top = this.props.locationY + 'px';
@@ -99,7 +104,7 @@ export default class Widget extends React.Component<Partial<IWidgetProps>,
 
     if (this.state.calculateInverted) {
       this.setState({
-        ...isInverted(this.innerElement, window),
+        ...isInverted(this.innerElement.current, window),
         calculateInverted: false,
       });
     }
@@ -110,7 +115,7 @@ export default class Widget extends React.Component<Partial<IWidgetProps>,
     this.setLocationStyle();
     if (this.state.calculateInverted) {
       this.setState({
-        ...isInverted(this.innerElement, window),
+        ...isInverted(this.innerElement.current, window),
         calculateInverted: false,
       });
     }
@@ -121,11 +126,11 @@ export default class Widget extends React.Component<Partial<IWidgetProps>,
       return (
         <div
           className={styles.self}
-          ref={ref => this.rootElement = ref}
+          ref={this.rootElement}
         >
           <div
             className={this.getInnerClassNames()}
-            ref={ref => this.innerElement = ref}
+            ref={this.innerElement}
           >
             {this.props.children}
           </div>

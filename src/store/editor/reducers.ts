@@ -28,7 +28,7 @@ export default function editor(state = initialState, action) {
           location: {
             x: location.x,
             y: location.y,
-          }
+          },
       });
     case EDITOR_NEW_ANNOTATION:
       return Object.assign({}, state, {

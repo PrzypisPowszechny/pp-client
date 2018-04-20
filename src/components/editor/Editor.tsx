@@ -1,5 +1,5 @@
 import React, {RefObject} from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import classNames from 'classnames';
 import Widget from '../widget/Widget';
 import styles from './Editor.scss';
@@ -15,6 +15,11 @@ interface IEditorProps {
   invertedY: boolean;
   locationX: number;
   locationY: number;
+  /*
+   * calculateInverted - (overwrites invertedX and invertedY)
+   * if true, the widget horizontal or vertical inversion will be calculated based on the window location
+   * after the component is rendered for the first time after prop change
+   */
   calculateInverted: boolean;
   form: IEditorForm;
   editor: any;
@@ -59,11 +64,9 @@ function annotationForm(annotation?: AnnotationViewModel): IEditorForm {
     calculateInverted: true,
     form,
   };
-}, null, null, { withRef: true })
-class Editor extends React.Component<
-  Partial<IEditorProps>,
-  Partial<IEditorState>
-  > {
+}, null, null, {withRef: true})
+class Editor extends React.Component<Partial<IEditorProps>,
+  Partial<IEditorState>> {
 
   static defaultProps = {
     visible: true,
@@ -78,7 +81,6 @@ class Editor extends React.Component<
   };
 
   static stateFromProps(props: IEditorProps): IEditorState {
-    console.log(props);
     return {
       ...props.form,
       locationX: props.editor.location.x,
@@ -91,14 +93,13 @@ class Editor extends React.Component<
     };
   }
 
-  rootElement: RefObject<Widget>;
   moverElement: RefObject<HTMLDivElement>;
   dragTracker: DragTracker;
 
   constructor(props: IEditorProps) {
     super(props);
     this.state = Editor.stateFromProps(props);
-    this.rootElement = React.createRef();
+
     this.moverElement = React.createRef();
   }
 
@@ -125,18 +126,16 @@ class Editor extends React.Component<
   }
 
   onMouseUp = () => {
-    this.setState({ isDragged: false });
+    this.setState({isDragged: false});
   }
 
   onMouseDown = (e: Event) => {
-    this.setState({ isDragged: true });
+    this.setState({isDragged: true});
   }
 
   setupDragTracker() {
-    // TODO improve widget div ref extraction
-    const rootElement = this.rootElement.current.rootElement;
     const moverElement = this.moverElement.current;
-    if (rootElement && moverElement) {
+    if (moverElement) {
       if (this.dragTracker) {
         this.dragTracker.destroy();
       }
@@ -179,16 +178,16 @@ class Editor extends React.Component<
   handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const target = e.currentTarget;
     const name = target.name;
-    this.setState({ [name]: target.value });
+    this.setState({[name]: target.value});
   }
 
-   validateForm(): boolean {
+  validateForm(): boolean {
     if (!this.state.referenceLink) {
-      this.setState({ referenceLinkError: 'Musisz podać źródło, jeśli chcesz dodać przypis!' });
+      this.setState({referenceLinkError: 'Musisz podać źródło, jeśli chcesz dodać przypis!'});
       return false;
     }
     if (!this.state.referenceLinkTitle) {
-      this.setState({ referenceLinkTitleError: 'Musisz podać tytuł źródła, jeśli chcesz dodać przypis!' });
+      this.setState({referenceLinkTitleError: 'Musisz podać tytuł źródła, jeśli chcesz dodać przypis!'});
       return false;
     }
     return true;
@@ -202,7 +201,7 @@ class Editor extends React.Component<
     // copied from old_src; TODO review
     if (this.validateForm()) { // if form values are correct
       if (!this.state.comment) { // if comment field is empty, display the modal
-        this.setState({ noCommentModalOpen: true });
+        this.setState({noCommentModalOpen: true});
         return;
       }
       this.executeSave(event);
@@ -271,7 +270,6 @@ class Editor extends React.Component<
         locationX={locationX}
         locationY={locationY}
         calculateInverted={calculateInverted}
-        ref={this.rootElement}
       >
         <div className={styles.headBar}>
           <label className={styles.priorityHeader}> Co dodajesz? </label>
@@ -329,33 +327,33 @@ class Editor extends React.Component<
           <i className={classNames(styles.inputIcon, 'linkify', 'icon')}/>
           <div
             className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { [styles.hide]: referenceLinkError === ''})}
+              {[styles.hide]: referenceLinkError === ''})}
           >
             {referenceLinkError}
           </div>
         </div>
         <div className={classNames(styles.editorInput, styles.referenceLinkTitle)}>
           <input
-              type="text"
-              name="referenceLinkTitle"
-              className={referenceLinkTitleError ? styles.error : ''}
-              value={referenceLinkTitle}
-              onChange={this.handleInputChange}
-              placeholder="Wpisz tytuł źródła"
+            type="text"
+            name="referenceLinkTitle"
+            className={referenceLinkTitleError ? styles.error : ''}
+            value={referenceLinkTitle}
+            onChange={this.handleInputChange}
+            placeholder="Wpisz tytuł źródła"
           />
           <i className={classNames(styles.inputIcon, 'tags', 'icon')}/>
           <div
-              className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { [styles.hide]: referenceLinkTitleError === ''})}
-              >
+            className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
+              {[styles.hide]: referenceLinkTitleError === ''})}
+          >
             {referenceLinkTitleError}
           </div>
           <Popup
-              className="pp-ui small-padding"
-              hideOnScroll={true}
-              trigger={<div className={styles.linkHelp}><i className="help circle icon"/></div>}
-              flowing={true}
-              hoverable={true}
+            className="pp-ui small-padding"
+            hideOnScroll={true}
+            trigger={<div className={styles.linkHelp}><i className="help circle icon"/></div>}
+            flowing={true}
+            hoverable={true}
           >
             np. <i>Treść ustawy</i>, <i>Wikipedia</i>,<br/> <i>Nagranie wypowiedzi ministra</i>
           </Popup>

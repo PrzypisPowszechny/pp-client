@@ -16,7 +16,6 @@ function initializeHighlightPlayground() {
   initializeCoreHandlers();
 }
 
-
 function initializeCoreHandlers() {
   window.textSelector = new TextSelector(document.body, handleSelect);
   window.highlighter = new Highlighter(document.body, null);
