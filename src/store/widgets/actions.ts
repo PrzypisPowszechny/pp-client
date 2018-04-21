@@ -1,16 +1,19 @@
 export const EDITOR_VISIBLE_CHANGE = 'EDITOR_VISIBLE_CHANGE';
 export const MENU_WIDGET_CHANGE = 'MENU_WIDGET_CHANGE';
+export const EDITOR_NEW_ANNOTATION = 'EDITOR_NEW_ANNOTATION';
 
-export interface IEditorVisibleChangeAction {
-  type: string;
-  payload: {
-    visible: boolean;
-    location?: {
-      x: number;
-      y: number;
-    }
+export const showEditorNewAnnotation = (x: number, y: number) => {
+  return {
+    type: EDITOR_NEW_ANNOTATION,
+    payload: {
+      visible: true,
+      location: {
+        x,
+        y,
+      },
+    },
   };
-}
+};
 
 export const showMenu = (visible, { x, y }) => {
   return {

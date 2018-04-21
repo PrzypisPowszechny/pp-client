@@ -1,63 +1,83 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, {RefObject} from 'react';
+import {connect} from 'react-redux';
 import classNames from 'classnames';
-import { Modal, Popup } from 'semantic-ui-react';
+import {selectEditorState} from 'store/selectors';
 
-import AnnotationViewModel from 'models/AnnotationViewModel';
-import { selectEditorState } from 'store/selectors';
-
-import Widget from 'components/widget';
-
-import { AnnotationPriorities, annotationPrioritiesLabels } from '../consts';
-import PriorityButton from './priority-button/PriorityButton';
+import {AnnotationPriorities, annotationPrioritiesLabels} from '../consts';
 import styles from './Editor.scss';
+import PriorityButton from './priority-button/PriorityButton';
+import {Modal, Popup} from 'semantic-ui-react';
+import {DraggableWidget} from 'components/widget';
 
 interface IEditorProps {
   visible: boolean;
-  invertedX: boolean;
-  invertedY: boolean;
   locationX: number;
   locationY: number;
-  annotation: AnnotationViewModel;
+  form: IEditorForm;
+  editor: any;
 }
 
-export interface IEditorState {
+export interface IEditorForm {
   priority: AnnotationPriorities;
   comment: string;
   referenceLink: string;
   referenceLinkTitle: string;
+}
 
+export interface IEditorState extends IEditorForm {
+  locationX: number;
+  locationY: number;
+  isDragged: boolean;
   referenceLinkError: string;
   referenceLinkTitleError: string;
   noCommentModalOpen: boolean;
 }
 
+function annotationForm(annotation?): IEditorForm {
+  const model: any = annotation || {};
+  return {
+    priority: model.priority || AnnotationPriorities.NORMAL,
+    comment: model.comment || '',
+    referenceLink: model.referenceLink || '',
+    referenceLinkTitle: model.referenceLinkTitle || '',
+  };
+}
+
 @connect((state) => {
+  let form;
+  const annotationId = state.widgets.editor.annotationId;
+  if (annotationId) {
+    form = annotationForm();
+  } else {
+    form = annotationForm(state.annotations.find(x => x.id === annotationId));
+  }
+
   const {
-    invertedX,
-    invertedY,
     locationX,
     locationY,
     visible,
   } = selectEditorState(state);
 
   return {
-    invertedX,
-    invertedY,
-    locationX,
-    locationY,
-    visible,
+    editor: {
+      locationX,
+      locationY,
+      visible,
+    },
+    form,
   };
 })
-class Editor extends React.Component<Partial<IEditorProps>, Partial<IEditorState>> {
+class Editor extends React.PureComponent<Partial<IEditorProps>,
+  /*
+   * NOTE:
+   * For a comprehensive note on invertedX and invertedY see Widget component
+   */
+  Partial<IEditorState>> {
 
   static defaultProps = {
     visible: true,
-    invertedX: false,
-    invertedY: false,
     locationX: 0,
     locationY: 0,
-    annotation: null,
   };
 
   static priorityToClass = {
@@ -66,37 +86,27 @@ class Editor extends React.Component<Partial<IEditorProps>, Partial<IEditorState
     [AnnotationPriorities.ALERT]: styles.priorityAlert,
   };
 
-  static stateFromProps(props: IEditorProps): IEditorState {
-    // TODO perhaps replace AnnotationViewModel with AnnotationModel
-    const annotation = props.annotation || new AnnotationViewModel();
+  static getDerivedStateFromProps(nextProps: IEditorProps) {
     return {
-      priority: annotation.priority || AnnotationPriorities.NORMAL,
-      comment: annotation.comment || '',
-      referenceLink: annotation.referenceLink || '',
+      ...nextProps.form,
+      locationX: nextProps.editor.locationX,
+      locationY: nextProps.editor.locationY,
       referenceLinkError: '',
-      referenceLinkTitle: annotation.referenceLinkTitle || '',
       referenceLinkTitleError: '',
       noCommentModalOpen: false,
     };
   }
 
+  moverElement: RefObject<HTMLDivElement>;
+
   constructor(props: IEditorProps) {
     super(props);
-    this.state = Editor.stateFromProps(props);
+    this.state = {};
+    this.moverElement = React.createRef();
   }
 
-  componentWillReceiveProps(newProps: IEditorProps) {
-    this.setState(Editor.stateFromProps(newProps));
-  }
-
-  componentWillUpdate(nextProps: IEditorProps, nextState: Partial<IEditorState>) {
-    // Whenever the field has changed, eradicate the error message
-    if (nextState.referenceLink) {
-      nextState.referenceLinkError = '';
-    }
-    if (nextState.referenceLinkTitle) {
-      nextState.referenceLinkTitleError = '';
-    }
+  isNewAnnotation() {
+    return this.props.editor.annotationId !== null;
   }
 
   setPriority = (priority: AnnotationPriorities) => {
@@ -113,17 +123,25 @@ class Editor extends React.Component<Partial<IEditorProps>, Partial<IEditorState
 
   handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const target = e.currentTarget;
-    const name = target.name;
-    this.setState({ [name]: target.value });
+    const stateUpdate = {[target.name]: target.value};
+
+    // Whenever the field has changed, eradicate the error message
+    if (stateUpdate.referenceLink) {
+      stateUpdate.referenceLinkError = '';
+    }
+    if (stateUpdate.referenceLinkTitle) {
+      stateUpdate.referenceLinkTitleError = '';
+    }
+    this.setState(stateUpdate);
   }
 
   validateForm(): boolean {
     if (!this.state.referenceLink) {
-      this.setState({ referenceLinkError: 'Musisz podać źródło, jeśli chcesz dodać przypis!' });
+      this.setState({referenceLinkError: 'Musisz podać źródło, jeśli chcesz dodać przypis!'});
       return false;
     }
     if (!this.state.referenceLinkTitle) {
-      this.setState({ referenceLinkTitleError: 'Musisz podać tytuł źródła, jeśli chcesz dodać przypis!' });
+      this.setState({referenceLinkTitleError: 'Musisz podać tytuł źródła, jeśli chcesz dodać przypis!'});
       return false;
     }
     return true;
@@ -134,10 +152,10 @@ class Editor extends React.Component<Partial<IEditorProps>, Partial<IEditorState
   }
 
   onSave = (event: any) => {
-    // TODO copied from old_src; review
+    // copied from old_src; TODO review
     if (this.validateForm()) { // if form values are correct
       if (!this.state.comment) { // if comment field is empty, display the modal
-        this.setState({ noCommentModalOpen: true });
+        this.setState({noCommentModalOpen: true});
         return;
       }
       this.executeSave(event);
@@ -150,7 +168,6 @@ class Editor extends React.Component<Partial<IEditorProps>, Partial<IEditorState
 
   executeSave = (event: any) => {
     // TODO
-    console.log(this.props.annotation);
   }
 
   // A modal displayed when user tries to save the form with comment field empty
@@ -185,6 +202,8 @@ class Editor extends React.Component<Partial<IEditorProps>, Partial<IEditorState
 
   render() {
     const {
+      locationX,
+      locationY,
       priority,
       comment,
       referenceLink,
@@ -193,14 +212,17 @@ class Editor extends React.Component<Partial<IEditorProps>, Partial<IEditorState
       referenceLinkTitleError,
     } = this.state;
 
+    const {
+      visible,
+    } = this.props.editor;
+
     return (
-      <Widget
+      <DraggableWidget
         className={classNames('pp-ui', styles.self)}
-        visible={this.props.visible}
-        invertedX={this.props.invertedX}
-        invertedY={this.props.invertedY}
-        locationX={this.props.locationX}
-        locationY={this.props.locationY}
+        visible={visible}
+        locationX={locationX}
+        locationY={locationY}
+        mover={this.moverElement}
       >
         <div className={styles.headBar}>
           <label className={styles.priorityHeader}> Co dodajesz? </label>
@@ -290,7 +312,10 @@ class Editor extends React.Component<Partial<IEditorProps>, Partial<IEditorState
           </Popup>
         </div>
         <div className={styles.bottomBar}>
-          <div className={styles.moverArea}>
+          <div
+            className={styles.moverArea}
+            ref={this.moverElement}
+          >
             <div className={styles.controls}>
               <button className={styles.cancel} onClick={this.onCancel}>
                 {' '}Anuluj{' '}
@@ -303,7 +328,7 @@ class Editor extends React.Component<Partial<IEditorProps>, Partial<IEditorState
           </div>
           <img className={styles.moverIcon} />
         </div>
-      </Widget>
+      </DraggableWidget>
     );
   }
 

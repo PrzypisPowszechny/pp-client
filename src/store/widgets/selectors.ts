@@ -1,11 +1,9 @@
 import { createSelector } from 'reselect';
 import { IStore } from 'store/reducer';
 
-function selectWidgetState({ inverted, location, visible }) {
+function selectWidgetState({ location, visible }) {
   return {
     visible,
-    invertedX: inverted.x,
-    invertedY: inverted.y,
     locationX: location.x,
     locationY: location.y,
   };

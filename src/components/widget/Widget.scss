@@ -43,27 +43,30 @@
 /*
 When window is horizontally or vertically inverted
  */
-.inner:global(.invert-x) {
+.inner.invert-x {
     left: auto;
     right: -18px;
 }
 
-.inner:global(.invert-y) {
+.inner.invert-y {
     bottom: auto;
     top: 8px;
 }
 
-.inner:global(.invert-x):after {
+.inner.invert-x:after {
     left: auto;
     right: 8px;
 }
 
-.inner:global(.invert-y):after {
+.inner.invert-y:after {
     background-position: 0 -15px;
     bottom: auto;
     top: -9px;
 }
 
+.inner.calculate-inverted {
+    visibility: hidden;
+}
 //TODO
 //.annotator-editor .invert-y .pp-widget:after {
 //    background-position: 0 -45px;
