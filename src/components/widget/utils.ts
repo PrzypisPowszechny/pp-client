@@ -28,7 +28,6 @@ export function isInverted(widget, window) {
       return {
         invertedX,
         invertedY,
-        calculateInverted: false,
       };
     }
   }

@@ -1,8 +1,7 @@
 import React, {RefObject} from 'react';
 import classNames from 'classnames';
 import styles from './Widget.scss';
-import Editor from "../editor/Editor";
-import {isInverted} from "./utils";
+import {isInverted} from './utils';
 
 interface IWidgetProps {
   visible: boolean;
@@ -26,7 +25,7 @@ interface IWidgetState {
   calculateInverted: boolean;
 }
 
-export default class Widget extends React.Component<Partial<IWidgetProps>,
+export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
   Partial<IWidgetState>> {
   /* Every time the component receives new props and  `calculateInverted` is true, `invertedX` and `invertedY`
    * will be calculated based on the `locationX` and `locationY` props so the component is fully visible in the window
@@ -55,13 +54,13 @@ export default class Widget extends React.Component<Partial<IWidgetProps>,
     className: '',
   };
 
-  static stateFromProps(props: IWidgetProps) {
+  static getDerivedStateFromProps(nextProps: IWidgetProps) {
     /*
      * If calculateInverted prop is set to true, invertedX and invertedY are set to false, so the initial measurements
      * may take place after the first render
     */
     let inverted;
-    if (props.calculateInverted) {
+    if (nextProps.calculateInverted) {
       inverted = {
         invertedX: false,
         invertedY: false,
@@ -69,7 +68,7 @@ export default class Widget extends React.Component<Partial<IWidgetProps>,
     }
     return {
       ...inverted,
-      calculateInverted: props.calculateInverted,
+      calculateInverted: nextProps.calculateInverted,
     };
   }
 
@@ -78,13 +77,9 @@ export default class Widget extends React.Component<Partial<IWidgetProps>,
 
   constructor(props: IWidgetProps) {
     super(props);
-    this.state = Widget.stateFromProps(props);
+    this.state = {};
     this.rootElement = React.createRef();
     this.innerElement = React.createRef();
-  }
-
-  componentWillReceiveProps(props: IWidgetProps) {
-    this.setState(Widget.stateFromProps(props));
   }
 
   getInnerClassNames() {
