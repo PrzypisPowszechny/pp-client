@@ -14,6 +14,7 @@ import './css/common/pp-semantic-ui-reset.scss';
 import './css/common/pp-semantic-ui-overrides.scss';
 
 import './css/selection.scss';
+import {showEditorNewAnnotation} from "./store/widgets/actions";
 
 console.log('Przypis script working!');
 
@@ -34,4 +35,5 @@ const isBrowser = typeof window !== 'undefined';
 if (isBrowser) {
   initializeCoreHandlers();
   injectApp();
+  store.dispatch(showEditorNewAnnotation(650, 500));
 }
