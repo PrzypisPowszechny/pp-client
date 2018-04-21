@@ -28,12 +28,21 @@ interface IWidgetState {
 
 export default class Widget extends React.Component<Partial<IWidgetProps>,
   Partial<IWidgetState>> {
-  /* every time the component receives new props and  `calculateInverted` is true, `invertedX` and `invertedY`
+  /* Every time the component receives new props and  `calculateInverted` is true, `invertedX` and `invertedY`
    * will be calculated based on the `locationX` and `locationY` props so the component is fully visible in the window
    *
    * NOTE:
-   * This isn't a maintainable solution in the long run
-   * It should be changed in the future, whenever the Widget/Editor behaviour needs to be extended
+   * This is a rough solution, probably not very maintainable in the long run
+   * We should consider changing it in the near future, when the Widget/Editor behaviour needs to be extended
+   *
+   * However, it does have a very concrete advantage
+   * - it makes no assumptions whatsoever about the size of the window;
+   * the size of the window can be calculated in the runtime;
+   * the component will deal with whatever is actually rendered to appear fully in the screen
+   * The widget's inner containter must simply fit the browser window, or it will be inverted.
+   *
+   * If we undertake to change this component behaviour, it should only be with a clear benefit in mind,
+   * that outweighs current flexibility
    */
 
   static defaultProps = {

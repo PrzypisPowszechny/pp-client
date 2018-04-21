@@ -67,8 +67,6 @@ function annotationForm(annotation?): IEditorForm {
     visible,
   } = selectEditorState(state);
 
-  console.log(selectEditorState(state));
-
   return {
     editor: {
       locationX,
@@ -80,6 +78,10 @@ function annotationForm(annotation?): IEditorForm {
   };
 })
 class Editor extends React.Component<Partial<IEditorProps>,
+  /*
+   * NOTE:
+   * For a comprehensive note on invertedX and invertedY see Widget component
+   */
   Partial<IEditorState>> {
 
   static defaultProps = {
@@ -112,7 +114,6 @@ class Editor extends React.Component<Partial<IEditorProps>,
 
   constructor(props: IEditorProps) {
     super(props);
-    console.log(props);
     this.state = Editor.stateFromProps(props);
 
     this.moverElement = React.createRef();
