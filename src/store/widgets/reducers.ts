@@ -24,6 +24,7 @@ const initialWidgetState = {
 
 const initialState = {
   editor: {
+    annotationId: null,
     ...initialWidgetState,
   },
   menu: {

@@ -6,6 +6,7 @@ export const showEditorNewAnnotation = (x: number, y: number) => {
   return {
     type: EDITOR_NEW_ANNOTATION,
     payload: {
+      annotationId: null,
       visible: true,
       location: {
         x,

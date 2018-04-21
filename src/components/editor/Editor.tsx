@@ -5,74 +5,46 @@ import {selectEditorState} from 'store/selectors';
 
 import {AnnotationPriorities, annotationPrioritiesLabels} from '../consts';
 import styles from './Editor.scss';
+import {DragTracker, IVec2} from '../../utils/move';
 import PriorityButton from './priority-button/PriorityButton';
 import {Modal, Popup} from 'semantic-ui-react';
-import {DraggableWidget} from 'components/widget';
-
-interface IEditorProps {
-  visible: boolean;
-  locationX: number;
-  locationY: number;
-  form: IEditorForm;
-  editor: any;
-}
-
-export interface IEditorForm {
-  priority: AnnotationPriorities;
-  comment: string;
-  referenceLink: string;
-  referenceLinkTitle: string;
-}
-
-export interface IEditorState extends IEditorForm {
-  locationX: number;
-  locationY: number;
-  isDragged: boolean;
-  referenceLinkError: string;
-  referenceLinkTitleError: string;
-  noCommentModalOpen: boolean;
-}
-
-function annotationForm(annotation?): IEditorForm {
-  const model: any = annotation || {};
-  return {
-    priority: model.priority || AnnotationPriorities.NORMAL,
-    comment: model.comment || '',
-    referenceLink: model.referenceLink || '',
-    referenceLinkTitle: model.referenceLinkTitle || '',
-  };
-}
+import Widget from '../widget/Widget';
+import {IEditorState, IEditorProps} from './interfaces';
+import { DraggableWidget } from 'components/widget';
 
 @connect((state) => {
-  let form;
-  const annotationId = state.widgets.editor.annotationId;
-  if (annotationId) {
-    form = annotationForm();
-  } else {
-    form = annotationForm(state.annotations.find(x => x.id === annotationId));
-  }
-
   const {
+    visible,
     locationX,
     locationY,
-    visible,
+    // form
+    annotationId,
+    priority,
+    comment,
+    referenceLink,
+    referenceLinkTitle,
   } = selectEditorState(state);
 
   return {
-    editor: {
-      locationX,
-      locationY,
-      visible,
-    },
-    form,
+    visible,
+    locationX,
+    locationY,
+    // form
+    annotationId,
+    priority,
+    comment,
+    referenceLink,
+    referenceLinkTitle,
   };
 })
-class Editor extends React.PureComponent<Partial<IEditorProps>,
-  /*
-   * NOTE:
-   * For a comprehensive note on invertedX and invertedY see Widget component
-   */
-  Partial<IEditorState>> {
+class Editor extends React.Component<
+  Partial<IEditorProps>,
+  Partial<IEditorState>
+  > {
+   /*
+    * NOTE:
+    * For a comprehensive note on invertedX and invertedY see Widget component
+    */
 
   static defaultProps = {
     visible: true,
@@ -88,9 +60,14 @@ class Editor extends React.PureComponent<Partial<IEditorProps>,
 
   static getDerivedStateFromProps(nextProps: IEditorProps) {
     return {
-      ...nextProps.form,
-      locationX: nextProps.editor.locationX,
-      locationY: nextProps.editor.locationY,
+      annotationId: nextProps.annotationId,
+      priority: nextProps.priority,
+      comment: nextProps.comment,
+      referenceLink: nextProps.referenceLink,
+      referenceLinkTitle: nextProps.referenceLinkTitle,
+
+      locationX: nextProps.locationX,
+      locationY: nextProps.locationY,
       referenceLinkError: '',
       referenceLinkTitleError: '',
       noCommentModalOpen: false,
@@ -106,7 +83,7 @@ class Editor extends React.PureComponent<Partial<IEditorProps>,
   }
 
   isNewAnnotation() {
-    return this.props.editor.annotationId !== null;
+    return this.props.annotationId !== null;
   }
 
   setPriority = (priority: AnnotationPriorities) => {
@@ -214,7 +191,7 @@ class Editor extends React.PureComponent<Partial<IEditorProps>,
 
     const {
       visible,
-    } = this.props.editor;
+    } = this.props;
 
     return (
       <DraggableWidget
