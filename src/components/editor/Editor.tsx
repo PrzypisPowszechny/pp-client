@@ -5,23 +5,15 @@ import {selectEditorState} from 'store/selectors';
 
 import {AnnotationPriorities, annotationPrioritiesLabels} from '../consts';
 import styles from './Editor.scss';
-import {DragTracker, IVec2} from "../../utils/move";
-import PriorityButton from "./priority-button/PriorityButton";
-import {Modal, Popup} from "semantic-ui-react";
-import Widget from "../widget/Widget";
+import {DragTracker, IVec2} from 'utils/move';
+import PriorityButton from './priority-button/PriorityButton';
+import {Modal, Popup} from 'semantic-ui-react';
+import Widget from 'components/widget';
 
 interface IEditorProps {
   visible: boolean;
-  invertedX: boolean;
-  invertedY: boolean;
   locationX: number;
   locationY: number;
-  /*
-   * calculateInverted - (overwrites invertedX and invertedY)
-   * if true, the widget horizontal or vertical inversion will be calculated based on the window location
-   * after the component is rendered for the first time after prop change
-   */
-  calculateInverted: boolean;
   form: IEditorForm;
   editor: any;
 }
@@ -36,8 +28,8 @@ export interface IEditorForm {
 export interface IEditorState extends IEditorForm {
   locationX: number;
   locationY: number;
-  calculateInverted: boolean;
   isDragged: boolean;
+  moved: boolean;
   referenceLinkError: string;
   referenceLinkTitleError: string;
   noCommentModalOpen: boolean;
@@ -55,10 +47,11 @@ function annotationForm(annotation?): IEditorForm {
 
 @connect((state) => {
   let form;
-  if (state.annotationId) {
+  const annotationId = state.widgets.editor.annotationId;
+  if (annotationId) {
     form = annotationForm();
   } else {
-    form = annotationForm(state.annotations.find(x => x.id === state.widgets.editor.annotationId));
+    form = annotationForm(state.annotations.find(x => x.id === annotationId));
   }
 
   const {
@@ -73,11 +66,10 @@ function annotationForm(annotation?): IEditorForm {
       locationY,
       visible,
     },
-    calculateInverted: true,
     form,
   };
 })
-class Editor extends React.Component<Partial<IEditorProps>,
+class Editor extends React.PureComponent<Partial<IEditorProps>,
   /*
    * NOTE:
    * For a comprehensive note on invertedX and invertedY see Widget component
@@ -96,13 +88,13 @@ class Editor extends React.Component<Partial<IEditorProps>,
     [AnnotationPriorities.ALERT]: styles.priorityAlert,
   };
 
-  static stateFromProps(props: IEditorProps): IEditorState {
+  static getDerivedStateFromProps(nextProps: IEditorProps) {
     return {
-      ...props.form,
-      locationX: props.editor.locationX,
-      locationY: props.editor.locationY,
-      calculateInverted: props.calculateInverted,
+      ...nextProps.form,
+      locationX: nextProps.editor.locationX,
+      locationY: nextProps.editor.locationY,
       isDragged: false,
+      moved: false,
       referenceLinkError: '',
       referenceLinkTitleError: '',
       noCommentModalOpen: false,
@@ -114,30 +106,15 @@ class Editor extends React.Component<Partial<IEditorProps>,
 
   constructor(props: IEditorProps) {
     super(props);
-    this.state = Editor.stateFromProps(props);
-
+    this.state = {};
     this.moverElement = React.createRef();
   }
-
-  componentWillReceiveProps(newProps: IEditorProps) {
-    this.setState(Editor.stateFromProps(newProps));
-  }
-
-  componentWillUpdate(nextProps: IEditorProps, nextState: Partial<IEditorState>) {
-    // Whenever the field has changed, eradicate the error message
-    if (nextState.referenceLink) {
-      nextState.referenceLinkError = '';
-    }
-    if (nextState.referenceLinkTitle) {
-      nextState.referenceLinkTitleError = '';
-    }
-  }
-
 
   onDrag = (delta: IVec2) => {
     this.setState({
       locationX: this.state.locationX + delta.x,
       locationY: this.state.locationY + delta.y,
+      moved: true,
     });
     return true;
   }
@@ -146,7 +123,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
     this.setState({isDragged: false});
   }
 
-  onMouseDown = (e: Event) => {
+  onMouseDown = () => {
     this.setState({isDragged: true});
   }
 
@@ -163,17 +140,11 @@ class Editor extends React.Component<Partial<IEditorProps>,
   componentDidMount() {
     // called on the first render only
     this.setupDragTracker();
-    if (this.state.calculateInverted) {
-      this.setState({calculateInverted: false});
-    }
   }
 
   componentDidUpdate() {
     // called on all but the first render
     this.setupDragTracker();
-    if (this.state.calculateInverted) {
-      this.setState({calculateInverted: false});
-    }
   }
 
   isNewAnnotation() {
@@ -194,8 +165,16 @@ class Editor extends React.Component<Partial<IEditorProps>,
 
   handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const target = e.currentTarget;
-    const name = target.name;
-    this.setState({[name]: target.value});
+    const stateUpdate = {[target.name]: target.value};
+
+    // Whenever the field has changed, eradicate the error message
+    if (stateUpdate.referenceLink) {
+      stateUpdate.referenceLinkError = '';
+    }
+    if (stateUpdate.referenceLinkTitle) {
+      stateUpdate.referenceLinkTitleError = '';
+    }
+    this.setState(stateUpdate);
   }
 
   validateForm(): boolean {
@@ -267,7 +246,8 @@ class Editor extends React.Component<Partial<IEditorProps>,
     const {
       locationX,
       locationY,
-      calculateInverted,
+      isDragged,
+      moved,
       priority,
       comment,
       referenceLink,
@@ -282,11 +262,11 @@ class Editor extends React.Component<Partial<IEditorProps>,
 
     return (
       <Widget
-        className={classNames("pp-ui", styles.self)}
+        className={classNames('pp-ui', styles.self)}
         visible={visible}
         locationX={locationX}
         locationY={locationY}
-        calculateInverted={calculateInverted}
+        calculateInverted={!moved}
       >
         <div className={styles.headBar}>
           <label className={styles.priorityHeader}> Co dodajesz? </label>
