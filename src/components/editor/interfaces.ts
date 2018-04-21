@@ -19,16 +19,14 @@ export interface IEditorProps extends IEditorForm {
    * if true, the widget horizontal or vertical inversion will be calculated based on the window location
    * after the component is rendered for the first time after prop change
    */
-  calculateInverted: boolean;
   editor: any;
 }
 
 export interface IEditorState extends IEditorForm {
   locationX: number;
   locationY: number;
-  calculateInverted: boolean;
+  moved: boolean;
 
-  isDragged: boolean;
   noCommentModalOpen: boolean;
 
   referenceLinkError: string;

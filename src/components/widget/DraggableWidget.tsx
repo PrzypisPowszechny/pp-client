@@ -7,17 +7,12 @@ import {IWidgetState, IWidgetProps, default as Widget} from './Widget';
 
 export interface IDraggableWidgetProps extends IWidgetProps {
   mover: RefObject<HTMLElement>;
-}
-
-export interface IDraggableWidgetState {
-  locationX: number;
-  locationY: number;
-  moved: boolean;
+  onDrag: (delta: IVec2) => void;
 }
 
 export default class DraggableWidget extends React.PureComponent<
     Partial<IDraggableWidgetProps>,
-    Partial<IDraggableWidgetState>
+  {}
   > {
 
   static defaultProps = {
@@ -40,10 +35,9 @@ export default class DraggableWidget extends React.PureComponent<
   }
 
   onDrag = (delta: IVec2) => {
-    this.setState({
-      locationX: this.state.locationX + delta.x,
-      locationY: this.state.locationY + delta.y,
-    });
+    if (this.props.onDrag) {
+      this.props.onDrag(delta);
+    }
     return true;
   }
 
@@ -68,18 +62,9 @@ export default class DraggableWidget extends React.PureComponent<
   }
 
   render() {
-    const {
-      locationX,
-      locationY,
-      moved,
-    } = this.state;
-
     return (
       <Widget
         {...this.props}
-        locationX={locationX}
-        locationY={locationY}
-        calculateInverted={!moved}
       >
         {this.props.children}
       </Widget>

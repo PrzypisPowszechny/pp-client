@@ -66,6 +66,7 @@ class Editor extends React.Component<
       referenceLink: nextProps.referenceLink,
       referenceLinkTitle: nextProps.referenceLinkTitle,
 
+      moved: false,
       locationX: nextProps.locationX,
       locationY: nextProps.locationY,
       referenceLinkError: '',
@@ -84,6 +85,15 @@ class Editor extends React.Component<
 
   isNewAnnotation() {
     return this.props.annotationId !== null;
+  }
+
+  onDrag = (delta: IVec2) => {
+    this.setState({
+      locationX: this.state.locationX + delta.x,
+      locationY: this.state.locationY + delta.y,
+      moved: true,
+    });
+    return true;
   }
 
   setPriority = (priority: AnnotationPriorities) => {
@@ -181,6 +191,7 @@ class Editor extends React.Component<
     const {
       locationX,
       locationY,
+      moved,
       priority,
       comment,
       referenceLink,
@@ -200,6 +211,8 @@ class Editor extends React.Component<
         locationX={locationX}
         locationY={locationY}
         mover={this.moverElement}
+        onDrag={this.onDrag}
+        calculateInverted={!moved}
       >
         <div className={styles.headBar}>
           <label className={styles.priorityHeader}> Co dodajesz? </label>
