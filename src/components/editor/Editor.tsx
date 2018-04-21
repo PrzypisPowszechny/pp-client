@@ -5,10 +5,9 @@ import {selectEditorState} from 'store/selectors';
 
 import {AnnotationPriorities, annotationPrioritiesLabels} from '../consts';
 import styles from './Editor.scss';
-import {DragTracker, IVec2} from 'utils/move';
 import PriorityButton from './priority-button/PriorityButton';
 import {Modal, Popup} from 'semantic-ui-react';
-import Widget from 'components/widget';
+import {DraggableWidget} from 'components/widget';
 
 interface IEditorProps {
   visible: boolean;
@@ -29,7 +28,6 @@ export interface IEditorState extends IEditorForm {
   locationX: number;
   locationY: number;
   isDragged: boolean;
-  moved: boolean;
   referenceLinkError: string;
   referenceLinkTitleError: string;
   noCommentModalOpen: boolean;
@@ -93,8 +91,6 @@ class Editor extends React.PureComponent<Partial<IEditorProps>,
       ...nextProps.form,
       locationX: nextProps.editor.locationX,
       locationY: nextProps.editor.locationY,
-      isDragged: false,
-      moved: false,
       referenceLinkError: '',
       referenceLinkTitleError: '',
       noCommentModalOpen: false,
@@ -102,49 +98,11 @@ class Editor extends React.PureComponent<Partial<IEditorProps>,
   }
 
   moverElement: RefObject<HTMLDivElement>;
-  dragTracker: DragTracker;
 
   constructor(props: IEditorProps) {
     super(props);
     this.state = {};
     this.moverElement = React.createRef();
-  }
-
-  onDrag = (delta: IVec2) => {
-    this.setState({
-      locationX: this.state.locationX + delta.x,
-      locationY: this.state.locationY + delta.y,
-      moved: true,
-    });
-    return true;
-  }
-
-  onMouseUp = () => {
-    this.setState({isDragged: false});
-  }
-
-  onMouseDown = () => {
-    this.setState({isDragged: true});
-  }
-
-  setupDragTracker() {
-    const moverElement = this.moverElement.current;
-    if (moverElement) {
-      if (this.dragTracker) {
-        this.dragTracker.destroy();
-      }
-      this.dragTracker = new DragTracker(moverElement, this.onMouseDown, this.onDrag, this.onMouseUp);
-    }
-  }
-
-  componentDidMount() {
-    // called on the first render only
-    this.setupDragTracker();
-  }
-
-  componentDidUpdate() {
-    // called on all but the first render
-    this.setupDragTracker();
   }
 
   isNewAnnotation() {
@@ -246,8 +204,6 @@ class Editor extends React.PureComponent<Partial<IEditorProps>,
     const {
       locationX,
       locationY,
-      isDragged,
-      moved,
       priority,
       comment,
       referenceLink,
@@ -261,12 +217,12 @@ class Editor extends React.PureComponent<Partial<IEditorProps>,
     } = this.props.editor;
 
     return (
-      <Widget
+      <DraggableWidget
         className={classNames('pp-ui', styles.self)}
         visible={visible}
         locationX={locationX}
         locationY={locationY}
-        calculateInverted={!moved}
+        mover={this.moverElement}
       >
         <div className={styles.headBar}>
           <label className={styles.priorityHeader}> Co dodajesz? </label>
@@ -372,7 +328,7 @@ class Editor extends React.PureComponent<Partial<IEditorProps>,
           </div>
           <img className={styles.moverIcon} />
         </div>
-      </Widget>
+      </DraggableWidget>
     );
   }
 

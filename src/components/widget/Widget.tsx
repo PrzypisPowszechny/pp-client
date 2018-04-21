@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import styles from './Widget.scss';
 import {isInverted} from './utils';
 
-interface IWidgetProps {
+export interface IWidgetProps {
   visible: boolean;
   locationX: number;
   locationY: number;
@@ -19,7 +19,7 @@ interface IWidgetProps {
   children: React.ReactChild | React.ReactChild[];
 }
 
-interface IWidgetState {
+export interface IWidgetState {
   invertedX: boolean;
   invertedY: boolean;
   calculateInverted: boolean;
