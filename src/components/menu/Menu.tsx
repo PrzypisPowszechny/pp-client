@@ -7,14 +7,19 @@ import { selectMenuState } from 'store/selectors';
 import Widget from 'components/widget';
 
 import styles from './Menu.scss';
+import {hideMenu, showEditorNewAnnotation} from 'store/widgets/actions';
 
 interface IMenuProps {
   visible: boolean;
   locationX: number;
   locationY: number;
+
+  showEditor: (x: number, y: number) => void;
+  hideMenu: () => void;
 }
 
-@connect((state) => {
+@connect(
+  (state) => {
   const {
     visible,
     locationX,
@@ -26,7 +31,12 @@ interface IMenuProps {
     locationX,
     locationY,
   };
-})
+},
+  dispatch => ({
+    showEditor: (x, y) => dispatch(showEditorNewAnnotation(x, y)),
+    hideMenu: () => dispatch(hideMenu()),
+  }),
+)
 export default class Menu extends React.Component<Partial<IMenuProps>, {}> {
 
   static defaultProps = {
@@ -39,9 +49,10 @@ export default class Menu extends React.Component<Partial<IMenuProps>, {}> {
     super(props);
   }
 
-  onClick(event: any) {
-    // TODO
-    console.log(event);
+  onClick = (e: any) => {
+    console.log('heeej');
+    this.props.hideMenu();
+    this.props.showEditor(this.props.locationX, this.props.locationY);
   }
 
   render() {

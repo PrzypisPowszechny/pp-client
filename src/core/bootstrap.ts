@@ -25,7 +25,7 @@ export function deinitializeCoreHandlers() {
 function textSelectorCallback(selection: Range.SerializedRange[], event) {
   if (selection.length === 1) {
     store.dispatch(textSelectedAction(selection));
-    store.dispatch(showMenu(true, mousePosition(event)));
+    store.dispatch(showMenu(mousePosition(event)));
   } else {
     console.warn('PP: more than one selected range is not supported');
   }

@@ -16,19 +16,6 @@ export const showEditorNewAnnotation = (x: number, y: number) => {
   };
 };
 
-export const showMenu = (visible, { x, y }) => {
-  return {
-    type: MENU_WIDGET_CHANGE,
-    payload: {
-      visible: true,
-      location: {
-        x,
-        y,
-      },
-    },
-  };
-};
-
 export const showEditor = () => {
   return {
     type: EDITOR_VISIBLE_CHANGE,
@@ -56,6 +43,28 @@ export const setEditor = (visible, x, y) => {
         x,
         y,
       },
+    },
+  };
+};
+
+export const showMenu = ({ x, y }) => {
+  return {
+    type: MENU_WIDGET_CHANGE,
+    payload: {
+      visible: true,
+      location: {
+        x,
+        y,
+      },
+    },
+  };
+};
+
+export const hideMenu = () => {
+  return {
+    type: MENU_WIDGET_CHANGE,
+    payload: {
+      visible: false,
     },
   };
 };
