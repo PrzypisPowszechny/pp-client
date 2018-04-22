@@ -11,16 +11,8 @@ export interface IEditorForm {
 
 export interface IEditorProps extends IEditorForm {
   visible: boolean;
-  invertedX: boolean;
-  invertedY: boolean;
   locationX: number;
   locationY: number;
-  /*
-   * calculateInverted - (overwrites invertedX and invertedY)
-   * if true, the widget horizontal or vertical inversion will be calculated based on the window location
-   * after the component is rendered for the first time after prop change
-   */
-  editor: any;
   range: Range.SerializedRange;
 
   createAnnotation: (IEditorForm) => void;
