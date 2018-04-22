@@ -50,7 +50,7 @@ function editorActionHandler(state, payload) {
     editor: {
       ...state.editor,
       ...payload,
-    }
+    },
   };
 }
 

@@ -1,6 +1,16 @@
+import {CREATE_ANNOTATION} from './actions';
 
-const initialState = [];
+const initialState = {
+  data: [],
+};
 
 export default function editor(state = initialState, action) {
-  return state;
+  switch (action.type) {
+    case CREATE_ANNOTATION:
+      return Object.assign({}, {
+        data: state.data.concat([action.payload]),
+      });
+    default:
+      return state;
+  }
 }

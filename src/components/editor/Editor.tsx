@@ -9,34 +9,44 @@ import {DragTracker, IVec2} from '../../utils/move';
 import PriorityButton from './priority-button/PriorityButton';
 import {Modal, Popup} from 'semantic-ui-react';
 import Widget from '../widget/Widget';
-import {IEditorState, IEditorProps} from './interfaces';
+import {IEditorState, IEditorProps, IEditorForm} from './interfaces';
 import { DraggableWidget } from 'components/widget';
+import { hideEditor } from 'store/widgets/actions';
+import {createAnnotation} from '../../store/annotations/actions';
 
-@connect((state) => {
-  const {
-    visible,
-    locationX,
-    locationY,
-    // form
-    annotationId,
-    priority,
-    comment,
-    referenceLink,
-    referenceLinkTitle,
-  } = selectEditorState(state);
+@connect(
+  (state) => {
+    const {
+      visible,
+      locationX,
+      locationY,
+      // form
+      annotationId,
+      priority,
+      comment,
+      referenceLink,
+      referenceLinkTitle,
+    } = selectEditorState(state);
 
-  return {
-    visible,
-    locationX,
-    locationY,
-    // form
-    annotationId,
-    priority,
-    comment,
-    referenceLink,
-    referenceLinkTitle,
-  };
-})
+    return {
+      visible,
+      locationX,
+      locationY,
+      // form
+      annotationId,
+      priority,
+      comment,
+      referenceLink,
+      referenceLinkTitle,
+    };
+  },
+  dispatch => ({
+    hideEditor: () => dispatch(hideEditor()),
+    createAnnotation: (form: IEditorForm) => {
+      dispatch(createAnnotation(form));
+    },
+  }),
+)
 class Editor extends React.Component<
   Partial<IEditorProps>,
   Partial<IEditorState>
@@ -138,23 +148,39 @@ class Editor extends React.Component<
     return Editor.priorityToClass[this.state.priority];
   }
 
-  onSave = (event: any) => {
+  onSaveClick = (event: any) => {
     // copied from old_src; TODO review
     if (this.validateForm()) { // if form values are correct
       if (!this.state.comment) { // if comment field is empty, display the modal
         this.setState({noCommentModalOpen: true});
         return;
       }
-      this.executeSave(event);
+      this.save();
     }
   }
 
-  onCancel = (event: any) => {
-    // TODO
+  onModalSaveClick = (event: any) => {
+    this.save();
   }
 
-  executeSave = (event: any) => {
-    // TODO
+  onCancelClick = (event: any) => {
+    this.props.hideEditor();
+  }
+
+  save() {
+    // TODO provide real query promise; for now just a placeholder (createAnnotation is to be removed)
+    const fetchData = new Promise((resolve, reject) => {
+      this.props.createAnnotation(this.state);
+      resolve();
+    });
+
+    fetchData
+      .then(() => {
+        this.props.hideEditor();
+      })
+      .catch(() => {
+        // TODO when failed
+      });
   }
 
   // A modal displayed when user tries to save the form with comment field empty
@@ -178,7 +204,7 @@ class Editor extends React.Component<
           </button>
           <button
             className="ui button"
-            onClick={this.executeSave}
+            onClick={this.onModalSaveClick}
           >
             Zapisz
           </button>
@@ -245,7 +271,7 @@ class Editor extends React.Component<
         </div>
         <div
           className={styles.close}
-          onClick={this.onCancel}
+          onClick={this.onCancelClick}
         >
           <i className="remove icon" />
         </div>
@@ -307,10 +333,10 @@ class Editor extends React.Component<
             ref={this.moverElement}
           >
             <div className={styles.controls}>
-              <button className={styles.cancel} onClick={this.onCancel}>
+              <button className={styles.cancel} onClick={this.onCancelClick}>
                 {' '}Anuluj{' '}
               </button>
-              <button className={classNames(styles.save, this.saveButtonClass())} onClick={this.onSave}>
+              <button className={classNames(styles.save, this.saveButtonClass())} onClick={this.onSaveClick}>
                 {' '}Zapisz{' '}
               </button>
               {this.renderNoCommentModal()}

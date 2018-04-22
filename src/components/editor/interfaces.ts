@@ -20,6 +20,8 @@ export interface IEditorProps extends IEditorForm {
    * after the component is rendered for the first time after prop change
    */
   editor: any;
+  createAnnotation: (IEditorForm) => void;
+  hideEditor: () => void;
 }
 
 export interface IEditorState extends IEditorForm {

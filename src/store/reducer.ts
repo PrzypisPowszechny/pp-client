@@ -4,7 +4,7 @@ import textSelector from './textSelector/reducers';
 import annotations from './annotations/reducers';
 
 export interface IStore {
-  annotations: any[];
+  annotations: any;
   widgets: WidgetReducer;
   textSelector: any;
 }

@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { IStore } from 'store/reducer';
 import {AnnotationPriorities} from '../../components/consts';
-import {IWidgetState, WidgetReducer} from "./reducers";
+import {IWidgetState, WidgetReducer} from './reducers';
 
 function selectWidgetState({ location, visible }) {
   return {
@@ -28,9 +28,9 @@ function selectAnnotationForm(annotations, annotationId?) {
   };
 }
 
-export const selectEditorState = createSelector<IStore, any, any[], any>(
+export const selectEditorState = createSelector<IStore, any, any, any>(
   state => state.widgets.editor,
-  state => state.annotations,
+  state => state.annotations.data,
   (editor, annotations) => ({
     ...selectWidgetState(editor),
     ...selectAnnotationForm(annotations, editor.annotationId),
