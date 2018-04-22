@@ -8,8 +8,10 @@ import Highlights from "../components/highlights/Highlights";
 export default function App() {
   return (
     <div>
+      <Editor />
       <Highlights />
       <Menu />
+      <Viewer />
     </div>
   );
 }

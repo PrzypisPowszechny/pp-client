@@ -1,29 +1,43 @@
 import React from 'react';
 import classNames from 'classnames';
-
+import { connect } from 'react-redux';
 import Widget from 'components/widget';
-import AnnotationViewModel from 'models/AnnotationViewModel';
 
 import ViewerItem from './ViewerItem';
 import styles from './Viewer.scss';
+import {selectViewerState} from 'store/widgets/selectors';
 
 interface IViewerProps {
   visible: boolean;
-  invertedX: boolean;
-  invertedY: boolean;
   locationX: number;
   locationY: number;
-  annotations: AnnotationViewModel[];
+  annotations: any[];
 }
 
+@connect(
+  (state) => {
+    const {
+      visible,
+      locationX,
+      locationY,
+      annotations,
+    } = selectViewerState(state);
+
+    return {
+      visible,
+      locationX,
+      locationY,
+      annotations,
+    };
+  },
+)
 export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
 
   static defaultProps = {
     visible: true,
-    invertedX: false,
-    invertedY: false,
     locationX: 0,
     locationY: 0,
+    annotations: [],
   };
 
   constructor(props: IViewerProps) {
@@ -33,7 +47,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
   renderItems() {
     return this.props.annotations.map(annotation => (
       <ViewerItem
-        key={annotation.id}
+        key={annotation.annotationId}
         annotation={annotation}
       />
     ));
@@ -44,10 +58,9 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
       <Widget
         className={classNames('pp-ui', styles.self)}
         visible={this.props.visible}
-        invertedX={this.props.invertedX}
-        invertedY={this.props.invertedY}
         locationX={this.props.locationX}
         locationY={this.props.locationY}
+        calculateInverted={true}
       >
         <ul className={styles.annotationItems}>
           {this.renderItems()}

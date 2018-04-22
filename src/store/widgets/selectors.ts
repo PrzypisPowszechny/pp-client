@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { IStore } from 'store/reducer';
-import {AnnotationPriorities} from '../../components/consts';
+import {AnnotationPriorities} from 'components/consts';
 import {IWidgetState, WidgetReducer} from './reducers';
 
 function selectWidgetState({ location, visible }) {
@@ -28,6 +28,10 @@ function selectAnnotationForm(annotations, annotationId?) {
   };
 }
 
+function selectViewerAnnotations(annotations: any[], annotationIds: any[]) {
+  return annotationIds.map(id => annotations.find(annotation => annotation.annotationId === id));
+}
+
 export const selectEditorState = createSelector<IStore, any, any, any>(
   state => state.widgets.editor,
   state => state.annotations.data,
@@ -41,4 +45,13 @@ export const selectEditorState = createSelector<IStore, any, any, any>(
 export const selectMenuState = createSelector<IStore, any, any>(
   state => state.widgets.menu,
   selectWidgetState,
+);
+
+export const selectViewerState = createSelector<IStore, any, any, any>(
+  state => state.widgets.viewer,
+  state => state.annotations.data,
+  (viewer, annotations) => ({
+    ...selectWidgetState(viewer),
+    annotations: selectViewerAnnotations(annotations, viewer.annotationIds),
+  }),
 );

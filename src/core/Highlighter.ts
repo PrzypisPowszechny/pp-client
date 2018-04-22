@@ -189,7 +189,6 @@ export default class Highlighter {
                     })
                     .toArray()
                     .map(id => this.highlightRegistry[id.toString()].annotationData);
-
         handler(e, annotations);
       });
   }

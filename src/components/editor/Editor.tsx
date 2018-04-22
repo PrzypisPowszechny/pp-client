@@ -176,7 +176,7 @@ class Editor extends React.Component<
   save() {
     // TODO provide real query promise; for now just a placeholder (createAnnotation is to be removed)
     const fetchData = new Promise((resolve, reject) => {
-      this.props.createAnnotation(this.state, this.props.range);
+      this.props.createAnnotation(this.state as IEditorForm, this.props.range);
       resolve();
     });
 
