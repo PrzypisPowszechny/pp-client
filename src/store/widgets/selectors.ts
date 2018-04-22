@@ -34,6 +34,7 @@ export const selectEditorState = createSelector<IStore, any, any, any>(
   (editor, annotations) => ({
     ...selectWidgetState(editor),
     ...selectAnnotationForm(annotations, editor.annotationId),
+    range: editor.range,
   }),
 );
 

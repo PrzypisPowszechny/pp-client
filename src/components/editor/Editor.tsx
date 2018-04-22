@@ -13,6 +13,7 @@ import {IEditorState, IEditorProps, IEditorForm} from './interfaces';
 import { DraggableWidget } from 'components/widget';
 import { hideEditor } from 'store/widgets/actions';
 import {createAnnotation} from '../../store/annotations/actions';
+import {Range} from 'xpath-range';
 
 @connect(
   (state) => {
@@ -20,6 +21,7 @@ import {createAnnotation} from '../../store/annotations/actions';
       visible,
       locationX,
       locationY,
+      range,
       // form
       annotationId,
       priority,
@@ -32,6 +34,7 @@ import {createAnnotation} from '../../store/annotations/actions';
       visible,
       locationX,
       locationY,
+      range,
       // form
       annotationId,
       priority,
@@ -42,8 +45,11 @@ import {createAnnotation} from '../../store/annotations/actions';
   },
   dispatch => ({
     hideEditor: () => dispatch(hideEditor()),
-    createAnnotation: (form: IEditorForm) => {
-      dispatch(createAnnotation(form));
+    createAnnotation: (form: IEditorForm, range: Range.SerializedRange) => {
+      dispatch(createAnnotation({
+        ...form,
+        range,
+      }));
     },
   }),
 )
@@ -170,7 +176,7 @@ class Editor extends React.Component<
   save() {
     // TODO provide real query promise; for now just a placeholder (createAnnotation is to be removed)
     const fetchData = new Promise((resolve, reject) => {
-      this.props.createAnnotation(this.state);
+      this.props.createAnnotation(this.state, this.props.range);
       resolve();
     });
 

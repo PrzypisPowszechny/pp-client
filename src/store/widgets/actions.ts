@@ -1,12 +1,15 @@
+import {Range} from 'xpath-range';
+
 export const EDITOR_VISIBLE_CHANGE = 'EDITOR_VISIBLE_CHANGE';
 export const MENU_WIDGET_CHANGE = 'MENU_WIDGET_CHANGE';
 export const EDITOR_NEW_ANNOTATION = 'EDITOR_NEW_ANNOTATION';
 
-export const showEditorNewAnnotation = (x: number, y: number) => {
+export const showEditorNewAnnotation = (x: number, y: number, range: Range.SerializedRange) => {
   return {
     type: EDITOR_NEW_ANNOTATION,
     payload: {
       annotationId: null,
+      range,
       visible: true,
       location: {
         x,

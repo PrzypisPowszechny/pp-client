@@ -8,13 +8,15 @@ import Widget from 'components/widget';
 
 import styles from './Menu.scss';
 import {hideMenu, showEditorNewAnnotation} from 'store/widgets/actions';
+import {Range} from 'xpath-range';
 
 interface IMenuProps {
   visible: boolean;
   locationX: number;
   locationY: number;
+  range: Range.SerializedRange;
 
-  showEditor: (x: number, y: number) => void;
+  showEditor: (x: number, y: number, range: Range.SerializedRange) => void;
   hideMenu: () => void;
 }
 
@@ -30,10 +32,11 @@ interface IMenuProps {
     visible,
     locationX,
     locationY,
+    range: state.textSelector.range,
   };
 },
   dispatch => ({
-    showEditor: (x, y) => dispatch(showEditorNewAnnotation(x, y)),
+    showEditor: (x, y, range) => dispatch(showEditorNewAnnotation(x, y, range)),
     hideMenu: () => dispatch(hideMenu()),
   }),
 )
@@ -50,9 +53,14 @@ export default class Menu extends React.Component<Partial<IMenuProps>, {}> {
   }
 
   onClick = (e: any) => {
-    console.log('heeej');
+    const {
+      locationX,
+      locationY,
+      range,
+    } = this.props;
+
     this.props.hideMenu();
-    this.props.showEditor(this.props.locationX, this.props.locationY);
+    this.props.showEditor(locationX, locationY, range);
   }
 
   render() {

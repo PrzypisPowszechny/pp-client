@@ -1,4 +1,5 @@
 import {AnnotationPriorities} from '../consts';
+import {Range} from 'xpath-range';
 
 export interface IEditorForm {
   annotationId: number;
@@ -20,6 +21,8 @@ export interface IEditorProps extends IEditorForm {
    * after the component is rendered for the first time after prop change
    */
   editor: any;
+  range: Range.SerializedRange;
+
   createAnnotation: (IEditorForm) => void;
   hideEditor: () => void;
 }
