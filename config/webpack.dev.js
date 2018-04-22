@@ -7,7 +7,7 @@ const webpack = require('webpack');
 
 const localPath = (...args) => path.resolve(__dirname, ...args);
 
-module.exports = (env, argv) => merge(common(env, argv), {
+module.exports = (env, argv) => merge(common.config(env, argv), {
   devtool: 'inline-source-map',
   devServer: {
     contentBase: '/dist',

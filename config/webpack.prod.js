@@ -6,12 +6,13 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const localPath = (...args) => path.resolve(__dirname, ...args);
 
-module.exports = (env, argv) => merge(common(env, argv), {
+module.exports = (env, argv) => merge(common.config(env, argv), {
+  output: {
+    path: common.BUILD_DIR,
+    publicPath: './',
+    filename: '[name].bundle.js',
+  },
   plugins: [
-     new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      parallel: true // will use an optimal number of CPUs
-    }),
     new ForkTsCheckerWebpackPlugin({
       async: false,
       watch: localPath('src'),
