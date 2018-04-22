@@ -2,6 +2,7 @@ import {
   EDITOR_NEW_ANNOTATION,
   EDITOR_VISIBLE_CHANGE,
   MENU_WIDGET_CHANGE,
+  VIEWER_VISIBLE_CHANGE,
 } from './actions';
 
 export interface IWidgetState {
@@ -9,9 +10,14 @@ export interface IWidgetState {
   location: {x: number; y: number};
 }
 
+export interface IViewerState extends IWidgetState {
+  annotationIds: any[];
+}
+
 export interface WidgetReducer {
   editor: IWidgetState;
   menu: IWidgetState;
+  viewer: IViewerState;
 }
 
 const initialWidgetState = {
@@ -30,6 +36,10 @@ const initialState = {
   menu: {
     ...initialWidgetState,
   },
+  viewer: {
+    ...initialWidgetState,
+    annotationIds: [],
+  },
 };
 
 export default function widgets(state = initialState, action): WidgetReducer {
@@ -39,6 +49,8 @@ export default function widgets(state = initialState, action): WidgetReducer {
       return editorActionHandler(state, action.payload);
     case MENU_WIDGET_CHANGE:
       return menuActionHandler(state, action.payload);
+    case VIEWER_VISIBLE_CHANGE:
+      return viewerActionHandler(state, action.payload);
     default:
       return state;
   }
@@ -59,6 +71,17 @@ function menuActionHandler(state, payload) {
     ...state,
     menu: {
       ...state.menu,
+      ...payload,
+    },
+  };
+}
+
+// todo here: update only when the annotations have changed
+function viewerActionHandler(state, payload) {
+  return {
+    ...state,
+    viewer: {
+      ...state.viewer,
       ...payload,
     },
   };
