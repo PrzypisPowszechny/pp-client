@@ -5,6 +5,7 @@ import store from 'store';
 import { showMenu, textSelectedAction } from 'store/actions';
 
 import { Highlighter, TextSelector } from './index';
+import {hideMenu} from 'store/widgets/actions';
 
 let handlers;
 
@@ -23,7 +24,9 @@ export function deinitializeCoreHandlers() {
 }
 
 function textSelectorCallback(selection: Range.SerializedRange[], event) {
-  if (selection.length === 1) {
+  if (selection.length === 0) {
+    store.dispatch(hideMenu());
+  } else if (selection.length === 1) {
     store.dispatch(textSelectedAction(selection));
     store.dispatch(showMenu(mousePosition(event)));
   } else {

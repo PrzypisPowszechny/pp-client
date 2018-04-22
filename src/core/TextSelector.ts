@@ -130,10 +130,6 @@ export default class TextSelector {
     // Get the currently selected ranges.
     const selectedRanges = this.captureDocumentSelection();
 
-    if (selectedRanges.length === 0) {
-      return;
-    }
-
     // Don't show the adder if the selection was of a part of Annotator itself.
     for (const selectedRange of selectedRanges) {
       let container = selectedRange.commonAncestor;
