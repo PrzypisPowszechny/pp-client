@@ -11,6 +11,11 @@ function selectWidgetState({ location, visible }) {
   };
 }
 
+export const selectMenuState = createSelector<IStore, any, any>(
+  state => state.widgets.menu,
+  selectWidgetState,
+);
+
 function selectAnnotationForm(annotations, annotationId?) {
   let model;
   if (annotationId) {
@@ -28,10 +33,6 @@ function selectAnnotationForm(annotations, annotationId?) {
   };
 }
 
-function selectViewerAnnotations(annotations: any[], annotationIds: any[]) {
-  return annotationIds.map(id => annotations.find(annotation => annotation.annotationId === id));
-}
-
 export const selectEditorState = createSelector<IStore, any, any, any>(
   state => state.widgets.editor,
   state => state.annotations.data,
@@ -42,10 +43,9 @@ export const selectEditorState = createSelector<IStore, any, any, any>(
   }),
 );
 
-export const selectMenuState = createSelector<IStore, any, any>(
-  state => state.widgets.menu,
-  selectWidgetState,
-);
+function selectViewerAnnotations(annotations: any[], annotationIds: any[]) {
+  return annotationIds.map(id => annotations.find(annotation => annotation.annotationId === id));
+}
 
 export const selectViewerState = createSelector<IStore, any, any, any>(
   state => state.widgets.viewer,
