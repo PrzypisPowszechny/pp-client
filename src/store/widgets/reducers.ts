@@ -76,7 +76,8 @@ function menuActionHandler(state, payload) {
   };
 }
 
-// todo here: update only when the annotations have changed
+// todo here: update the location only when the annotations have also changed
+// (to prevent the window from changing the location once displayed for a
 function viewerActionHandler(state, payload) {
   return {
     ...state,

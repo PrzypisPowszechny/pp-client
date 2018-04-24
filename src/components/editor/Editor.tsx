@@ -1,19 +1,17 @@
 import React, {RefObject} from 'react';
 import {connect} from 'react-redux';
 import classNames from 'classnames';
-import {selectEditorState} from 'store/selectors';
-
-import {AnnotationPriorities, annotationPrioritiesLabels} from '../consts';
-import styles from './Editor.scss';
-import {DragTracker, IVec2} from '../../utils/move';
-import PriorityButton from './priority-button/PriorityButton';
+import {Range} from 'xpath-range';
 import {Modal, Popup} from 'semantic-ui-react';
-import Widget from '../widget/Widget';
+import {AnnotationPriorities, annotationPrioritiesLabels} from '../consts';
+import {DragTracker, IVec2} from 'utils/move';
+import PriorityButton from './priority-button/PriorityButton';
 import {IEditorState, IEditorProps, IEditorForm} from './interfaces';
 import { DraggableWidget } from 'components/widget';
-import { hideEditor } from 'store/widgets/actions';
-import {createAnnotation} from '../../store/annotations/actions';
-import {Range} from 'xpath-range';
+import { hideEditor, createAnnotation} from 'store/actions';
+import {selectEditorState} from 'store/selectors';
+
+import styles from './Editor.scss';
 
 @connect(
   (state) => {
