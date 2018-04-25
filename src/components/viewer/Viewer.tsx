@@ -16,6 +16,11 @@ interface IViewerProps {
   hideViewer: () => void;
 }
 
+/*
+ * TODO list
+ * - [roadmap 6.1.4] the appear/disappear logic of Viewer is just a simulation and should be refined or
+  * (preferably) straightforwardly adapted from old_src/ViewerWidget
+ */
 @connect(
   (state) => {
     const {

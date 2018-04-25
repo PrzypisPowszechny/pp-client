@@ -16,7 +16,6 @@ interface IViewerItemProps {
 interface IViewerItemState {
   initialView: boolean;
   useful: boolean;
-  objection: boolean;
   confirmDeleteModalOpen: boolean;
 }
 
@@ -27,11 +26,10 @@ export default class ViewerItem extends React.Component<IViewerItemProps, Partia
   constructor(props: IViewerItemProps) {
     super(props);
 
-    // TODO move useful/objection from this component's state to global state
+    // TODO move useful from this component's state to global state
     this.state = {
       initialView: true,
       useful: this.props.annotation.useful,
-      objection: this.props.annotation.objection,
       confirmDeleteModalOpen: false,
     };
     this.setControlDisappearTimeout();
@@ -72,12 +70,6 @@ export default class ViewerItem extends React.Component<IViewerItemProps, Partia
     this.setState({ useful: !this.state.useful });
   }
 
-  // NOTE: objection will be removed in this version, stays here only so as not to disrupt the current codebase
-  toggleObjection = (e) => {
-    // TODO
-    this.setState({ objection: !this.state.objection });
-  }
-
   headerPriorityClass() {
     const priorityToClass = {
       [AnnotationPriorities.NORMAL]: styles.priorityNormal,
@@ -97,22 +89,6 @@ export default class ViewerItem extends React.Component<IViewerItemProps, Partia
       >
         Przydatne
         <span className={styles.number}>{usefulCount + (useful ? 1 : 0)}</span>
-      </a>
-    );
-  }
-
-  // NOTE: objection will be removed in this version, stays here only so as not to disrupt the current codebase
-  objectionButton() {
-    const { objectionCount } = this.props.annotation;
-    const { objection } = this.state;
-
-    return (
-      <a
-        className={classNames('ui', 'label', 'medium', styles.objection, { [styles.selected]: objection })}
-        onClick={this.toggleObjection}
-      >
-        Sprzeciw
-        <span className={styles.number}>{objectionCount + (objection ? 1 : 0)}</span>
       </a>
     );
   }
@@ -206,14 +182,6 @@ export default class ViewerItem extends React.Component<IViewerItemProps, Partia
               inverted={true}
             >
               Daj znać, że uważasz przypis za pomocny.
-            </Popup>
-            <Popup
-              trigger={this.objectionButton()}
-              size="small"
-              className="pp-ui pp-popup-small-padding"
-              inverted={true}
-            >
-              Daj znać, jeśli uważasz, że przypis nie jest obiektywny.
             </Popup>
           </div>
         </div>
