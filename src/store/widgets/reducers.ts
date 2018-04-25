@@ -4,6 +4,7 @@ import {
   MENU_WIDGET_CHANGE,
   VIEWER_VISIBLE_CHANGE,
 } from './actions';
+import * as _ from "lodash";
 
 export interface IWidgetState {
   visible: boolean;
@@ -76,14 +77,24 @@ function menuActionHandler(state, payload) {
   };
 }
 
-// todo here: update the location only when the annotations have also changed
-// (to prevent the window from changing the location once displayed for a
 function viewerActionHandler(state, payload) {
+  // Update location only when the displayed annotations have changed, too.
+  // This prevents window from changing every time the user cursor slips off the widget
+  const prevIds = state.viewer.annotationIds;
+  const newIds = payload.annotationIds;
+  let locationOverride = {};
+  if (_.difference(prevIds, newIds).length === 0 && _.difference(newIds, prevIds).length === 0) {
+    locationOverride = {
+      location: state.viewer.location,
+    };
+  }
+
   return {
     ...state,
     viewer: {
       ...state.viewer,
       ...payload,
+      ...locationOverride,
     },
   };
 }
