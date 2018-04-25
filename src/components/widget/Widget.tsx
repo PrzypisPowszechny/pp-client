@@ -16,6 +16,7 @@ export interface IWidgetProps {
    */
   calculateInverted: boolean;
   className: string;
+  onMouseLeave: (Event) => void;
   children: React.ReactChild | React.ReactChild[];
 }
 
@@ -52,6 +53,7 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
     invertedY: false,
     calculateInverted: false,
     className: '',
+    onMouseLeave: null,
   };
 
   static getDerivedStateFromProps(nextProps: IWidgetProps) {
@@ -102,9 +104,15 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
     }
   }
 
-  componentDidMount() {
+  mountedOrUpdated() {
     // Set the CSS left/top properties
     this.setLocationStyle();
+
+    // Set callbacks
+    const inner = this.innerElement.current;
+    if (inner) {
+      inner.addEventListener('mouseleave', this.props.onMouseLeave);
+    }
 
     if (this.state.calculateInverted) {
       this.setState({
@@ -114,15 +122,12 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
     }
   }
 
+  componentDidMount() {
+    this.mountedOrUpdated();
+  }
+
   componentDidUpdate(prevProps, prevState) {
-    // Set the CSS left/top properties
-    this.setLocationStyle();
-    if (this.state.calculateInverted) {
-      this.setState({
-        ...isInverted(this.innerElement.current, window),
-        calculateInverted: false,
-      });
-    }
+    this.mountedOrUpdated();
   }
 
   render() {

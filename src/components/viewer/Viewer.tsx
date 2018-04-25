@@ -6,12 +6,14 @@ import Widget from 'components/widget';
 import ViewerItem from './ViewerItem';
 import styles from './Viewer.scss';
 import {selectViewerState} from 'store/widgets/selectors';
+import {hideViewer} from 'store/widgets/actions';
 
 interface IViewerProps {
   visible: boolean;
   locationX: number;
   locationY: number;
   annotations: any[];
+  hideViewer: () => void;
 }
 
 @connect(
@@ -30,6 +32,9 @@ interface IViewerProps {
       annotations,
     };
   },
+  dispatch => ({
+    hideViewer: () => dispatch(hideViewer()),
+  }),
 )
 export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
 
@@ -61,6 +66,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
         locationX={this.props.locationX}
         locationY={this.props.locationY}
         calculateInverted={true}
+        onMouseLeave={this.props.hideViewer}
       >
         <ul className={styles.annotationItems}>
           {this.renderItems()}
