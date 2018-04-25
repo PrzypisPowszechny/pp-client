@@ -102,7 +102,7 @@ export default class Highlighter {
   options;
   highlightRegistry: IHighlightRegistry;
 
-  constructor(element, options) {
+  constructor(element, options?) {
     this.element = element;
     this.options = {
       ...Highlighter.defaultOptions,
@@ -176,16 +176,20 @@ export default class Highlighter {
    */
   onHighlightEvent = (
     event: string,
-    handler: (e: any, annotationData: any) => void,
+    handler: (e: any, annotationData: any[]) => void,
   ) => {
     $(this.element)
       .on(event + '.' + this.options.nameSpace, '.' + this.options.highlightClass, (e) => {
-        const highlightElement = e.target;
-        if (highlightElement) {
-          const highlightId = $(highlightElement).attr(this.options.highlightIdAttr);
-          const data = this.highlightRegistry[highlightId.toString()];
-          handler(e, data.annotationData);
-        }
+
+        const annotations = $(e.target)
+                    .parents('.' + this.options.highlightClass)
+                    .addBack()
+                    .map((_, elem) => {
+                        return $(elem).attr(this.options.highlightIdAttr);
+                    })
+                    .toArray()
+                    .map(id => this.highlightRegistry[id.toString()].annotationData);
+        handler(e, annotations);
       });
   }
 

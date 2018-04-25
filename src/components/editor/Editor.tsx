@@ -1,78 +1,64 @@
 import React, {RefObject} from 'react';
 import {connect} from 'react-redux';
 import classNames from 'classnames';
+import {Range} from 'xpath-range';
+import {Modal, Popup} from 'semantic-ui-react';
+import {AnnotationPriorities, annotationPrioritiesLabels} from '../consts';
+import {DragTracker, IVec2} from 'utils/move';
+import PriorityButton from './priority-button/PriorityButton';
+import {IEditorState, IEditorProps, IEditorForm} from './interfaces';
+import { DraggableWidget } from 'components/widget';
+import { hideEditor, createAnnotation} from 'store/actions';
 import {selectEditorState} from 'store/selectors';
 
-import {AnnotationPriorities, annotationPrioritiesLabels} from '../consts';
 import styles from './Editor.scss';
-import PriorityButton from './priority-button/PriorityButton';
-import {Modal, Popup} from 'semantic-ui-react';
-import {DraggableWidget} from 'components/widget';
 
-interface IEditorProps {
-  visible: boolean;
-  locationX: number;
-  locationY: number;
-  form: IEditorForm;
-  editor: any;
-}
-
-export interface IEditorForm {
-  priority: AnnotationPriorities;
-  comment: string;
-  referenceLink: string;
-  referenceLinkTitle: string;
-}
-
-export interface IEditorState extends IEditorForm {
-  locationX: number;
-  locationY: number;
-  isDragged: boolean;
-  referenceLinkError: string;
-  referenceLinkTitleError: string;
-  noCommentModalOpen: boolean;
-}
-
-function annotationForm(annotation?): IEditorForm {
-  const model: any = annotation || {};
-  return {
-    priority: model.priority || AnnotationPriorities.NORMAL,
-    comment: model.comment || '',
-    referenceLink: model.referenceLink || '',
-    referenceLinkTitle: model.referenceLinkTitle || '',
-  };
-}
-
-@connect((state) => {
-  let form;
-  const annotationId = state.widgets.editor.annotationId;
-  if (annotationId) {
-    form = annotationForm();
-  } else {
-    form = annotationForm(state.annotations.find(x => x.id === annotationId));
-  }
-
-  const {
-    locationX,
-    locationY,
-    visible,
-  } = selectEditorState(state);
-
-  return {
-    editor: {
+@connect(
+  (state) => {
+    const {
+      visible,
       locationX,
       locationY,
+      range,
+      // form
+      annotationId,
+      priority,
+      comment,
+      referenceLink,
+      referenceLinkTitle,
+    } = selectEditorState(state);
+
+    return {
       visible,
+      locationX,
+      locationY,
+      range,
+      // form
+      annotationId,
+      priority,
+      comment,
+      referenceLink,
+      referenceLinkTitle,
+    };
+  },
+  dispatch => ({
+    hideEditor: () => dispatch(hideEditor()),
+    createAnnotation: (form: IEditorForm, range: Range.SerializedRange) => {
+      dispatch(createAnnotation({
+        ...form,
+        range,
+      }));
     },
-    form,
-  };
-})
-class Editor extends React.PureComponent<Partial<IEditorProps>,
-  /*
-   * NOTE:
-   * For a comprehensive note on invertedX and invertedY see Widget component
-   */
-  Partial<IEditorState>> {
+  }),
+)
+class Editor extends React.Component<
+  Partial<IEditorProps>,
+  Partial<IEditorState>
+  > {
+   /*
+    * NOTE:
+    * For a comprehensive note on invertedX and invertedY see Widget component
+    */
 
   static defaultProps = {
     visible: true,
@@ -88,9 +74,15 @@ class Editor extends React.PureComponent<Partial<IEditorProps>,
 
   static getDerivedStateFromProps(nextProps: IEditorProps) {
     return {
-      ...nextProps.form,
-      locationX: nextProps.editor.locationX,
-      locationY: nextProps.editor.locationY,
+      annotationId: nextProps.annotationId,
+      priority: nextProps.priority,
+      comment: nextProps.comment,
+      referenceLink: nextProps.referenceLink,
+      referenceLinkTitle: nextProps.referenceLinkTitle,
+
+      moved: false,
+      locationX: nextProps.locationX,
+      locationY: nextProps.locationY,
       referenceLinkError: '',
       referenceLinkTitleError: '',
       noCommentModalOpen: false,
@@ -106,7 +98,16 @@ class Editor extends React.PureComponent<Partial<IEditorProps>,
   }
 
   isNewAnnotation() {
-    return this.props.editor.annotationId !== null;
+    return this.props.annotationId !== null;
+  }
+
+  onDrag = (delta: IVec2) => {
+    this.setState({
+      locationX: this.state.locationX + delta.x,
+      locationY: this.state.locationY + delta.y,
+      moved: true,
+    });
+    return true;
   }
 
   setPriority = (priority: AnnotationPriorities) => {
@@ -151,23 +152,39 @@ class Editor extends React.PureComponent<Partial<IEditorProps>,
     return Editor.priorityToClass[this.state.priority];
   }
 
-  onSave = (event: any) => {
+  onSaveClick = (event: any) => {
     // copied from old_src; TODO review
     if (this.validateForm()) { // if form values are correct
       if (!this.state.comment) { // if comment field is empty, display the modal
         this.setState({noCommentModalOpen: true});
         return;
       }
-      this.executeSave(event);
+      this.save();
     }
   }
 
-  onCancel = (event: any) => {
-    // TODO
+  onModalSaveClick = (event: any) => {
+    this.save();
   }
 
-  executeSave = (event: any) => {
-    // TODO
+  onCancelClick = (event: any) => {
+    this.props.hideEditor();
+  }
+
+  save() {
+    // TODO provide real query promise; for now just a placeholder (createAnnotation is to be removed)
+    const fetchData = new Promise((resolve, reject) => {
+      this.props.createAnnotation(this.state as IEditorForm, this.props.range);
+      resolve();
+    });
+
+    fetchData
+      .then(() => {
+        this.props.hideEditor();
+      })
+      .catch(() => {
+        // TODO when failed
+      });
   }
 
   // A modal displayed when user tries to save the form with comment field empty
@@ -191,7 +208,7 @@ class Editor extends React.PureComponent<Partial<IEditorProps>,
           </button>
           <button
             className="ui button"
-            onClick={this.executeSave}
+            onClick={this.onModalSaveClick}
           >
             Zapisz
           </button>
@@ -204,6 +221,7 @@ class Editor extends React.PureComponent<Partial<IEditorProps>,
     const {
       locationX,
       locationY,
+      moved,
       priority,
       comment,
       referenceLink,
@@ -214,7 +232,7 @@ class Editor extends React.PureComponent<Partial<IEditorProps>,
 
     const {
       visible,
-    } = this.props.editor;
+    } = this.props;
 
     return (
       <DraggableWidget
@@ -223,6 +241,8 @@ class Editor extends React.PureComponent<Partial<IEditorProps>,
         locationX={locationX}
         locationY={locationY}
         mover={this.moverElement}
+        onDrag={this.onDrag}
+        calculateInverted={!moved}
       >
         <div className={styles.headBar}>
           <label className={styles.priorityHeader}> Co dodajesz? </label>
@@ -255,7 +275,7 @@ class Editor extends React.PureComponent<Partial<IEditorProps>,
         </div>
         <div
           className={styles.close}
-          onClick={this.onCancel}
+          onClick={this.onCancelClick}
         >
           <i className="remove icon" />
         </div>
@@ -317,10 +337,10 @@ class Editor extends React.PureComponent<Partial<IEditorProps>,
             ref={this.moverElement}
           >
             <div className={styles.controls}>
-              <button className={styles.cancel} onClick={this.onCancel}>
+              <button className={styles.cancel} onClick={this.onCancelClick}>
                 {' '}Anuluj{' '}
               </button>
-              <button className={classNames(styles.save, this.saveButtonClass())} onClick={this.onSave}>
+              <button className={classNames(styles.save, this.saveButtonClass())} onClick={this.onSaveClick}>
                 {' '}Zapisz{' '}
               </button>
               {this.renderNoCommentModal()}

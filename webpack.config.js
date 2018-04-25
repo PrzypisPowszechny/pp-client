@@ -161,4 +161,7 @@ const config = (env, argv) => ({
   ],
 });
 
-module.exports = config;
+module.exports = {
+  config: config,
+  BUILD_DIR: BUILD_DIR,
+};

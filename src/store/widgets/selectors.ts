@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 import { IStore } from 'store/reducer';
+import {AnnotationPriorities} from 'components/consts';
+import {IWidgetState, WidgetReducer} from './reducers';
 
 function selectWidgetState({ location, visible }) {
   return {
@@ -14,7 +16,42 @@ export const selectMenuState = createSelector<IStore, any, any>(
   selectWidgetState,
 );
 
-export const selectEditorState = createSelector<IStore, any, any>(
+function selectAnnotationForm(annotations, annotationId?) {
+  let model;
+  if (annotationId) {
+    model = annotations.find(x => x.id === annotationId);
+  } else {
+    model = {};
+  }
+
+  return {
+    annotationId: model.id,
+    priority: model.priority || AnnotationPriorities.NORMAL,
+    comment: model.comment || '',
+    referenceLink: model.referenceLink || '',
+    referenceLinkTitle: model.referenceLinkTitle || '',
+  };
+}
+
+export const selectEditorState = createSelector<IStore, any, any, any>(
   state => state.widgets.editor,
-  selectWidgetState,
+  state => state.annotations.data,
+  (editor, annotations) => ({
+    ...selectWidgetState(editor),
+    ...selectAnnotationForm(annotations, editor.annotationId),
+    range: editor.range,
+  }),
+);
+
+function selectViewerAnnotations(annotations: any[], annotationIds: any[]) {
+  return annotationIds.map(id => annotations.find(annotation => annotation.annotationId === id));
+}
+
+export const selectViewerState = createSelector<IStore, any, any, any>(
+  state => state.widgets.viewer,
+  state => state.annotations.data,
+  (viewer, annotations) => ({
+    ...selectWidgetState(viewer),
+    annotations: selectViewerAnnotations(annotations, viewer.annotationIds),
+  }),
 );

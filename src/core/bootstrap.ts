@@ -2,9 +2,11 @@ import { Range } from 'xpath-range';
 
 import { mousePosition } from 'common/dom';
 import store from 'store';
-import { showMenu, textSelectedAction } from 'store/actions';
+import { showMenu, makeSelection } from 'store/actions';
 
 import { Highlighter, TextSelector } from './index';
+import {hideMenu} from 'store/widgets/actions';
+import {noSelection} from 'store/textSelector/actions';
 
 let handlers;
 
@@ -23,9 +25,12 @@ export function deinitializeCoreHandlers() {
 }
 
 function textSelectorCallback(selection: Range.SerializedRange[], event) {
-  if (selection.length === 1) {
-    store.dispatch(textSelectedAction(selection));
-    store.dispatch(showMenu(true, mousePosition(event)));
+  if (selection.length === 0) {
+    store.dispatch(hideMenu());
+    store.dispatch(noSelection());
+  } else if (selection.length === 1) {
+    store.dispatch(makeSelection(selection[0]));
+    store.dispatch(showMenu(mousePosition(event)));
   } else {
     console.warn('PP: more than one selected range is not supported');
   }
