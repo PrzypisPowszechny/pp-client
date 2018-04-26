@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
 import moment from 'moment';
 import { Popup, Modal, Button } from 'semantic-ui-react';
 
@@ -7,18 +8,35 @@ import AnnotationViewModel from 'models/AnnotationViewModel';
 
 import { AnnotationPriorities, annotationPrioritiesLabels } from '../consts';
 import styles from './Viewer.scss';
+import {hideViewer} from 'store/widgets/actions';
+import {selectViewerState} from 'store/widgets/selectors';
 
 interface IViewerItemProps {
   key: number;
-  annotation: AnnotationViewModel;
+
+  doesBelongToUser: boolean;
+  priority: AnnotationPriorities;
+  useful: boolean;
+  usefulCount: number;
+  comment: string;
+  referenceLink: string;
+  referenceLinkTitle: string;
+  createDate: string;
+
+  hideViewer: () => void;
 }
 
 interface IViewerItemState {
-  initialView: boolean;
-  useful: boolean;
+  initialView: boolean; // used to determine whether edit/delete buttons should be visible
   confirmDeleteModalOpen: boolean;
 }
 
+@connect(
+  null,
+  dispatch => ({
+    hideViewer: () => dispatch(hideViewer()),
+  }),
+)
 export default class ViewerItem extends React.Component<IViewerItemProps, Partial<IViewerItemState>> {
 
   static editControlDisappearTimeout = 500;
@@ -26,10 +44,8 @@ export default class ViewerItem extends React.Component<IViewerItemProps, Partia
   constructor(props: IViewerItemProps) {
     super(props);
 
-    // TODO move useful from this component's state to global state
     this.state = {
       initialView: true,
-      useful: this.props.annotation.useful,
       confirmDeleteModalOpen: false,
     };
     this.setControlDisappearTimeout();
@@ -49,9 +65,9 @@ export default class ViewerItem extends React.Component<IViewerItemProps, Partia
   }
 
   handleEdit = (e) => {
-    // TODO
-    console.log('edit');
-    console.log(this.props.annotation);
+    this.props.hideViewer();
+    // [roadmap 6.4.1.3] TODO on "edit" open the Editor for edit.
+    console.log('Editor should open now with the form filled in; not implemented yet!');
   }
 
   setDeleteModalOpen = e => this.setState({ confirmDeleteModalOpen: true });
@@ -59,15 +75,13 @@ export default class ViewerItem extends React.Component<IViewerItemProps, Partia
   setDeleteModalClosed = e => this.setState({ confirmDeleteModalOpen: false });
 
   handleDelete = (e) => {
-    this.setState({ confirmDeleteModalOpen: false });
-    // TODO
-    console.log('delete');
-    console.log(this.props.annotation);
+    this.props.hideViewer();
+    // [roadmap 5.3] TODO connect handleDelete to redux-json-api call
+    console.log('Annotations should be deleted now; not implemented yet!');
   }
 
   toggleUseful = (e) => {
-    // TODO
-    this.setState({ useful: !this.state.useful });
+    // [roadmap 5.3] TODO connect toggleUseful to redux-json-api call
   }
 
   headerPriorityClass() {
@@ -76,19 +90,17 @@ export default class ViewerItem extends React.Component<IViewerItemProps, Partia
       [AnnotationPriorities.WARNING]: styles.priorityWarning,
       [AnnotationPriorities.ALERT]: styles.priorityAlert,
     };
-    return priorityToClass[this.props.annotation.priority];
+    return priorityToClass[this.props.priority];
   }
 
   usefulButton() {
-    const { usefulCount } = this.props.annotation;
-    const { useful } = this.state;
     return (
       <a
-        className={classNames('ui', 'label', 'medium', styles.useful, { [styles.selected]: useful })}
+        className={classNames('ui', 'label', 'medium', styles.useful, { [styles.selected]: this.props.useful })}
         onClick={this.toggleUseful}
       >
         Przydatne
-        <span className={styles.number}>{usefulCount + (useful ? 1 : 0)}</span>
+        <span className={styles.number}>{this.props.usefulCount}</span>
       </a>
     );
   }
@@ -116,7 +128,7 @@ export default class ViewerItem extends React.Component<IViewerItemProps, Partia
   }
 
   renderControls() {
-    if (this.props.annotation.doesBelongToUser) {
+    if (this.props.doesBelongToUser) {
       return (
         <div className={classNames(styles.controls, { [styles.visible]: this.state.initialView })}>
           {this.renderDeleteModal()}
@@ -148,7 +160,7 @@ export default class ViewerItem extends React.Component<IViewerItemProps, Partia
       referenceLink,
       referenceLinkTitle,
       createDate,
-    } = this.props.annotation;
+    } = this.props;
 
     // Set date language
     moment.locale('pl');
