@@ -31,10 +31,9 @@ interface IViewerItemState {
 }
 
 @connect(
-  null,
-  dispatch => ({
-    hideViewer: () => dispatch(hideViewer()),
-  }),
+  null, {
+    hideViewer,
+  },
 )
 export default class ViewerItem extends React.Component<Partial<IViewerItemProps>, Partial<IViewerItemState>> {
 
