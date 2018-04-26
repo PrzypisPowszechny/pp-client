@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { Popup, Modal, Button } from 'semantic-ui-react';
 
-import AnnotationViewModel from 'models/AnnotationViewModel';
 
 import { AnnotationPriorities, annotationPrioritiesLabels } from '../consts';
 import styles from './Viewer.scss';

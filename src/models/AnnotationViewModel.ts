@@ -1,8 +1,8 @@
 import { AnnotationPriorities } from 'components/consts';
 import { IAnnotationAPIModel } from 'old_src/pp-annotator/annotation/IAnnotationAPIModel';
 
-// ViewModel ported from old_src
-// TODO probably replace it with an api data model
+// ViewModel copied from old_src
+// TODO replace it with an api data model
 export default class AnnotationViewModel {
 
   id: number;
