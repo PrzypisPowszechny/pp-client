@@ -153,7 +153,6 @@ class Editor extends React.Component<
   }
 
   onSaveClick = (event: any) => {
-    // copied from old_src; TODO review
     if (this.validateForm()) { // if form values are correct
       if (!this.state.comment) { // if comment field is empty, display the modal
         this.setState({noCommentModalOpen: true});
@@ -172,7 +171,8 @@ class Editor extends React.Component<
   }
 
   save() {
-    // TODO provide real query promise; for now just a placeholder (createAnnotation is to be removed)
+    // TODO [roadmap 5.4] connect save to redux-json-api call
+    // for now just a placeholder fetch data and a placeholder dispatch (createAnnotation is to be removed)
     const fetchData = new Promise((resolve, reject) => {
       this.props.createAnnotation(this.state as IEditorForm, this.props.range);
       resolve();
@@ -240,9 +240,10 @@ class Editor extends React.Component<
         visible={visible}
         locationX={locationX}
         locationY={locationY}
+        calculateInverted={!moved}
+        widgetTriangle={true}
         mover={this.moverElement}
         onDrag={this.onDrag}
-        calculateInverted={!moved}
       >
         <div className={styles.headBar}>
           <label className={styles.priorityHeader}> Co dodajesz? </label>

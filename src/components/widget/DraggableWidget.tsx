@@ -65,9 +65,7 @@ export default class DraggableWidget extends React.PureComponent<
     return (
       <Widget
         {...this.props}
-      >
-        {this.props.children}
-      </Widget>
+      />
     );
   }
 }

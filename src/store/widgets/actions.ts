@@ -20,6 +20,8 @@ export const showEditorNewAnnotation = (x: number, y: number, range: Range.Seria
   };
 };
 
+// TODO sth like showEditorAnnotation for existing annotation edit
+
 export const hideEditor = () => {
   return {
     type: EDITOR_VISIBLE_CHANGE,

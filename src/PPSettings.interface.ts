@@ -1,4 +1,3 @@
 export default interface IPPSettings {
-    MOCK_VIEWER: boolean;
-    READ_ANNOTATIONS_FROM_FILE: boolean;
+  // for now empty, but used before and used in the future :)
 }

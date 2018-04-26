@@ -7,12 +7,19 @@ import { PPHighlightClass } from 'consts';
 
 const TEXTSELECTOR_NS = 'annotator-textselector';
 
+
+/**
+ * TextSelector monitors a document (or a specific element) for text selections
+ * and can notify another object of a selection event
+ *
+ * It is PP's adaptation of annotator's TextSelectors
+ */
 /*
  * IMPORTANT NOTE on SELECTION RANGES
  * We leave annotator's TextSelector more or less as it is;
  * It can handle all kinds of selection (also multi-range selection). Although our application further assumes that
  * no more than one range can be selected for an annotation, there is no reason to stop supporting it at such an early
- * stage. If we ever stumble across multi-range selections it will be clear based on  TextSelectors output
+ * stage. If we ever stumble across multi-range selections it will be clear based on TextSelectors output
  * (rather than exceptions).
  */
 
@@ -31,10 +38,7 @@ function isAnnotator(element) {
 
 export type SelectionCallback = (selection: Range.SerializedRange[], event: any) => void;
 
-/**
- * TextSelector monitors a document (or a specific element) for text selections
- * and can notify another object of a selection event
- */
+
 export default class TextSelector {
 
   document;

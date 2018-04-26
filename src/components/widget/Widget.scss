@@ -21,11 +21,11 @@
     font-weight: bold;
 }
 
-.inner::after {
+.inner.widget-triangle::after {
     /* The downward triangle below widget. */
 
     //KG todo replace the annotator's triangle with our own
-    //background-image: url(~annotator/img/annotator-glyph-sprite.png?embed);
+    background-image: url(../../../node_modules/annotator/img/annotator-glyph-sprite.png?embed);
 
     background-repeat: no-repeat;
 

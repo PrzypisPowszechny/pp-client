@@ -74,11 +74,8 @@ interface IHighlightDrawArgs {
  * Highlighter provides a simple way to draw highlighted <span> tags over
  * annotated ranges within a document.
  *
- * element - The root Element on which to dereference annotation ranges and
- *         draw highlights.
- * options - An options Object containing configuration options for the plugin.
- *         See `Highlighter.options` for available options.
- *
+ * It is PP's adaption of annotator's Highlighter
+ * todo: replace jquery with pure js
  */
 export default class Highlighter {
 
@@ -174,6 +171,7 @@ export default class Highlighter {
    *
    * event - HTML event to subscribe to such as mouseover, mouseleave, etc...
    */
+  // todo (nice to have): rewrite it to pure js
   onHighlightEvent = (
     event: string,
     handler: (e: any, annotationData: any[]) => void,
@@ -224,6 +222,7 @@ export default class Highlighter {
     return this.draw(id, range, annotationData);
   }
 
+  // todo (nice to have): rewrite it to pure js
   destroy = () => {
     $(this.element)
       .find('.' + this.options.highlightClass)

@@ -35,10 +35,10 @@ interface IMenuProps {
     range: state.textSelector.range,
   };
 },
-  dispatch => ({
-    showEditor: (x, y, range) => dispatch(showEditorNewAnnotation(x, y, range)),
-    hideMenu: () => dispatch(hideMenu()),
-  }),
+  {
+    showEditor: showEditorNewAnnotation,
+    hideMenu,
+  },
 )
 export default class Menu extends React.Component<Partial<IMenuProps>, {}> {
 
