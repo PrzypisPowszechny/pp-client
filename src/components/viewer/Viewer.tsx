@@ -7,7 +7,7 @@ import ViewerItem from './ViewerItem';
 import styles from './Viewer.scss';
 import {selectViewerState} from 'store/widgets/selectors';
 import {hideViewer} from 'store/widgets/actions';
-import {AnnotationPriorities} from "../consts";
+import {AnnotationPriorities} from '../consts';
 
 interface IViewerProps {
   visible: boolean;
@@ -67,7 +67,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
         comment="TODO przekazać prawdziwe propsy"
         referenceLink="falszywy link"
         referenceLinkTitle="Fałszywy link"
-        createDate={Date()}
+        createDate={new Date()}
       />
     ));
   }
@@ -80,6 +80,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
         locationX={this.props.locationX}
         locationY={this.props.locationY}
         calculateInverted={true}
+        widgetTriangle={true}
         onMouseLeave={this.props.hideViewer}
       >
         <ul className={styles.annotationItems}>

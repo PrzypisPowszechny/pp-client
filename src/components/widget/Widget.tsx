@@ -15,6 +15,8 @@ export interface IWidgetProps {
    * after the component is rendered for the first time after prop change
    */
   calculateInverted: boolean;
+  widgetTriangle: boolean;
+
   className: string;
   onMouseLeave: (Event) => void;
   children: React.ReactChild | React.ReactChild[];
@@ -54,6 +56,7 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
     calculateInverted: false,
     className: '',
     onMouseLeave: null,
+    widgetTriangle: false,
   };
 
   static getDerivedStateFromProps(nextProps: IWidgetProps) {
@@ -89,6 +92,7 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
       styles.inner,
       this.props.className,
       {
+        [styles.widgetTriangle]: this.props.widgetTriangle,
         [styles.invertX]: this.state.invertedX,
         [styles.invertY]: this.state.invertedY,
         [styles.calculateInverted]: this.state.calculateInverted,

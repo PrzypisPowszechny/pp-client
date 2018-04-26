@@ -240,9 +240,10 @@ class Editor extends React.Component<
         visible={visible}
         locationX={locationX}
         locationY={locationY}
+        calculateInverted={!moved}
+        widgetTriangle={true}
         mover={this.moverElement}
         onDrag={this.onDrag}
-        calculateInverted={!moved}
       >
         <div className={styles.headBar}>
           <label className={styles.priorityHeader}> Co dodajesz? </label>
