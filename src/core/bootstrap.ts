@@ -26,8 +26,8 @@ export function deinitializeCoreHandlers() {
 
 function textSelectorCallback(selection: Range.SerializedRange[], event) {
   if (selection.length === 0) {
-    store.dispatch(hideMenu());
     store.dispatch(noSelection());
+    store.dispatch(hideMenu());
   } else if (selection.length === 1) {
     store.dispatch(makeSelection(selection[0]));
     store.dispatch(showMenu(mousePosition(event)));

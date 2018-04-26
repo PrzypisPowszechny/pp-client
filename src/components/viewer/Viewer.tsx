@@ -7,6 +7,7 @@ import ViewerItem from './ViewerItem';
 import styles from './Viewer.scss';
 import {selectViewerState} from 'store/widgets/selectors';
 import {hideViewer} from 'store/widgets/actions';
+import {AnnotationPriorities} from "../consts";
 
 interface IViewerProps {
   visible: boolean;
@@ -55,10 +56,18 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
   }
 
   renderItems() {
+    // TODO FAKE DATA (pass real props
     return this.props.annotations.map(annotation => (
       <ViewerItem
-        key={annotation.annotationId}
-        annotation={annotation}
+        key={1} // just pass annotation id
+        doesBelongToUser={true}
+        priority={AnnotationPriorities.ALERT}
+        useful={true}
+        usefulCount={3}
+        comment="TODO przekazać prawdziwe propsy"
+        referenceLink="falszywy link"
+        referenceLinkTitle="Fałszywy link"
+        createDate={Date()}
       />
     ));
   }

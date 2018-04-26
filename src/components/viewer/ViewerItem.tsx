@@ -21,7 +21,7 @@ interface IViewerItemProps {
   comment: string;
   referenceLink: string;
   referenceLinkTitle: string;
-  createDate: string;
+  createDate: any;
 
   hideViewer: () => void;
 }
@@ -37,7 +37,7 @@ interface IViewerItemState {
     hideViewer: () => dispatch(hideViewer()),
   }),
 )
-export default class ViewerItem extends React.Component<IViewerItemProps, Partial<IViewerItemState>> {
+export default class ViewerItem extends React.Component<Partial<IViewerItemProps>, Partial<IViewerItemState>> {
 
   static editControlDisappearTimeout = 500;
 
