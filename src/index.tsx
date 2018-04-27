@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { setAxiosConfig } from 'redux-json-api';
 
 import store from 'store';
 
@@ -22,6 +23,10 @@ function injectApp() {
   const documentContainer = document.createElement('div');
   documentContainer.id = 'pp-document-container';
   window.document.body.appendChild(documentContainer);
+
+  store.dispatch(setAxiosConfig({
+    baseURL: 'http://localhost:8000/api',
+  }));
 
   ReactDOM.render(
     <Provider store={store}>

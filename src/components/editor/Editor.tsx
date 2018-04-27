@@ -1,5 +1,6 @@
 import React, {RefObject} from 'react';
 import {connect} from 'react-redux';
+import { createResource } from 'redux-json-api'
 import classNames from 'classnames';
 import {Range} from 'xpath-range';
 import {Modal, Popup} from 'semantic-ui-react';
@@ -43,12 +44,11 @@ import styles from './Editor.scss';
   },
   dispatch => ({
     hideEditor: () => dispatch(hideEditor()),
-    createAnnotation: (form: IEditorForm, range: Range.SerializedRange) => {
-      dispatch(createAnnotation({
-        ...form,
-        range,
-      }));
-    },
+    createAnnotation: (form: IEditorForm, range: Range.SerializedRange) =>
+      dispatch(
+        createAnnotation({...form, range }),
+      ),
+    createResource: (resourceData: Object) => dispatch(createResource(resourceData)),
   }),
 )
 class Editor extends React.Component<
@@ -173,17 +173,38 @@ class Editor extends React.Component<
   save() {
     // TODO [roadmap 5.4] connect save to redux-json-api call
     // for now just a placeholder fetch data and a placeholder dispatch (createAnnotation is to be removed)
-    const fetchData = new Promise((resolve, reject) => {
-      this.props.createAnnotation(this.state as IEditorForm, this.props.range);
-      resolve();
-    });
+    // const fetchData = new Promise((resolve, reject) => {
+    //   this.props.createAnnotation(this.state as IEditorForm, this.props.range);
+    //   resolve();
+    // });
+    //
+    // fetchData
+    //   .then(() => {
+    //     this.props.hideEditor();
+    //   })
+    //   .catch(() => {
+    //     // TODO when failed
+    //   });
 
-    fetchData
-      .then(() => {
+    const resourceData = {
+      type: 'annotations',
+      attributes: {
+        url: window.location.origin + window.location.pathname,
+        ranges: 'string',
+        quote: 'string',
+        priority: 'NORMAL',
+        comment: this.state.comment,
+        annotation_link: this.state.referenceLink,
+        annotation_link_title: this.state.referenceLinkTitle,
+      }
+    };
+
+    this.props.createResource(resourceData).then(() => {
+        console.log('done!');
         this.props.hideEditor();
       })
-      .catch(() => {
-        // TODO when failed
+      .catch((errors) => {
+        console.log(errors);
       });
   }
 

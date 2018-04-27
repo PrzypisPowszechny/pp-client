@@ -16,6 +16,7 @@ export interface IEditorProps extends IEditorForm {
   range: Range.SerializedRange;
 
   createAnnotation: (form: IEditorForm, range: Range.SerializedRange) => void;
+  createResource: (resourceData: Object) => Promise<Object>;
   hideEditor: () => void;
 }
 
