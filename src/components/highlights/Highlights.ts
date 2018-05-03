@@ -11,7 +11,7 @@ interface IHighlightsProps {
 
 @connect(
   state => ({
-    annotations: state.annotations.data,
+      annotations: state.api.annotations ? state.api.annotations.data : [],
   }),
   dispatch => ({
     showViewer: (x, y, annotationId) => dispatch(showViewer(x, y, annotationId)),
@@ -39,9 +39,9 @@ export default class Highlights extends React.Component<Partial<IHighlightsProps
   drawAll() {
     // For each annotation, it is cleared and drawn again
     this.highlighter.drawAll(this.props.annotations.map(annotation => ({
-      id: annotation.annotationId,
-      range: annotation.range,
-      annotationData: annotation,
+      id: annotation.annotationId || annotation.id,
+      range: annotation.attributes.range,
+      annotationData: annotation.attributes,
     })));
   }
 

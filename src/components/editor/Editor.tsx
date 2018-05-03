@@ -174,7 +174,7 @@ class Editor extends React.Component<
     // TODO [roadmap 5.4] connect save to redux-json-api call
     // for now just a placeholder fetch data and a placeholder dispatch (createAnnotation is to be removed)
     // const fetchData = new Promise((resolve, reject) => {
-    //   this.props.createAnnotation(this.state as IEditorForm, this.props.range);
+    this.props.createAnnotation(this.state as IEditorForm, this.props.range);
     //   resolve();
     // });
     //
@@ -185,18 +185,16 @@ class Editor extends React.Component<
     //   .catch(() => {
     //     // TODO when failed
     //   });
-
     const resourceData = {
       type: 'annotations',
       attributes: {
         url: window.location.origin + window.location.pathname,
-        ranges: 'string',
-        quote: 'string',
-        priority: 'NORMAL',
+        range: this.props.range,
+        priority: this.state.priority,
         comment: this.state.comment,
-        annotation_link: this.state.referenceLink,
-        annotation_link_title: this.state.referenceLinkTitle,
-      }
+        annotationLink: this.state.referenceLink,
+        annotationLinkTitle: this.state.referenceLinkTitle,
+      },
     };
 
     this.props.createResource(resourceData).then(() => {

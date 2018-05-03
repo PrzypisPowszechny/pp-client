@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { setAxiosConfig } from 'redux-json-api';
+import { setAxiosConfig, readEndpoint } from 'redux-json-api';
 
 import store from 'store';
 
@@ -27,6 +27,7 @@ function injectApp() {
   store.dispatch(setAxiosConfig({
     baseURL: 'http://localhost:8000/api',
   }));
+  store.dispatch(readEndpoint('/annotations?url=http://localhost:8080/'));
 
   ReactDOM.render(
     <Provider store={store}>
