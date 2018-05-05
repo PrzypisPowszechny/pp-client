@@ -13,6 +13,7 @@ import { hideEditor, createAnnotation} from 'store/actions';
 import {selectEditorState} from 'store/selectors';
 
 import styles from './Editor.scss';
+import {getAnnotationUrl} from '../../utils/url';
 
 @connect(
   (state) => {
@@ -48,6 +49,7 @@ import styles from './Editor.scss';
       dispatch(
         createAnnotation({...form, range }),
       ),
+    // TODO: add typing
     createResource: (resourceData: Object) => dispatch(createResource(resourceData)),
   }),
 )
@@ -171,24 +173,13 @@ class Editor extends React.Component<
   }
 
   save() {
-    // TODO [roadmap 5.4] connect save to redux-json-api call
-    // for now just a placeholder fetch data and a placeholder dispatch (createAnnotation is to be removed)
-    // const fetchData = new Promise((resolve, reject) => {
+    // TODO  [roadmap 5.6] remove dummy annotations when connecting with redux-json-api finished
     this.props.createAnnotation(this.state as IEditorForm, this.props.range);
-    //   resolve();
-    // });
-    //
-    // fetchData
-    //   .then(() => {
-    //     this.props.hideEditor();
-    //   })
-    //   .catch(() => {
-    //     // TODO when failed
-    //   });
+
     const resourceData = {
       type: 'annotations',
       attributes: {
-        url: window.location.origin + window.location.pathname,
+        url: getAnnotationUrl(),
         range: this.props.range,
         priority: this.state.priority,
         comment: this.state.comment,
@@ -198,7 +189,6 @@ class Editor extends React.Component<
     };
 
     this.props.createResource(resourceData).then(() => {
-        console.log('done!');
         this.props.hideEditor();
       })
       .catch((errors) => {

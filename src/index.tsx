@@ -16,6 +16,7 @@ import './css/common/pp-semantic-ui-overrides.scss';
 
 import './css/selection.scss';
 import {showEditorNewAnnotation} from 'store/widgets/actions';
+import {getAnnotationUrl} from './utils/url'
 
 console.log('Przypis script working!');
 
@@ -24,10 +25,14 @@ function injectApp() {
   documentContainer.id = 'pp-document-container';
   window.document.body.appendChild(documentContainer);
 
+  // TODO: 1. wrap those dispatches into dedicated function to make this code more separate and descriptive
+  // TODO: 2. this url is hardcoded now, but should be imported from config
   store.dispatch(setAxiosConfig({
     baseURL: 'http://localhost:8000/api',
   }));
-  store.dispatch(readEndpoint('/annotations?url=http://localhost:8080/'));
+
+  // This our root request that need to have part of the url (path) hardcoded
+  store.dispatch(readEndpoint('/annotations?url=' + getAnnotationUrl()));
 
   ReactDOM.render(
     <Provider store={store}>

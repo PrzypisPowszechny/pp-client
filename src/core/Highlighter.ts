@@ -147,8 +147,6 @@ export default class Highlighter {
    *  Returns an Array of drawn highlight elements.
    */
   draw = (id: number | string, range: Range.SerializedRange, annotationData: any) => {
-    console.log('FFFFFFFFFf');
-    console.log(id);
     const normedRange = reanchorRange(range, this.element);
     const highlightElements = highlightRange(normedRange, this.options.highlightClass);
     const normedId = Highlighter.coerceId(id);
