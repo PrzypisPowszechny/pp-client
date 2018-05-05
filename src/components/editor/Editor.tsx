@@ -1,5 +1,6 @@
 import React, {RefObject} from 'react';
 import {connect} from 'react-redux';
+import { createResource } from 'redux-json-api'
 import classNames from 'classnames';
 import {Range} from 'xpath-range';
 import {Modal, Popup} from 'semantic-ui-react';
@@ -12,6 +13,7 @@ import { hideEditor, createAnnotation} from 'store/actions';
 import {selectEditorState} from 'store/selectors';
 
 import styles from './Editor.scss';
+import {getAnnotationUrl} from '../../utils/url';
 
 @connect(
   (state) => {
@@ -43,12 +45,12 @@ import styles from './Editor.scss';
   },
   dispatch => ({
     hideEditor: () => dispatch(hideEditor()),
-    createAnnotation: (form: IEditorForm, range: Range.SerializedRange) => {
-      dispatch(createAnnotation({
-        ...form,
-        range,
-      }));
-    },
+    createAnnotation: (form: IEditorForm, range: Range.SerializedRange) =>
+      dispatch(
+        createAnnotation({...form, range }),
+      ),
+    // TODO: add typing
+    createResource: (resourceData: Object) => dispatch(createResource(resourceData)),
   }),
 )
 class Editor extends React.Component<
@@ -171,19 +173,26 @@ class Editor extends React.Component<
   }
 
   save() {
-    // TODO [roadmap 5.4] connect save to redux-json-api call
-    // for now just a placeholder fetch data and a placeholder dispatch (createAnnotation is to be removed)
-    const fetchData = new Promise((resolve, reject) => {
-      this.props.createAnnotation(this.state as IEditorForm, this.props.range);
-      resolve();
-    });
+    // TODO  [roadmap 5.6] remove dummy annotations when connecting with redux-json-api finished
+    this.props.createAnnotation(this.state as IEditorForm, this.props.range);
 
-    fetchData
-      .then(() => {
+    const resourceData = {
+      type: 'annotations',
+      attributes: {
+        url: getAnnotationUrl(),
+        range: this.props.range,
+        priority: this.state.priority,
+        comment: this.state.comment,
+        annotationLink: this.state.referenceLink,
+        annotationLinkTitle: this.state.referenceLinkTitle,
+      },
+    };
+
+    this.props.createResource(resourceData).then(() => {
         this.props.hideEditor();
       })
-      .catch(() => {
-        // TODO when failed
+      .catch((errors) => {
+        console.log(errors);
       });
   }
 
