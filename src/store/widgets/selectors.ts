@@ -44,12 +44,12 @@ export const selectEditorState = createSelector<IStore, any, any, any>(
 );
 
 function selectViewerAnnotations(annotations: any[], annotationIds: any[]) {
-  return annotationIds.map(id => annotations.find(annotation => annotation.annotationId === id));
+  return annotationIds.map(id => annotations.find(annotation => annotation.id === id));
 }
 
 export const selectViewerState = createSelector<IStore, any, any, any>(
   state => state.widgets.viewer,
-  state => state.annotations.data,
+  state => state.api.annotations ? state.api.annotations.data : [],
   (viewer, annotations) => ({
     ...selectWidgetState(viewer),
     annotations: selectViewerAnnotations(annotations, viewer.annotationIds),

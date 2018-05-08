@@ -32,16 +32,16 @@ export default class Highlights extends React.Component<Partial<IHighlightsProps
     this.props.showViewer(
       position.x,
       position.y,
-      annotations.map(annotation => annotation.annotationId),
+      annotations.map(annotation => annotation.id),
     );
   }
 
   drawAll() {
     // For each annotation, it is cleared and drawn again
     this.highlighter.drawAll(this.props.annotations.map(annotation => ({
-      id: annotation.annotationId || annotation.id,
+      id: annotation.id,
       range: annotation.attributes.range,
-      annotationData: annotation.attributes,
+      annotationData: annotation,
     })));
   }
 

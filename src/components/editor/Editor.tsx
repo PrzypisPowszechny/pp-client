@@ -14,6 +14,7 @@ import {selectEditorState} from 'store/selectors';
 
 import styles from './Editor.scss';
 import {getAnnotationUrl} from '../../utils/url';
+import {AnnotationAPIPostModel} from "../../api/annotations";
 
 @connect(
   (state) => {
@@ -49,8 +50,7 @@ import {getAnnotationUrl} from '../../utils/url';
       dispatch(
         createAnnotation({...form, range }),
       ),
-    // TODO: add typing
-    createResource: (resourceData: Object) => dispatch(createResource(resourceData)),
+    createResource: (data: AnnotationAPIPostModel) => dispatch(createResource(data)),
   }),
 )
 class Editor extends React.Component<
@@ -174,7 +174,7 @@ class Editor extends React.Component<
 
   save() {
     // TODO  [roadmap 5.6] remove dummy annotations when connecting with redux-json-api finished
-    this.props.createAnnotation(this.state as IEditorForm, this.props.range);
+    // this.props.createAnnotation(this.state as IEditorForm, this.props.range);
 
     const resourceData = {
       type: 'annotations',

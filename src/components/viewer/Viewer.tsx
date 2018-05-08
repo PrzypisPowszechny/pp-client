@@ -8,12 +8,13 @@ import styles from './Viewer.scss';
 import {selectViewerState} from 'store/widgets/selectors';
 import {hideViewer} from 'store/widgets/actions';
 import {AnnotationPriorities} from '../consts';
+import {AnnotationAPIModel} from 'api/annotations';
 
 interface IViewerProps {
   visible: boolean;
   locationX: number;
   locationY: number;
-  annotations: any[];
+  annotations: AnnotationAPIModel[];
   hideViewer: () => void;
 }
 
@@ -56,20 +57,24 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
   }
 
   renderItems() {
-    // TODO FAKE DATA (pass real props
-    return this.props.annotations.map(annotation => (
-      <ViewerItem
-        key={1} // just pass annotation id
-        doesBelongToUser={true}
-        priority={AnnotationPriorities.ALERT}
-        useful={true}
-        usefulCount={3}
-        comment="TODO przekazać prawdziwe propsy"
-        referenceLink="falszywy link"
-        referenceLinkTitle="Fałszywy link"
-        createDate={new Date()}
-      />
-    ));
+    return this.props.annotations.map((annotation) => {
+      const attrs = annotation.attributes;
+      return (
+        <ViewerItem
+          key={annotation.id}
+
+          comment={attrs.comment}
+          doesBelongToUser={attrs.doesBelongToUser}
+          priority={attrs.priority}
+          upvote={attrs.upvote}
+          upvoteCount={attrs.upvoteCount}
+          referenceLink={attrs.annotationLink}
+          referenceLinkTitle={attrs.annotationLinkTitle}
+
+          createDate={new Date()} // TODO use date from API (now missing)
+        />
+      );
+    });
   }
 
   render() {
