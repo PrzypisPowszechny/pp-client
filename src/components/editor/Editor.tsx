@@ -179,7 +179,6 @@ class Editor extends React.Component<
         annotationLinkTitle: this.state.annotationLinkTitle,
       },
     };
-
     this.props.createAnnotation(resourceData).then(() => {
         this.props.hideEditor();
       })

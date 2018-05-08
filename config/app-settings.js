@@ -3,6 +3,6 @@ exports.appSettings = {
     API_URL: "http://localhost:8000/api",
   },
   production: {
-    API_URL: "",
+    API_URL: "http://przypispowszechny.pl/api",
   }
 };
