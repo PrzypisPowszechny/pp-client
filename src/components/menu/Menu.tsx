@@ -7,7 +7,7 @@ import { selectMenuState } from 'store/selectors';
 import Widget from 'components/widget';
 
 import styles from './Menu.scss';
-import {hideMenu, showEditorNewAnnotation} from 'store/widgets/actions';
+import {hideMenu, setSelectionRange, showEditorAnnotation} from 'store/widgets/actions';
 import {Range} from 'xpath-range';
 
 interface IMenuProps {
@@ -16,7 +16,8 @@ interface IMenuProps {
   locationY: number;
   range: Range.SerializedRange;
 
-  showEditor: (x: number, y: number, range: Range.SerializedRange) => void;
+  setSelectionRange: (range: Range.SerializedRange) => void;
+  showEditor: (x: number, y: number) => void;
   hideMenu: () => void;
 }
 
@@ -36,7 +37,8 @@ interface IMenuProps {
   };
 },
   {
-    showEditor: showEditorNewAnnotation,
+    showEditor: showEditorAnnotation,
+    setSelectionRange,
     hideMenu,
   },
 )
@@ -60,7 +62,8 @@ export default class Menu extends React.Component<Partial<IMenuProps>, {}> {
     } = this.props;
 
     this.props.hideMenu();
-    this.props.showEditor(locationX, locationY, range);
+    this.props.setSelectionRange(range);
+    this.props.showEditor(locationX, locationY);
   }
 
   render() {

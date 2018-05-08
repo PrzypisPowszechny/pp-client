@@ -1,10 +1,11 @@
 import {
-  EDITOR_NEW_ANNOTATION,
+  EDITOR_ANNOTATION,
   EDITOR_VISIBLE_CHANGE,
-  MENU_WIDGET_CHANGE,
+  MENU_WIDGET_CHANGE, SET_EDITOR_SELECTION_RANGE,
   VIEWER_VISIBLE_CHANGE,
 } from './actions';
-import * as _ from "lodash";
+import * as _ from 'lodash';
+import {Range} from 'xpath-range';
 
 export interface IWidgetState {
   visible: boolean;
@@ -12,11 +13,16 @@ export interface IWidgetState {
 }
 
 export interface IViewerState extends IWidgetState {
-  annotationIds: any[];
+  annotationIds: string[];
+}
+
+export interface IEditorState extends IWidgetState {
+  annotationId: string;
+  range: Range.SerializedRange;
 }
 
 export interface WidgetReducer {
-  editor: IWidgetState;
+  editor: IEditorState;
   menu: IWidgetState;
   viewer: IViewerState;
 }
@@ -32,6 +38,7 @@ const initialWidgetState = {
 const initialState = {
   editor: {
     annotationId: null,
+    range: null,
     ...initialWidgetState,
   },
   menu: {
@@ -46,7 +53,8 @@ const initialState = {
 export default function widgets(state = initialState, action): WidgetReducer {
   switch (action.type) {
     case EDITOR_VISIBLE_CHANGE:
-    case EDITOR_NEW_ANNOTATION:
+    case EDITOR_ANNOTATION:
+    case SET_EDITOR_SELECTION_RANGE:
       return editorActionHandler(state, action.payload);
     case MENU_WIDGET_CHANGE:
       return menuActionHandler(state, action.payload);
@@ -79,7 +87,7 @@ function menuActionHandler(state, payload) {
 
 function viewerActionHandler(state, payload) {
   // Update location only when the displayed annotations have changed, too.
-  // This prevents window from changing every time the user cursor slips off the widget
+  // This prevents window from changing every time the user's cursor slips off the widget
   const prevIds = state.viewer.annotationIds;
   const newIds = payload.annotationIds;
   let locationOverride = {};
