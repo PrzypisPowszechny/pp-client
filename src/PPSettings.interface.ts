@@ -1,3 +1,3 @@
-export default interface IPPSettings {
-  // for now empty, but used before and used in the future :)
+export default interface PPSettings {
+  API_URL: string;
 }

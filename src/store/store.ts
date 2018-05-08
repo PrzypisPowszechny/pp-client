@@ -17,8 +17,9 @@ const store = createStore(
   applyMiddleware(thunk, promise, logger),
 );
 
+console.log(PP_SETTINGS);
 store.dispatch(setAxiosConfig({
-  baseURL: 'http://localhost:8000/api',
+  baseURL: PP_SETTINGS.API_URL,
 }));
 
 export default store;

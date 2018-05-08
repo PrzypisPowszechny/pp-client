@@ -1,8 +1,8 @@
 exports.appSettings = {
   development: {
-    // for now empty, but used before and used in the future :)
+    API_URL: "http://localhost:8000/api",
   },
   production: {
-    // for now empty, but used before and used in the future :)
+    API_URL: "",
   }
 };

@@ -16,9 +16,16 @@ import './css/common/pp-semantic-ui-overrides.scss';
 
 import './css/selection.scss';
 
+import PPSettings from 'PPSettings.interface';
+
+// Declared in webpack.config through DefinePlugin
+declare global {
+  const PP_SETTINGS: PPSettings;
+}
+
 console.log('Przypis script working!');
 
-function loadData() {
+function loadInitialData() {
   // This is our root request that needs to have part of the url (path) hardcoded
   store.dispatch(readEndpoint('/annotations?url=' + window.location.href));
 }
@@ -27,5 +34,5 @@ const isBrowser = typeof window !== 'undefined';
 if (isBrowser) {
   initializeCoreHandlers();
   injectComponents();
-  loadData();
+  loadInitialData();
 }
