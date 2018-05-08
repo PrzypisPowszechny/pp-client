@@ -64,9 +64,16 @@ export interface IHighlightRegistry {
   };
 }
 
+interface IRange {
+  start: string;
+  startOffset: number;
+  end: string;
+  endOffset: number;
+}
+
 interface IHighlightDrawArgs {
   id: number | string;
-  range: Range.SerializedRange;
+  range: IRange;
   annotationData: any;
 }
 

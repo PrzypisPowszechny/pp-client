@@ -49,7 +49,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
     visible: true,
     locationX: 0,
     locationY: 0,
-    annotations: [],
+      annotations: [],
   };
 
   constructor(props: IViewerProps) {

@@ -9,12 +9,12 @@ import {DragTracker, IVec2} from 'utils/move';
 import PriorityButton from './priority-button/PriorityButton';
 import {IEditorState, IEditorProps, IEditorForm} from './interfaces';
 import { DraggableWidget } from 'components/widget';
-import { hideEditor, createAnnotation} from 'store/actions';
+import { hideEditor } from 'store/actions';
 import {selectEditorState} from 'store/selectors';
 
 import styles from './Editor.scss';
 import {getAnnotationUrl} from '../../utils/url';
-import {AnnotationAPIPostModel} from "../../api/annotations";
+import {AnnotationAPIPostModel} from 'api/annotations';
 
 @connect(
   (state) => {
@@ -46,11 +46,7 @@ import {AnnotationAPIPostModel} from "../../api/annotations";
   },
   dispatch => ({
     hideEditor: () => dispatch(hideEditor()),
-    createAnnotation: (form: IEditorForm, range: Range.SerializedRange) =>
-      dispatch(
-        createAnnotation({...form, range }),
-      ),
-    createResource: (data: AnnotationAPIPostModel) => dispatch(createResource(data)),
+    createAnnotation: (data: AnnotationAPIPostModel) => dispatch(createResource(data)),
   }),
 )
 class Editor extends React.Component<
@@ -173,9 +169,6 @@ class Editor extends React.Component<
   }
 
   save() {
-    // TODO  [roadmap 5.6] remove dummy annotations when connecting with redux-json-api finished
-    // this.props.createAnnotation(this.state as IEditorForm, this.props.range);
-
     const resourceData = {
       type: 'annotations',
       attributes: {
@@ -188,7 +181,7 @@ class Editor extends React.Component<
       },
     };
 
-    this.props.createResource(resourceData).then(() => {
+    this.props.createAnnotation(resourceData).then(() => {
         this.props.hideEditor();
       })
       .catch((errors) => {

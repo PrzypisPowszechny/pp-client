@@ -35,7 +35,7 @@ function selectAnnotationForm(annotations, annotationId?) {
 
 export const selectEditorState = createSelector<IStore, any, any, any>(
   state => state.widgets.editor,
-  state => state.annotations.data,
+  state => state.api.annotations ? state.api.annotations.data : [],
   (editor, annotations) => ({
     ...selectWidgetState(editor),
     ...selectAnnotationForm(annotations, editor.annotationId),
