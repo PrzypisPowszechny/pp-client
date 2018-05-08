@@ -6,8 +6,8 @@ export interface IEditorForm {
   annotationId: number;
   priority: AnnotationPriorities;
   comment: string;
-  referenceLink: string;
-  referenceLinkTitle: string;
+  annotationLink: string;
+  annotationLinkTitle: string;
 }
 
 export interface IEditorProps extends IEditorForm {
@@ -27,6 +27,6 @@ export interface IEditorState extends IEditorForm {
 
   noCommentModalOpen: boolean;
 
-  referenceLinkError: string;
-  referenceLinkTitleError: string;
+  annotationLinkError: string;
+  annotationLinkTitleError: string;
 }

@@ -18,8 +18,8 @@ interface IViewerItemProps {
   upvote: boolean;
   upvoteCount: number;
   comment: string;
-  referenceLink: string;
-  referenceLinkTitle: string;
+  annotationLink: string;
+  annotationLinkTitle: string;
   createDate: any;
 
   hideViewer: () => void;
@@ -154,8 +154,8 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     const {
       priority,
       comment,
-      referenceLink,
-      referenceLinkTitle,
+      annotationLink,
+      annotationLinkTitle,
       createDate,
     } = this.props;
 
@@ -178,9 +178,9 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
           {comment}
         </div>
         <div className={styles.bottomBar}>
-          <div className={styles.referenceLinkContainer}>
-            <a className={styles.referenceLink} href={referenceLink} target="_blank">
-              {referenceLinkTitle}
+          <div className={styles.annotationLinkContainer}>
+            <a className={styles.annotationLink} href={annotationLink} target="_blank">
+              {annotationLinkTitle}
             </a>
           </div>
           <div className={styles.ratings}>

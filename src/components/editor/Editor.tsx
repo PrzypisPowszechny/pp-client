@@ -26,8 +26,8 @@ import {AnnotationAPICreateModel} from 'api/annotations';
       annotationId,
       priority,
       comment,
-      referenceLink,
-      referenceLinkTitle,
+      annotationLink,
+      annotationLinkTitle,
     } = selectEditorState(state);
 
     return {
@@ -39,8 +39,8 @@ import {AnnotationAPICreateModel} from 'api/annotations';
       annotationId,
       priority,
       comment,
-      referenceLink,
-      referenceLinkTitle,
+      annotationLink,
+      annotationLinkTitle,
     };
   },
   dispatch => ({
@@ -74,14 +74,14 @@ class Editor extends React.Component<
       annotationId: nextProps.annotationId,
       priority: nextProps.priority,
       comment: nextProps.comment,
-      referenceLink: nextProps.referenceLink,
-      referenceLinkTitle: nextProps.referenceLinkTitle,
+      annotationLink: nextProps.annotationLink,
+      annotationLinkTitle: nextProps.annotationLinkTitle,
 
       moved: false,
       locationX: nextProps.locationX,
       locationY: nextProps.locationY,
-      referenceLinkError: '',
-      referenceLinkTitleError: '',
+      annotationLinkError: '',
+      annotationLinkTitleError: '',
       noCommentModalOpen: false,
     };
   }
@@ -124,22 +124,22 @@ class Editor extends React.Component<
     const stateUpdate = {[target.name]: target.value};
 
     // Whenever the field has changed, eradicate the error message
-    if (stateUpdate.referenceLink) {
-      stateUpdate.referenceLinkError = '';
+    if (stateUpdate.annotationLink) {
+      stateUpdate.annotationLinkError = '';
     }
-    if (stateUpdate.referenceLinkTitle) {
-      stateUpdate.referenceLinkTitleError = '';
+    if (stateUpdate.annotationLinkTitle) {
+      stateUpdate.annotationLinkTitleError = '';
     }
     this.setState(stateUpdate);
   }
 
   validateForm(): boolean {
-    if (!this.state.referenceLink) {
-      this.setState({referenceLinkError: 'Musisz podać źródło, jeśli chcesz dodać przypis!'});
+    if (!this.state.annotationLink) {
+      this.setState({annotationLinkError: 'Musisz podać źródło, jeśli chcesz dodać przypis!'});
       return false;
     }
-    if (!this.state.referenceLinkTitle) {
-      this.setState({referenceLinkTitleError: 'Musisz podać tytuł źródła, jeśli chcesz dodać przypis!'});
+    if (!this.state.annotationLinkTitle) {
+      this.setState({annotationLinkTitleError: 'Musisz podać tytuł źródła, jeśli chcesz dodać przypis!'});
       return false;
     }
     return true;
@@ -175,8 +175,8 @@ class Editor extends React.Component<
         range: this.props.range,
         priority: this.state.priority,
         comment: this.state.comment,
-        annotationLink: this.state.referenceLink,
-        annotationLinkTitle: this.state.referenceLinkTitle,
+        annotationLink: this.state.annotationLink,
+        annotationLinkTitle: this.state.annotationLinkTitle,
       },
     };
 
@@ -225,10 +225,10 @@ class Editor extends React.Component<
       moved,
       priority,
       comment,
-      referenceLink,
-      referenceLinkError,
-      referenceLinkTitle,
-      referenceLinkTitleError,
+      annotationLink,
+      annotationLinkError,
+      annotationLinkTitle,
+      annotationLinkTitleError,
     } = this.state;
 
     const {
@@ -290,38 +290,38 @@ class Editor extends React.Component<
             placeholder="Dodaj treść przypisu"
           />
         </div>
-        <div className={classNames(styles.editorInput, styles.referenceLink)}>
+        <div className={classNames(styles.editorInput, styles.annotationLink)}>
           <input
             type="text"
-            name="referenceLink"
-            className={referenceLinkError ? styles.error : ''}
-            value={referenceLink}
+            name="annotationLink"
+            className={annotationLinkError ? styles.error : ''}
+            value={annotationLink}
             onChange={this.handleInputChange}
             placeholder="Wklej link do źródła"
           />
           <i className={classNames(styles.inputIcon, 'linkify', 'icon')} />
           <div
             className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { [styles.hide]: referenceLinkError === '' })}
+              { [styles.hide]: annotationLinkError === '' })}
           >
-            {referenceLinkError}
+            {annotationLinkError}
           </div>
         </div>
-        <div className={classNames(styles.editorInput, styles.referenceLinkTitle)}>
+        <div className={classNames(styles.editorInput, styles.annotationLinkTitle)}>
           <input
             type="text"
-            name="referenceLinkTitle"
-            className={referenceLinkTitleError ? styles.error : ''}
-            value={referenceLinkTitle}
+            name="annotationLinkTitle"
+            className={annotationLinkTitleError ? styles.error : ''}
+            value={annotationLinkTitle}
             onChange={this.handleInputChange}
             placeholder="Wpisz tytuł źródła"
           />
           <i className={classNames(styles.inputIcon, 'tags', 'icon')} />
           <div
             className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { [styles.hide]: referenceLinkTitleError === '' })}
+              { [styles.hide]: annotationLinkTitleError === '' })}
           >
-            {referenceLinkTitleError}
+            {annotationLinkTitleError}
           </div>
           <Popup
             className="pp-ui small-padding"

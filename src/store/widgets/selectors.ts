@@ -28,8 +28,8 @@ function selectAnnotationForm(annotations, annotationId?) {
     annotationId: model.id,
     priority: model.priority || AnnotationPriorities.NORMAL,
     comment: model.comment || '',
-    referenceLink: model.referenceLink || '',
-    referenceLinkTitle: model.referenceLinkTitle || '',
+    annotationLink: model.annotationLink || '',
+    annotationLinkTitle: model.annotationLinkTitle || '',
   };
 }
 

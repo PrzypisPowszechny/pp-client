@@ -68,8 +68,8 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
           priority={attrs.priority}
           upvote={attrs.upvote}
           upvoteCount={attrs.upvoteCount}
-          referenceLink={attrs.annotationLink}
-          referenceLinkTitle={attrs.annotationLinkTitle}
+          annotationLink={attrs.annotationLink}
+          annotationLinkTitle={attrs.annotationLinkTitle}
 
           createDate={new Date()} // TODO use date from API (now missing)
         />
