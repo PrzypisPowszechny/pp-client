@@ -28,14 +28,14 @@ function selectAnnotationForm(annotations, annotationId?) {
     annotationId: model.id,
     priority: model.priority || AnnotationPriorities.NORMAL,
     comment: model.comment || '',
-    referenceLink: model.referenceLink || '',
-    referenceLinkTitle: model.referenceLinkTitle || '',
+    annotationLink: model.annotationLink || '',
+    annotationLinkTitle: model.annotationLinkTitle || '',
   };
 }
 
 export const selectEditorState = createSelector<IStore, any, any, any>(
   state => state.widgets.editor,
-  state => state.annotations.data,
+  state => state.api.annotations ? state.api.annotations.data : [],
   (editor, annotations) => ({
     ...selectWidgetState(editor),
     ...selectAnnotationForm(annotations, editor.annotationId),
@@ -44,12 +44,12 @@ export const selectEditorState = createSelector<IStore, any, any, any>(
 );
 
 function selectViewerAnnotations(annotations: any[], annotationIds: any[]) {
-  return annotationIds.map(id => annotations.find(annotation => annotation.annotationId === id));
+  return annotationIds.map(id => annotations.find(annotation => annotation.id === id));
 }
 
 export const selectViewerState = createSelector<IStore, any, any, any>(
   state => state.widgets.viewer,
-  state => state.annotations.data,
+  state => state.api.annotations ? state.api.annotations.data : [],
   (viewer, annotations) => ({
     ...selectWidgetState(viewer),
     annotations: selectViewerAnnotations(annotations, viewer.annotationIds),

@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 import {Highlighter} from 'core';
 import {showViewer} from 'store/widgets/actions';
 import { mousePosition } from 'common/dom';
+import {AnnotationAPIModel} from 'api/annotations';
+import {Range} from 'xpath-range';
 
 interface IHighlightsProps {
-  annotations: any[];
+  annotations: AnnotationAPIModel[];
   showViewer: (x: number, y: number, annotationId: number) => void;
 }
 
@@ -32,16 +34,16 @@ export default class Highlights extends React.Component<Partial<IHighlightsProps
     this.props.showViewer(
       position.x,
       position.y,
-      annotations.map(annotation => annotation.annotationId),
+      annotations.map(annotation => annotation.id),
     );
   }
 
   drawAll() {
-    // For each annotation, it is cleared and drawn again
+    // For each annotation, it is cleared and redrawn
     this.highlighter.drawAll(this.props.annotations.map(annotation => ({
-      id: annotation.annotationId || annotation.id,
+      id: annotation.id,
       range: annotation.attributes.range,
-      annotationData: annotation.attributes,
+      annotationData: annotation,
     })));
   }
 

@@ -11,15 +11,15 @@ import {hideViewer} from 'store/widgets/actions';
 import {selectViewerState} from 'store/widgets/selectors';
 
 interface IViewerItemProps {
-  key: number;
+  key: string;
 
   doesBelongToUser: boolean;
   priority: AnnotationPriorities;
-  useful: boolean;
-  usefulCount: number;
+  upvote: boolean;
+  upvoteCount: number;
   comment: string;
-  referenceLink: string;
-  referenceLinkTitle: string;
+  annotationLink: string;
+  annotationLinkTitle: string;
   createDate: any;
 
   hideViewer: () => void;
@@ -41,7 +41,6 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
 
   constructor(props: IViewerItemProps) {
     super(props);
-
     this.state = {
       initialView: true,
       confirmDeleteModalOpen: false,
@@ -78,8 +77,8 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     console.log('Annotations should be deleted now; not implemented yet!');
   }
 
-  toggleUseful = (e) => {
-    // [roadmap 5.3] TODO connect toggleUseful to redux-json-api call
+  toggleUpvote = (e) => {
+    // [roadmap 5.3] TODO connect toggleUpvote to redux-json-api call
   }
 
   headerPriorityClass() {
@@ -91,14 +90,14 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     return priorityToClass[this.props.priority];
   }
 
-  usefulButton() {
+  upvoteButton() {
     return (
       <a
-        className={classNames('ui', 'label', 'medium', styles.useful, { [styles.selected]: this.props.useful })}
-        onClick={this.toggleUseful}
+        className={classNames('ui', 'label', 'medium', styles.upvote, { [styles.selected]: this.props.upvote })}
+        onClick={this.toggleUpvote}
       >
         Przydatne
-        <span className={styles.number}>{this.props.usefulCount}</span>
+        <span className={styles.number}>{this.props.upvoteCount}</span>
       </a>
     );
   }
@@ -155,8 +154,8 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     const {
       priority,
       comment,
-      referenceLink,
-      referenceLinkTitle,
+      annotationLink,
+      annotationLinkTitle,
       createDate,
     } = this.props;
 
@@ -179,14 +178,14 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
           {comment}
         </div>
         <div className={styles.bottomBar}>
-          <div className={styles.referenceLinkContainer}>
-            <a className={styles.referenceLink} href={referenceLink} target="_blank">
-              {referenceLinkTitle}
+          <div className={styles.annotationLinkContainer}>
+            <a className={styles.annotationLink} href={annotationLink} target="_blank">
+              {annotationLinkTitle}
             </a>
           </div>
           <div className={styles.ratings}>
             <Popup
-              trigger={this.usefulButton()}
+              trigger={this.upvoteButton()}
               size="small"
               className="pp-ui pp-popup-small-padding"
               inverted={true}

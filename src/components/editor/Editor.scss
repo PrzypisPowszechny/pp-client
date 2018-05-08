@@ -40,7 +40,7 @@ $editor-vertical-spacing: 15px;
   }
 }
 
-/* fields: comment, referenceLink */
+/* fields: comment, annotationLink */
 .editor-input {
   display: block;
   padding: 0;
@@ -93,8 +93,8 @@ $editor-vertical-spacing: 15px;
     }
 }
 
-/* reference link field */
-.reference-link {
+/* annotation link field */
+.annotation-link {
     input {
         padding-left: 2em;
     }
@@ -113,7 +113,7 @@ $editor-vertical-spacing: 15px;
 
 }
 
-.reference-link-title {
+.annotation-link-title {
     margin-bottom: 0;
     input {
         padding-left: 2em;
