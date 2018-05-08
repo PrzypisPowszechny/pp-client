@@ -1,16 +1,16 @@
 import {Range} from 'xpath-range';
 
-export const EDITOR_NEW_ANNOTATION = 'EDITOR_NEW_ANNOTATION';
+export const EDITOR_ANNOTATION = 'EDITOR_ANNOTATION';
+export const SET_EDITOR_SELECTION_RANGE = 'SET_EDITOR_SELECTION_RANGE';
 export const EDITOR_VISIBLE_CHANGE = 'EDITOR_VISIBLE_CHANGE';
 export const VIEWER_VISIBLE_CHANGE = 'VIEWER_VISIBLE_CHANGE';
 export const MENU_WIDGET_CHANGE = 'MENU_WIDGET_CHANGE';
 
-export const showEditorNewAnnotation = (x: number, y: number, range: Range.SerializedRange) => {
+export const showEditorAnnotation = (x: number, y: number, id?: string) => {
   return {
-    type: EDITOR_NEW_ANNOTATION,
+    type: EDITOR_ANNOTATION,
     payload: {
-      annotationId: null,
-      range,
+      annotationId: id,
       visible: true,
       location: {
         x,
@@ -20,7 +20,14 @@ export const showEditorNewAnnotation = (x: number, y: number, range: Range.Seria
   };
 };
 
-// TODO sth like showEditorAnnotation for existing annotation edit
+export const setSelectionRange = (range: Range.SerializedRange) => {
+  return {
+    type: SET_EDITOR_SELECTION_RANGE,
+    payload: {
+      range,
+    },
+  };
+};
 
 export const hideEditor = () => {
   return {

@@ -1,6 +1,6 @@
 import React, {RefObject} from 'react';
 import {connect} from 'react-redux';
-import { createResource } from 'redux-json-api'
+import { createResource, updateResource } from 'redux-json-api';
 import classNames from 'classnames';
 import {Range} from 'xpath-range';
 import {Modal, Popup} from 'semantic-ui-react';
@@ -45,7 +45,13 @@ import {AnnotationAPICreateModel} from 'api/annotations';
   },
   dispatch => ({
     hideEditor: () => dispatch(hideEditor()),
-    createAnnotation: (data: AnnotationAPICreateModel) => dispatch(createResource(data)),
+    createAnnotation: (model: AnnotationAPICreateModel) => {
+      if (model.id) {
+        return dispatch(updateResource(model));
+      } else {
+        return dispatch(createResource(model));
+      }
+    }
   }),
 )
 class Editor extends React.Component<
@@ -168,7 +174,8 @@ class Editor extends React.Component<
   }
 
   save() {
-    const resourceData = {
+    const model = {
+      id: this.props.annotationId,
       type: 'annotations',
       attributes: {
         url: window.location.href,
@@ -179,8 +186,8 @@ class Editor extends React.Component<
         annotationLinkTitle: this.state.annotationLinkTitle,
       },
     };
-
-    this.props.createAnnotation(resourceData).then(() => {
+    console.log(model);
+    this.props.createAnnotation(model).then(() => {
         this.props.hideEditor();
       })
       .catch((errors) => {

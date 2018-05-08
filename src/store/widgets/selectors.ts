@@ -16,13 +16,19 @@ export const selectMenuState = createSelector<IStore, any, any>(
   selectWidgetState,
 );
 
-function selectAnnotationForm(annotations, annotationId?) {
+function selectAnnotationForm(annotations, editor) {
+  const annotationId = editor.annotationId;
   let attrs;
+  // When the annotation is being created for the first time, range is stored in state.editor.range;
+  // If the annotation already exists, it is taken from annotation API model.
+  let range;
   if (annotationId) {
     const model = annotations.find(x => x.id === annotationId);
     attrs = model.attributes;
+    range = attrs.range;
   } else {
     attrs = {};
+    range = editor.range;
   }
 
   return {
@@ -31,6 +37,7 @@ function selectAnnotationForm(annotations, annotationId?) {
     comment: attrs.comment || '',
     annotationLink: attrs.annotationLink || '',
     annotationLinkTitle: attrs.annotationLinkTitle || '',
+    range,
   };
 }
 
@@ -39,8 +46,7 @@ export const selectEditorState = createSelector<IStore, any, any, any>(
   state => state.api.annotations ? state.api.annotations.data : [],
   (editor, annotations) => ({
     ...selectWidgetState(editor),
-    ...selectAnnotationForm(annotations, editor.annotationId),
-    range: editor.range,
+    ...selectAnnotationForm(annotations, editor),
   }),
 );
 
