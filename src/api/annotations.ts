@@ -7,7 +7,7 @@ export interface RangeAPIModel {
   endOffset: number;
 }
 
-export interface AnnotationAPIPostModel {
+export interface AnnotationAPICreateModel {
   type: string;
   attributes: {
     url: string;

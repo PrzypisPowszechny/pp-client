@@ -13,8 +13,7 @@ import { hideEditor } from 'store/actions';
 import {selectEditorState} from 'store/selectors';
 
 import styles from './Editor.scss';
-import {getAnnotationUrl} from '../../utils/url';
-import {AnnotationAPIPostModel} from 'api/annotations';
+import {AnnotationAPICreateModel} from 'api/annotations';
 
 @connect(
   (state) => {
@@ -46,7 +45,7 @@ import {AnnotationAPIPostModel} from 'api/annotations';
   },
   dispatch => ({
     hideEditor: () => dispatch(hideEditor()),
-    createAnnotation: (data: AnnotationAPIPostModel) => dispatch(createResource(data)),
+    createAnnotation: (data: AnnotationAPICreateModel) => dispatch(createResource(data)),
   }),
 )
 class Editor extends React.Component<
@@ -172,7 +171,7 @@ class Editor extends React.Component<
     const resourceData = {
       type: 'annotations',
       attributes: {
-        url: getAnnotationUrl(),
+        url: window.location.href,
         range: this.props.range,
         priority: this.state.priority,
         comment: this.state.comment,

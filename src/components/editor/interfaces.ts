@@ -1,6 +1,6 @@
 import {AnnotationPriorities} from '../consts';
 import {Range} from 'xpath-range';
-import {AnnotationAPIPostModel} from 'api/annotations';
+import {AnnotationAPICreateModel} from 'api/annotations';
 
 export interface IEditorForm {
   annotationId: number;
@@ -16,7 +16,7 @@ export interface IEditorProps extends IEditorForm {
   locationY: number;
   range: Range.SerializedRange;
 
-  createAnnotation: (resourceData: AnnotationAPIPostModel) => Promise<object>;
+  createAnnotation: (resourceData: AnnotationAPICreateModel) => Promise<object>;
   hideEditor: () => void;
 }
 

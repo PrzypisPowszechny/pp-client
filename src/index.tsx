@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import {  readEndpoint } from 'redux-json-api';
-import {getAnnotationUrl} from './utils/url';
 import store from 'store';
 
 import App from 'containers/App';
@@ -21,7 +20,7 @@ console.log('Przypis script working!');
 
 function loadData() {
   // This is our root request that needs to have part of the url (path) hardcoded
-  store.dispatch(readEndpoint('/annotations?url=' + getAnnotationUrl()));
+  store.dispatch(readEndpoint('/annotations?url=' + window.location.href));
 }
 
 const isBrowser = typeof window !== 'undefined';
