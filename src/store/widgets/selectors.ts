@@ -17,19 +17,20 @@ export const selectMenuState = createSelector<IStore, any, any>(
 );
 
 function selectAnnotationForm(annotations, annotationId?) {
-  let model;
+  let attrs;
   if (annotationId) {
-    model = annotations.find(x => x.id === annotationId);
+    const model = annotations.find(x => x.id === annotationId);
+    attrs = model.attributes;
   } else {
-    model = {};
+    attrs = {};
   }
 
   return {
-    annotationId: model.id,
-    priority: model.priority || AnnotationPriorities.NORMAL,
-    comment: model.comment || '',
-    annotationLink: model.annotationLink || '',
-    annotationLinkTitle: model.annotationLinkTitle || '',
+    annotationId,
+    priority: attrs.priority || AnnotationPriorities.NORMAL,
+    comment: attrs.comment || '',
+    annotationLink: attrs.annotationLink || '',
+    annotationLinkTitle: attrs.annotationLinkTitle || '',
   };
 }
 
