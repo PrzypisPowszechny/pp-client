@@ -19,6 +19,7 @@ const store = createStore(
 
 store.dispatch(setAxiosConfig({
   baseURL: PP_SETTINGS.API_URL,
+  withCredentials: true,
 }));
 
 export default store;
