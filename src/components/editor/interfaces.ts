@@ -3,7 +3,6 @@ import {AnnotationAPICreateModel, AnnotationAPIModel} from 'api/annotations';
 import {IEditorRange} from 'store/widgets/reducers';
 
 export interface IEditorProps {
-  visible: boolean;
   locationX: number;
   locationY: number;
 

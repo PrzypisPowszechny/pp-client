@@ -20,7 +20,6 @@ import * as _ from 'lodash';
   (state) => {
 
     const {
-      visible,
       locationX,
       locationY,
 
@@ -29,7 +28,6 @@ import * as _ from 'lodash';
     } = selectEditorState(state);
 
     return {
-      visible,
       locationX,
       locationY,
 
@@ -241,14 +239,9 @@ class Editor extends React.Component<
       annotationLinkTitleError,
     } = this.state;
 
-    const {
-      visible,
-    } = this.props;
-
     return (
       <DraggableWidget
         className={classNames('pp-ui', styles.self)}
-        visible={visible}
         locationX={locationX}
         locationY={locationY}
         calculateInverted={!moved}
