@@ -4,7 +4,6 @@ import styles from './Widget.scss';
 import {isInverted} from './utils';
 
 export interface IWidgetProps {
-  visible: boolean;
   locationX: number;
   locationY: number;
   invertedX: boolean;
@@ -48,7 +47,6 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
    */
 
   static defaultProps = {
-    visible: true,
     locationX: 0,
     locationY: 0,
     invertedX: false,
@@ -135,22 +133,18 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
   }
 
   render() {
-    if (this.props.visible) {
-      return (
+    return (
+      <div
+        className={styles.self}
+        ref={this.rootElement}
+      >
         <div
-          className={styles.self}
-          ref={this.rootElement}
+          className={this.getInnerClassNames()}
+          ref={this.innerElement}
         >
-          <div
-            className={this.getInnerClassNames()}
-            ref={this.innerElement}
-          >
-            {this.props.children}
-          </div>
+          {this.props.children}
         </div>
-      );
-    } else {
-      return null;
-    }
+      </div>
+    );
   }
 }
