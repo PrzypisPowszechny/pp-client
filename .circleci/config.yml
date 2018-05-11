@@ -6,8 +6,9 @@ version: 2
 jobs:
   build:
     docker:
-      # specify the version you desire here
-      - image: circleci/node:latest
+      # node 8.x - this is newest version recommended for production and so most widely supported by packages,
+      # this will change in April 2019 (https://github.com/nodejs/Release)
+      - image: circleci/node:8
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -19,19 +20,19 @@ jobs:
     steps:
       - checkout
 
-      # Download and cache dependencies
+      # Download and cache dependencies, some dependencies may vary also on a per node version basis
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-node-8-dependencies-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+          - v1-node-8-dependencies-
 
       - run: npm install
 
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v1-node-8-dependencies-{{ checksum "package.json" }}
 
       # run tests!
       - run: npm run build
