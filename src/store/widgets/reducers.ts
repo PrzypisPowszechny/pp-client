@@ -5,7 +5,6 @@ import {
   VIEWER_VISIBLE_CHANGE,
 } from './actions';
 import * as _ from 'lodash';
-import {Range} from 'xpath-range';
 
 export interface IWidgetState {
   visible: boolean;
@@ -16,9 +15,17 @@ export interface IViewerState extends IWidgetState {
   annotationIds: string[];
 }
 
+// IEditorRange differs from Range.SerializedRange in that it is a simple object (not a class)
+export interface IEditorRange {
+  start: string;
+  startOffset: number;
+  end: string;
+  endOffset: number;
+}
+
 export interface IEditorState extends IWidgetState {
   annotationId: string;
-  range: Range.SerializedRange;
+  range: IEditorRange;
 }
 
 export interface WidgetReducer {
