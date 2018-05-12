@@ -50,13 +50,8 @@ class Editor extends React.Component<
   Partial<IEditorProps>,
   Partial<IEditorState>
   > {
-   /*
-    * NOTE:
-    * For a comprehensive note on invertedX and invertedY see Widget component
-    */
 
   static defaultProps = {
-    visible: true,
     locationX: 0,
     locationY: 0,
   };
@@ -74,6 +69,8 @@ class Editor extends React.Component<
      * However, it is not enough, as two annotations can be made for the exact same range
      */
     const nextAnnotation: any = nextProps.annotation || {};
+    // Note: nextProps.annotation && nextProps.annotation.id === prevState.annotationId will generate updates
+    // if only nextProps.annotation is null
     const areAnnotationsEqual = prevState.annotationId === nextAnnotation.id;
     const areRangesEqual = _.isEqual(prevState.range, nextProps.range);
     if (areAnnotationsEqual && areRangesEqual) {
@@ -88,7 +85,6 @@ class Editor extends React.Component<
         annotationLink: attrs.annotationLink || '',
         annotationLinkTitle: attrs.annotationLinkTitle || '',
 
-        moved: false,
         locationX: nextProps.locationX,
         locationY: nextProps.locationY,
         annotationLinkError: '',
@@ -104,15 +100,6 @@ class Editor extends React.Component<
     super(props);
     this.state = {};
     this.moverElement = React.createRef();
-  }
-
-  onDrag = (delta: IVec2) => {
-    this.setState({
-      locationX: this.state.locationX + delta.x,
-      locationY: this.state.locationY + delta.y,
-      moved: true,
-    });
-    return true;
   }
 
   setPriority = (priority: AnnotationPriorities) => {
@@ -228,9 +215,6 @@ class Editor extends React.Component<
 
   render() {
     const {
-      locationX,
-      locationY,
-      moved,
       priority,
       comment,
       annotationLink,
@@ -242,12 +226,10 @@ class Editor extends React.Component<
     return (
       <DraggableWidget
         className={classNames('pp-ui', styles.self)}
-        locationX={locationX}
-        locationY={locationY}
-        calculateInverted={!moved}
+        initialLocationX={this.props.locationX}
+        initialLocationY={this.props.locationY}
         widgetTriangle={true}
         mover={this.moverElement}
-        onDrag={this.onDrag}
       >
         <div className={styles.headBar}>
           <label className={styles.priorityHeader}> Co dodajesz? </label>

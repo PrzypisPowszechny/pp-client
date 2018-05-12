@@ -9,11 +9,11 @@ export interface IWidgetProps {
   invertedX: boolean;
   invertedY: boolean;
   /*
-   * calculateInverted - (overwrites invertedX and invertedY)
+   * updateInverted - (overwrites invertedX and invertedY)
    * if true, the widget horizontal or vertical inversion will be calculated based on the window location
    * after the component is rendered for the first time after prop change
    */
-  calculateInverted: boolean;
+  updateInverted: boolean;
   widgetTriangle: boolean;
 
   className: string;
@@ -24,12 +24,12 @@ export interface IWidgetProps {
 export interface IWidgetState {
   invertedX: boolean;
   invertedY: boolean;
-  calculateInverted: boolean;
+  updateInverted: boolean;
 }
 
 export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
   Partial<IWidgetState>> {
-  /* Every time the component receives new props and  `calculateInverted` is true, `invertedX` and `invertedY`
+  /* Every time the component receives new props and  `updateInverted` is true, `invertedX` and `invertedY`
    * will be calculated based on the `locationX` and `locationY` props so the component is fully visible in the window
    *
    * NOTE:
@@ -51,7 +51,7 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
     locationY: 0,
     invertedX: false,
     invertedY: false,
-    calculateInverted: false,
+    updateInverted: false,
     className: '',
     onMouseLeave: null,
     widgetTriangle: false,
@@ -59,11 +59,11 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
 
   static getDerivedStateFromProps(nextProps: IWidgetProps) {
     /*
-     * If calculateInverted prop is set to true, invertedX and invertedY are set to false, so the initial measurements
+     * If updateInverted prop is set to true, invertedX and invertedY are set to false, so the initial measurements
      * may take place after the first render
     */
     let inverted;
-    if (nextProps.calculateInverted) {
+    if (nextProps.updateInverted) {
       inverted = {
         invertedX: false,
         invertedY: false,
@@ -71,7 +71,7 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
     }
     return {
       ...inverted,
-      calculateInverted: nextProps.calculateInverted,
+      updateInverted: nextProps.updateInverted,
     };
   }
 
@@ -93,7 +93,7 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
         [styles.widgetTriangle]: this.props.widgetTriangle,
         [styles.invertX]: this.state.invertedX,
         [styles.invertY]: this.state.invertedY,
-        [styles.calculateInverted]: this.state.calculateInverted,
+        [styles.updateInverted]: this.state.updateInverted,
       },
     );
   }
@@ -106,7 +106,7 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
     }
   }
 
-  mountedOrUpdated() {
+  onMountedOrUpdated() {
     // Set the CSS left/top properties
     this.setLocationStyle();
 
@@ -116,20 +116,20 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
       inner.addEventListener('mouseleave', this.props.onMouseLeave);
     }
 
-    if (this.state.calculateInverted) {
+    if (this.state.updateInverted) {
       this.setState({
         ...isInverted(this.innerElement.current, window),
-        calculateInverted: false,
+        updateInverted: false,
       });
     }
   }
 
   componentDidMount() {
-    this.mountedOrUpdated();
+    this.onMountedOrUpdated();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    this.mountedOrUpdated();
+    this.onMountedOrUpdated();
   }
 
   render() {
