@@ -103,7 +103,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
         className={classNames('pp-ui', styles.self)}
         locationX={this.props.locationX}
         locationY={this.props.locationY}
-        calculateInverted={true}
+        updateInverted={true}
         widgetTriangle={true}
         onMouseLeave={this.props.hideViewer}
       >

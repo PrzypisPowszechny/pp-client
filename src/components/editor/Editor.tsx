@@ -56,7 +56,6 @@ class Editor extends React.Component<
     */
 
   static defaultProps = {
-    visible: true,
     locationX: 0,
     locationY: 0,
   };
@@ -67,52 +66,25 @@ class Editor extends React.Component<
     [AnnotationPriorities.ALERT]: styles.priorityAlert,
   };
 
-  static getDerivedStateFromProps(nextProps: IEditorProps, prevState: IEditorState) {
-    /*
-     * The window should update whenever either annotation or range changes
-     * Comparing ranges is crucial when the annotation was null before and is null again;
-     * However, it is not enough, as two annotations can be made for the exact same range
-     */
-    const nextAnnotation: any = nextProps.annotation || {};
-    const areAnnotationsEqual = prevState.annotationId === nextAnnotation.id;
-    const areRangesEqual = _.isEqual(prevState.range, nextProps.range);
-    if (areAnnotationsEqual && areRangesEqual) {
-      return { ...prevState };
-    } else {
-      const attrs: Partial<AnnotationAPIModelAttrs> = nextAnnotation.attributes || {};
-      return {
-        annotationId: nextAnnotation.id,
-        range: nextProps.range,
-        priority: attrs.priority ||  AnnotationPriorities.NORMAL,
-        comment: attrs.comment || '',
-        annotationLink: attrs.annotationLink || '',
-        annotationLinkTitle: attrs.annotationLinkTitle || '',
-
-        moved: false,
-        locationX: nextProps.locationX,
-        locationY: nextProps.locationY,
-        annotationLinkError: '',
-        annotationLinkTitleError: '',
-        noCommentModalOpen: false,
-      };
-    }
-  }
-
   moverElement: RefObject<HTMLDivElement>;
 
   constructor(props: IEditorProps) {
     super(props);
-    this.state = {};
-    this.moverElement = React.createRef();
-  }
+    const annotation: any = props.annotation || {};
+    const attrs: Partial<AnnotationAPIModelAttrs> = annotation.attributes || {};
+    this.state = {
+      annotationId: annotation.id,
+      range: props.range,
+      priority: attrs.priority ||  AnnotationPriorities.NORMAL,
+      comment: attrs.comment || '',
+      annotationLink: attrs.annotationLink || '',
+      annotationLinkTitle: attrs.annotationLinkTitle || '',
 
-  onDrag = (delta: IVec2) => {
-    this.setState({
-      locationX: this.state.locationX + delta.x,
-      locationY: this.state.locationY + delta.y,
-      moved: true,
-    });
-    return true;
+      annotationLinkError: '',
+      annotationLinkTitleError: '',
+      noCommentModalOpen: false,
+    };
+    this.moverElement = React.createRef();
   }
 
   setPriority = (priority: AnnotationPriorities) => {
@@ -228,9 +200,6 @@ class Editor extends React.Component<
 
   render() {
     const {
-      locationX,
-      locationY,
-      moved,
       priority,
       comment,
       annotationLink,
@@ -238,16 +207,14 @@ class Editor extends React.Component<
       annotationLinkTitle,
       annotationLinkTitleError,
     } = this.state;
-
+    console.log(this.props);
     return (
       <DraggableWidget
         className={classNames('pp-ui', styles.self)}
-        locationX={locationX}
-        locationY={locationY}
-        calculateInverted={!moved}
+        initialLocationX={this.props.locationX}
+        initialLocationY={this.props.locationY}
         widgetTriangle={true}
         mover={this.moverElement}
-        onDrag={this.onDrag}
       >
         <div className={styles.headBar}>
           <label className={styles.priorityHeader}> Co dodajesz? </label>

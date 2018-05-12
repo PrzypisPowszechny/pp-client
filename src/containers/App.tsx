@@ -6,24 +6,25 @@ import Highlights from 'components/highlights/Highlights';
 import {connect} from 'react-redux';
 
 interface AppProps {
-  editorVisible: boolean;
+  editor: any;
   viewerVisible: boolean;
   menuVisible: boolean;
 }
 
 @connect(
   state => ({
-    editorVisible: state.widgets.editor.visible,
+    editor: state.widgets.editor,
     viewerVisible: state.widgets.viewer.visible,
     menuVisible: state.widgets.menu.visible,
   }),
 )
 export default class App extends React.Component<Partial<AppProps>> {
-
+  // always updates...:
+  // <Editor key={JSON.stringify(this.props.editor.range) + JSON.stringify(this.props.editor.annotationId)}/>
   render() {
     return (
       <div>
-        {this.props.editorVisible && <Editor/>}
+        {this.props.editor.visible && <Editor/>}
         {this.props.viewerVisible && <Viewer/>}
         {this.props.menuVisible && <Menu/>}
         <Highlights/>
