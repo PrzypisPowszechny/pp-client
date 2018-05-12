@@ -19,12 +19,14 @@ interface AppProps {
   }),
 )
 export default class App extends React.Component<Partial<AppProps>> {
-  // always updates...:
-  // <Editor key={JSON.stringify(this.props.editor.range) + JSON.stringify(this.props.editor.annotationId)}/>
   render() {
+    const editorKey = {
+      annotationId: this.props.editor.annotationId,
+      range: this.props.editor.range,
+    };
     return (
       <div>
-        {this.props.editor.visible && <Editor/>}
+        {this.props.editor.visible && <Editor key={JSON.stringify(editorKey)}/> }
         {this.props.viewerVisible && <Viewer/>}
         {this.props.menuVisible && <Menu/>}
         <Highlights/>
