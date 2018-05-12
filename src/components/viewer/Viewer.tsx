@@ -11,7 +11,6 @@ import {AnnotationPriorities} from '../consts';
 import {AnnotationAPIModel} from 'api/annotations';
 
 interface IViewerProps {
-  visible: boolean;
   locationX: number;
   locationY: number;
   annotations: AnnotationAPIModel[];
@@ -28,14 +27,12 @@ interface IViewerProps {
 @connect(
   (state) => {
     const {
-      visible,
       locationX,
       locationY,
       annotations,
     } = selectViewerState(state);
 
     return {
-      visible,
       locationX,
       locationY,
       annotations,
@@ -104,10 +101,9 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
     return (
       <Widget
         className={classNames('pp-ui', styles.self)}
-        visible={this.props.visible}
         locationX={this.props.locationX}
         locationY={this.props.locationY}
-        calculateInverted={true}
+        updateInverted={true}
         widgetTriangle={true}
         onMouseLeave={this.props.hideViewer}
       >

@@ -11,7 +11,6 @@ import {hideMenu, setSelectionRange, showEditorAnnotation} from 'store/widgets/a
 import {Range} from 'xpath-range';
 
 interface IMenuProps {
-  visible: boolean;
   locationX: number;
   locationY: number;
   range: Range.SerializedRange;
@@ -24,13 +23,11 @@ interface IMenuProps {
 @connect(
   (state) => {
   const {
-    visible,
     locationX,
     locationY,
   } = selectMenuState(state);
 
   return {
-    visible,
     locationX,
     locationY,
     range: state.textSelector.range,
@@ -70,7 +67,6 @@ export default class Menu extends React.Component<Partial<IMenuProps>, {}> {
     return (
       <Widget
         className={classNames('pp-ui', styles.self)}
-        visible={this.props.visible}
         locationX={this.props.locationX}
         locationY={this.props.locationY}
       >

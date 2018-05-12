@@ -1,26 +1,26 @@
 import {AnnotationPriorities} from '../consts';
-import {Range} from 'xpath-range';
-import {AnnotationAPICreateModel} from 'api/annotations';
+import {AnnotationAPICreateModel, AnnotationAPIModel} from 'api/annotations';
+import {IEditorRange} from 'store/widgets/reducers';
 
-export interface IEditorForm {
-  annotationId: number;
-  priority: AnnotationPriorities;
-  comment: string;
-  annotationLink: string;
-  annotationLinkTitle: string;
-}
-
-export interface IEditorProps extends IEditorForm {
-  visible: boolean;
+export interface IEditorProps {
   locationX: number;
   locationY: number;
-  range: Range.SerializedRange;
+
+  annotation: AnnotationAPIModel;
+  range: IEditorRange;
 
   createAnnotation: (model: AnnotationAPICreateModel) => Promise<object>;
   hideEditor: () => void;
 }
 
-export interface IEditorState extends IEditorForm {
+export interface IEditorState {
+  annotationId: string;
+  priority: AnnotationPriorities;
+  comment: string;
+  annotationLink: string;
+  annotationLinkTitle: string;
+  range: IEditorRange;
+
   locationX: number;
   locationY: number;
   moved: boolean;
