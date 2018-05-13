@@ -40,18 +40,21 @@ function highlightRange(normedRange, cssClass) {
  * for those ranges which are not reanchorable in the current document.
  */
 function reanchorRange(range, rootElement) {
-  try {
-    return Range.sniff(range).normalize(rootElement);
-  } catch (e) {
-    if (!(e instanceof Range.RangeError)) {
-      // Oh Javascript, why you so crap? This will lose the traceback.
-      throw(e);
+  const sniffedRange = Range.sniff(range);
+  if (sniffedRange) {
+    try {
+      return sniffedRange.normalize(rootElement);
+    } catch (e) {
+      if (!(e instanceof Range.RangeError)) {
+        // Oh Javascript, why you so crap? This will lose the traceback.
+        throw(e);
+      }
     }
-    /*
-     Otherwise, we simply swallow the error. Callers are responsible
-     for only trying to draw valid annotations.
-     */
   }
+ /*
+   Otherwise, we simply swallow the error. Callers are responsible
+   for only trying to draw valid annotations.
+   */
   return null;
 }
 
@@ -155,6 +158,9 @@ export default class Highlighter {
    */
   draw = (id: number | string, range: Range.SerializedRange, annotationData: any) => {
     const normedRange = reanchorRange(range, this.element);
+    if (!normedRange) {
+      return null;
+    }
     const highlightElements = highlightRange(normedRange, this.options.highlightClass);
     const normedId = Highlighter.coerceId(id);
 
