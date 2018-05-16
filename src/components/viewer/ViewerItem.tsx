@@ -155,9 +155,6 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
       createDate,
     } = this.props;
 
-    // Set date language
-    moment.locale('pl');
-
     return (
       <li className={styles.annotation}>
         <div className={styles.headBar}>
