@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Button, Modal, Popup } from 'semantic-ui-react';
+import { Popup, Button } from 'semantic-ui-react';
 
 import { AnnotationPriorities, annotationPrioritiesLabels } from '../consts';
 import styles from './Viewer.scss';
@@ -27,7 +27,6 @@ interface IViewerItemProps {
 
 interface IViewerItemState {
   initialView: boolean; // used to determine whether edit/delete buttons should be visible
-  confirmDeleteModalOpen: boolean;
 }
 
 @connect(
@@ -44,7 +43,6 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     super(props);
     this.state = {
       initialView: true,
-      confirmDeleteModalOpen: false,
     };
     this.setControlDisappearTimeout();
   }
@@ -68,10 +66,6 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
   onDeleteClick = (e) => {
     this.props.onDelete(this.props.annotationId);
   }
-
-  setDeleteModalOpen = e => this.setState({ confirmDeleteModalOpen: true });
-
-  setDeleteModalClosed = e => this.setState({ confirmDeleteModalOpen: false });
 
   toggleUpvote = (e) => {
     // [roadmap 5.3] TODO connect toggleUpvote to redux-json-api call
@@ -98,33 +92,10 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     );
   }
 
-  renderDeleteModal() {
-    return (
-      <Modal
-        size="mini"
-        className="pp-ui"
-        open={this.state.confirmDeleteModalOpen}
-      >
-        <Modal.Content>
-          <p>Czy na pewno chcesz usunąć przypis?</p>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button onClick={this.setDeleteModalClosed} size="tiny" negative={true}>
-            Nie
-          </Button>
-          <Button onClick={this.onDeleteClick} size="tiny" positive={true}>
-            Tak
-          </Button>
-        </Modal.Actions>
-      </Modal>
-    );
-  }
-
   renderControls() {
     if (this.props.doesBelongToUser) {
       return (
         <div className={classNames(styles.controls, { [styles.visible]: this.state.initialView })}>
-          {this.renderDeleteModal()}
           <button
             type="button"
             title="Edit"
@@ -135,7 +106,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
           <button
             type="button"
             title="Delete"
-            onClick={this.setDeleteModalOpen}
+            onClick={this.onDeleteClick}
           >
             <i className="trash icon" />
           </button>
