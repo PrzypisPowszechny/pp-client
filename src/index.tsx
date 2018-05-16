@@ -16,6 +16,13 @@ import './css/common/pp-semantic-ui-overrides.scss';
 
 import './css/selection.scss';
 
+// Set moment.js language for whole package
+// Apparently, there is no clean solution to import only momentJS specific locale package
+// and set it for future momentJS calls;
+// (https://github.com/moment/moment/issues/2517)
+import * as moment from 'moment';
+moment.locale('pl');
+
 import PPSettings from 'PPSettings.interface';
 
 // Declared in webpack.config through DefinePlugin
