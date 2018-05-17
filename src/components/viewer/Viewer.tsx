@@ -78,19 +78,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
       return (
         <ViewerItem
           key={annotation.id}
-
-          annotationId={annotation.id}
-          comment={attrs.comment}
-          doesBelongToUser={attrs.doesBelongToUser}
-          priority={attrs.priority}
-          upvote={attrs.upvote}
-          upvoteCount={attrs.upvoteCount}
-          annotationLink={attrs.annotationLink}
-          annotationLinkTitle={attrs.annotationLinkTitle}
-          onEdit={this.onItemEdit}
-          onDelete={this.onItemDelete}
-
-          createDate={new Date()} // TODO use date from API (now missing)
+          annotation={annotation}
         />
       );
     });
