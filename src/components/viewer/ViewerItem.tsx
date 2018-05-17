@@ -1,25 +1,27 @@
 import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
+import { createResource, deleteResource } from 'redux-json-api';
 import moment from 'moment';
-import { Popup, Button } from 'semantic-ui-react';
+import { Popup } from 'semantic-ui-react';
 
 import { AnnotationPriorities, annotationPrioritiesLabels } from '../consts';
 import styles from './Viewer.scss';
 import { hideViewer, showEditorAnnotation } from 'store/widgets/actions';
+import {
+  AnnotationAPIModel,
+  AnnotationType,
+  AnnotationUpvoteAPICreateModel,
+  AnnotationUpvoteAPIModel,
+  AnnotationUpvoteType,
+} from '../../api/annotations';
 
 interface IViewerItemProps {
   key: string;
+  annotation: AnnotationAPIModel;
 
-  annotationId: string;
-  doesBelongToUser: boolean;
-  priority: AnnotationPriorities;
-  upvote: boolean;
-  upvoteCount: number;
-  comment: string;
-  annotationLink: string;
-  annotationLinkTitle: string;
-  createDate: any;
+  deleteUpvote: (instance: AnnotationUpvoteAPIModel) => Promise<object>;
+  createUpvote: (instance: AnnotationUpvoteAPICreateModel) => Promise<object>;
 
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
@@ -30,10 +32,14 @@ interface IViewerItemState {
 }
 
 @connect(
-  null, {
-    showEditorAnnotation,
-    hideViewer,
-  },
+  null,
+  dispatch => ({
+    showEditorAnnotation: () => dispatch(showEditorAnnotation),
+    hideViewer: () => dispatch(hideViewer),
+
+    deleteUpvote: (instance: AnnotationUpvoteAPIModel) => dispatch(deleteResource(instance)),
+    createUpvote: (instance: AnnotationUpvoteAPICreateModel) => dispatch(createResource(instance)),
+  }),
 )
 export default class ViewerItem extends React.Component<Partial<IViewerItemProps>, Partial<IViewerItemState>> {
 
@@ -60,15 +66,46 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     );
   }
   onEditClick = (e) => {
-    this.props.onEdit(this.props.annotationId);
+    // this.props.onEdit(this.props.annotationId);
   }
 
   onDeleteClick = (e) => {
-    this.props.onDelete(this.props.annotationId);
+    // this.props.onDelete(this.props.annotationId);
   }
 
   toggleUpvote = (e) => {
-    // [roadmap 5.3] TODO connect toggleUpvote to redux-json-api call
+    const { annotation } = this.props;
+    if (annotation.relationships.annotationUpvote.data) {
+      this.props.deleteUpvote({
+        ...annotation.relationships.annotationUpvote.data,
+        // Include relation to remove have the reverse relation (at annotation instance) removed as well,
+        // even if this annotationUpvote is not in the store.
+        relationships: {
+          annotation: {
+            data: {id: annotation.id, type: annotation.type},
+          },
+        },
+      })
+        .then(() => null)
+        .catch((errors) => {
+          console.log(errors);
+        });
+    } else {
+      this.props.createUpvote({
+        type: AnnotationUpvoteType,
+        relationships: {
+          annotation: {
+            data: {
+              id: annotation.id,
+              type: AnnotationType,
+            },
+          },
+        },
+      }).then(() => null)
+      .catch((errors) => {
+        console.log(errors);
+      });
+    }
   }
 
   headerPriorityClass() {
@@ -77,23 +114,28 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
       [AnnotationPriorities.WARNING]: styles.priorityWarning,
       [AnnotationPriorities.ALERT]: styles.priorityAlert,
     };
-    return priorityToClass[this.props.priority];
+    return priorityToClass[this.props.annotation.attributes.priority];
   }
 
   upvoteButton() {
+    const { annotation } = this.props;
+    const { annotationUpvote } = annotation.relationships;
+    const totalUpvoteCount = annotation.attributes.upvoteCountExceptUser + (annotationUpvote.data ? 1 : 0);
     return (
       <a
-        className={classNames('ui', 'label', 'medium', styles.upvote, { [styles.selected]: this.props.upvote })}
+        className={classNames('ui', 'label', 'medium', styles.upvote, {
+          [styles.selected]: Boolean(annotationUpvote.data) })
+        }
         onClick={this.toggleUpvote}
       >
         Przydatne
-        <span className={styles.number}>{this.props.upvoteCount}</span>
+        <span className={styles.number}>{totalUpvoteCount}</span>
       </a>
     );
   }
 
   renderControls() {
-    if (this.props.doesBelongToUser) {
+    if (this.props.annotation.attributes.doesBelongToUser) {
       return (
         <div className={classNames(styles.controls, { [styles.visible]: this.state.initialView })}>
           <button
@@ -124,7 +166,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
       annotationLink,
       annotationLinkTitle,
       createDate,
-    } = this.props;
+    } = this.props.annotation.attributes;
 
     return (
       <li className={styles.annotation}>
