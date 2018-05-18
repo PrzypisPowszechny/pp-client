@@ -4,15 +4,16 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { Popup, Modal, Button } from 'semantic-ui-react';
 
-
 import { AnnotationPriorities, annotationPrioritiesLabels } from '../consts';
 import styles from './Viewer.scss';
-import {hideViewer} from 'store/widgets/actions';
+import {hideViewer, setSelectionRange, showEditorAnnotation} from 'store/widgets/actions';
 import {selectViewerState} from 'store/widgets/selectors';
+import {Range} from 'xpath-range';
 
 interface IViewerItemProps {
   key: string;
 
+  annotationId: string;
   doesBelongToUser: boolean;
   priority: AnnotationPriorities;
   upvote: boolean;
@@ -22,7 +23,8 @@ interface IViewerItemProps {
   annotationLinkTitle: string;
   createDate: any;
 
-  hideViewer: () => void;
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
 interface IViewerItemState {
@@ -32,6 +34,7 @@ interface IViewerItemState {
 
 @connect(
   null, {
+    showEditorAnnotation,
     hideViewer,
   },
 )
@@ -60,22 +63,17 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
       ViewerItem.editControlDisappearTimeout,
     );
   }
+  onEditClick = (e) => {
+    this.props.onEdit(this.props.annotationId);
+  }
 
-  handleEdit = (e) => {
-    this.props.hideViewer();
-    // [roadmap 6.4.1.3] TODO on "edit" open the Editor for edit.
-    console.log('Editor should open now with the form filled in; not implemented yet!');
+  onDeleteClick = (e) => {
+    this.props.onDelete(this.props.annotationId);
   }
 
   setDeleteModalOpen = e => this.setState({ confirmDeleteModalOpen: true });
 
   setDeleteModalClosed = e => this.setState({ confirmDeleteModalOpen: false });
-
-  handleDelete = (e) => {
-    this.props.hideViewer();
-    // [roadmap 5.3] TODO connect handleDelete to redux-json-api call
-    console.log('Annotations should be deleted now; not implemented yet!');
-  }
 
   toggleUpvote = (e) => {
     // [roadmap 5.3] TODO connect toggleUpvote to redux-json-api call
@@ -116,7 +114,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
           <Button onClick={this.setDeleteModalClosed} size="tiny" negative={true}>
             Nie
           </Button>
-          <Button onClick={this.handleDelete} size="tiny" positive={true}>
+          <Button onClick={this.onDeleteClick} size="tiny" positive={true}>
             Tak
           </Button>
         </Modal.Actions>
@@ -132,7 +130,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
           <button
             type="button"
             title="Edit"
-            onClick={this.handleEdit}
+            onClick={this.onEditClick}
           >
             <i className="edit icon" />
           </button>

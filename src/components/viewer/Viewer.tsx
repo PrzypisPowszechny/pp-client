@@ -6,7 +6,7 @@ import Widget from 'components/widget';
 import ViewerItem from './ViewerItem';
 import styles from './Viewer.scss';
 import {selectViewerState} from 'store/widgets/selectors';
-import {hideViewer} from 'store/widgets/actions';
+import {hideViewer, showEditorAnnotation} from 'store/widgets/actions';
 import {AnnotationPriorities} from '../consts';
 import {AnnotationAPIModel} from 'api/annotations';
 
@@ -15,6 +15,8 @@ interface IViewerProps {
   locationX: number;
   locationY: number;
   annotations: AnnotationAPIModel[];
+
+  showEditorAnnotation: (x: number, y: number, id?: string) => void;
   hideViewer: () => void;
 }
 
@@ -39,9 +41,10 @@ interface IViewerProps {
       annotations,
     };
   },
-  dispatch => ({
-    hideViewer: () => dispatch(hideViewer()),
-  }),
+  {
+    showEditorAnnotation,
+    hideViewer,
+  },
 )
 export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
 
@@ -56,6 +59,23 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
     super(props);
   }
 
+  onItemEdit = (id: string) => {
+    const {
+      locationX,
+      locationY,
+    } = this.props;
+
+    this.props.showEditorAnnotation(locationX, locationY, id);
+    this.props.hideViewer();
+  }
+
+  onItemDelete = (id: string) => {
+    // [roadmap 5.3] TODO connect to redux-json-api call
+    console.log('Annotations should be deleted now; not implemented yet!');
+    this.props.hideViewer();
+  }
+
+
   renderItems() {
     return this.props.annotations.map((annotation) => {
       const attrs = annotation.attributes;
@@ -63,6 +83,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
         <ViewerItem
           key={annotation.id}
 
+          annotationId={annotation.id}
           comment={attrs.comment}
           doesBelongToUser={attrs.doesBelongToUser}
           priority={attrs.priority}
@@ -70,6 +91,8 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
           upvoteCount={attrs.upvoteCount}
           annotationLink={attrs.annotationLink}
           annotationLinkTitle={attrs.annotationLinkTitle}
+          onEdit={this.onItemEdit}
+          onDelete={this.onItemDelete}
 
           createDate={new Date()} // TODO use date from API (now missing)
         />

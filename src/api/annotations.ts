@@ -8,6 +8,7 @@ export interface RangeAPIModel {
 }
 
 export interface AnnotationAPICreateModel {
+  id?: string;
   type: string;
   attributes: {
     url: string;
