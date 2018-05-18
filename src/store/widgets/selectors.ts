@@ -44,7 +44,9 @@ export const selectEditorState = createSelector<IStore, any, any, any>(
 );
 
 function selectViewerAnnotations(annotations: any[], annotationIds: any[]) {
-  return annotationIds.map(id => annotations.find(annotation => annotation.id === id));
+  return annotationIds.map(id => annotations.find(annotation => annotation.id === id))
+    // Filter out outdated annotationIds (which are only updated on view new opening)
+    .filter( annotation => annotation);
 }
 
 export const selectViewerState = createSelector<IStore, any, any, any>(

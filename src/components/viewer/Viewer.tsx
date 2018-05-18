@@ -1,8 +1,9 @@
 import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
+import { createResource, deleteResource } from 'redux-json-api';
 import Widget from 'components/widget';
-import { Modal, Button } from 'semantic-ui-react';
+import { Button, Modal } from 'semantic-ui-react';
 
 import ViewerItem from './ViewerItem';
 import styles from './Viewer.scss';
@@ -15,6 +16,7 @@ interface IViewerProps {
   locationY: number;
   annotations: AnnotationAPIModel[];
 
+  deleteAnnotation: (instance: AnnotationAPIModel) => Promise<object>;
   showEditorAnnotation: (x: number, y: number, id?: string) => void;
   hideViewer: () => void;
 }
@@ -46,10 +48,10 @@ interface IViewerState {
   {
     showEditorAnnotation,
     hideViewer,
+    deleteAnnotation: (instance: AnnotationAPIModel) => deleteResource(instance),
   },
 )
 export default class Viewer extends React.Component<Partial<IViewerProps>, Partial<IViewerState>> {
-
   static defaultProps = {
     visible: true,
     locationX: 0,
@@ -70,22 +72,26 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, Parti
       locationX,
       locationY,
     } = this.props;
-
     this.props.showEditorAnnotation(locationX, locationY, id);
     this.props.hideViewer();
   }
 
-  onItemDeleteClick = (id: string) => {
+  onItemDelete = (id: string) => {
     this.setState({
       confirmDeleteModalOpen: true,
       deleteAnnotationId: id,
     });
 }
-
-  onItemDelete = () => {
-    // [roadmap 5.3] TODO connect to redux-json-api call
-    console.log(`Annotation ${this.state.deleteAnnotationId} should be deleted now; not implemented yet!`);
-    this.props.hideViewer();
+  onItemConfirmedDelete = (e) => {
+    const annotation = this.props.annotations.find(a => a.id === this.state.deleteAnnotationId);
+    this.props.deleteAnnotation(annotation)
+      .catch((errors) => {
+        console.log(errors);
+      });
+    this.setState({
+      confirmDeleteModalOpen: false,
+      deleteAnnotationId: null,
+    });
   }
 
   onMouseLeave = (e) => {
@@ -111,6 +117,8 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, Parti
         <ViewerItem
           key={annotation.id}
           annotation={annotation}
+          onDelete={this.onItemDelete}
+          onEdit={this.onItemEdit}
         />
       );
     });
@@ -130,7 +138,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, Parti
           <Button onClick={this.setDeleteModalClosed} size="tiny" negative={true}>
             Nie
           </Button>
-          <Button onClick={this.onItemDelete} size="tiny" positive={true}>
+          <Button onClick={this.onItemConfirmedDelete} size="tiny" positive={true}>
             Tak
           </Button>
         </Modal.Actions>
