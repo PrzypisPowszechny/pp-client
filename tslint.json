@@ -20,6 +20,7 @@
     "no-console": false,
     "no-unnecessary-callback-wrapper": true,
     "object-literal-sort-keys": false,
+    "object-curly-spacing": true,
     "ordered-imports": false,
     "ter-arrow-parens": [true, "as-needed", { "requireForBlockBody": true }],
     "trailing-comma": [
