@@ -2,45 +2,37 @@ import React, {RefObject} from 'react';
 import {connect} from 'react-redux';
 import { createResource, updateResource } from 'redux-json-api';
 import classNames from 'classnames';
-import {Range} from 'xpath-range';
 import {Modal, Popup} from 'semantic-ui-react';
 import {AnnotationPriorities, annotationPrioritiesLabels} from '../consts';
 import {DragTracker, IVec2} from 'utils/move';
 import PriorityButton from './priority-button/PriorityButton';
-import {IEditorState, IEditorProps, IEditorForm} from './interfaces';
+import {IEditorState, IEditorProps } from './interfaces';
 import { DraggableWidget } from 'components/widget';
 import { hideEditor } from 'store/actions';
 import {selectEditorState} from 'store/selectors';
 
 import styles from './Editor.scss';
-import {AnnotationAPICreateModel} from 'api/annotations';
+import {AnnotationAPICreateModel, AnnotationAPIModel} from 'api/annotations';
+import {AnnotationAPIModelAttrs} from 'api/annotations';
+import * as _ from 'lodash';
 
 @connect(
   (state) => {
+
     const {
-      visible,
       locationX,
       locationY,
+
       range,
-      // form
-      annotationId,
-      priority,
-      comment,
-      annotationLink,
-      annotationLinkTitle,
+      annotation,
     } = selectEditorState(state);
 
     return {
-      visible,
       locationX,
       locationY,
+
       range,
-      // form
-      annotationId,
-      priority,
-      comment,
-      annotationLink,
-      annotationLinkTitle,
+      annotation,
     };
   },
   dispatch => ({
@@ -51,20 +43,15 @@ import {AnnotationAPICreateModel} from 'api/annotations';
       } else {
         return dispatch(createResource(model));
       }
-    }
+    },
   }),
 )
 class Editor extends React.Component<
   Partial<IEditorProps>,
   Partial<IEditorState>
   > {
-   /*
-    * NOTE:
-    * For a comprehensive note on invertedX and invertedY see Widget component
-    */
 
   static defaultProps = {
-    visible: true,
     locationX: 0,
     locationY: 0,
   };
@@ -75,21 +62,36 @@ class Editor extends React.Component<
     [AnnotationPriorities.ALERT]: styles.priorityAlert,
   };
 
-  static getDerivedStateFromProps(nextProps: IEditorProps) {
-    return {
-      annotationId: nextProps.annotationId,
-      priority: nextProps.priority,
-      comment: nextProps.comment,
-      annotationLink: nextProps.annotationLink,
-      annotationLinkTitle: nextProps.annotationLinkTitle,
+  static getDerivedStateFromProps(nextProps: IEditorProps, prevState: IEditorState) {
+    /*
+     * The window should update whenever either annotation or range changes
+     * Comparing ranges is crucial when the annotation was null before and is null again;
+     * However, it is not enough, as two annotations can be made for the exact same range
+     */
+    const nextAnnotation: any = nextProps.annotation || {};
+    // Note: nextProps.annotation && nextProps.annotation.id === prevState.annotationId will generate updates
+    // if only nextProps.annotation is null
+    const areAnnotationsEqual = prevState.annotationId === nextAnnotation.id;
+    const areRangesEqual = _.isEqual(prevState.range, nextProps.range);
+    if (areAnnotationsEqual && areRangesEqual) {
+      return { ...prevState };
+    } else {
+      const attrs: Partial<AnnotationAPIModelAttrs> = nextAnnotation.attributes || {};
+      return {
+        annotationId: nextAnnotation.id,
+        range: nextProps.range,
+        priority: attrs.priority ||  AnnotationPriorities.NORMAL,
+        comment: attrs.comment || '',
+        annotationLink: attrs.annotationLink || '',
+        annotationLinkTitle: attrs.annotationLinkTitle || '',
 
-      moved: false,
-      locationX: nextProps.locationX,
-      locationY: nextProps.locationY,
-      annotationLinkError: '',
-      annotationLinkTitleError: '',
-      noCommentModalOpen: false,
-    };
+        locationX: nextProps.locationX,
+        locationY: nextProps.locationY,
+        annotationLinkError: '',
+        annotationLinkTitleError: '',
+        noCommentModalOpen: false,
+      };
+    }
   }
 
   moverElement: RefObject<HTMLDivElement>;
@@ -98,19 +100,6 @@ class Editor extends React.Component<
     super(props);
     this.state = {};
     this.moverElement = React.createRef();
-  }
-
-  isNewAnnotation() {
-    return this.props.annotationId !== null;
-  }
-
-  onDrag = (delta: IVec2) => {
-    this.setState({
-      locationX: this.state.locationX + delta.x,
-      locationY: this.state.locationY + delta.y,
-      moved: true,
-    });
-    return true;
   }
 
   setPriority = (priority: AnnotationPriorities) => {
@@ -175,7 +164,7 @@ class Editor extends React.Component<
 
   save() {
     const model = {
-      id: this.props.annotationId,
+      id: this.props.annotation ? this.props.annotation.id : null,
       type: 'annotations',
       attributes: {
         url: window.location.href,
@@ -226,9 +215,6 @@ class Editor extends React.Component<
 
   render() {
     const {
-      locationX,
-      locationY,
-      moved,
       priority,
       comment,
       annotationLink,
@@ -237,20 +223,13 @@ class Editor extends React.Component<
       annotationLinkTitleError,
     } = this.state;
 
-    const {
-      visible,
-    } = this.props;
-
     return (
       <DraggableWidget
         className={classNames('pp-ui', styles.self)}
-        visible={visible}
-        locationX={locationX}
-        locationY={locationY}
-        calculateInverted={!moved}
+        initialLocationX={this.props.locationX}
+        initialLocationY={this.props.locationY}
         widgetTriangle={true}
         mover={this.moverElement}
-        onDrag={this.onDrag}
       >
         <div className={styles.headBar}>
           <label className={styles.priorityHeader}> Co dodajesz? </label>

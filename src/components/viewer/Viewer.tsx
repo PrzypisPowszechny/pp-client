@@ -7,11 +7,10 @@ import ViewerItem from './ViewerItem';
 import styles from './Viewer.scss';
 import {selectViewerState} from 'store/widgets/selectors';
 import {hideViewer, showEditorAnnotation} from 'store/widgets/actions';
-import {AnnotationPriorities} from '../consts';
+import {AnnotationPriorities} from 'components/consts';
 import {AnnotationAPIModel} from 'api/annotations';
 
 interface IViewerProps {
-  visible: boolean;
   locationX: number;
   locationY: number;
   annotations: AnnotationAPIModel[];
@@ -28,14 +27,12 @@ interface IViewerProps {
 @connect(
   (state) => {
     const {
-      visible,
       locationX,
       locationY,
       annotations,
     } = selectViewerState(state);
 
     return {
-      visible,
       locationX,
       locationY,
       annotations,
@@ -71,10 +68,9 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
 
   onItemDelete = (id: string) => {
     // [roadmap 5.3] TODO connect to redux-json-api call
-    console.log('Annotations should be deleted now; not implemented yet!');
+    console.log('Annotation should be deleted now; not implemented yet!');
     this.props.hideViewer();
   }
-
 
   renderItems() {
     return this.props.annotations.map((annotation) => {
@@ -104,10 +100,9 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
     return (
       <Widget
         className={classNames('pp-ui', styles.self)}
-        visible={this.props.visible}
         locationX={this.props.locationX}
         locationY={this.props.locationY}
-        calculateInverted={true}
+        updateInverted={true}
         widgetTriangle={true}
         onMouseLeave={this.props.hideViewer}
       >

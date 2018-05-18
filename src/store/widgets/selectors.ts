@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import { IStore } from 'store/reducer';
 import {AnnotationPriorities} from 'components/consts';
 import {IWidgetState, WidgetReducer} from './reducers';
+import {AnnotationAPIModel} from 'api/annotations';
 
 function selectWidgetState({ location, visible }) {
   return {
@@ -18,25 +19,20 @@ export const selectMenuState = createSelector<IStore, any, any>(
 
 function selectAnnotationForm(annotations, editor) {
   const annotationId = editor.annotationId;
-  let attrs;
   // When the annotation is being created for the first time, range is stored in state.editor.range;
   // If the annotation already exists, it is taken from annotation API model.
   let range;
+  let annotation;
   if (annotationId) {
-    const model = annotations.find(x => x.id === annotationId);
-    attrs = model.attributes;
-    range = attrs.range;
+    annotation = annotations.find(x => x.id === annotationId);
+    range = annotation.attributes.range;
   } else {
-    attrs = {};
+    annotation = null;
     range = editor.range;
   }
 
   return {
-    annotationId,
-    priority: attrs.priority || AnnotationPriorities.NORMAL,
-    comment: attrs.comment || '',
-    annotationLink: attrs.annotationLink || '',
-    annotationLinkTitle: attrs.annotationLinkTitle || '',
+    annotation,
     range,
   };
 }
