@@ -12,7 +12,7 @@ interface IHighlightsProps {
 
 @connect(
   state => ({
-      annotations: state.api.annotations ? state.api.annotations.data : [],
+      annotations: state.api.annotations.data
   }),
   dispatch => ({
     showViewer: (x, y, annotationId) => dispatch(showViewer(x, y, annotationId)),
