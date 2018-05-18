@@ -8,6 +8,7 @@ import {
 import _difference from 'lodash/difference';
 import { API_DELETED } from 'redux-json-api/lib/constants';
 import { AnnotationResourceType } from '../../api/annotations';
+import { combineReducers } from 'redux';
 
 export interface IWidgetState {
   visible: boolean;
@@ -45,94 +46,66 @@ const initialWidgetState = {
   },
 };
 
-const initialState = {
-  editor: {
-    annotationId: null,
-    range: null,
-    ...initialWidgetState,
-  },
-  menu: {
-    ...initialWidgetState,
-  },
-  viewer: {
-    ...initialWidgetState,
-    annotationIds: [],
-  },
-};
+const widgets = combineReducers({
+  menu, viewer, editor,
+});
+export default widgets;
 
-export default function widgets(state = initialState, action): WidgetReducer {
+function viewer(state = { ...initialWidgetState, annotationIds: []} , action) {
   switch (action.type) {
-    case EDITOR_VISIBLE_CHANGE:
-    case EDITOR_ANNOTATION:
-    case SET_EDITOR_SELECTION_RANGE:
-      return editorActionHandler(state, action.payload);
-    case MENU_WIDGET_CHANGE:
-      return menuActionHandler(state, action.payload);
     case VIEWER_VISIBLE_CHANGE:
-      return viewerActionHandler(state, action.payload);
+      // Update location only when the displayed annotations have changed, too.
+      // This prevents window from changing every time the user's cursor slips off the widget
+      const prevIds = state.annotationIds;
+      const newIds = action.payload.annotationIds;
+      let locationOverride = {};
+      if (_difference(prevIds, newIds).length === 0 && _difference(newIds, prevIds).length === 0) {
+        locationOverride = {
+          location: state.location,
+        };
+      }
+      return {
+        ...state,
+        ...action.payload,
+        ...locationOverride,
+      };
     case API_DELETED:
-      return apiDeletedActionHandler(state, action.payload);
+      // If one of viewed annotation is removed, filter it out
+      const {type: resType, id: resId} = action.payload;
+      if (resType === AnnotationResourceType && state.visible) {
+        const filteredAnnotationIds = state.annotationIds.slice()
+          .filter(id => id !== resId);
+
+        if (state.annotationIds.length !== filteredAnnotationIds.length) {
+          return {
+            ...state,
+            annotationIds: filteredAnnotationIds,
+            visible: filteredAnnotationIds.length > 0,
+          };
+        }
+      }
+      return state;
     default:
       return state;
   }
 }
 
-function editorActionHandler(state, payload) {
-  return {
-    ...state,
-    editor: {
-      ...state.editor,
-      ...payload,
-    },
-  };
-}
-
-function menuActionHandler(state, payload) {
-  return {
-    ...state,
-    menu: {
-      ...state.menu,
-      ...payload,
-    },
-  };
-}
-
-function viewerActionHandler(state, payload) {
-  // Update location only when the displayed annotations have changed, too.
-  // This prevents window from changing every time the user's cursor slips off the widget
-  const prevIds = state.viewer.annotationIds;
-  const newIds = payload.annotationIds;
-  let locationOverride = {};
-  if (_difference(prevIds, newIds).length === 0 && _difference(newIds, prevIds).length === 0) {
-    locationOverride = {
-      location: state.viewer.location,
-    };
+function menu(state = initialWidgetState , action) {
+  switch (action.type) {
+    case MENU_WIDGET_CHANGE:
+      return {...state, ...action.payload};
+    default:
+      return state;
   }
-
-  return {
-    ...state,
-    viewer: {
-      ...state.viewer,
-      ...payload,
-      ...locationOverride,
-    },
-  };
 }
 
-function apiDeletedActionHandler(state, {type: resType, id: resId}) {
-  if (resType === AnnotationResourceType && state.viewer.visible) {
-    const filteredAnnotationIds = state.viewer.annotationIds.slice()
-      .filter(id => id !== resId);
-
-    if (state.viewer.annotationIds.length !== filteredAnnotationIds.length) {
-      return {
-        ...state,
-        viewer: {
-          ...state.viewer,
-          annotationIds: filteredAnnotationIds,
-          visible: filteredAnnotationIds.length > 0,
-        }};
-    }
+function editor(state = {annotationId: null, range: null, ...initialWidgetState}, action) {
+  switch (action.type) {
+    case EDITOR_VISIBLE_CHANGE:
+    case EDITOR_ANNOTATION:
+    case SET_EDITOR_SELECTION_RANGE:
+      return {...state, ...action.payload};
+    default:
+      return state;
   }
-  return state;
 }
