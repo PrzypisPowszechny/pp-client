@@ -18,6 +18,7 @@ import {
 interface IViewerItemProps {
   key: string;
   annotation: AnnotationAPIModel;
+  hideViewer: () => undefined;
 
   deleteUpvote: (instance: AnnotationUpvoteAPIModel) => Promise<object>;
   createUpvote: (instance: AnnotationUpvoteAPICreateModel) => Promise<object>;
@@ -67,11 +68,11 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     );
   }
   onEditClick = (e) => {
-    // this.props.onEdit(this.props.annotationId);
+    this.props.onEdit(this.props.annotation.id);
   }
 
   onDeleteClick = (e) => {
-    // this.props.onDelete(this.props.annotationId);
+    this.props.onDelete(this.props.annotation.id);
   }
 
   setDeleteModalOpen = e => this.setState({ confirmDeleteModalOpen: true });
@@ -90,11 +91,10 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
             data: {id: annotation.id, type: annotation.type},
           },
         },
-      })
-        .then(() => null)
-        .catch((errors) => {
-          console.log(errors);
-        });
+      }).then(() => null)
+      .catch((errors) => {
+        console.log(errors);
+      });
     } else {
       this.props.createUpvote({
         type: AnnotationUpvoteType,

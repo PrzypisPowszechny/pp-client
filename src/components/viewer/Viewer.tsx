@@ -1,13 +1,14 @@
 import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
+import { createResource, deleteResource } from 'redux-json-api';
 import Widget from 'components/widget';
 
 import ViewerItem from './ViewerItem';
 import styles from './Viewer.scss';
 import {selectViewerState} from 'store/widgets/selectors';
 import {hideViewer, showEditorAnnotation} from 'store/widgets/actions';
-import {AnnotationPriorities} from 'components/consts';
+import {AnnotationPriorities, annotationPrioritiesLabels} from 'components/consts';
 import {AnnotationAPIModel} from 'api/annotations';
 
 interface IViewerProps {
@@ -15,6 +16,7 @@ interface IViewerProps {
   locationY: number;
   annotations: AnnotationAPIModel[];
 
+  deleteAnnotation: (instance: AnnotationAPIModel) => Promise<object>;
   showEditorAnnotation: (x: number, y: number, id?: string) => void;
   hideViewer: () => void;
 }
@@ -41,8 +43,10 @@ interface IViewerProps {
   {
     showEditorAnnotation,
     hideViewer,
+    deleteAnnotation: (instance: AnnotationAPIModel) => deleteResource(instance),
   },
 )
+
 export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
 
   static defaultProps = {
@@ -61,15 +65,16 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
       locationX,
       locationY,
     } = this.props;
-
     this.props.showEditorAnnotation(locationX, locationY, id);
     this.props.hideViewer();
   }
 
   onItemDelete = (id: string) => {
-    // [roadmap 5.3] TODO connect to redux-json-api call
-    console.log('Annotation should be deleted now; not implemented yet!');
-    this.props.hideViewer();
+    const annotation = this.props.annotations.find(a => a.id === id);
+    this.props.deleteAnnotation(annotation)
+      .catch((errors) => {
+        console.log(errors);
+      });
   }
 
   renderItems() {
@@ -79,6 +84,8 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
         <ViewerItem
           key={annotation.id}
           annotation={annotation}
+          onDelete={this.onItemDelete}
+          onEdit={this.onItemEdit}
         />
       );
     });
