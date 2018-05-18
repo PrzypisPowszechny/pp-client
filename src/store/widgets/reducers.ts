@@ -6,6 +6,8 @@ import {
   VIEWER_VISIBLE_CHANGE,
 } from './actions';
 import _difference from 'lodash/difference';
+import { API_DELETED } from 'redux-json-api/lib/constants';
+import { AnnotationResourceType } from '../../api/annotations';
 
 export interface IWidgetState {
   visible: boolean;
@@ -68,6 +70,8 @@ export default function widgets(state = initialState, action): WidgetReducer {
       return menuActionHandler(state, action.payload);
     case VIEWER_VISIBLE_CHANGE:
       return viewerActionHandler(state, action.payload);
+    case API_DELETED:
+      return apiDeletedActionHandler(state, action.payload);
     default:
       return state;
   }
@@ -113,4 +117,22 @@ function viewerActionHandler(state, payload) {
       ...locationOverride,
     },
   };
+}
+
+function apiDeletedActionHandler(state, {type: resType, id: resId}) {
+  if (resType === AnnotationResourceType && state.viewer.visible) {
+    const filteredAnnotationIds = state.viewer.annotationIds.slice()
+      .filter(id => id !== resId);
+
+    if (state.viewer.annotationIds.length !== filteredAnnotationIds.length) {
+      return {
+        ...state,
+        viewer: {
+          ...state.viewer,
+          annotationIds: filteredAnnotationIds,
+          visible: filteredAnnotationIds.length > 0,
+        }};
+    }
+  }
+  return state;
 }
