@@ -75,5 +75,6 @@ export interface APIModel {
   type: string;
 }
 
-export const AnnotationType = 'annotations';
-export const AnnotationUpvoteType = 'annotationUpvotes';
+// Because of redux-json-api constraints these types, have to be consistent with relationships names
+export const AnnotationResourceType = 'annotations';
+export const AnnotationUpvoteResourceType = 'annotationUpvotes';

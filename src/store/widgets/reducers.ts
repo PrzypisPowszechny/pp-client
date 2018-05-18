@@ -5,7 +5,7 @@ import {
   SET_EDITOR_SELECTION_RANGE,
   VIEWER_VISIBLE_CHANGE,
 } from './actions';
-import * as _ from 'lodash';
+import _difference from 'lodash/difference';
 
 export interface IWidgetState {
   visible: boolean;
@@ -99,7 +99,7 @@ function viewerActionHandler(state, payload) {
   const prevIds = state.viewer.annotationIds;
   const newIds = payload.annotationIds;
   let locationOverride = {};
-  if (_.difference(prevIds, newIds).length === 0 && _.difference(newIds, prevIds).length === 0) {
+  if (_difference(prevIds, newIds).length === 0 && _difference(newIds, prevIds).length === 0) {
     locationOverride = {
       location: state.viewer.location,
     };

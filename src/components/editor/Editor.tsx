@@ -35,11 +35,11 @@ import * as _ from 'lodash';
   },
   dispatch => ({
     hideEditor: () => dispatch(hideEditor()),
-    createAnnotation: (model: AnnotationAPICreateModel) => {
-      if (model.id) {
-        return dispatch(updateResource(model));
+    createAnnotation: (instance: AnnotationAPICreateModel) => {
+      if (instance.id) {
+        return dispatch(updateResource(instance));
       } else {
-        return dispatch(createResource(model));
+        return dispatch(createResource(instance));
       }
     },
   }),
@@ -72,7 +72,7 @@ class Editor extends React.Component<
     const areAnnotationsEqual = prevState.annotationId === nextAnnotation.id;
     const areRangesEqual = _.isEqual(prevState.range, nextProps.range);
     if (areAnnotationsEqual && areRangesEqual) {
-      return { ...prevState };
+      return null;
     } else {
       const attrs: Partial<AnnotationAPIModelAttrs> = nextAnnotation.attributes || {};
       return {
@@ -161,7 +161,7 @@ class Editor extends React.Component<
   }
 
   save() {
-    const model = {
+    const instance = {
       id: this.props.annotation ? this.props.annotation.id : null,
       type: 'annotations',
       attributes: {
@@ -173,7 +173,7 @@ class Editor extends React.Component<
         annotationLinkTitle: this.state.annotationLinkTitle,
       },
     };
-    this.props.createAnnotation(model).then(() => {
+    this.props.createAnnotation(instance).then(() => {
         this.props.hideEditor();
       })
       .catch((errors) => {

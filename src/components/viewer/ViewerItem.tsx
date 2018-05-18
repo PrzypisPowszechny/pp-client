@@ -8,12 +8,13 @@ import { Popup } from 'semantic-ui-react';
 import { AnnotationPriorities, annotationPrioritiesLabels } from '../consts';
 import styles from './Viewer.scss';
 import { hideViewer, showEditorAnnotation } from 'store/widgets/actions';
+
 import {
   AnnotationAPIModel,
-  AnnotationType,
+  AnnotationResourceType,
   AnnotationUpvoteAPICreateModel,
   AnnotationUpvoteAPIModel,
-  AnnotationUpvoteType,
+  AnnotationUpvoteResourceType,
 } from '../../api/annotations';
 
 interface IViewerItemProps {
@@ -92,12 +93,12 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
       });
     } else {
       this.props.createUpvote({
-        type: AnnotationUpvoteType,
+        type: AnnotationUpvoteResourceType,
         relationships: {
           annotation: {
             data: {
               id: annotation.id,
-              type: AnnotationType,
+              type: AnnotationResourceType,
             },
           },
         },
