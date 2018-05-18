@@ -16,6 +16,7 @@ import {
   AnnotationUpvoteAPIModel,
   AnnotationUpvoteResourceType,
 } from '../../api/annotations';
+import Timer = NodeJS.Timer;
 
 interface IViewerItemProps {
   key: string;
@@ -31,6 +32,7 @@ interface IViewerItemProps {
 
 interface IViewerItemState {
   initialView: boolean; // used to determine whether edit/delete buttons should be visible
+  disappearTimeoutId: Timer;
 }
 
 @connect(
@@ -61,11 +63,21 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     this.setControlDisappearTimeout();
   }
 
+  componentWillMount() {
+    if (this.state.disappearTimeoutId) {
+      clearTimeout(this.state.disappearTimeoutId);
+    }
+  }
+
   setControlDisappearTimeout() {
-    setTimeout(
-      () => this.setState({ initialView: false }),
+    if (this.state.disappearTimeoutId) {
+      clearTimeout(this.state.disappearTimeoutId);
+    }
+    const disappearTimeoutId = setTimeout(
+      () => this.setState({ initialView: false, disappearTimeoutId: null }),
       ViewerItem.editControlDisappearTimeout,
     );
+    this.setState({disappearTimeoutId});
   }
   onEditClick = (e) => {
     this.props.onEdit(this.props.annotation.id);
