@@ -1,4 +1,5 @@
 import React from 'react';
+
 declare const chrome: any;
 
 export default class BrowserPopup extends React.Component<{}, {}> {

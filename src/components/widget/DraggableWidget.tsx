@@ -1,13 +1,6 @@
-import React, {ReactNode, RefObject} from 'react';
-import classNames from 'classnames';
-import styles from './Widget.scss';
-import {isInverted} from './utils';
-import {DragTracker, IVec2} from 'utils/move';
-import {IWidgetState, IWidgetProps, default as Widget} from './Widget';
-import {AnnotationAPIModelAttrs} from 'api/annotations';
-import {AnnotationPriorities} from '../consts';
-import * as _ from 'lodash';
-import {IEditorProps, IEditorState} from 'components/editor/interfaces';
+import React, { RefObject } from 'react';
+import { DragTracker, IVec2 } from 'utils/move';
+import { default as Widget } from './Widget';
 
 export interface IDraggableWidgetProps {
   // Props consumed by DraggableWidget

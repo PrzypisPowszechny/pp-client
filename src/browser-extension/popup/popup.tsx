@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import BrowserPopup from './BrowserPopup';
-
 // import Semantic-ui packages
 import 'semantic-ui-css/semantic.min.css';
 import './popup.scss';

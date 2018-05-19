@@ -1,4 +1,4 @@
-import {AnnotationPriorities} from 'components/consts';
+import { AnnotationPriorities } from 'components/consts';
 
 export interface RangeAPIModel {
   start: string;

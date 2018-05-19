@@ -2,11 +2,11 @@ import { Range } from 'xpath-range';
 
 import { mousePosition } from 'common/dom';
 import store from 'store';
-import { showMenu, makeSelection } from 'store/actions';
+import { makeSelection, showMenu } from 'store/actions';
 
 import { Highlighter, TextSelector } from '../core/index';
-import {hideMenu} from 'store/widgets/actions';
-import {noSelection} from 'store/textSelector/actions';
+import { hideMenu } from 'store/widgets/actions';
+import { noSelection } from 'store/textSelector/actions';
 
 let handlers;
 

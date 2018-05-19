@@ -1,9 +1,9 @@
-import { createStore, applyMiddleware } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import rootReducer from './reducer';
 import promise from 'redux-promise';
 import { createLogger } from 'redux-logger';
-import {  setAxiosConfig } from 'redux-json-api';
+import { setAxiosConfig } from 'redux-json-api';
 
 // TS override
 declare global {

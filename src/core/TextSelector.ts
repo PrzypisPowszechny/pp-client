@@ -1,9 +1,8 @@
 import { Range } from 'xpath-range';
-// More on xpath-range here: https://github.com/opengovfoundation/xpath-range
-// Wondering what's inside? See https://github.com/opengovfoundation/xpath-range/blob/master/src/range.coffee#L227
-
 import $ from 'jquery';
 import { PPHighlightClass } from 'consts';
+// More on xpath-range here: https://github.com/opengovfoundation/xpath-range
+// Wondering what's inside? See https://github.com/opengovfoundation/xpath-range/blob/master/src/range.coffee#L227
 
 const TEXTSELECTOR_NS = 'annotator-textselector';
 
