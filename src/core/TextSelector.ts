@@ -21,30 +21,29 @@ const TEXTSELECTOR_NS = 'annotator-textselector';
  * (rather than exceptions).
  */
 
-/**
- * isAnnotator determines if the provided element is part of Annotator. Useful
- * for ignoring mouse actions on the annotator elements.
- *
- * element - An Element or TextNode to check.
- *
- * Returns true if the element is a child of an annotator element.
- */
-function isAnnotator(element) {
+function hasClassParents(element, selector: string) {
   const elAndParents = $(element).parents().addBack();
-  return (elAndParents.filter('.pp-ui').length !== 0);
+  return (elAndParents.filter(selector).length !== 0);
 }
 
-export type SelectionCallback = (selection: Range.SerializedRange[], event: any) => void;
+export type SelectionCallback = (selection: Range.SerializedRange[], isInsideArticle: boolean, event: any) => void;
 
 export default class TextSelector {
 
   document;
   element;
   onSelection: SelectionCallback;
+  outsideArticleSelector: string;
 
-  constructor(element, onSelection: SelectionCallback) {
+  constructor(
+    element,
+    onSelection: SelectionCallback,
+    outsideArticleClasses: string[],
+  ) {
     this.element = element;
     this.onSelection = onSelection;
+    // an OR selector to match any of the classes external to the article
+    this.outsideArticleSelector = outsideArticleClasses.map(cls => `.${cls}`).join(', ');
 
     if (this.element.ownerDocument) {
       this.document = this.element.ownerDocument;
@@ -131,23 +130,35 @@ export default class TextSelector {
     // Get the currently selected ranges.
     const selectedRanges = this.captureDocumentSelection();
 
+    let isInsideArticle = true;
+
     // Don't show the adder if the selection was of a part of Annotator itself.
     for (const selectedRange of selectedRanges) {
       let container = selectedRange.commonAncestor;
       if ($(container).hasClass(PPHighlightClass)) {
         container = $(container).parents(`[class!=${PPHighlightClass}]`)[0];
       }
-      if (isAnnotator(container)) {
-        return;
+      if (!this.isInsideArticle(container)) {
+        isInsideArticle = false;
       }
     }
 
     const serializedRanges = [];
     for (const range of selectedRanges) {
-      const serializedRange = range.serialize(this.element, '.' + PPHighlightClass);
+      const serializedRange = range.serialize(this.element, `.${PPHighlightClass}`);
       serializedRanges.push(serializedRange);
     }
 
-    this.onSelection(serializedRanges, event);
+    this.onSelection(serializedRanges, isInsideArticle, event);
+  }
+
+  /*
+  * isInsideArticle determines if the provided element is a part of the article itself or outside the article. Useful
+  * for ignoring mouse actions on the very PP elements or belonging to any other browser extension
+  *
+  * element - An Element or TextNode to check.
+  */
+  isInsideArticle(element) {
+    return !hasClassParents(element, this.outsideArticleSelector);
   }
 }

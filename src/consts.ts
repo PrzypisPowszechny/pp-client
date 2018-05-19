@@ -5,5 +5,9 @@
  */
 export const PPViewerIndirectChildClass = 'pp-viewer-indirect-child';
 
+export const outsideArticleClasses = [
+  'pp-ui',
+];
+
 // Keep it in sync with css/selection.scss
 export const PPHighlightClass = 'pp-highlight';
