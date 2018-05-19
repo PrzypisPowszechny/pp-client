@@ -114,7 +114,7 @@ class Editor extends React.Component<
 
   handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const target = e.currentTarget;
-    const stateUpdate = {[target.name]: target.value};
+    const stateUpdate = { [target.name]: target.value };
 
     // Whenever the field has changed, eradicate the error message
     if (stateUpdate.annotationLink) {
@@ -128,11 +128,11 @@ class Editor extends React.Component<
 
   validateForm(): boolean {
     if (!this.state.annotationLink) {
-      this.setState({annotationLinkError: 'Musisz podać źródło, jeśli chcesz dodać przypis!'});
+      this.setState({ annotationLinkError: 'Musisz podać źródło, jeśli chcesz dodać przypis!' });
       return false;
     }
     if (!this.state.annotationLinkTitle) {
-      this.setState({annotationLinkTitleError: 'Musisz podać tytuł źródła, jeśli chcesz dodać przypis!'});
+      this.setState({ annotationLinkTitleError: 'Musisz podać tytuł źródła, jeśli chcesz dodać przypis!' });
       return false;
     }
     return true;
@@ -145,7 +145,7 @@ class Editor extends React.Component<
   onSaveClick = (event: any) => {
     if (this.validateForm()) { // if form values are correct
       if (!this.state.comment) { // if comment field is empty, display the modal
-        this.setState({noCommentModalOpen: true});
+        this.setState({ noCommentModalOpen: true });
         return;
       }
       this.save();

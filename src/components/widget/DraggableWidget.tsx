@@ -37,7 +37,7 @@ export default class DraggableWidget extends React.PureComponent<
       prevState.initialLocationX === nextProps.initialLocationX
       && prevState.initialLocationY === nextProps.initialLocationY;
     if (areInitialLocationsEqual) {
-      return {...prevState};
+      return { ...prevState };
     } else {
       return {
         initialLocationX: nextProps.initialLocationX,
