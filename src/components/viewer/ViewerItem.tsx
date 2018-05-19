@@ -21,6 +21,8 @@ import Timer = NodeJS.Timer;
 interface IViewerItemProps {
   key: string;
   annotation: AnnotationAPIModel;
+  indirectChildClassName: string;
+
   hideViewer: () => undefined;
 
   deleteUpvote: (instance: AnnotationUpvoteAPIModel) => Promise<object>;
@@ -181,6 +183,10 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
       createDate,
     } = this.props.annotation.attributes;
 
+    const {
+      indirectChildClassName,
+    } = this.props;
+
     return (
       <li className={styles.annotation}>
         <div className={styles.headBar}>
@@ -206,7 +212,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
             <Popup
               trigger={this.upvoteButton()}
               size="small"
-              className="pp-ui pp-popup-small-padding"
+              className={classNames(indirectChildClassName, 'pp-ui', 'pp-popup-small-padding')}
               inverted={true}
             >
               Daj znać, że uważasz przypis za pomocny.

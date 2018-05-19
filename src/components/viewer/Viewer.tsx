@@ -10,6 +10,7 @@ import styles from './Viewer.scss';
 import { selectViewerState } from 'store/widgets/selectors';
 import { hideViewer, showEditorAnnotation } from 'store/widgets/actions';
 import { AnnotationAPIModel } from 'api/annotations';
+import { PPViewerIndirectChildClass } from 'consts';
 
 interface IViewerProps {
   locationX: number;
@@ -95,9 +96,14 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, Parti
   }
 
   onMouseLeave = (e) => {
-    // Close the window only when the modal is not open
+    // Normally, close the window, except...
+    // not when the modal is not open
     if (!this.state.confirmDeleteModalOpen) {
-      this.props.hideViewer();
+      // check what element the pointer entered;
+      // not when this element is manually marked as an indirect Viewer child (despite not being a DOM child)
+      if (!e.relatedTarget.classList.contains(PPViewerIndirectChildClass)) {
+        this.props.hideViewer();
+      }
     }
   }
 
@@ -115,10 +121,12 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, Parti
       const attrs = annotation.attributes;
       return (
         <ViewerItem
-          key={annotation.id}
-          annotation={annotation}
-          onDelete={this.onItemDelete}
-          onEdit={this.onItemEdit}
+            key={annotation.id}
+            annotation={annotation}
+            onDelete={this.onItemDelete}
+            onEdit={this.onItemEdit}
+            // ignore these elements on mouseleave
+            indirectChildClassName={PPViewerIndirectChildClass}
         />
       );
     });
