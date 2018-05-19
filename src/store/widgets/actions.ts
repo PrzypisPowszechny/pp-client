@@ -30,7 +30,7 @@ export const setSelectionRange = (range: Range.SerializedRange) => {
         startOffset: range.startOffset,
         end: range.end,
         endOffset: range.endOffset,
-      }
+      },
     },
   };
 };

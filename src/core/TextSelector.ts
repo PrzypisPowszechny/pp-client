@@ -6,7 +6,6 @@ import { PPHighlightClass } from 'consts';
 
 const TEXTSELECTOR_NS = 'annotator-textselector';
 
-
 /**
  * TextSelector monitors a document (or a specific element) for text selections
  * and can notify another object of a selection event
@@ -36,7 +35,6 @@ function isAnnotator(element) {
 }
 
 export type SelectionCallback = (selection: Range.SerializedRange[], event: any) => void;
-
 
 export default class TextSelector {
 
