@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {Highlighter} from 'core';
-import {showViewer} from 'store/widgets/actions';
+import { Highlighter } from 'core';
+import { showViewer } from 'store/widgets/actions';
 import { mousePosition } from 'common/dom';
-import {AnnotationAPIModel} from 'api/annotations';
-import {Range} from 'xpath-range';
+import { AnnotationAPIModel } from 'api/annotations';
 
 interface IHighlightsProps {
   annotations: AnnotationAPIModel[];

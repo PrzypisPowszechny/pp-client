@@ -1,19 +1,17 @@
-import React, {RefObject} from 'react';
-import {connect} from 'react-redux';
+import React, { RefObject } from 'react';
+import { connect } from 'react-redux';
 import { createResource, updateResource } from 'redux-json-api';
 import classNames from 'classnames';
-import {Modal, Popup} from 'semantic-ui-react';
-import {AnnotationPriorities, annotationPrioritiesLabels} from '../consts';
-import {DragTracker, IVec2} from 'utils/move';
+import { Modal, Popup } from 'semantic-ui-react';
+import { AnnotationPriorities, annotationPrioritiesLabels } from '../consts';
 import PriorityButton from './priority-button/PriorityButton';
-import {IEditorState, IEditorProps } from './interfaces';
+import { IEditorProps, IEditorState } from './interfaces';
 import { DraggableWidget } from 'components/widget';
 import { hideEditor } from 'store/actions';
-import {selectEditorState} from 'store/selectors';
+import { selectEditorState } from 'store/selectors';
 
 import styles from './Editor.scss';
-import {AnnotationAPICreateModel, AnnotationAPIModel} from 'api/annotations';
-import {AnnotationAPIModelAttrs} from 'api/annotations';
+import { AnnotationAPICreateModel, AnnotationAPIModelAttrs } from 'api/annotations';
 import * as _ from 'lodash';
 
 @connect(

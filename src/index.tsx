@@ -1,10 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import {  readEndpoint } from 'redux-json-api';
+import { readEndpoint } from 'redux-json-api';
 import store from 'store';
-
-import App from 'containers/App';
 import { initializeCoreHandlers } from 'init/handlers';
 import { injectComponents } from 'init/components';
 

@@ -1,6 +1,6 @@
-import {AnnotationPriorities} from '../consts';
-import {AnnotationAPICreateModel, AnnotationAPIModel} from 'api/annotations';
-import {IEditorRange} from 'store/widgets/reducers';
+import { AnnotationPriorities } from '../consts';
+import { AnnotationAPICreateModel, AnnotationAPIModel } from 'api/annotations';
+import { IEditorRange } from 'store/widgets/reducers';
 
 export interface IEditorProps {
   locationX: number;

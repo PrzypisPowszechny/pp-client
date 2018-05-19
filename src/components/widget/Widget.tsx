@@ -1,7 +1,7 @@
-import React, {RefObject} from 'react';
+import React, { RefObject } from 'react';
 import classNames from 'classnames';
 import styles from './Widget.scss';
-import {isInverted} from './utils';
+import { isInverted } from './utils';
 
 export interface IWidgetProps {
   locationX: number;

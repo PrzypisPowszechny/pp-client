@@ -7,8 +7,8 @@ import { selectMenuState } from 'store/selectors';
 import Widget from 'components/widget';
 
 import styles from './Menu.scss';
-import {hideMenu, setSelectionRange, showEditorAnnotation} from 'store/widgets/actions';
-import {Range} from 'xpath-range';
+import { hideMenu, setSelectionRange, showEditorAnnotation } from 'store/widgets/actions';
+import { Range } from 'xpath-range';
 
 interface IMenuProps {
   locationX: number;

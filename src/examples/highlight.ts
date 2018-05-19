@@ -1,5 +1,5 @@
 import { Range } from 'xpath-range';
-import { TextSelector, Highlighter } from 'core/index';
+import { Highlighter, TextSelector } from 'core/index';
 
 import 'css/selection.scss';
 

@@ -1,8 +1,5 @@
 import { createSelector } from 'reselect';
 import { IStore } from 'store/reducer';
-import {AnnotationPriorities} from 'components/consts';
-import {IWidgetState, WidgetReducer} from './reducers';
-import {AnnotationAPIModel} from 'api/annotations';
 
 function selectWidgetState({ location, visible }) {
   return {

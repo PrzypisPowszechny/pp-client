@@ -2,13 +2,11 @@ import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Popup, Modal, Button } from 'semantic-ui-react';
+import { Button, Modal, Popup } from 'semantic-ui-react';
 
 import { AnnotationPriorities, annotationPrioritiesLabels } from '../consts';
 import styles from './Viewer.scss';
-import {hideViewer, setSelectionRange, showEditorAnnotation} from 'store/widgets/actions';
-import {selectViewerState} from 'store/widgets/selectors';
-import {Range} from 'xpath-range';
+import { hideViewer, showEditorAnnotation } from 'store/widgets/actions';
 
 interface IViewerItemProps {
   key: string;

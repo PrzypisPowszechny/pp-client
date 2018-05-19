@@ -1,4 +1,4 @@
-import {Range} from 'xpath-range';
+import { Range } from 'xpath-range';
 
 export const TEXT_SELECTED = 'TEXT_SELECTED';
 

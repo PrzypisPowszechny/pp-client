@@ -5,10 +5,9 @@ import Widget from 'components/widget';
 
 import ViewerItem from './ViewerItem';
 import styles from './Viewer.scss';
-import {selectViewerState} from 'store/widgets/selectors';
-import {hideViewer, showEditorAnnotation} from 'store/widgets/actions';
-import {AnnotationPriorities} from 'components/consts';
-import {AnnotationAPIModel} from 'api/annotations';
+import { selectViewerState } from 'store/widgets/selectors';
+import { hideViewer, showEditorAnnotation } from 'store/widgets/actions';
+import { AnnotationAPIModel } from 'api/annotations';
 
 interface IViewerProps {
   locationX: number;

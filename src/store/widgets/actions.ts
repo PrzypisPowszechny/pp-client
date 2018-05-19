@@ -1,4 +1,4 @@
-import {Range} from 'xpath-range';
+import { Range } from 'xpath-range';
 
 export const EDITOR_ANNOTATION = 'EDITOR_ANNOTATION';
 export const SET_EDITOR_SELECTION_RANGE = 'SET_EDITOR_SELECTION_RANGE';
