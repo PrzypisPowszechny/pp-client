@@ -18,8 +18,8 @@ export interface IStore {
 // we initialize all types manually to be able to call eg. deleteResource right away.
 export const apiInitializedFields = {
   api: {
-    annotations: { data: []},
-    annotationUpvotes: { data: []},
+    annotations: { data: [] },
+    annotationUpvotes: { data: [] },
   },
 };
 

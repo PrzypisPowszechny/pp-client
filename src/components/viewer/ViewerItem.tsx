@@ -77,7 +77,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
       () => this.setState({ initialView: false, disappearTimeoutId: null }),
       ViewerItem.editControlDisappearTimeout,
     );
-    this.setState({disappearTimeoutId});
+    this.setState({ disappearTimeoutId });
   }
   onEditClick = (e) => {
     this.props.onEdit(this.props.annotation.id);
@@ -96,7 +96,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
         // even if this annotationUpvote is not in the store.
         relationships: {
           annotation: {
-            data: {id: annotation.id, type: annotation.type},
+            data: { id: annotation.id, type: annotation.type },
           },
         },
       }).then(() => null)

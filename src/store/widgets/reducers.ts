@@ -51,7 +51,7 @@ const widgets = combineReducers({
 });
 export default widgets;
 
-function viewer(state = { ...initialWidgetState, annotationIds: []} , action) {
+function viewer(state = { ...initialWidgetState, annotationIds: [] } , action) {
   switch (action.type) {
     case VIEWER_VISIBLE_CHANGE:
       // Update location only when the displayed annotations have changed, too.
@@ -71,7 +71,7 @@ function viewer(state = { ...initialWidgetState, annotationIds: []} , action) {
       };
     case API_DELETED:
       // If one of viewed annotation is removed, filter it out
-      const {type: resType, id: resId} = action.payload;
+      const { type: resType, id: resId } = action.payload;
       if (resType === AnnotationResourceType && state.visible) {
         const filteredAnnotationIds = state.annotationIds.slice()
           .filter(id => id !== resId);
@@ -93,18 +93,18 @@ function viewer(state = { ...initialWidgetState, annotationIds: []} , action) {
 function menu(state = initialWidgetState , action) {
   switch (action.type) {
     case MENU_WIDGET_CHANGE:
-      return {...state, ...action.payload};
+      return { ...state, ...action.payload };
     default:
       return state;
   }
 }
 
-function editor(state = {annotationId: null, range: null, ...initialWidgetState}, action) {
+function editor(state = { annotationId: null, range: null, ...initialWidgetState }, action) {
   switch (action.type) {
     case EDITOR_VISIBLE_CHANGE:
     case EDITOR_ANNOTATION:
     case SET_EDITOR_SELECTION_RANGE:
-      return {...state, ...action.payload};
+      return { ...state, ...action.payload };
     default:
       return state;
   }

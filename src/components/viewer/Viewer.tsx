@@ -48,7 +48,7 @@ interface IViewerState {
   {
     showEditorAnnotation,
     hideViewer,
-    deleteAnnotation: (instance: AnnotationAPIModel) => deleteResource(instance),
+    deleteAnnotation: deleteResource,
   },
 )
 export default class Viewer extends React.Component<Partial<IViewerProps>, Partial<IViewerState>> {
