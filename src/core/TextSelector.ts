@@ -146,7 +146,7 @@ export default class TextSelector {
 
     let isInsideArticle = true;
 
-    // Don't show the adder if the selection was of a part of Annotator itself.
+    // If any part of the selection is outside the article, classify the selection as outside the article
     for (const selectedRange of selectedRanges) {
       let container = selectedRange.commonAncestor;
       if ($(container).hasClass(PPHighlightClass)) {

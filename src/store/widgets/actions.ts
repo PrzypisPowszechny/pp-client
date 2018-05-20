@@ -20,17 +20,11 @@ export const showEditorAnnotation = (x: number, y: number, id?: string) => {
   };
 };
 
-// Note: range is explicitly rewritten, so it becomes a pure object (no functions)
 export const setSelectionRange = (range: Range.SerializedRange) => {
   return {
     type: SET_EDITOR_SELECTION_RANGE,
     payload: {
-      range: {
-        start: range.start,
-        startOffset: range.startOffset,
-        end: range.end,
-        endOffset: range.endOffset,
-      },
+      range,
     },
   };
 };
