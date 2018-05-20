@@ -34,7 +34,6 @@ interface IViewerItemProps {
 
 interface IViewerItemState {
   initialView: boolean; // used to determine whether edit/delete buttons should be visible
-  disappearTimeoutId: Timer;
 }
 
 @connect(
@@ -51,36 +50,43 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
 
   static editControlDisappearTimeout = 500;
 
+  static getDerivedStateFromProps() {
+    return { initialView: true };
+  }
+
+  disappearTimeoutId: Timer;
+
   constructor(props: IViewerItemProps) {
     super(props);
-    this.state = {
-      initialView: true,
-    };
-    this.setControlDisappearTimeout();
+    this.state = {};
   }
 
   componentWillReceiveProps() {
     // Set timeout after which edit buttons disappear
-    this.setState({ initialView: true });
-    this.setControlDisappearTimeout();
-  }
-
-  componentWillMount() {
-    if (this.state.disappearTimeoutId) {
-      clearTimeout(this.state.disappearTimeoutId);
+    // In React 16.3 this is legacy method and should theoreticaly be replaced with componentDidUpdate;
+    // However, this won't prevent the timer from firing after the component has been rendered and
+    // before componentDidUpdate is called? Consider submitting an issue to React 16.3
+    if (this.disappearTimeoutId) {
+      clearTimeout(this.disappearTimeoutId);
     }
   }
 
-  setControlDisappearTimeout() {
-    if (this.state.disappearTimeoutId) {
-      clearTimeout(this.state.disappearTimeoutId);
-    }
-    const disappearTimeoutId = setTimeout(
-      () => this.setState({ initialView: false, disappearTimeoutId: null }),
+  componentDidUpdate() {
+    this.disappearTimeoutId = setTimeout(
+      () => {
+        this.setState({ initialView: false });
+        this.disappearTimeoutId = null;
+      },
       ViewerItem.editControlDisappearTimeout,
     );
-    this.setState({ disappearTimeoutId });
   }
+
+  componentWillUnmount() {
+    if (this.disappearTimeoutId) {
+      clearTimeout(this.disappearTimeoutId);
+    }
+  }
+
   onEditClick = (e) => {
     this.props.onEdit(this.props.annotation.id);
   }
