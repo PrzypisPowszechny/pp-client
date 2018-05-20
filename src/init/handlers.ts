@@ -13,7 +13,7 @@ let handlers;
 export function initializeCoreHandlers() {
   const highlighter = new Highlighter(document.body, null);
   const selector = new TextSelector(document.body, {
-    onMouseUp: selectionChangeCallback,
+    onSelectionChange: selectionChangeCallback,
     outsideArticleClasses,
   });
 
