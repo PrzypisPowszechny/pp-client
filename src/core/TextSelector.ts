@@ -1,5 +1,6 @@
 import { Range } from 'xpath-range';
 import $ from 'jquery';
+import _isEqual from 'lodash/isEqual';
 import { PPHighlightClass } from 'consts';
 // More on xpath-range here: https://github.com/opengovfoundation/xpath-range
 // Wondering what's inside? See https://github.com/opengovfoundation/xpath-range/blob/master/src/range.coffee#L227
@@ -28,22 +29,35 @@ function hasClassParents(element, selector: string) {
 
 export type SelectionCallback = (selection: Range.SerializedRange[], isInsideArticle: boolean, event: any) => void;
 
-export default class TextSelector {
+export interface TextSelectorOptions {
+  onMouseUp?: SelectionCallback;
+  onSelectionChange?: SelectionCallback;
+  outsideArticleClasses?: string[];
+}
 
-  document;
-  element;
-  onSelection: SelectionCallback;
+export default class TextSelector {
+  document: Document;
+  element: Element;
+  onMouseUp: SelectionCallback;
+  onSelectionChange: SelectionCallback;
   outsideArticleSelector: string;
+  lastRanges: Range.SerializedRange[];
 
   constructor(
-    element,
-    onSelection: SelectionCallback,
-    outsideArticleClasses: string[],
+    element: Element,
+    options: TextSelectorOptions,
   ) {
+    /*
+     * onMouseUp - called on every mouseUp event, passing current selection;
+     * onSelectionChange - called only when the selection has changed
+     */
     this.element = element;
-    this.onSelection = onSelection;
+    options = options || {};
+    this.onMouseUp = options.onMouseUp;
+    this.onSelectionChange = options.onSelectionChange;
     // an OR selector to match any of the classes external to the article
-    this.outsideArticleSelector = outsideArticleClasses.map(cls => `.${cls}`).join(', ');
+    this.outsideArticleSelector = (options.outsideArticleClasses || []).map(cls => `.${cls}`).join(', ');
+    this.lastRanges = null;
 
     if (this.element.ownerDocument) {
       this.document = this.element.ownerDocument;
@@ -149,7 +163,15 @@ export default class TextSelector {
       serializedRanges.push(serializedRange);
     }
 
-    this.onSelection(serializedRanges, isInsideArticle, event);
+    if (this.onSelectionChange) {
+      if (!_isEqual(serializedRanges, this.lastRanges)) {
+        this.onSelectionChange(serializedRanges, isInsideArticle, event);
+      }
+    }
+    if (this.onMouseUp) {
+      this.onMouseUp(serializedRanges, isInsideArticle, event);
+    }
+    this.lastRanges = serializedRanges;
   }
 
   /*

@@ -12,7 +12,10 @@ let handlers;
 
 export function initializeCoreHandlers() {
   const highlighter = new Highlighter(document.body, null);
-  const selector = new TextSelector(document.body, textSelectorCallback, outsideArticleClasses);
+  const selector = new TextSelector(document.body, {
+    onMouseUp: selectionChangeCallback,
+    outsideArticleClasses,
+  });
 
   handlers = {
     highlighter,
@@ -24,7 +27,7 @@ export function deinitializeCoreHandlers() {
   // ...?
 }
 
-function textSelectorCallback(
+function selectionChangeCallback(
   selection: Range.SerializedRange[],
   isInsideArticle: boolean,
   event) {
