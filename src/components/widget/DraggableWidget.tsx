@@ -36,9 +36,7 @@ export default class DraggableWidget extends React.PureComponent<
     const areInitialLocationsEqual =
       prevState.initialLocationX === nextProps.initialLocationX
       && prevState.initialLocationY === nextProps.initialLocationY;
-    if (areInitialLocationsEqual) {
-      return { ...prevState };
-    } else {
+    if (!areInitialLocationsEqual) {
       return {
         initialLocationX: nextProps.initialLocationX,
         initialLocationY: nextProps.initialLocationY,
@@ -47,6 +45,7 @@ export default class DraggableWidget extends React.PureComponent<
         hasBeenDragged: false,
       };
     }
+    return null;
   }
 
   dragTracker: DragTracker;

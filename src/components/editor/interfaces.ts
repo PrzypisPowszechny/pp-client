@@ -9,7 +9,7 @@ export interface IEditorProps {
   annotation: AnnotationAPIModel;
   range: IEditorRange;
 
-  createAnnotation: (model: AnnotationAPICreateModel) => Promise<object>;
+  createAnnotation: (instance: AnnotationAPICreateModel) => Promise<object>;
   hideEditor: () => void;
 }
 
