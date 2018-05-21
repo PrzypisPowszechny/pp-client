@@ -20,7 +20,7 @@ function initializeHighlightPlayground() {
 }
 
 function initializeCoreHandlers() {
-  window.textSelector = new TextSelector(document.body, handleSelect);
+  window.textSelector = new TextSelector(document.body, { onMouseUp: handleSelect });
   window.highlighter = new Highlighter(document.body, null);
   window.highlighter.onHighlightEvent('mouseover', (e, annotationData) => {
     console.log(e);

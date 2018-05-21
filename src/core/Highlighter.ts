@@ -1,6 +1,6 @@
-import { Range } from 'xpath-range';
 import $ from 'jquery';
 import { PPHighlightClass } from 'consts';
+import { Range } from 'xpath-range';
 
 /**
  * highlightRange wraps the DOM Nodes within the provided range with a highlight
@@ -39,7 +39,7 @@ function highlightRange(normedRange, cssClass) {
  * reanchorRange will attempt to normalize a range, swallowing Range.RangeErrors
  * for those ranges which are not reanchorable in the current document.
  */
-function reanchorRange(range, rootElement) {
+function reanchorRange(range, rootElement): Range.NormalizedRange {
   const sniffedRange = Range.sniff(range);
   if (sniffedRange) {
     try {
@@ -61,15 +61,23 @@ function reanchorRange(range, rootElement) {
 export interface IHighlightRegistry {
   [id: string]: {
     normedId: string;
-    range: Range.SerializedRange;
+    range: ISerializedRange;
     annotationData: any;
     highlightElements: HTMLElement[];
   };
 }
 
+// pure SerializedRange object with no assumptions on methods
+export interface ISerializedRange {
+  start: string;
+  startOffset: number;
+  end: string;
+  endOffset: number;
+}
+
 interface IHighlightDrawArgs {
   id: number | string;
-  range: Range.NormalizedRange;
+  range: ISerializedRange;
   annotationData: any;
 }
 
@@ -157,7 +165,7 @@ export default class Highlighter {
    *
    *  Returns an Array of drawn highlight elements.
    */
-  draw = (id: number | string, range: Range.SerializedRange, annotationData: any) => {
+  draw = (id: number | string, range: ISerializedRange, annotationData: any) => {
     const normedRange = reanchorRange(range, this.element);
     if (!normedRange) {
       return null;
@@ -231,7 +239,7 @@ export default class Highlighter {
    *
    * Returns the list of newly-drawn highlights.
    */
-  redraw = (id: number | string, range: Range.SerializedRange, annotationData: any) => {
+  redraw = (id: number | string, range: ISerializedRange, annotationData: any) => {
     this.undraw(id);
     return this.draw(id, range, annotationData);
   }
