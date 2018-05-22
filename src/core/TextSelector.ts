@@ -1,5 +1,6 @@
 import { Range } from 'xpath-range';
 import $ from 'jquery';
+import _isEqual from 'lodash/isEqual';
 import { PPHighlightClass } from 'consts';
 // More on xpath-range here: https://github.com/opengovfoundation/xpath-range
 // Wondering what's inside? See https://github.com/opengovfoundation/xpath-range/blob/master/src/range.coffee#L227
@@ -21,30 +22,42 @@ const TEXTSELECTOR_NS = 'annotator-textselector';
  * (rather than exceptions).
  */
 
-/**
- * isAnnotator determines if the provided element is part of Annotator. Useful
- * for ignoring mouse actions on the annotator elements.
- *
- * element - An Element or TextNode to check.
- *
- * Returns true if the element is a child of an annotator element.
- */
-function isAnnotator(element) {
+function hasClassParents(element, selector: string) {
   const elAndParents = $(element).parents().addBack();
-  return (elAndParents.filter('.pp-ui').length !== 0);
+  return (elAndParents.filter(selector).length !== 0);
 }
 
-export type SelectionCallback = (selection: Range.SerializedRange[], event: any) => void;
+export type SelectionCallback = (selection: Range.SerializedRange[], isInsideArticle: boolean, event: any) => void;
+
+export interface TextSelectorOptions {
+  onMouseUp?: SelectionCallback;
+  onSelectionChange?: SelectionCallback;
+  outsideArticleClasses?: string[];
+}
 
 export default class TextSelector {
+  document: Document;
+  element: Element;
+  onMouseUp: SelectionCallback;
+  onSelectionChange: SelectionCallback;
+  outsideArticleSelector: string;
+  lastRanges: Range.SerializedRange[];
 
-  document;
-  element;
-  onSelection: SelectionCallback;
-
-  constructor(element, onSelection: SelectionCallback) {
+  constructor(
+    element: Element,
+    options: TextSelectorOptions,
+  ) {
+    /*
+     * onMouseUp - called on every mouseUp event, passing current selection;
+     * onSelectionChange - called only when the selection has changed
+     */
     this.element = element;
-    this.onSelection = onSelection;
+    options = options || {};
+    this.onMouseUp = options.onMouseUp;
+    this.onSelectionChange = options.onSelectionChange;
+    // an OR selector to match any of the classes external to the article
+    this.outsideArticleSelector = (options.outsideArticleClasses || []).map(cls => `.${cls}`).join(', ');
+    this.lastRanges = null;
 
     if (this.element.ownerDocument) {
       this.document = this.element.ownerDocument;
@@ -131,23 +144,43 @@ export default class TextSelector {
     // Get the currently selected ranges.
     const selectedRanges = this.captureDocumentSelection();
 
-    // Don't show the adder if the selection was of a part of Annotator itself.
+    let isInsideArticle = true;
+
+    // If any part of the selection is outside the article, classify the selection as outside the article
     for (const selectedRange of selectedRanges) {
       let container = selectedRange.commonAncestor;
       if ($(container).hasClass(PPHighlightClass)) {
         container = $(container).parents(`[class!=${PPHighlightClass}]`)[0];
       }
-      if (isAnnotator(container)) {
-        return;
+      if (!this.isInsideArticle(container)) {
+        isInsideArticle = false;
       }
     }
 
     const serializedRanges = [];
     for (const range of selectedRanges) {
-      const serializedRange = range.serialize(this.element, '.' + PPHighlightClass);
+      const serializedRange = range.serialize(this.element, `.${PPHighlightClass}`);
       serializedRanges.push(serializedRange);
     }
 
-    this.onSelection(serializedRanges, event);
+    if (this.onSelectionChange) {
+      if (!_isEqual(serializedRanges, this.lastRanges)) {
+        this.onSelectionChange(serializedRanges, isInsideArticle, event);
+      }
+    }
+    if (this.onMouseUp) {
+      this.onMouseUp(serializedRanges, isInsideArticle, event);
+    }
+    this.lastRanges = serializedRanges;
+  }
+
+  /*
+  * isInsideArticle determines if the provided element is a part of the article itself or outside the article. Useful
+  * for ignoring mouse actions on the very PP elements or belonging to any other browser extension
+  *
+  * element - An Element or TextNode to check.
+  */
+  isInsideArticle(element) {
+    return !hasClassParents(element, this.outsideArticleSelector);
   }
 }

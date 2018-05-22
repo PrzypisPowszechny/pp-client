@@ -21,6 +21,8 @@ import Timer = NodeJS.Timer;
 interface IViewerItemProps {
   key: string;
   annotation: AnnotationAPIModel;
+  indirectChildClassName: string;
+
   hideViewer: () => undefined;
 
   deleteUpvote: (instance: AnnotationUpvoteAPIModel) => Promise<object>;
@@ -32,7 +34,6 @@ interface IViewerItemProps {
 
 interface IViewerItemState {
   initialView: boolean; // used to determine whether edit/delete buttons should be visible
-  disappearTimeoutId: Timer;
 }
 
 @connect(
@@ -49,36 +50,33 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
 
   static editControlDisappearTimeout = 500;
 
+  static getDerivedStateFromProps() {
+    return { initialView: true };
+  }
+
+  disappearTimeoutId: Timer;
+
   constructor(props: IViewerItemProps) {
     super(props);
-    this.state = {
-      initialView: true,
-    };
-    this.setControlDisappearTimeout();
+    this.state = {};
   }
 
-  componentWillReceiveProps() {
-    // Set timeout after which edit buttons disappear
-    this.setState({ initialView: true });
-    this.setControlDisappearTimeout();
-  }
-
-  componentWillMount() {
-    if (this.state.disappearTimeoutId) {
-      clearTimeout(this.state.disappearTimeoutId);
-    }
-  }
-
-  setControlDisappearTimeout() {
-    if (this.state.disappearTimeoutId) {
-      clearTimeout(this.state.disappearTimeoutId);
-    }
-    const disappearTimeoutId = setTimeout(
-      () => this.setState({ initialView: false, disappearTimeoutId: null }),
+  componentDidMount() {
+    this.disappearTimeoutId = setTimeout(
+      () => {
+        this.setState({ initialView: false });
+        this.disappearTimeoutId = null;
+      },
       ViewerItem.editControlDisappearTimeout,
     );
-    this.setState({ disappearTimeoutId });
   }
+
+  componentWillUnmount() {
+    if (this.disappearTimeoutId) {
+      clearTimeout(this.disappearTimeoutId);
+    }
+  }
+
   onEditClick = (e) => {
     this.props.onEdit(this.props.annotation.id);
   }
@@ -181,6 +179,10 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
       createDate,
     } = this.props.annotation.attributes;
 
+    const {
+      indirectChildClassName,
+    } = this.props;
+
     return (
       <li className={styles.annotation}>
         <div className={styles.headBar}>
@@ -206,7 +208,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
             <Popup
               trigger={this.upvoteButton()}
               size="small"
-              className="pp-ui pp-popup-small-padding"
+              className={classNames(indirectChildClassName, 'pp-ui', 'pp-popup-small-padding')}
               inverted={true}
             >
               Daj znać, że uważasz przypis za pomocny.

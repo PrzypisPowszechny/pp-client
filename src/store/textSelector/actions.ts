@@ -10,12 +10,3 @@ export function makeSelection(range: Range.SerializedRange) {
     },
   };
 }
-
-export function noSelection() {
-  return {
-    type: TEXT_SELECTED,
-    payload: {
-      range: null,
-    },
-  };
-}
