@@ -61,17 +61,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     this.state = {};
   }
 
-  componentWillReceiveProps() {
-    // Set timeout after which edit buttons disappear
-    // In React 16.3 this is legacy method and should theoreticaly be replaced with componentDidUpdate;
-    // However, this won't prevent the timer from firing after the component has been rendered and
-    // before componentDidUpdate is called? Consider submitting an issue to React 16.3
-    if (this.disappearTimeoutId) {
-      clearTimeout(this.disappearTimeoutId);
-    }
-  }
-
-  componentDidUpdate() {
+  componentDidMount() {
     this.disappearTimeoutId = setTimeout(
       () => {
         this.setState({ initialView: false });
