@@ -3,6 +3,10 @@
 @import "css/common/vars/size";
 @import "css/common/vars/z-index";
 
+
+// The downward triangle attached to the widget from the pointer direction.
+$triangle-size: 12px;
+
 .self,
 .inner{
     position: absolute;
@@ -21,23 +25,23 @@
     font-weight: bold;
 }
 
-.inner.widget-triangle::after {
-    /* The downward triangle below widget. */
 
-    //KG todo replace the annotator's triangle with our own
-    background-image: url(../../../node_modules/annotator/img/annotator-glyph-sprite.png?embed);
 
-    background-repeat: no-repeat;
-
-    content: "";
+.inner.widget-triangle:after {
     display: block;
-    width: 18px;
-    height: 10px;
-    background-position: 0 0;
     position: absolute;
-    bottom: -10px;
-    left: 8px;
+    content: "";
+    width: $triangle-size;
+    height: $triangle-size;
+    bottom: -$triangle-size / 2;
+    top: auto;
+    left: 18px - $triangle-size / 2;
+    right: auto;
+    z-index: -1;
+    transform: rotate(45deg);
 
+    background: #FFFFFF;
+    box-shadow: 1px 1px 0px 0px rgb(210, 212, 210);
 }
 
 /*
@@ -53,20 +57,21 @@ When window is horizontally or vertically inverted
     top: 8px;
 }
 
-.inner.invert-x:after {
+.inner.invert-x.widget-triangle:after {
     left: auto;
-    right: 8px;
+    right: 18px - $triangle-size / 2;
 }
 
-.inner.invert-y:after {
-    background-position: 0 -15px;
+.inner.invert-y.widget-triangle:after {
     bottom: auto;
-    top: -9px;
+    top: -$triangle-size / 2;
+    transform: rotate(-135deg);
 }
 
 .inner.update-inverted {
     visibility: hidden;
 }
+
 //TODO
 //.annotator-editor .invert-y .pp-widget:after {
 //    background-position: 0 -45px;
