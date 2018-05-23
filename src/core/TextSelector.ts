@@ -1,7 +1,7 @@
 import { Range } from 'xpath-range';
 import $ from 'jquery';
 import _isEqual from 'lodash/isEqual';
-import { PPHighlightClass } from 'consts';
+import { PPHighlightClass } from 'class_consts';
 // More on xpath-range here: https://github.com/opengovfoundation/xpath-range
 // Wondering what's inside? See https://github.com/opengovfoundation/xpath-range/blob/master/src/range.coffee#L227
 

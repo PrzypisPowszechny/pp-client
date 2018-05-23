@@ -5,7 +5,7 @@ import { AnnotationPriorities } from '../../consts';
 import { Popup } from 'semantic-ui-react';
 
 import styles from './PriorityButton.scss';
-import { PPScopeClass } from '../../../consts';
+import { PPScopeClass } from '../../../class_consts';
 
 interface IPriorityButtonProps {
   type: AnnotationPriorities;

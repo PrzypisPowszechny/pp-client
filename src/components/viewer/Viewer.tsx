@@ -10,7 +10,7 @@ import styles from './Viewer.scss';
 import { selectViewerState } from 'store/widgets/selectors';
 import { hideViewer, showEditorAnnotation } from 'store/widgets/actions';
 import { AnnotationAPIModel } from 'api/annotations';
-import { PPScopeClass, PPViewerIndirectChildClass } from 'consts';
+import { PPScopeClass, PPViewerIndirectChildClass } from 'class_consts.ts';
 
 interface IViewerProps {
   locationX: number;

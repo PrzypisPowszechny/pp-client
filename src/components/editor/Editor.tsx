@@ -13,7 +13,7 @@ import { selectEditorState } from 'store/selectors';
 import styles from './Editor.scss';
 import { AnnotationAPICreateModel, AnnotationAPIModelAttrs } from 'api/annotations';
 import * as _ from 'lodash';
-import { PPScopeClass } from 'consts';
+import { PPScopeClass } from 'class_consts.ts';
 
 @connect(
   (state) => {

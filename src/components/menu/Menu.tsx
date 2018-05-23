@@ -9,7 +9,7 @@ import Widget from 'components/widget';
 import styles from './Menu.scss';
 import { hideMenu, setSelectionRange, showEditorAnnotation } from 'store/widgets/actions';
 import { Range } from 'xpath-range';
-import { PPScopeClass } from '../../consts';
+import { PPScopeClass } from '../../class_consts';
 
 interface IMenuProps {
   locationX: number;

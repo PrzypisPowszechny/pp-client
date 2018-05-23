@@ -17,7 +17,7 @@ import {
   AnnotationUpvoteResourceType,
 } from '../../api/annotations';
 import Timer = NodeJS.Timer;
-import { PPScopeClass } from '../../consts';
+import { PPScopeClass } from '../../class_consts';
 
 interface IViewerItemProps {
   key: string;
