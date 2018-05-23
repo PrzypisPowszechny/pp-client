@@ -10,7 +10,7 @@ import styles from './Viewer.scss';
 import { selectViewerState } from 'store/widgets/selectors';
 import { hideViewer, showEditorAnnotation } from 'store/widgets/actions';
 import { AnnotationAPIModel } from 'api/annotations';
-import { PPViewerIndirectChildClass } from 'consts';
+import { PPScopeClass, PPViewerIndirectChildClass } from 'consts';
 
 interface IViewerProps {
   locationX: number;
@@ -135,7 +135,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, Parti
     return (
       <Modal
         size="mini"
-        className="pp-ui"
+        className={PPScopeClass}
         open={this.state.confirmDeleteModalOpen}
       >
         <Modal.Content>

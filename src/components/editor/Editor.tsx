@@ -13,6 +13,7 @@ import { selectEditorState } from 'store/selectors';
 import styles from './Editor.scss';
 import { AnnotationAPICreateModel, AnnotationAPIModelAttrs } from 'api/annotations';
 import * as _ from 'lodash';
+import { PPScopeClass } from 'consts';
 
 @connect(
   (state) => {
@@ -186,7 +187,7 @@ class Editor extends React.Component<
     return (
       <Modal
         size="mini"
-        className="pp-ui"
+        className={PPScopeClass}
         open={this.state.noCommentModalOpen}
       >
         <Modal.Content>
@@ -223,7 +224,7 @@ class Editor extends React.Component<
 
     return (
       <DraggableWidget
-        className={classNames('pp-ui', styles.self)}
+        className={classNames(PPScopeClass, styles.self)}
         initialLocationX={this.props.locationX}
         initialLocationY={this.props.locationY}
         widgetTriangle={true}
@@ -307,7 +308,7 @@ class Editor extends React.Component<
             {annotationLinkTitleError}
           </div>
           <Popup
-            className="pp-ui small-padding"
+            className={classNames(PPScopeClass, 'small-padding')}
             hideOnScroll={true}
             trigger={<div className={styles.linkHelp}><i className="help circle icon" /></div>}
             flowing={true}

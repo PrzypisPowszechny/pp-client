@@ -17,6 +17,7 @@ import {
   AnnotationUpvoteResourceType,
 } from '../../api/annotations';
 import Timer = NodeJS.Timer;
+import { PPScopeClass } from '../../consts';
 
 interface IViewerItemProps {
   key: string;
@@ -208,7 +209,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
             <Popup
               trigger={this.upvoteButton()}
               size="small"
-              className={classNames(indirectChildClassName, 'pp-ui', 'pp-popup-small-padding')}
+              className={classNames(indirectChildClassName, PPScopeClass, 'pp-popup-small-padding')}
               inverted={true}
             >
               Daj znać, że uważasz przypis za pomocny.
