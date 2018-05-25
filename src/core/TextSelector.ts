@@ -5,7 +5,7 @@ import { PPHighlightClass } from 'class_consts';
 // More on xpath-range here: https://github.com/opengovfoundation/xpath-range
 // Wondering what's inside? See https://github.com/opengovfoundation/xpath-range/blob/master/src/range.coffee#L227
 
-const TEXTSELECTOR_NS = 'annotator-textselector';
+const TEXTSELECTOR_NS = 'pp-textselector';
 
 /**
  * TextSelector monitors a document (or a specific element) for text selections

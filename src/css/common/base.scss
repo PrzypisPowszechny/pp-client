@@ -14,15 +14,6 @@
 // Shameful overrides, potentially harmful for other websites
 @import "shame";
 
-/*
-NOTE:
-We still rely a little bit on the annotator module's styles, but we're in the process of removing it
-
-todo these annotator classes cannot be renamed yet as they still belong to annotator's source:
-annotator-invert-X
-annotator-invert-Y
- */
-
 #{$pp-scope} {
     font-family: $font-family-preset;
     font-size: $default-font-size;

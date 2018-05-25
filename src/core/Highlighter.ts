@@ -7,7 +7,7 @@ import { Range } from 'xpath-range';
  * element of the specified class and returns the highlight Elements.
  *
  * normedRange - A NormalizedRange to be highlighted.
- * cssClass - A CSS class to use for the highlight (default: 'annotator-hl')
+ * cssClass - A CSS class to use for the highlight
  *
  * Returns an array of highlight Elements.
  */
