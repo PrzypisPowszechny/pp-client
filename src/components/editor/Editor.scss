@@ -10,24 +10,24 @@ $editor-vertical-spacing: 15px;
 
 /* -- PP Editor -- */
 .self {
-    width: $editor-width;
-    background-color: white;
-    font-size: $editor-font-size;
-    font-family: $font-family-preset;
+  width: $editor-width;
+  background-color: white;
+  font-size: $editor-font-size;
+  font-family: $font-family-preset;
 
-    @include pp-widget-edge();
+  @include pp-widget-edge();
 }
 
 /* --- Editor head bar --- */
 .head-bar {
-    padding: 0 $editor-horizontal-spacing 0 $editor-horizontal-spacing;
-    margin: $editor-vertical-spacing 0 $editor-vertical-spacing 0;
+  padding: 0 $editor-horizontal-spacing 0 $editor-horizontal-spacing;
+  margin: $editor-vertical-spacing 0 $editor-vertical-spacing 0;
 
-    .priority-header {
-        display: inline-block;
-        font-weight: $font-semi-bold;
-        margin: 0 0 10px 0;
-    }
+  .priority-header {
+    display: inline-block;
+    font-weight: $font-semi-bold;
+    margin: 0 0 10px 0;
+  }
 }
 
 .header-buttons {
@@ -79,184 +79,179 @@ $editor-vertical-spacing: 15px;
   }
 }
 
-
 /* comment field */
 .comment {
-    overflow: auto;
+  overflow: auto;
 
-    textarea {
-        float: left;
-        padding: 0.5em;
-        width: 100%;
-        line-height: 1.2em;
-        height: calc(3 * 1.2em + 1.1em); // 3 lines
-    }
+  textarea {
+    float: left;
+    padding: 0.5em;
+    width: 100%;
+    line-height: 1.2em;
+    height: calc(3 * 1.2em + 1.1em); // 3 lines
+  }
 }
 
 /* annotation link field */
 .annotation-link {
-    input {
-        padding-left: 2em;
-    }
-    .error-msg {
-        left: 0;
-        top: 20px;
-    }
+  input {
+    padding-left: 2em;
+  }
+  .error-msg {
+    left: 0;
+    top: 20px;
+  }
 
-    .input-icon {
-        display: block;
-        position: absolute;
-        top: 9px;
-        left: 0;
-        width: 2em;
-    }
+  .input-icon {
+    display: block;
+    position: absolute;
+    top: 9px;
+    left: 0;
+    width: 2em;
+  }
 
 }
 
 .annotation-link-title {
-    margin-bottom: 0;
-    input {
-        padding-left: 2em;
-        width: 381px;
-    }
+  margin-bottom: 0;
+  input {
+    padding-left: 2em;
+    width: 381px;
+  }
 
-    .input-icon {
-        display: block;
-        position: absolute;
-        top: 9px;
-        left: 0;
-        width: 2em;
-    }
+  .input-icon {
+    display: block;
+    position: absolute;
+    top: 9px;
+    left: 0;
+    width: 2em;
+  }
 
-    .error-msg {
-        left: 0;
-        top: 20px;
-    }
+  .error-msg {
+    left: 0;
+    top: 20px;
+  }
 
-    .link-help {
-        width: 20px;
-    }
+  .link-help {
+    width: 20px;
+  }
 }
 
 .mover-icon {
-    display: none;
-    position: absolute;
-    margin: 0 auto;
-    left: 0;
-    right: 0;
-    bottom: 3px;
-    width: 18px;
+  display: none;
+  position: absolute;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  bottom: 3px;
+  width: 18px;
 
-    pointer-events: none;
-    content: url('../../../assets/three-dots.svg');
-    opacity: 0.5;
+  pointer-events: none;
+  content: url('../../../assets/three-dots.svg');
+  opacity: 0.5;
 }
 
 .self:hover .mover-icon {
-    display: block;
+  display: block;
 }
-
 
 .bottom-bar {
-    position: relative;;
-    margin: 0;
+  position: relative;;
+  margin: 0;
 
-    // the bottom area used for dragging
-    // extend it to the very edges of the widget, so it is easy to hit
-    .mover-area {
-        display: inline-block;
-        padding: $editor-vertical-spacing $editor-horizontal-spacing;
-        width: 100%;
-        cursor: move;
+  // the bottom area used for dragging
+  // extend it to the very edges of the widget, so it is easy to hit
+  .mover-area {
+    display: inline-block;
+    padding: $editor-vertical-spacing $editor-horizontal-spacing;
+    width: 100%;
+    cursor: move;
+  }
+
+  .controls {
+    float: right;
+    display: inline-block;
+    padding: 0;
+    min-width: 150px;
+    text-align: right;
+    vertical-align: top;
+
+    button {
+      border: none;
+      outline: none;
+      background: none;
+      padding-left: 10px;
+      height: 25px;
+      cursor: pointer;
+      font-weight: $font-semi-bold;
+      font-size: $editor-font-size + 1px;
+      color: #888888;
     }
 
-    .controls {
-        float: right;
-        display: inline-block;
-        padding: 0;
-        min-width: 150px;
-        text-align: right;
-        vertical-align: top;
-
-        button {
-            border: none;
-            outline: none;
-            background: none;
-            padding-left: 10px;
-            height: 25px;
-            cursor: pointer;
-            font-weight: $font-semi-bold;
-            font-size: $editor-font-size + 1px;
-            color: #888888;
-        }
-
-        button:hover {
-            color: darken(#888888, 8%);
-        }
-        // use priority-specific as a baseline and darken it so it presents well as a button
-        // for :hover, darken it even more (manually selected values)
-        .priority-normal {
-            color: darken($normal-ref-color, 5%);
-        }
-        .priority-normal:hover {
-            color: darken($normal-ref-color, 5% + 8%);
-        }
-        .priority-warning {
-            color: darken($warning-ref-color, 8%);
-        }
-        .priority-warning:hover {
-            color: darken($warning-ref-color, 8% + 4%);
-        }
-        .priority-alert {
-            color: darken($alert-ref-color, 5%);
-        }
-        .priority-alert:hover {
-            color: darken($alert-ref-color, 5% + 4%);
-        }
-
+    button:hover {
+      color: darken(#888888, 8%);
     }
+    // use priority-specific as a baseline and darken it so it presents well as a button
+    // for :hover, darken it even more (manually selected values)
+    .priority-normal {
+      color: darken($normal-ref-color, 5%);
+    }
+    .priority-normal:hover {
+      color: darken($normal-ref-color, 5% + 8%);
+    }
+    .priority-warning {
+      color: darken($warning-ref-color, 8%);
+    }
+    .priority-warning:hover {
+      color: darken($warning-ref-color, 8% + 4%);
+    }
+    .priority-alert {
+      color: darken($alert-ref-color, 5%);
+    }
+    .priority-alert:hover {
+      color: darken($alert-ref-color, 5% + 4%);
+    }
+
+  }
 }
-
-
 
 /* Some pp-editor-widget embedded elements */
 
 .error-msg {
-    font-size: 14px !important;
-    position: absolute !important; // override semantic-ui defaults
-    z-index: $tooltip-z-index;
+  font-size: 14px !important;
+  position: absolute !important; // override semantic-ui defaults
+  z-index: $tooltip-z-index;
 }
 
 /* all cross-style close buttons */
 .close {
-    position: absolute;
-    right: 0;
-    top: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
 
-    border: none;
-    outline: none;
+  border: none;
+  outline: none;
 
-    color: #888888;
-    background: none;
-    cursor: pointer;
+  color: #888888;
+  background: none;
+  cursor: pointer;
 }
 
 /* --- Help windows --- */
 .priority-help,
 .link-help {
-    display: inline-block;
+  display: inline-block;
 
-    margin-left: 7px;
-    border: none;
-    outline: none;
+  margin-left: 7px;
+  border: none;
+  outline: none;
 
-    font-size: 17px;
-    color: #888888;
+  font-size: 17px;
+  color: #888888;
 
-    background: none;
-    cursor: pointer;
+  background: none;
+  cursor: pointer;
 }
-
 
 // TODO review: copied from original annotator.css (and adapted to pp-editor-widget & editor-input)
 /* --- scrollbar --- */
@@ -264,27 +259,27 @@ $editor-vertical-spacing: 15px;
 // I leave it here until we decide we don't
 
 .editor-input textarea::-webkit-scrollbar {
-    height: 8px;
-    width: 8px;
+  height: 8px;
+  width: 8px;
 }
 
 .editor-input textarea::-webkit-scrollbar-track-piece {
-    margin: 13px 0 3px;
-    background-color: #e5e5e5;
-    -webkit-border-radius: 4px;
+  margin: 13px 0 3px;
+  background-color: #e5e5e5;
+  -webkit-border-radius: 4px;
 }
 
 .editor-input textarea::-webkit-scrollbar-thumb:vertical {
-    height: 25px;
-    background-color: #ccc;
-    -webkit-border-radius: 4px;
-    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  height: 25px;
+  background-color: #ccc;
+  -webkit-border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
 .editor-input textarea::-webkit-scrollbar-thumb:horizontal {
-    width: 25px;
-    background-color: #ccc;
-    -webkit-border-radius: 4px;
+  width: 25px;
+  background-color: #ccc;
+  -webkit-border-radius: 4px;
 }
 
 .hide {
