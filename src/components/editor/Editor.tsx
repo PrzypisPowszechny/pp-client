@@ -12,7 +12,8 @@ import { selectEditorState } from 'store/selectors';
 
 import styles from './Editor.scss';
 import { AnnotationAPICreateModel, AnnotationAPIModelAttrs } from 'api/annotations';
-import * as _ from 'lodash';
+import _isEqual from 'lodash/isEqual';
+import { PPScopeClass } from 'class_consts.ts';
 
 @connect(
   (state) => {
@@ -70,7 +71,7 @@ class Editor extends React.Component<
     // Note: nextProps.annotation && nextProps.annotation.id === prevState.annotationId will generate updates
     // if only nextProps.annotation is null
     const areAnnotationsEqual = prevState.annotationId === nextAnnotation.id;
-    const areRangesEqual = _.isEqual(prevState.range, nextProps.range);
+    const areRangesEqual = _isEqual(prevState.range, nextProps.range);
     if (areAnnotationsEqual && areRangesEqual) {
       return null;
     } else {
@@ -186,7 +187,7 @@ class Editor extends React.Component<
     return (
       <Modal
         size="mini"
-        className="pp-ui"
+        className={PPScopeClass}
         open={this.state.noCommentModalOpen}
       >
         <Modal.Content>
@@ -223,7 +224,7 @@ class Editor extends React.Component<
 
     return (
       <DraggableWidget
-        className={classNames('pp-ui', styles.self)}
+        className={classNames(PPScopeClass, styles.self)}
         initialLocationX={this.props.locationX}
         initialLocationY={this.props.locationY}
         widgetTriangle={true}
@@ -307,7 +308,7 @@ class Editor extends React.Component<
             {annotationLinkTitleError}
           </div>
           <Popup
-            className="pp-ui small-padding"
+            className={classNames(PPScopeClass, 'small-padding')}
             hideOnScroll={true}
             trigger={<div className={styles.linkHelp}><i className="help circle icon" /></div>}
             flowing={true}

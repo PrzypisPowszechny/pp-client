@@ -5,6 +5,7 @@ import { AnnotationPriorities } from '../../consts';
 import { Popup } from 'semantic-ui-react';
 
 import styles from './PriorityButton.scss';
+import { PPScopeClass } from '../../../class_consts';
 
 interface IPriorityButtonProps {
   type: AnnotationPriorities;
@@ -59,7 +60,7 @@ export default class PriorityButton extends PureComponent<IPriorityButtonProps> 
       <Popup
         trigger={button}
         size="small"
-        className="pp-ui small-padding single-long-line"
+        className={classNames(PPScopeClass, 'small-padding', 'single-long-line')}
         inverted={false}
       >
         {tooltipText}

@@ -3,81 +3,69 @@
 @import "css/common/vars/size";
 @import "css/common/vars/z-index";
 
+// The downward triangle attached to the widget from the pointer direction.
+$triangle-size: 12px;
+
 .self,
-.inner{
-    position: absolute;
-    z-index: 10; // less than semantic ui modal's (1000)
+.inner {
+  position: absolute;
+  z-index: 10; // less than semantic ui modal's (1000)
 }
 
 .inner {
-    margin: 0;
-    padding: 0;
-    left: -18px;
-    bottom: 15px;
-    color: rgb(0, 0, 0);
+  margin: 0;
+  padding: 0;
+  left: -18px;
+  bottom: 15px;
+  color: rgb(0, 0, 0);
 }
 
 .inner strong {
-    font-weight: bold;
+  font-weight: bold;
 }
 
-.inner.widget-triangle::after {
-    /* The downward triangle below widget. */
+.inner.widget-triangle:after {
+  display: block;
+  position: absolute;
+  content: "";
+  width: $triangle-size;
+  height: $triangle-size;
+  bottom: -$triangle-size / 2;
+  top: auto;
+  left: 18px - $triangle-size / 2;
+  right: auto;
+  z-index: -1;
+  transform: rotate(45deg);
 
-    //KG todo replace the annotator's triangle with our own
-    background-image: url(../../../node_modules/annotator/img/annotator-glyph-sprite.png?embed);
-
-    background-repeat: no-repeat;
-
-    content: "";
-    display: block;
-    width: 18px;
-    height: 10px;
-    background-position: 0 0;
-    position: absolute;
-    bottom: -10px;
-    left: 8px;
-
+  background: #FFFFFF;
+  box-shadow: 1px 1px 0px 0px rgb(210, 212, 210);
 }
 
 /*
 When window is horizontally or vertically inverted
  */
 .inner.invert-x {
-    left: auto;
-    right: -18px;
+  left: auto;
+  right: -18px;
 }
 
 .inner.invert-y {
-    bottom: auto;
-    top: 8px;
+  bottom: auto;
+  top: 8px;
 }
 
-.inner.invert-x:after {
-    left: auto;
-    right: 8px;
+.inner.invert-x.widget-triangle:after {
+  left: auto;
+  right: 18px - $triangle-size / 2;
 }
 
-.inner.invert-y:after {
-    background-position: 0 -15px;
-    bottom: auto;
-    top: -9px;
+.inner.invert-y.widget-triangle:after {
+  bottom: auto;
+  top: -$triangle-size / 2;
+  transform: rotate(-135deg);
 }
 
 .inner.update-inverted {
-    visibility: hidden;
+  visibility: hidden;
 }
-//TODO
-//.annotator-editor .invert-y .pp-widget:after {
-//    background-position: 0 -45px;
-//    height: 11px;
-//}
-
-//.self .listing {
-//    padding: 0;
-//    margin: 0;
-//    list-style: none;
-//}
-
-
 

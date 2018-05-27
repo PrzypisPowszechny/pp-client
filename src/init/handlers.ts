@@ -6,7 +6,7 @@ import { makeSelection, showMenu } from 'store/actions';
 
 import { Highlighter, TextSelector } from '../core/index';
 import { hideMenu } from 'store/widgets/actions';
-import { outsideArticleClasses } from '../consts';
+import { outsideArticleClasses } from 'class_consts';
 import highlights from './highlights';
 
 let handlers;
