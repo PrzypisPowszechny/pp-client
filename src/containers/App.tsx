@@ -2,7 +2,6 @@ import React from 'react';
 import Menu from 'components/menu';
 import Viewer from 'components/viewer';
 import Editor from 'components/editor';
-import Highlights from 'components/highlights/Highlights';
 import { connect } from 'react-redux';
 
 interface AppProps {
@@ -27,7 +26,6 @@ export default class App extends React.Component<Partial<AppProps>> {
         {this.props.editor.visible && <Editor/>}
         {this.props.viewerVisible && <Viewer/>}
         {this.props.menuVisible && <Menu/>}
-        <Highlights/>
       </div>
     );
   }
