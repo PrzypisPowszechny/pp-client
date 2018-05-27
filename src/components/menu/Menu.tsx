@@ -9,6 +9,7 @@ import Widget from 'components/widget';
 import styles from './Menu.scss';
 import { hideMenu, setSelectionRange, showEditorAnnotation } from 'store/widgets/actions';
 import { Range } from 'xpath-range';
+import { PPScopeClass } from '../../class_consts';
 
 interface IMenuProps {
   locationX: number;
@@ -66,7 +67,7 @@ export default class Menu extends React.Component<Partial<IMenuProps>, {}> {
   render() {
     return (
       <Widget
-        className={classNames('pp-ui', styles.self)}
+        className={classNames(PPScopeClass, styles.self)}
         locationX={this.props.locationX}
         locationY={this.props.locationY}
       >
