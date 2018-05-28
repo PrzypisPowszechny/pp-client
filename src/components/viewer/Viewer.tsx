@@ -11,6 +11,7 @@ import { selectViewerState } from 'store/widgets/selectors';
 import { hideViewer, showEditorAnnotation } from 'store/widgets/actions';
 import { AnnotationAPIModel } from 'api/annotations';
 import { PPScopeClass, PPViewerIndirectChildClass } from 'class_consts.ts';
+import Timer = NodeJS.Timer;
 
 interface IViewerProps {
   locationX: number;
@@ -54,12 +55,16 @@ interface IViewerState {
 )
 export default class Viewer extends React.Component<Partial<IViewerProps>, Partial<IViewerState>> {
 
+  static mouseleaveDisappearTimeout = 200;
+
   static defaultProps = {
     visible: true,
     locationX: 0,
     locationY: 0,
-      annotations: [],
+    annotations: [],
   };
+
+  disappearTimeoutId: Timer;
 
   constructor(props: IViewerProps) {
     super(props);
@@ -67,6 +72,26 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, Parti
       confirmDeleteModalOpen: false,
       deleteAnnotationId: null,
     };
+  }
+
+  componentWillUnmount() {
+    this.clearDisappearTimer();
+  }
+
+  startDisappearTimer() {
+    this.disappearTimeoutId = setTimeout(
+      () => {
+        this.disappearTimeoutId = null;
+        this.props.hideViewer();
+      },
+      Viewer.mouseleaveDisappearTimeout,
+    );
+  }
+
+  clearDisappearTimer() {
+    if (this.disappearTimeoutId) {
+      clearTimeout(this.disappearTimeoutId);
+    }
   }
 
   onItemEdit = (id: string) => {
@@ -83,7 +108,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, Parti
       confirmDeleteModalOpen: true,
       deleteAnnotationId: id,
     });
-}
+  }
   onItemConfirmedDelete = (e) => {
     const annotation = this.props.annotations.find(a => a.id === this.state.deleteAnnotationId);
     this.props.deleteAnnotation(annotation)
@@ -103,8 +128,12 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, Parti
     const isMouseOverIndirectChild = e.relatedTarget.classList.contains(PPViewerIndirectChildClass);
     if (!this.state.confirmDeleteModalOpen && !isMouseOverIndirectChild) {
       // check what element the pointer entered;
-      this.props.hideViewer();
+      this.startDisappearTimer();
     }
+  }
+
+  onMouseEnter = (e) => {
+    this.clearDisappearTimer();
   }
 
   setDeleteModalClosed = (e) => {
@@ -163,6 +192,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, Parti
         updateInverted={true}
         widgetTriangle={true}
         onMouseLeave={this.onMouseLeave}
+        onMouseEnter={this.onMouseEnter}
       >
         <ul className={styles.annotationItems}>
           {this.renderItems()}

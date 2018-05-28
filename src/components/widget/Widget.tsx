@@ -18,6 +18,7 @@ export interface IWidgetProps {
 
   className: string;
   onMouseLeave: (Event) => void;
+  onMouseEnter: (Event) => void;
   children: React.ReactChild | React.ReactChild[];
 }
 
@@ -54,6 +55,7 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
     updateInverted: false,
     className: '',
     onMouseLeave: null,
+    onMouseEnter: null,
     widgetTriangle: false,
   };
 
@@ -114,6 +116,7 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
     const inner = this.innerElement.current;
     if (inner) {
       inner.addEventListener('mouseleave', this.props.onMouseLeave);
+      inner.addEventListener('mouseenter', this.props.onMouseEnter);
     }
 
     if (this.state.updateInverted) {
