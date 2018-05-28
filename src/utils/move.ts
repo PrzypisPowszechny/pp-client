@@ -84,9 +84,9 @@ export class DragTracker {
 
     // Throttle repeated mousemove events
     this.throttled = true;
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       this.throttled = false;
-    }, 1000 / 60);
+    });
   }
 
   // Event handler for mouseup

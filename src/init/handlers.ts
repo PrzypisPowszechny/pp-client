@@ -7,11 +7,12 @@ import { makeSelection, showMenu } from 'store/actions';
 import { Highlighter, TextSelector } from '../core/index';
 import { hideMenu } from 'store/widgets/actions';
 import { outsideArticleClasses } from 'class_consts';
+import highlights from './highlights';
 
 let handlers;
 
 export function initializeCoreHandlers() {
-  const highlighter = new Highlighter(document.body, null);
+  const highlighter = new Highlighter(document.body);
   const selector = new TextSelector(document.body, {
     onSelectionChange: selectionChangeCallback,
     outsideArticleClasses,
@@ -21,10 +22,12 @@ export function initializeCoreHandlers() {
     highlighter,
     selector,
   };
+
+  highlights.init(highlighter);
 }
 
 export function deinitializeCoreHandlers() {
-  // ...?
+  highlights.deinit();
 }
 
 function selectionChangeCallback(
