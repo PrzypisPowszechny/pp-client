@@ -53,6 +53,7 @@ interface IViewerState {
   },
 )
 export default class Viewer extends React.Component<Partial<IViewerProps>, Partial<IViewerState>> {
+
   static defaultProps = {
     visible: true,
     locationX: 0,
