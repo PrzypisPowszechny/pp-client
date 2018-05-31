@@ -186,7 +186,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, Parti
   render() {
     return (
       <Widget
-        className={classNames('pp-ui', styles.self)}
+        className={classNames(PPScopeClass, styles.self)}
         locationX={this.props.locationX}
         locationY={this.props.locationY}
         updateInverted={true}
