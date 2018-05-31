@@ -55,5 +55,7 @@ export const selectViewerState = createSelector<IStore, any, any, any>(
   (viewer, annotations) => ({
     ...selectWidgetState(viewer),
     annotations: selectViewerAnnotations(annotations, viewer.annotationIds),
+    annotationIds: viewer.annotationIds,
+    deleteModal: viewer.deleteModal,
   }),
 );

@@ -8,24 +8,29 @@ import { Button, Modal } from 'semantic-ui-react';
 import ViewerItem from './ViewerItem';
 import styles from './Viewer.scss';
 import { selectViewerState } from 'store/widgets/selectors';
-import { hideViewer, showEditorAnnotation } from 'store/widgets/actions';
+import { hideViewer, hideViewerDeleteModal, openViewerDeleteModal, showEditorAnnotation } from 'store/widgets/actions';
 import { AnnotationAPIModel } from 'api/annotations';
 import { PPScopeClass, PPViewerIndirectChildClass } from 'class_consts.ts';
 import Timer = NodeJS.Timer;
+import Highlighter from 'core/Highlighter';
 
 interface IViewerProps {
   locationX: number;
   locationY: number;
   annotations: AnnotationAPIModel[];
+  deleteModalId: string;
+  deleteModalOpen: boolean;
+
+  highlighter: Highlighter;
+
+  onMouseLeave: (Event) => void;
+  onMouseEnter: (Event) => void;
 
   deleteAnnotation: (instance: AnnotationAPIModel) => Promise<object>;
   showEditorAnnotation: (x: number, y: number, id?: string) => void;
   hideViewer: () => void;
-}
-
-interface IViewerState {
-  confirmDeleteModalOpen: boolean;
-  deleteAnnotationId: string;
+  openViewerDeleteModal: (id: string) => void;
+  hideViewerDeleteModal: () => void;
 }
 
 /*
@@ -36,26 +41,34 @@ interface IViewerState {
 @connect(
   (state) => {
     const {
+      visible,
       locationX,
       locationY,
+      deleteModal: {
+        deleteModalId,
+        deleteModalOpen,
+      },
       annotations,
     } = selectViewerState(state);
 
     return {
+      visible,
       locationX,
       locationY,
+      deleteModalId,
+      deleteModalOpen,
       annotations,
     };
   },
   {
     showEditorAnnotation,
     hideViewer,
+    openViewerDeleteModal,
+    hideViewerDeleteModal,
     deleteAnnotation: deleteResource,
   },
 )
-export default class Viewer extends React.Component<Partial<IViewerProps>, Partial<IViewerState>> {
-
-  static mouseleaveDisappearTimeout = 200;
+export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
 
   static defaultProps = {
     visible: true,
@@ -64,34 +77,8 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, Parti
     annotations: [],
   };
 
-  disappearTimeoutId: Timer;
-
   constructor(props: IViewerProps) {
     super(props);
-    this.state = {
-      confirmDeleteModalOpen: false,
-      deleteAnnotationId: null,
-    };
-  }
-
-  componentWillUnmount() {
-    this.clearDisappearTimer();
-  }
-
-  startDisappearTimer() {
-    this.disappearTimeoutId = setTimeout(
-      () => {
-        this.disappearTimeoutId = null;
-        this.props.hideViewer();
-      },
-      Viewer.mouseleaveDisappearTimeout,
-    );
-  }
-
-  clearDisappearTimer() {
-    if (this.disappearTimeoutId) {
-      clearTimeout(this.disappearTimeoutId);
-    }
   }
 
   onItemEdit = (id: string) => {
@@ -104,45 +91,21 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, Parti
   }
 
   onItemDelete = (id: string) => {
-    this.setState({
-      confirmDeleteModalOpen: true,
-      deleteAnnotationId: id,
-    });
+    this.props.openViewerDeleteModal(id);
   }
+
   onItemConfirmedDelete = (e) => {
-    const annotation = this.props.annotations.find(a => a.id === this.state.deleteAnnotationId);
+    const annotation = this.props.annotations.find(a => a.id === this.props.deleteModalId);
     this.props.deleteAnnotation(annotation)
       .catch((errors) => {
         console.log(errors);
       });
-    this.setState({
-      confirmDeleteModalOpen: false,
-      deleteAnnotationId: null,
-    });
-  }
-
-  onMouseLeave = (e) => {
-    // Normally, close the window, except...
-    // not when the modal is not open
-    // not when this element is manually marked as an indirect Viewer child (despite not being a DOM child)
-    const isMouseOverIndirectChild = e.relatedTarget.classList.contains(PPViewerIndirectChildClass);
-    if (!this.state.confirmDeleteModalOpen && !isMouseOverIndirectChild) {
-      // check what element the pointer entered;
-      this.startDisappearTimer();
-    }
-  }
-
-  onMouseEnter = (e) => {
-    this.clearDisappearTimer();
   }
 
   setDeleteModalClosed = (e) => {
     // todo: in the future we should handle the case when the modal has just been closed and
     // the cursor is outside the viewer (so it never actually leaves the viewer area)
-    this.setState({
-      confirmDeleteModalOpen: false,
-      deleteAnnotationId: null,
-    });
+    this.props.hideViewerDeleteModal();
   }
 
   renderItems() {
@@ -152,7 +115,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, Parti
         <ViewerItem
           key={annotation.id}
           annotation={annotation}
-          onDelete={this.onItemDelete}
+          onDelete={this.props.openViewerDeleteModal}
           onEdit={this.onItemEdit}
           // ignore these elements on mouseleave
           indirectChildClassName={PPViewerIndirectChildClass}
@@ -166,7 +129,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, Parti
       <Modal
         size="mini"
         className={PPScopeClass}
-        open={this.state.confirmDeleteModalOpen}
+        open={this.props.deleteModalOpen}
       >
         <Modal.Content>
           <p>Czy na pewno chcesz usunąć przypis?</p>
@@ -191,8 +154,8 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, Parti
         locationY={this.props.locationY}
         updateInverted={true}
         widgetTriangle={true}
-        onMouseLeave={this.onMouseLeave}
-        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.props.onMouseLeave}
+        onMouseEnter={this.props.onMouseEnter}
       >
         <ul className={styles.annotationItems}>
           {this.renderItems()}

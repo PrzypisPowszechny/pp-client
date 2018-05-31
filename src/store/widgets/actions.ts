@@ -4,6 +4,7 @@ export const EDITOR_ANNOTATION = 'EDITOR_ANNOTATION';
 export const SET_EDITOR_SELECTION_RANGE = 'SET_EDITOR_SELECTION_RANGE';
 export const EDITOR_VISIBLE_CHANGE = 'EDITOR_VISIBLE_CHANGE';
 export const VIEWER_VISIBLE_CHANGE = 'VIEWER_VISIBLE_CHANGE';
+export const VIEWER_MODAL_CHANGE = 'VIEWER_MODAL_CHANGE';
 export const MENU_WIDGET_CHANGE = 'MENU_WIDGET_CHANGE';
 
 export const showEditorAnnotation = (x: number, y: number, id?: string) => {
@@ -66,6 +67,7 @@ export const showViewer = (x: number, y: number, annotationIds: number[]) => {
     payload: {
       annotationIds,
       visible: true,
+      deleteModal: {},
       location: {
         x,
         y,
@@ -79,6 +81,26 @@ export const hideViewer = () => {
     type: VIEWER_VISIBLE_CHANGE,
     payload: {
       visible: false,
+    },
+  };
+};
+
+export const openViewerDeleteModal = (id: string) => {
+  return {
+    type: VIEWER_MODAL_CHANGE,
+    payload: {
+      deleteModalOpen: true,
+      deleteModalId: id,
+    },
+  };
+};
+
+export const hideViewerDeleteModal = () => {
+  return {
+    type: VIEWER_MODAL_CHANGE,
+    payload: {
+      deleteModalOpen: false,
+      deleteModalId: null,
     },
   };
 };

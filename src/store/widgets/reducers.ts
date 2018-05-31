@@ -2,7 +2,7 @@ import {
   EDITOR_ANNOTATION,
   EDITOR_VISIBLE_CHANGE,
   MENU_WIDGET_CHANGE,
-  SET_EDITOR_SELECTION_RANGE,
+  SET_EDITOR_SELECTION_RANGE, VIEWER_MODAL_CHANGE,
   VIEWER_VISIBLE_CHANGE,
 } from './actions';
 import _difference from 'lodash/difference';
@@ -51,7 +51,7 @@ const widgets = combineReducers({
 });
 export default widgets;
 
-function viewer(state = { ...initialWidgetState, annotationIds: [] } , action) {
+function viewer(state = { ...initialWidgetState, annotationIds: [], deleteModal: {} } , action) {
   switch (action.type) {
     case VIEWER_VISIBLE_CHANGE:
       // Update location only when the displayed annotations have changed, too.
@@ -68,6 +68,11 @@ function viewer(state = { ...initialWidgetState, annotationIds: [] } , action) {
         ...state,
         ...action.payload,
         ...locationOverride,
+      };
+    case VIEWER_MODAL_CHANGE:
+      return {
+        ...state,
+        deleteModal: action.payload,
       };
     case API_DELETED:
       // If one of viewed annotation is removed, filter it out
