@@ -60,6 +60,7 @@ export default class ViewerManager extends React.Component<Partial<IViewerManage
    */
 
   static mouseleaveDisappearTimeout = 200;
+  static modalCloseDisappearTimeout = 1100;
 
   static defaultProps = {
     visible: true,
@@ -67,6 +68,7 @@ export default class ViewerManager extends React.Component<Partial<IViewerManage
   };
 
   disappearTimeoutId: Timer;
+  isMouseOver: boolean;
 
   constructor(props: IViewerManagerProps) {
     super(props);
@@ -75,6 +77,7 @@ export default class ViewerManager extends React.Component<Partial<IViewerManage
   componentDidMount() {
     this.props.highlighter.onHighlightEvent('mouseover', this.onHighlightMouseover);
     this.props.highlighter.onHighlightEvent('mouseleave', this.onHighlightMouseleave);
+    this.isMouseOver = false;
   }
 
   componentWillUnmount() {
@@ -89,11 +92,11 @@ export default class ViewerManager extends React.Component<Partial<IViewerManage
     const eventAnnotations = annotations.map(ann => ann.id);
     // Make sure the leave event is up-to-date
     if (_isEqual(eventAnnotations, this.props.annotationIds)) {
-      this.startDisappearTimer();
+      this.startDisappearTimer(ViewerManager.mouseleaveDisappearTimeout);
     }
   }
 
-  startDisappearTimer() {
+  startDisappearTimer(timeout: number) {
     // clear the timer so more than one cannot accumulate
     this.clearDisappearTimer();
     this.disappearTimeoutId = setTimeout(
@@ -101,7 +104,7 @@ export default class ViewerManager extends React.Component<Partial<IViewerManage
         this.disappearTimeoutId = null;
         this.props.hideViewer();
       },
-      ViewerManager.mouseleaveDisappearTimeout,
+      timeout,
     );
   }
 
@@ -113,18 +116,26 @@ export default class ViewerManager extends React.Component<Partial<IViewerManage
   }
 
   onMouseLeave = (e) => {
+    this.isMouseOver = false;
     // Normally, close the window, except...
     // not when the modal is not open
     // not when this element is manually marked as an indirect Viewer child (despite not being a DOM child)
     const isMouseOverIndirectChild = e.relatedTarget.classList.contains(PPViewerIndirectChildClass);
     if (!this.props.deleteModalOpen && !isMouseOverIndirectChild) {
       // check what element the pointer entered;
-      this.startDisappearTimer();
+      this.startDisappearTimer(ViewerManager.mouseleaveDisappearTimeout);
     }
   }
 
   onMouseEnter = (e) => {
+    this.isMouseOver = true;
     this.clearDisappearTimer();
+  }
+
+  onModalClose = (e) => {
+    if (!this.isMouseOver) {
+      this.startDisappearTimer(ViewerManager.modalCloseDisappearTimeout);
+    }
   }
 
   render() {
@@ -133,6 +144,7 @@ export default class ViewerManager extends React.Component<Partial<IViewerManage
         <Viewer
           onMouseLeave={this.onMouseLeave}
           onMouseEnter={this.onMouseEnter}
+          onModalClose={this.onModalClose}
         />
       );
     } else {

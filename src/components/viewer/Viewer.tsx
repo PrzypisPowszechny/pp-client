@@ -25,6 +25,7 @@ interface IViewerProps {
 
   onMouseLeave: (Event) => void;
   onMouseEnter: (Event) => void;
+  onModalClose: (Event) => void;
 
   deleteAnnotation: (instance: AnnotationAPIModel) => Promise<object>;
   showEditorAnnotation: (x: number, y: number, id?: string) => void;
@@ -33,11 +34,6 @@ interface IViewerProps {
   hideViewerDeleteModal: () => void;
 }
 
-/*
- * TODO list
- * - [roadmap 6.1.4] the appear/disappear logic of Viewer is just a simulation and should be refined or
-  * (preferably) straightforwardly adapted from old_src/ViewerWidget
- */
 @connect(
   (state) => {
     const {
@@ -103,9 +99,8 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
   }
 
   setDeleteModalClosed = (e) => {
-    // todo: in the future we should handle the case when the modal has just been closed and
-    // the cursor is outside the viewer (so it never actually leaves the viewer area)
     this.props.hideViewerDeleteModal();
+    this.props.onModalClose(e);
   }
 
   renderItems() {
