@@ -2,6 +2,7 @@ import store from 'store';
 import { showViewer } from 'store/actions';
 import { mousePosition } from 'common/dom';
 import Highlighter from 'core/Highlighter';
+import { mouseOverViewer } from '../store/widgets/actions';
 
 let instance;
 let mouseDown = false;
@@ -20,7 +21,8 @@ function onMouseUp(e: MouseEvent) {
 
 function init(highlighter: Highlighter) {
   // This event subscription will last irrespective of whether annotations are redrawn or not
-  highlighter.onHighlightEvent('mouseover', handleHighlightEvent);
+  highlighter.onHighlightEvent('mouseover', handleHighlightMouseEnter);
+  highlighter.onHighlightEvent('mouseleave', handleHighlightMouseLeave);
 
   // Watch mouse button state;
   document.body.addEventListener('mousedown', onMouseDown);
@@ -58,7 +60,11 @@ function drawHighlights() {
   })));
 }
 
-function handleHighlightEvent(e, annotations) {
+function handleHighlightMouseLeave(e, annotations) {
+  store.dispatch(mouseOverViewer(false));
+}
+
+function handleHighlightMouseEnter(e, annotations) {
   // If the mouse button is currently depressed, we're probably trying to
   // make a selection, so we shouldn't show the viewer.
   if (mouseDown) {

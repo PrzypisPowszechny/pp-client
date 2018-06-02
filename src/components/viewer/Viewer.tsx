@@ -13,6 +13,7 @@ import { AnnotationAPIModel } from 'api/annotations';
 import { PPScopeClass, PPViewerIndirectChildClass } from 'class_consts.ts';
 import Timer = NodeJS.Timer;
 import Highlighter from 'core/Highlighter';
+import { mouseOverViewer } from '../../store/widgets/actions';
 
 interface IViewerProps {
   locationX: number;
@@ -21,15 +22,12 @@ interface IViewerProps {
   deleteModalId: string;
   deleteModalOpen: boolean;
 
-  highlighter: Highlighter;
-
-  onMouseLeave: (Event) => void;
-  onMouseEnter: (Event) => void;
   onModalClose: (Event) => void;
 
   deleteAnnotation: (instance: AnnotationAPIModel) => Promise<object>;
   showEditorAnnotation: (x: number, y: number, id?: string) => void;
   hideViewer: () => void;
+  mouseOverViewer: (value: boolean) => void;
   openViewerDeleteModal: (id: string) => void;
   hideViewerDeleteModal: () => void;
 }
@@ -59,6 +57,7 @@ interface IViewerProps {
   {
     showEditorAnnotation,
     hideViewer,
+    mouseOverViewer,
     openViewerDeleteModal,
     hideViewerDeleteModal,
     deleteAnnotation: deleteResource,
@@ -100,7 +99,22 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
 
   setDeleteModalClosed = (e) => {
     this.props.hideViewerDeleteModal();
-    this.props.onModalClose(e);
+    this.props.mouseOverViewer(false);
+  }
+
+  handleMouseLeave = (e) => {
+    // Normally, close the window, except...
+    // not when the modal is not open
+    // not when this element is manually marked as an indirect Viewer child (despite not being a DOM child)
+    const isMouseOverIndirectChild = e.relatedTarget.classList.contains(PPViewerIndirectChildClass);
+    if (!this.props.deleteModalOpen && !isMouseOverIndirectChild) {
+      // check what element the pointer entered;
+      this.props.mouseOverViewer(false);
+    }
+  }
+
+  handleMouseEnter = (e) => {
+    this.props.mouseOverViewer(true);
   }
 
   renderItems() {
@@ -149,8 +163,8 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
         locationY={this.props.locationY}
         updateInverted={true}
         widgetTriangle={true}
-        onMouseLeave={this.props.onMouseLeave}
-        onMouseEnter={this.props.onMouseEnter}
+        onMouseLeave={this.handleMouseLeave}
+        onMouseEnter={this.handleMouseEnter}
       >
         <ul className={styles.annotationItems}>
           {this.renderItems()}

@@ -9,7 +9,7 @@ import { hideMenu } from 'store/widgets/actions';
 import { outsideArticleClasses } from 'class_consts';
 import highlights from './highlights';
 
-export let handlers;
+let handlers;
 
 export function initializeCoreHandlers() {
   const highlighter = new Highlighter(document.body);

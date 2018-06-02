@@ -67,6 +67,7 @@ export const showViewer = (x: number, y: number, annotationIds: number[]) => {
     payload: {
       annotationIds,
       visible: true,
+      mouseOver: true,
       deleteModal: {},
       location: {
         x,
@@ -81,6 +82,15 @@ export const hideViewer = () => {
     type: VIEWER_VISIBLE_CHANGE,
     payload: {
       visible: false,
+    },
+  };
+};
+
+export const mouseOverViewer = (value: boolean) => {
+  return {
+    type: VIEWER_VISIBLE_CHANGE,
+    payload: {
+      mouseOver: value,
     },
   };
 };

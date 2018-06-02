@@ -57,5 +57,6 @@ export const selectViewerState = createSelector<IStore, any, any, any>(
     annotations: selectViewerAnnotations(annotations, viewer.annotationIds),
     annotationIds: viewer.annotationIds,
     deleteModal: viewer.deleteModal,
+    mouseOver: viewer.mouseOver,
   }),
 );

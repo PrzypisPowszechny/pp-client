@@ -8,21 +8,31 @@ import { Button, Modal } from 'semantic-ui-react';
 import ViewerItem from './ViewerItem';
 import styles from './Viewer.scss';
 import { selectViewerState } from 'store/widgets/selectors';
-import { hideViewer, showEditorAnnotation } from 'store/widgets/actions';
+import { hideViewer, mouseOverViewer, showEditorAnnotation } from 'store/widgets/actions';
 import { AnnotationAPIModel } from 'api/annotations';
 import { PPScopeClass, PPViewerIndirectChildClass } from 'class_consts.ts';
 import Timer = NodeJS.Timer;
-import Highlighter from 'core/Highlighter';
 import Viewer from './Viewer';
 import _isEqual from 'lodash/isEqual';
 
+interface IViewerManagerState {
+  mouseOver: boolean;
+  // whether the Viewer is about to disappear
+  mouseHasLeft: boolean;
+  // whether the Viewer has been prevented from disappearing by the entering mouse
+  mouseHasEntered: boolean;
+
+  deleteModalOpen: boolean;
+  deleteModalJustClosed: boolean;
+}
+
 interface IViewerManagerProps {
   visible: boolean;
+  mouseOver: boolean;
   deleteModalOpen: boolean;
   annotationIds: string[];
 
-  highlighter: Highlighter;
-
+  mouseOverViewer: (value: boolean) => void;
   hideViewer: () => void;
   showViewer: () => void;
 }
@@ -31,6 +41,7 @@ interface IViewerManagerProps {
   (state) => {
     const {
       visible,
+      mouseOver,
       deleteModal: {
         deleteModalOpen,
       },
@@ -39,24 +50,23 @@ interface IViewerManagerProps {
 
     return {
       visible,
+      mouseOver,
       deleteModalOpen,
       annotationIds,
     };
   },
   {
     hideViewer,
+    mouseOverViewer,
   },
 )
-export default class ViewerManager extends React.Component<Partial<IViewerManagerProps>, {}> {
+export default class ViewerManager extends React.Component<Partial<IViewerManagerProps>, Partial<IViewerManagerState>> {
   /*
    * ViewerManager purpose is to centrally manage mouse events, both related to Viewer widget and highlight-related .
    * (note: Especially the latter couldn't be correctly done by a Viewer that is mounted on
    * the highlight mouseover event, since Viewer could not subscribe to highlight mouseleave event quickly enough
    * -- before the pointer leaves it. It was the first attempted solution and quick mouse movements were in fact
    * not captured)
-   *
-   * Highlighter component is provided from the outside and lets ViewerManager subscribe directly
-   * to highlight mouse events.
    */
 
   static mouseleaveDisappearTimeout = 200;
@@ -67,33 +77,34 @@ export default class ViewerManager extends React.Component<Partial<IViewerManage
     deleteModalOpen: false,
   };
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    return {
+      deleteModalOpen: nextProps.deleteModalOpen,
+      mouseOver: nextProps.mouseOver,
+
+      mouseHasLeft: prevState.mouseOver && !nextProps.mouseOver,
+      mouseHasEntered: !prevState.mouseOver && nextProps.mouseOver,
+      deleteModalJustClosed: prevState.deleteModalOpen && !nextProps.deleteModalOpen,
+    };
+  }
+
   disappearTimeoutId: Timer;
-  isMouseOver: boolean;
 
   constructor(props: IViewerManagerProps) {
     super(props);
+    this.state = {};
+  }
+
+  componentDidUpdate() {
+    this.updateTimers();
   }
 
   componentDidMount() {
-    this.props.highlighter.onHighlightEvent('mouseover', this.onHighlightMouseover);
-    this.props.highlighter.onHighlightEvent('mouseleave', this.onHighlightMouseleave);
-    this.isMouseOver = false;
+    this.updateTimers();
   }
 
   componentWillUnmount() {
     this.clearDisappearTimer();
-  }
-
-  onHighlightMouseover = (e, annotations) => {
-    this.clearDisappearTimer();
-  }
-
-  onHighlightMouseleave = (e, annotations) => {
-    const eventAnnotations = annotations.map(ann => ann.id);
-    // Make sure the leave event is up-to-date
-    if (_isEqual(eventAnnotations, this.props.annotationIds)) {
-      this.startDisappearTimer(ViewerManager.mouseleaveDisappearTimeout);
-    }
   }
 
   startDisappearTimer(timeout: number) {
@@ -115,40 +126,21 @@ export default class ViewerManager extends React.Component<Partial<IViewerManage
     }
   }
 
-  onMouseLeave = (e) => {
-    this.isMouseOver = false;
-    // Normally, close the window, except...
-    // not when the modal is not open
-    // not when this element is manually marked as an indirect Viewer child (despite not being a DOM child)
-    const isMouseOverIndirectChild = e.relatedTarget.classList.contains(PPViewerIndirectChildClass);
-    if (!this.props.deleteModalOpen && !isMouseOverIndirectChild) {
-      // check what element the pointer entered;
-      this.startDisappearTimer(ViewerManager.mouseleaveDisappearTimeout);
-    }
-  }
-
-  onMouseEnter = (e) => {
-    this.isMouseOver = true;
-    this.clearDisappearTimer();
-  }
-
-  onModalClose = (e) => {
-    if (!this.isMouseOver) {
-      this.startDisappearTimer(ViewerManager.modalCloseDisappearTimeout);
+  updateTimers() {
+    if (this.state.mouseHasLeft) {
+      if (this.state.deleteModalJustClosed) {
+        this.startDisappearTimer(ViewerManager.modalCloseDisappearTimeout);
+      } else {
+        this.startDisappearTimer(ViewerManager.mouseleaveDisappearTimeout);
+      }
+    } else if (this.state.mouseHasEntered) {
+      this.clearDisappearTimer();
     }
   }
 
   render() {
-    if (this.props.visible) {
-      return (
-        <Viewer
-          onMouseLeave={this.onMouseLeave}
-          onMouseEnter={this.onMouseEnter}
-          onModalClose={this.onModalClose}
-        />
-      );
-    } else {
-      return null;
-    }
+    return (
+      this.props.visible && <Viewer/>
+    );
   }
 }
