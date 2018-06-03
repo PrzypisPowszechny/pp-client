@@ -127,4 +127,5 @@ const config = (env, argv) => ({
 module.exports = {
   config: config,
   BUILD_DIR: BUILD_DIR,
+  EXT_DIR: EXT_DIR,
 };
