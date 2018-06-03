@@ -32,7 +32,7 @@ Thank god, Chrome parses manifest.json with comments!
         "*://*.wikipedia.org/*",
         "*://*.facebook.com/*"
       ],
-      "js": ["main.bundle.js", "vendor.bundle.js"]
+      "js": ["main.bundle.js", "vendor_css.bundle.js"]
     }
   ],
   "browser_action": {
