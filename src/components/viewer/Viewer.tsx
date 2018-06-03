@@ -3,69 +3,67 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createResource, deleteResource } from 'redux-json-api';
 import Widget from 'components/widget';
-import { Button, Modal } from 'semantic-ui-react';
 
 import ViewerItem from './ViewerItem';
 import styles from './Viewer.scss';
 import { selectViewerState } from 'store/widgets/selectors';
-import { hideViewer, showEditorAnnotation } from 'store/widgets/actions';
+import { hideViewer, openViewerDeleteModal, showEditorAnnotation } from 'store/widgets/actions';
 import { AnnotationAPIModel } from 'api/annotations';
 import { PPScopeClass, PPViewerIndirectChildClass } from 'class_consts.ts';
+import { mouseOverViewer } from 'store/widgets/actions';
+import DeleteAnnotationModal from './DeleteAnnotationModal';
 
 interface IViewerProps {
   locationX: number;
   locationY: number;
   annotations: AnnotationAPIModel[];
 
-  deleteAnnotation: (instance: AnnotationAPIModel) => Promise<object>;
+  deleteModalOpen: boolean;
+
   showEditorAnnotation: (x: number, y: number, id?: string) => void;
   hideViewer: () => void;
+  mouseOverViewer: (value: boolean) => void;
+  openViewerDeleteModal: (id: string) => void;
 }
 
-interface IViewerState {
-  confirmDeleteModalOpen: boolean;
-  deleteAnnotationId: string;
-}
-
-/*
- * TODO list
- * - [roadmap 6.1.4] the appear/disappear logic of Viewer is just a simulation and should be refined or
-  * (preferably) straightforwardly adapted from old_src/ViewerWidget
- */
 @connect(
   (state) => {
     const {
+      visible,
       locationX,
       locationY,
+      deleteModal: {
+        deleteModalOpen,
+      },
       annotations,
     } = selectViewerState(state);
 
     return {
+      visible,
       locationX,
       locationY,
+      deleteModalOpen,
       annotations,
     };
   },
   {
     showEditorAnnotation,
     hideViewer,
-    deleteAnnotation: deleteResource,
+    mouseOverViewer,
+    openViewerDeleteModal,
   },
 )
-export default class Viewer extends React.Component<Partial<IViewerProps>, Partial<IViewerState>> {
+export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
+
   static defaultProps = {
     visible: true,
     locationX: 0,
     locationY: 0,
-      annotations: [],
+    annotations: [],
   };
 
   constructor(props: IViewerProps) {
     super(props);
-    this.state = {
-      confirmDeleteModalOpen: false,
-      deleteAnnotationId: null,
-    };
   }
 
   onItemEdit = (id: string) => {
@@ -78,41 +76,22 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, Parti
   }
 
   onItemDelete = (id: string) => {
-    this.setState({
-      confirmDeleteModalOpen: true,
-      deleteAnnotationId: id,
-    });
-}
-  onItemConfirmedDelete = (e) => {
-    const annotation = this.props.annotations.find(a => a.id === this.state.deleteAnnotationId);
-    this.props.deleteAnnotation(annotation)
-      .catch((errors) => {
-        console.log(errors);
-      });
-    this.setState({
-      confirmDeleteModalOpen: false,
-      deleteAnnotationId: null,
-    });
+    this.props.openViewerDeleteModal(id);
   }
 
-  onMouseLeave = (e) => {
+  handleMouseLeave = (e) => {
     // Normally, close the window, except...
     // not when the modal is not open
     // not when this element is manually marked as an indirect Viewer child (despite not being a DOM child)
     const isMouseOverIndirectChild = e.relatedTarget.classList.contains(PPViewerIndirectChildClass);
-    if (!this.state.confirmDeleteModalOpen && !isMouseOverIndirectChild) {
+    if (!this.props.deleteModalOpen && !isMouseOverIndirectChild) {
       // check what element the pointer entered;
-      this.props.hideViewer();
+      this.props.mouseOverViewer(false);
     }
   }
 
-  setDeleteModalClosed = (e) => {
-    // todo: in the future we should handle the case when the modal has just been closed and
-    // the cursor is outside the viewer (so it never actually leaves the viewer area)
-    this.setState({
-      confirmDeleteModalOpen: false,
-      deleteAnnotationId: null,
-    });
+  handleMouseEnter = (e) => {
+    this.props.mouseOverViewer(true);
   }
 
   renderItems() {
@@ -122,7 +101,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, Parti
         <ViewerItem
           key={annotation.id}
           annotation={annotation}
-          onDelete={this.onItemDelete}
+          onDelete={this.props.openViewerDeleteModal}
           onEdit={this.onItemEdit}
           // ignore these elements on mouseleave
           indirectChildClassName={PPViewerIndirectChildClass}
@@ -131,42 +110,21 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, Parti
     });
   }
 
-  renderDeleteModal() {
-    return (
-      <Modal
-        size="mini"
-        className={PPScopeClass}
-        open={this.state.confirmDeleteModalOpen}
-      >
-        <Modal.Content>
-          <p>Czy na pewno chcesz usunąć przypis?</p>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button onClick={this.setDeleteModalClosed} size="tiny" negative={true}>
-            Nie
-          </Button>
-          <Button onClick={this.onItemConfirmedDelete} size="tiny" positive={true}>
-            Tak
-          </Button>
-        </Modal.Actions>
-      </Modal>
-    );
-  }
-
   render() {
     return (
       <Widget
-        className={classNames('pp-ui', styles.self)}
+        className={classNames(PPScopeClass, styles.self)}
         locationX={this.props.locationX}
         locationY={this.props.locationY}
         updateInverted={true}
         widgetTriangle={true}
-        onMouseLeave={this.onMouseLeave}
+        onMouseLeave={this.handleMouseLeave}
+        onMouseEnter={this.handleMouseEnter}
       >
         <ul className={styles.annotationItems}>
           {this.renderItems()}
         </ul>
-        {this.renderDeleteModal()}
+        <DeleteAnnotationModal/>
       </Widget>
     );
   }
