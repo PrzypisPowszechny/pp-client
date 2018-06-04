@@ -6,7 +6,7 @@ const base = {
 
   name: 'Przypis Powszechny',
   description: '',
-  version: '1.0',
+  version: '0.1',
 
   permissions: [
     'activeTab',

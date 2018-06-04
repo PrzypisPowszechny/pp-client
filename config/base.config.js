@@ -1,6 +1,4 @@
 const path = require('path');
-
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
 
@@ -29,9 +27,6 @@ const config = (env, argv) => ({
       localPath(ROOT, 'src'),
       localPath(ROOT, 'node_modules'),
     ]
-  },
-  optimization: {
-    splitChunks: false,
   },
   module: {
     rules: [
@@ -107,11 +102,6 @@ const config = (env, argv) => ({
   },
   plugins: [
     new CleanWebpackPlugin([BUILD_DIR, EXT_DIR]),
-    new HtmlWebpackPlugin({
-      title: 'Przypis testowa pusta strona',
-      template: 'src/test.html',
-      filename: 'index.html',
-    }),
     new webpack.DefinePlugin({
       // use appropriate (development or production) PP settings
       PP_SETTINGS: JSON.stringify(appSettings[argv.mode]),

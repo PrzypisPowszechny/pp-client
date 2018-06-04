@@ -30,6 +30,9 @@ module.exports = (env, argv) => merge(common.config(env, argv), {
     publicPath: 'chrome-extension://hhjfhkdpnajfnekdaigmpahnnoccfaio/',
     filename: '[name].bundle.js',
   },
+  optimization: {
+    splitChunks: false,
+  },
   plugins: [
     new CreateFileWebpack({
       path: common.EXT_DIR,
