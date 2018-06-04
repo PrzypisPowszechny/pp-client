@@ -58,9 +58,9 @@
     "webpack-merge": "^4.1.2"
   },
   "scripts": {
-    "build": "webpack --mode production --config config/webpack.prod.js",
-    "start": "webpack-dev-server --mode development --config config/webpack.dev.js",
-    "build-dev-extension": "webpack --mode development --config config/browser-extension/webpack.ext.dev.js",
+    "build": "webpack --mode production --config config/prod.config.js",
+    "start": "webpack-dev-server --mode development --config config/dev.config.js",
+    "build-dev-extension": "webpack --mode development --config config/browser-extension/ext.dev.config.js",
     "lint": "tslint --project tsconfig.json",
     "lint-fix": "npm run lint -- --fix"
   },

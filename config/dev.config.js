@@ -1,6 +1,6 @@
 const path = require('path');
 const merge = require('webpack-merge');
-const common = require('../webpack.config');
+const common = require('./base.config');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin');
 const webpack = require('webpack');

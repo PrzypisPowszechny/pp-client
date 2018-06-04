@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CreateFileWebpack = require('create-file-webpack');
 
-const common = require('../../webpack.config');
+const common = require('../base.config');
 const manifestSettings = require('./manifest');
 
 const manifest = merge(manifestSettings.base, {

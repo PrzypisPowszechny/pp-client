@@ -5,12 +5,13 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
 
 // app-specific settings (enabled features etc.)
-const { appSettings } = require('./config/app-settings');
+const { appSettings } = require('./app-settings');
 
 const localPath = (...args) => path.resolve(__dirname, ...args);
 
-const BUILD_DIR = localPath('dist');
-const EXT_DIR = localPath('dist-ext');
+const ROOT = localPath('..');
+const BUILD_DIR = localPath(ROOT, 'dist');
+const EXT_DIR = localPath(ROOT, 'dist-ext');
 
 const config = (env, argv) => ({
   entry: {
@@ -25,8 +26,8 @@ const config = (env, argv) => ({
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json"],
     modules: [
-      localPath('src'),
-      localPath('node_modules'),
+      localPath(ROOT, 'src'),
+      localPath(ROOT, 'node_modules'),
     ]
   },
   optimization: {
@@ -55,8 +56,8 @@ const config = (env, argv) => ({
         /* SCSS global styles */
         test: /\.scss$/,
         include: [
-          localPath('src', 'css'),
-          localPath('src', 'browser-extension')
+          localPath(ROOT, 'src', 'css'),
+          localPath(ROOT, 'src', 'browser-extension')
         ],
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
@@ -64,8 +65,8 @@ const config = (env, argv) => ({
         /* SCSS modules */
         test: /\.scss$/,
         include: [
-          localPath('src', 'components'),
-          localPath('src', 'containers'),
+          localPath(ROOT, 'src', 'components'),
+          localPath(ROOT, 'src', 'containers'),
         ],
         use: [
           'style-loader',
@@ -81,7 +82,7 @@ const config = (env, argv) => ({
             loader: 'sass-loader',
             options: {
               includePaths: [
-                localPath('src'),
+                localPath(ROOT, 'src'),
               ],
             },
           }],
