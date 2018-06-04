@@ -33,11 +33,6 @@ const config = (env, argv) => merge(common.config(env, argv), {
     splitChunks: false,
   },
   plugins: [
-    new CreateFileWebpack({
-      path: common.EXT_DIR,
-      fileName: 'manifest.json',
-      content: JSON.stringify(manifest, null, 2),
-    }),
     new HtmlWebpackPlugin({
       title: 'Przypis Powszechny -- pomoc',
       template: 'src/browser-extension/popup/popup.html',
@@ -55,5 +50,6 @@ const config = (env, argv) => merge(common.config(env, argv), {
 
 module.exports = {
   config: config,
+  manifest: manifest,
   EXT_DIR: common.EXT_DIR,
 };
