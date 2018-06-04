@@ -62,3 +62,8 @@ After **every modification** to `pp-client` app you also need to reload the Chro
 [This reloading app](https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid) 
 is extremely useful. However, note that it acts up from time to time (and it's necessary to reload 
 the extension by hand, in Chrome extension settings by clicking **reload**)
+
+
+## In-depth pages
+
+[Build details](docs/build.md)
