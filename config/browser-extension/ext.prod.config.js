@@ -7,8 +7,7 @@ const common = require('./ext.base.config');
 
 module.exports = (env, argv) => merge(common.config(env, argv), {
   output: {
-    // TODO dynamic publicPath loading
+    // TODO insert true chrome store key when generated
     publicPath: 'chrome-extension://hhjfhkdpnajfnekdaigmpahnnoccfaio/',
   },
 });
-
