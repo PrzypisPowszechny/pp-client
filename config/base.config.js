@@ -1,16 +1,15 @@
 const path = require('path');
-
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
 
 // app-specific settings (enabled features etc.)
-const { appSettings } = require('./config/app-settings');
+const { appSettings } = require('./app-settings');
 
 const localPath = (...args) => path.resolve(__dirname, ...args);
 
-const BUILD_DIR = localPath('dist');
-const EXT_DIR = localPath('dist-ext');
+const ROOT = localPath('..');
+const BUILD_DIR = localPath(ROOT, 'dist');
+const EXT_DIR = localPath(ROOT, 'dist-ext');
 
 const config = (env, argv) => ({
   entry: {
@@ -25,8 +24,8 @@ const config = (env, argv) => ({
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json"],
     modules: [
-      localPath('src'),
-      localPath('node_modules'),
+      localPath(ROOT, 'src'),
+      localPath(ROOT, 'node_modules'),
     ]
   },
   module: {
@@ -34,23 +33,6 @@ const config = (env, argv) => ({
       {
         test: /\.tsx?$/,
         use: [
-          {
-            // use babel-loader (and not just ts-loader) to compile js to es5 and so to make uglify plugin work
-            loader: 'babel-loader',
-            options: {
-              cacheDirectory: true,
-              presets: [
-                "react",
-                [
-                  "es2015",
-                  {
-                    "modules": false
-                  }
-                ],
-                "es2016"
-              ]
-            }
-          },
           {
             loader: "ts-loader",
             options: {
@@ -69,8 +51,8 @@ const config = (env, argv) => ({
         /* SCSS global styles */
         test: /\.scss$/,
         include: [
-          localPath('src', 'css'),
-          localPath('src', 'browser-extension')
+          localPath(ROOT, 'src', 'css'),
+          localPath(ROOT, 'src', 'browser-extension')
         ],
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
@@ -78,8 +60,8 @@ const config = (env, argv) => ({
         /* SCSS modules */
         test: /\.scss$/,
         include: [
-          localPath('src', 'components'),
-          localPath('src', 'containers'),
+          localPath(ROOT, 'src', 'components'),
+          localPath(ROOT, 'src', 'containers'),
         ],
         use: [
           'style-loader',
@@ -95,7 +77,7 @@ const config = (env, argv) => ({
             loader: 'sass-loader',
             options: {
               includePaths: [
-                localPath('src'),
+                localPath(ROOT, 'src'),
               ],
             },
           }],
@@ -118,36 +100,8 @@ const config = (env, argv) => ({
       },
     ],
   },
-  // default settings
-  optimization: {
-    splitChunks: {
-      chunks: "all",
-      minSize: 30000,
-      minChunks: 1,
-      maxAsyncRequests: 5,
-      maxInitialRequests: 3,
-      automaticNameDelimiter: '~',
-      name: true,
-      cacheGroups: {
-        default: {
-          minChunks: 2,
-          priority: -20,
-          reuseExistingChunk: true
-        },
-        vendors: {
-          test: /[\\/]node_modules[\\/]/,
-          priority: -10
-        }
-      }
-    }
-  },
   plugins: [
     new CleanWebpackPlugin([BUILD_DIR, EXT_DIR]),
-    new HtmlWebpackPlugin({
-      title: 'Przypis testowa pusta strona',
-      template: 'src/test.html',
-      filename: 'index.html',
-    }),
     new webpack.DefinePlugin({
       // use appropriate (development or production) PP settings
       PP_SETTINGS: JSON.stringify(appSettings[argv.mode]),
@@ -164,4 +118,5 @@ const config = (env, argv) => ({
 module.exports = {
   config: config,
   BUILD_DIR: BUILD_DIR,
+  EXT_DIR: EXT_DIR,
 };
