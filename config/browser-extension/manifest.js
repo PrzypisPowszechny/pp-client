@@ -3,7 +3,6 @@
 // Contains only the most universal information;
 const base = {
   manifest_version: 2,
-
   name: 'Przypis Powszechny',
   description: '',
   version: '0.1',
