@@ -2,7 +2,7 @@
 // A base for future manifest.json
 // Contains only the most universal information;
 
-const VERSION = '0.1.0';
+const VERSION = '0.1.0.3';
 
 const base = {
   manifest_version: 2,
@@ -22,9 +22,10 @@ const base = {
     default_title: 'Przypis Powszechny - wersja testowa'
   },
   web_accessible_resources: [
-    'fonts/*',
-    '*.svg',
-    '*.png'
+    'assets/*',
+    'help/*',
+    'node_modules/*',
+    'fonts/*'
   ]
 };
 
