@@ -64,6 +64,8 @@ is extremely useful. However, note that it acts up from time to time (and it's n
 the extension by hand, in Chrome extension settings by clicking **reload**)
 
 
-## In-depth pages
+## More
 
 [Build details](docs/build.md)
+
+[Valuable references](docs/references.md)
