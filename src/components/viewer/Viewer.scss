@@ -60,7 +60,8 @@ li.annotation {
 
 .comment-date {
   margin-top: 3px;
-  float: right;
+  margin-left: 5px;
+  float: left;
   font-weight: $font-light;
   font-size: $viewer-font-size - 2px;
   color: rgb(86, 121, 176);
@@ -126,7 +127,7 @@ li.annotation {
   align-items: flex-end;
 
   min-height: 25px;
-  
+
   // Display small widget (230px) by default, but if there is comment widening whole widget then keep up with its width
   min-width: 230px;
   width: 100%;
