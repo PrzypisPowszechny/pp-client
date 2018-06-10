@@ -190,7 +190,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
       <li className={styles.annotation}>
         <div className={styles.headBar}>
           <div className={classNames(styles.commentPriority, this.headerPriorityClass())}>
-            {annotationPrioritiesLabels[priority]}
+            {comment ? annotationPrioritiesLabels[priority] : 'źródło'}
           </div>
 
           <div className={styles.commentDate}>
@@ -198,9 +198,11 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
           </div>
           {this.renderControls()}
         </div>
-        <div className={styles.comment}>
-          {comment}
-        </div>
+        {!comment ? '' :
+          <div className={styles.comment}>
+            {comment}
+          </div>
+        }
         <div className={styles.bottomBar}>
           <div className={styles.annotationLinkContainer}>
             <a className={styles.annotationLink} href={annotationLink} target="_blank">
