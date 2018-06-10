@@ -314,7 +314,7 @@ class Editor extends React.Component<
             flowing={true}
             hoverable={true}
           >
-            np. <i>Treść ustawy</i>, <i>Wikipedia</i>,<br /> <i>Nagranie wypowiedzi ministra</i>
+            np. <i>Treść ustawy</i>, <i>Artykuł na Wikipedii</i>,<br /> <i>Nagranie wypowiedzi ministra</i>
           </Popup>
         </div>
         <div className={styles.bottomBar}>
