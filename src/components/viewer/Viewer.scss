@@ -126,9 +126,10 @@ li.annotation {
   align-items: flex-end;
 
   min-height: 25px;
+  
+  // Display small widget (230px) by default, but if there is comment widening whole widget then keep up with its width
   min-width: 230px;
-  //max-height: 45px;
-  //overflow: hidden;
+  width: 100%;
 
   padding-top: 6px; // = pp-viewer-widget padding-bottom
 
