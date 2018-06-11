@@ -18,6 +18,8 @@ import {
 } from '../../api/annotations';
 import Timer = NodeJS.Timer;
 import { PPScopeClass } from '../../class_consts';
+import { extractHostname } from '../../utils/url';
+
 
 interface IViewerItemProps {
   key: string;
@@ -129,19 +131,19 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     return priorityToClass[this.props.annotation.attributes.priority];
   }
 
-  upvoteButton() {
+  renderUpvoteButton() {
     const { annotation } = this.props;
     const { annotationUpvote } = annotation.relationships;
     const totalUpvoteCount = annotation.attributes.upvoteCountExceptUser + (annotationUpvote.data ? 1 : 0);
     return (
       <a
-        className={classNames('ui', 'label', 'medium', styles.upvote, {
+        className={classNames('ui', styles.upvote, {
           [styles.selected]: Boolean(annotationUpvote.data) })
         }
         onClick={this.toggleUpvote}
       >
-        Przydatne
         <span className={styles.number}>{totalUpvoteCount}</span>
+        <span className={styles.upvoteIcon} />
       </a>
     );
   }
@@ -188,7 +190,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
       <li className={styles.annotation}>
         <div className={styles.headBar}>
           <div className={classNames(styles.commentPriority, this.headerPriorityClass())}>
-            {annotationPrioritiesLabels[priority]}
+            {comment ? annotationPrioritiesLabels[priority] : 'źródło'}
           </div>
 
           <div className={styles.commentDate}>
@@ -196,18 +198,24 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
           </div>
           {this.renderControls()}
         </div>
-        <div className={styles.comment}>
-          {comment}
-        </div>
+        {!comment ? '' :
+          <div className={styles.comment}>
+            {comment}
+          </div>
+        }
         <div className={styles.bottomBar}>
           <div className={styles.annotationLinkContainer}>
             <a className={styles.annotationLink} href={annotationLink} target="_blank">
-              {annotationLinkTitle}
+              <span className={styles.annotationLinkIcon} />
+              {extractHostname(annotationLink)}
             </a>
+            <div className={styles.annotationLinkTitle}>
+              {annotationLinkTitle}
+            </div>
           </div>
           <div className={styles.ratings}>
             <Popup
-              trigger={this.upvoteButton()}
+              trigger={this.renderUpvoteButton()}
               size="small"
               className={classNames(indirectChildClassName, PPScopeClass, 'pp-popup-small-padding')}
               inverted={true}

@@ -60,7 +60,8 @@ li.annotation {
 
 .comment-date {
   margin-top: 3px;
-  float: right;
+  margin-left: 5px;
+  float: left;
   font-weight: $font-light;
   font-size: $viewer-font-size - 2px;
   color: rgb(86, 121, 176);
@@ -111,30 +112,32 @@ li.annotation {
   clear: both;
 
   font-weight: $font-light;
-  font-size: 14px;
+  font-size: 12px;
   color: rgb(0, 0, 0);
+
+  /* bottom line */
+  border-bottom: 1px solid rgb(210, 212, 210);
+
 }
 
 /* --- Viewer bottom bar --- */
 .bottom-bar {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
 
   min-height: 25px;
-  //max-height: 45px;
-  //overflow: hidden;
+
+  // Display small widget (230px) by default, but if there is comment widening whole widget then keep up with its width
+  min-width: 230px;
+  width: 100%;
 
   padding-top: 6px; // = pp-viewer-widget padding-bottom
-
-  /* upper line */
-  border-top: 1px solid rgb(210, 212, 210);
 
   color: rgb(136, 136, 136);
 }
 
 .annotation-link-container {
-  max-width: 50%;
   min-height: 100%;
   margin-right: 8px;
 }
@@ -147,19 +150,35 @@ li.annotation {
 
   font-size: 12px;
   line-height: 0.5em;
+  clear: both;
+}
+
+.annotation-link-icon::after {
+  margin-right: 3px;
+  width: 12px;
+  height: 12px;
+  top:2px;
+  position: relative;
+  display: inline-block;
+  content: url('../../../assets/hyperlink-icon.png');
+}
+
+.annotation-link-title {
+  margin-left: 14px;
+  font-size: $viewer-font-size;
+
 }
 
 .ratings {
-  display: flex;
-  align-items: center;
-  min-height: 100%;
-  padding: 3px 0;
 
   a {
     display: flex !important;
     justify-content: space-between;
-    font-size: $viewer-font-size - 1px !important;
-    width: 110px;
+    font-size: $viewer-font-size !important;
+    font-weight: bold;
+    margin-left: 30px;
+    margin-right: 7px;
+
 
     .number {
       opacity: 0.8;
@@ -173,6 +192,16 @@ li.annotation {
       color: #ff6333;
     }
   }
+  :hover {
+    cursor: pointer;
+  }
 }
 
+.upvote-icon::after {
+  margin-left: 3px;
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  content: url('../../../assets/upvote-icon.png');
+}
 
