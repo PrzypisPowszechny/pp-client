@@ -1,12 +1,15 @@
 
 // A base for future manifest.json
 // Contains only the most universal information;
+
+const VERSION = '0.1.0.3';
+
 const base = {
   manifest_version: 2,
-
   name: 'Przypis Powszechny',
   description: '',
-  version: '0.1',
+  version: VERSION,
+  version_name: `${VERSION} test`,
 
   permissions: [
     'activeTab',
@@ -14,18 +17,15 @@ const base = {
     'identity.email',
     'https://ajax.googleapis.com/'
   ],
-  oauth2: {
-    client_id: '79553213007-8oueh36t82f23in0ig5qaomc1k05tnuu.apps.googleusercontent.com',
-    scopes: ['profile']
-  },
   content_security_policy: "script-src 'self' 'unsafe-eval'; object-src 'self'",
   browser_action: {
     default_title: 'Przypis Powszechny - wersja testowa'
   },
   web_accessible_resources: [
-    'fonts/*',
-    '*.svg',
-    '*.png'
+    'assets/*',
+    'help/*',
+    'node_modules/*',
+    'fonts/*'
   ]
 };
 

@@ -8,8 +8,8 @@ const { appSettings } = require('./app-settings');
 const localPath = (...args) => path.resolve(__dirname, ...args);
 
 const ROOT = localPath('..');
-const BUILD_DIR = localPath(ROOT, 'dist');
-const EXT_DIR = localPath(ROOT, 'dist-ext');
+const BUILD_DIR = localPath(ROOT, 'dist', 'client');
+const EXT_DIR = localPath(ROOT, 'dist', 'browser-extension');
 
 const config = (env, argv) => ({
   entry: {
