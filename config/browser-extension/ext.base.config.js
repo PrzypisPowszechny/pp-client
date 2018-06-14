@@ -12,9 +12,12 @@ const manifest = merge(manifestSettings.base, {
     js: [
       // defined in webpack.config.js
       'main.bundle.js',
-      'vendor_css.bundle.js'
+      'vendor_css.bundle.js',
     ]
   }],
+  background: {
+    scripts: ['background.bundle.js'],
+  },
   browser_action: {
     default_icon: 'assets/icon.png',
     default_popup: 'popup.html',
@@ -23,6 +26,7 @@ const manifest = merge(manifestSettings.base, {
 
 const config = (env, argv) => merge(common.config(env, argv), {
   entry: {
+    background: './src/browser-extension/background.ts',
     popup: './src/browser-extension/popup/popup.tsx',
   },
   output: {

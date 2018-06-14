@@ -1,5 +1,6 @@
 const merge = require('webpack-merge');
 const CreateFileWebpack = require('create-file-webpack');
+const ChromeExtensionReloader  = require('webpack-chrome-extension-reloader');
 
 const common = require('./ext.base.config');
 
@@ -24,6 +25,14 @@ module.exports = (env, argv) => merge(common.config(env, argv), {
       fileName: 'manifest.json',
       content: JSON.stringify(manifest, null, 2),
     }),
+    new ChromeExtensionReloader({
+      port: 9090, // Which port use to create the server
+      reloadPage: true, // Force the reload of the page also
+      entries: { //The entries used for the content/background scripts
+        contentScript: ['main', 'vendor_css', 'popup'], //Use the entry names, not the file name or the path
+        background: 'background'
+      }
+    })
   ]
 });
 
