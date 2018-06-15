@@ -1,7 +1,9 @@
 const merge = require('webpack-merge');
 const CreateFileWebpack = require('create-file-webpack');
+const ChromeExtensionReloader  = require('webpack-chrome-extension-reloader');
 
 const common = require('./ext.base.config');
+const devPlugins = require('../dev.plugins');
 
 // An arbitrary key used for development; controlling it, we control the app id, which is generated from the key.
 // Otherwise the key will be automatically generated along with the app id and we would have to update our publicPath
@@ -24,6 +26,15 @@ module.exports = (env, argv) => merge(common.config(env, argv), {
       fileName: 'manifest.json',
       content: JSON.stringify(manifest, null, 2),
     }),
+    new ChromeExtensionReloader({
+      port: 9090, // Which port use to create the server
+      reloadPage: true, // Force the reload of the page also
+      entries: { //The entries used for the content/background scripts
+        contentScript: ['main', 'vendor_css', 'popup'], //Use the entry names, not the file name or the path
+        background: 'background'
+      }
+    }),
+    ...devPlugins,
   ]
 });
 
