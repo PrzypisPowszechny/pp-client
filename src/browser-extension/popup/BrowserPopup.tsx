@@ -1,5 +1,11 @@
 import React from 'react';
 
+import addIcon from '../../../assets/pp-add-icon.svg';
+import requestIcon from '../../../assets/pp-request-icon.svg';
+import switchOffIcon from '../../../assets/pp-switch-off-icon.svg';
+
+import Toggle from './toggle/toggle.tsx'
+
 declare const chrome: any;
 
 export default class BrowserPopup extends React.Component<{}, {}> {
@@ -9,32 +15,31 @@ export default class BrowserPopup extends React.Component<{}, {}> {
 
   render() {
     return (
-      <div className="ui vertical menu pp-popup">
-        <div className="item">
-          <h4>*Przypis Powszechny</h4>
-        </div>
-        <div className="item">
-          <div className="header">Pomoc</div>
-          <div className="menu">
-            <a className="item" target="_blank" href={chrome.extension.getURL('help/index.html')}>
-              Jak dodawać przypisy?
-            </a>
+      <div className="pp-popup">
+        <ul className="menu">
+          <li className="menu__item clickable">
+            <img className="menu__item__icon" src={addIcon}/>
+            <a>Dodaj przypis</a>
+          </li>
+          <li className="menu__item clickable">
+            <img className="menu__item__icon" src={requestIcon}/>
+            <a>Poproś o przypis</a>
+          </li>
+          <hr className="menu__separator" />
+          <li className="menu__item">
+            <img className="menu__item__icon" src={switchOffIcon}/>
+            <span>Wyłącz wtyczkę</span>
+            <Toggle />
+          </li>
+          <li className="menu__sub-item">
+            <span>tylko na tej stronie</span>
+            <Toggle />
+          </li>
+          <hr className="menu__separator"/>
+          <div className="cta-container">
+            <button className="cta-button">Daj znać, co myślisz</button>
           </div>
-        </div>
-        <div className="item">
-          <div className="header">O aplikacji</div>
-          <div className="menu">
-            <a className="item">Strona na fb</a>
-            <a className="item">Dołącz do nas</a>
-          </div>
-        </div>
-        <div className="item">
-          <div className="header">Ustawienia</div>
-          <div className="large menu">
-            <a className="item">Wyłącz wtyczkę</a>
-            <a className="item">Odinstaluj</a>
-          </div>
-        </div>
+        </ul>
     </div>
     );
   }

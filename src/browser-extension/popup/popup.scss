@@ -1,16 +1,83 @@
 html, body {
   height: 171px;
+  border: none;
+  border-color: rgba(0, 0, 0, 0.08);
 }
 
 body {
-  min-width: 210px !important;
+  min-width: 230px !important;
+  border-color: rgba(0, 0, 0, 0.08);
 }
 
 .pp-popup {
-  margin: 0 !important;
-  border: none !important;
-}
+  max-width: 230px;
+  min-width: 230px;
+  background-color: #FFFFFF;
 
-.item {
-  font-size: 1em !important;
+
+  .menu {
+    list-style: none;
+    margin: 0;
+    padding: 8px 0;
+
+
+    &__item {
+      padding: 12px;
+      font-size: 14px;
+      display: flex;
+      line-height: 1.5em;
+
+
+      &__icon {
+        height: 22px;
+        margin-right: 12px;
+      }
+
+      a {
+        text-decoration: none;
+        color: #000000;
+      }
+    }
+
+    &__sub-item {
+      @extend .menu__item;
+      margin-left: 34px;
+    }
+
+    .clickable:hover {
+      background-color: rgba(0, 0, 0, 0.08);
+      cursor: pointer;
+    }
+
+
+    &__separator {
+      border-color: rgba(0, 0, 0, 0.08);
+    }
+
+  }
+
+  .cta-container {
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+  }
+
+
+    .cta-button {
+      margin: 0;
+      font-size: 11px;
+      text-transform: uppercase;
+      cursor: pointer;
+      outline: inherit;
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 3px;
+      background-color: #2ecc71;
+      box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
+      border-radius: 2px;
+      color: #FFFFFF;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
 }
