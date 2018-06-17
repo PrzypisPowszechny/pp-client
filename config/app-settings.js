@@ -1,8 +1,10 @@
 exports.appSettings = {
   development: {
-    API_URL: "https://przypispowszechny.pl/api",
+    DEV: true,
+    API_URL: "https://przypispowszechny.pl/api"
   },
   production: {
+    DEV: false,
     API_URL: "https://przypispowszechny.pl/api",
   }
 };
