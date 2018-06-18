@@ -209,9 +209,9 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
               <span className={styles.annotationLinkIcon} />
               {extractHostname(annotationLink)}
             </a>
-            <div className={styles.annotationLinkTitle}>
+            <a className={styles.annotationLinkTitle} href={annotationLink} target="_blank">
               {annotationLinkTitle}
-            </div>
+            </a>
           </div>
           <div className={styles.ratings}>
             <Popup

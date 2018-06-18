@@ -170,6 +170,8 @@ li.annotation {
   // Normally it adjusts to $widget-inner-width or $small-widget-inner-width, but to handle extreme edge-case when
   // somebody inserted very long word, which would distort whole design
   max-width: 330px;
+  color: black;
+  display: block;
 }
 
 .ratings {
