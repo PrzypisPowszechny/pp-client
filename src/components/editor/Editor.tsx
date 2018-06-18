@@ -61,6 +61,8 @@ class Editor extends React.Component<
     [AnnotationPriorities.ALERT]: styles.priorityAlert,
   };
 
+  static linkTitleMaxLength = 110;
+
   static getDerivedStateFromProps(nextProps: IEditorProps, prevState: IEditorState) {
     /*
      * The window should update whenever either annotation or range changes
@@ -134,6 +136,11 @@ class Editor extends React.Component<
     }
     if (!this.state.annotationLinkTitle) {
       this.setState({ annotationLinkTitleError: 'Musisz podać tytuł źródła, jeśli chcesz dodać przypis!' });
+      return false;
+    } else if (this.state.annotationLinkTitle.length > Editor.linkTitleMaxLength) {
+      this.setState({ annotationLinkTitleError:
+          `Skróć tytuł źródła z ${this.state.annotationLinkTitle.length} do ${Editor.linkTitleMaxLength} znaków!`,
+      });
       return false;
     }
     return true;
