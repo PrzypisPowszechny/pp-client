@@ -18,8 +18,7 @@ import {
 } from '../../api/annotations';
 import Timer = NodeJS.Timer;
 import { PPScopeClass } from '../../class_consts';
-import { extractHostname } from '../../utils/url';
-
+import { extractHostname, httpPrefixed } from '../../utils/url';
 
 interface IViewerItemProps {
   key: string;
@@ -205,11 +204,11 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
         }
         <div className={styles.bottomBar}>
           <div className={styles.annotationLinkContainer}>
-            <a className={styles.annotationLink} href={annotationLink} target="_blank">
+            <a className={styles.annotationLink} href={httpPrefixed(annotationLink)} target="_blank">
               <span className={styles.annotationLinkIcon} />
               {extractHostname(annotationLink)}
             </a>
-            <a className={styles.annotationLinkTitle} href={annotationLink} target="_blank">
+            <a className={styles.annotationLinkTitle} href={httpPrefixed(annotationLink)} target="_blank">
               {annotationLinkTitle}
             </a>
           </div>

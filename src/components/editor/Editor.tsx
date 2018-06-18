@@ -14,6 +14,7 @@ import styles from './Editor.scss';
 import { AnnotationAPICreateModel, AnnotationAPIModelAttrs } from 'api/annotations';
 import _isEqual from 'lodash/isEqual';
 import { PPScopeClass } from 'class_consts.ts';
+import { isValidUrl } from '../../utils/url';
 
 @connect(
   (state) => {
@@ -62,6 +63,7 @@ class Editor extends React.Component<
   };
 
   static linkTitleMaxLength = 110;
+  static linkMaxLength = 2048;
 
   static getDerivedStateFromProps(nextProps: IEditorProps, prevState: IEditorState) {
     /*
@@ -132,6 +134,14 @@ class Editor extends React.Component<
   validateForm(): boolean {
     if (!this.state.annotationLink) {
       this.setState({ annotationLinkError: 'Musisz podać źródło, jeśli chcesz dodać przypis!' });
+      return false;
+    } else if (this.state.annotationLink.length > Editor.linkMaxLength) {
+      this.setState({ annotationLinkError:
+          `Skróć źródło z ${this.state.annotationLink.length} do ${Editor.linkMaxLength} znaków!`,
+      });
+      return false;
+    } else if (!isValidUrl(this.state.annotationLink)) {
+      this.setState({ annotationLinkError: 'Podaj poprawny link do źródła!' });
       return false;
     }
     if (!this.state.annotationLinkTitle) {
