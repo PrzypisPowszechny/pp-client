@@ -128,8 +128,8 @@ li.annotation {
 
   min-height: 25px;
 
-  // Display small widget (230px) by default, but if there is comment widening whole widget then keep up with its width
-  min-width: 230px;
+  // Display small widget by default, but if there is comment ( that widens whole widget) then keep up with its width
+  min-width: $small-widget-inner-width;
   width: 100%;
 
   padding-top: 6px; // = pp-viewer-widget padding-bottom
@@ -166,7 +166,12 @@ li.annotation {
 .annotation-link-title {
   margin-left: 14px;
   font-size: $viewer-font-size;
-
+  overflow-wrap: break-word;
+  // Normally it adjusts to $widget-inner-width or $small-widget-inner-width, but to handle extreme edge-case when
+  // somebody inserted very long word, which would distort whole design
+  max-width: 330px;
+  color: black;
+  display: block;
 }
 
 .ratings {

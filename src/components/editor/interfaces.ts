@@ -27,6 +27,7 @@ export interface IEditorState {
 
   noCommentModalOpen: boolean;
 
+  commentError: string;
   annotationLinkError: string;
   annotationLinkTitleError: string;
 }
