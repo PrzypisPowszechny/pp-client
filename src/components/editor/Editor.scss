@@ -80,9 +80,8 @@ $editor-vertical-spacing: 15px;
 }
 
 /* comment field */
-.comment {
+.comment-textarea-wrapper {
   overflow: auto;
-
   textarea {
     float: left;
     padding: 0.5em;
@@ -90,6 +89,7 @@ $editor-vertical-spacing: 15px;
     line-height: 1.2em;
     height: calc(3 * 1.2em + 1.1em); // 3 lines
   }
+
 }
 
 /* annotation link field */

@@ -64,6 +64,7 @@ class Editor extends React.Component<
 
   static linkTitleMaxLength = 110;
   static linkMaxLength = 2048;
+  static commentMaxLength = 1000;
 
   static getDerivedStateFromProps(nextProps: IEditorProps, prevState: IEditorState) {
     /*
@@ -92,6 +93,7 @@ class Editor extends React.Component<
         locationY: nextProps.locationY,
         annotationLinkError: '',
         annotationLinkTitleError: '',
+        commentError: '',
         noCommentModalOpen: false,
       };
     }
@@ -128,10 +130,21 @@ class Editor extends React.Component<
     if (stateUpdate.annotationLinkTitle) {
       stateUpdate.annotationLinkTitleError = '';
     }
+    if (stateUpdate.comment) {
+      stateUpdate.commentError = '';
+    }
     this.setState(stateUpdate);
   }
 
   validateForm(): boolean {
+    if (this.state.comment) {
+      if (this.state.comment.length > Editor.commentMaxLength) {
+        this.setState({ commentError:
+            `Skróć komentarz z ${this.state.comment.length} do ${Editor.commentMaxLength} znaków!`,
+        });
+        return false;
+      }
+    }
     if (!this.state.annotationLink) {
       this.setState({ annotationLinkError: 'Musisz podać źródło, jeśli chcesz dodać przypis!' });
       return false;
@@ -233,6 +246,7 @@ class Editor extends React.Component<
     const {
       priority,
       comment,
+      commentError,
       annotationLink,
       annotationLinkError,
       annotationLinkTitle,
@@ -282,14 +296,22 @@ class Editor extends React.Component<
         >
           <i className="remove icon" />
         </div>
-        <div className={classNames(styles.editorInput, styles.comment)}>
-          <textarea
-            autoFocus={true}
-            name="comment"
-            value={comment}
-            onChange={this.handleInputChange}
-            placeholder="Dodaj treść przypisu"
-          />
+        <div className={classNames(styles.editorInput)}>
+           <div className={classNames(styles.commentTextareaWrapper)}>
+            <textarea
+              autoFocus={true}
+              name="comment"
+              value={comment}
+              onChange={this.handleInputChange}
+              placeholder="Dodaj treść przypisu"
+            />
+          </div>
+          <div
+            className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
+              { [styles.hide]: commentError === '' })}
+          >
+            {commentError}
+          </div>
         </div>
         <div className={classNames(styles.editorInput, styles.annotationLink)}>
           <input
