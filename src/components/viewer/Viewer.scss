@@ -74,6 +74,10 @@ li.annotation {
   opacity: 0;
   transition: opacity 0.2s ease-in; // animate on opacity change
 
+  &.always-visible {
+    opacity: 1;
+  }
+
   button {
     border: none;
     outline: none;
@@ -210,3 +214,15 @@ li.annotation {
   content: url('../../../assets/upvote-icon.png');
 }
 
+
+.actions-icon::after {
+  display: block;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  content: url('../../../assets/three-dots.svg');
+  opacity: 0.5;
+}

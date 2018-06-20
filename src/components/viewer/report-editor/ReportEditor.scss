@@ -1,0 +1,22 @@
+@import "css/common/vars/size";
+@import "css/common/vars/colors";
+@import "css/common/vars/fonts";
+@import "css/common/mixins";
+
+/* -- PP Viewer -- */
+// The oldest CSS in the project
+// it would benefit from some refactoring in the meantime...
+$viewer-font-size: 14px;
+
+.self {
+  background-color: white;
+  padding: 6px $widget-inner-margin;
+
+  @include pp-widget-edge();
+  min-width: 200px;
+  min-height: 50px;
+
+  position: absolute;
+  top: 40px;
+  right:-150px;
+}
