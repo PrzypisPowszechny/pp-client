@@ -245,7 +245,10 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
           </div>
         </div>
         {!this.state.reportEditorVisible ? null :
-          <ReportEditor annotation={this.props.annotation} onCancel={this.toggleReportEditor} />
+          <ReportEditor
+            annotation={this.props.annotation}
+            onCancel={this.toggleReportEditor}
+          />
         }
       </li>
     );

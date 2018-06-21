@@ -56,6 +56,30 @@ export interface AnnotationUpvoteAPIModel extends APIModel {
   };
 }
 
+export interface AnnotationReportAPIModelAttrs {
+    reason: Reasons;
+    comment: string;
+}
+
+export interface AnnotationReportAPICreateModel extends APICreateModel {
+  relationships: {
+    annotation: CreateRelation;
+  };
+  attributes: AnnotationReportAPIModelAttrs;
+}
+
+export interface AnnotationReportAPIModel extends APIModel {
+  relationships: {
+    annotation: Relation;
+  };
+  attributes: AnnotationReportAPIModelAttrs;
+}
+
+export enum Reasons {
+  SPAM = 'SPAM',
+  OTHER = 'OTHER',
+}
+
 export interface Relation {
   link?: string;
   data: APIModel | null;
@@ -78,3 +102,4 @@ export interface APIModel {
 // Because of redux-json-api constraints these types, have to be consistent with relationships names
 export const AnnotationResourceType = 'annotations';
 export const AnnotationUpvoteResourceType = 'annotationUpvotes';
+export const AnnotationReportResourceType = 'annotationReports';
