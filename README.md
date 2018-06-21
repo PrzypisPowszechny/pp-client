@@ -21,51 +21,115 @@ Install packages
 npm install
 ```
 
-## Client app
+## pp-client as a browser extension
 
-Client app contains the pure add & read annotation functionality (90% of the application)
+Chrome extensions have very clear constraints on their structure.
+Although we currently only support Chrome, browser extensions as such have largely been standardized, so we can roughly talk about browser extensions in general.
 
-### Development
+Full extension configuration is defined in `manifest.json`.
 
-Just type the following command to launch a localhost with injected bundle
+Parts relevant to our application -- the ones we actually implement:
+
+- background script
+- content scripts
+- popup window (appearing when the extension icon is clicked)
+- extension icon
+
+We further use some resources unique to Chrome extensions
+- chrome storage
+- chrome message API
+
+## Building
+
+Long story short: for hot reloading development you probably just want to run:
 ```
-npm start
+npm run start-extension
 ```
-It uses `webpack-dev-server`, so every change is rebuilt live and the page is reloaded.
-HMR (Hot Module Replacement) is enabled.
 
+### Introduction
 
-## Browser extension app
+Since content scripts are injected to every page visited by the extension's user,
+they are technically very much like regular scripts attached by the website author himself (except we are injecting them, yes).
 
-The browser extension uses the client app code as a Chrome extension `content_script`. So far, it only extends it with
-- icon in the browser menu
-- popup window (appearing when the icon is clicked)
+Exploiting the analogy, we can call this part of the application shortly the **client** part.
 
-### Development
+### dev / prod configuration
+Production configuration and development differences:
+- many introduced by default by Webpack 4 itself (which is nice) -- by default it builds bundles differently for development and production settings
+(e.g. minifies bundles in production settings)
+- other differences can be introduced by different variables used within the application for dev and prod configuration,
+ defined in `config/app-settings`.
 
-To build the extension, run:
+## Browser extension build
+
+### development
+Both `build-dev-extension` and `start-extension` will compile to a `dist/browser-extension` directory.
+
+**single build**
+
 ```
 npm run build-dev-extension
 ```
-After **every modification**, remember to run the build again to see the results
-(it seems there are Hot Module Replacement tools for browser extensions, too; 
-we should use them in the future).
 
-#### Load the extension
+**hot reloading**
 
-See how to load the extension in [Chrome developer docs](https://developer.chrome.com/extensions/getstarted#unpacked) 
-in **Load the extension** section. Choose `pp-client/dist` directory as the app root.
+```
+npm run start-extension
+```
 
-#### Reload the extension
+Go to Chrome extension page and load the extension (to see how to load an extension go to [Chrome developer docs](https://developer.chrome.com/extensions/getstarted#unpacked)
+to **Load the extension** section). Choose `dist/browser-extension` directory as the app root.
 
-After **every modification** to `pp-client` app you also need to reload the Chrome extension. 
-[This reloading app](https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid) 
-is extremely useful. However, note that it acts up from time to time (and it's necessary to reload 
-the extension by hand, in Chrome extension settings by clicking **reload**)
+A rebuild of the browser package (`dist/browser-extension`) won't normally reload the browser extension already loaded by Chrome.
+
+**If you're using hot reloading**, each change to one of the content scripts or popup window
+(to be precise, in Webpack terms -- any dependency of the entry points,
+which are marked as either `content_script` or `default_popup` in `manifest.json`) will cause Chrome to reload the extension.
+
+**If you're not using hot reloading**, you need to manually refresh the browser extension in Chrome's extension page.
+
+When the extension has been reloaded, you still need to refresh each opened tab for the change to take effect in that very tab.
+
+As for now, this part of the hot reloading plugin is not fully clear.
+It reloads some of the open tabs (I'm not sure how it chooses which).
+Most of the time, only the last used.
+
+Needless to say, without hot reloading you need to reload the tab manually.
+
+#### Further notes (but no less important)
+- Hot reloading **does not reload anything on the first build**; it's best to start off with running it,
+and introduce changes to the code just then, rather than build only when it's needed.
+- If you don't see a change you expect to have made in the extension,
+**make sure that the tab has in fact been reloaded**
+    - it's clearly visible with the devTools open;
+    - a separate monitor with the current tab on top is also very handy in subconsciously supervising the refreshing
+
+- if you're not sure the extension has been reloaded by Chrome, you can do it manually;
+but rather than use Chrome extension page, it's quicker to use [this reloading app](https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid).
+
+### production
+```
+npm run build-extension
+```
+Modifies `dist/browser-extension` as a side effect.
+
+A package ready to upload to Chrome Web Store is `dist/pp-chrome.zip`.
+
+## Content script (= client) build
 
 
-## More
+### client + hot reloading + dev configuration
+```
+npm start
+```
 
-[Build details](docs/build.md)
+### client + prod configuration
+```
+npm run build
+```
+
+# More
+
+[More build notes](docs/build.md)
 
 [Valuable references](docs/references.md)
