@@ -128,7 +128,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     }
   }
 
-  toggleReportEditor = (e) => {
+  toggleReportEditor = (e?: any) => {
     this.setState({ reportEditorVisible: !this.state.reportEditorVisible });
   }
 
@@ -248,6 +248,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
           <ReportEditor
             annotation={this.props.annotation}
             onCancel={this.toggleReportEditor}
+            onSuccess={this.toggleReportEditor}
           />
         }
       </li>

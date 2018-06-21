@@ -1,27 +1,14 @@
 import React from 'react';
 import classNames from 'classnames';
-import { connect } from 'react-redux';
-import { createResource, deleteResource } from 'redux-json-api';
 
 import styles from './ReportEditor.scss';
-import { selectViewerState } from 'store/widgets/selectors';
-import {
-  AnnotationAPIModel,
-  AnnotationReportAPIModel,
-  AnnotationReportAPICreateModel,
-  AnnotationReportResourceType, AnnotationResourceType,
-  Reasons,
-} from 'api/annotations';
-import { AnnotationAPICreateModel } from '../../../api/annotations';
+import { AnnotationAPIModel, Reasons } from 'api/annotations';
 import { PPScopeClass } from '../../../class_consts';
-// import { hideEditor } from '../../../store/actions';
-// import { PPScopeClass, PPViewerIndirectChildClass } from 'class_consts.ts';
-// import { mouseOverViewer } from 'store/widgets/actions';
 
 interface IReportProps {
   annotation: AnnotationAPIModel;
   onCancel: (e) => void;
-  createAnnotationReport: (instance: AnnotationReportAPICreateModel) => Promise<AnnotationReportAPIModel>;
+  onSubmit: (reason: Reasons, comment: string) => void;
 }
 
 interface IReportState {
@@ -29,14 +16,6 @@ interface IReportState {
   comment: string;
 }
 
-@connect(
-  state => state,
-  dispatch => ({
-    createAnnotationReport: (instance: AnnotationReportAPICreateModel) => {
-        return dispatch(createResource(instance));
-    },
-  }),
-)
 export default class Report extends React.Component<Partial<IReportProps>, Partial<IReportState>> {
   constructor(props: IReportProps) {
     super(props);
@@ -52,34 +31,12 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
     return `annotation-${this.props.annotation.id}-report-reason-${Reasons.OTHER}`;
   }
 
-  save = () => {
-    const instance = {
-      type: AnnotationReportResourceType,
-      attributes: {
-        reason: this.state.reason,
-        comment: this.state.comment,
-      },
-      relationships: {
-        annotation: {
-          data: {
-            id: this.props.annotation.id,
-            type: AnnotationResourceType,
-          },
-        },
-      },
-    };
-    this.props.createAnnotationReport(instance).then(() => {
-        console.log('happy');
-      })
-      .catch((errors) => {
-        console.log(errors);
-      });
+  submit = () => {
+    // TODO: validate and only if ok, call onSubmit
+    this.props.onSubmit(this.state.reason, this.state.comment);
   }
 
   render() {
-    const {
-      annotation,
-    } = this.props;
     return (
       <div className={classNames(PPScopeClass, styles.self, styles.editor)}>
         <div>
@@ -105,7 +62,7 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
           <textarea name="comment" onChange={this.handleInputChange} />
 
         </div>
-        <button onClick={this.save}>Wyślij</button>
+        <button onClick={this.submit}>Wyślij</button>
         <button onClick={this.props.onCancel}>Anuluj</button>
       </div>
     );

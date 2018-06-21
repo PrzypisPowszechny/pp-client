@@ -2,26 +2,25 @@ import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createResource, deleteResource } from 'redux-json-api';
-import Widget from 'components/widget';
 
-// import ViewerItem from './ViewerItem';
 import styles from './ReportEditor.scss';
-import { selectViewerState } from 'store/widgets/selectors';
-// import { hideViewer, openViewerDeleteModal, showEditorAnnotation } from 'store/widgets/actions';
-import { AnnotationAPIModel } from 'api/annotations';
-import { AnnotationAPICreateModel } from '../../../api/annotations';
+import {
+  AnnotationAPIModel,
+  AnnotationReportAPIModel,
+  AnnotationReportAPICreateModel,
+  AnnotationReportResourceType, AnnotationResourceType,
+  Reasons,
+} from 'api/annotations';
 import { hideEditor } from '../../../store/actions';
-import { AnnotationPriorities } from '../../consts';
 import Report from './Report';
 import { PPScopeClass } from '../../../class_consts';
 import Suggestion from './Suggestion';
-// import { PPScopeClass, PPViewerIndirectChildClass } from 'class_consts.ts';
-// import { mouseOverViewer } from 'store/widgets/actions';
-// import DeleteAnnotationModal from './DeleteAnnotationModal';
 
 interface IReportEditorProps {
   annotation: AnnotationAPIModel;
   onCancel: (e) => void;
+  onSuccess: () => void;
+  createAnnotationReport: (instance: AnnotationReportAPICreateModel) => Promise<AnnotationReportAPIModel>;
 }
 
 interface IReportEditorState {
@@ -37,12 +36,8 @@ enum Dialogs {
 @connect(
   state => state,
   dispatch => ({
-    reportAnnotation: (instance: AnnotationAPICreateModel) => {
-      // if (instance.id) {
-      //   return dispatch(updateResource(instance));
-      // } else {
-      //   return dispatch(createResource(instance));
-      // }
+    createAnnotationReport: (instance: AnnotationReportAPICreateModel) => {
+        return dispatch(createResource(instance));
     },
   }),
 )
@@ -59,6 +54,27 @@ export default class ReportEditor extends React.Component<Partial<IReportEditorP
 
   selectDialog = (e) => {
     this.setState({ activeDialog: e.target.value });
+  }
+
+  save = (reason: Reasons, comment: string) => {
+    const instance = {
+      type: AnnotationReportResourceType,
+      attributes: { reason, comment },
+      relationships: {
+        annotation: {
+          data: {
+            id: this.props.annotation.id,
+            type: AnnotationResourceType,
+          },
+        },
+      },
+    };
+    this.props.createAnnotationReport(instance).then(() => {
+        this.props.onSuccess();
+      })
+      .catch((errors) => {
+        console.log(errors);
+      });
   }
 
   render() {
@@ -86,9 +102,9 @@ export default class ReportEditor extends React.Component<Partial<IReportEditorP
           </div>
         );
       case 'report':
-        return <Report annotation={annotation} onCancel={onCancel}/>;
+        return <Report annotation={annotation} onCancel={onCancel} onSubmit={this.save}/>;
       case 'suggestion':
-        return <Suggestion annotation={annotation} onCancel={onCancel}/>;
+        return <Suggestion annotation={annotation} onCancel={onCancel} onSubmit={this.save}/>;
       default:
         return;
     }
