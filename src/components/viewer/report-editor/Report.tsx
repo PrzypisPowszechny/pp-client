@@ -45,9 +45,11 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
 
   render() {
     return (
-      <div className={classNames(PPScopeClass, styles.self)}>
-        report
-        <a onClick={this.props.onCancel}>Anuluj</a>
+      <div className={classNames(PPScopeClass, styles.self, styles.editor)}>
+        <div>
+          report
+        </div>
+        <button onClick={this.props.onCancel}>Anuluj</button>
       </div>
     );
   }

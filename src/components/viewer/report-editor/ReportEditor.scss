@@ -3,20 +3,60 @@
 @import "css/common/vars/fonts";
 @import "css/common/mixins";
 
-/* -- PP Viewer -- */
-// The oldest CSS in the project
-// it would benefit from some refactoring in the meantime...
-$viewer-font-size: 14px;
+$editor-inner-width: 300px;
+$menu-inner-width: 165px;
+
 
 .self {
   background-color: white;
-  padding: 6px $widget-inner-margin;
+  padding: 6px ($widget-inner-margin / 2);
 
   @include pp-widget-edge();
-  min-width: 200px;
   min-height: 50px;
 
   position: absolute;
-  top: 40px;
+  top: 30px;
   right:-150px;
+
+  button {
+    @include button-reset();
+    font-size: $default-font-size - 1;
+  }
+
+  span, span::after {
+    vertical-align: middle;
+  }
+
+}
+
+.self.menu {
+  width: $menu-inner-width;
+  right: -$menu-inner-width + 30;
+}
+
+.self.editor {
+  width: $editor-inner-width;
+  right: -$editor-inner-width + 30;
+}
+
+.icon {
+  display: inline-block;
+  margin: 1px 5px 0 0;
+  left: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  background-size: 14px 14px;
+  content: " ";
+}
+
+.report-icon::after {
+  @extend .icon;
+  background-image: url('../../../../assets/report-symbol.svg');
+}
+
+.suggest-icon::after {
+  @extend .icon;
+  background-image: url('../../../../assets/suggest-edit-symbol.svg');
 }

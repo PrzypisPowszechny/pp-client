@@ -58,7 +58,7 @@ export default class ReportEditor extends React.Component<Partial<IReportEditorP
   }
 
   selectDialog = (e) => {
-    this.setState({activeDialog: e.target.rel});
+    this.setState({ activeDialog: e.target.value });
   }
 
   render() {
@@ -70,9 +70,19 @@ export default class ReportEditor extends React.Component<Partial<IReportEditorP
     switch (this.state.activeDialog) {
       case 'menu':
         return (
-          <div className={classNames(PPScopeClass, styles.self)}>
-            <a onClick={this.selectDialog} rel={Dialogs.REPORT}> raportuj </a>
-            <a onClick={this.selectDialog} rel={Dialogs.SUGGESTION}> sugeruj </a>
+          <div className={classNames(PPScopeClass, styles.self, styles.menu)}>
+            <div>
+              <button onClick={this.selectDialog} value={Dialogs.REPORT}>
+                <span className={classNames(styles.reportIcon)} />
+                <span> Zgłoś przypis </span>
+              </button>
+            </div>
+            <div>
+              <button onClick={this.selectDialog} value={Dialogs.SUGGESTION}>
+                <span className={classNames(styles.suggestIcon)} />
+                <span> Zasugeruj poprawkę </span>
+              </button>
+            </div>
           </div>
         );
       case 'report':

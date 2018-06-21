@@ -159,7 +159,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
   }
 
   renderControls() {
-    if (!this.props.annotation.attributes.doesBelongToUser) {
+    if (this.props.annotation.attributes.doesBelongToUser) {
       return (
         <div className={classNames(styles.controls, { [styles.visible]: this.state.initialView })}>
           <button
@@ -180,7 +180,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
       );
     } else {
       return (
-        <div className={classNames(styles.controls, styles.alwaysVisible)}>
+        <div className={classNames(styles.controls, styles.visible )}>
           <button
             type="button"
             title="Edit"

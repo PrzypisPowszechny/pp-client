@@ -24,6 +24,7 @@ li.annotation {
   display: block;
   list-style: none;
   font-size: $viewer-font-size; /* for most of UI text */
+  position: relative;
 }
 
 /* --- Viewer head bar --- */
@@ -74,25 +75,8 @@ li.annotation {
   opacity: 0;
   transition: opacity 0.2s ease-in; // animate on opacity change
 
-  &.always-visible {
-    opacity: 1;
-  }
-
   button {
-    border: none;
-    outline: none;
-    background: none;
-    cursor: pointer;
-    padding: 5px;
-    font-size: $viewer-font-size + 2px;
-
-    i {
-      margin: 0;
-    }
-
-    &[disabled] {
-      display: none;
-    }
+    @include button-reset()
   }
 }
 

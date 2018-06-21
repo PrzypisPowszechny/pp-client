@@ -45,9 +45,11 @@ export default class Suggestion extends React.Component<Partial<ISuggestionProps
 
   render() {
     return (
-      <div className={classNames(PPScopeClass, styles.self)}>
-        suggestion
-        <a onClick={this.props.onCancel}>Anuluj</a>
+      <div className={classNames(PPScopeClass, styles.self, styles.editor)}>
+        <div>
+          suggestion
+        </div>
+        <button onClick={this.props.onCancel}>Anuluj</button>
       </div>
     );
   }
