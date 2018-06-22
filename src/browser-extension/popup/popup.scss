@@ -49,6 +49,11 @@ body {
       cursor: pointer;
     }
 
+    .clickable.disabled a {
+      //TODO change the icon color for disabled
+      color: #ccc;
+    }
+
 
     &__separator {
       border-color: rgba(0, 0, 0, 0.08);
@@ -62,7 +67,6 @@ body {
     justify-content: center;
   }
 
-
     .cta-button {
       margin: 0;
       font-size: 11px;
@@ -71,7 +75,6 @@ body {
       outline: inherit;
       display: inline-block;
       padding: 8px 12px;
-      border-radius: 3px;
       background-color: #2ecc71;
       box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
       border-radius: 2px;

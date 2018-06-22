@@ -4,7 +4,6 @@ const urlRegex = new RegExp(/^(https?:\/\/)?[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[
 export function extractHostname(url) {
   let hostname;
   //find & remove protocol (http, ftp, etc.) and get hostname
-
   if (url.indexOf("://") > -1) {
     hostname = url.split('/')[2];
   }
@@ -29,4 +28,9 @@ export function httpPrefixed(url) {
 
 export function isValidUrl(url) {
   return url.match(urlRegex)
+}
+
+export function standardizeURL(url) {
+  //find & remove URL parameters
+  return url.split('?')[0];
 }
