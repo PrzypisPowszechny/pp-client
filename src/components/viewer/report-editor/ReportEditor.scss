@@ -54,6 +54,14 @@ $menu-inner-width: 165px;
     width: 260px;
     height: 85px;
   }
+
+  // override semantic-ui
+  :global(.error-msg.ui.pointing.red.basic.label.large) {
+      font-size: 14px;
+      position: absolute;
+      z-index: $tooltip-z-index;
+      margin-top:0.5em;
+  }
 }
 
 .radioInputLine {
@@ -70,11 +78,18 @@ $menu-inner-width: 165px;
   }
 }
 
-.error-msg {
-  font-size: 14px !important;
-  position: absolute !important; // override semantic-ui defaults
-  z-index: $tooltip-z-index;
-}
+
+//
+//.error-msg.ui.label {
+//  font-size: 14px;
+//  position: absolute; // override semantic-ui defaults
+//  z-index: $tooltip-z-index;
+//
+//  &.ui.label {
+//    background: blue;
+//    //margin-top: 0.5em;
+//  }
+//}
 
 .icon {
   display: inline-block;

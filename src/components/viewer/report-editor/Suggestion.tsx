@@ -50,7 +50,7 @@ export default class Suggestion extends React.Component<Partial<ISuggestionProps
             />
           </div>
           <div
-            className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
+            className={classNames('error-msg', 'ui', 'pointing', 'red', 'basic', 'label', 'large',
               { [styles.hide]: !this.state.showCommentError })}
           >
             Wpisz swoje uwagi!
