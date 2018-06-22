@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { reducer as api } from 'redux-json-api';
 import widgets, { WidgetReducer } from './widgets/reducers';
+import appModes, { AppModeReducer } from './appModes/reducers';
 import textSelector from './textSelector/reducers';
 import { AnnotationAPIModel, AnnotationUpvoteAPIModel } from 'api/annotations';
 
@@ -9,6 +10,7 @@ export interface IStore {
     annotations: { data: AnnotationAPIModel[] };
     annotationUpvotes: { data: AnnotationUpvoteAPIModel[] };
   };
+  appModes: AppModeReducer;
   widgets: WidgetReducer;
   textSelector: any;
 }
@@ -25,6 +27,7 @@ export const apiInitializedFields = {
 
 export default combineReducers<IStore>({
   api,
+  appModes,
   widgets,
   textSelector,
 });

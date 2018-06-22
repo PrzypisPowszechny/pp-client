@@ -8,6 +8,9 @@ import { Highlighter, TextSelector } from '../core/index';
 import { hideMenu } from 'store/widgets/actions';
 import { outsideArticleClasses } from 'class_consts';
 import highlights from './highlights';
+import * as chromeKeys from 'chrome-storage/keys';
+import { changeAppModes } from '../store/appModes/actions';
+import initChromeStorageHandlers from './storageHandlers';
 
 let handlers;
 
@@ -24,6 +27,7 @@ export function initializeCoreHandlers() {
   };
 
   highlights.init(highlighter);
+  initChromeStorageHandlers();
 }
 
 export function deinitializeCoreHandlers() {

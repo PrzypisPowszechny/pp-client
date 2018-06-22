@@ -106,6 +106,7 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
   handleDisabledExtensionChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.checked;
     this.setState({ disabledExtension: newValue });
+    chromeStorage.set({ [chromeKeys.DISABLED_EXTENSION]: newValue });
   }
 
 
