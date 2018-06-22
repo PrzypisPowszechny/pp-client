@@ -4,6 +4,7 @@ import { readEndpoint } from 'redux-json-api';
 import store from 'store';
 import { initializeCoreHandlers } from 'init/handlers';
 import { injectComponents } from 'init/components';
+import chromeStorage from 'chrome-storage';
 
 import './css/common/base.scss';
 // semantic-ui minimum defaults for semantic-ui to work
@@ -21,6 +22,8 @@ import * as moment from 'moment';
 moment.locale('pl');
 
 import PPSettings from 'PPSettings.interface';
+import * as chromeKeys from './chrome-storage/keys';
+import { hydrateStoreWithChromeStorage } from './init/storageHandlers';
 
 // Declared in webpack.config through DefinePlugin
 declare global {
@@ -38,5 +41,6 @@ const isBrowser = typeof window !== 'undefined';
 if (isBrowser) {
   initializeCoreHandlers();
   injectComponents();
+  hydrateStoreWithChromeStorage();
   loadInitialData();
 }

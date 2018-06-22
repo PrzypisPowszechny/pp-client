@@ -1,10 +1,10 @@
 export const MODIFY_APP_MODES = 'MODIFY_APP_MODES';
 
-export function changeAppModes(settings) {
+export function changeAppModes(appModes) {
   return {
     type: MODIFY_APP_MODES,
     payload: {
-      settings,
+      ...appModes,
     },
   };
 }

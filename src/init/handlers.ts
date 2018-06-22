@@ -11,6 +11,7 @@ import highlights from './highlights';
 import * as chromeKeys from 'chrome-storage/keys';
 import { changeAppModes } from '../store/appModes/actions';
 import initChromeStorageHandlers from './storageHandlers';
+import { selectModeState } from '../store/appModes/selectors';
 
 let handlers;
 
@@ -38,15 +39,20 @@ function selectionChangeCallback(
   selection: Range.SerializedRange[],
   isInsideArticle: boolean,
   event) {
-  if (selection.length === 0 || (selection.length === 1 && !isInsideArticle)) {
-    // Propagate to the store only selections fully inside the article (e.g. not belonging to any of PP components)
-    // When we need to react also to other, we can easily expand the textSelector reducer; for now it' too eager.
-    store.dispatch(makeSelection(null));
-    store.dispatch(hideMenu());
-  } else if (selection.length === 1) {
-    store.dispatch(makeSelection(selection[0]));
-    store.dispatch(showMenu(mousePosition(event)));
-  } else {
-    console.warn('PP: more than one selected range is not supported');
+
+  const appModes = selectModeState(store.getState());
+  console.log(appModes);
+  if (appModes.annotationMode) {
+    if (selection.length === 0 || (selection.length === 1 && !isInsideArticle)) {
+      // Propagate to the store only selections fully inside the article (e.g. not belonging to any of PP components)
+      // When we need to react also to other, we can easily expand the textSelector reducer; for now it' too eager.
+      store.dispatch(makeSelection(null));
+      store.dispatch(hideMenu());
+    } else if (selection.length === 1) {
+      store.dispatch(makeSelection(selection[0]));
+      store.dispatch(showMenu(mousePosition(event)));
+    } else {
+      console.warn('PP: more than one selected range is not supported');
+    }
   }
 }
