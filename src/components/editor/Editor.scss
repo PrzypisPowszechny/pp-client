@@ -2,6 +2,7 @@
 @import "css/common/vars/colors";
 @import "css/common/vars/z-index";
 @import "css/common/mixins";
+@import 'css/common/buttons.scss';
 
 $editor-width: 450px;
 $editor-font-size: 14px;
@@ -52,6 +53,8 @@ $editor-vertical-spacing: 15px;
     width: 100%;
     border: 1px solid #D8DADA;
     outline: none;
+    margin: 0;
+    display: inline-block;
     color: #000000;
     font-weight: $font-light;
     line-height: 1em;
@@ -177,14 +180,7 @@ $editor-vertical-spacing: 15px;
     vertical-align: top;
 
     button {
-      border: none;
-      outline: none;
-      background: none;
-      padding-left: 10px;
-      height: 25px;
-      cursor: pointer;
-      font-weight: $font-semi-bold;
-      font-size: $editor-font-size + 1px;
+      @extend %submit-button;
       color: #888888;
     }
 

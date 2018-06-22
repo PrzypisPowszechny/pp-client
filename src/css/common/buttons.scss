@@ -1,0 +1,20 @@
+@import "css/common/vars/fonts";
+@import "css/common/vars/colors";
+
+%reset-button-style {
+  border: none;
+  outline: none;
+  background-image: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+
+%submit-button {
+  @extend %reset-button-style;
+  padding-left: 10px;
+  height: 25px;
+  font-family: $open-sans;
+  font-weight: $font-semi-bold;
+  font-size: 15px;
+}

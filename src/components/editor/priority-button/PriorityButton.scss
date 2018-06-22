@@ -1,22 +1,27 @@
 @import 'css/common/vars/colors';
 @import 'css/common/vars/fonts';
+@import 'css/common/buttons.scss';
+
+
 
 .self {
+  @extend %reset-button-style;
   display: block;
-  border: none;
-  outline: none;
+  border-radius: 3px;
   margin: 0;
   padding: 4px 8px;
   height: 48px;
-
-  text-align: center;
-  color: white;
-  font-weight: $font-semi-bold;
-  text-transform: uppercase;
-  font-size: 12px;
-
   background-color: #D8DADA;
   cursor: pointer;
+
+  @extend %annotation-priority-font;
+  text-align: center;
+
+  &:hover,&.selected {
+    @extend %reset-button-style;
+    @extend %annotation-priority-font;
+  }
+
 
   &.normal {
     &:hover,
