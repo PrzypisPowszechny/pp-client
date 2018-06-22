@@ -16,7 +16,7 @@ declare const chrome: any;
 interface IBrowserPopupState {
   isLoading: boolean;
   currentTabURL: string;
-  annotationMode: boolean;
+  annotationModePages: string[];
   disabledExtension: boolean;
   disabledPages: string[];
 }
@@ -28,7 +28,7 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
     this.state = {
       isLoading: true,
       currentTabURL: null,
-      annotationMode: false,
+      annotationModePages: [],
       disabledExtension: false,
       disabledPages: [],
     };
@@ -42,13 +42,13 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
      */
     if (this.state.isLoading) {
       chromeStorage.get([
-        chromeKeys.ANNOTATION_MODE,
+        chromeKeys.ANNOTATION_MODE_PAGES,
         chromeKeys.DISABLED_EXTENSION,
         chromeKeys.DISABLED_PAGES,
       ], (result) => {
         this.setState({
           isLoading: false,
-          annotationMode: result[chromeKeys.ANNOTATION_MODE] || false,
+          annotationModePages: result[chromeKeys.ANNOTATION_MODE_PAGES] || [],
           disabledExtension: result[chromeKeys.DISABLED_EXTENSION] || false,
           disabledPages: result[chromeKeys.DISABLED_PAGES] || [],
         });
@@ -70,6 +70,14 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
     this.loadStateFromStorage();
   }
 
+  isExtensionDisabledForCurrentTab() {
+    return (this.state.disabledPages || []).indexOf(this.state.currentTabURL) !== -1;
+  }
+
+  isAnnotationModeForCurrentTab() {
+    return (this.state.annotationModePages || []).indexOf(this.state.currentTabURL) !== -1;
+  }
+
   /*
    * ON POPUP STATE PERSISTENCE
    * We need to both update the storage and the local state
@@ -79,15 +87,27 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
    * we could consider moving to react-redux-chrome instead of refining it
    */
   handleAnnotationModeClick = (e) => {
-    this.setState({ annotationMode: true });
-    chromeStorage.set({ [chromeKeys.ANNOTATION_MODE]: true });
-    window.close();
+    const {
+      annotationModePages,
+      currentTabURL,
+    } = this.state;
+
+    const isAnnotationMode = this.isAnnotationModeForCurrentTab();
+    if (!isAnnotationMode) {
+      let newAnnotationModePages;
+      // Remove from pages if it's there, add otherwise
+      newAnnotationModePages = [...annotationModePages, currentTabURL];
+      this.setState({ annotationModePages: newAnnotationModePages });
+      chromeStorage.set({ [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages });
+      window.close();
+    }
   }
 
   handleDisabledExtensionChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.checked;
     this.setState({ disabledExtension: newValue });
   }
+
 
   handleDisabledPageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
@@ -109,12 +129,11 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
   render() {
     const {
       isLoading,
-      currentTabURL,
-      annotationMode,
       disabledExtension,
-      disabledPages,
     } = this.state;
-    const isDisabled = (disabledPages || []).indexOf(currentTabURL) !== -1;
+
+    const isDisabledExtension = this.isExtensionDisabledForCurrentTab()
+    const isAnnotationMode = this.isAnnotationModeForCurrentTab();
 
     if (isLoading) {
       // Do not display the page already, when loading; otherwise we'll always see the toggle transition...
@@ -125,7 +144,7 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
       <div className="pp-popup">
         <ul className="menu">
           <li
-            className={classNames('menu__item', 'clickable', { disabled: annotationMode })}
+            className={classNames('menu__item', 'clickable', { disabled: isAnnotationMode })}
             onClick={this.handleAnnotationModeClick}
           >
             <img className="menu__item__icon" src={addIcon}/>
@@ -147,7 +166,7 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
           <li className="menu__sub-item">
             <span>tylko na tej stronie</span>
             <Toggle
-              checked={isDisabled}
+              checked={isDisabledExtension}
               onChange={this.handleDisabledPageChange}
             />
           </li>
