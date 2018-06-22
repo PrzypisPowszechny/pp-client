@@ -54,7 +54,7 @@ const config = (env, argv) => ({
           localPath(ROOT, 'src', 'css'),
           localPath(ROOT, 'src', 'browser-extension')
         ],
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        use: ['style-loader', 'css-loader', 'cssimportant-loader', 'sass-loader'],
       },
       {
         /* SCSS modules */
