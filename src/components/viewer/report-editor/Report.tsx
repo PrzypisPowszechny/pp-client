@@ -28,7 +28,7 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
   }
 
   getRadioId(reason: Reasons) {
-    return `annotation-${this.props.annotation.id}-report-reason-${Reasons.OTHER}`;
+    return `annotation-${this.props.annotation.id}-report-reason-${reason}`;
   }
 
   submit = () => {
@@ -40,26 +40,61 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
     return (
       <div className={classNames(PPScopeClass, styles.self, styles.editor)}>
         <div>
-
-          <input
-            id={this.getRadioId(Reasons.SPAM)}
-            type="radio"
-            name="reason"
-            value={Reasons.SPAM}
+          <div>
+            <input
+              id={this.getRadioId(Reasons.BIASED)}
+              type="radio"
+              name="reason"
+              value={Reasons.BIASED}
+              onChange={this.handleInputChange}
+            />
+            <label htmlFor={this.getRadioId(Reasons.BIASED)}> przypis jest nieobiektywny</label>
+          </div>
+          <div>
+            <input
+              id={this.getRadioId(Reasons.UNRELIABLE)}
+              type="radio"
+              name="reason"
+              value={Reasons.UNRELIABLE}
+              onChange={this.handleInputChange}
+            />
+            <label htmlFor={this.getRadioId(Reasons.UNRELIABLE)}> źródło jest nierzetlne</label>
+          </div>
+          <div>
+            <input
+              id={this.getRadioId(Reasons.USELESS)}
+              type="radio"
+              name="reason"
+              value={Reasons.USELESS}
+              onChange={this.handleInputChange}
+            />
+            <label htmlFor={this.getRadioId(Reasons.USELESS)}> przypis jest niepotrzebny </label>
+          </div>
+          <div>
+            <input
+              id={this.getRadioId(Reasons.SPAM)}
+              type="radio"
+              name="reason"
+              value={Reasons.SPAM}
+              onChange={this.handleInputChange}
+            />
+            <label htmlFor={this.getRadioId(Reasons.SPAM)}> spam</label>
+          </div>
+          <div>
+            <input
+              id={this.getRadioId(Reasons.OTHER)}
+              type="radio"
+              name="reason"
+              value={Reasons.OTHER}
+              onChange={this.handleInputChange}
+            />
+            <label htmlFor={this.getRadioId(Reasons.OTHER)}> inne</label>
+          </div>
+          <textarea
+            name="comment"
+            placeholder="Wpisz tutaj swoje uwagi (opcjonalnie)"
             onChange={this.handleInputChange}
           />
-          <label htmlFor={this.getRadioId(Reasons.SPAM)}> Spam</label>
-
-          <input
-            id={this.getRadioId(Reasons.OTHER)}
-            type="radio"
-            name="reason"
-            value={Reasons.OTHER}
-            onChange={this.handleInputChange}
-          />
-          <label htmlFor={this.getRadioId(Reasons.OTHER)}> Inny</label>
-
-          <textarea name="comment" onChange={this.handleInputChange} />
 
         </div>
         <button onClick={this.submit}>Wyślij</button>

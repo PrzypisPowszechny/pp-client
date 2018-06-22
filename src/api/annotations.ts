@@ -76,8 +76,12 @@ export interface AnnotationReportAPIModel extends APIModel {
 }
 
 export enum Reasons {
-  SPAM = 'SPAM',
   OTHER = 'OTHER',
+  BIASED = 'BIASED',
+  UNRELIABLE = 'UNRELIABLE',
+  USELESS = 'USELESS',
+  SPAM = 'SPAM',
+  SUGGESTED_CORRECTION = 'SUGGESTED_CORRECTION',
 }
 
 export interface Relation {

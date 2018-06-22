@@ -27,14 +27,18 @@ export default class Suggestion extends React.Component<Partial<ISuggestionProps
 
   submit = () => {
     // TODO: validate and only if ok, call onSubmit
-    this.props.onSubmit(Reasons.SPAM, this.state.comment);
+    this.props.onSubmit(Reasons.SUGGESTED_CORRECTION, this.state.comment);
   }
 
   render() {
     return (
       <div className={classNames(PPScopeClass, styles.self, styles.editor)}>
         <div>
-          <textarea name="comment" onChange={this.handleInputChange} />
+          <textarea
+            name="comment"
+            placeholder="Wpisz tutaj swoje uwagi"
+            onChange={this.handleInputChange}
+          />
         </div>
         <button onClick={this.submit}>Wyślij</button>
         <button onClick={this.props.onCancel}>Anuluj</button>
