@@ -46,8 +46,9 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
   render() {
     return (
       <div className={classNames(PPScopeClass, styles.self, styles.editor)}>
-        <div className={classNames(styles.input)}>
-          <div>
+        <h3>Co jest nie tak?</h3>
+        <div>
+          <div className={classNames(styles.radioInputLine)}>
             <input
               id={this.getRadioId(Reasons.BIASED)}
               type="radio"
@@ -57,7 +58,7 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
             />
             <label htmlFor={this.getRadioId(Reasons.BIASED)}> przypis jest nieobiektywny</label>
           </div>
-          <div>
+          <div className={classNames(styles.radioInputLine)}>
             <input
               id={this.getRadioId(Reasons.UNRELIABLE)}
               type="radio"
@@ -67,7 +68,7 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
             />
             <label htmlFor={this.getRadioId(Reasons.UNRELIABLE)}> źródło jest nierzetlne</label>
           </div>
-          <div>
+          <div className={classNames(styles.radioInputLine)}>
             <input
               id={this.getRadioId(Reasons.USELESS)}
               type="radio"
@@ -77,7 +78,7 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
             />
             <label htmlFor={this.getRadioId(Reasons.USELESS)}> przypis jest niepotrzebny </label>
           </div>
-          <div>
+          <div className={classNames(styles.radioInputLine)}>
             <input
               id={this.getRadioId(Reasons.SPAM)}
               type="radio"
@@ -87,7 +88,7 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
             />
             <label htmlFor={this.getRadioId(Reasons.SPAM)}> spam</label>
           </div>
-          <div>
+          <div className={classNames(styles.radioInputLine)}>
             <input
               id={this.getRadioId(Reasons.OTHER)}
               type="radio"
@@ -111,8 +112,10 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
             onChange={this.handleInputChange}
           />
         </div>
-        <button onClick={this.submit}>Wyślij</button>
-        <button onClick={this.props.onCancel}>Anuluj</button>
+        <div className={styles.submitButtons}>
+          <button onClick={this.props.onCancel} className={styles.cancel}>Anuluj</button>
+          <button onClick={this.submit} className={styles.submit}>Wyślij</button>
+        </div>
       </div>
     );
   }

@@ -40,6 +40,7 @@ export default class Suggestion extends React.Component<Partial<ISuggestionProps
   render() {
     return (
       <div className={classNames(PPScopeClass, styles.self, styles.editor)}>
+        <h3>Co można poprawić w tym przypisie?</h3>
         <div className={classNames(styles.input)}>
           <div>
             <textarea
@@ -55,8 +56,10 @@ export default class Suggestion extends React.Component<Partial<ISuggestionProps
             Wpisz swoje uwagi!
           </div>
         </div>
-        <button onClick={this.submit}>Wyślij</button>
-        <button onClick={this.props.onCancel}>Anuluj</button>
+        <div className={styles.submitButtons}>
+          <button onClick={this.props.onCancel} className={styles.cancel}>Anuluj</button>
+          <button onClick={this.submit} className={styles.submit}>Wyślij</button>
+        </div>
       </div>
     );
   }

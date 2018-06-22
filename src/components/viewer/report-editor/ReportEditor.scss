@@ -10,38 +10,64 @@ $menu-inner-width: 165px;
 
 .self {
   background-color: white;
-  padding: 6px ($widget-inner-margin / 2);
 
   @include pp-widget-edge();
   min-height: 50px;
 
+  color: #4a4a4a;
   position: absolute;
   top: 30px;
   right:-150px;
 
+  h3 {
+    font-size: $default-font-size;
+    font-weight: bold;
+    margin: 0 0 5px;
+  }
+
   button {
     @include button-reset();
-    font-size: $default-font-size - 1;
+    font-size: $default-font-size - 2;
   }
 
   span, span::after {
     vertical-align: middle;
   }
 
+  &.menu {
+    width: $menu-inner-width;
+    right: -$menu-inner-width + 30;
+
+    padding: 5px;
+  }
+
+  &.editor {
+    width: $editor-inner-width;
+    right: -$editor-inner-width + 30;
+
+    padding: 16px 14px;
+  }
+
+  textarea {
+    margin-top: 10px;
+
+    width: 260px;
+    height: 85px;
+  }
 }
 
-.self.menu {
-  width: $menu-inner-width;
-  right: -$menu-inner-width + 30;
-}
+.radioInputLine {
+  margin-bottom: 5px;
 
-.self.editor {
-  width: $editor-inner-width;
-  right: -$editor-inner-width + 30;
-}
+  label {
+    vertical-align: middle;
+    margin-left: 5px;
+  }
 
-.input {
-  position: relative;
+  input[type=radio] {
+    vertical-align: middle;
+    margin-top:-2px;
+  }
 }
 
 .error-msg {
@@ -52,7 +78,7 @@ $menu-inner-width: 165px;
 
 .icon {
   display: inline-block;
-  margin: 1px 5px 0 0;
+  margin: -2px 5px 0 0;
   left: 0;
   right: 0;
   width: 14px;
@@ -74,4 +100,23 @@ $menu-inner-width: 165px;
 
 .hide {
   display: none !important;
+}
+
+.submit-buttons {
+  text-align: right;
+
+  button {
+    display: inline-block;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-top: 8px;
+
+    &.submit {
+      color: #5679b0;
+    }
+
+    &.cancel {
+      color: #888888;
+    }
+  }
 }
