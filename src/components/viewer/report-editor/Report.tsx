@@ -14,16 +14,21 @@ interface IReportProps {
 interface IReportState {
   reason: Reasons;
   comment: string;
+  showReasonError: boolean;
 }
 
 export default class Report extends React.Component<Partial<IReportProps>, Partial<IReportState>> {
   constructor(props: IReportProps) {
     super(props);
+    this.state = {};
   }
 
   handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const target = e.currentTarget;
-    const stateUpdate = { [target.name]: target.value };
+    const stateUpdate = {
+      [target.name]: target.value,
+      showReasonError: target.name !== 'reason' && this.state.showReasonError,
+    };
     this.setState(stateUpdate);
   }
 
@@ -32,14 +37,16 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
   }
 
   submit = () => {
-    // TODO: validate and only if ok, call onSubmit
+    if (!this.state.reason) {
+      this.setState({ showReasonError: true });
+    }
     this.props.onSubmit(this.state.reason, this.state.comment);
   }
 
   render() {
     return (
       <div className={classNames(PPScopeClass, styles.self, styles.editor)}>
-        <div>
+        <div className={classNames(styles.input)}>
           <div>
             <input
               id={this.getRadioId(Reasons.BIASED)}
@@ -90,12 +97,19 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
             />
             <label htmlFor={this.getRadioId(Reasons.OTHER)}> inne</label>
           </div>
+          <div
+            className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
+              { [styles.hide]: !this.state.showReasonError })}
+          >
+            Wybierz typ zgłoszenia!
+          </div>
+        </div>
+        <div>
           <textarea
             name="comment"
             placeholder="Wpisz tutaj swoje uwagi (opcjonalnie)"
             onChange={this.handleInputChange}
           />
-
         </div>
         <button onClick={this.submit}>Wyślij</button>
         <button onClick={this.props.onCancel}>Anuluj</button>

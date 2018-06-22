@@ -12,33 +12,48 @@ interface ISuggestionProps {
 
 interface ISuggestionState {
   comment: string;
+  showCommentError: boolean;
 }
 
 export default class Suggestion extends React.Component<Partial<ISuggestionProps>, Partial<ISuggestionState>> {
   constructor(props: ISuggestionProps) {
     super(props);
+    this.state = {};
   }
 
   handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const target = e.currentTarget;
-    const stateUpdate = { [target.name]: target.value };
+    const stateUpdate = {
+      [target.name]: target.value,
+      showCommentError: target.name !== 'reason' && this.state.showCommentError,
+    };
     this.setState(stateUpdate);
   }
 
   submit = () => {
-    // TODO: validate and only if ok, call onSubmit
+    if (!this.state.comment) {
+      this.setState({ showCommentError: true });
+    }
     this.props.onSubmit(Reasons.SUGGESTED_CORRECTION, this.state.comment);
   }
 
   render() {
     return (
       <div className={classNames(PPScopeClass, styles.self, styles.editor)}>
-        <div>
-          <textarea
-            name="comment"
-            placeholder="Wpisz tutaj swoje uwagi"
-            onChange={this.handleInputChange}
-          />
+        <div className={classNames(styles.input)}>
+          <div>
+            <textarea
+              name="comment"
+              placeholder="Wpisz tutaj swoje uwagi"
+              onChange={this.handleInputChange}
+            />
+          </div>
+          <div
+            className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
+              { [styles.hide]: !this.state.showCommentError })}
+          >
+            Wpisz swoje uwagi!
+          </div>
         </div>
         <button onClick={this.submit}>Wyślij</button>
         <button onClick={this.props.onCancel}>Anuluj</button>

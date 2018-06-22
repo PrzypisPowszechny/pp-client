@@ -1,4 +1,5 @@
 @import "css/common/vars/size";
+@import "css/common/vars/z-index";
 @import "css/common/vars/colors";
 @import "css/common/vars/fonts";
 @import "css/common/mixins";
@@ -39,6 +40,16 @@ $menu-inner-width: 165px;
   right: -$editor-inner-width + 30;
 }
 
+.input {
+  position: relative;
+}
+
+.error-msg {
+  font-size: 14px !important;
+  position: absolute !important; // override semantic-ui defaults
+  z-index: $tooltip-z-index;
+}
+
 .icon {
   display: inline-block;
   margin: 1px 5px 0 0;
@@ -59,4 +70,8 @@ $menu-inner-width: 165px;
 .suggest-icon::after {
   @extend .icon;
   background-image: url('../../../../assets/suggest-edit-symbol.svg');
+}
+
+.hide {
+  display: none !important;
 }
