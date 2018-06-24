@@ -28,17 +28,14 @@ function deinit() {
 function drawHighlights() {
   const disabledExtension = store.getState().appModes.disabledExtension;
   const annotations = store.getState().api.annotations.data;
-  console.log(disabledExtension, annotations);
   // nothing changed, do nothing
   if (annotations === instance.annotations && disabledExtension === instance.disabledExtension) {
     return;
   }
 
-  console.log(disabledExtension, annotations);
   if (disabledExtension && !instance.disabledExtension) {
     instance.highlighter.undrawAll();
   } else {
-    // and redraw
     instance.highlighter.drawAll(annotations.map(annotation => ({
       id: annotation.id,
       range: annotation.attributes.range,

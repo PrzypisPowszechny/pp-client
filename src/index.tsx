@@ -2,7 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { readEndpoint } from 'redux-json-api';
 import store from 'store';
-import { initializeCoreHandlers } from 'init/handlers';
+import { initializeDocumentHandlers } from 'init/documentHandlers';
 import { injectComponents } from 'init/components';
 import chromeStorage from 'chrome-storage';
 
@@ -23,7 +23,8 @@ moment.locale('pl');
 
 import PPSettings from 'PPSettings.interface';
 import * as chromeKeys from './chrome-storage/keys';
-import { hydrateStoreWithChromeStorage } from './init/storageHandlers';
+import initializeChromeStorageHandlers from './init/chromeStorageHandlers';
+import { changeAppModes } from './store/appModes/actions';
 
 // Declared in webpack.config through DefinePlugin
 declare global {
@@ -37,10 +38,30 @@ function loadInitialData() {
   store.dispatch(readEndpoint('/annotations?url=' + window.location.href));
 }
 
+/*
+ * Map chrome storage keys to Redux store values
+ */
+export function loadDataFromChromeStorage() {
+  chromeStorage.get([
+    chromeKeys.ANNOTATION_MODE_PAGES,
+    chromeKeys.DISABLED_EXTENSION,
+    chromeKeys.DISABLED_PAGES,
+  ], (result) => {
+    const newAppModes = {
+      annotationModePages: result[chromeKeys.ANNOTATION_MODE_PAGES] || [],
+      disabledExtension: result[chromeKeys.DISABLED_EXTENSION] || false,
+      disabledPages: result[chromeKeys.DISABLED_PAGES] || [],
+    };
+    store.dispatch(changeAppModes(newAppModes));
+  });
+}
+
 const isBrowser = typeof window !== 'undefined';
 if (isBrowser) {
-  initializeCoreHandlers();
+  initializeDocumentHandlers();
+  initializeChromeStorageHandlers();
   injectComponents();
-  hydrateStoreWithChromeStorage();
+  // load Data
   loadInitialData();
+  loadDataFromChromeStorage();
 }

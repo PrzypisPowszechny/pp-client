@@ -8,14 +8,12 @@ import { Highlighter, TextSelector } from '../core/index';
 import { hideMenu } from 'store/widgets/actions';
 import { outsideArticleClasses } from 'class_consts';
 import highlights from './highlights';
-import * as chromeKeys from 'chrome-storage/keys';
-import { changeAppModes } from '../store/appModes/actions';
-import initChromeStorageHandlers from './storageHandlers';
+import initChromeStorageHandlers from './chromeStorageHandlers';
 import { selectModeState } from '../store/appModes/selectors';
 
 let handlers;
 
-export function initializeCoreHandlers() {
+export function initializeDocumentHandlers() {
   const highlighter = new Highlighter(document.body);
   const selector = new TextSelector(document.body, {
     onSelectionChange: selectionChangeCallback,
@@ -28,7 +26,6 @@ export function initializeCoreHandlers() {
   };
 
   highlights.init(highlighter);
-  initChromeStorageHandlers();
 }
 
 export function deinitializeCoreHandlers() {
@@ -41,7 +38,6 @@ function selectionChangeCallback(
   event) {
 
   const appModes = selectModeState(store.getState());
-  console.log(appModes);
   if (appModes.annotationMode) {
     if (selection.length === 0 || (selection.length === 1 && !isInsideArticle)) {
       // Propagate to the store only selections fully inside the article (e.g. not belonging to any of PP components)
