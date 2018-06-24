@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect';
-import { IStore } from 'store/reducer';
+import { IAppState } from 'store/reducer';
 import { standardizeURL } from 'utils/url';
 
-export const selectModeState = createSelector<IStore, any, any>(
+export const selectModeState = createSelector<IAppState, any, any>(
   state => state.appModes,
   (appModes) => {
     const currentStandardizedURL = standardizeURL(window.location.href);
