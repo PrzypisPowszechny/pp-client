@@ -95,7 +95,6 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
     const isAnnotationMode = this.isAnnotationModeForCurrentTab();
     if (!isAnnotationMode) {
       let newAnnotationModePages;
-      // Remove from pages if it's there, add otherwise
       newAnnotationModePages = [...annotationModePages, currentTabURL];
       this.setState({ annotationModePages: newAnnotationModePages });
       chromeStorage.set({ [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages });

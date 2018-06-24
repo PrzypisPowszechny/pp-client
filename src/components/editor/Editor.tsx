@@ -15,6 +15,7 @@ import { AnnotationAPICreateModel, AnnotationAPIModelAttrs } from 'api/annotatio
 import _isEqual from 'lodash/isEqual';
 import { PPScopeClass } from 'class_consts.ts';
 import { isValidUrl } from '../../utils/url';
+import { turnOffAnnotationMode } from '../../chrome-storage';
 
 @connect(
   (state) => {
@@ -28,6 +29,7 @@ import { isValidUrl } from '../../utils/url';
     } = selectEditorState(state);
 
     return {
+      appModes: state.appModes,
       locationX,
       locationY,
 
@@ -46,10 +48,8 @@ import { isValidUrl } from '../../utils/url';
     },
   }),
 )
-class Editor extends React.Component<
-  Partial<IEditorProps>,
-  Partial<IEditorState>
-  > {
+class Editor extends React.Component<Partial<IEditorProps>,
+  Partial<IEditorState>> {
 
   static defaultProps = {
     locationX: 0,
@@ -84,7 +84,7 @@ class Editor extends React.Component<
       return {
         annotationId: nextAnnotation.id,
         range: nextProps.range,
-        priority: attrs.priority ||  AnnotationPriorities.NORMAL,
+        priority: attrs.priority || AnnotationPriorities.NORMAL,
         comment: attrs.comment || '',
         annotationLink: attrs.annotationLink || '',
         annotationLinkTitle: attrs.annotationLinkTitle || '',
@@ -205,8 +205,11 @@ class Editor extends React.Component<
       },
     };
     this.props.createAnnotation(instance).then(() => {
-        this.props.hideEditor();
-      })
+      this.props.hideEditor();
+      // Turn off the annotation mode by directly changing Chrome storage.
+      // We're subscribed to chrome storage changes and changes to the Redux store will follow
+      turnOffAnnotationMode(this.props.appModes);
+    })
       .catch((errors) => {
         console.log(errors);
       });
@@ -294,7 +297,7 @@ class Editor extends React.Component<
           className={styles.close}
           onClick={this.onCancelClick}
         >
-          <i className="remove icon" />
+          <i className="remove icon"/>
         </div>
         <div className={classNames(styles.editorInput)}>
            <div className={classNames(styles.commentTextareaWrapper)}>
@@ -322,7 +325,7 @@ class Editor extends React.Component<
             onChange={this.handleInputChange}
             placeholder="Wklej link do źródła"
           />
-          <i className={classNames(styles.inputIcon, 'linkify', 'icon')} />
+          <i className={classNames(styles.inputIcon, 'linkify', 'icon')}/>
           <div
             className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
               { [styles.hide]: annotationLinkError === '' })}
@@ -339,7 +342,7 @@ class Editor extends React.Component<
             onChange={this.handleInputChange}
             placeholder="Wpisz tytuł źródła"
           />
-          <i className={classNames(styles.inputIcon, 'tags', 'icon')} />
+          <i className={classNames(styles.inputIcon, 'tags', 'icon')}/>
           <div
             className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
               { [styles.hide]: annotationLinkTitleError === '' })}
@@ -349,11 +352,11 @@ class Editor extends React.Component<
           <Popup
             className={classNames(PPScopeClass, 'small-padding')}
             hideOnScroll={true}
-            trigger={<div className={styles.linkHelp}><i className="help circle icon" /></div>}
+            trigger={<div className={styles.linkHelp}><i className="help circle icon"/></div>}
             flowing={true}
             hoverable={true}
           >
-            np. <i>Treść ustawy</i>, <i>Artykuł na Wikipedii</i>,<br /> <i>Nagranie wypowiedzi ministra</i>
+            np. <i>Treść ustawy</i>, <i>Artykuł na Wikipedii</i>,<br/> <i>Nagranie wypowiedzi ministra</i>
           </Popup>
         </div>
         <div className={styles.bottomBar}>
@@ -371,7 +374,7 @@ class Editor extends React.Component<
               {this.renderNoCommentModal()}
             </div>
           </div>
-          <img className={styles.moverIcon} />
+          <img className={styles.moverIcon}/>
         </div>
       </DraggableWidget>
     );
