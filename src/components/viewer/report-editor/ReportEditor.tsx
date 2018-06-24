@@ -53,7 +53,8 @@ export default class ReportEditor extends React.Component<Partial<IReportEditorP
   }
 
   selectDialog = (e) => {
-    this.setState({ activeDialog: e.target.value });
+    // We use e.currentTarget (the event handling element) since in Chrome e.target returns the node inside button
+    this.setState({ activeDialog: e.currentTarget.value });
   }
 
   save = (reason: Reasons, comment: string) => {
