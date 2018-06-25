@@ -1,8 +1,8 @@
 import * as chromeKeys from '../chrome-storage/keys';
 import { changeAppModes } from '../store/appModes/actions';
 import store from '../store';
-import chromeStorage from 'chrome-storage';
 import { AppModeReducer } from '../store/appModes/reducers';
+import chromeStorage from 'chrome-storage';
 
 const storageKeysToAppMode = {
   [chromeKeys.DISABLED_EXTENSION]: 'isExtensionDisabled',
@@ -11,7 +11,7 @@ const storageKeysToAppMode = {
 };
 
 export default function initializeChromeStorageHandlers() {
-  chrome.storage.onChanged.addListener((changes, namespace) => {
+  chromeStorage.onChanged.addListener((changes, namespace) => {
     const newModes = {};
     for (const key of Object.keys(changes)) {
       store.dispatch(

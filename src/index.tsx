@@ -46,6 +46,7 @@ export function loadDataFromChromeStorage() {
       chromeKeys.DISABLED_EXTENSION,
       chromeKeys.DISABLED_PAGES,
     ], (result) => {
+      console.log(result);
       const newAppModes = {
         annotationModePages: result[chromeKeys.ANNOTATION_MODE_PAGES] || [],
         isExtensionDisabled: result[chromeKeys.DISABLED_EXTENSION] || false,
