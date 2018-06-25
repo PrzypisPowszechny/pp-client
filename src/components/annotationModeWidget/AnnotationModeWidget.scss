@@ -1,0 +1,45 @@
+@import "css/common/vars/fonts";
+@import "css/common/mixins";
+
+/* -- PP Action menu -- */
+.self {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 270px;
+  z-index: 10;
+  padding: 20px 10px;
+
+  font-size: 14px;
+  font-family: $font-family-preset;
+  line-height: 1.5em;
+  color: #222222;
+
+  background-color: rgba(255, 255, 255, 0.9);
+
+  @include pp-widget-edge();
+  text-align: center;
+  transition: background-color 0.15s;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 1);
+  }
+
+  .msg {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  button {
+    text-transform: uppercase;
+    cursor: pointer;
+    outline: none;
+    padding: 8px 10px;
+    background-color: #888888;
+    border: none;
+    border-radius: 2px;
+    color: #FFFFFF;
+    letter-spacing: 0.5px;
+    text-align: center;
+  }
+}
