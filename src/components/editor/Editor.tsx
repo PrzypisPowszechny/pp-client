@@ -206,9 +206,11 @@ class Editor extends React.Component<Partial<IEditorProps>,
     };
     this.props.createAnnotation(instance).then(() => {
       this.props.hideEditor();
-      // Turn off the annotation mode by directly changing Chrome storage.
-      // We're subscribed to chrome storage changes and changes to the Redux store will follow
-      turnOffAnnotationMode(this.props.appModes);
+      // When creating a new annotation, turn off the annotation mode
+      // Do it by directly changing Chrome storage. Changes to the Redux store will follow thanks to subscription
+      if (!instance.id) {
+        turnOffAnnotationMode(this.props.appModes);
+      }
     })
       .catch((errors) => {
         console.log(errors);

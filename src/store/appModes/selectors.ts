@@ -1,17 +1,20 @@
 import { createSelector } from 'reselect';
 import { IAppState } from 'store/reducer';
-import { standardizeURL } from 'utils/url';
+import { standardizeUrlForPageSettings } from 'utils/url';
 
-export const selectModeState = createSelector<IAppState, any, any>(
+export const selectModeForCurrentPage = createSelector<IAppState, any, any>(
   state => state.appModes,
   (appModes) => {
-    const currentStandardizedURL = standardizeURL(window.location.href);
-    console.log(appModes);
-    console.log(appModes.disabledPages.indexOf(currentStandardizedURL));
-    console.log(currentStandardizedURL);
+    // Standardize the URL by disregarding stuff that does not identify a page like URL parameters etc.
+    const currentStandardizedUrl = standardizeUrlForPageSettings(window.location.href);
+
     return {
-      disabledExtension: appModes.disabledExtension || appModes.disabledPages.indexOf(currentStandardizedURL) !== -1,
-      annotationMode: appModes.annotationModePages.indexOf(currentStandardizedURL) !== -1,
+    // Page highlights are disabled when
+    //  the extension is disabled in general or when it is disabled for this particular page
+      arePageHighlightsDisabled: appModes.isExtensionDisabled
+      || appModes.disabledPages.indexOf(currentStandardizedUrl) !== -1,
+      // Annotation mode is on when the current URL
+      isAnnotationMode: appModes.annotationModePages.indexOf(currentStandardizedUrl) !== -1,
     };
   },
 );

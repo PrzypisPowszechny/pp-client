@@ -1,13 +1,13 @@
 import { MODIFY_APP_MODES } from './actions';
 
 export interface AppModeReducer {
-  disabledExtension: boolean;
+  isExtensionDisabled: boolean;
   annotationModePages: string[];
   disabledPages: string[];
 }
 
-const initialState = {
-  disabledExtension: false,
+const initialState: AppModeReducer = {
+  isExtensionDisabled: false,
   annotationModePages: [],
   disabledPages: [],
 };

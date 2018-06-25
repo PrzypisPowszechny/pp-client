@@ -39,9 +39,6 @@ function loadInitialData() {
   store.dispatch(readEndpoint('/annotations?url=' + window.location.href));
 }
 
-/*
- * Map chrome storage keys to Redux store values
- */
 export function loadDataFromChromeStorage() {
   return new Promise((resolve, reject) => {
     chromeStorage.get([
@@ -51,7 +48,7 @@ export function loadDataFromChromeStorage() {
     ], (result) => {
       const newAppModes = {
         annotationModePages: result[chromeKeys.ANNOTATION_MODE_PAGES] || [],
-        disabledExtension: result[chromeKeys.DISABLED_EXTENSION] || false,
+        isExtensionDisabled: result[chromeKeys.DISABLED_EXTENSION] || false,
         disabledPages: result[chromeKeys.DISABLED_PAGES] || [],
       };
       store.dispatch(changeAppModes(newAppModes));
@@ -60,13 +57,25 @@ export function loadDataFromChromeStorage() {
   });
 }
 
+/*
+ * APPLICATION STATE POLICY
+ * The application state is populated both from browser storage (appModes) and from the API (all other reducers)
+ *
+ * While API data changes are not listened to (no need),
+ * browser storage is the communication channel between browser extension popup and the content script(s)
+ * running on all open tabs, so beside loading data from browser storage we listen to changes to react to
+ * popup settings changes in real time.
+ * Browser storage is the source of truth for Redux store; we do not change state.appModes directly;
+ * we commit changes to browser storage and recalculate state.appMode on storage change.
+ */
+
 const isBrowser = typeof window !== 'undefined';
 if (isBrowser) {
   initializeDocumentHandlers();
   initializeChromeStorageHandlers();
   injectComponents();
-  // Optimization: load data from storage first, so annotations are not drawn and soon undrawn
-  loadDataFromChromeStorage().then(() => {
-    loadInitialData();
-  });
+
+  // Optimization: load data from storage first, so annotations are not drawn before we know current application modes
+  // (disabled extension mode and disabled page mode will erase them)
+  loadDataFromChromeStorage().then(loadInitialData);
 }

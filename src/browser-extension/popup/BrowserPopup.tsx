@@ -4,7 +4,7 @@ import addIcon from '../../../assets/pp-add-icon.svg';
 import requestIcon from '../../../assets/pp-request-icon.svg';
 import switchOffIcon from '../../../assets/pp-switch-off-icon.svg';
 
-import { standardizeURL } from 'utils/url';
+import { standardizeUrlForPageSettings } from 'utils/url';
 import Toggle from './toggle/toggle';
 import chromeStorage from 'chrome-storage';
 import * as chromeKeys from 'chrome-storage/keys';
@@ -15,9 +15,9 @@ declare const chrome: any;
 
 interface IBrowserPopupState {
   isLoading: boolean;
-  currentTabURL: string;
+  currentTabUrl: string;
   annotationModePages: string[];
-  disabledExtension: boolean;
+  isExtensionDisabled: boolean;
   disabledPages: string[];
 }
 
@@ -27,9 +27,9 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
 
     this.state = {
       isLoading: true,
-      currentTabURL: null,
+      currentTabUrl: null,
       annotationModePages: [],
-      disabledExtension: false,
+      isExtensionDisabled: false,
       disabledPages: [],
     };
   }
@@ -49,7 +49,7 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
         this.setState({
           isLoading: false,
           annotationModePages: result[chromeKeys.ANNOTATION_MODE_PAGES] || [],
-          disabledExtension: result[chromeKeys.DISABLED_EXTENSION] || false,
+          isExtensionDisabled: result[chromeKeys.DISABLED_EXTENSION] || false,
           disabledPages: result[chromeKeys.DISABLED_PAGES] || [],
         });
       });
@@ -60,7 +60,7 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
   componentDidMount() {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const tab = tabs[0];
-      this.setState({ currentTabURL: standardizeURL(tab.url) });
+      this.setState({ currentTabUrl: standardizeUrlForPageSettings(tab.url) });
     });
 
     this.loadStateFromStorage();
@@ -71,11 +71,11 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
   }
 
   isExtensionDisabledForCurrentTab() {
-    return (this.state.disabledPages || []).indexOf(this.state.currentTabURL) !== -1;
+    return (this.state.disabledPages || []).indexOf(this.state.currentTabUrl) !== -1;
   }
 
   isAnnotationModeForCurrentTab() {
-    return (this.state.annotationModePages || []).indexOf(this.state.currentTabURL) !== -1;
+    return (this.state.annotationModePages || []).indexOf(this.state.currentTabUrl) !== -1;
   }
 
   /*
@@ -89,13 +89,13 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
   handleAnnotationModeClick = (e) => {
     const {
       annotationModePages,
-      currentTabURL,
+      currentTabUrl,
     } = this.state;
 
     const isAnnotationMode = this.isAnnotationModeForCurrentTab();
     if (!isAnnotationMode) {
       let newAnnotationModePages;
-      newAnnotationModePages = [...annotationModePages, currentTabURL];
+      newAnnotationModePages = [...annotationModePages, currentTabUrl];
       this.setState({ annotationModePages: newAnnotationModePages });
       chromeStorage.set({ [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages });
       window.close();
@@ -104,23 +104,22 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
 
   handleDisabledExtensionChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.checked;
-    this.setState({ disabledExtension: newValue });
+    this.setState({ isExtensionDisabled: newValue });
     chromeStorage.set({ [chromeKeys.DISABLED_EXTENSION]: newValue });
   }
-
 
   handleDisabledPageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     const {
       disabledPages,
-      currentTabURL,
+      currentTabUrl,
     } = this.state;
 
     let newDisabledList;
     if (checked) {
-      newDisabledList = [...disabledPages, currentTabURL];
+      newDisabledList = [...disabledPages, currentTabUrl];
     } else {
-      newDisabledList = _filter(disabledPages, url => url !== currentTabURL);
+      newDisabledList = _filter(disabledPages, url => url !== currentTabUrl);
     }
     this.setState({ disabledPages: newDisabledList });
     chromeStorage.set({ [chromeKeys.DISABLED_PAGES]: newDisabledList });
@@ -129,10 +128,10 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
   render() {
     const {
       isLoading,
-      disabledExtension,
+      isExtensionDisabled,
     } = this.state;
 
-    const isDisabledExtension = this.isExtensionDisabledForCurrentTab()
+    const isCurrentPageDisabled = this.isExtensionDisabledForCurrentTab();
     const isAnnotationMode = this.isAnnotationModeForCurrentTab();
 
     if (isLoading) {
@@ -159,14 +158,14 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
             <img className="menu__item__icon" src={switchOffIcon}/>
             <span>Wyłącz wtyczkę</span>
             <Toggle
-              checked={disabledExtension}
+              checked={isExtensionDisabled}
               onChange={this.handleDisabledExtensionChange}
             />
           </li>
           <li className="menu__sub-item">
             <span>tylko na tej stronie</span>
             <Toggle
-              checked={isDisabledExtension}
+              checked={isCurrentPageDisabled}
               onChange={this.handleDisabledPageChange}
             />
           </li>

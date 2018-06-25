@@ -30,7 +30,7 @@ export function isValidUrl(url) {
   return url.match(urlRegex)
 }
 
-export function standardizeURL(url) {
+export function standardizeUrlForPageSettings(url) {
   //find & remove URL parameters
   return url.split('?')[0];
 }

@@ -3,7 +3,7 @@ import { showViewer } from 'store/actions';
 import { mousePosition } from 'common/dom';
 import Highlighter from 'core/Highlighter';
 import { mouseOverViewer } from '../store/widgets/actions';
-import { selectModeState } from '../store/appModes/selectors';
+import { selectModeForCurrentPage } from '../store/appModes/selectors';
 
 let instance;
 
@@ -27,12 +27,12 @@ function deinit() {
 }
 
 function drawHighlights() {
-  const disabledExtension = selectModeState(store.getState()).disabledExtension;
+  const arePageHighlightsDisabled = selectModeForCurrentPage(store.getState()).arePageHighlightsDisabled;
   const annotations = store.getState().api.annotations.data;
-  if (disabledExtension && !instance.disabledExtension) {
+  if (arePageHighlightsDisabled && !instance.arePageHighlightsDisabled) {
     instance.highlighter.undrawAll();
-  } else if (!disabledExtension &&
-    (annotations !== instance.annotations || disabledExtension !== instance.disabledExtension)
+  } else if (!arePageHighlightsDisabled &&
+    (annotations !== instance.annotations || arePageHighlightsDisabled !== instance.arePageHighlightsDisabled)
   ) {
     instance.highlighter.drawAll(annotations.map(annotation => ({
       id: annotation.id,
@@ -43,7 +43,7 @@ function drawHighlights() {
 
   // save for later, to check if updates are needed
   instance.annotations = annotations;
-  instance.disabledExtension = disabledExtension;
+  instance.arePageHighlightsDisabled = arePageHighlightsDisabled;
 }
 
 function handleHighlightMouseLeave(e, annotations) {

@@ -1,7 +1,7 @@
 import { AppModeReducer } from '../store/appModes/reducers';
 import _filter from 'lodash/filter';
 import * as chromeKeys from './keys';
-import { standardizeURL } from 'utils/url';
+import { standardizeUrlForPageSettings } from 'utils/url';
 
 let storage;
 
@@ -15,7 +15,7 @@ if (PP_SETTINGS.DEV) {
 export default storage;
 
 export function turnOffAnnotationMode(appModes: AppModeReducer) {
-  const currentStandardizedURL = standardizeURL(window.location.href);
-  const newAnnotationModePages = _filter(appModes.annotationModePages, url => url !== currentStandardizedURL)
+  const currentStandardizedURL = standardizeUrlForPageSettings(window.location.href);
+  const newAnnotationModePages = _filter(appModes.annotationModePages, url => url !== currentStandardizedURL);
   storage.set({ [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages });
 }
