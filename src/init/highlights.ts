@@ -3,6 +3,7 @@ import { showViewer } from 'store/actions';
 import { mousePosition } from 'common/dom';
 import Highlighter from 'core/Highlighter';
 import { mouseOverViewer } from '../store/widgets/actions';
+import { selectModeState } from '../store/appModes/selectors';
 
 let instance;
 
@@ -26,9 +27,8 @@ function deinit() {
 }
 
 function drawHighlights() {
-  const disabledExtension = store.getState().appModes.disabledExtension;
+  const disabledExtension = selectModeState(store.getState()).disabledExtension;
   const annotations = store.getState().api.annotations.data;
-
   if (disabledExtension && !instance.disabledExtension) {
     instance.highlighter.undrawAll();
   } else if (!disabledExtension &&

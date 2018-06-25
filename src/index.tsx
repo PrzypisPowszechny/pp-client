@@ -67,7 +67,6 @@ if (isBrowser) {
   injectComponents();
   // Optimization: load data from storage first, so annotations are not drawn and soon undrawn
   loadDataFromChromeStorage().then(() => {
-    console.log('loaded!');
     loadInitialData();
   });
 }

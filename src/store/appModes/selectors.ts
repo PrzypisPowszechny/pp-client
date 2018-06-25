@@ -7,6 +7,8 @@ export const selectModeState = createSelector<IAppState, any, any>(
   (appModes) => {
     const currentStandardizedURL = standardizeURL(window.location.href);
     console.log(appModes);
+    console.log(appModes.disabledPages.indexOf(currentStandardizedURL));
+    console.log(currentStandardizedURL);
     return {
       disabledExtension: appModes.disabledExtension || appModes.disabledPages.indexOf(currentStandardizedURL) !== -1,
       annotationMode: appModes.annotationModePages.indexOf(currentStandardizedURL) !== -1,
