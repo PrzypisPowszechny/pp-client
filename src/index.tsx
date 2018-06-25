@@ -19,6 +19,7 @@ import './css/selection.scss';
 // and set it for future momentJS calls;
 // (https://github.com/moment/moment/issues/2517)
 import * as moment from 'moment';
+
 moment.locale('pl');
 
 import PPSettings from 'PPSettings.interface';
@@ -42,17 +43,20 @@ function loadInitialData() {
  * Map chrome storage keys to Redux store values
  */
 export function loadDataFromChromeStorage() {
-  chromeStorage.get([
-    chromeKeys.ANNOTATION_MODE_PAGES,
-    chromeKeys.DISABLED_EXTENSION,
-    chromeKeys.DISABLED_PAGES,
-  ], (result) => {
-    const newAppModes = {
-      annotationModePages: result[chromeKeys.ANNOTATION_MODE_PAGES] || [],
-      disabledExtension: result[chromeKeys.DISABLED_EXTENSION] || false,
-      disabledPages: result[chromeKeys.DISABLED_PAGES] || [],
-    };
-    store.dispatch(changeAppModes(newAppModes));
+  return new Promise((resolve, reject) => {
+    chromeStorage.get([
+      chromeKeys.ANNOTATION_MODE_PAGES,
+      chromeKeys.DISABLED_EXTENSION,
+      chromeKeys.DISABLED_PAGES,
+    ], (result) => {
+      const newAppModes = {
+        annotationModePages: result[chromeKeys.ANNOTATION_MODE_PAGES] || [],
+        disabledExtension: result[chromeKeys.DISABLED_EXTENSION] || false,
+        disabledPages: result[chromeKeys.DISABLED_PAGES] || [],
+      };
+      store.dispatch(changeAppModes(newAppModes));
+      resolve();
+    });
   });
 }
 
@@ -61,7 +65,9 @@ if (isBrowser) {
   initializeDocumentHandlers();
   initializeChromeStorageHandlers();
   injectComponents();
-  // load Data
-  loadInitialData();
-  loadDataFromChromeStorage();
+  // Optimization: load data from storage first, so annotations are not drawn and soon undrawn
+  loadDataFromChromeStorage().then(() => {
+    console.log('loaded!');
+    loadInitialData();
+  });
 }
