@@ -24,7 +24,7 @@ interface IReportEditorProps {
 }
 
 interface IReportEditorState {
-  activeDialog: 'menu'|'report'|'suggestion';
+  activeDialog: Dialogs;
 }
 
 enum Dialogs {
@@ -107,7 +107,7 @@ export default class ReportEditor extends React.Component<Partial<IReportEditorP
       case 'suggestion':
         return <Suggestion annotation={annotation} onCancel={onCancel} onSubmit={this.save}/>;
       default:
-        return;
+        return null;
     }
   }
 }
