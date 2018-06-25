@@ -19,6 +19,7 @@ import {
 import Timer = NodeJS.Timer;
 import { PPScopeClass } from '../../class_consts';
 import { extractHostname, httpPrefixed } from '../../utils/url';
+import ReportEditor from './report-editor/ReportEditor';
 
 interface IViewerItemProps {
   key: string;
@@ -36,6 +37,8 @@ interface IViewerItemProps {
 
 interface IViewerItemState {
   initialView: boolean; // used to determine whether edit/delete buttons should be visible
+  // TODO: move this field (and create reportEditorAnnotationId) to global store if only one editor shall be present
+  reportEditorVisible: boolean;
 }
 
 @connect(
@@ -52,6 +55,10 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
 
   static editControlDisappearTimeout = 500;
 
+  static defaultState = {
+    reportEditorVisible: false,
+  };
+
   static getDerivedStateFromProps() {
     return { initialView: true };
   }
@@ -60,7 +67,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
 
   constructor(props: IViewerItemProps) {
     super(props);
-    this.state = {};
+    this.state = ViewerItem.defaultState;
   }
 
   componentDidMount() {
@@ -121,6 +128,10 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     }
   }
 
+  toggleReportEditor = (e?: any) => {
+    this.setState({ reportEditorVisible: !this.state.reportEditorVisible });
+  }
+
   headerPriorityClass() {
     const priorityToClass = {
       [AnnotationPriorities.NORMAL]: styles.priorityNormal,
@@ -168,7 +179,17 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
         </div>
       );
     } else {
-      return null;
+      return (
+        <div className={classNames(styles.controls, styles.visible )}>
+          <button
+            type="button"
+            title="Edit"
+            onClick={this.toggleReportEditor}
+          >
+            <span className={classNames(styles.actionsIcon)} />
+          </button>
+        </div>
+      );
     }
   }
 
@@ -223,6 +244,13 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
             </Popup>
           </div>
         </div>
+        {!this.state.reportEditorVisible ? null :
+          <ReportEditor
+            annotation={this.props.annotation}
+            onCancel={this.toggleReportEditor}
+            onSuccess={this.toggleReportEditor}
+          />
+        }
       </li>
     );
   }

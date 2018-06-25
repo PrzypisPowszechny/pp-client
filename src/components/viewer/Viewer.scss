@@ -24,6 +24,7 @@ li.annotation {
   display: block;
   list-style: none;
   font-size: $viewer-font-size; /* for most of UI text */
+  position: relative;
 }
 
 /* --- Viewer head bar --- */
@@ -75,20 +76,7 @@ li.annotation {
   transition: opacity 0.2s ease-in; // animate on opacity change
 
   button {
-    border: none;
-    outline: none;
-    background: none;
-    cursor: pointer;
-    padding: 5px;
-    font-size: $viewer-font-size + 2px;
-
-    i {
-      margin: 0;
-    }
-
-    &[disabled] {
-      display: none;
-    }
+    @include button-reset()
   }
 }
 
@@ -210,3 +198,15 @@ li.annotation {
   content: url('../../../assets/upvote-icon.png');
 }
 
+
+.actions-icon::after {
+  display: block;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  content: url('../../../assets/three-dots.svg');
+  opacity: 0.5;
+}

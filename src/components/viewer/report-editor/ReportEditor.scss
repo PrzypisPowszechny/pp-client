@@ -1,0 +1,137 @@
+@import "css/common/vars/size";
+@import "css/common/vars/z-index";
+@import "css/common/vars/colors";
+@import "css/common/vars/fonts";
+@import "css/common/mixins";
+
+$editor-inner-width: 300px;
+$menu-inner-width: 165px;
+
+
+.self {
+  background-color: white;
+
+  @include pp-widget-edge();
+  min-height: 50px;
+
+  color: #4a4a4a;
+  position: absolute;
+  top: 30px;
+  right:-150px;
+
+  h3 {
+    font-size: $default-font-size;
+    font-weight: bold;
+    margin: 0 0 5px;
+  }
+
+  button {
+    @include button-reset();
+    font-size: $default-font-size - 2;
+  }
+
+  span, span::after {
+    vertical-align: middle;
+  }
+
+  &.menu {
+    width: $menu-inner-width;
+    right: -$menu-inner-width + 30;
+
+    padding: 5px;
+  }
+
+  &.editor {
+    width: $editor-inner-width;
+    right: -$editor-inner-width + 30;
+
+    padding: 16px 14px;
+  }
+
+  textarea {
+    margin-top: 10px;
+
+    width: 260px;
+    height: 85px;
+  }
+
+  // override semantic-ui
+  :global(.error-msg.ui.pointing.red.basic.label.large) {
+      font-size: 14px;
+      position: absolute;
+      z-index: $tooltip-z-index;
+      margin-top:0.5em;
+  }
+}
+
+.radioInputLine {
+  margin-bottom: 5px;
+
+  label {
+    vertical-align: middle;
+    margin-left: 5px;
+  }
+
+  input[type=radio] {
+    vertical-align: middle;
+    margin-top:-2px;
+  }
+}
+
+
+//
+//.error-msg.ui.label {
+//  font-size: 14px;
+//  position: absolute; // override semantic-ui defaults
+//  z-index: $tooltip-z-index;
+//
+//  &.ui.label {
+//    background: blue;
+//    //margin-top: 0.5em;
+//  }
+//}
+
+.icon {
+  display: inline-block;
+  margin: -2px 5px 0 0;
+  left: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  background-size: 14px 14px;
+  content: " ";
+}
+
+.report-icon::after {
+  @extend .icon;
+  background-image: url('../../../../assets/report-symbol.svg');
+}
+
+.suggest-icon::after {
+  @extend .icon;
+  background-image: url('../../../../assets/suggest-edit-symbol.svg');
+}
+
+.hide {
+  display: none !important;
+}
+
+.submit-buttons {
+  text-align: right;
+
+  button {
+    display: inline-block;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-top: 8px;
+
+    &.submit {
+      color: #5679b0;
+    }
+
+    &.cancel {
+      color: #888888;
+    }
+  }
+}
