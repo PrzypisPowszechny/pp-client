@@ -1,8 +1,11 @@
 import { AnnotationPriorities } from '../consts';
 import { AnnotationAPICreateModel, AnnotationAPIModel } from 'api/annotations';
 import { IEditorRange } from 'store/widgets/reducers';
+import { AppModeReducer } from '../../store/appModes/reducers';
 
 export interface IEditorProps {
+  appModes: AppModeReducer;
+
   locationX: number;
   locationY: number;
 

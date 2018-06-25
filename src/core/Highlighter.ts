@@ -51,10 +51,10 @@ function reanchorRange(range, rootElement): Range.NormalizedRange {
       }
     }
   }
- /*
-   Otherwise, we simply swallow the error. Callers are responsible
-   for only trying to draw valid annotations.
-   */
+  /*
+    Otherwise, we simply swallow the error. Callers are responsible
+    for only trying to draw valid annotations.
+    */
   return null;
 }
 
@@ -150,12 +150,18 @@ export default class Highlighter {
 
       // Undraw all stale annotations from registry
       const annotationIds = annotations.map(annotation => annotation.id);
-      for (const annotationId in this.highlightRegistry ) {
+      for (const annotationId in this.highlightRegistry) {
         if (annotationIds.indexOf(annotationId) === -1) {
           this.undraw(annotationId);
         }
       }
     });
+  }
+
+  undrawAll = () => {
+    for (const normedId of Object.keys(this.highlightRegistry)) {
+      this.undraw(normedId);
+    }
   }
 
   /**
@@ -173,7 +179,7 @@ export default class Highlighter {
     const highlightElements = highlightRange(normedRange, this.options.highlightClass);
     const normedId = Highlighter.coerceId(id);
 
-    // If this is has a highlight already, first remove it from DOM
+    // If this id has a highlight already, first remove it from DOM
     if (normedId in this.highlightRegistry) {
       this.undraw(normedId);
     }
@@ -193,7 +199,7 @@ export default class Highlighter {
    *
    * event - HTML event to subscribe to such as mouseover, mouseleave, etc...
    */
-  // todo (nice to have): rewrite it to pure js
+    // todo (nice to have): rewrite it to pure js
   onHighlightEvent = (
     event: string,
     handler: (e: any, annotationData: any[]) => void,
@@ -202,13 +208,13 @@ export default class Highlighter {
       .on(event + '.' + this.options.nameSpace, '.' + this.options.highlightClass, (e) => {
 
         const annotations = $(e.target)
-                    .parents('.' + this.options.highlightClass)
-                    .addBack()
-                    .map((_, elem) => {
-                        return $(elem).attr(this.options.highlightIdAttr);
-                    })
-                    .toArray()
-                    .map(id => this.highlightRegistry[id.toString()].annotationData);
+          .parents('.' + this.options.highlightClass)
+          .addBack()
+          .map((_, elem) => {
+            return $(elem).attr(this.options.highlightIdAttr);
+          })
+          .toArray()
+          .map(id => this.highlightRegistry[id.toString()].annotationData);
         handler(e, annotations);
       });
   }
