@@ -7,6 +7,15 @@
   background-image: none;
   background-color: transparent;
   cursor: pointer;
+
+  &:hover,&.selected {
+    border: none;
+    outline: none;
+    background-image: none;
+    background-color: transparent;
+    cursor: pointer;
+  }
+
 }
 
 
@@ -17,4 +26,5 @@
   font-family: $open-sans;
   font-weight: $font-semi-bold;
   font-size: 15px;
+  text-transform: none;
 }

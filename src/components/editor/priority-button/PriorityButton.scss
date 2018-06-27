@@ -12,13 +12,12 @@
   padding: 4px 8px;
   height: 48px;
   background-color: #D8DADA;
-  cursor: pointer;
 
   @extend %annotation-priority-font;
   text-align: center;
 
+
   &:hover,&.selected {
-    @extend %reset-button-style;
     @extend %annotation-priority-font;
   }
 
