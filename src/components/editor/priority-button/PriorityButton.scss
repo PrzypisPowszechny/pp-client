@@ -1,6 +1,7 @@
 @import 'css/common/vars/colors';
 @import 'css/common/vars/fonts';
 @import 'css/common/buttons.scss';
+@import "css/common/vars/z-index";
 
 
 
@@ -42,4 +43,10 @@
       background-color: $alert-ref-color;
     }
   }
+}
+
+// override semantic-ui
+// TODO rewrite without important
+.tooltip {
+  z-index: $editor-z-index + 1 !important;
 }

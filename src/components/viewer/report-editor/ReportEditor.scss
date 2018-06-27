@@ -18,6 +18,7 @@ $menu-inner-width: 165px;
   position: absolute;
   top: 30px;
   right:-150px;
+  z-index: $viewer-z-index + 1;
 
   h3 {
     font-size: $default-font-size;
@@ -59,7 +60,7 @@ $menu-inner-width: 165px;
   :global(.error-msg.ui.pointing.red.basic.label.large) {
       font-size: 14px;
       position: absolute;
-      z-index: $tooltip-z-index;
+      z-index: $viewer-z-index + 2;
       margin-top:0.5em;
   }
 }

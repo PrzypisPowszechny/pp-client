@@ -15,6 +15,7 @@ $editor-vertical-spacing: 15px;
   background-color: white;
   font-size: $editor-font-size;
   font-family: $font-family-preset;
+  z-index: $editor-z-index;
 
   @include pp-widget-edge();
 }
@@ -216,7 +217,13 @@ $editor-vertical-spacing: 15px;
 .error-msg {
   font-size: 14px !important;
   position: absolute !important; // override semantic-ui defaults
-  z-index: $tooltip-z-index;
+  z-index: $editor-z-index + 1;
+}
+
+// override semantic-ui
+// TODO rewrite without important
+.tooltip {
+  z-index: $editor-z-index + 1 !important;
 }
 
 /* all cross-style close buttons */

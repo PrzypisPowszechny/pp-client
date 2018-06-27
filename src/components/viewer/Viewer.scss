@@ -2,6 +2,7 @@
 @import "css/common/vars/colors";
 @import "css/common/vars/fonts";
 @import "css/common/mixins";
+@import "css/common/vars/z-index";
 
 /* -- PP Viewer -- */
 // The oldest CSS in the project
@@ -11,6 +12,7 @@ $viewer-font-size: 14px;
 .self {
   background-color: white;
   padding: 6px $widget-inner-margin;
+  z-index: $viewer-z-index;
 
   @include pp-widget-edge();
 }

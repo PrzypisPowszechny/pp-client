@@ -347,7 +347,7 @@ class Editor extends React.Component<
             {annotationLinkTitleError}
           </div>
           <Popup
-            className={classNames(PPScopeClass, 'small-padding')}
+            className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
             hideOnScroll={true}
             trigger={<div className={styles.linkHelp}><i className="help circle icon" /></div>}
             flowing={true}
