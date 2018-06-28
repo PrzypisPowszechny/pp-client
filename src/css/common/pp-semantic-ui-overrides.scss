@@ -17,3 +17,7 @@
 #{$pp-scope}.ui.popup.pp-popup-long-line {
   max-width: 420px;
 }
+
+.ui.page.modals.dimmer.transition.visible.active {
+  z-index: 10000050;
+}
