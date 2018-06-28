@@ -6,7 +6,7 @@
 
 
 .self {
-  @extend %reset-button-style;
+  @include button-reset();
   display: block;
   border-radius: 3px;
   margin: 0;

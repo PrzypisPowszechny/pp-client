@@ -98,7 +98,7 @@ $editor-vertical-spacing: 15px;
 
 /* annotation link field */
 .annotation-link {
-  input {
+  input[type=text] {
     padding-left: 2em;
   }
   .error-msg {
@@ -118,7 +118,7 @@ $editor-vertical-spacing: 15px;
 
 .annotation-link-title {
   margin-bottom: 0;
-  input {
+  input[type=text] {
     padding-left: 2em;
     width: 381px;
   }
@@ -129,6 +129,7 @@ $editor-vertical-spacing: 15px;
     top: 9px;
     left: 0;
     width: 2em;
+    line-height: 1.45em;
   }
 
   .error-msg {
@@ -175,40 +176,28 @@ $editor-vertical-spacing: 15px;
   .controls {
     float: right;
     display: inline-block;
-    padding: 0;
+    padding: 5px 0;
     min-width: 150px;
     text-align: right;
     vertical-align: top;
 
     button {
-      @extend %submit-button;
-      color: #888888;
+      @include submit-button();
+      @include button-color(#888888);
     }
 
-    button:hover {
-      color: darken(#888888, 8%);
-    }
     // use priority-specific as a baseline and darken it so it presents well as a button
-    // for :hover, darken it even more (manually selected values)
     .priority-normal {
-      color: darken($normal-ref-color, 5%);
-    }
-    .priority-normal:hover {
-      color: darken($normal-ref-color, 5% + 8%);
-    }
-    .priority-warning {
-      color: darken($warning-ref-color, 8%);
-    }
-    .priority-warning:hover {
-      color: darken($warning-ref-color, 8% + 4%);
-    }
-    .priority-alert {
-      color: darken($alert-ref-color, 5%);
-    }
-    .priority-alert:hover {
-      color: darken($alert-ref-color, 5% + 4%);
+      @include button-color($normal-ref-color);
     }
 
+    .priority-warning {
+      @include button-color(darken($warning-ref-color, 3%));
+    }
+
+    .priority-alert {
+      @include button-color(darken($alert-ref-color, 3%));
+    }
   }
 }
 

@@ -1,6 +1,7 @@
 @import 'vars/scope';
 @import 'vars/fonts';
 @import 'vars/size';
+@import "vars/z-index";
 
 #{$pp-scope}.ui.popup,
 #{$pp-scope}.ui.modal {
@@ -18,6 +19,7 @@
   max-width: 420px;
 }
 
+// Override default semantic ui modal z-index
 .ui.page.modals.dimmer.transition.visible.active {
-  z-index: 10000050;
+  z-index: $z-index-base + 100;
 }
