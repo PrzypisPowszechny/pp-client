@@ -14,6 +14,11 @@ import mockStorage from './mock';
  */
 let storage;
 
+// Firefox fix for chrome global interface
+interface CustomWindow extends Window { chrome: any; }
+declare let window: CustomWindow;
+window.chrome = window.chrome || {};
+
 // Mock storage for non-extension environment
 if (typeof chrome.storage !== 'undefined') {
   if (PP_SETTINGS.DEV) {
