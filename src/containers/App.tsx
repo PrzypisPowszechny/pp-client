@@ -4,11 +4,14 @@ import Viewer from 'components/viewer';
 import Editor from 'components/editor';
 import { connect } from 'react-redux';
 import ViewerManager from '../components/viewer/ViewerManager';
+import { selectModeForCurrentPage } from '../store/appModes/selectors';
+import AnnotationModeWidget from '../components/annotationModeWidget/AnnotationModeWidget';
 
 interface AppProps {
   editor: any;
   viewerVisible: boolean;
   menuVisible: boolean;
+  annotationModeWidgetVisible: boolean;
 }
 
 @connect(
@@ -16,6 +19,7 @@ interface AppProps {
     editor: state.widgets.editor,
     viewerVisible: state.widgets.viewer.visible,
     menuVisible: state.widgets.menu.visible,
+    annotationModeWidgetVisible: selectModeForCurrentPage(state).isAnnotationMode,
   }),
 )
 export default class App extends React.Component<Partial<AppProps>> {
@@ -26,6 +30,7 @@ export default class App extends React.Component<Partial<AppProps>> {
       <div>
         {this.props.editor.visible && <Editor/>}
         {this.props.menuVisible && <Menu/>}
+        {this.props.annotationModeWidgetVisible && <AnnotationModeWidget/>}
         <ViewerManager/>
       </div>
     );

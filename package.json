@@ -22,6 +22,7 @@
     "xpath-range": "0.0.5"
   },
   "devDependencies": {
+    "@types/chrome": "0.0.69",
     "@types/classnames": "^2.2.3",
     "@types/jquery": "^3.3.1",
     "@types/lodash": "^4.14.106",

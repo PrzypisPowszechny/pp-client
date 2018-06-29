@@ -12,6 +12,7 @@ const base = {
   version_name: `${VERSION} test`,
 
   permissions: [
+    'storage',
     'activeTab',
     'identity',
     'identity.email',

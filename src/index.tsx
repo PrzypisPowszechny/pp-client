@@ -1,8 +1,8 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { readEndpoint } from 'redux-json-api';
+
 import store from 'store';
-import { initializeCoreHandlers } from 'init/handlers';
+import { initializeDocumentHandlers } from 'init/documentHandlers';
 import { injectComponents } from 'init/components';
 
 import './css/common/base.scss';
@@ -18,9 +18,14 @@ import './css/selection.scss';
 // and set it for future momentJS calls;
 // (https://github.com/moment/moment/issues/2517)
 import * as moment from 'moment';
+
 moment.locale('pl');
 
 import PPSettings from 'PPSettings.interface';
+import * as chromeKeys from './chrome-storage/keys';
+import initializeChromeStorageHandlers from './init/chromeStorageHandlers';
+import { changeAppModes } from './store/appModes/actions';
+import { loadDataFromChromeStorage, loadInitialData } from './init/data';
 
 // Declared in webpack.config through DefinePlugin
 declare global {
@@ -29,14 +34,25 @@ declare global {
 
 console.log('Przypis script working!');
 
-function loadInitialData() {
-  // This is our root request that needs to have part of the url (path) hardcoded
-  store.dispatch(readEndpoint('/annotations?url=' + window.location.href));
-}
+/*
+ * APPLICATION STATE POLICY
+ * The application state is populated both from browser storage (appModes) and from the API (all other reducers)
+ *
+ * While API data changes are not listened to (no need),
+ * browser storage is the communication channel between browser extension popup and the content script(s)
+ * running on all open tabs, so beside loading data from browser storage we listen to changes to react to
+ * popup settings changes in real time.
+ * Browser storage is the source of truth for Redux store; we do not change state.appModes directly;
+ * we commit changes to browser storage and recalculate state.appMode on storage change.
+ */
 
 const isBrowser = typeof window !== 'undefined';
 if (isBrowser) {
-  initializeCoreHandlers();
+  initializeDocumentHandlers();
+  initializeChromeStorageHandlers();
   injectComponents();
-  loadInitialData();
+
+  // Optimization: load data from storage first, so annotations are not drawn before we know current application modes
+  // (disabled extension mode and disabled page mode will erase them)
+  loadDataFromChromeStorage().then(loadInitialData);
 }
