@@ -11,7 +11,6 @@ import {
   AnnotationReportResourceType, AnnotationResourceType,
   Reasons,
 } from 'api/annotations';
-import { hideEditor } from '../../../store/actions';
 import Report from './Report';
 import { PPScopeClass } from '../../../class_consts';
 import Suggestion from './Suggestion';
@@ -25,6 +24,7 @@ interface IReportEditorProps {
 
 interface IReportEditorState {
   activeDialog: Dialogs;
+  isCreating: boolean;
 }
 
 enum Dialogs {
@@ -57,8 +57,8 @@ export default class ReportEditor extends React.Component<Partial<IReportEditorP
     this.setState({ activeDialog: e.currentTarget.value });
   }
 
-  save = (reason: Reasons, comment: string) => {
-    const instance = {
+  getAnnotationInstance(reason: Reasons, comment: string) {
+    return {
       type: AnnotationReportResourceType,
       attributes: { reason, comment },
       relationships: {
@@ -70,12 +70,21 @@ export default class ReportEditor extends React.Component<Partial<IReportEditorP
         },
       },
     };
-    this.props.createAnnotationReport(instance).then(() => {
+  }
+
+  save = (reason: Reasons, comment: string) => {
+    if (!this.state.isCreating) {
+      this.setState({isCreating: true});
+      this.props.createAnnotationReport(this.getAnnotationInstance(reason, comment)).then(() => {
+        this.setState({isCreating: false});
         this.props.onSuccess();
       })
       .catch((errors) => {
+        this.setState({isCreating: false});
         console.log(errors);
+        // TODO: show error toast here
       });
+    }
   }
 
   render() {
