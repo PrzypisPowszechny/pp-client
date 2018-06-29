@@ -39,7 +39,7 @@ import { turnOffAnnotationMode } from '../../chrome-storage';
   },
   dispatch => ({
     hideEditor: () => dispatch(hideEditor()),
-    createAnnotation: (instance: AnnotationAPICreateModel) => {
+    createOrUpdateAnnotation: (instance: AnnotationAPICreateModel) => {
       if (instance.id) {
         return dispatch(updateResource(instance));
       } else {
@@ -191,8 +191,8 @@ class Editor extends React.Component<Partial<IEditorProps>,
     this.props.hideEditor();
   }
 
-  save() {
-    const instance = {
+  getAnnotationFromState() {
+    return {
       id: this.props.annotation ? this.props.annotation.id : null,
       type: 'annotations',
       attributes: {
@@ -204,17 +204,27 @@ class Editor extends React.Component<Partial<IEditorProps>,
         annotationLinkTitle: this.state.annotationLinkTitle,
       },
     };
-    this.props.createAnnotation(instance).then(() => {
-      this.props.hideEditor();
-      // When creating a new annotation, turn off the annotation mode
-      // Do it by directly changing Chrome storage. Changes to the Redux store will follow thanks to subscription
-      if (!instance.id) {
-        turnOffAnnotationMode(this.props.appModes);
-      }
-    })
-      .catch((errors) => {
+  }
+
+  save() {
+    if (!this.state.isCreating) {
+      this.setState({ isCreating: true });
+      const instance = this.getAnnotationFromState();
+      const isNewInstance = !instance.id;
+      this.props.createOrUpdateAnnotation(instance).then(() => {
+        this.setState({ isCreating: false });
+        this.props.hideEditor();
+        // Right after creating a new annotation, turn off the annotation mode
+        // Do it by directly changing Chrome storage. Changes to the Redux store will follow thanks to subscription.
+        if (isNewInstance) {
+          turnOffAnnotationMode(this.props.appModes);
+        }
+      }).catch((errors) => {
+        this.setState({ isCreating: false });
         console.log(errors);
+        // TODO: show error toast here
       });
+    }
   }
 
   // A modal displayed when user tries to save the form with comment field empty

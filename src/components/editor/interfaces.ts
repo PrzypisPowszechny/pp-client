@@ -12,7 +12,7 @@ export interface IEditorProps {
   annotation: AnnotationAPIModel;
   range: IEditorRange;
 
-  createAnnotation: (instance: AnnotationAPICreateModel) => Promise<object>;
+  createOrUpdateAnnotation: (instance: AnnotationAPICreateModel) => Promise<object>;
   hideEditor: () => void;
 }
 
@@ -33,4 +33,6 @@ export interface IEditorState {
   commentError: string;
   annotationLinkError: string;
   annotationLinkTitleError: string;
+
+  isCreating: boolean;
 }
