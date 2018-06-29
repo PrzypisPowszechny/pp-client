@@ -5,17 +5,52 @@ import classNames from 'classnames';
 import { Modal, Popup } from 'semantic-ui-react';
 import { AnnotationPriorities, annotationPrioritiesLabels } from '../consts';
 import PriorityButton from './priority-button/PriorityButton';
-import { IEditorProps, IEditorState } from './interfaces';
 import { DraggableWidget } from 'components/widget';
 import { hideEditor } from 'store/actions';
 import { selectEditorState } from 'store/selectors';
 
 import styles from './Editor.scss';
-import { AnnotationAPICreateModel, AnnotationAPIModelAttrs } from 'api/annotations';
+import { AnnotationAPICreateModel, AnnotationAPIModelAttrs, AnnotationAPIModel } from 'api/annotations';
 import _isEqual from 'lodash/isEqual';
 import { PPScopeClass } from 'class_consts.ts';
 import { isValidUrl } from '../../utils/url';
 import { turnOffAnnotationMode } from '../../chrome-storage';
+import { IEditorRange } from 'store/widgets/reducers';
+import { AppModeReducer } from '../../store/appModes/reducers';
+
+interface IEditorProps {
+  appModes: AppModeReducer;
+
+  locationX: number;
+  locationY: number;
+
+  annotation: AnnotationAPIModel;
+  range: IEditorRange;
+
+  createOrUpdateAnnotation: (instance: AnnotationAPICreateModel) => Promise<object>;
+  hideEditor: () => void;
+}
+
+interface IEditorState {
+  annotationId: string;
+  priority: AnnotationPriorities;
+  comment: string;
+  annotationLink: string;
+  annotationLinkTitle: string;
+  range: IEditorRange;
+
+  locationX: number;
+  locationY: number;
+  moved: boolean;
+
+  noCommentModalOpen: boolean;
+
+  commentError: string;
+  annotationLinkError: string;
+  annotationLinkTitleError: string;
+
+  isCreating: boolean;
+}
 
 @connect(
   (state) => {
