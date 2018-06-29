@@ -5,7 +5,7 @@ import appModes, { AppModeReducer } from './appModes/reducers';
 import textSelector from './textSelector/reducers';
 import { AnnotationAPIModel, AnnotationUpvoteAPIModel } from 'api/annotations';
 
-export interface IAppState {
+export interface ITabState {
   api: {
     annotations: { data: AnnotationAPIModel[] };
     annotationUpvotes: { data: AnnotationUpvoteAPIModel[] };
@@ -25,7 +25,7 @@ export const apiInitializedFields = {
   },
 };
 
-export default combineReducers<IAppState>({
+export default combineReducers<ITabState>({
   api,
   appModes,
   widgets,

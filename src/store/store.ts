@@ -1,6 +1,6 @@
 import { applyMiddleware, compose, createStore, Store } from 'redux';
 import thunk from 'redux-thunk';
-import rootReducer, { apiInitializedFields, IAppState } from './reducer';
+import rootReducer, { apiInitializedFields, ITabState } from './reducer';
 import promise from 'redux-promise';
 import { createLogger } from 'redux-logger';
 import { setAxiosConfig } from 'redux-json-api';
@@ -12,11 +12,11 @@ declare global {
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const logger = createLogger();
-const store: Store<IAppState> = createStore(
+const store: Store<ITabState> = createStore(
   rootReducer,
   {
     ...apiInitializedFields,
-  } as IAppState,
+  } as ITabState,
   composeEnhancers(
     applyMiddleware(thunk, promise, logger),
   ),

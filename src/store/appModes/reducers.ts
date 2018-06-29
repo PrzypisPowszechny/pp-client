@@ -15,15 +15,11 @@ const initialState: AppModeReducer = {
 export default function appModes(state = initialState, action) {
   switch (action.type) {
     case MODIFY_APP_MODES:
-      return appModesActionHandler(state, action.payload);
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }
-}
-
-function appModesActionHandler(state, payload) {
-  return {
-    ...state,
-    ...payload,
-  };
 }

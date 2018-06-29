@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect';
-import { IAppState } from 'store/reducer';
+import { ITabState } from 'store/reducer';
 import { standardizeUrlForPageSettings } from 'utils/url';
 
-export const selectModeForCurrentPage = createSelector<IAppState, any, any>(
+export const selectModeForCurrentPage = createSelector<ITabState, any, any>(
   state => state.appModes,
   (appModes) => {
     // Standardize the URL by disregarding stuff that does not identify a page like URL parameters etc.

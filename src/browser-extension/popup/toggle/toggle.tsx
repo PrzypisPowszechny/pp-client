@@ -2,8 +2,6 @@ import React from 'react';
 
 import './toggle.scss';
 
-declare const chrome: any;
-
 interface IToggleProps {
   checked: boolean;
   onChange: (Event) => void;

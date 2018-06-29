@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { IAppState } from 'store/reducer';
+import { ITabState } from 'store/reducer';
 
 function selectWidgetState({ location, visible }) {
   return {
@@ -9,7 +9,7 @@ function selectWidgetState({ location, visible }) {
   };
 }
 
-export const selectMenuState = createSelector<IAppState, any, any>(
+export const selectMenuState = createSelector<ITabState, any, any>(
   state => state.widgets.menu,
   selectWidgetState,
 );
@@ -34,7 +34,7 @@ function selectAnnotationForm(annotations, editor) {
   };
 }
 
-export const selectEditorState = createSelector<IAppState, any, any, any>(
+export const selectEditorState = createSelector<ITabState, any, any, any>(
   state => state.widgets.editor,
   state => state.api.annotations.data,
   (editor, annotations) => ({
@@ -49,7 +49,7 @@ function selectViewerAnnotations(annotations: any[], annotationIds: any[]) {
     .filter( annotation => annotation);
 }
 
-export const selectViewerState = createSelector<IAppState, any, any, any>(
+export const selectViewerState = createSelector<ITabState, any, any, any>(
   state => state.widgets.viewer,
   state => state.api.annotations.data,
   (viewer, annotations) => ({
