@@ -4,6 +4,14 @@ import * as chromeKeys from './keys';
 import { standardizeUrlForPageSettings } from 'utils/url';
 import mockStorage from './mock';
 
+/*
+ * This storage is an abstraction to use development and production environment equally
+ *
+ * Unfortunately, it turns out it cannot be done very cleanly;
+ * some useful attributes (e.g. onChanged) are found directly in chrome.storage,
+ * others (e.g. get) in chrome.storage.sync and chrome.storage.local
+ * TODO: look for a better solution
+ */
 let storage;
 
 // Mock storage for non-extension environment
@@ -14,6 +22,8 @@ if (typeof chrome.storage !== 'undefined') {
     // Saves to this storage go to Google servers and are synced between many Google sessions on different PCs.
     storage = chrome.storage.sync;
   }
+  // Rewrite onChanged to allow get, set and onChanged as one object attributes;
+  storage.onChanged = chrome.storage.onChanged;
 } else {
   storage = mockStorage;
 }
