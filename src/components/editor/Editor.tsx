@@ -37,7 +37,7 @@ import { isValidUrl } from '../../utils/url';
   },
   dispatch => ({
     hideEditor: () => dispatch(hideEditor()),
-    createAnnotation: (instance: AnnotationAPICreateModel) => {
+    createOrUpdateAnnotation: (instance: AnnotationAPICreateModel) => {
       if (instance.id) {
         return dispatch(updateResource(instance));
       } else {
@@ -191,8 +191,8 @@ class Editor extends React.Component<
     this.props.hideEditor();
   }
 
-  save() {
-    const instance = {
+  getAnnotationFromState() {
+    return {
       id: this.props.annotation ? this.props.annotation.id : null,
       type: 'annotations',
       attributes: {
@@ -204,12 +204,20 @@ class Editor extends React.Component<
         annotationLinkTitle: this.state.annotationLinkTitle,
       },
     };
-    this.props.createAnnotation(instance).then(() => {
+  }
+
+  save() {
+    if (!this.state.isCreating) {
+      this.setState({isCreating: true});
+      this.props.createOrUpdateAnnotation(this.getAnnotationFromState()).then(() => {
+        this.setState({isCreating: false});
         this.props.hideEditor();
-      })
-      .catch((errors) => {
+      }).catch((errors) => {
+        this.setState({isCreating: false});
         console.log(errors);
+        // TODO: show error toast here
       });
+    }
   }
 
   // A modal displayed when user tries to save the form with comment field empty

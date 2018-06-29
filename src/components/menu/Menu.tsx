@@ -72,7 +72,7 @@ export default class Menu extends React.Component<Partial<IMenuProps>, {}> {
         locationY={this.props.locationY}
       >
         <button
-          className={classNames(styles.createAnnotation, 'ui', 'basic', 'pointing', 'below', 'label', 'large')}
+          className={classNames(styles.createOrUpdateAnnotation, 'ui', 'basic', 'pointing', 'below', 'label', 'large')}
           onClick={this.onClick}
         >
           <i className="plus icon" />
