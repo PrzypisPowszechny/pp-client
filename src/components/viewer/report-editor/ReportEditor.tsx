@@ -72,13 +72,13 @@ export default class ReportEditor extends React.Component<Partial<IReportEditorP
 
   save = (reason: Reasons, comment: string) => {
     if (!this.state.isCreating) {
-      this.setState({isCreating: true});
+      this.setState({ isCreating: true });
       this.props.createAnnotationReport(this.getAnnotationInstance(reason, comment)).then(() => {
-        this.setState({isCreating: false});
+        this.setState({ isCreating: false });
         this.props.onSuccess();
       })
       .catch((errors) => {
-        this.setState({isCreating: false});
+        this.setState({ isCreating: false });
         console.log(errors);
         // TODO: show error toast here
       });
