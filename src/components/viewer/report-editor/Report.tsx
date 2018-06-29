@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 import styles from './ReportEditor.scss';
-import { AnnotationAPIModel, Reasons } from 'api/annotations';
+import { AnnotationAPIModel, Reasons } from 'api';
 import { PPScopeClass } from '../../../class_consts';
 
 interface IReportProps {

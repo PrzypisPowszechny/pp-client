@@ -5,12 +5,10 @@ import { createResource, deleteResource } from 'redux-json-api';
 
 import styles from './ReportEditor.scss';
 import {
-  AnnotationAPIModel,
-  AnnotationReportAPIModel,
-  AnnotationReportAPICreateModel,
-  AnnotationReportResourceType, AnnotationResourceType,
+  AnnotationResourceType, AnnotationAPIModel,
+  AnnotationReportResourceType, AnnotationReportAPIModel, AnnotationReportAPICreateModel,
   Reasons,
-} from 'api/annotations';
+} from 'api';
 import Report from './Report';
 import { PPScopeClass } from '../../../class_consts';
 import Suggestion from './Suggestion';

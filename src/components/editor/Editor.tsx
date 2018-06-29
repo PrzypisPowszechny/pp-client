@@ -3,14 +3,16 @@ import { connect } from 'react-redux';
 import { createResource, updateResource } from 'redux-json-api';
 import classNames from 'classnames';
 import { Modal, Popup } from 'semantic-ui-react';
-import { AnnotationPriorities, annotationPrioritiesLabels } from '../consts';
 import PriorityButton from './priority-button/PriorityButton';
 import { DraggableWidget } from 'components/widget';
 import { hideEditor } from 'store/actions';
 import { selectEditorState } from 'store/selectors';
 
 import styles from './Editor.scss';
-import { AnnotationAPICreateModel, AnnotationAPIModelAttrs, AnnotationAPIModel } from 'api/annotations';
+import {
+  AnnotationAPIModel, AnnotationAPICreateModel, AnnotationAPIModelAttrs,
+  AnnotationPriorities, annotationPrioritiesLabels,
+} from 'api';
 import _isEqual from 'lodash/isEqual';
 import { PPScopeClass } from 'class_consts.ts';
 import { isValidUrl } from '../../utils/url';

@@ -9,7 +9,7 @@ import ViewerItem from './ViewerItem';
 import styles from './Viewer.scss';
 import { selectViewerState } from 'store/widgets/selectors';
 import { hideViewer, mouseOverViewer, showEditorAnnotation } from 'store/widgets/actions';
-import { AnnotationAPIModel } from 'api/annotations';
+import { AnnotationAPIModel } from 'api';
 import { PPScopeClass, PPViewerIndirectChildClass } from 'class_consts.ts';
 import Timer = NodeJS.Timer;
 import Viewer from './Viewer';

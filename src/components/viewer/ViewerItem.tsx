@@ -5,17 +5,13 @@ import { createResource, deleteResource } from 'redux-json-api';
 import moment from 'moment';
 import { Popup } from 'semantic-ui-react';
 
-import { AnnotationPriorities, annotationPrioritiesLabels } from '../consts';
 import styles from './Viewer.scss';
 import { hideViewer, showEditorAnnotation } from 'store/widgets/actions';
-
 import {
-  AnnotationAPIModel,
-  AnnotationResourceType,
-  AnnotationUpvoteAPICreateModel,
-  AnnotationUpvoteAPIModel,
-  AnnotationUpvoteResourceType,
-} from '../../api/annotations';
+  AnnotationResourceType, AnnotationAPIModel,
+  AnnotationUpvoteResourceType, AnnotationUpvoteAPIModel, AnnotationUpvoteAPICreateModel,
+  AnnotationPriorities, annotationPrioritiesLabels,
+} from 'api';
 import Timer = NodeJS.Timer;
 import { PPScopeClass } from '../../class_consts';
 import { extractHostname, httpPrefixed } from '../../utils/url';
