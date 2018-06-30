@@ -9,9 +9,11 @@ import styles from './Viewer.scss';
 import { hideViewer, showEditorAnnotation } from 'store/widgets/actions';
 import {
   AnnotationResourceType, AnnotationAPIModel,
-  AnnotationUpvoteResourceType, AnnotationUpvoteAPIModel, AnnotationUpvoteAPICreateModel,
   AnnotationPriorities, annotationPrioritiesLabels,
-} from 'api';
+} from 'api/annotations';
+import {
+  AnnotationUpvoteResourceType, AnnotationUpvoteAPIModel, AnnotationUpvoteAPICreateModel,
+} from 'api/annotation-upvotes';
 import Timer = NodeJS.Timer;
 import { PPScopeClass } from '../../class_consts';
 import { extractHostname, httpPrefixed } from '../../utils/url';

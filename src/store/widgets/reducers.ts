@@ -7,7 +7,7 @@ import {
 } from './actions';
 import _difference from 'lodash/difference';
 import { API_DELETED } from 'redux-json-api/lib/constants';
-import { AnnotationResourceType } from 'api';
+import { AnnotationResourceType } from 'api/annotations';
 import { combineReducers } from 'redux';
 
 export interface IWidgetState {

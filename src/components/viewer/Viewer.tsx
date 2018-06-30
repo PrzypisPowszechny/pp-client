@@ -8,7 +8,7 @@ import ViewerItem from './ViewerItem';
 import styles from './Viewer.scss';
 import { selectViewerState } from 'store/widgets/selectors';
 import { hideViewer, openViewerDeleteModal, showEditorAnnotation } from 'store/widgets/actions';
-import { AnnotationAPIModel } from 'api';
+import { AnnotationAPIModel } from 'api/annotations';
 import { PPScopeClass, PPViewerIndirectChildClass } from 'class_consts.ts';
 import { mouseOverViewer } from 'store/widgets/actions';
 import DeleteAnnotationModal from './DeleteAnnotationModal';

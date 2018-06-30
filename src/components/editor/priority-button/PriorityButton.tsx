@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 
-import { AnnotationPriorities } from 'api';
+import { AnnotationPriorities } from 'api/annotations';
 import { Popup } from 'semantic-ui-react';
 
 import styles from './PriorityButton.scss';

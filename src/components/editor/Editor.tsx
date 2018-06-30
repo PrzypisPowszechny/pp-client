@@ -12,7 +12,7 @@ import styles from './Editor.scss';
 import {
   AnnotationAPIModel, AnnotationAPICreateModel, AnnotationAPIModelAttrs,
   AnnotationPriorities, annotationPrioritiesLabels,
-} from 'api';
+} from 'api/annotations';
 import _isEqual from 'lodash/isEqual';
 import { PPScopeClass } from 'class_consts.ts';
 import { isValidUrl } from '../../utils/url';

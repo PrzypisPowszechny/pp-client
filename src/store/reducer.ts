@@ -3,7 +3,8 @@ import { reducer as api } from 'redux-json-api';
 import widgets, { WidgetReducer } from './widgets/reducers';
 import appModes, { AppModeReducer } from './appModes/reducers';
 import textSelector from './textSelector/reducers';
-import { AnnotationAPIModel, AnnotationUpvoteAPIModel } from 'api';
+import { AnnotationAPIModel } from 'api/annotations';
+import { AnnotationUpvoteAPIModel } from 'api/annotation-upvotes';
 
 export interface ITabState {
   api: {

@@ -6,7 +6,7 @@ const storage = {
   get,
   set,
   onChanged: {
-    addListener: (callback) => {},
+    addListener: callback => ({ }),
   },
 };
 
