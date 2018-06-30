@@ -1,23 +1,23 @@
-export interface Relation {
+export abstract class Relation {
   link?: string;
   data: APIModel | null;
 }
 
-export interface CreateRelation {
+export abstract class CreateRelation {
   data: APIModel | null;
 }
 
-export interface Relations {
+export abstract class Relations {
   link: string;
   data: APIModel[];
 }
 
-export interface APIModel {
+export abstract class APIModel {
   id: string;
   type: string;
 }
 
-export interface APICreateModel {
+export abstract class APICreateModel {
   id?: string;
   type: string;
 }

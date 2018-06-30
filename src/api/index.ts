@@ -1,4 +1,5 @@
 // Because of redux-json-api constraints these types, have to be consistent with relationships names
+
 export {
   AnnotationResourceType,
   AnnotationAPIModel,
@@ -17,4 +18,4 @@ export {
   AnnotationUpvoteResourceType,
   AnnotationUpvoteAPIModel,
   AnnotationUpvoteAPICreateModel,
-} from './annotation-upvotes';
+  } from './annotation-upvotes';

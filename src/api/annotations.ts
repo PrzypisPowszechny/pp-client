@@ -2,18 +2,18 @@ import { APICreateModel, APIModel, Relation } from './json-api';
 
 export const AnnotationResourceType = 'annotations';
 
-export interface AnnotationAPIModel extends APIModel {
+export abstract class AnnotationAPIModel extends APIModel {
   attributes: AnnotationAPIModelAttrs;
   relationships: {
     annotationUpvote: Relation;
   };
 }
 
-export interface AnnotationAPICreateModel extends APICreateModel {
+export abstract class AnnotationAPICreateModel extends APICreateModel {
   attributes: AnnotationAPICreateModelAttrs;
 }
 
-export interface AnnotationAPIModelAttrs {
+export abstract class AnnotationAPIModelAttrs {
   url: string;
   range: RangeAPIModel;
   priority: AnnotationPriorities;
@@ -25,7 +25,7 @@ export interface AnnotationAPIModelAttrs {
   createDate?: Date;
 }
 
-export interface AnnotationAPICreateModelAttrs {
+export abstract class AnnotationAPICreateModelAttrs {
   url: string;
   range: RangeAPIModel;
   priority: AnnotationPriorities;
@@ -34,7 +34,7 @@ export interface AnnotationAPICreateModelAttrs {
   annotationLinkTitle: string;
 }
 
-export interface RangeAPIModel {
+export abstract class RangeAPIModel {
   start: string;
   startOffset: number;
   end: string;
