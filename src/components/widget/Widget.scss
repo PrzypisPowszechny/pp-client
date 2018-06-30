@@ -4,17 +4,19 @@
 
 // The downward triangle attached to the widget from the pointer direction.
 $triangle-size: 12px;
+$transparent-offset: 50px;
 
 .self,
-.inner {
+.inner,
+.transparent-offset {
   position: absolute;
 }
 
 .inner {
   margin: 0;
-  padding: 0;
-  left: -18px;
-  bottom: 15px;
+  padding: $transparent-offset;
+  left: -18px - $transparent-offset;
+  bottom: 15px - $transparent-offset;
   color: rgb(0, 0, 0);
 }
 
@@ -28,11 +30,11 @@ $triangle-size: 12px;
   content: "";
   width: $triangle-size;
   height: $triangle-size;
-  bottom: -$triangle-size / 2;
+  bottom: -$triangle-size / 2 + $transparent-offset;
   top: auto;
-  left: 18px - $triangle-size / 2;
+  left: 18px - $triangle-size / 2 + $transparent-offset;
   right: auto;
-  z-index: -1;
+  z-index: 10;
   transform: rotate(45deg);
 
   background: #FFFFFF;
@@ -44,22 +46,22 @@ When window is horizontally or vertically inverted
  */
 .inner.invert-x {
   left: auto;
-  right: -18px;
+  right: -18px - $transparent-offset;
 }
 
 .inner.invert-y {
   bottom: auto;
-  top: 8px;
+  top: 8px - $transparent-offset;
 }
 
 .inner.invert-x.widget-triangle:after {
   left: auto;
-  right: 18px - $triangle-size / 2;
+  right: 18px - $triangle-size / 2 + $transparent-offset;
 }
 
 .inner.invert-y.widget-triangle:after {
   bottom: auto;
-  top: -$triangle-size / 2;
+  top: -$triangle-size / 2 + $transparent-offset;
   transform: rotate(-135deg);
 }
 
