@@ -1,38 +1,19 @@
-import { AnnotationPriorities } from 'components/consts';
+import { APICreateModel, APIModel, Relation } from './json-api';
 
-export interface RangeAPIModel {
-  start: string;
-  startOffset: number;
-  end: string;
-  endOffset: number;
-}
+export const AnnotationResourceType = 'annotations';
 
-export interface AnnotationAPICreateModel extends APICreateModel {
-  attributes: AnnotationAPICreateModelAttrs;
-}
-
-export interface APICreateModel {
-  id?: string;
-  type: string;
-}
-
-export interface AnnotationAPICreateModelAttrs {
-  url: string;
-  range: RangeAPIModel;
-  priority: AnnotationPriorities;
-  comment: string;
-  annotationLink: string;
-  annotationLinkTitle: string;
-}
-
-export interface AnnotationAPIModel extends APIModel {
+export abstract class AnnotationAPIModel extends APIModel {
   attributes: AnnotationAPIModelAttrs;
   relationships: {
     annotationUpvote: Relation;
   };
 }
 
-export interface AnnotationAPIModelAttrs {
+export abstract class AnnotationAPICreateModel extends APICreateModel {
+  attributes: AnnotationAPICreateModelAttrs;
+}
+
+export abstract class AnnotationAPIModelAttrs {
   url: string;
   range: RangeAPIModel;
   priority: AnnotationPriorities;
@@ -44,66 +25,30 @@ export interface AnnotationAPIModelAttrs {
   createDate?: Date;
 }
 
-export interface AnnotationUpvoteAPICreateModel extends APICreateModel {
-  relationships: {
-    annotation: CreateRelation;
-  };
+export abstract class AnnotationAPICreateModelAttrs {
+  url: string;
+  range: RangeAPIModel;
+  priority: AnnotationPriorities;
+  comment: string;
+  annotationLink: string;
+  annotationLinkTitle: string;
 }
 
-export interface AnnotationUpvoteAPIModel extends APIModel {
-  relationships: {
-    annotation: Relation;
-  };
+export abstract class RangeAPIModel {
+  start: string;
+  startOffset: number;
+  end: string;
+  endOffset: number;
 }
 
-export interface AnnotationReportAPIModelAttrs {
-    reason: Reasons;
-    comment: string;
+export enum AnnotationPriorities {
+  NORMAL = 'NORMAL',
+  WARNING = 'WARNING',
+  ALERT = 'ALERT',
 }
 
-export interface AnnotationReportAPICreateModel extends APICreateModel {
-  relationships: {
-    annotation: CreateRelation;
-  };
-  attributes: AnnotationReportAPIModelAttrs;
-}
-
-export interface AnnotationReportAPIModel extends APIModel {
-  relationships: {
-    annotation: Relation;
-  };
-  attributes: AnnotationReportAPIModelAttrs;
-}
-
-export enum Reasons {
-  OTHER = 'OTHER',
-  BIASED = 'BIASED',
-  UNRELIABLE = 'UNRELIABLE',
-  USELESS = 'USELESS',
-  SPAM = 'SPAM',
-  SUGGESTED_CORRECTION = 'SUGGESTED_CORRECTION',
-}
-
-export interface Relation {
-  link?: string;
-  data: APIModel | null;
-}
-
-export interface CreateRelation {
-  data: APIModel | null;
-}
-
-export interface Relations {
-  link: string;
-  data: APIModel[];
-}
-
-export interface APIModel {
-  id: string;
-  type: string;
-}
-
-// Because of redux-json-api constraints these types, have to be consistent with relationships names
-export const AnnotationResourceType = 'annotations';
-export const AnnotationUpvoteResourceType = 'annotationUpvotes';
-export const AnnotationReportResourceType = 'annotationReports';
+export const annotationPrioritiesLabels = {
+  NORMAL: 'dodatkowa informacja',
+  WARNING: 'doprecyzowanie',
+  ALERT: 'sprostowanie błędu',
+};

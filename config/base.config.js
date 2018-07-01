@@ -104,7 +104,7 @@ const config = (env, argv) => ({
     new CleanWebpackPlugin([BUILD_DIR, EXT_DIR]),
     new webpack.DefinePlugin({
       // use appropriate (development or production) PP settings
-      PP_SETTINGS: JSON.stringify(appSettings[argv.mode]),
+      PP_SETTINGS: JSON.stringify(appSettings(env, argv)),
     }),
     // JQuery is assumed by semantic ui, so we need to define it
     new webpack.ProvidePlugin({

@@ -11,8 +11,7 @@
     "interface-name": false,
     "jsx-no-multiline-js": false,
     "max-classes-per-file": [
-      true,
-      2
+      false
     ],
     "member-access": [
       true, "no-public"

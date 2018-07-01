@@ -3,19 +3,56 @@ import { connect } from 'react-redux';
 import { createResource, updateResource } from 'redux-json-api';
 import classNames from 'classnames';
 import { Modal, Popup } from 'semantic-ui-react';
-import { AnnotationPriorities, annotationPrioritiesLabels } from '../consts';
 import PriorityButton from './priority-button/PriorityButton';
-import { IEditorProps, IEditorState } from './interfaces';
 import { DraggableWidget } from 'components/widget';
 import { hideEditor } from 'store/actions';
 import { selectEditorState } from 'store/selectors';
 
 import styles from './Editor.scss';
-import { AnnotationAPICreateModel, AnnotationAPIModelAttrs } from 'api/annotations';
+import {
+  AnnotationAPIModel, AnnotationAPICreateModel, AnnotationAPIModelAttrs,
+  AnnotationPriorities, annotationPrioritiesLabels,
+} from 'api';
 import _isEqual from 'lodash/isEqual';
 import { PPScopeClass } from 'class_consts.ts';
 import { isValidUrl } from '../../utils/url';
 import { turnOffAnnotationMode } from '../../chrome-storage';
+import { IEditorRange } from 'store/widgets/reducers';
+import { AppModeReducer } from '../../store/appModes/reducers';
+
+interface IEditorProps {
+  appModes: AppModeReducer;
+
+  locationX: number;
+  locationY: number;
+
+  annotation: AnnotationAPIModel;
+  range: IEditorRange;
+
+  createOrUpdateAnnotation: (instance: AnnotationAPICreateModel) => Promise<object>;
+  hideEditor: () => void;
+}
+
+interface IEditorState {
+  annotationId: string;
+  priority: AnnotationPriorities;
+  comment: string;
+  annotationLink: string;
+  annotationLinkTitle: string;
+  range: IEditorRange;
+
+  locationX: number;
+  locationY: number;
+  moved: boolean;
+
+  noCommentModalOpen: boolean;
+
+  commentError: string;
+  annotationLinkError: string;
+  annotationLinkTitleError: string;
+
+  isCreating: boolean;
+}
 
 @connect(
   (state) => {
@@ -137,32 +174,39 @@ class Editor extends React.Component<Partial<IEditorProps>,
   }
 
   validateForm(): boolean {
-    if (this.state.comment) {
-      if (this.state.comment.length > Editor.commentMaxLength) {
-        this.setState({ commentError:
-            `Skróć komentarz z ${this.state.comment.length} do ${Editor.commentMaxLength} znaków!`,
-        });
+    const {
+      comment,
+      annotationLink: link,
+      annotationLinkTitle: linkTitle,
+    } = this.state;
+    const {
+      linkMaxLength,
+      linkTitleMaxLength,
+      commentMaxLength,
+    } = Editor;
+
+    if (comment) {
+      if (comment.length > commentMaxLength) {
+        this.setState({ commentError: `Skróć komentarz z ${comment.length} do ${commentMaxLength} znaków!` });
         return false;
       }
     }
-    if (!this.state.annotationLink) {
+    if (!link) {
       this.setState({ annotationLinkError: 'Musisz podać źródło, jeśli chcesz dodać przypis!' });
       return false;
-    } else if (this.state.annotationLink.length > Editor.linkMaxLength) {
-      this.setState({ annotationLinkError:
-          `Skróć źródło z ${this.state.annotationLink.length} do ${Editor.linkMaxLength} znaków!`,
-      });
+    } else if (link.length > linkMaxLength) {
+      this.setState({ annotationLinkError: `Skróć źródło z ${link.length} do ${linkMaxLength} znaków!` });
       return false;
-    } else if (!isValidUrl(this.state.annotationLink)) {
+    } else if (!isValidUrl(link)) {
       this.setState({ annotationLinkError: 'Podaj poprawny link do źródła!' });
       return false;
     }
-    if (!this.state.annotationLinkTitle) {
+    if (!linkTitle) {
       this.setState({ annotationLinkTitleError: 'Musisz podać tytuł źródła, jeśli chcesz dodać przypis!' });
       return false;
-    } else if (this.state.annotationLinkTitle.length > Editor.linkTitleMaxLength) {
-      this.setState({ annotationLinkTitleError:
-          `Skróć tytuł źródła z ${this.state.annotationLinkTitle.length} do ${Editor.linkTitleMaxLength} znaków!`,
+    } else if (linkTitle.length > linkTitleMaxLength) {
+      this.setState({
+        annotationLinkTitleError: `Skróć tytuł źródła z ${linkTitle.length} do ${linkTitleMaxLength} znaków!`,
       });
       return false;
     }

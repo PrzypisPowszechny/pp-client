@@ -1,6 +1,5 @@
 import React from 'react';
 import Menu from 'components/menu';
-import Viewer from 'components/viewer';
 import Editor from 'components/editor';
 import { connect } from 'react-redux';
 import ViewerManager from '../components/viewer/ViewerManager';

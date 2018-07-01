@@ -8,7 +8,6 @@ import { Highlighter, TextSelector } from '../core/index';
 import { hideMenu } from 'store/widgets/actions';
 import { outsideArticleClasses } from 'class_consts';
 import highlights from './highlights';
-import initChromeStorageHandlers from './chromeStorageHandlers';
 import { selectModeForCurrentPage } from '../store/appModes/selectors';
 
 let handlers;

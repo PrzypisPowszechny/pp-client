@@ -1,19 +1,10 @@
 import React from 'react';
-import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createResource, deleteResource } from 'redux-json-api';
-import Widget from 'components/widget';
-import { Button, Modal } from 'semantic-ui-react';
-
-import ViewerItem from './ViewerItem';
-import styles from './Viewer.scss';
 import { selectViewerState } from 'store/widgets/selectors';
-import { hideViewer, mouseOverViewer, showEditorAnnotation } from 'store/widgets/actions';
-import { AnnotationAPIModel } from 'api/annotations';
-import { PPScopeClass, PPViewerIndirectChildClass } from 'class_consts.ts';
-import Timer = NodeJS.Timer;
+import { hideViewer, mouseOverViewer } from 'store/widgets/actions';
 import Viewer from './Viewer';
-import _isEqual from 'lodash/isEqual';
+import Timer = NodeJS.Timer;
 
 interface IViewerManagerState {
   mouseOver: boolean;
