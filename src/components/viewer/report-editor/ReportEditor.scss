@@ -2,7 +2,8 @@
 @import "css/common/vars/z-index";
 @import "css/common/vars/colors";
 @import "css/common/vars/fonts";
-@import "css/common/mixins";
+@import 'css/common/buttons';
+@import 'css/common/mixins';
 
 $editor-inner-width: 300px;
 $menu-inner-width: 165px;
@@ -18,16 +19,12 @@ $menu-inner-width: 165px;
   position: absolute;
   top: 30px;
   right:-150px;
+  z-index: $viewer-z-index + 1;
 
   h3 {
     font-size: $default-font-size;
     font-weight: bold;
     margin: 0 0 5px;
-  }
-
-  button {
-    @include button-reset();
-    font-size: $default-font-size - 2;
   }
 
   span, span::after {
@@ -39,6 +36,13 @@ $menu-inner-width: 165px;
     right: -$menu-inner-width + 30;
 
     padding: 5px;
+
+
+    button {
+      @include button-reset();
+      font-size: $default-font-size - 2;
+    }
+
   }
 
   &.editor {
@@ -59,7 +63,7 @@ $menu-inner-width: 165px;
   :global(.error-msg.ui.pointing.red.basic.label.large) {
       font-size: 14px;
       position: absolute;
-      z-index: $tooltip-z-index;
+      z-index: $viewer-z-index + 2;
       margin-top:0.5em;
   }
 }
@@ -119,19 +123,21 @@ $menu-inner-width: 165px;
 
 .submit-buttons {
   text-align: right;
+  margin-top: 12px;
 
   button {
+    @include submit-button();
     display: inline-block;
-    text-transform: uppercase;
-    font-weight: bold;
-    margin-top: 8px;
+    font-size: $default-font-size;
+
 
     &.submit {
-      color: #5679b0;
+      @include button-color(#5679b0);
     }
 
     &.cancel {
-      color: #888888;
+      @include button-color(#888888);
     }
+
   }
 }

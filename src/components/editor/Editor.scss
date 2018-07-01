@@ -2,6 +2,7 @@
 @import "css/common/vars/colors";
 @import "css/common/vars/z-index";
 @import "css/common/mixins";
+@import 'css/common/buttons.scss';
 
 $editor-width: 450px;
 $editor-font-size: 14px;
@@ -14,6 +15,7 @@ $editor-vertical-spacing: 15px;
   background-color: white;
   font-size: $editor-font-size;
   font-family: $font-family-preset;
+  z-index: $editor-z-index;
 
   @include pp-widget-edge();
 }
@@ -52,6 +54,8 @@ $editor-vertical-spacing: 15px;
     width: 100%;
     border: 1px solid #D8DADA;
     outline: none;
+    margin: 0;
+    display: inline-block;
     color: #000000;
     font-weight: $font-light;
     line-height: 1em;
@@ -94,7 +98,7 @@ $editor-vertical-spacing: 15px;
 
 /* annotation link field */
 .annotation-link {
-  input {
+  input[type=text] {
     padding-left: 2em;
   }
   .error-msg {
@@ -114,7 +118,7 @@ $editor-vertical-spacing: 15px;
 
 .annotation-link-title {
   margin-bottom: 0;
-  input {
+  input[type=text] {
     padding-left: 2em;
     width: 381px;
   }
@@ -125,6 +129,7 @@ $editor-vertical-spacing: 15px;
     top: 9px;
     left: 0;
     width: 2em;
+    line-height: 1.45em;
   }
 
   .error-msg {
@@ -171,47 +176,28 @@ $editor-vertical-spacing: 15px;
   .controls {
     float: right;
     display: inline-block;
-    padding: 0;
+    padding: 5px 0;
     min-width: 150px;
     text-align: right;
     vertical-align: top;
 
     button {
-      border: none;
-      outline: none;
-      background: none;
-      padding-left: 10px;
-      height: 25px;
-      cursor: pointer;
-      font-weight: $font-semi-bold;
-      font-size: $editor-font-size + 1px;
-      color: #888888;
+      @include submit-button();
+      @include button-color(#888888);
     }
 
-    button:hover {
-      color: darken(#888888, 8%);
-    }
     // use priority-specific as a baseline and darken it so it presents well as a button
-    // for :hover, darken it even more (manually selected values)
     .priority-normal {
-      color: darken($normal-ref-color, 5%);
-    }
-    .priority-normal:hover {
-      color: darken($normal-ref-color, 5% + 8%);
-    }
-    .priority-warning {
-      color: darken($warning-ref-color, 8%);
-    }
-    .priority-warning:hover {
-      color: darken($warning-ref-color, 8% + 4%);
-    }
-    .priority-alert {
-      color: darken($alert-ref-color, 5%);
-    }
-    .priority-alert:hover {
-      color: darken($alert-ref-color, 5% + 4%);
+      @include button-color($normal-ref-color);
     }
 
+    .priority-warning {
+      @include button-color(darken($warning-ref-color, 3%));
+    }
+
+    .priority-alert {
+      @include button-color(darken($alert-ref-color, 3%));
+    }
   }
 }
 
@@ -220,7 +206,13 @@ $editor-vertical-spacing: 15px;
 .error-msg {
   font-size: 14px !important;
   position: absolute !important; // override semantic-ui defaults
-  z-index: $tooltip-z-index;
+  z-index: $editor-z-index + 1;
+}
+
+// override semantic-ui
+// TODO rewrite without important
+.tooltip {
+  z-index: $editor-z-index + 1 !important;
 }
 
 /* all cross-style close buttons */

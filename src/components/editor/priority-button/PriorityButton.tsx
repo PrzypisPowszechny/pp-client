@@ -60,7 +60,7 @@ export default class PriorityButton extends PureComponent<IPriorityButtonProps> 
       <Popup
         trigger={button}
         size="small"
-        className={classNames(PPScopeClass, 'small-padding', 'single-long-line')}
+        className={classNames(PPScopeClass, styles.tooltip, 'small-padding', 'single-long-line')}
         inverted={false}
       >
         {tooltipText}

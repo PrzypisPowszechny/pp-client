@@ -1,7 +1,6 @@
 @import "css/common/vars/colors";
 @import "css/common/vars/fonts";
 @import "css/common/vars/size";
-@import "css/common/vars/z-index";
 
 // The downward triangle attached to the widget from the pointer direction.
 $triangle-size: 12px;
@@ -9,7 +8,6 @@ $triangle-size: 12px;
 .self,
 .inner {
   position: absolute;
-  z-index: 10; // less than semantic ui modal's (1000)
 }
 
 .inner {
@@ -68,4 +66,3 @@ When window is horizontally or vertically inverted
 .inner.update-inverted {
   visibility: hidden;
 }
-

@@ -1,4 +1,21 @@
+// FONTS
+
+$open-sans: "Open Sans", sans-serif;
+
+
+
 $default-font-size: 14px;
-$font-family-preset: "Open Sans", sans-serif;
+$font-family-preset: $open-sans;
 $font-light: 300;
 $font-semi-bold: 600;
+
+
+%annotation-priority-font {
+  font-family: $open-sans;
+  font-weight: $font-semi-bold;
+  font-size: 12px;
+  line-height: normal;
+  text-transform: uppercase;
+  text-shadow: none;
+  color: white;
+}

@@ -1,0 +1,51 @@
+@import "css/common/vars/fonts";
+@import "css/common/vars/colors";
+
+@mixin button-reset {
+  margin: 0;
+  border: none;
+  outline: none;
+  background: none;
+  box-shadow: none;
+  cursor: pointer;
+
+  line-height: normal;
+
+  &:hover,&.selected {
+    margin: 0;
+    border: none;
+    outline: none;
+    background-image: none;
+    background-color: transparent;
+    box-shadow: none;
+    cursor: pointer;
+  }
+
+  i {
+    margin: 0;
+  }
+
+  &[disabled] {
+    display: none;
+  }
+
+}
+
+
+@mixin submit-button() {
+  @include button-reset();
+  padding: 0 10px;
+  font-family: $open-sans;
+  font-weight: $font-semi-bold;
+  font-size: 16px;
+  text-transform: none;
+}
+
+
+@mixin button-color($color) {
+  color: $color;
+
+  &:hover {
+    color: darken($color, 5%)
+  }
+}

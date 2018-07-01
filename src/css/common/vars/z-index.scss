@@ -1,1 +1,12 @@
-$tooltip-z-index: 10000;
+
+// sounds like ridiculously large number, but it's necessery
+$z-index-base: 1000000;
+
+
+$viewer-z-index: $z-index-base + 10;
+// viewer-z-index + 1 = report editor
+
+$editor-z-index: $z-index-base + 20;
+// editor-z-index + 1 = editor's tooltips and errors
+
+$menu-z-index: $z-index-base + 30;
