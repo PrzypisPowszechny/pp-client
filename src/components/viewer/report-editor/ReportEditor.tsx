@@ -5,12 +5,11 @@ import { createResource, deleteResource } from 'redux-json-api';
 
 import styles from './ReportEditor.scss';
 import {
-  AnnotationAPIModel,
-  AnnotationReportAPIModel,
-  AnnotationReportAPICreateModel,
-  AnnotationReportResourceType, AnnotationResourceType,
-  Reasons,
+  AnnotationResourceType, AnnotationAPIModel,
 } from 'api/annotations';
+import {
+  AnnotationReportResourceType, AnnotationReportAPIModel, AnnotationReportAPICreateModel, Reasons,
+} from 'api/annotation-reports';
 import Report from './Report';
 import { PPScopeClass } from '../../../class_consts';
 import Suggestion from './Suggestion';
@@ -74,13 +73,13 @@ export default class ReportEditor extends React.Component<Partial<IReportEditorP
 
   save = (reason: Reasons, comment: string) => {
     if (!this.state.isCreating) {
-      this.setState({isCreating: true});
+      this.setState({ isCreating: true });
       this.props.createAnnotationReport(this.getAnnotationInstance(reason, comment)).then(() => {
-        this.setState({isCreating: false});
+        this.setState({ isCreating: false });
         this.props.onSuccess();
       })
       .catch((errors) => {
-        this.setState({isCreating: false});
+        this.setState({ isCreating: false });
         console.log(errors);
         // TODO: show error toast here
       });

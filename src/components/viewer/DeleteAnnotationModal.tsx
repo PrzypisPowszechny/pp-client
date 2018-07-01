@@ -1,5 +1,4 @@
 import React from 'react';
-import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { deleteResource } from 'redux-json-api';
 import { Button, Modal } from 'semantic-ui-react';

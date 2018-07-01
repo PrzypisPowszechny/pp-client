@@ -1,7 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import store from 'store';
 import { initializeDocumentHandlers } from 'init/documentHandlers';
 import { injectComponents } from 'init/components';
 
@@ -22,9 +21,7 @@ import * as moment from 'moment';
 moment.locale('pl');
 
 import PPSettings from 'PPSettings.interface';
-import * as chromeKeys from './chrome-storage/keys';
 import initializeChromeStorageHandlers from './init/chromeStorageHandlers';
-import { changeAppModes } from './store/appModes/actions';
 import { loadDataFromChromeStorage, loadInitialData } from './init/data';
 
 // Declared in webpack.config through DefinePlugin
