@@ -89,9 +89,7 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
 
   getInnerClassNames() {
     return classNames(
-      styles.inner,
-      this.props.className,
-      {
+      styles.inner, {
         [styles.widgetTriangle]: this.props.widgetTriangle,
         [styles.invertX]: this.state.invertedX,
         [styles.invertY]: this.state.invertedY,
@@ -145,7 +143,9 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
           className={this.getInnerClassNames()}
           ref={this.innerElement}
         >
-          {this.props.children}
+          <div className={this.props.className}>
+            {this.props.children}
+          </div>
         </div>
       </div>
     );
