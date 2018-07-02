@@ -6,6 +6,12 @@
 $triangle-size: 12px;
 $transparent-offset: 50px;
 
+
+:export {
+  // Use unique name no to clash with $ var
+  transparent-offset-value: $transparent-offset;
+}
+
 .self,
 .inner,
 .transparent-offset {

@@ -1,10 +1,9 @@
+import styles from './Widget.scss';
 
 export function isInverted(widget, window) {
-    // console.log('orientation');
     // TODO replace annotator jQuery with pure js
     const win = $(window);
-    // This number must be synchronized with $transparent-offset from Widget.scss
-    const transparentOffset = 50;
+    const transparentOffset = parseInt(styles.transparentOffsetValue, 10);
 
     if (widget) {
       const $widget = $(widget);
