@@ -2,7 +2,7 @@
 @import "mixins";
 @import "vars/colors";
 @import "vars/fonts";
-@import "vars/size";
+@import "vars/sizes";
 // We only import specific components from semantic-ui, omitting the original semantic ui `reset` and `site` components.
 // For the package to work properly, we also need to fill the gap and provide a reset of our own,
 // but with limited scope so the browser extension does not break websites' styles.
