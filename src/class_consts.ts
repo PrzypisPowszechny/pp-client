@@ -1,3 +1,5 @@
+import scopeStyles from './css/common/vars/scope.scss';
+import selectionStyles from 'css/selection.scss';
 
 /*
  * Elements wearing this class will be ignored in viewer mouseleave handling
@@ -5,8 +7,7 @@
  */
 export const PPViewerIndirectChildClass = 'pp-viewer-indirect-child';
 
-// IMPORTANT: Keep it in sync with css/common/vars/scope
-export const PPScopeClass = 'pp-ui';
+export const PPScopeClass = scopeStyles['pp-scope-class'];
 
 /*
  * Classes outside the main article content;
@@ -17,5 +18,4 @@ export const outsideArticleClasses = [
   PPScopeClass,
 ];
 
-// IMPORTANT: Keep it in sync with css/selection.scss
-export const PPHighlightClass = 'pp-highlight';
+export const PPHighlightClass = selectionStyles['pp-highlight-class'];

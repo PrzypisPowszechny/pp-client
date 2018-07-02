@@ -3,7 +3,7 @@ import styles from './Widget.scss';
 export function isInverted(widget, window) {
     // TODO replace annotator jQuery with pure js
     const win = $(window);
-    const transparentOffset = parseInt(styles.transparentOffsetValue, 10);
+    const transparentOffset = parseInt(styles.transparentOffsetSize, 10);
 
     if (widget) {
       const $widget = $(widget);

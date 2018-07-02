@@ -1,8 +1,14 @@
 /*
   Styles related to selection highlighting
-  IMPORTANT: keep it in sync with class_consts.ts
  */
 
-.pp-highlight {
+$pp-highlight-class: pp-highlight;
+$pp-highlight: "." + $pp-highlight-class;
+
+#{$pp-highlight} {
   background: rgba(120, 120, 120, 0.3);
+}
+
+:export {
+  pp-highlight-class: $pp-highlight-class;
 }
