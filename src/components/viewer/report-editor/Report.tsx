@@ -100,7 +100,7 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
             <label htmlFor={this.getRadioId(Reasons.OTHER)}> inne</label>
           </div>
           <div
-            className={classNames('error-msg', 'ui', 'pointing', 'red', 'basic', 'label', 'large',
+            className={classNames(styles['error-msg'], 'ui', 'pointing', 'red', 'basic', 'label', 'large',
               { [styles.hide]: !this.state.showReasonError })}
           >
             Wybierz typ zgłoszenia!

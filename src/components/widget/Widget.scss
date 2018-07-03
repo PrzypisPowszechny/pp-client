@@ -1,15 +1,14 @@
 @import "css/common/vars/colors";
 @import "css/common/vars/fonts";
-@import "css/common/vars/size";
+@import "css/common/vars/sizes";
 
 // The downward triangle attached to the widget from the pointer direction.
 $triangle-size: 12px;
-$transparent-offset: 50px;
+$transparent-offset-size: 50px;
 
 
 :export {
-  // Use unique name no to clash with $ var
-  transparent-offset-value: $transparent-offset;
+  transparent-offset-size: $transparent-offset-size;
 }
 
 .self,
@@ -20,9 +19,9 @@ $transparent-offset: 50px;
 
 .inner {
   margin: 0;
-  padding: $transparent-offset;
-  left: -18px - $transparent-offset;
-  bottom: 15px - $transparent-offset;
+  padding: $transparent-offset-size;
+  left: -18px - $transparent-offset-size;
+  bottom: 15px - $transparent-offset-size;
   color: rgb(0, 0, 0);
 }
 
@@ -36,9 +35,9 @@ $transparent-offset: 50px;
   content: "";
   width: $triangle-size;
   height: $triangle-size;
-  bottom: -$triangle-size / 2 + $transparent-offset;
+  bottom: -$triangle-size / 2 + $transparent-offset-size;
   top: auto;
-  left: 18px - $triangle-size / 2 + $transparent-offset;
+  left: 18px - $triangle-size / 2 + $transparent-offset-size;
   right: auto;
   z-index: 10;
   transform: rotate(45deg);
@@ -52,22 +51,22 @@ When window is horizontally or vertically inverted
  */
 .inner.invert-x {
   left: auto;
-  right: -18px - $transparent-offset;
+  right: -18px - $transparent-offset-size;
 }
 
 .inner.invert-y {
   bottom: auto;
-  top: 8px - $transparent-offset;
+  top: 8px - $transparent-offset-size;
 }
 
 .inner.invert-x.widget-triangle:after {
   left: auto;
-  right: 18px - $triangle-size / 2 + $transparent-offset;
+  right: 18px - $triangle-size / 2 + $transparent-offset-size;
 }
 
 .inner.invert-y.widget-triangle:after {
   bottom: auto;
-  top: -$triangle-size / 2 + $transparent-offset;
+  top: -$triangle-size / 2 + $transparent-offset-size;
   transform: rotate(-135deg);
 }
 

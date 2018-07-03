@@ -1,4 +1,4 @@
-@import "css/common/vars/size";
+@import "css/common/vars/sizes";
 @import "css/common/vars/z-index";
 @import "css/common/vars/colors";
 @import "css/common/vars/fonts";
@@ -58,14 +58,15 @@ $menu-inner-width: 165px;
     width: 260px;
     height: 85px;
   }
+}
 
-  // override semantic-ui
-  :global(.error-msg.ui.pointing.red.basic.label.large) {
-      font-size: 14px;
-      position: absolute;
-      z-index: $viewer-z-index + 2;
-      margin-top:0.5em;
-  }
+
+// override semantic-ui
+:local(.error-msg):global(.ui.pointing.red.basic.label.large) {
+    font-size: 14px;
+    position: absolute;
+    z-index: $viewer-z-index + 2;
+    margin-top:0.5em;
 }
 
 .radioInputLine {
