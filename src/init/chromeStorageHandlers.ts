@@ -3,6 +3,7 @@ import { changeAppModes } from '../store/appModes/actions';
 import store from '../store';
 import { AppModeReducer } from '../store/appModes/reducers';
 import chromeStorage from 'chrome-storage';
+import { setSelectionRange, showEditorAnnotation } from '../store/widgets/actions';
 
 const storageKeysToAppMode = {
   [chromeKeys.DISABLED_EXTENSION]: 'isExtensionDisabled',

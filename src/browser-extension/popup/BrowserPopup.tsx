@@ -11,8 +11,6 @@ import * as chromeKeys from 'chrome-storage/keys';
 import _filter from 'lodash/filter';
 import classNames from 'classnames';
 
-declare const chrome: any;
-
 interface IBrowserPopupState {
   isLoading: boolean;
   currentTabUrl: string;

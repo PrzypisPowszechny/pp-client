@@ -9,6 +9,7 @@ import { hideMenu } from 'store/widgets/actions';
 import { outsideArticleClasses } from 'class_consts';
 import highlights from './highlights';
 import { selectModeForCurrentPage } from '../store/appModes/selectors';
+import { setSelectionRange, showEditorAnnotation } from '../store/widgets/actions';
 
 let handlers;
 
@@ -25,10 +26,12 @@ export function initializeDocumentHandlers() {
   };
 
   highlights.init(highlighter);
+  chrome.runtime.onMessage.addListener(contextMenuAnnotateCallback);
 }
 
 export function deinitializeCoreHandlers() {
   highlights.deinit();
+  chrome.runtime.onMessage.removeListener(contextMenuAnnotateCallback);
 }
 
 function selectionChangeCallback(
@@ -47,6 +50,23 @@ function selectionChangeCallback(
       store.dispatch(makeSelection(selection[0]));
       store.dispatch(showMenu(mousePosition(event)));
     } else {
+      console.warn('PP: more than one selected range is not supported');
+    }
+  }
+}
+
+function contextMenuAnnotateCallback(request, sender) {
+  if (request.action === 'ANNOTATE') {
+    /*
+     * For now, do not check for being inside article.
+     * Reason: checking ContextMenu API selection for being insideArticle is possible, but uncomfortable,
+     * as context menu actions are handled in the separate background script.
+     */
+    const selection = handlers.selector.captureDocumentSelection();
+    if (selection.length === 1) {
+      store.dispatch(setSelectionRange(selection[0]));
+      store.dispatch(showEditorAnnotation(0, 0));
+    } else if (selection.length > 1) {
       console.warn('PP: more than one selected range is not supported');
     }
   }
