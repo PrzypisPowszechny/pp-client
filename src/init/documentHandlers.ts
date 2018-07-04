@@ -62,8 +62,8 @@ function contextMenuAnnotateCallback(request, sender) {
      * Reason: checking ContextMenu API selection for being insideArticle is possible, but uncomfortable,
      * as context menu actions are handled in the separate background script.
      */
-    const selection = handlers.selector.captureDocumentSelection();
-
+    const selection = handlers.selector.currentSerializedSelection();
+    console.log(selection);
     if (selection.length === 1) {
       store.dispatch(setSelectionRange(selection[0]));
       const selectionCenter = handlers.selector.currentSingleSelectionCenter();

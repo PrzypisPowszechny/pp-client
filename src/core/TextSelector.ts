@@ -132,6 +132,20 @@ export default class TextSelector {
     return ranges;
   }
 
+  currentSerializedSelection = () => {
+    const selectedRanges = this.captureDocumentSelection();
+    return this.serializeRanges(selectedRanges);
+  }
+
+  serializeRanges = (ranges: Range.NormalizedRange[]) => {
+    const serializedRanges = [];
+    for (const range of ranges) {
+      const serializedRange = range.serialize(this.element, `.${PPHighlightClass}`);
+      serializedRanges.push(serializedRange);
+    }
+    return serializedRanges;
+  }
+
   currentSingleSelectionCenter = () => {
     /*
      * We assume only a single selection is made
@@ -176,11 +190,7 @@ export default class TextSelector {
       }
     }
 
-    const serializedRanges = [];
-    for (const range of selectedRanges) {
-      const serializedRange = range.serialize(this.element, `.${PPHighlightClass}`);
-      serializedRanges.push(serializedRange);
-    }
+    const serializedRanges = this.serializeRanges(selectedRanges);
 
     if (this.onSelectionChange) {
       if (!_isEqual(serializedRanges, this.lastRanges)) {
