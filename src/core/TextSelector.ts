@@ -13,6 +13,7 @@ const TEXTSELECTOR_NS = 'pp-textselector';
  *
  * It is PP's adaptation of annotator's TextSelectors
  */
+
 /*
  * IMPORTANT NOTE on SELECTION RANGES
  * We leave annotator's TextSelector more or less as it is;
@@ -129,6 +130,24 @@ export default class TextSelector {
     }
 
     return ranges;
+  }
+
+  currentSingleSelectionCenter = () => {
+    /*
+     * We assume only a single selection is made
+     * Return null if zero or more selection ranges are made
+     */
+    const selection = window.getSelection();
+    if (selection.rangeCount !== 1) {
+      return null;
+    }
+    const selectionBox = selection.getRangeAt(0).getBoundingClientRect();
+    const x = window.scrollX + selectionBox.left + selectionBox.width / 2;
+    const y = window.scrollY + selectionBox.top + selectionBox.height / 2;
+    return {
+      x,
+      y,
+    };
   }
 
   /**
