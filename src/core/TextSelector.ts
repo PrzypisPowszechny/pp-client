@@ -149,7 +149,7 @@ export default class TextSelector {
   currentSingleSelectionCenter = () => {
     /*
      * We assume only a single selection is made
-     * Return null if zero or more selection ranges are made
+     * Return null if less or more than one selection range is made
      */
     const selection = window.getSelection();
     if (selection.rangeCount !== 1) {
