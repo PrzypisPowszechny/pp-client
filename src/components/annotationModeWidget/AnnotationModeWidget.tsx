@@ -5,10 +5,10 @@ import classNames from 'classnames';
 import styles from './AnnotationModeWidget.scss';
 import { PPScopeClass } from '../../class_consts';
 import { turnOffAnnotationMode } from '../../chrome-storage';
-import { AppModeReducer } from '../../store/appModes/reducers';
+import { AppModes } from 'store/appModes/types';
 
 export interface IAnnotationModeWidgetProps {
-  appModes: AppModeReducer;
+  appModes: AppModes;
 }
 
 @connect(

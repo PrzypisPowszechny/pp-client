@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
 import { reducer as api } from 'redux-json-api';
 import widgets, { WidgetReducer } from './widgets/reducers';
-import appModes, { AppModeReducer } from './appModes/reducers';
+import { AppModes } from './appModes/types';
+import appModes from './appModes/reducers';
 import textSelector from './textSelector/reducers';
 import { AnnotationAPIModel } from 'api/annotations';
 import { AnnotationUpvoteAPIModel } from 'api/annotation-upvotes';
@@ -11,7 +12,7 @@ export interface ITabState {
     annotations: { data: AnnotationAPIModel[] };
     annotationUpvotes: { data: AnnotationUpvoteAPIModel[] };
   };
-  appModes: AppModeReducer;
+  appModes: AppModes;
   widgets: WidgetReducer;
   textSelector: any;
 }

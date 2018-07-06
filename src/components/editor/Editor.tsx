@@ -18,10 +18,10 @@ import { PPScopeClass } from 'class_consts.ts';
 import { isValidUrl } from '../../utils/url';
 import { turnOffAnnotationMode } from '../../chrome-storage';
 import { IEditorRange } from 'store/widgets/reducers';
-import { AppModeReducer } from '../../store/appModes/reducers';
+import { AppModes } from '../../store/appModes/types';
 
 interface IEditorProps {
-  appModes: AppModeReducer;
+  appModes: AppModes;
 
   locationX: number;
   locationY: number;
