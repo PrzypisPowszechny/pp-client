@@ -140,13 +140,15 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
     return (
       <div className="pp-popup">
         <ul className="menu">
-          <li
-            className={classNames('menu__item', 'clickable', { disabled: isAnnotationMode })}
-            onClick={this.handleAnnotationModeClick}
-          >
-            <img className="menu__item__icon" src={addIcon}/>
-            <a>Dodaj przypis</a>
-          </li>
+          {
+            <li
+              className={classNames('menu__item', 'clickable',
+                { disabled: isAnnotationMode || isExtensionDisabled || isCurrentPageDisabled })}
+              onClick={this.handleAnnotationModeClick}
+            >
+              <img className="menu__item__icon" src={addIcon}/>
+              <a>Dodaj przypis</a>
+            </li>}
           <li className="menu__item clickable">
             <img className="menu__item__icon" src={requestIcon}/>
             <a>Poproś o przypis</a>
