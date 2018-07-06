@@ -111,16 +111,26 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
     const {
       disabledPages,
       currentTabUrl,
+      annotationModePages,
     } = this.state;
 
-    let newDisabledList;
+    let newDisabledPages;
     if (checked) {
-      newDisabledList = [...disabledPages, currentTabUrl];
+      newDisabledPages = [...disabledPages, currentTabUrl];
     } else {
-      newDisabledList = _filter(disabledPages, url => url !== currentTabUrl);
+      newDisabledPages = _filter(disabledPages, url => url !== currentTabUrl);
     }
-    this.setState({ disabledPages: newDisabledList });
-    chromeStorage.set({ [chromeKeys.DISABLED_PAGES]: newDisabledList });
+    // Permanently turn off the annotation mode for the disabled pages
+    const newAnnotationModePages = _filter(annotationModePages, url => !newDisabledPages.includes(url));
+
+    this.setState({
+      disabledPages: newDisabledPages,
+      annotationModePages: newAnnotationModePages,
+    });
+    chromeStorage.set({
+      [chromeKeys.DISABLED_PAGES]: newDisabledPages,
+      [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages,
+    });
   }
 
   render() {
