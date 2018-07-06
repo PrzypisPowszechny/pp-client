@@ -23,6 +23,7 @@ const manifest = merge(manifestSettings.base, {
     default_popup: 'popup.html',
   },
   icons: {
+    // This size is used in context menu
     '16': 'assets/icon.png',
   }
 });

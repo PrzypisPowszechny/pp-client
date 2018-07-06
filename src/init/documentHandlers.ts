@@ -63,7 +63,6 @@ function contextMenuAnnotateCallback(request, sender) {
      * as context menu actions are handled in the separate background script.
      */
     const selection = handlers.selector.currentSerializedSelection();
-    console.log(selection);
     if (selection.length === 1) {
       store.dispatch(setSelectionRange(selection[0]));
       const selectionCenter = handlers.selector.currentSingleSelectionCenter();
