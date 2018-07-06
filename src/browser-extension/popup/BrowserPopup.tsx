@@ -156,7 +156,10 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
             onClick={this.handleAnnotationModeClick}
           >
             <img className="menu__item__icon" src={addIcon}/>
-            <a>Dodaj przypis</a>
+            {isAnnotationMode ?
+              <a className="active-mode">Dodajesz przypis... </a>
+              : <a>Dodaj przypis</a>
+            }
           </li>
           <hr className="menu__separator"/>
           <li className="menu__item">
