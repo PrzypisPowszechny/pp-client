@@ -13,6 +13,7 @@ const TEXTSELECTOR_NS = 'pp-textselector';
  *
  * It is PP's adaptation of annotator's TextSelectors
  */
+
 /*
  * IMPORTANT NOTE on SELECTION RANGES
  * We leave annotator's TextSelector more or less as it is;
@@ -131,6 +132,38 @@ export default class TextSelector {
     return ranges;
   }
 
+  currentSerializedSelection = () => {
+    const selectedRanges = this.captureDocumentSelection();
+    return this.serializeRanges(selectedRanges);
+  }
+
+  serializeRanges = (ranges: Range.NormalizedRange[]) => {
+    const serializedRanges = [];
+    for (const range of ranges) {
+      const serializedRange = range.serialize(this.element, `.${PPHighlightClass}`);
+      serializedRanges.push(serializedRange);
+    }
+    return serializedRanges;
+  }
+
+  currentSingleSelectionCenter = () => {
+    /*
+     * We assume only a single selection is made
+     * Return null if less or more than one selection range is made
+     */
+    const selection = window.getSelection();
+    if (selection.rangeCount !== 1) {
+      return null;
+    }
+    const selectionBox = selection.getRangeAt(0).getBoundingClientRect();
+    const x = window.scrollX + selectionBox.left + selectionBox.width / 2;
+    const y = window.scrollY + selectionBox.top + selectionBox.height / 2;
+    return {
+      x,
+      y,
+    };
+  }
+
   /**
    * Event callback: called when the mouse button is released. Checks to see if a
    * selection has been made
@@ -157,11 +190,7 @@ export default class TextSelector {
       }
     }
 
-    const serializedRanges = [];
-    for (const range of selectedRanges) {
-      const serializedRange = range.serialize(this.element, `.${PPHighlightClass}`);
-      serializedRanges.push(serializedRange);
-    }
+    const serializedRanges = this.serializeRanges(selectedRanges);
 
     if (this.onSelectionChange) {
       if (!_isEqual(serializedRanges, this.lastRanges)) {

@@ -16,6 +16,7 @@ const base = {
     'activeTab',
     'identity',
     'identity.email',
+    'contextMenus',
     'https://ajax.googleapis.com/'
   ],
   content_security_policy: "script-src 'self' 'unsafe-eval'; object-src 'self'",

@@ -204,9 +204,9 @@ export default class Highlighter {
     event: string,
     handler: (e: any, annotationData: any[]) => void,
   ) => {
+
     $(this.element)
       .on(event + '.' + this.options.nameSpace, '.' + this.options.highlightClass, (e) => {
-
         const annotations = $(e.target)
           .parents('.' + this.options.highlightClass)
           .addBack()

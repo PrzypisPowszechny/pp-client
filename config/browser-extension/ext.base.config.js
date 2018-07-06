@@ -22,6 +22,10 @@ const manifest = merge(manifestSettings.base, {
     default_icon: 'assets/icon.png',
     default_popup: 'popup.html',
   },
+  icons: {
+    // This size is used in context menu
+    '16': 'assets/icon.png',
+  }
 });
 
 const config = (env, argv) => merge(common.config(env, argv), {
