@@ -5,6 +5,7 @@ export const SET_EDITOR_SELECTION_RANGE = 'SET_EDITOR_SELECTION_RANGE';
 export const EDITOR_VISIBLE_CHANGE = 'EDITOR_VISIBLE_CHANGE';
 export const VIEWER_VISIBLE_CHANGE = 'VIEWER_VISIBLE_CHANGE';
 export const VIEWER_MODAL_CHANGE = 'VIEWER_MODAL_CHANGE';
+export const VIEWER_REPORT_EDITOR_CHANGE = 'VIEWER_REPORT_EDITOR_CHANGE';
 export const MENU_WIDGET_CHANGE = 'MENU_WIDGET_CHANGE';
 
 export const showEditorAnnotation = (x: number, y: number, id?: string) => {
@@ -61,11 +62,12 @@ export const hideMenu = () => {
   };
 };
 
+// TODO refactor viewer actions
 export const showViewer = (x: number, y: number, annotationIds: number[]) => {
   return {
     type: VIEWER_VISIBLE_CHANGE,
     payload: {
-      annotationIds,
+      viewerItems: annotationIds.map(id => ({ annotationId: id })),
       visible: true,
       mouseOver: true,
       deleteModal: {},
@@ -111,6 +113,16 @@ export const hideViewerDeleteModal = () => {
     payload: {
       deleteModalOpen: false,
       deleteModalId: null,
+    },
+  };
+};
+
+export const changeViewerReportEditorOpen = (annotationId: string, isReportEditorOpen: boolean) => {
+  return {
+    type: VIEWER_REPORT_EDITOR_CHANGE,
+    payload: {
+      annotationId,
+      isReportEditorOpen,
     },
   };
 };

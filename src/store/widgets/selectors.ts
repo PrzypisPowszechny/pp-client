@@ -54,8 +54,7 @@ export const selectViewerState = createSelector<ITabState, any, any, any>(
   state => state.api.annotations.data,
   (viewer, annotations) => ({
     ...selectWidgetState(viewer),
-    annotations: selectViewerAnnotations(annotations, viewer.annotationIds),
-    annotationIds: viewer.annotationIds,
+    annotationIds: viewer.viewerItems.map(annotation => annotation.annotationId),
     deleteModal: viewer.deleteModal,
     mouseOver: viewer.mouseOver,
   }),

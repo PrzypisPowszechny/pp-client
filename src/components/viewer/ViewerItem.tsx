@@ -6,7 +6,11 @@ import moment from 'moment';
 import { Popup } from 'semantic-ui-react';
 
 import styles from './Viewer.scss';
-import { hideViewer, showEditorAnnotation } from 'store/widgets/actions';
+import {
+  changeViewerReportEditorOpen,
+  hideViewer,
+  showEditorAnnotation,
+} from 'store/widgets/actions';
 import {
   AnnotationResourceType, AnnotationAPIModel,
   AnnotationPriorities, annotationPrioritiesLabels,
@@ -21,27 +25,38 @@ import ReportEditor from './report-editor/ReportEditor';
 
 interface IViewerItemProps {
   key: string;
-  annotation: AnnotationAPIModel;
+  annotationId: string;
   indirectChildClassName: string;
 
-  hideViewer: () => undefined;
+  annotation: AnnotationAPIModel;
+  isReportEditorOpen: boolean;
 
+  hideViewer: () => undefined;
   deleteUpvote: (instance: AnnotationUpvoteAPIModel) => Promise<object>;
   createUpvote: (instance: AnnotationUpvoteAPICreateModel) => Promise<object>;
-
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
 }
 
 interface IViewerItemState {
   initialView: boolean; // used to determine whether edit/delete buttons should be visible
-  // TODO: move this field (and create reportEditorAnnotationId) to global store if only one editor shall be present
-  reportEditorVisible: boolean;
 }
 
 @connect(
-  null,
+  (state, props) => {
+    const viewerItem = state.widgets.viewer.viewerItems.find(item => item.annotationId === props.annotationId);
+    const annotations = state.api.annotations.data;
+    const {
+      annotationId,
+    } = viewerItem;
+
+    return {
+      ...viewerItem,
+      annotation: annotations.find(annotation => annotation.id === annotationId),
+    };
+  },
   dispatch => ({
+    changeViewerReportEditorOpen: () => dispatch(changeViewerReportEditorOpen),
     showEditorAnnotation: () => dispatch(showEditorAnnotation),
     hideViewer: () => dispatch(hideViewer),
 
@@ -54,12 +69,8 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
   static editControlDisappearTimeout = 500;
 
   static defaultState = {
-    reportEditorVisible: false,
+    initialView: true,
   };
-
-  static getDerivedStateFromProps() {
-    return { initialView: true };
-  }
 
   disappearTimeoutId: Timer;
 
@@ -99,15 +110,16 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
         ...annotation.relationships.annotationUpvote.data,
         // Include relation to remove have the reverse relation (at annotation instance) removed as well,
         // even if this annotationUpvote is not in the store.
+        // even if this annotationUpvote is not in the store.
         relationships: {
           annotation: {
             data: { id: annotation.id, type: annotation.type },
           },
         },
       }).then(() => null)
-      .catch((errors) => {
-        console.log(errors);
-      });
+        .catch((errors) => {
+          console.log(errors);
+        });
     } else {
       this.props.createUpvote({
         type: AnnotationUpvoteResourceType,
@@ -120,14 +132,18 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
           },
         },
       }).then(() => null)
-      .catch((errors) => {
-        console.log(errors);
-      });
+        .catch((errors) => {
+          console.log(errors);
+        });
     }
   }
 
   toggleReportEditor = (e?: any) => {
-    this.setState({ reportEditorVisible: !this.state.reportEditorVisible });
+    const {
+      annotation,
+      isReportEditorOpen,
+    } = this.props;
+    changeViewerReportEditorOpen(annotation.id, !isReportEditorOpen);
   }
 
   headerPriorityClass() {
@@ -146,12 +162,13 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     return (
       <a
         className={classNames('ui', styles.upvote, {
-          [styles.selected]: Boolean(annotationUpvote.data) })
+          [styles.selected]: Boolean(annotationUpvote.data),
+        })
         }
         onClick={this.toggleUpvote}
       >
         <span className={styles.number}>{totalUpvoteCount}</span>
-        <span className={styles.upvoteIcon} />
+        <span className={styles.upvoteIcon}/>
       </a>
     );
   }
@@ -165,26 +182,26 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
             title="Edit"
             onClick={this.onEditClick}
           >
-            <i className="edit icon" />
+            <i className="edit icon"/>
           </button>
           <button
             type="button"
             title="Delete"
             onClick={this.onDeleteClick}
           >
-            <i className="trash icon" />
+            <i className="trash icon"/>
           </button>
         </div>
       );
     } else {
       return (
-        <div className={classNames(styles.controls, styles.visible )}>
+        <div className={classNames(styles.controls, styles.visible)}>
           <button
             type="button"
             title="Edit"
             onClick={this.toggleReportEditor}
           >
-            <span className={classNames(styles.actionsIcon)} />
+            <span className={classNames(styles.actionsIcon)}/>
           </button>
         </div>
       );
@@ -224,7 +241,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
         <div className={styles.bottomBar}>
           <div className={styles.annotationLinkContainer}>
             <a className={styles.annotationLink} href={httpPrefixed(annotationLink)} target="_blank">
-              <span className={styles.annotationLinkIcon} />
+              <span className={styles.annotationLinkIcon}/>
               {extractHostname(annotationLink)}
             </a>
             <a className={styles.annotationLinkTitle} href={httpPrefixed(annotationLink)} target="_blank">
@@ -242,7 +259,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
             </Popup>
           </div>
         </div>
-        {!this.state.reportEditorVisible ? null :
+        {!this.props.isReportEditorOpen ? null :
           <ReportEditor
             annotation={this.props.annotation}
             onCancel={this.toggleReportEditor}
