@@ -40,7 +40,7 @@ export default class Suggestion extends React.Component<Partial<ISuggestionProps
 
   render() {
     return (
-      <div className={classNames(PPScopeClass, styles.self, styles.editor)}>
+      <div className={classNames(PPScopeClass, styles.self, styles.selfEdge, styles.editor)}>
         <h3>Co można poprawić w tym przypisie?</h3>
         <div className={classNames(styles.input)}>
           <div>

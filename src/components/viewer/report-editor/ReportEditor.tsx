@@ -13,6 +13,7 @@ import {
 import Report from './Report';
 import { PPScopeClass } from '../../../class_consts';
 import Suggestion from './Suggestion';
+import Timer = NodeJS.Timer;
 
 interface IReportEditorProps {
   annotation: AnnotationAPIModel;
@@ -23,6 +24,7 @@ interface IReportEditorProps {
 
 interface IReportEditorState {
   activeDialog: Dialogs;
+  opacity: number;
   isCreating: boolean;
 }
 
@@ -30,6 +32,7 @@ enum Dialogs {
   MENU = 'menu',
   REPORT = 'report',
   SUGGESTION = 'suggestion',
+  DONE_TOAST = 'done_toast',
 }
 
 @connect(
@@ -44,7 +47,10 @@ export default class ReportEditor extends React.Component<Partial<IReportEditorP
 
   static defaultState = {
     activeDialog: Dialogs.MENU,
+    opacity: 1,
   };
+
+  fadeOutTimer: Timer = null;
 
   constructor(props: IReportEditorProps) {
     super(props);
@@ -75,8 +81,8 @@ export default class ReportEditor extends React.Component<Partial<IReportEditorP
     if (!this.state.isCreating) {
       this.setState({ isCreating: true });
       this.props.createAnnotationReport(this.getAnnotationInstance(reason, comment)).then(() => {
-        this.setState({ isCreating: false });
-        this.props.onSuccess();
+        this.setState({ isCreating: false, activeDialog: Dialogs.DONE_TOAST });
+        this.fadeOutTimer = setTimeout(this.fadeOutStart, 1000);
       })
       .catch((errors) => {
         this.setState({ isCreating: false });
@@ -86,6 +92,23 @@ export default class ReportEditor extends React.Component<Partial<IReportEditorP
     }
   }
 
+  fadeOutStart = () => {
+    this.fadeOutTimer = setInterval(this.fadeOutTick, 100);
+  }
+
+  fadeOutTick = () => {
+    if (this.state.opacity > 0) {
+      this.setState({ opacity: this.state.opacity - 0.03 });
+    } else {
+      clearInterval(this.fadeOutTimer);
+      this.props.onSuccess();
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.fadeOutTimer);
+  }
+
   render() {
     const {
       annotation,
@@ -93,9 +116,9 @@ export default class ReportEditor extends React.Component<Partial<IReportEditorP
     } = this.props;
 
     switch (this.state.activeDialog) {
-      case 'menu':
+      case Dialogs.MENU:
         return (
-          <div className={classNames(PPScopeClass, styles.self, styles.menu)}>
+          <div className={classNames(PPScopeClass, styles.self, styles.selfEdge, styles.menu)}>
             <div>
               <button onClick={this.selectDialog} value={Dialogs.REPORT}>
                 <span className={classNames(styles.reportIcon)} />
@@ -110,10 +133,22 @@ export default class ReportEditor extends React.Component<Partial<IReportEditorP
             </div>
           </div>
         );
-      case 'report':
+      case Dialogs.REPORT:
         return <Report annotation={annotation} onCancel={onCancel} onSubmit={this.save}/>;
-      case 'suggestion':
+      case Dialogs.SUGGESTION:
         return <Suggestion annotation={annotation} onCancel={onCancel} onSubmit={this.save}/>;
+      case Dialogs.DONE_TOAST:
+          return (
+            <div
+              className={classNames(styles.self, styles.selfOffset, styles.toast)}
+              style={{ opacity: this.state.opacity }}
+            >
+              <div className={classNames(PPScopeClass, styles.selfEdge, styles.toast)}>
+                Twoje zgłoszenie zostało wysłane. Dziękujemy, że pomagasz nam ulepszać przypisy
+              </div>
+            </div>
+
+          );
       default:
         return null;
     }
