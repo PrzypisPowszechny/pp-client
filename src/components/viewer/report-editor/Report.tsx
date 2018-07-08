@@ -101,7 +101,7 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
           </div>
           <div
             className={classNames(styles['error-msg'], 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { [styles.hide]: !this.state.showReasonError })}
+              { [styles.hidden]: !this.state.showReasonError })}
           >
             Wybierz typ zgłoszenia!
           </div>

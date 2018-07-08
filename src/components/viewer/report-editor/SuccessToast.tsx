@@ -19,8 +19,8 @@ export default class SuccessToast extends React.Component<Partial<ISuccessToastP
     opacity: 1,
   };
 
-  waitPeriod = 4000;
-  fadeOutPeriod = 5000;
+  waitPeriod = 3000;
+  fadeOutPeriod = 4000;
   tickPeriod = 100;
 
   timer: Timer = null;
@@ -61,7 +61,12 @@ export default class SuccessToast extends React.Component<Partial<ISuccessToastP
         style={{ opacity: this.state.opacity }}
       >
         <div className={classNames(PPScopeClass, styles.selfEdge, styles.toast)}>
+          <div className={styles.close} onClick={this.props.onFinish}>
+            <i className="remove icon"/>
+          </div>
+
           Twoje zgłoszenie zostało wysłane. Dziękujemy, że pomagasz nam ulepszać przypisy.
+
         </div>
       </div>
 

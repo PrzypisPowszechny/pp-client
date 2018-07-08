@@ -127,7 +127,7 @@ $menu-inner-width: 165px;
   background-image: url('../../../../assets/suggest-edit-symbol.svg');
 }
 
-.hide {
+.hidden {
   display: none !important;
 }
 
@@ -151,3 +151,9 @@ $menu-inner-width: 165px;
 
   }
 }
+
+/* all cross-style close buttons */
+.close {
+  @include close-icon();
+}
+

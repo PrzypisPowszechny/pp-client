@@ -217,16 +217,7 @@ $editor-vertical-spacing: 15px;
 
 /* all cross-style close buttons */
 .close {
-  position: absolute;
-  right: 0;
-  top: 0;
-
-  border: none;
-  outline: none;
-
-  color: #888888;
-  background: none;
-  cursor: pointer;
+  @include close-icon();
 }
 
 /* --- Help windows --- */
