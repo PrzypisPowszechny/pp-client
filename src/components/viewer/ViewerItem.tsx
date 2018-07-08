@@ -148,6 +148,10 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     this.props.changeViewerReportEditorOpen(annotation.id, !isReportEditorOpen);
   }
 
+  handleAnnotationLinkClick = () => {
+    this.props.hideViewer();
+  }
+
   headerPriorityClass() {
     const priorityToClass = {
       [AnnotationPriorities.NORMAL]: styles.priorityNormal,
@@ -229,7 +233,6 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
           <div className={classNames(styles.commentPriority, this.headerPriorityClass())}>
             {comment ? annotationPrioritiesLabels[priority] : 'źródło'}
           </div>
-
           <div className={styles.commentDate}>
             {createDate ? moment(createDate).fromNow() : ''}
           </div>
@@ -242,11 +245,13 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
         }
         <div className={styles.bottomBar}>
           <div className={styles.annotationLinkContainer}>
-            <a className={styles.annotationLink} href={httpPrefixed(annotationLink)} target="_blank">
+            <a className={styles.annotationLink} href={httpPrefixed(annotationLink)}
+               onClick={this.handleAnnotationLinkClick} target="_blank">
               <span className={styles.annotationLinkIcon}/>
               {extractHostname(annotationLink)}
             </a>
-            <a className={styles.annotationLinkTitle} href={httpPrefixed(annotationLink)} target="_blank">
+            <a className={styles.annotationLinkTitle} href={httpPrefixed(annotationLink)}
+               onClick={this.handleAnnotationLinkClick} target="_blank">
               {annotationLinkTitle}
             </a>
           </div>
