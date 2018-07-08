@@ -143,7 +143,7 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
           className={this.getInnerClassNames()}
           ref={this.innerElement}
         >
-          <div className={this.props.className}>
+          <div className={classNames(styles.content, this.props.className)}>
             {this.props.children}
           </div>
         </div>

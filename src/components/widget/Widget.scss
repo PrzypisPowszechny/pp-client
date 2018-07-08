@@ -12,8 +12,7 @@ $transparent-offset-size: 50px;
 }
 
 .self,
-.inner,
-.transparent-offset {
+.inner,{
   position: absolute;
 }
 
@@ -23,6 +22,11 @@ $transparent-offset-size: 50px;
   left: -18px - $transparent-offset-size;
   bottom: 15px - $transparent-offset-size;
   color: rgb(0, 0, 0);
+  position: absolute;
+
+  .content {
+    position: relative;
+  }
 }
 
 .inner strong {
