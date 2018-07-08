@@ -19,7 +19,7 @@ export default class SuccessToast extends React.Component<Partial<ISuccessToastP
     opacity: 1,
   };
 
-  waitPeriod = 2000;
+  waitPeriod = 4000;
   fadeOutPeriod = 5000;
   tickPeriod = 100;
 
@@ -61,7 +61,7 @@ export default class SuccessToast extends React.Component<Partial<ISuccessToastP
         style={{ opacity: this.state.opacity }}
       >
         <div className={classNames(PPScopeClass, styles.selfEdge, styles.toast)}>
-          Twoje zgłoszenie zostało wysłane. Dziękujemy, że pomagasz nam ulepszać przypisy
+          Twoje zgłoszenie zostało wysłane. Dziękujemy, że pomagasz nam ulepszać przypisy.
         </div>
       </div>
 

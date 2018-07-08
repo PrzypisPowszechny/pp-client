@@ -51,7 +51,6 @@ $menu-inner-width: 165px;
 
     padding: 5px;
 
-
     button {
       @include button-reset();
       font-size: $default-font-size - 2;
@@ -59,10 +58,20 @@ $menu-inner-width: 165px;
 
   }
 
-  &.editor, &.toast {
+  &.editor {
     width: $editor-inner-width;
-
     padding: 16px 14px;
+  }
+
+  &.toast {
+    width: $editor-inner-width;
+    padding: 26px 24px;
+
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.5em;
+    color: #222222;
+    font-weight: $font-semi-bold;
   }
 
   textarea {
@@ -72,8 +81,6 @@ $menu-inner-width: 165px;
     height: 85px;
   }
 }
-
-
 
 // override semantic-ui
 :local(.error-msg):global(.ui.pointing.red.basic.label.large) {
