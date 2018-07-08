@@ -8,7 +8,6 @@ import AnnotationModeWidget from '../components/annotationModeWidget/AnnotationM
 
 interface AppProps {
   editor: any;
-  viewerVisible: boolean;
   menuVisible: boolean;
   annotationModeWidgetVisible: boolean;
 }
@@ -16,7 +15,6 @@ interface AppProps {
 @connect(
   state => ({
     editor: state.widgets.editor,
-    viewerVisible: state.widgets.viewer.visible,
     menuVisible: state.widgets.menu.visible,
     annotationModeWidgetVisible: selectModeForCurrentPage(state).isAnnotationMode,
   }),

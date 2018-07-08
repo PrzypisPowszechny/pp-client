@@ -63,7 +63,7 @@ export const hideMenu = () => {
 };
 
 // TODO refactor viewer actions
-export const showViewer = (x: number, y: number, annotationIds: number[]) => {
+export const showViewer = (x: number, y: number, annotationIds: string[]) => {
   return {
     type: VIEWER_VISIBLE_CHANGE,
     payload: {

@@ -55,6 +55,7 @@ export const selectViewerState = createSelector<ITabState, any, any, any>(
   (viewer, annotations) => ({
     ...selectWidgetState(viewer),
     annotationIds: viewer.viewerItems.map(annotation => annotation.annotationId),
+    isAnyReportEditorOpen: viewer.viewerItems.some(item => item.isReportEditorOpen),
     deleteModal: viewer.deleteModal,
     mouseOver: viewer.mouseOver,
   }),

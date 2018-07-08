@@ -64,20 +64,9 @@ const initialViewerState = {
 function viewer(state = initialViewerState, action) {
   switch (action.type) {
     case VIEWER_VISIBLE_CHANGE:
-      // Update location only when the displayed annotations have changed, too.
-      // This prevents window from changing every time the user's cursor slips off the widget
-      const prevIds = state.viewerItems.map(item => item.annotationId);
-      const newIds = action.payload.annotationIds;
-      let locationOverride = {};
-      if (_difference(prevIds, newIds).length === 0 && _difference(newIds, prevIds).length === 0) {
-        locationOverride = {
-          location: state.location,
-        };
-      }
       return {
         ...state,
         ...action.payload,
-        ...locationOverride,
       };
     case VIEWER_MODAL_CHANGE:
       return {

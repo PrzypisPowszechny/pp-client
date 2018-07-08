@@ -32,6 +32,7 @@ interface IViewerItemProps {
   isReportEditorOpen: boolean;
 
   hideViewer: () => undefined;
+  changeViewerReportEditorOpen: (annotationId, isReportEditorOpen) => void;
   deleteUpvote: (instance: AnnotationUpvoteAPIModel) => Promise<object>;
   createUpvote: (instance: AnnotationUpvoteAPICreateModel) => Promise<object>;
   onEdit: (id: string) => void;
@@ -56,7 +57,8 @@ interface IViewerItemState {
     };
   },
   dispatch => ({
-    changeViewerReportEditorOpen: () => dispatch(changeViewerReportEditorOpen),
+    changeViewerReportEditorOpen: (annotationId, isReportEditorOpen) =>
+      dispatch(changeViewerReportEditorOpen(annotationId, isReportEditorOpen)),
     showEditorAnnotation: () => dispatch(showEditorAnnotation),
     hideViewer: () => dispatch(hideViewer),
 
@@ -143,7 +145,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
       annotation,
       isReportEditorOpen,
     } = this.props;
-    changeViewerReportEditorOpen(annotation.id, !isReportEditorOpen);
+    this.props.changeViewerReportEditorOpen(annotation.id, !isReportEditorOpen);
   }
 
   headerPriorityClass() {
