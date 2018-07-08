@@ -120,7 +120,7 @@ export default class ReportEditor extends React.Component<Partial<IReportEditorP
       case Dialogs.SUCCESS_TOAST:
           return <SuccessToast onFinish={this.props.onSuccess} />;
       default:
-        return null;
+        return <div/>;
     }
   }
 }

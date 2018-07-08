@@ -79,6 +79,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
   }
 
   handleMouseLeave = (e) => {
+    console.log('leave check');
     // Normally, close the window, except...
     // not when the modal is open
     // not when this element is manually marked as an indirect Viewer child (despite not being a DOM child)
@@ -87,6 +88,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
     if (!this.props.deleteModalOpen && !isMouseOverIndirectChild) {
       // check what element the pointer entered;
       this.props.mouseOverViewer(false);
+      console.log('leave confirmed');
     }
   }
 
@@ -113,6 +115,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
     return (
       <Widget
         className={classNames(PPScopeClass, styles.self)}
+        offsetClassName={classNames(PPScopeClass, styles.selfOffset)}
         locationX={this.props.locationX}
         locationY={this.props.locationY}
         updateInverted={true}

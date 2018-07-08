@@ -17,6 +17,11 @@ $viewer-font-size: 14px;
   @include pp-widget-edge();
 }
 
+.self-offset {
+  // just for purpose of identification
+  border: 0;
+}
+
 ul.annotation-items {
   margin: 0;
   padding: 0;
