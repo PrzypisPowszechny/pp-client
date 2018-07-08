@@ -88,7 +88,7 @@ export const hideViewer = () => {
   };
 };
 
-export const mouseOverViewer = (value: boolean) => {
+export const setMouseOverViewer = (value: boolean) => {
   return {
     type: VIEWER_VISIBLE_CHANGE,
     payload: {
@@ -101,7 +101,7 @@ export const openViewerDeleteModal = (id: string) => {
   return {
     type: VIEWER_MODAL_CHANGE,
     payload: {
-      deleteModalOpen: true,
+      isDeleteModalOpen: true,
       deleteModalId: id,
     },
   };
@@ -111,7 +111,7 @@ export const hideViewerDeleteModal = () => {
   return {
     type: VIEWER_MODAL_CHANGE,
     payload: {
-      deleteModalOpen: false,
+      isDeleteModalOpen: false,
       deleteModalId: null,
     },
   };

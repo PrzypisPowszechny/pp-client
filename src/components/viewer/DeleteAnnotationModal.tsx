@@ -7,16 +7,16 @@ import { selectViewerState } from 'store/widgets/selectors';
 import { hideViewerDeleteModal } from 'store/widgets/actions';
 import { AnnotationAPIModel } from 'api/annotations';
 import { PPScopeClass } from 'class_consts.ts';
-import { mouseOverViewer } from 'store/widgets/actions';
+import { setMouseOverViewer } from 'store/widgets/actions';
 
 interface IModalProps {
   deleteModalId: string;
-  deleteModalOpen: boolean;
+  isDeleteModalOpen: boolean;
 
   annotations: AnnotationAPIModel[];
 
   deleteAnnotation: (instance: AnnotationAPIModel) => Promise<object>;
-  mouseOverViewer: (value: boolean) => void;
+  setMouseOverViewer: (value: boolean) => void;
   hideViewerDeleteModal: () => void;
 }
 
@@ -25,19 +25,19 @@ interface IModalProps {
     const {
       deleteModal: {
         deleteModalId,
-        deleteModalOpen,
+        isDeleteModalOpen,
       },
       annotations,
     } = selectViewerState(state);
 
     return {
       deleteModalId,
-      deleteModalOpen,
+      isDeleteModalOpen,
       annotations,
     };
   },
   {
-    mouseOverViewer,
+    setMouseOverViewer,
     hideViewerDeleteModal,
     deleteAnnotation: deleteResource,
   },
@@ -54,7 +54,7 @@ export default class DeleteAnnotationModal extends React.Component<Partial<IModa
 
   handleCancel = (e) => {
     this.props.hideViewerDeleteModal();
-    this.props.mouseOverViewer(false);
+    this.props.setMouseOverViewer(false);
   }
 
   render() {
@@ -62,7 +62,7 @@ export default class DeleteAnnotationModal extends React.Component<Partial<IModa
       <Modal
         size="mini"
         className={PPScopeClass}
-        open={this.props.deleteModalOpen}
+        open={this.props.isDeleteModalOpen}
       >
         <Modal.Content>
           <p>Czy na pewno chcesz usunąć przypis?</p>

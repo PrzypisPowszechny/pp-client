@@ -9,19 +9,20 @@ import styles from './Viewer.scss';
 import { selectViewerState } from 'store/widgets/selectors';
 import { hideViewer, openViewerDeleteModal, showEditorAnnotation } from 'store/widgets/actions';
 import { AnnotationAPIModel } from 'api/annotations';
-import { PPScopeClass, PPViewerIndirectChildClass } from 'class_consts.ts';
-import { mouseOverViewer } from 'store/widgets/actions';
+import { PPScopeClass, PPViewerHoverContainerClass, PPViewerIndirectChildClass } from 'class_consts.ts';
+import { setMouseOverViewer } from 'store/widgets/actions';
 import DeleteAnnotationModal from './DeleteAnnotationModal';
 
 interface IViewerProps {
   locationX: number;
   locationY: number;
+  isDeleteModalOpen: boolean;
+
   annotationIds: string[];
-  deleteModalOpen: boolean;
 
   showEditorAnnotation: (x: number, y: number, id?: string) => void;
   hideViewer: () => void;
-  mouseOverViewer: (value: boolean) => void;
+  setMouseOverViewer: (value: boolean) => void;
   openViewerDeleteModal: (id: string) => void;
 }
 
@@ -32,7 +33,7 @@ interface IViewerProps {
       locationX,
       locationY,
       deleteModal: {
-        deleteModalOpen,
+        isDeleteModalOpen,
       },
       annotationIds,
     } = selectViewerState(state);
@@ -41,14 +42,14 @@ interface IViewerProps {
       visible,
       locationX,
       locationY,
-      deleteModalOpen,
+      isDeleteModalOpen,
       annotationIds,
     };
   },
   {
     showEditorAnnotation,
     hideViewer,
-    mouseOverViewer,
+    setMouseOverViewer,
     openViewerDeleteModal,
   },
 )
@@ -79,21 +80,19 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
   }
 
   handleMouseLeave = (e) => {
-    console.log('leave check');
     // Normally, close the window, except...
     // not when the modal is open
     // not when this element is manually marked as an indirect Viewer child (despite not being a DOM child)
     // (related target can be null e.g. on tab change)
     const isMouseOverIndirectChild = e.relatedTarget && e.relatedTarget.classList.contains(PPViewerIndirectChildClass);
-    if (!this.props.deleteModalOpen && !isMouseOverIndirectChild) {
+    if (!this.props.isDeleteModalOpen && !isMouseOverIndirectChild) {
       // check what element the pointer entered;
-      this.props.mouseOverViewer(false);
-      console.log('leave confirmed');
+      this.props.setMouseOverViewer(false);
     }
   }
 
   handleMouseEnter = (e) => {
-    this.props.mouseOverViewer(true);
+    this.props.setMouseOverViewer(true);
   }
 
   renderItems() {
@@ -115,7 +114,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
     return (
       <Widget
         className={classNames(PPScopeClass, styles.self)}
-        offsetClassName={classNames(PPScopeClass, styles.selfOffset)}
+        offsetClassName={classNames(PPScopeClass, PPViewerHoverContainerClass)}
         locationX={this.props.locationX}
         locationY={this.props.locationY}
         updateInverted={true}

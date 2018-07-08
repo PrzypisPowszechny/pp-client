@@ -16,7 +16,6 @@ export function isInverted(widget, window) {
         top: offset.top,
         right: offset.left + $widget.width(),
       };
-      // console.log(this.props);
       let invertedX = false;
       if ((current.right - viewport.right) > transparentOffset) {
         invertedX = true;

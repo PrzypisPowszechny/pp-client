@@ -136,7 +136,6 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
   }
 
   render() {
-    console.log('classname:', this.props);
     return (
       <div
         className={classNames(styles.self, this.props.offsetClassName)}

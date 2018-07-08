@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createResource, deleteResource } from 'redux-json-api';
 import { selectViewerState } from 'store/widgets/selectors';
-import { hideViewer, mouseOverViewer } from 'store/widgets/actions';
+import { hideViewer, setMouseOverViewer } from 'store/widgets/actions';
 import Viewer from './Viewer';
 import Timer = NodeJS.Timer;
-import styles from './Viewer.scss';
+import { PPViewerHoverContainerClass } from '../../class_consts';
 
 interface IViewerManagerState {
   mouseOver: boolean;
@@ -14,18 +14,18 @@ interface IViewerManagerState {
   // whether the Viewer has been prevented from disappearing by the entering mouse
   mouseHasEntered: boolean;
 
-  deleteModalOpen: boolean;
+  isDeleteModalOpen: boolean;
   deleteModalJustClosed: boolean;
 }
 
 interface IViewerManagerProps {
   visible: boolean;
-  mouseOver: boolean;
-  deleteModalOpen: boolean;
+  isMouseOver: boolean;
+  isDeleteModalOpen: boolean;
   annotationIds: string[];
   isAnyReportEditorOpen: boolean;
 
-  mouseOverViewer: (value: boolean) => void;
+  setMouseOverViewer: (value: boolean) => void;
   hideViewer: () => void;
   showViewer: () => void;
 }
@@ -34,9 +34,9 @@ interface IViewerManagerProps {
   (state) => {
     const {
       visible,
-      mouseOver,
+      mouseOver: isMouseOver,
       deleteModal: {
-        deleteModalOpen,
+        isDeleteModalOpen,
       },
       annotationIds,
       isAnyReportEditorOpen,
@@ -44,15 +44,14 @@ interface IViewerManagerProps {
 
     return {
       visible,
-      mouseOver,
-      deleteModalOpen,
+      isMouseOver,
+      isDeleteModalOpen,
       annotationIds,
       isAnyReportEditorOpen,
     };
-  },
-  {
+  }, {
     hideViewer,
-    mouseOverViewer,
+    setMouseOverViewer,
   },
 )
 export default class ViewerManager extends React.Component<Partial<IViewerManagerProps>, Partial<IViewerManagerState>> {
@@ -64,22 +63,22 @@ export default class ViewerManager extends React.Component<Partial<IViewerManage
    * not captured)
    */
 
-  static mouseleaveDisappearTimeout = 200;
+  static mouseLeaveDisappearTimeout = 200;
   static modalCloseDisappearTimeout = 1100;
 
   static defaultProps = {
     visible: true,
-    deleteModalOpen: false,
+    isDeleteModalOpen: false,
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
     return {
-      deleteModalOpen: nextProps.deleteModalOpen,
-      mouseOver: nextProps.mouseOver,
+      isDeleteModalOpen: nextProps.isDeleteModalOpen,
+      isMouseOver: nextProps.isMouseOver,
 
-      mouseHasLeft: prevState.mouseOver && !nextProps.mouseOver,
-      mouseHasEntered: !prevState.mouseOver && nextProps.mouseOver,
-      deleteModalJustClosed: prevState.deleteModalOpen && !nextProps.deleteModalOpen,
+      mouseHasLeft: prevState.isMouseOver && !nextProps.isMouseOver,
+      mouseHasEntered: !prevState.isMouseOver && nextProps.isMouseOver,
+      deleteModalJustClosed: prevState.isDeleteModalOpen && !nextProps.isDeleteModalOpen,
     };
   }
 
@@ -97,7 +96,7 @@ export default class ViewerManager extends React.Component<Partial<IViewerManage
 
   componentDidMount() {
     this.updateDisappearTimer();
-    this.checkHoverIntervalTimer = setInterval(this.checkHover, 1000);
+    this.checkHoverIntervalTimer = setInterval(this.checkHover, 200);
   }
 
   componentWillUnmount() {
@@ -106,15 +105,13 @@ export default class ViewerManager extends React.Component<Partial<IViewerManage
   }
 
   checkHover = () => {
-    if (document.querySelectorAll(`.${styles.selfOffset} :hover`).length) {
-      console.log('hover!');
+    if (document.querySelectorAll(`.${PPViewerHoverContainerClass} :hover`).length) {
       if (this.state.mouseHasLeft) {
-        this.props.mouseOverViewer(true);
+        this.props.setMouseOverViewer(true);
       }
     } else {
-      console.log('no hover...');
       if (this.state.mouseHasEntered) {
-        this.props.mouseOverViewer(false);
+        this.props.setMouseOverViewer(false);
       }
     }
   }
@@ -143,7 +140,7 @@ export default class ViewerManager extends React.Component<Partial<IViewerManage
       if (this.state.deleteModalJustClosed) {
         this.startDisappearTimer(ViewerManager.modalCloseDisappearTimeout);
       } else if (!this.props.isAnyReportEditorOpen) {
-        this.startDisappearTimer(ViewerManager.mouseleaveDisappearTimeout);
+        this.startDisappearTimer(ViewerManager.mouseLeaveDisappearTimeout);
       }
     } else if (this.state.mouseHasEntered) {
       this.clearDisappearTimer();

@@ -7,6 +7,8 @@ import selectionStyles from 'css/selection.scss';
  */
 export const PPViewerIndirectChildClass = 'pp-viewer-indirect-child';
 
+export const PPViewerHoverContainerClass = 'pp-viewer-hover-container';
+
 export const PPScopeClass = scopeStyles['pp-scope-class'];
 
 /*

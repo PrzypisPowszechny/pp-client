@@ -18,11 +18,6 @@ $viewer-font-size: 14px;
   @include pp-widget-edge();
 }
 
-.self-offset {
-  // just for purpose of identification
-  border: 0;
-}
-
 .popup:global(#{$pp-scope}.ui.popup) {
   z-index: $viewer-z-index + 1;
 }
