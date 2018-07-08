@@ -10,3 +10,5 @@ $editor-z-index: $z-index-base + 20;
 // editor-z-index + 1 = editor's tooltips and errors
 
 $menu-z-index: $z-index-base + 30;
+
+$annotation-mode-widget-z-index: $z-index-base;

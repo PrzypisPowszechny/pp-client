@@ -111,16 +111,26 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
     const {
       disabledPages,
       currentTabUrl,
+      annotationModePages,
     } = this.state;
 
-    let newDisabledList;
+    let newDisabledPages;
     if (checked) {
-      newDisabledList = [...disabledPages, currentTabUrl];
+      newDisabledPages = [...disabledPages, currentTabUrl];
     } else {
-      newDisabledList = _filter(disabledPages, url => url !== currentTabUrl);
+      newDisabledPages = _filter(disabledPages, url => url !== currentTabUrl);
     }
-    this.setState({ disabledPages: newDisabledList });
-    chromeStorage.set({ [chromeKeys.DISABLED_PAGES]: newDisabledList });
+    // Permanently turn off the annotation mode for the disabled pages
+    const newAnnotationModePages = _filter(annotationModePages, url => !newDisabledPages.includes(url));
+
+    this.setState({
+      disabledPages: newDisabledPages,
+      annotationModePages: newAnnotationModePages,
+    });
+    chromeStorage.set({
+      [chromeKeys.DISABLED_PAGES]: newDisabledPages,
+      [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages,
+    });
   }
 
   render() {
@@ -141,15 +151,12 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
       <div className="pp-popup">
         <ul className="menu">
           <li
-            className={classNames('menu__item', 'clickable', { disabled: isAnnotationMode })}
+            className={classNames('menu__item', 'clickable',
+              { disabled: isAnnotationMode || isExtensionDisabled || isCurrentPageDisabled })}
             onClick={this.handleAnnotationModeClick}
           >
             <img className="menu__item__icon" src={addIcon}/>
             <a>Dodaj przypis</a>
-          </li>
-          <li className="menu__item clickable">
-            <img className="menu__item__icon" src={requestIcon}/>
-            <a>Poproś o przypis</a>
           </li>
           <hr className="menu__separator"/>
           <li className="menu__item">
@@ -167,10 +174,6 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
               onChange={this.handleDisabledPageChange}
             />
           </li>
-          <hr className="menu__separator"/>
-          <div className="cta-container">
-            <button className="cta-button">Daj znać, co myślisz</button>
-          </div>
         </ul>
       </div>
     );

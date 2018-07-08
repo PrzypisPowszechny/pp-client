@@ -1,4 +1,5 @@
 @import "css/common/vars/fonts";
+@import "css/common/vars/z-index";
 @import "css/common/mixins";
 
 /* -- PP Action menu -- */
@@ -7,7 +8,7 @@
   top: 20px;
   right: 20px;
   width: 270px;
-  z-index: 10;
+  z-index: $annotation-mode-widget-z-index;
   padding: 20px 10px;
 
   font-size: 14px;

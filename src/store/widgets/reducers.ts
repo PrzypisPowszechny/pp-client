@@ -9,10 +9,12 @@ import _difference from 'lodash/difference';
 import { API_DELETED } from 'redux-json-api/lib/constants';
 import { AnnotationResourceType } from 'api/annotations';
 import { combineReducers } from 'redux';
+import { MODIFY_APP_MODES } from '../appModes/actions';
+import { isAnnotationMode } from 'store/appModes/selectors';
 
 export interface IWidgetState {
   visible: boolean;
-  location: {x: number; y: number};
+  location: { x: number; y: number };
 }
 
 export interface IViewerState extends IWidgetState {
@@ -51,7 +53,7 @@ const widgets = combineReducers({
 });
 export default widgets;
 
-function viewer(state = { ...initialWidgetState, annotationIds: [], deleteModal: {} } , action) {
+function viewer(state = { ...initialWidgetState, annotationIds: [], deleteModal: {} }, action) {
   switch (action.type) {
     case VIEWER_VISIBLE_CHANGE:
       // Update location only when the displayed annotations have changed, too.
@@ -95,7 +97,7 @@ function viewer(state = { ...initialWidgetState, annotationIds: [], deleteModal:
   }
 }
 
-function menu(state = initialWidgetState , action) {
+function menu(state = initialWidgetState, action) {
   switch (action.type) {
     case MENU_WIDGET_CHANGE:
       return { ...state, ...action.payload };
@@ -110,6 +112,12 @@ function editor(state = { annotationId: null, range: null, ...initialWidgetState
     case EDITOR_ANNOTATION:
     case SET_EDITOR_SELECTION_RANGE:
       return { ...state, ...action.payload };
+    case MODIFY_APP_MODES:
+      // When the annotation mode is turned off, editor is closed
+      return {
+        ...state,
+        visible: state.visible && isAnnotationMode(action.payload),
+      };
     default:
       return state;
   }

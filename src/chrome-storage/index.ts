@@ -1,4 +1,4 @@
-import { AppModeReducer } from '../store/appModes/reducers';
+import { AppModes } from '../store/appModes/types';
 import _filter from 'lodash/filter';
 import * as chromeKeys from './keys';
 import { standardizeUrlForPageSettings } from 'utils/url';
@@ -35,7 +35,7 @@ if (typeof chrome.storage !== 'undefined') {
 
 export default storage;
 
-export function turnOffAnnotationMode(appModes: AppModeReducer) {
+export function turnOffAnnotationMode(appModes: AppModes) {
   const currentStandardizedURL = standardizeUrlForPageSettings(window.location.href);
   const newAnnotationModePages = _filter(appModes.annotationModePages, url => url !== currentStandardizedURL);
   storage.set({ [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages });

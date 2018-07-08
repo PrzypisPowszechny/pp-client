@@ -13,6 +13,10 @@
       "./@types",
       "./node_modules/@types"
     ],
+    "lib": [
+      "dom",
+      "es7"
+    ],
     "baseUrl": ".",
     "paths": {
       "*": [
