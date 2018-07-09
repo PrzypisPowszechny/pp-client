@@ -8,7 +8,7 @@ import Timer = NodeJS.Timer;
 import { PPViewerHoverContainerClass } from '../../class_consts';
 
 interface IViewerManagerState {
-  mouseOver: boolean;
+  isMouseOver: boolean;
   // whether the Viewer is about to disappear
   mouseHasLeft: boolean;
   // whether the Viewer has been prevented from disappearing by the entering mouse
@@ -106,11 +106,11 @@ export default class ViewerManager extends React.Component<Partial<IViewerManage
 
   checkHover = () => {
     if (document.querySelectorAll(`.${PPViewerHoverContainerClass} :hover`).length) {
-      if (this.state.mouseHasLeft) {
+      if (!this.state.isMouseOver) {
         this.props.setMouseOverViewer(true);
       }
     } else {
-      if (this.state.mouseHasEntered) {
+      if (this.state.isMouseOver) {
         this.props.setMouseOverViewer(false);
       }
     }
