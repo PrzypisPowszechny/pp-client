@@ -20,3 +20,16 @@
     display: none;
   }
 }
+
+@mixin close-icon {
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  border: none;
+  outline: none;
+
+  color: #888888;
+  background: none;
+  cursor: pointer;
+}

@@ -259,7 +259,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
             <Popup
               trigger={this.renderUpvoteButton()}
               size="small"
-              className={classNames(indirectChildClassName, PPScopeClass, 'pp-popup-small-padding')}
+              className={classNames(indirectChildClassName, PPScopeClass, styles.popup, 'pp-popup-small-padding')}
               inverted={true}
             >
               Daj znać, że uważasz przypis za pomocny.

@@ -2,7 +2,7 @@ import store from 'store';
 import { showViewer } from 'store/actions';
 import { mousePosition } from 'common/dom';
 import Highlighter from 'core/Highlighter';
-import { mouseOverViewer } from '../store/widgets/actions';
+import { setMouseOverViewer } from '../store/widgets/actions';
 import { selectModeForCurrentPage } from '../store/appModes/selectors';
 import _difference from 'lodash/difference';
 import { selectViewerState } from '../store/widgets/selectors';
@@ -52,7 +52,7 @@ function handleHighlightMouseLeave(e, annotations) {
   if (e.buttons !== 0) {
     return;
   }
-  store.dispatch(mouseOverViewer(false));
+  store.dispatch(setMouseOverViewer(false));
 }
 
 function handleHighlightMouseEnter(e, annotations) {

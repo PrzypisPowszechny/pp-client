@@ -46,7 +46,7 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
 
   render() {
     return (
-      <div className={classNames(PPScopeClass, styles.self, styles.editor)}>
+      <div className={classNames(PPScopeClass, styles.self, styles.selfEdge, styles.editor)}>
         <h3>Co jest nie tak?</h3>
         <div>
           <div className={classNames(styles.radioInputLine)}>
@@ -101,7 +101,7 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
           </div>
           <div
             className={classNames(styles['error-msg'], 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { [styles.hide]: !this.state.showReasonError })}
+              { [styles.hidden]: !this.state.showReasonError })}
           >
             Wybierz typ zgłoszenia!
           </div>

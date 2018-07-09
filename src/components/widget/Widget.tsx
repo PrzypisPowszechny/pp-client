@@ -17,6 +17,7 @@ export interface IWidgetProps {
   widgetTriangle: boolean;
 
   className: string;
+  offsetClassName?: string;
   onMouseLeave: (Event) => void;
   onMouseEnter: (Event) => void;
   children: React.ReactChild | React.ReactChild[];
@@ -54,6 +55,7 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
     invertedY: false,
     updateInverted: false,
     className: '',
+    offsetClassName: '',
     onMouseLeave: null,
     onMouseEnter: null,
     widgetTriangle: false,
@@ -136,14 +138,14 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
   render() {
     return (
       <div
-        className={styles.self}
+        className={classNames(styles.self, this.props.offsetClassName)}
         ref={this.rootElement}
       >
         <div
           className={this.getInnerClassNames()}
           ref={this.innerElement}
         >
-          <div className={this.props.className}>
+          <div className={classNames(styles.content, this.props.className)}>
             {this.props.children}
           </div>
         </div>

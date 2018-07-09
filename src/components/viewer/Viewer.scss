@@ -1,3 +1,4 @@
+@import 'css/common/vars/scope';
 @import "css/common/vars/sizes";
 @import "css/common/vars/colors";
 @import "css/common/vars/fonts";
@@ -15,6 +16,10 @@ $viewer-font-size: 14px;
   z-index: $viewer-z-index;
 
   @include pp-widget-edge();
+}
+
+.popup:global(#{$pp-scope}.ui.popup) {
+  z-index: $viewer-z-index + 1;
 }
 
 ul.annotation-items {
