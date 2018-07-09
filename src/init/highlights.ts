@@ -4,6 +4,8 @@ import { mousePosition } from 'common/dom';
 import Highlighter from 'core/Highlighter';
 import { mouseOverViewer } from '../store/widgets/actions';
 import { selectModeForCurrentPage } from '../store/appModes/selectors';
+import _difference from 'lodash/difference';
+import { selectViewerState } from '../store/widgets/selectors';
 
 let instance;
 
@@ -59,12 +61,30 @@ function handleHighlightMouseEnter(e, annotations) {
   if (e.buttons !== 0) {
     return;
   }
-  const position = mousePosition(e);
-  store.dispatch(showViewer(
-    position.x,
-    position.y,
-    annotations.map(annotation => annotation.id),
-  ));
+
+  const {
+    annotationIds,
+    isAnyReportEditorOpen,
+    visible,
+  } = selectViewerState(store.getState());
+
+  if (!isAnyReportEditorOpen) {
+    // Open a new Viewer only when
+    // - the viewer is not visible
+    // - the displayed annotations have changed, too. This prevents the widget from shifting location
+    //   every time the user's cursor slips off the widget
+    const newIds = annotations.map(item => item.id);
+    const annotationsChanged =
+      _difference(annotationIds, newIds).length !== 0 || _difference(newIds, annotationIds).length !== 0;
+    if (!visible || annotationsChanged) {
+      const position = mousePosition(e);
+      store.dispatch(showViewer(
+        position.x,
+        position.y,
+        annotations.map(annotation => annotation.id),
+      ));
+    }
+  }
 }
 
 export default {

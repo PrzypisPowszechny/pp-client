@@ -16,8 +16,7 @@ import DeleteAnnotationModal from './DeleteAnnotationModal';
 interface IViewerProps {
   locationX: number;
   locationY: number;
-  annotations: AnnotationAPIModel[];
-
+  annotationIds: string[];
   deleteModalOpen: boolean;
 
   showEditorAnnotation: (x: number, y: number, id?: string) => void;
@@ -35,7 +34,7 @@ interface IViewerProps {
       deleteModal: {
         deleteModalOpen,
       },
-      annotations,
+      annotationIds,
     } = selectViewerState(state);
 
     return {
@@ -43,7 +42,7 @@ interface IViewerProps {
       locationX,
       locationY,
       deleteModalOpen,
-      annotations,
+      annotationIds,
     };
   },
   {
@@ -81,7 +80,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
 
   handleMouseLeave = (e) => {
     // Normally, close the window, except...
-    // not when the modal is not open
+    // not when the modal is open
     // not when this element is manually marked as an indirect Viewer child (despite not being a DOM child)
     const isMouseOverIndirectChild = e.relatedTarget.classList.contains(PPViewerIndirectChildClass);
     if (!this.props.deleteModalOpen && !isMouseOverIndirectChild) {
@@ -95,12 +94,11 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
   }
 
   renderItems() {
-    return this.props.annotations.map((annotation) => {
-      const attrs = annotation.attributes;
+    return this.props.annotationIds.map((id) => {
       return (
         <ViewerItem
-          key={annotation.id}
-          annotation={annotation}
+          key={id}
+          annotationId={id}
           onDelete={this.props.openViewerDeleteModal}
           onEdit={this.onItemEdit}
           // ignore these elements on mouseleave

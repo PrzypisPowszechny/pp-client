@@ -22,6 +22,7 @@ interface IViewerManagerProps {
   mouseOver: boolean;
   deleteModalOpen: boolean;
   annotationIds: string[];
+  isAnyReportEditorOpen: boolean;
 
   mouseOverViewer: (value: boolean) => void;
   hideViewer: () => void;
@@ -37,6 +38,7 @@ interface IViewerManagerProps {
         deleteModalOpen,
       },
       annotationIds,
+      isAnyReportEditorOpen,
     } = selectViewerState(state);
 
     return {
@@ -44,6 +46,7 @@ interface IViewerManagerProps {
       mouseOver,
       deleteModalOpen,
       annotationIds,
+      isAnyReportEditorOpen,
     };
   },
   {
@@ -121,7 +124,7 @@ export default class ViewerManager extends React.Component<Partial<IViewerManage
     if (this.state.mouseHasLeft) {
       if (this.state.deleteModalJustClosed) {
         this.startDisappearTimer(ViewerManager.modalCloseDisappearTimeout);
-      } else {
+      } else if (!this.props.isAnyReportEditorOpen) {
         this.startDisappearTimer(ViewerManager.mouseleaveDisappearTimeout);
       }
     } else if (this.state.mouseHasEntered) {

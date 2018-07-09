@@ -2,7 +2,7 @@ import {
   EDITOR_ANNOTATION,
   EDITOR_VISIBLE_CHANGE,
   MENU_WIDGET_CHANGE,
-  SET_EDITOR_SELECTION_RANGE, VIEWER_MODAL_CHANGE,
+  SET_EDITOR_SELECTION_RANGE, VIEWER_MODAL_CHANGE, VIEWER_REPORT_EDITOR_CHANGE,
   VIEWER_VISIBLE_CHANGE,
 } from './actions';
 import _difference from 'lodash/difference';
@@ -18,7 +18,14 @@ export interface IWidgetState {
 }
 
 export interface IViewerState extends IWidgetState {
-  annotationIds: string[];
+  viewerItems: IViewerItemState[];
+  deleteModal: any;
+  mouseOver: boolean;
+}
+
+export interface IViewerItemState {
+  annotationId: string;
+  isReportEditorOpen: boolean;
 }
 
 // IEditorRange differs from Range.SerializedRange in that it is a simple object (not a class)
@@ -48,46 +55,45 @@ const initialWidgetState = {
   },
 };
 
-const widgets = combineReducers({
-  menu, viewer, editor,
-});
-export default widgets;
+const initialViewerState = {
+  ...initialWidgetState,
+  deleteModal: {},
+  viewerItems: [],
+};
 
-function viewer(state = { ...initialWidgetState, annotationIds: [], deleteModal: {} }, action) {
+function viewer(state = initialViewerState, action) {
   switch (action.type) {
     case VIEWER_VISIBLE_CHANGE:
-      // Update location only when the displayed annotations have changed, too.
-      // This prevents window from changing every time the user's cursor slips off the widget
-      const prevIds = state.annotationIds;
-      const newIds = action.payload.annotationIds;
-      let locationOverride = {};
-      if (_difference(prevIds, newIds).length === 0 && _difference(newIds, prevIds).length === 0) {
-        locationOverride = {
-          location: state.location,
-        };
-      }
       return {
         ...state,
         ...action.payload,
-        ...locationOverride,
       };
     case VIEWER_MODAL_CHANGE:
       return {
         ...state,
         deleteModal: action.payload,
       };
+    case VIEWER_REPORT_EDITOR_CHANGE:
+      const viewerItem = state.viewerItems.find(item => item.annotationId === action.payload.annotationId);
+      const updatedViewerItem: IViewerItemState = { ...action.payload };
+      return {
+        ...state,
+        viewerItems: state.viewerItems.map(item =>
+          item.annotationId === action.payload.annotationId ? updatedViewerItem : { ...item },
+        ),
+      };
     case API_DELETED:
       // If one of viewed annotation is removed, filter it out
       const { type: resType, id: resId } = action.payload;
       if (resType === AnnotationResourceType && state.visible) {
-        const filteredAnnotationIds = state.annotationIds.slice()
-          .filter(id => id !== resId);
+        const filteredViewerItems = state.viewerItems.slice()
+          .filter(item => item.annotationId !== resId);
 
-        if (state.annotationIds.length !== filteredAnnotationIds.length) {
+        if (state.viewerItems.length !== filteredViewerItems.length) {
           return {
             ...state,
-            annotationIds: filteredAnnotationIds,
-            visible: filteredAnnotationIds.length > 0,
+            viewerItems: filteredViewerItems,
+            visible: filteredViewerItems.length > 0,
           };
         }
       }
@@ -122,3 +128,9 @@ function editor(state = { annotationId: null, range: null, ...initialWidgetState
       return state;
   }
 }
+
+const widgets = combineReducers({
+  menu, viewer, editor,
+});
+
+export default widgets;
