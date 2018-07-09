@@ -82,7 +82,8 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
     // Normally, close the window, except...
     // not when the modal is open
     // not when this element is manually marked as an indirect Viewer child (despite not being a DOM child)
-    const isMouseOverIndirectChild = e.relatedTarget.classList.contains(PPViewerIndirectChildClass);
+    // (related target can be null e.g. on tab change)
+    const isMouseOverIndirectChild = e.relatedTarget && e.relatedTarget.classList.contains(PPViewerIndirectChildClass);
     if (!this.props.deleteModalOpen && !isMouseOverIndirectChild) {
       // check what element the pointer entered;
       this.props.mouseOverViewer(false);
