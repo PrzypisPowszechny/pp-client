@@ -177,17 +177,21 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
         }
         <div className={styles.bottomBar}>
           <div className={styles.annotationLinkContainer}>
-            <a className={styles.annotationLink}
-               href={httpPrefixed(annotationLink)}
-               onClick={this.handleAnnotationLinkClick}
-               target="_blank">
+            <a
+              className={styles.annotationLink}
+              href={httpPrefixed(annotationLink)}
+              onClick={this.handleAnnotationLinkClick}
+              target="_blank"
+            >
               <span className={styles.annotationLinkIcon}/>
               {extractHostname(annotationLink)}
             </a>
-            <a className={styles.annotationLinkTitle}
-               href={httpPrefixed(annotationLink)}
-               onClick={this.handleAnnotationLinkClick}
-               target="_blank">
+            <a
+              className={styles.annotationLinkTitle}
+              href={httpPrefixed(annotationLink)}
+              onClick={this.handleAnnotationLinkClick}
+              target="_blank"
+            >
               {annotationLinkTitle}
             </a>
           </div>

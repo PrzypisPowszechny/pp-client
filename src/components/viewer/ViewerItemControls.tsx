@@ -2,22 +2,15 @@ import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createResource, deleteResource } from 'redux-json-api';
-import moment from 'moment';
-import { Popup } from 'semantic-ui-react';
-
 import styles from './Viewer.scss';
+// TODO: refactor ReportEditor.scss styles
+import menuStyles from './report-editor/ReportEditor.scss';
 import {
   changeViewerReportEditorOpen,
-  hideViewer,
   showEditorAnnotation,
 } from 'store/widgets/actions';
-import {
-  AnnotationResourceType, AnnotationAPIModel,
-  AnnotationPriorities, annotationPrioritiesLabels,
+import {AnnotationAPIModel,
 } from 'api/annotations';
-import {
-  AnnotationUpvoteResourceType, AnnotationUpvoteAPIModel, AnnotationUpvoteAPICreateModel,
-} from 'api/annotation-upvotes';
 import Timer = NodeJS.Timer;
 import { PPScopeClass } from '../../class_consts';
 import { extractHostname, httpPrefixed } from '../../utils/url';
@@ -34,6 +27,14 @@ interface IViewerItemControlsProps {
 
 interface IViewerItemControlsState {
   initialView: boolean; // used to determine whether edit/delete buttons should be visible
+  activeDialog?: Dialogs;
+}
+
+enum Dialogs {
+  MENU = 'menu',
+  REPORT = 'report',
+  SUGGESTION = 'suggestion',
+  SUCCESS_TOAST = 'success_toast',
 }
 
 @connect(
@@ -51,14 +52,15 @@ interface IViewerItemControlsState {
   }),
 )
 export default class ViewerItemControls extends
-  React.Component<Partial<IViewerItemControlsProps>,
-  Partial<IViewerItemControlsState>>
-{
-
+  React.Component<
+    Partial<IViewerItemControlsProps>,
+    Partial<IViewerItemControlsState>
+  > {
   static editControlDisappearTimeout = 500;
 
   static defaultState = {
     initialView: true,
+    activeDialog: null,
   };
 
   disappearTimeoutId: Timer;
@@ -92,12 +94,19 @@ export default class ViewerItemControls extends
     this.props.onDelete(this.props.annotation.id);
   }
 
-  toggleReportEditor = (e?: any) => {
-    const {
-      annotation,
-      isReportEditorOpen,
-    } = this.props;
-    this.props.changeViewerReportEditorOpen(annotation.id, !isReportEditorOpen);
+  selectDialog = (e: any) => {
+      // We use e.currentTarget (the event handling element) since in Chrome e.target returns the node inside button
+      this.setState({ activeDialog: e.currentTarget.value });
+  }
+
+  openReportEditor = (e) => {
+    this.selectDialog(e);
+    this.props.changeViewerReportEditorOpen(this.props.annotation.id, true);
+  }
+
+  closeReportEditor = () => {
+    this.setState({ activeDialog: null });
+    this.props.changeViewerReportEditorOpen(this.props.annotation.id, false);
   }
 
   render() {
@@ -127,18 +136,55 @@ export default class ViewerItemControls extends
             <button
               type="button"
               title="Edit"
-              onClick={this.toggleReportEditor}
+              onClick={this.selectDialog}
+              value={Dialogs.MENU}
             >
               <span className={classNames(styles.actionsIcon)}/>
             </button>
           </div>
-         {!this.props.isReportEditorOpen ? null :
-            <ReportEditor
-                annotation={this.props.annotation}
-                onCancel={this.toggleReportEditor}
-                onSuccess={this.toggleReportEditor}
-            />
-          }
+         {
+           (() => {
+             switch (this.state.activeDialog) {
+               case Dialogs.MENU:
+                 return (
+                   <div className={classNames(PPScopeClass, menuStyles.self, menuStyles.selfEdge, menuStyles.menu)}>
+                    <div>
+                      <button onClick={this.openReportEditor} value={Dialogs.REPORT}>
+                        <span className={classNames(menuStyles.reportIcon)} />
+                        <span> Zgłoś przypis </span>
+                      </button>
+                    </div>
+                    <div>
+                      <button onClick={this.openReportEditor} value={Dialogs.SUGGESTION}>
+                        <span className={classNames(menuStyles.suggestIcon)} />
+                        <span> Zasugeruj poprawkę </span>
+                      </button>
+                    </div>
+                  </div>
+                 );
+               case Dialogs.REPORT:
+                 return (
+                   <ReportEditor
+                     reportComponentClass={ReportEditor.Report}
+                     annotation={this.props.annotation}
+                     onCancel={this.closeReportEditor}
+                     onSuccess={this.closeReportEditor}
+                   />
+                 );
+               case Dialogs.SUGGESTION:
+                 return (
+                   <ReportEditor
+                     reportComponentClass={ReportEditor.Suggestion}
+                     annotation={this.props.annotation}
+                     onCancel={this.closeReportEditor}
+                     onSuccess={this.closeReportEditor}
+                   />
+                 );
+               default:
+                return <div/>;
+             }
+           })()
+         }
         </div>
       );
     }
