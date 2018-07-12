@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createResource, deleteResource } from 'redux-json-api';
 import { selectViewerState } from 'store/widgets/selectors';
 import { hideViewer, setMouseOverViewer } from 'store/widgets/actions';
 import Viewer from './Viewer';
@@ -148,8 +147,6 @@ export default class ViewerManager extends React.Component<Partial<IViewerManage
   }
 
   render() {
-    return (
-      this.props.visible && <Viewer/>
-    );
+    return this.props.visible && <Viewer/>;
   }
 }

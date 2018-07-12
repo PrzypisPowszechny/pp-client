@@ -6,11 +6,7 @@ import moment from 'moment';
 import { Popup } from 'semantic-ui-react';
 
 import styles from './Viewer.scss';
-import {
-  changeViewerReportEditorOpen,
-  hideViewer,
-  showEditorAnnotation,
-} from 'store/widgets/actions';
+import { hideViewer } from 'store/widgets/actions';
 import {
   AnnotationResourceType, AnnotationAPIModel,
   AnnotationPriorities, annotationPrioritiesLabels,
@@ -18,10 +14,8 @@ import {
 import {
   AnnotationUpvoteResourceType, AnnotationUpvoteAPIModel, AnnotationUpvoteAPICreateModel,
 } from 'api/annotation-upvotes';
-import Timer = NodeJS.Timer;
 import { PPScopeClass } from '../../class_consts';
 import { extractHostname, httpPrefixed } from '../../utils/url';
-import ReportEditor from './report-editor/ReportEditor';
 import ViewerItemControls from './ViewerItemControls';
 
 interface IViewerItemProps {
@@ -33,11 +27,8 @@ interface IViewerItemProps {
   isReportEditorOpen: boolean;
 
   hideViewer: () => undefined;
-  changeViewerReportEditorOpen: (annotationId, isReportEditorOpen) => void;
   deleteUpvote: (instance: AnnotationUpvoteAPIModel) => Promise<object>;
   createUpvote: (instance: AnnotationUpvoteAPICreateModel) => Promise<object>;
-  onEdit: (id: string) => void;
-  onDelete: (id: string) => void;
 }
 
 interface IViewerItemState {
@@ -48,21 +39,13 @@ interface IViewerItemState {
   (state, props) => {
     const viewerItem = state.widgets.viewer.viewerItems.find(item => item.annotationId === props.annotationId);
     const annotations = state.api.annotations.data;
-    const {
-      annotationId,
-    } = viewerItem;
-
     return {
       ...viewerItem,
-      annotation: annotations.find(annotation => annotation.id === annotationId),
+      annotation: annotations.find(annotation => annotation.id === props.annotationId),
     };
   },
   dispatch => ({
-    changeViewerReportEditorOpen: (annotationId, isReportEditorOpen) =>
-      dispatch(changeViewerReportEditorOpen(annotationId, isReportEditorOpen)),
-    showEditorAnnotation: () => dispatch(showEditorAnnotation),
     hideViewer: () => dispatch(hideViewer),
-
     deleteUpvote: (instance: AnnotationUpvoteAPIModel) => dispatch(deleteResource(instance)),
     createUpvote: (instance: AnnotationUpvoteAPICreateModel) => dispatch(createResource(instance)),
   }),
@@ -164,11 +147,9 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
           <div className={styles.commentDate}>
             {createDate ? moment(createDate).fromNow() : ''}
           </div>
-          <ViewerItemControls
-            annotation={this.props.annotation}
-            onEdit={this.props.onEdit}
-            onDelete={this.props.onDelete}
-          />
+
+          <ViewerItemControls annotation={this.props.annotation} />
+
         </div>
         {!comment ? '' :
           <div className={styles.comment}>

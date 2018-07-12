@@ -1,28 +1,30 @@
 import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { createResource, deleteResource } from 'redux-json-api';
 import styles from './Viewer.scss';
 // TODO: refactor ReportEditor.scss styles
 import menuStyles from './report-editor/ReportEditor.scss';
 import {
+  hideViewer,
+  openViewerDeleteModal,
   changeViewerReportEditorOpen,
   showEditorAnnotation,
 } from 'store/widgets/actions';
-import {AnnotationAPIModel,
-} from 'api/annotations';
+import { AnnotationAPIModel } from 'api/annotations';
 import Timer = NodeJS.Timer;
 import { PPScopeClass } from '../../class_consts';
-import { extractHostname, httpPrefixed } from '../../utils/url';
 import ReportEditor from './report-editor/ReportEditor';
 
 interface IViewerItemControlsProps {
+  locationX: number;
+  locationY: number;
+  isDeleteModalOpen: boolean;
   annotation: AnnotationAPIModel;
-  isReportEditorOpen: boolean;
 
   changeViewerReportEditorOpen: (annotationId, isReportEditorOpen) => void;
-  onEdit: (id: string) => void;
-  onDelete: (id: string) => void;
+  showEditorAnnotation: (x: number, y: number, id?: string) => void;
+  hideViewer: () => void;
+  openViewerDeleteModal: (id: string) => void;
 }
 
 interface IViewerItemControlsState {
@@ -39,17 +41,29 @@ enum Dialogs {
 
 @connect(
   (state, props) => {
+    const {
+      location: {
+          x: locationX,
+          y: locationY,
+      },
+      deleteModal: {
+        isDeleteModalOpen,
+      },
+    } = state.widgets.viewer;
     const viewerItem = state.widgets.viewer.viewerItems.find(item => item.annotationId === props.annotation.id);
 
     return {
+      locationX,
+      locationY,
+      isDeleteModalOpen,
       ...viewerItem,
     };
+  }, {
+    changeViewerReportEditorOpen,
+    showEditorAnnotation,
+    hideViewer,
+    openViewerDeleteModal,
   },
-  dispatch => ({
-    changeViewerReportEditorOpen: (annotationId, isReportEditorOpen) =>
-      dispatch(changeViewerReportEditorOpen(annotationId, isReportEditorOpen)),
-    showEditorAnnotation: () => dispatch(showEditorAnnotation),
-  }),
 )
 export default class ViewerItemControls extends
   React.Component<
@@ -63,7 +77,7 @@ export default class ViewerItemControls extends
     activeDialog: null,
   };
 
-  disappearTimeoutId: Timer;
+  disappearTimeoutTimer: Timer;
 
   constructor(props: IViewerItemControlsProps) {
     super(props);
@@ -71,32 +85,38 @@ export default class ViewerItemControls extends
   }
 
   componentDidMount() {
-    this.disappearTimeoutId = setTimeout(
+    this.disappearTimeoutTimer = setTimeout(
       () => {
         this.setState({ initialView: false });
-        this.disappearTimeoutId = null;
+        this.disappearTimeoutTimer = null;
       },
       ViewerItemControls.editControlDisappearTimeout,
     );
   }
 
   componentWillUnmount() {
-    if (this.disappearTimeoutId) {
-      clearTimeout(this.disappearTimeoutId);
+    if (this.disappearTimeoutTimer) {
+      clearTimeout(this.disappearTimeoutTimer);
     }
   }
 
-  onEditClick = (e) => {
-    this.props.onEdit(this.props.annotation.id);
+  onAnnotationEditClick = () => {
+    const {
+      locationX,
+      locationY,
+      annotation,
+    } = this.props;
+    this.props.showEditorAnnotation(locationX, locationY, annotation.id);
+    this.props.hideViewer();
   }
 
-  onDeleteClick = (e) => {
-    this.props.onDelete(this.props.annotation.id);
+  onAnnotationDeleteClick = () => {
+    this.props.openViewerDeleteModal(this.props.annotation.id);
   }
 
   selectDialog = (e: any) => {
-      // We use e.currentTarget (the event handling element) since in Chrome e.target returns the node inside button
-      this.setState({ activeDialog: e.currentTarget.value });
+    // We use e.currentTarget (the event handling element) since in Chrome e.target returns the node inside button
+    this.setState({ activeDialog: e.currentTarget.value });
   }
 
   openReportEditor = (e) => {
@@ -116,14 +136,14 @@ export default class ViewerItemControls extends
           <button
             type="button"
             title="Edit"
-            onClick={this.onEditClick}
+            onClick={this.onAnnotationEditClick}
           >
             <i className="edit icon"/>
           </button>
           <button
             type="button"
             title="Delete"
-            onClick={this.onDeleteClick}
+            onClick={this.onAnnotationDeleteClick}
           >
             <i className="trash icon"/>
           </button>
