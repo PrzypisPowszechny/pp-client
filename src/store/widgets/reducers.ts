@@ -74,12 +74,14 @@ function viewer(state = initialViewerState, action) {
         deleteModal: action.payload,
       };
     case VIEWER_REPORT_EDITOR_CHANGE:
-      const viewerItem = state.viewerItems.find(item => item.annotationId === action.payload.annotationId);
-      const updatedViewerItem: IViewerItemState = { ...action.payload };
       return {
         ...state,
         viewerItems: state.viewerItems.map(item =>
-          item.annotationId === action.payload.annotationId ? updatedViewerItem : { ...item },
+          item.annotationId === action.payload.annotationId ?
+            // Update fields related to this action, preserving all other
+            { ...item, ...action.payload } :
+            // If no change to item, do not re-create it, map will trigger necessary updated anyway
+            item,
         ),
       };
     case API_DELETED:

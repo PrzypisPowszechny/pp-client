@@ -34,6 +34,10 @@ function selectAnnotationForm(annotations, editor) {
   };
 }
 
+export function selectAnnotation(state: ITabState, annotationId: string) {
+  return state.api.annotations.data.find( annotation => annotation.id === annotationId);
+}
+
 export const selectEditorState = createSelector<ITabState, any, any, any>(
   state => state.widgets.editor,
   state => state.api.annotations.data,
@@ -42,12 +46,6 @@ export const selectEditorState = createSelector<ITabState, any, any, any>(
     ...selectAnnotationForm(annotations, editor),
   }),
 );
-
-function selectViewerAnnotations(annotations: any[], annotationIds: any[]) {
-  return annotationIds.map(id => annotations.find(annotation => annotation.id === id))
-    // Filter out outdated annotationIds (which are only updated on view new opening)
-    .filter( annotation => annotation);
-}
 
 export const selectViewerState = createSelector<ITabState, any, any>(
   state => state.widgets.viewer,

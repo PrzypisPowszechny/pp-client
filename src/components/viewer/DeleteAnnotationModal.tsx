@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { deleteResource } from 'redux-json-api';
 import { Button, Modal } from 'semantic-ui-react';
 
-import { selectViewerState } from 'store/widgets/selectors';
+import { selectAnnotation, selectViewerState } from 'store/widgets/selectors';
 import { hideViewerDeleteModal } from 'store/widgets/actions';
 import { AnnotationAPIModel } from 'api/annotations';
 import { PPScopeClass } from 'class_consts.ts';
@@ -21,7 +21,7 @@ interface IModalProps {
 }
 
 @connect(
-  (state, props) => {
+  (state) => {
     const {
       deleteModal: {
         deleteModalId,
@@ -32,7 +32,7 @@ interface IModalProps {
     return {
       deleteModalId,
       isDeleteModalOpen,
-      annotation: state.api.annotations.data.find(annotation => annotation.id === props.deleteModalId),
+      annotation: selectAnnotation(state, deleteModalId),
     };
   },
   {

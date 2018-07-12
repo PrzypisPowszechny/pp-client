@@ -24,7 +24,7 @@ interface IUpvoteState {
 }
 
 @connect(
-  (state, props) => null,
+  (state, props) => ({}),
   dispatch => ({
     deleteUpvote: (instance: AnnotationUpvoteAPIModel) => dispatch(deleteResource(instance)),
     createUpvote: (instance: AnnotationUpvoteAPICreateModel) => dispatch(createResource(instance)),
