@@ -74,7 +74,7 @@ export default class ViewerItemControls extends
   componentDidMount() {
     this.disappearTimeoutTimer = setTimeout(
       () => {
-        this.setState({initialView: false});
+        this.setState({ initialView: false });
         this.disappearTimeoutTimer = null;
       },
       ViewerItemControls.editControlDisappearTimeout,
@@ -102,7 +102,7 @@ export default class ViewerItemControls extends
   }
 
   toggleDialog = () => {
-    this.setState({isDialogOpen: !this.state.isDialogOpen});
+    this.setState({ isDialogOpen: !this.state.isDialogOpen });
   }
 
   render() {

@@ -1,9 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { createResource, deleteResource } from 'redux-json-api';
 import moment from 'moment';
-import { Popup } from 'semantic-ui-react';
 
 import styles from './Viewer.scss';
 import { hideViewer } from 'store/widgets/actions';
@@ -11,12 +9,9 @@ import {
   AnnotationResourceType, AnnotationAPIModel,
   AnnotationPriorities, annotationPrioritiesLabels,
 } from 'api/annotations';
-import {
-  AnnotationUpvoteResourceType, AnnotationUpvoteAPIModel, AnnotationUpvoteAPICreateModel,
-} from 'api/annotation-upvotes';
-import { PPScopeClass } from '../../class_consts';
 import { extractHostname, httpPrefixed } from '../../utils/url';
 import ViewerItemControls from './ViewerItemControls';
+import Upvote from './Upvote';
 
 interface IViewerItemProps {
   key: string;
@@ -24,11 +19,7 @@ interface IViewerItemProps {
   indirectChildClassName: string;
 
   annotation: AnnotationAPIModel;
-  isReportEditorOpen: boolean;
-
   hideViewer: () => undefined;
-  deleteUpvote: (instance: AnnotationUpvoteAPIModel) => Promise<object>;
-  createUpvote: (instance: AnnotationUpvoteAPICreateModel) => Promise<object>;
 }
 
 interface IViewerItemState {
@@ -37,18 +28,13 @@ interface IViewerItemState {
 
 @connect(
   (state, props) => {
-    const viewerItem = state.widgets.viewer.viewerItems.find(item => item.annotationId === props.annotationId);
     const annotations = state.api.annotations.data;
     return {
-      ...viewerItem,
       annotation: annotations.find(annotation => annotation.id === props.annotationId),
     };
+  }, {
+    hideViewer,
   },
-  dispatch => ({
-    hideViewer: () => dispatch(hideViewer),
-    deleteUpvote: (instance: AnnotationUpvoteAPIModel) => dispatch(deleteResource(instance)),
-    createUpvote: (instance: AnnotationUpvoteAPICreateModel) => dispatch(createResource(instance)),
-  }),
 )
 export default class ViewerItem extends React.Component<Partial<IViewerItemProps>, Partial<IViewerItemState>> {
 
@@ -57,41 +43,6 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
   constructor(props: IViewerItemProps) {
     super(props);
     this.state = ViewerItem.defaultState;
-  }
-
-  toggleUpvote = (e) => {
-    const { annotation } = this.props;
-    if (annotation.relationships.annotationUpvote.data) {
-      this.props.deleteUpvote({
-        ...annotation.relationships.annotationUpvote.data,
-        // Include relation to remove have the reverse relation (at annotation instance) removed as well,
-        // even if this annotationUpvote is not in the store.
-        // even if this annotationUpvote is not in the store.
-        relationships: {
-          annotation: {
-            data: { id: annotation.id, type: annotation.type },
-          },
-        },
-      }).then(() => null)
-        .catch((errors) => {
-          console.log(errors);
-        });
-    } else {
-      this.props.createUpvote({
-        type: AnnotationUpvoteResourceType,
-        relationships: {
-          annotation: {
-            data: {
-              id: annotation.id,
-              type: AnnotationResourceType,
-            },
-          },
-        },
-      }).then(() => null)
-        .catch((errors) => {
-          console.log(errors);
-        });
-    }
   }
 
   handleAnnotationLinkClick = () => {
@@ -107,24 +58,6 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     return priorityToClass[this.props.annotation.attributes.priority];
   }
 
-  renderUpvoteButton() {
-    const { annotation } = this.props;
-    const { annotationUpvote } = annotation.relationships;
-    const totalUpvoteCount = annotation.attributes.upvoteCountExceptUser + (annotationUpvote.data ? 1 : 0);
-    return (
-      <a
-        className={classNames('ui', styles.upvote, {
-          [styles.selected]: Boolean(annotationUpvote.data),
-        })
-        }
-        onClick={this.toggleUpvote}
-      >
-        <span className={styles.number}>{totalUpvoteCount}</span>
-        <span className={styles.upvoteIcon}/>
-      </a>
-    );
-  }
-
   render() {
     const {
       priority,
@@ -135,6 +68,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     } = this.props.annotation.attributes;
 
     const {
+      annotation,
       indirectChildClassName,
     } = this.props;
 
@@ -176,16 +110,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
               {annotationLinkTitle}
             </a>
           </div>
-          <div className={styles.ratings}>
-            <Popup
-              trigger={this.renderUpvoteButton()}
-              size="small"
-              className={classNames(indirectChildClassName, PPScopeClass, styles.popup, 'pp-popup-small-padding')}
-              inverted={true}
-            >
-              Daj znać, że uważasz przypis za pomocny.
-            </Popup>
-          </div>
+          <Upvote annotation={annotation} indirectChildClassName={indirectChildClassName} />
         </div>
       </li>
     );
