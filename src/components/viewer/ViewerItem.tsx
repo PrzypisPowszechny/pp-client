@@ -6,7 +6,7 @@ import moment from 'moment';
 import styles from './Viewer.scss';
 import { hideViewer } from 'store/widgets/actions';
 import {
-  AnnotationResourceType, AnnotationAPIModel,
+  AnnotationAPIModel,
   AnnotationPriorities, annotationPrioritiesLabels,
 } from 'api/annotations';
 import { extractHostname, httpPrefixed } from '../../utils/url';
