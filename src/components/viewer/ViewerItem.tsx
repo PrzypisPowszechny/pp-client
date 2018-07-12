@@ -22,6 +22,7 @@ import Timer = NodeJS.Timer;
 import { PPScopeClass } from '../../class_consts';
 import { extractHostname, httpPrefixed } from '../../utils/url';
 import ReportEditor from './report-editor/ReportEditor';
+import ViewerItemControls from './ViewerItemControls';
 
 interface IViewerItemProps {
   key: string;
@@ -68,41 +69,11 @@ interface IViewerItemState {
 )
 export default class ViewerItem extends React.Component<Partial<IViewerItemProps>, Partial<IViewerItemState>> {
 
-  static editControlDisappearTimeout = 500;
-
-  static defaultState = {
-    initialView: true,
-  };
-
-  disappearTimeoutId: Timer;
+  static defaultState = {};
 
   constructor(props: IViewerItemProps) {
     super(props);
     this.state = ViewerItem.defaultState;
-  }
-
-  componentDidMount() {
-    this.disappearTimeoutId = setTimeout(
-      () => {
-        this.setState({ initialView: false });
-        this.disappearTimeoutId = null;
-      },
-      ViewerItem.editControlDisappearTimeout,
-    );
-  }
-
-  componentWillUnmount() {
-    if (this.disappearTimeoutId) {
-      clearTimeout(this.disappearTimeoutId);
-    }
-  }
-
-  onEditClick = (e) => {
-    this.props.onEdit(this.props.annotation.id);
-  }
-
-  onDeleteClick = (e) => {
-    this.props.onDelete(this.props.annotation.id);
   }
 
   toggleUpvote = (e) => {
@@ -140,14 +111,6 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     }
   }
 
-  toggleReportEditor = (e?: any) => {
-    const {
-      annotation,
-      isReportEditorOpen,
-    } = this.props;
-    this.props.changeViewerReportEditorOpen(annotation.id, !isReportEditorOpen);
-  }
-
   handleAnnotationLinkClick = () => {
     this.props.hideViewer();
   }
@@ -179,41 +142,6 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     );
   }
 
-  renderControls() {
-    if (this.props.annotation.attributes.doesBelongToUser) {
-      return (
-        <div className={classNames(styles.controls, { [styles.visible]: this.state.initialView })}>
-          <button
-            type="button"
-            title="Edit"
-            onClick={this.onEditClick}
-          >
-            <i className="edit icon"/>
-          </button>
-          <button
-            type="button"
-            title="Delete"
-            onClick={this.onDeleteClick}
-          >
-            <i className="trash icon"/>
-          </button>
-        </div>
-      );
-    } else {
-      return (
-        <div className={classNames(styles.controls, styles.visible)}>
-          <button
-            type="button"
-            title="Edit"
-            onClick={this.toggleReportEditor}
-          >
-            <span className={classNames(styles.actionsIcon)}/>
-          </button>
-        </div>
-      );
-    }
-  }
-
   render() {
     const {
       priority,
@@ -236,7 +164,11 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
           <div className={styles.commentDate}>
             {createDate ? moment(createDate).fromNow() : ''}
           </div>
-          {this.renderControls()}
+          <ViewerItemControls
+            annotation={this.props.annotation}
+            onEdit={this.props.onEdit}
+            onDelete={this.props.onDelete}
+          />
         </div>
         {!comment ? '' :
           <div className={styles.comment}>
@@ -245,13 +177,17 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
         }
         <div className={styles.bottomBar}>
           <div className={styles.annotationLinkContainer}>
-            <a className={styles.annotationLink} href={httpPrefixed(annotationLink)}
-               onClick={this.handleAnnotationLinkClick} target="_blank">
+            <a className={styles.annotationLink}
+               href={httpPrefixed(annotationLink)}
+               onClick={this.handleAnnotationLinkClick}
+               target="_blank">
               <span className={styles.annotationLinkIcon}/>
               {extractHostname(annotationLink)}
             </a>
-            <a className={styles.annotationLinkTitle} href={httpPrefixed(annotationLink)}
-               onClick={this.handleAnnotationLinkClick} target="_blank">
+            <a className={styles.annotationLinkTitle}
+               href={httpPrefixed(annotationLink)}
+               onClick={this.handleAnnotationLinkClick}
+               target="_blank">
               {annotationLinkTitle}
             </a>
           </div>
@@ -266,13 +202,6 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
             </Popup>
           </div>
         </div>
-        {!this.props.isReportEditorOpen ? null :
-          <ReportEditor
-            annotation={this.props.annotation}
-            onCancel={this.toggleReportEditor}
-            onSuccess={this.toggleReportEditor}
-          />
-        }
       </li>
     );
   }

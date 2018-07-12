@@ -60,7 +60,7 @@ export default class ReportEditor extends React.Component<Partial<IReportEditorP
     this.setState({ activeDialog: e.currentTarget.value });
   }
 
-  getAnnotationInstance(reason: Reasons, comment: string) {
+  getAnnotationReportInstance(reason: Reasons, comment: string) {
     return {
       type: AnnotationReportResourceType,
       attributes: { reason, comment },
@@ -78,7 +78,7 @@ export default class ReportEditor extends React.Component<Partial<IReportEditorP
   save = (reason: Reasons, comment: string) => {
     if (!this.state.isCreating) {
       this.setState({ isCreating: true });
-      this.props.createAnnotationReport(this.getAnnotationInstance(reason, comment)).then(() => {
+      this.props.createAnnotationReport(this.getAnnotationReportInstance(reason, comment)).then(() => {
         this.setState({ isCreating: false, activeDialog: Dialogs.SUCCESS_TOAST });
       })
       .catch((errors) => {
