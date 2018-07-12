@@ -13,7 +13,7 @@ interface IModalProps {
   deleteModalId: string;
   isDeleteModalOpen: boolean;
 
-  annotations: AnnotationAPIModel[];
+  annotation: AnnotationAPIModel;
 
   deleteAnnotation: (instance: AnnotationAPIModel) => Promise<object>;
   setMouseOverViewer: (value: boolean) => void;
@@ -21,19 +21,18 @@ interface IModalProps {
 }
 
 @connect(
-  (state) => {
+  (state, props) => {
     const {
       deleteModal: {
         deleteModalId,
         isDeleteModalOpen,
       },
-      annotations,
     } = selectViewerState(state);
 
     return {
       deleteModalId,
       isDeleteModalOpen,
-      annotations,
+      annotation: state.api.annotations.data.find(annotation => annotation.id === props.deleteModalId),
     };
   },
   {
@@ -45,8 +44,7 @@ interface IModalProps {
 export default class DeleteAnnotationModal extends React.Component<Partial<IModalProps>, {}> {
 
   handleConfirmDelete = (e) => {
-    const annotation = this.props.annotations.find(a => a.id === this.props.deleteModalId);
-    this.props.deleteAnnotation(annotation)
+    this.props.deleteAnnotation(this.props.annotation)
       .catch((errors) => {
         console.log(errors);
       });

@@ -49,10 +49,9 @@ function selectViewerAnnotations(annotations: any[], annotationIds: any[]) {
     .filter( annotation => annotation);
 }
 
-export const selectViewerState = createSelector<ITabState, any, any, any>(
+export const selectViewerState = createSelector<ITabState, any, any>(
   state => state.widgets.viewer,
-  state => state.api.annotations.data,
-  (viewer, annotations) => ({
+  viewer => ({
     ...selectWidgetState(viewer),
     annotationIds: viewer.viewerItems.map(annotation => annotation.annotationId),
     isAnyReportEditorOpen: viewer.viewerItems.some(item => item.isReportEditorOpen),
