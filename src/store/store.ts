@@ -11,14 +11,19 @@ declare global {
 }
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const logger = createLogger();
+const middlewares = [thunk, promise];
+
+if (PP_SETTINGS.DEV) {
+  const logger = createLogger();
+  middlewares.push(logger);
+}
 const store: Store<ITabState> = createStore(
   rootReducer,
   {
     ...apiInitializedFields,
   } as ITabState,
   composeEnhancers(
-    applyMiddleware(thunk, promise, logger),
+    applyMiddleware(...middlewares),
   ),
 );
 
