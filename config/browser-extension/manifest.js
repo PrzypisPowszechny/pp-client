@@ -2,7 +2,7 @@
 // A base for future manifest.json
 // Contains only the most universal information;
 
-const VERSION = '0.1.0.3';
+const VERSION = '0.2.0.0';
 
 const base = {
   manifest_version: 2,
@@ -38,7 +38,7 @@ const contentScriptSettings = {
     '*://*.google.com/*',
     '*://*.google.pl/*',
     '*://*.wikipedia.org/*',
-    '*://*.facebook.com/*'
+    '*://*.facebook.com/*',
   ],
 };
 
