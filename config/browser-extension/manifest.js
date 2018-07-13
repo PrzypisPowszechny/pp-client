@@ -39,6 +39,7 @@ const contentScriptSettings = {
     '*://*.google.pl/*',
     '*://*.wikipedia.org/*',
     '*://*.facebook.com/*',
+    '*://*.slack.com/*',
   ],
 };
 
