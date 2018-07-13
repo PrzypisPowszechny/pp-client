@@ -164,7 +164,7 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
           <hr className="menu__separator"/>
           <li className="menu__item">
             <img className="menu__item__icon" src={switchOffIcon}/>
-            <span>Wyłącz wtyczkę</span>
+            <span>Ukryj przypisy</span>
             <Toggle
               checked={isExtensionDisabled}
               onChange={this.handleDisabledExtensionChange}
