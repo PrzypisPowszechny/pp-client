@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { deleteResource } from 'redux-json-api';
 import { Button, Modal } from 'semantic-ui-react';
 
-import { selectViewerState } from 'store/widgets/selectors';
+import { selectAnnotation, selectViewerState } from 'store/widgets/selectors';
 import { hideViewerDeleteModal } from 'store/widgets/actions';
 import { AnnotationAPIModel } from 'api/annotations';
 import { PPScopeClass } from 'class_consts.ts';
@@ -13,7 +13,7 @@ interface IModalProps {
   deleteModalId: string;
   isDeleteModalOpen: boolean;
 
-  annotations: AnnotationAPIModel[];
+  annotation: AnnotationAPIModel;
 
   deleteAnnotation: (instance: AnnotationAPIModel) => Promise<object>;
   setMouseOverViewer: (value: boolean) => void;
@@ -27,13 +27,12 @@ interface IModalProps {
         deleteModalId,
         isDeleteModalOpen,
       },
-      annotations,
     } = selectViewerState(state);
 
     return {
       deleteModalId,
       isDeleteModalOpen,
-      annotations,
+      annotation: selectAnnotation(state, deleteModalId),
     };
   },
   {
@@ -45,8 +44,7 @@ interface IModalProps {
 export default class DeleteAnnotationModal extends React.Component<Partial<IModalProps>, {}> {
 
   handleConfirmDelete = (e) => {
-    const annotation = this.props.annotations.find(a => a.id === this.props.deleteModalId);
-    this.props.deleteAnnotation(annotation)
+    this.props.deleteAnnotation(this.props.annotation)
       .catch((errors) => {
         console.log(errors);
       });

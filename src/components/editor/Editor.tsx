@@ -430,7 +430,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
               {this.renderNoCommentModal()}
             </div>
           </div>
-          <img className={styles.moverIcon}/>
+          <span className={styles.moverIcon} />
         </div>
       </DraggableWidget>
     );
