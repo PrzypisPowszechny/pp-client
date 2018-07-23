@@ -15,12 +15,12 @@ import { hideEditor } from 'store/actions';
 import { AppModes } from 'store/appModes/types';
 import { selectEditorState } from 'store/selectors';
 import { IEditorRange } from 'store/widgets/reducers';
-import { isValidUrl } from 'utils/url';
 
 import { DraggableWidget } from 'components/widget';
 
 import NoCommentModal from './no-comment-modal/NoCommentModal';
 import PriorityButton from './priority-button/PriorityButton';
+import * as helpers from './helpers';
 
 import styles from './Editor.scss';
 
@@ -103,10 +103,6 @@ class Editor extends React.Component<Partial<IEditorProps>,
     [AnnotationPriorities.ALERT]: styles.priorityAlert,
   };
 
-  static linkTitleMaxLength = 110;
-  static linkMaxLength = 2048;
-  static commentMaxLength = 1000;
-
   static getDerivedStateFromProps(nextProps: IEditorProps, prevState: IEditorState) {
     /*
      * The window should update whenever either annotation or range changes
@@ -183,38 +179,17 @@ class Editor extends React.Component<Partial<IEditorProps>,
       annotationLink: link,
       annotationLinkTitle: linkTitle,
     } = this.state;
-    const {
-      linkMaxLength,
-      linkTitleMaxLength,
-      commentMaxLength,
-    } = Editor;
 
-    if (comment) {
-      if (comment.length > commentMaxLength) {
-        this.setState({ commentError: `Skróć komentarz z ${comment.length} do ${commentMaxLength} znaków!` });
-        return false;
-      }
+    const validationResult = helpers.validateEditorForm({ comment, link, linkTitle });
+
+    if (validationResult.valid) {
+      return true;
     }
-    if (!link) {
-      this.setState({ annotationLinkError: 'Musisz podać źródło, jeśli chcesz dodać przypis!' });
-      return false;
-    } else if (link.length > linkMaxLength) {
-      this.setState({ annotationLinkError: `Skróć źródło z ${link.length} do ${linkMaxLength} znaków!` });
-      return false;
-    } else if (!isValidUrl(link)) {
-      this.setState({ annotationLinkError: 'Podaj poprawny link do źródła!' });
-      return false;
-    }
-    if (!linkTitle) {
-      this.setState({ annotationLinkTitleError: 'Musisz podać tytuł źródła, jeśli chcesz dodać przypis!' });
-      return false;
-    } else if (linkTitle.length > linkTitleMaxLength) {
-      this.setState({
-        annotationLinkTitleError: `Skróć tytuł źródła z ${linkTitle.length} do ${linkTitleMaxLength} znaków!`,
-      });
-      return false;
-    }
-    return true;
+
+    this.setState({
+      ...validationResult.errors,
+    });
+    return false;
   }
 
   saveButtonClass(): string {
