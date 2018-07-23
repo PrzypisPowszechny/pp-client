@@ -6,8 +6,10 @@ import { Popup } from 'semantic-ui-react';
 import _isEqual from 'lodash/isEqual';
 
 import {
-  AnnotationAPIModel, AnnotationAPICreateModel, AnnotationAPIModelAttrs,
-  AnnotationPriorities, annotationPrioritiesLabels,
+  AnnotationAPIModel,
+  AnnotationAPICreateModel,
+  AnnotationAPIModelAttrs,
+  AnnotationPriorities,
 } from 'api/annotations';
 import { turnOffAnnotationMode } from 'chrome-storage';
 import { PPScopeClass } from 'class_consts';
@@ -18,8 +20,8 @@ import { IEditorRange } from 'store/widgets/reducers';
 
 import { DraggableWidget } from 'components/widget';
 
-import NoCommentModal from './no-comment-modal/NoCommentModal';
-import PriorityButton from './priority-button/PriorityButton';
+import NoCommentModal from './NoCommentModal';
+import PriorityButtonsBar from './PriorityButtonsBar';
 import * as helpers from './helpers';
 
 import styles from './Editor.scss';
@@ -144,7 +146,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
     this.moverElement = React.createRef();
   }
 
-  setPriority = (priority: AnnotationPriorities) => {
+  handleSetPriority = (priority: AnnotationPriorities) => {
     this.setState({
       priority,
     });
@@ -270,35 +272,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
         widgetTriangle={true}
         mover={this.moverElement}
       >
-        <div className={styles.headBar}>
-          <label className={styles.priorityHeader}> Co dodajesz? </label>
-          <div className={styles.headerButtons}>
-            <PriorityButton
-              type={AnnotationPriorities.NORMAL}
-              onClick={this.setPriority}
-              priority={priority}
-              tooltipText="Przypis nie jest niezbędny, ale może być użyteczny"
-            >
-              {annotationPrioritiesLabels.NORMAL}
-            </PriorityButton>
-            <PriorityButton
-              type={AnnotationPriorities.WARNING}
-              onClick={this.setPriority}
-              priority={priority}
-              tooltipText="Bez tego przypisu czytelnik może być wprowadzony w&nbsp;błąd"
-            >
-              {annotationPrioritiesLabels.WARNING}
-            </PriorityButton>
-            <PriorityButton
-              type={AnnotationPriorities.ALERT}
-              onClick={this.setPriority}
-              priority={priority}
-              tooltipText="Bez tego przypisu tekst wprowadzi w&nbsp;błąd!"
-            >
-              {annotationPrioritiesLabels.ALERT}
-            </PriorityButton>
-          </div>
-        </div>
+        <PriorityButtonsBar onSetPriority={this.handleSetPriority} priority={priority} />
         <div
           className={styles.close}
           onClick={this.onCancelClick}

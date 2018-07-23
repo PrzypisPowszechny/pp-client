@@ -3,11 +3,10 @@
 @import "css/common/vars/z-index";
 @import "css/common/mixins";
 @import 'css/common/buttons.scss';
+@import "./common.scss";
 
 $editor-width: 450px;
 $editor-font-size: 14px;
-$editor-horizontal-spacing: 20px;
-$editor-vertical-spacing: 15px;
 
 /* -- PP Editor -- */
 .self {
@@ -18,28 +17,6 @@ $editor-vertical-spacing: 15px;
   z-index: $editor-z-index;
 
   @include pp-widget-edge();
-}
-
-/* --- Editor head bar --- */
-.head-bar {
-  padding: 0 $editor-horizontal-spacing 0 $editor-horizontal-spacing;
-  margin: $editor-vertical-spacing 0 $editor-vertical-spacing 0;
-
-  .priority-header {
-    display: inline-block;
-    font-weight: $font-semi-bold;
-    margin: 0 0 10px 0;
-  }
-}
-
-.header-buttons {
-  display: flex;
-  justify-content: space-between;
-  flex: 1;
-
-  :not(:first-child):not(:last-child) {
-    margin: 0 10px;
-  }
 }
 
 /* fields: comment, annotationLink */
