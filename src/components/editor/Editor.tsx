@@ -2,23 +2,27 @@ import React, { RefObject } from 'react';
 import { connect } from 'react-redux';
 import { createResource, updateResource } from 'redux-json-api';
 import classNames from 'classnames';
-import { Modal, Popup } from 'semantic-ui-react';
-import PriorityButton from './priority-button/PriorityButton';
-import { DraggableWidget } from 'components/widget';
-import { hideEditor } from 'store/actions';
-import { selectEditorState } from 'store/selectors';
+import { Popup } from 'semantic-ui-react';
+import _isEqual from 'lodash/isEqual';
 
-import styles from './Editor.scss';
 import {
   AnnotationAPIModel, AnnotationAPICreateModel, AnnotationAPIModelAttrs,
   AnnotationPriorities, annotationPrioritiesLabels,
 } from 'api/annotations';
-import _isEqual from 'lodash/isEqual';
-import { PPScopeClass } from 'class_consts.ts';
-import { isValidUrl } from '../../utils/url';
-import { turnOffAnnotationMode } from '../../chrome-storage';
+import { turnOffAnnotationMode } from 'chrome-storage';
+import { PPScopeClass } from 'class_consts';
+import { hideEditor } from 'store/actions';
+import { AppModes } from 'store/appModes/types';
+import { selectEditorState } from 'store/selectors';
 import { IEditorRange } from 'store/widgets/reducers';
-import { AppModes } from '../../store/appModes/types';
+import { isValidUrl } from 'utils/url';
+
+import { DraggableWidget } from 'components/widget';
+
+import NoCommentModal from './no-comment-modal/NoCommentModal';
+import PriorityButton from './priority-button/PriorityButton';
+
+import styles from './Editor.scss';
 
 interface IEditorProps {
   appModes: AppModes;
@@ -150,7 +154,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
     });
   }
 
-  setModalOpen = () => {
+  handleCloseCommentModal = () => {
     this.setState({
       noCommentModalOpen: false,
     });
@@ -227,7 +231,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
     }
   }
 
-  onModalSaveClick = (event: any) => {
+  handleModalSaveClick = () => {
     this.save();
   }
 
@@ -271,36 +275,6 @@ class Editor extends React.Component<Partial<IEditorProps>,
     }
   }
 
-  // A modal displayed when user tries to save the form with comment field empty
-  renderNoCommentModal() {
-    return (
-      <Modal
-        size="mini"
-        className={PPScopeClass}
-        open={this.state.noCommentModalOpen}
-      >
-        <Modal.Content>
-          Czy na pewno chcesz dodać przypis bez treści?
-        </Modal.Content>
-        {/* Action buttons style from semantic-ui, probably temporary */}
-        <Modal.Actions>
-          <button
-            className="ui button negative"
-            onClick={this.setModalOpen}
-          >
-            Anuluj
-          </button>
-          <button
-            className="ui button"
-            onClick={this.onModalSaveClick}
-          >
-            Zapisz
-          </button>
-        </Modal.Actions>
-      </Modal>
-    );
-  }
-
   render() {
     const {
       priority,
@@ -310,6 +284,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
       annotationLinkError,
       annotationLinkTitle,
       annotationLinkTitleError,
+      noCommentModalOpen,
     } = this.state;
 
     return (
@@ -427,7 +402,11 @@ class Editor extends React.Component<Partial<IEditorProps>,
               <button className={classNames(styles.save, this.saveButtonClass())} onClick={this.onSaveClick}>
                 {' '}Zapisz{' '}
               </button>
-              {this.renderNoCommentModal()}
+              <NoCommentModal
+                open={noCommentModalOpen}
+                onCloseCommentModal={this.handleCloseCommentModal}
+                onModalSaveClick={this.handleModalSaveClick}
+              />
             </div>
           </div>
           <span className={styles.moverIcon} />
