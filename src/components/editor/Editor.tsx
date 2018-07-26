@@ -2,23 +2,29 @@ import React, { RefObject } from 'react';
 import { connect } from 'react-redux';
 import { createResource, updateResource } from 'redux-json-api';
 import classNames from 'classnames';
-import { Modal, Popup } from 'semantic-ui-react';
-import PriorityButton from './priority-button/PriorityButton';
-import { DraggableWidget } from 'components/widget';
+import { Popup } from 'semantic-ui-react';
+import _isEqual from 'lodash/isEqual';
+
+import {
+  AnnotationAPIModel,
+  AnnotationAPICreateModel,
+  AnnotationAPIModelAttrs,
+  AnnotationPriorities,
+} from 'api/annotations';
+import { turnOffAnnotationMode } from 'chrome-storage';
+import { PPScopeClass } from 'class_consts';
 import { hideEditor } from 'store/actions';
+import { AppModes } from 'store/appModes/types';
 import { selectEditorState } from 'store/selectors';
+import { IEditorRange } from 'store/widgets/reducers';
+
+import { DraggableWidget } from 'components/widget';
+
+import NoCommentModal from './NoCommentModal';
+import PriorityButtonsBar from './PriorityButtonsBar';
+import * as helpers from './helpers';
 
 import styles from './Editor.scss';
-import {
-  AnnotationAPIModel, AnnotationAPICreateModel, AnnotationAPIModelAttrs,
-  AnnotationPriorities, annotationPrioritiesLabels,
-} from 'api/annotations';
-import _isEqual from 'lodash/isEqual';
-import { PPScopeClass } from 'class_consts.ts';
-import { isValidUrl } from '../../utils/url';
-import { turnOffAnnotationMode } from '../../chrome-storage';
-import { IEditorRange } from 'store/widgets/reducers';
-import { AppModes } from '../../store/appModes/types';
 
 interface IEditorProps {
   appModes: AppModes;
@@ -99,10 +105,6 @@ class Editor extends React.Component<Partial<IEditorProps>,
     [AnnotationPriorities.ALERT]: styles.priorityAlert,
   };
 
-  static linkTitleMaxLength = 110;
-  static linkMaxLength = 2048;
-  static commentMaxLength = 1000;
-
   static getDerivedStateFromProps(nextProps: IEditorProps, prevState: IEditorState) {
     /*
      * The window should update whenever either annotation or range changes
@@ -144,13 +146,13 @@ class Editor extends React.Component<Partial<IEditorProps>,
     this.moverElement = React.createRef();
   }
 
-  setPriority = (priority: AnnotationPriorities) => {
+  handleSetPriority = (priority: AnnotationPriorities) => {
     this.setState({
       priority,
     });
   }
 
-  setModalOpen = () => {
+  handleCloseCommentModal = () => {
     this.setState({
       noCommentModalOpen: false,
     });
@@ -179,38 +181,17 @@ class Editor extends React.Component<Partial<IEditorProps>,
       annotationLink: link,
       annotationLinkTitle: linkTitle,
     } = this.state;
-    const {
-      linkMaxLength,
-      linkTitleMaxLength,
-      commentMaxLength,
-    } = Editor;
 
-    if (comment) {
-      if (comment.length > commentMaxLength) {
-        this.setState({ commentError: `Skróć komentarz z ${comment.length} do ${commentMaxLength} znaków!` });
-        return false;
-      }
+    const validationResult = helpers.validateEditorForm({ comment, link, linkTitle });
+
+    if (validationResult.valid) {
+      return true;
     }
-    if (!link) {
-      this.setState({ annotationLinkError: 'Musisz podać źródło, jeśli chcesz dodać przypis!' });
-      return false;
-    } else if (link.length > linkMaxLength) {
-      this.setState({ annotationLinkError: `Skróć źródło z ${link.length} do ${linkMaxLength} znaków!` });
-      return false;
-    } else if (!isValidUrl(link)) {
-      this.setState({ annotationLinkError: 'Podaj poprawny link do źródła!' });
-      return false;
-    }
-    if (!linkTitle) {
-      this.setState({ annotationLinkTitleError: 'Musisz podać tytuł źródła, jeśli chcesz dodać przypis!' });
-      return false;
-    } else if (linkTitle.length > linkTitleMaxLength) {
-      this.setState({
-        annotationLinkTitleError: `Skróć tytuł źródła z ${linkTitle.length} do ${linkTitleMaxLength} znaków!`,
-      });
-      return false;
-    }
-    return true;
+
+    this.setState({
+      ...validationResult.errors,
+    });
+    return false;
   }
 
   saveButtonClass(): string {
@@ -227,7 +208,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
     }
   }
 
-  onModalSaveClick = (event: any) => {
+  handleModalSaveClick = () => {
     this.save();
   }
 
@@ -271,36 +252,6 @@ class Editor extends React.Component<Partial<IEditorProps>,
     }
   }
 
-  // A modal displayed when user tries to save the form with comment field empty
-  renderNoCommentModal() {
-    return (
-      <Modal
-        size="mini"
-        className={PPScopeClass}
-        open={this.state.noCommentModalOpen}
-      >
-        <Modal.Content>
-          Czy na pewno chcesz dodać przypis bez treści?
-        </Modal.Content>
-        {/* Action buttons style from semantic-ui, probably temporary */}
-        <Modal.Actions>
-          <button
-            className="ui button negative"
-            onClick={this.setModalOpen}
-          >
-            Anuluj
-          </button>
-          <button
-            className="ui button"
-            onClick={this.onModalSaveClick}
-          >
-            Zapisz
-          </button>
-        </Modal.Actions>
-      </Modal>
-    );
-  }
-
   render() {
     const {
       priority,
@@ -310,6 +261,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
       annotationLinkError,
       annotationLinkTitle,
       annotationLinkTitleError,
+      noCommentModalOpen,
     } = this.state;
 
     return (
@@ -320,35 +272,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
         widgetTriangle={true}
         mover={this.moverElement}
       >
-        <div className={styles.headBar}>
-          <label className={styles.priorityHeader}> Co dodajesz? </label>
-          <div className={styles.headerButtons}>
-            <PriorityButton
-              type={AnnotationPriorities.NORMAL}
-              onClick={this.setPriority}
-              priority={priority}
-              tooltipText="Przypis nie jest niezbędny, ale może być użyteczny"
-            >
-              {annotationPrioritiesLabels.NORMAL}
-            </PriorityButton>
-            <PriorityButton
-              type={AnnotationPriorities.WARNING}
-              onClick={this.setPriority}
-              priority={priority}
-              tooltipText="Bez tego przypisu czytelnik może być wprowadzony w&nbsp;błąd"
-            >
-              {annotationPrioritiesLabels.WARNING}
-            </PriorityButton>
-            <PriorityButton
-              type={AnnotationPriorities.ALERT}
-              onClick={this.setPriority}
-              priority={priority}
-              tooltipText="Bez tego przypisu tekst wprowadzi w&nbsp;błąd!"
-            >
-              {annotationPrioritiesLabels.ALERT}
-            </PriorityButton>
-          </div>
-        </div>
+        <PriorityButtonsBar onSetPriority={this.handleSetPriority} priority={priority} />
         <div
           className={styles.close}
           onClick={this.onCancelClick}
@@ -427,7 +351,11 @@ class Editor extends React.Component<Partial<IEditorProps>,
               <button className={classNames(styles.save, this.saveButtonClass())} onClick={this.onSaveClick}>
                 {' '}Zapisz{' '}
               </button>
-              {this.renderNoCommentModal()}
+              <NoCommentModal
+                open={noCommentModalOpen}
+                onCloseCommentModal={this.handleCloseCommentModal}
+                onModalSaveClick={this.handleModalSaveClick}
+              />
             </div>
           </div>
           <span className={styles.moverIcon} />
