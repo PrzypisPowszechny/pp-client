@@ -7,7 +7,8 @@ exports.appSettings = (env, argv) => {
    */
   return {
     DEV: getDevValue(safeEnv, mode),
-    API_URL: getApiUrlValue(safeEnv, mode),
+    SITE_URL: getHostValue(safeEnv, mode) + '/site',
+    API_URL: getHostValue(safeEnv, mode) + '/api',
   };
 }
 
@@ -21,14 +22,14 @@ function getDevValue(env, mode) {
   }
 }
 
-function getApiUrlValue(env, mode) {
+function getHostValue(env, mode) {
   switch (env.api) {
     case 'local':
-        return "http://localhost:8000/api"
+        return "http://localhost:8000"
     case 'pp':
-      return "https://przypispowszechny.pl/api"
+      return "https://przypispowszechny.pl"
     case 'devdeploy1':
     default:
-      return "https://devdeploy1.przypispowszechny.pl/api"
+      return "https://devdeploy1.przypispowszechny.pl"
   }
 }
