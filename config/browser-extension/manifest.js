@@ -16,7 +16,7 @@ const base = {
     'activeTab',
     'contextMenus',
   ],
-  content_security_policy: "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  content_security_policy: "script-src 'self' 'unsafe-eval' https://www.google-analytics.com; object-src 'self'",
   browser_action: {
     default_title: 'Przypis Powszechny - wersja testowa'
   },
