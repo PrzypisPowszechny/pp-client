@@ -1,15 +1,14 @@
 
 // A base for future manifest.json
 // Contains only the most universal information;
-
-const VERSION = '0.2.0.0';
+import packageConf from '../../package';
 
 const base = {
   manifest_version: 2,
   name: 'Przypis Powszechny',
   description: '',
-  version: VERSION,
-  version_name: `${VERSION} test`,
+  version: packageConf.version,
+  version_name: `${packageConf.version} test`,
 
   permissions: [
     'storage',
