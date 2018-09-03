@@ -12,7 +12,7 @@ import {
 import { extractHostname, httpPrefixed } from '../../utils/url';
 import ViewerItemControls from './ViewerItemControls';
 import Upvote from './Upvote';
-import { Events } from '../../pp-ga/pp-ga';
+import ppGA from '../../pp-ga';
 
 interface IViewerItemProps {
   key: string;
@@ -47,13 +47,8 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
   }
 
   componentDidMount() {
-    chrome.runtime.sendMessage({
-      action: 'SEND_GA_EVENT',
-      eventName: Events.annotationDisplayed.name,
-      args: [
-        this.props.annotationId, annotationPrioritiesLabels[this.props.annotation.attributes.priority],
-      ],
-    });
+    const { priority, comment, annotationLink } = this.props.annotation.attributes;
+    ppGA.annotationDisplayed(this.props.annotationId, priority, !comment, annotationLink);
   }
 
   handleAnnotationLinkClick = () => {

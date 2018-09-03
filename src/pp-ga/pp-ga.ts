@@ -1,6 +1,7 @@
 import './ga.js';
 import FieldsObject = UniversalAnalytics.FieldsObject;
 import packageConf from '../../package.json';
+import { annotationPrioritiesLabels } from '../api/annotations';
 
 const GA_ID_PROD = 'UA-123054125-1';
 const GA_ID_DEV = 'UA-123054125-2';
@@ -12,7 +13,16 @@ const GACustomFieldsIndex = {
   reason: 'dimension4',
   isCommentBlank: 'dimension5',
   annotationId: 'dimension6',
+  annotationLink: 'dimension7',
 };
+
+function sendEvent(fieldsObject: FieldsObject) {
+  ga('send', 'event', fieldsObject);
+}
+
+function sendEventByMessage(fieldsObject: FieldsObject) {
+  chrome.runtime.sendMessage({ action: 'SEND_GA_EVENT', fieldsObject });
+}
 
 export function init() {
   ga('create', PP_SETTINGS.DEV ? GA_ID_DEV : GA_ID_PROD);
@@ -22,12 +32,10 @@ export function init() {
   ga('set', 'appVersion', packageConf.version);
 }
 
-export function handleMessage(request) {
-  return Events[request.eventName](...request.args);
-}
-
-function sendEvent(fieldsObject: FieldsObject) {
-  ga('send', 'event', fieldsObject);
+export function sendEventFromMessage(request) {
+  if (request.action === 'SEND_GA_EVENT') {
+    sendEvent(request.fieldsObject);
+  }
 }
 
 export function extensionInstalled() {
@@ -47,12 +55,17 @@ export function extensionUninstalled() {
   sendEvent({eventCategory: 'Extension', eventAction: 'uninstall', eventLabel: 'ExtensionUninstalled' });
 }
 
-export class Events {
-  static annotationDisplayed(annotationId: string, annotationPriority: string) {
-    sendEvent({
-      eventCategory: 'Annotations', eventAction: 'display', eventLabel: 'AnnotationDisplayed',
-      [GACustomFieldsIndex.annotationId]: annotationId,
-      [GACustomFieldsIndex.priority]: annotationPriority,
-    });
-  }
+export function annotationDisplayed(annotationId: string, priority: string, isCommentBlank: boolean, link: string) {
+  sendEventByMessage({
+    eventCategory: 'Annotations', eventAction: 'display', eventLabel: 'AnnotationDisplayed',
+    [GACustomFieldsIndex.eventUrl]: window.location,
+    [GACustomFieldsIndex.annotationId]: annotationId,
+    [GACustomFieldsIndex.priority]: formatPriority(priority),
+    [GACustomFieldsIndex.isCommentBlank]: isCommentBlank,
+    [GACustomFieldsIndex.annotationLink]: link,
+  });
+}
+
+function formatPriority(priority) {
+  return `${priority} - ${annotationPrioritiesLabels[priority]}`;
 }

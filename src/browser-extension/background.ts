@@ -27,12 +27,6 @@ function onInstalled(details: InstalledDetails) {
   }
 }
 
-function onSendGAEvent(request) {
-  if (request.action === 'SEND_GA_EVENT') {
-    ppGA.handleMessage(request);
-  }
-}
-
 ppGA.init();
 
 chrome.contextMenus.create({
@@ -43,4 +37,4 @@ chrome.contextMenus.create({
 
 chrome.runtime.onInstalled.addListener(onInstalled);
 chrome.runtime.setUninstallURL(PP_SETTINGS.SITE_URL + '/extension-uninstalled');
-chrome.runtime.onMessage.addListener(onSendGAEvent);
+chrome.runtime.onMessage.addListener(ppGA.sendEventFromMessage);
