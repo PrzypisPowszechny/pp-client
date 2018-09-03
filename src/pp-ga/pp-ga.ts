@@ -7,9 +7,8 @@ const GA_ID_DEV = 'UA-123054125-2';
 
 export function init() {
   ga('create', PP_SETTINGS.DEV ? GA_ID_DEV : GA_ID_PROD);
-  if (PP_SETTINGS.DEV) {
-    ga('set', 'checkProtocolTask', () => { /* nothing */ });
-  }
+  // Our extension protocol is chrome which is not what GA expects. It will fall back to http(s)
+  ga('set', 'checkProtocolTask', () => { /* nothing */ });
 }
 
 function sendEvent(fieldsObject: FieldsObject) {
