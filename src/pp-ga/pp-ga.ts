@@ -21,6 +21,9 @@ function sendEvent(fieldsObject: FieldsObject) {
 }
 
 function sendEventByMessage(fieldsObject: FieldsObject) {
+  if (window.location.href.startsWith('http')) {
+    fieldsObject[GACustomFieldsIndex.eventUrl] = window.location.href;
+  }
   chrome.runtime.sendMessage({ action: 'SEND_GA_EVENT', fieldsObject });
 }
 
@@ -39,26 +42,35 @@ export function sendEventFromMessage(request) {
 }
 
 export function extensionInstalled() {
-  sendEvent({ eventCategory: 'Extension', eventAction: 'install', eventLabel: 'ExtensionInstalled' });
+  sendEvent({ eventCategory: 'Extension', eventAction: 'Install', eventLabel: 'ExtensionInstalled' });
 }
 
 export function extensionUpgradedFrom(previousVersion: string) {
   if (packageConf.version === previousVersion) {
-    sendEvent({ eventCategory: 'Extension', eventAction: 'reinstall', eventLabel: 'ExtensionReinstalled' });
+    sendEvent({ eventCategory: 'Extension', eventAction: 'Reinstall', eventLabel: 'ExtensionReinstalled' });
   } else {
-    sendEvent({ eventCategory: 'Extension', eventAction: 'upgrade', eventLabel: 'ExtensionUpgraded' });
+    sendEvent({ eventCategory: 'Extension', eventAction: 'Upgrade', eventLabel: 'ExtensionUpgraded' });
   }
 }
 
 // This need to be in fact implemented on our site frontend, not in the extension
 export function extensionUninstalled() {
-  sendEvent({eventCategory: 'Extension', eventAction: 'uninstall', eventLabel: 'ExtensionUninstalled' });
+  sendEvent({eventCategory: 'Extension', eventAction: 'Uninstall', eventLabel: 'ExtensionUninstalled' });
 }
 
 export function annotationDisplayed(annotationId: string, priority: string, isCommentBlank: boolean, link: string) {
   sendEventByMessage({
-    eventCategory: 'Annotations', eventAction: 'display', eventLabel: 'AnnotationDisplayed',
-    [GACustomFieldsIndex.eventUrl]: window.location,
+    eventCategory: 'Annotation', eventAction: 'Display', eventLabel: 'AnnotationDisplayed',
+    [GACustomFieldsIndex.annotationId]: annotationId,
+    [GACustomFieldsIndex.priority]: formatPriority(priority),
+    [GACustomFieldsIndex.isCommentBlank]: isCommentBlank,
+    [GACustomFieldsIndex.annotationLink]: link,
+  });
+}
+
+export function annotationLinkClicked(annotationId: string, priority: string, isCommentBlank: boolean, link: string) {
+  sendEventByMessage({
+    eventCategory: 'Annotation', eventAction: 'Click', eventLabel: 'AnnotationLinkClicked',
     [GACustomFieldsIndex.annotationId]: annotationId,
     [GACustomFieldsIndex.priority]: formatPriority(priority),
     [GACustomFieldsIndex.isCommentBlank]: isCommentBlank,

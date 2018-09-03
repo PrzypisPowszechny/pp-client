@@ -52,6 +52,8 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
   }
 
   handleAnnotationLinkClick = () => {
+    const { priority, comment, annotationLink } = this.props.annotation.attributes;
+    ppGA.annotationLinkClicked(this.props.annotationId, priority, !comment, annotationLink);
     this.props.hideViewer();
   }
 
