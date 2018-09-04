@@ -78,6 +78,18 @@ export function annotationLinkClicked(annotationId: string, priority: string, is
   });
 }
 
+export function annotationAddingModeInited() {
+  sendEventByMessage({
+    eventCategory: 'AnnotationAddingMode', eventAction: 'Init', eventLabel: 'AnnotationAddingModeInited',
+  });
+}
+
+export function annotationAddingModeCancelled() {
+  sendEventByMessage({
+    eventCategory: 'AnnotationAddingMode', eventAction: 'Cancel', eventLabel: 'AnnotationAddingModeCancelled',
+  });
+}
+
 function formatPriority(priority) {
   return `${priority} - ${annotationPrioritiesLabels[priority]}`;
 }

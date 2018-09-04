@@ -10,6 +10,7 @@ import chromeStorage from 'chrome-storage';
 import * as chromeKeys from 'chrome-storage/keys';
 import _filter from 'lodash/filter';
 import classNames from 'classnames';
+import ppGA from '../../pp-ga';
 
 interface IBrowserPopupState {
   isLoading: boolean;
@@ -97,6 +98,7 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
       this.setState({ annotationModePages: newAnnotationModePages });
       chromeStorage.set({ [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages });
       window.close();
+      ppGA.annotationAddingModeInited();
     }
   }
 
