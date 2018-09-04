@@ -121,6 +121,16 @@ export function annotationEdited(annotationId: string, priority: string, isComme
   });
 }
 
+export function annotationDeleted(annotationId: string, priority: string, isCommentBlank: boolean, link: string) {
+  sendEventByMessage({
+    eventCategory: 'Annotation', eventAction: 'Delete', eventLabel: 'AnnotationDeleted',
+    [GACustomFieldsIndex.annotationId]: annotationId,
+    [GACustomFieldsIndex.priority]: formatPriority(priority),
+    [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
+    [GACustomFieldsIndex.annotationLink]: link,
+  });
+}
+
 export function annotationFormMoved() {
   sendEventByMessage({
     eventCategory: 'AnnotationForm', eventAction: 'Move', eventLabel: 'AnnotationFormMoved',

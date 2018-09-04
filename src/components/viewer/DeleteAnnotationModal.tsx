@@ -8,6 +8,7 @@ import { hideViewerDeleteModal } from 'store/widgets/actions';
 import { AnnotationAPIModel } from 'api/annotations';
 import { PPScopeClass } from 'class_consts.ts';
 import { setMouseOverViewer } from 'store/widgets/actions';
+import ppGA from '../../pp-ga';
 
 interface IModalProps {
   deleteModalId: string;
@@ -45,6 +46,10 @@ export default class DeleteAnnotationModal extends React.Component<Partial<IModa
 
   handleConfirmDelete = (e) => {
     this.props.deleteAnnotation(this.props.annotation)
+      .then(() => {
+        const attrs = this.props.annotation.attributes;
+        ppGA.annotationDeleted(this.props.annotation.id,  attrs.priority, !attrs.comment, attrs.annotationLink);
+      })
       .catch((errors) => {
         console.log(errors);
       });
