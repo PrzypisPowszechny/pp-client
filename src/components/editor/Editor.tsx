@@ -217,6 +217,10 @@ class Editor extends React.Component<Partial<IEditorProps>,
     this.props.hideEditor();
   }
 
+  onMoved = () => {
+    ppGA.annotationFormMoved();
+  }
+
   getAnnotationFromState() {
     return {
       id: this.props.annotation ? this.props.annotation.id : null,
@@ -276,6 +280,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
         initialLocationY={this.props.locationY}
         widgetTriangle={true}
         mover={this.moverElement}
+        onMoved={this.onMoved}
       >
         <PriorityButtonsBar onSetPriority={this.handleSetPriority} priority={priority} />
         <div

@@ -117,6 +117,12 @@ export function annotationEdited(annotationId: string, priority: string, isComme
   });
 }
 
+export function annotationFormMoved() {
+  sendEventByMessage({
+    eventCategory: 'AnnotationForm', eventAction: 'Move', eventLabel: 'AnnotationFormMoved',
+  });
+}
+
 function formatPriority(priority) {
   return `${priority} - ${annotationPrioritiesLabels[priority]}`;
 }
