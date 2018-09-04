@@ -1,51 +1,12 @@
-import './ga.js';
-import FieldsObject = UniversalAnalytics.FieldsObject;
+import { sendEvent, sendEventByMessage, GACustomFieldsIndex } from './core';
+import { formatBoolean, formatPriority, formatReason } from './utils';
 import packageConf from '../../package.json';
-import { annotationPrioritiesLabels } from '../api/annotations';
-
-const GA_ID_PROD = 'UA-123054125-1';
-const GA_ID_DEV = 'UA-123054125-2';
-
-const GACustomFieldsIndex = {
-  eventUrl: 'dimension1',
-  triggeredBy: 'dimension2',
-  priority: 'dimension3',
-  reason: 'dimension4',
-  isCommentBlank: 'dimension5',
-  annotationId: 'dimension6',
-  annotationLink: 'dimension7',
-};
-
-function sendEvent(fieldsObject: FieldsObject) {
-  ga('send', 'event', fieldsObject);
-}
-
-function sendEventByMessage(fieldsObject: FieldsObject) {
-  if (window.location.href.startsWith('http')) {
-    fieldsObject[GACustomFieldsIndex.eventUrl] = fieldsObject.location = window.location.href;
-  }
-  chrome.runtime.sendMessage({ action: 'SEND_GA_EVENT', fieldsObject });
-}
-
-export function init() {
-  ga('create', PP_SETTINGS.DEV ? GA_ID_DEV : GA_ID_PROD);
-  // Our extension protocol is chrome which is not what GA expects. It will fall back to http(s)
-  ga('set', 'checkProtocolTask', () => { /* nothing */ });
-  ga('set', 'appName', 'PP browser extension');
-  ga('set', 'appVersion', packageConf.version);
-}
-
-export function sendEventFromMessage(request) {
-  if (request.action === 'SEND_GA_EVENT') {
-    sendEvent(request.fieldsObject);
-  }
-}
 
 export function extensionInstalled() {
   sendEvent({ eventCategory: 'Extension', eventAction: 'Install', eventLabel: 'ExtensionInstalled' });
 }
 
-export function extensionUpgradedFrom(previousVersion: string) {
+export function extensionUpgraded(previousVersion: string) {
   if (packageConf.version === previousVersion) {
     sendEvent({ eventCategory: 'Extension', eventAction: 'Reinstall', eventLabel: 'ExtensionReinstalled' });
   } else {
@@ -58,7 +19,7 @@ export function extensionUninstalled() {
   sendEvent({eventCategory: 'Extension', eventAction: 'Uninstall', eventLabel: 'ExtensionUninstalled' });
 }
 
-export function extensionDisabledOnAllSites(currentUrl) {
+export function extensionDisabledOnAllSites(currentUrl: string) {
   sendEventByMessage({
     eventCategory: 'Extension', eventAction: 'DisableOnAllSites', eventLabel: 'ExtensionDisabledOnSite',
     [GACustomFieldsIndex.eventUrl]: currentUrl,
@@ -66,7 +27,7 @@ export function extensionDisabledOnAllSites(currentUrl) {
   });
 }
 
-export function extensionEnabledOnAllSites(currentUrl) {
+export function extensionEnabledOnAllSites(currentUrl: string) {
   sendEventByMessage({
     eventCategory: 'Extension', eventAction: 'EnableOnAllSites', eventLabel: 'ExtensionEnabledOnAllSites',
     [GACustomFieldsIndex.eventUrl]: currentUrl,
@@ -74,7 +35,7 @@ export function extensionEnabledOnAllSites(currentUrl) {
   });
 }
 
-export function extensionDisabledOnSite(url) {
+export function extensionDisabledOnSite(url: string) {
   sendEventByMessage({
     eventCategory: 'Extension', eventAction: 'DisableOnSite', eventLabel: 'ExtensionDisabledOnSite',
     [GACustomFieldsIndex.eventUrl]: url,
@@ -82,7 +43,7 @@ export function extensionDisabledOnSite(url) {
   });
 }
 
-export function extensionEnabledOnSite(url) {
+export function extensionEnabledOnSite(url: string) {
   sendEventByMessage({
     eventCategory: 'Extension', eventAction: 'EnableOnSite', eventLabel: 'ExtensionEnabledOnSite',
     [GACustomFieldsIndex.eventUrl]: url,
@@ -122,7 +83,7 @@ export function annotationAddingModeCancelled() {
   });
 }
 
-export function annotationAddFormDisplayed(triggeredBy) {
+export function annotationAddFormDisplayed(triggeredBy: string) {
   sendEventByMessage({
     eventCategory: 'AnnotationAddForm', eventAction: 'Display', eventLabel: 'AnnotationAddFormDisplayed',
     [GACustomFieldsIndex.triggeredBy]: triggeredBy,
@@ -205,16 +166,4 @@ export function annotationSuggestionSent(annotationId: string, isCommentBlank: b
     [GACustomFieldsIndex.annotationId]: annotationId,
     [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
   });
-}
-
-function formatPriority(priority) {
-  return `${priority} - ${annotationPrioritiesLabels[priority]}`;
-}
-
-function formatBoolean(val: boolean) {
-  return val ? 'True' : 'False';
-}
-
-function formatReason(reason) {
-  return `${reason}`;
 }

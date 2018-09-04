@@ -19,7 +19,7 @@ function onInstalled(details: InstalledDetails) {
       ppGA.extensionInstalled();
       break;
     case 'update':
-      ppGA.extensionUpgradedFrom(details.previousVersion);
+      ppGA.extensionUpgraded(details.previousVersion);
       break;
     default:
       // ignore 'chrome_update' and 'shared_module_update'
