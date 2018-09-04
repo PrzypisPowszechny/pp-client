@@ -25,6 +25,7 @@ import PriorityButtonsBar from './PriorityButtonsBar';
 import * as helpers from './helpers';
 
 import styles from './Editor.scss';
+import ppGA from 'pp-ga';
 
 interface IEditorProps {
   appModes: AppModes;
@@ -239,10 +240,14 @@ class Editor extends React.Component<Partial<IEditorProps>,
       this.props.createOrUpdateAnnotation(instance).then(() => {
         this.setState({ isCreating: false });
         this.props.hideEditor();
-        // Right after creating a new annotation, turn off the annotation mode
+        // Right after creating a new annotation, turn off the annotation mode (it might be already off)
         // Do it by directly changing Chrome storage. Changes to the Redux store will follow thanks to subscription.
+        const attributes = instance.attributes;
         if (isNewInstance) {
           turnOffAnnotationMode(this.props.appModes);
+          ppGA.annotationAdded(instance.id, attributes.priority, !attributes.comment, attributes.annotationLink);
+        } else {
+          ppGA.annotationEdited(instance.id, attributes.priority, !attributes.comment, attributes.annotationLink);
         }
       }).catch((errors) => {
         this.setState({ isCreating: false });

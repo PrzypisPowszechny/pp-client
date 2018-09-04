@@ -97,6 +97,26 @@ export function annotationAddFormDisplayed(triggeredBy) {
   });
 }
 
+export function annotationAdded(annotationId: string, priority: string, isCommentBlank: boolean, link: string) {
+  sendEventByMessage({
+    eventCategory: 'Annotation', eventAction: 'Add', eventLabel: 'AnnotationAdded',
+    [GACustomFieldsIndex.annotationId]: annotationId,
+    [GACustomFieldsIndex.priority]: formatPriority(priority),
+    [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
+    [GACustomFieldsIndex.annotationLink]: link,
+  });
+}
+
+export function annotationEdited(annotationId: string, priority: string, isCommentBlank: boolean, link: string) {
+  sendEventByMessage({
+    eventCategory: 'Annotation', eventAction: 'Edit', eventLabel: 'AnnotationEdited',
+    [GACustomFieldsIndex.annotationId]: annotationId,
+    [GACustomFieldsIndex.priority]: formatPriority(priority),
+    [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
+    [GACustomFieldsIndex.annotationLink]: link,
+  });
+}
+
 function formatPriority(priority) {
   return `${priority} - ${annotationPrioritiesLabels[priority]}`;
 }
