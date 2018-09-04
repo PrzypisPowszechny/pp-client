@@ -10,6 +10,7 @@ import {
 import { AnnotationAPIModel } from 'api/annotations';
 import Timer = NodeJS.Timer;
 import ViewerItemDialog from './ViewerItemDialog';
+import ppGA from '../../pp-ga';
 
 interface IViewerItemControlsProps {
   locationX: number;
@@ -93,8 +94,10 @@ export default class ViewerItemControls extends
       locationY,
       annotation,
     } = this.props;
+    const attrs = annotation.attributes;
     this.props.showEditorAnnotation(locationX, locationY, annotation.id);
     this.props.hideViewer();
+    ppGA.annotationEditFormDisplayed(annotation.id, attrs.priority, !attrs.comment, attrs.annotationLink);
   }
 
   onAnnotationDeleteClick = () => {
