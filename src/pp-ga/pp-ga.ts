@@ -58,6 +58,38 @@ export function extensionUninstalled() {
   sendEvent({eventCategory: 'Extension', eventAction: 'Uninstall', eventLabel: 'ExtensionUninstalled' });
 }
 
+export function extensionDisabledOnAllSites(currentUrl) {
+  sendEventByMessage({
+    eventCategory: 'Extension', eventAction: 'DisableOnAllSites', eventLabel: 'ExtensionDisabledOnSite',
+    [GACustomFieldsIndex.eventUrl]: currentUrl,
+    location: currentUrl,
+  });
+}
+
+export function extensionEnabledOnAllSites(currentUrl) {
+  sendEventByMessage({
+    eventCategory: 'Extension', eventAction: 'EnableOnAllSites', eventLabel: 'ExtensionEnabledOnAllSites',
+    [GACustomFieldsIndex.eventUrl]: currentUrl,
+    location: currentUrl,
+  });
+}
+
+export function extensionDisabledOnSite(url) {
+  sendEventByMessage({
+    eventCategory: 'Extension', eventAction: 'DisableOnSite', eventLabel: 'ExtensionDisabledOnSite',
+    [GACustomFieldsIndex.eventUrl]: url,
+    location: url,
+  });
+}
+
+export function extensionEnabledOnSite(url) {
+  sendEventByMessage({
+    eventCategory: 'Extension', eventAction: 'EnableOnSite', eventLabel: 'ExtensionEnabledOnSite',
+    [GACustomFieldsIndex.eventUrl]: url,
+    location: url,
+  });
+}
+
 export function annotationDisplayed(annotationId: string, priority: string, isCommentBlank: boolean, link: string) {
   sendEventByMessage({
     eventCategory: 'Annotation', eventAction: 'Display', eventLabel: 'AnnotationDisplayed',

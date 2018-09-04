@@ -103,9 +103,14 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
   }
 
   handleDisabledExtensionChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.checked;
-    this.setState({ isExtensionDisabled: newValue });
-    chromeStorage.set({ [chromeKeys.DISABLED_EXTENSION]: newValue });
+    const isDisabledNewValue = e.target.checked;
+    this.setState({ isExtensionDisabled: isDisabledNewValue });
+    chromeStorage.set({ [chromeKeys.DISABLED_EXTENSION]: isDisabledNewValue });
+    if (isDisabledNewValue) {
+      ppGA.extensionDisabledOnAllSites(this.state.currentTabUrl);
+    } else {
+      ppGA.extensionEnabledOnAllSites(this.state.currentTabUrl);
+    }
   }
 
   handleDisabledPageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -119,8 +124,10 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
     let newDisabledPages;
     if (checked) {
       newDisabledPages = [...disabledPages, currentTabUrl];
+      ppGA.extensionDisabledOnSite(currentTabUrl);
     } else {
       newDisabledPages = _filter(disabledPages, url => url !== currentTabUrl);
+      ppGA.extensionEnabledOnSite(currentTabUrl);
     }
     // Permanently turn off the annotation mode for the disabled pages
     const newAnnotationModePages = _filter(annotationModePages, url => !newDisabledPages.includes(url));
