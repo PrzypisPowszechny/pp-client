@@ -22,7 +22,7 @@ function sendEvent(fieldsObject: FieldsObject) {
 
 function sendEventByMessage(fieldsObject: FieldsObject) {
   if (window.location.href.startsWith('http')) {
-    fieldsObject[GACustomFieldsIndex.eventUrl] = window.location.href;
+    fieldsObject[GACustomFieldsIndex.eventUrl] = fieldsObject.location = window.location.href;
   }
   chrome.runtime.sendMessage({ action: 'SEND_GA_EVENT', fieldsObject });
 }
