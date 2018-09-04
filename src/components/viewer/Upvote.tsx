@@ -10,6 +10,7 @@ import {
   AnnotationUpvoteResourceType, AnnotationUpvoteAPIModel, AnnotationUpvoteAPICreateModel,
 } from 'api/annotation-upvotes';
 import { PPScopeClass } from '../../class_consts';
+import ppGA from 'pp-ga';
 
 interface IUpvoteProps {
   indirectChildClassName: string;
@@ -38,6 +39,7 @@ export default class Upvote extends React.Component<Partial<IUpvoteProps>, Parti
 
   toggleUpvote = (e) => {
     const { annotation } = this.props;
+    const { attributes: attrs } =  annotation;
     if (annotation.relationships.annotationUpvote.data) {
       this.props.deleteUpvote({
         ...annotation.relationships.annotationUpvote.data,
@@ -49,10 +51,11 @@ export default class Upvote extends React.Component<Partial<IUpvoteProps>, Parti
             data: { id: annotation.id, type: annotation.type },
           },
         },
-      }).then(() => null)
-        .catch((errors) => {
-          console.log(errors);
-        });
+      }).then(() => {
+        ppGA.annotationUpvoteCancelled(annotation.id, attrs.priority, !attrs.comment, attrs.annotationLink);
+      }).catch((errors) => {
+        console.log(errors);
+      });
     } else {
       this.props.createUpvote({
         type: AnnotationUpvoteResourceType,
@@ -64,10 +67,11 @@ export default class Upvote extends React.Component<Partial<IUpvoteProps>, Parti
             },
           },
         },
-      }).then(() => null)
-        .catch((errors) => {
-          console.log(errors);
-        });
+      }).then(() => {
+        ppGA.annotationUpvoted(annotation.id, attrs.priority, !attrs.comment, attrs.annotationLink);
+      }).catch((errors) => {
+        console.log(errors);
+      });
     }
   }
 
