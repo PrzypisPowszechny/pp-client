@@ -8,8 +8,8 @@ const GA_ID_DEV = 'UA-123054125-2';
 
 const GACustomFieldsIndex = {
   eventUrl: 'dimension1',
-  priority: 'dimension2',
-  triggeredBy: 'dimension3',
+  triggeredBy: 'dimension2',
+  priority: 'dimension3',
   reason: 'dimension4',
   isCommentBlank: 'dimension5',
   annotationId: 'dimension6',
@@ -63,7 +63,7 @@ export function annotationDisplayed(annotationId: string, priority: string, isCo
     eventCategory: 'Annotation', eventAction: 'Display', eventLabel: 'AnnotationDisplayed',
     [GACustomFieldsIndex.annotationId]: annotationId,
     [GACustomFieldsIndex.priority]: formatPriority(priority),
-    [GACustomFieldsIndex.isCommentBlank]: isCommentBlank,
+    [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
     [GACustomFieldsIndex.annotationLink]: link,
   });
 }
@@ -73,7 +73,7 @@ export function annotationLinkClicked(annotationId: string, priority: string, is
     eventCategory: 'Annotation', eventAction: 'Click', eventLabel: 'AnnotationLinkClicked',
     [GACustomFieldsIndex.annotationId]: annotationId,
     [GACustomFieldsIndex.priority]: formatPriority(priority),
-    [GACustomFieldsIndex.isCommentBlank]: isCommentBlank,
+    [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
     [GACustomFieldsIndex.annotationLink]: link,
   });
 }
@@ -90,6 +90,17 @@ export function annotationAddingModeCancelled() {
   });
 }
 
+export function annotationAddFormDisplayed(triggeredBy) {
+  sendEventByMessage({
+    eventCategory: 'AnnotationAddForm', eventAction: 'Display', eventLabel: 'AnnotationAddFormDisplayed',
+    [GACustomFieldsIndex.triggeredBy]: triggeredBy,
+  });
+}
+
 function formatPriority(priority) {
   return `${priority} - ${annotationPrioritiesLabels[priority]}`;
+}
+
+function formatBoolean(val: boolean) {
+  return val ? 'True' : 'False';
 }

@@ -10,6 +10,7 @@ import { outsideArticleClasses } from 'class_consts';
 import highlights from './highlights';
 import { selectModeForCurrentPage } from '../store/appModes/selectors';
 import { setSelectionRange, showEditorAnnotation } from '../store/widgets/actions';
+import ppGA from 'pp-ga';
 
 let handlers;
 
@@ -67,6 +68,7 @@ function contextMenuAnnotateCallback(request, sender) {
       store.dispatch(setSelectionRange(selection[0]));
       const selectionCenter = handlers.selector.currentSingleSelectionCenter();
       store.dispatch(showEditorAnnotation(selectionCenter.x, selectionCenter.y));
+      ppGA.annotationAddFormDisplayed('rightMouseContextMenu');
     } else if (selection.length > 1) {
       console.warn('PP: more than one selected range is not supported');
     }
