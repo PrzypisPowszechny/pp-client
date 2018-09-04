@@ -1,7 +1,7 @@
 
 // A base for future manifest.json
 // Contains only the most universal information;
-import packageConf from '../../package';
+const packageConf = require('../../package');
 
 const base = {
   manifest_version: 2,
