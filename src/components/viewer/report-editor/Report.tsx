@@ -3,13 +3,14 @@ import classNames from 'classnames';
 
 import styles from './ReportEditor.scss';
 import { AnnotationAPIModel } from 'api/annotations';
-import { Reasons } from 'api/annotation-reports';
+import { AnnotationReportAPIModel, DataResponse, Reasons } from 'api/annotation-reports';
 import { PPScopeClass } from '../../../class_consts';
+import ppGA from 'pp-ga';
 
 interface IReportProps {
   annotation: AnnotationAPIModel;
   onCancel: (e) => void;
-  onSubmit: (reason: Reasons, comment: string) => void;
+  onSubmit: (reason: Reasons, comment: string) => Promise<DataResponse<AnnotationReportAPIModel>|void>;
 }
 
 interface IReportState {
@@ -22,6 +23,10 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
   constructor(props: IReportProps) {
     super(props);
     this.state = {};
+  }
+
+  componentDidMount() {
+    ppGA.annotationReportFormOpened(this.props.annotation.id);
   }
 
   handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -40,8 +45,11 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
   submit = () => {
     if (!this.state.reason) {
       this.setState({ showReasonError: true });
+    } else {
+      this.props.onSubmit(this.state.reason, this.state.comment).then( () => {
+        ppGA.annotationReportSent(this.props.annotation.id, this.state.reason, !this.state.comment);
+      }).catch(() => null);
     }
-    this.props.onSubmit(this.state.reason, this.state.comment);
   }
 
   render() {

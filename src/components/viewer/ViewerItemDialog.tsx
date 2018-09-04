@@ -6,6 +6,7 @@ import { changeViewerReportEditorOpen } from 'store/widgets/actions';
 import { AnnotationAPIModel } from 'api/annotations';
 import { PPScopeClass } from '../../class_consts';
 import ReportEditor from './report-editor/ReportEditor';
+import ppGA from '../../pp-ga';
 
 interface IViewerItemDialogProps {
   annotation: AnnotationAPIModel;

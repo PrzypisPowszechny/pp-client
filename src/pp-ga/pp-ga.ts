@@ -144,10 +144,45 @@ export function annotationUpvoteCancelled(annotationId: string, priority: string
   });
 }
 
+export function annotationReportFormOpened(annotationId: string) {
+  sendEventByMessage({
+    eventCategory: 'AnnotationReportForm', eventAction: 'Open', eventLabel: 'AnnotationReportFormOpened',
+    [GACustomFieldsIndex.annotationId]: annotationId,
+  });
+}
+
+export function annotationReportSent(annotationId: string, reason: string, isCommentBlank: boolean) {
+  sendEventByMessage({
+    eventCategory: 'AnnotationReport', eventAction: 'Send', eventLabel: 'AnnotationReportSent',
+    [GACustomFieldsIndex.annotationId]: annotationId,
+    [GACustomFieldsIndex.reason]: formatReason(reason),
+    [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
+  });
+}
+
+export function annotationSuggestionFormOpened(annotationId: string) {
+  sendEventByMessage({
+    eventCategory: 'AnnotationSuggestionForm', eventAction: 'Open', eventLabel: 'AnnotationSuggestionFormOpened',
+    [GACustomFieldsIndex.annotationId]: annotationId,
+  });
+}
+
+export function annotationSuggestionSent(annotationId: string, isCommentBlank: boolean) {
+  sendEventByMessage({
+    eventCategory: 'AnnotationSuggestion', eventAction: 'Send', eventLabel: 'AnnotationSuggestionSent',
+    [GACustomFieldsIndex.annotationId]: annotationId,
+    [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
+  });
+}
+
 function formatPriority(priority) {
   return `${priority} - ${annotationPrioritiesLabels[priority]}`;
 }
 
 function formatBoolean(val: boolean) {
   return val ? 'True' : 'False';
+}
+
+function formatReason(reason) {
+  return `${reason}`;
 }
