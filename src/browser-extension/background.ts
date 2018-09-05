@@ -19,13 +19,12 @@ function onInstalled(details: InstalledDetails) {
       ppGA.extensionInstalled();
       break;
     case 'update':
-      ppGA.extensionUpgradedFrom(details.previousVersion);
+      ppGA.extensionUpgraded(details.previousVersion);
       break;
     default:
       // ignore 'chrome_update' and 'shared_module_update'
       break;
   }
-
 }
 
 ppGA.init();
@@ -38,3 +37,4 @@ chrome.contextMenus.create({
 
 chrome.runtime.onInstalled.addListener(onInstalled);
 chrome.runtime.setUninstallURL(PP_SETTINGS.SITE_URL + '/extension-uninstalled');
+chrome.runtime.onMessage.addListener(ppGA.sendEventFromMessage);

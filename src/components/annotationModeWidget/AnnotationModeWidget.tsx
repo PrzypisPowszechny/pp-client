@@ -6,6 +6,7 @@ import styles from './AnnotationModeWidget.scss';
 import { PPScopeClass } from '../../class_consts';
 import { turnOffAnnotationMode } from '../../chrome-storage';
 import { AppModes } from 'store/appModes/types';
+import ppGA from '../../pp-ga';
 
 export interface IAnnotationModeWidgetProps {
   appModes: AppModes;
@@ -20,6 +21,7 @@ export default class AnnotationModeWidget extends React.Component<Partial<IAnnot
 
   handleCancelClick = (e: any) => {
     turnOffAnnotationMode(this.props.appModes);
+    ppGA.annotationAddingModeCancelled();
   }
 
   render() {

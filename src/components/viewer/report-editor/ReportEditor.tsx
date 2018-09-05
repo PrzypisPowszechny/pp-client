@@ -2,11 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createResource, deleteResource } from 'redux-json-api';
 
+import { AnnotationAPIModel, AnnotationResourceType } from 'api/annotations';
 import {
-  AnnotationResourceType, AnnotationAPIModel,
-} from 'api/annotations';
-import {
-  AnnotationReportResourceType, AnnotationReportAPIModel, AnnotationReportAPICreateModel, Reasons,
+  AnnotationReportAPICreateModel,
+  AnnotationReportAPIModel,
+  AnnotationReportResourceType, DataResponse,
+  Reasons,
 } from 'api/annotation-reports';
 import Report from './Report';
 import Suggestion from './Suggestion';
@@ -17,7 +18,7 @@ interface IReportEditorProps {
   annotation: AnnotationAPIModel;
   onCancel: (e) => void;
   onSuccess: () => void;
-  createAnnotationReport: (instance: AnnotationReportAPICreateModel) => Promise<AnnotationReportAPIModel>;
+  createAnnotationReport: (instance: AnnotationReportAPICreateModel) => Promise<DataResponse<AnnotationReportAPIModel>>;
 }
 
 interface IReportEditorState {
@@ -64,17 +65,19 @@ export default class ReportEditor extends React.Component<Partial<IReportEditorP
   }
 
   save = (reason: Reasons, comment: string) => {
-    if (!this.state.isCreating) {
-      this.setState({ isCreating: true });
-      this.props.createAnnotationReport(this.getAnnotationReportInstance(reason, comment)).then(() => {
-        this.setState({ isCreating: false, isDisplayingToast: true });
-      })
-      .catch((errors) => {
-        this.setState({ isCreating: false });
-        console.log(errors);
-        // TODO: show error toast here
-      });
+    if (this.state.isCreating) {
+      return Promise.reject(null);
     }
+    this.setState({ isCreating: true });
+    return this.props.createAnnotationReport(this.getAnnotationReportInstance(reason, comment)).then(
+    (data) => {
+        this.setState({ isCreating: false, isDisplayingToast: true });
+        return data;
+    }).catch((errors) => {
+      this.setState({ isCreating: false });
+      console.log(errors);
+      // TODO: show error toast here
+    });
   }
 
   render() {

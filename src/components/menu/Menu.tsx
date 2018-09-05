@@ -10,6 +10,7 @@ import styles from './Menu.scss';
 import { hideMenu, setSelectionRange, showEditorAnnotation } from 'store/widgets/actions';
 import { Range } from 'xpath-range';
 import { PPScopeClass } from '../../class_consts';
+import ppGA from '../../pp-ga';
 
 interface IMenuProps {
   locationX: number;
@@ -62,6 +63,7 @@ export default class Menu extends React.Component<Partial<IMenuProps>, {}> {
     this.props.hideMenu();
     this.props.setSelectionRange(range);
     this.props.showEditor(locationX, locationY);
+    ppGA.annotationAddFormDisplayed('addingModeMenu');
   }
 
   render() {

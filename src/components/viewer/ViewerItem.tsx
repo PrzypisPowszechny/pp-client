@@ -12,6 +12,7 @@ import {
 import { extractHostname, httpPrefixed } from '../../utils/url';
 import ViewerItemControls from './ViewerItemControls';
 import Upvote from './Upvote';
+import ppGA from '../../pp-ga';
 
 interface IViewerItemProps {
   key: string;
@@ -45,8 +46,15 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     this.state = ViewerItem.defaultState;
   }
 
+  componentDidMount() {
+    const { priority, comment, annotationLink } = this.props.annotation.attributes;
+    ppGA.annotationDisplayed(this.props.annotationId, priority, !comment, annotationLink);
+  }
+
   handleAnnotationLinkClick = () => {
+    const { priority, comment, annotationLink } = this.props.annotation.attributes;
     this.props.hideViewer();
+    ppGA.annotationLinkClicked(this.props.annotationId, priority, !comment, annotationLink);
   }
 
   headerPriorityClass() {

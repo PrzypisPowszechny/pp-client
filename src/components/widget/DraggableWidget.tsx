@@ -12,6 +12,7 @@ export interface IDraggableWidgetProps {
   children: any;
   widgetTriangle: boolean;
   className: string;
+  onMoved?: () => void;
 }
 
 export interface IDraggableWidgetState {
@@ -70,7 +71,7 @@ export default class DraggableWidget extends React.PureComponent<
       if (this.dragTracker) {
         this.dragTracker.destroy();
       }
-      this.dragTracker = new DragTracker(moverElement, null, this.onDrag, null);
+      this.dragTracker = new DragTracker(moverElement, null, this.onDrag, this.props.onMoved);
     }
   }
 

@@ -2,6 +2,10 @@ import { APICreateModel, APIModel, CreateRelation, Relation } from './json-api';
 
 export const AnnotationReportResourceType = 'annotationReports';
 
+export interface DataResponse<Model> {
+  data: Model;
+}
+
 export interface AnnotationReportAPIModel extends APIModel {
   relationships: {
     annotation: Relation;

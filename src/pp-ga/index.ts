@@ -1,3 +1,8 @@
-import * as ppGA from './pp-ga';
+import * as events from './events';
+import { init, sendEventFromMessage } from './core';
 
-export default ppGA;
+export default {
+  ...events,
+  init,
+  sendEventFromMessage,
+};

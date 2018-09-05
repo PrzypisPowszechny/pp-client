@@ -4,11 +4,13 @@ import styles from './ReportEditor.scss';
 import { AnnotationAPIModel } from 'api/annotations';
 import { Reasons } from 'api/annotation-reports';
 import { PPScopeClass } from '../../../class_consts';
+import ppGA from '../../../pp-ga';
+import { AnnotationReportAPIModel, DataResponse } from '../../../api/annotation-reports';
 
 interface ISuggestionProps {
   annotation: AnnotationAPIModel;
   onCancel: (e) => void;
-  onSubmit: (reason: Reasons, comment: string) => void;
+  onSubmit: (reason: Reasons, comment: string) => Promise<DataResponse<AnnotationReportAPIModel>|void>;
 }
 
 interface ISuggestionState {
@@ -20,6 +22,10 @@ export default class Suggestion extends React.Component<Partial<ISuggestionProps
   constructor(props: ISuggestionProps) {
     super(props);
     this.state = {};
+  }
+
+  componentDidMount() {
+    ppGA.annotationSuggestionFormOpened(this.props.annotation.id);
   }
 
   handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -34,8 +40,11 @@ export default class Suggestion extends React.Component<Partial<ISuggestionProps
   submit = () => {
     if (!this.state.comment) {
       this.setState({ showCommentError: true });
+    } else {
+      this.props.onSubmit(Reasons.SUGGESTED_CORRECTION, this.state.comment).then( () => {
+        ppGA.annotationSuggestionSent(this.props.annotation.id, !this.state.comment);
+      }).catch(() => null);
     }
-    this.props.onSubmit(Reasons.SUGGESTED_CORRECTION, this.state.comment);
   }
 
   render() {
