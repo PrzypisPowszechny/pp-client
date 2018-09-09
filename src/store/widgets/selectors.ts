@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 import { ITabState } from 'store/reducer';
+import { AnnotationAPIModel, AnnotationProvider, AnnotationViewModel } from '../../api/annotations';
+import { DemagogAnnotationAPIModel } from '../../api/demagog-annotations';
 
 function selectWidgetState({ location, visible }) {
   return {
@@ -34,9 +36,45 @@ function selectAnnotationForm(annotations, editor) {
   };
 }
 
-export function selectAnnotation(state: ITabState, annotationId: string) {
-  return state.api.annotations.data.find( annotation => annotation.id === annotationId);
+function mapToAnnotationViewModel(instance: AnnotationAPIModel) {
+  return {
+    id: instance.id,
+    ...instance.attributes,
+    provider: AnnotationProvider.USER,
+    demagogCategory: null,
+  };
 }
+
+export function selectAnnotation(state: ITabState, prefixedAnnotationId: string): AnnotationViewModel {
+  if (!prefixedAnnotationId) {
+    return;
+  }
+  const splitId = prefixedAnnotationId.split('.');
+  if (splitId.length === 1) {
+    const annotation = state.api.annotations.data.find( instance => instance.id === splitId[0]);
+    return mapToAnnotationViewModel(annotation);
+  } else if (splitId.length === 2 && splitId[0] === 'demagog') {
+    // search
+    return state.demagogApi.annotations.find(instance => instance.id === prefixedAnnotationId);
+  } else {
+    throw Error(`Unrecognised AnnotationViewModel id: "${prefixedAnnotationId}"`);
+  }
+}
+
+export const selectAnnotations = createSelector<
+  ITabState,
+  AnnotationViewModel[],
+  AnnotationAPIModel[],
+  AnnotationViewModel[]>(
+  state => state.demagogApi.annotations,
+  state => state.api.annotations.data,
+  (demagogAnnotations, annotations) => {
+    // Demagog annotations mapping to view model involves major logic so it's done at the loading time;
+    // user annotations have not been mapped yet
+    const userAnnotations: AnnotationViewModel[] = annotations.map(mapToAnnotationViewModel);
+    return demagogAnnotations.concat(userAnnotations);
+  },
+);
 
 export const selectEditorState = createSelector<ITabState, any, any, any>(
   state => state.widgets.editor,

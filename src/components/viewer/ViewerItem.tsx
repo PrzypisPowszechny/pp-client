@@ -7,18 +7,19 @@ import styles from './Viewer.scss';
 import { hideViewer } from 'store/widgets/actions';
 import {
   AnnotationAPIModel,
-  AnnotationPriorities, annotationPrioritiesLabels,
+  AnnotationPriorities, annotationPrioritiesLabels, AnnotationProvider, AnnotationViewModel,
 } from 'api/annotations';
 import { extractHostname, httpPrefixed } from '../../utils/url';
 import ViewerItemControls from './ViewerItemControls';
 import Upvote from './Upvote';
+import { selectAnnotation } from '../../store/widgets/selectors';
 
 interface IViewerItemProps {
   key: string;
   annotationId: string;
   indirectChildClassName: string;
 
-  annotation: AnnotationAPIModel;
+  annotation: AnnotationViewModel;
   hideViewer: () => undefined;
 }
 
@@ -30,7 +31,7 @@ interface IViewerItemState {
   (state, props) => {
     const annotations = state.api.annotations.data;
     return {
-      annotation: annotations.find(annotation => annotation.id === props.annotationId),
+      annotation: selectAnnotation(state, props.annotationId),
     };
   }, {
     hideViewer,
@@ -55,7 +56,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
       [AnnotationPriorities.WARNING]: styles.priorityWarning,
       [AnnotationPriorities.ALERT]: styles.priorityAlert,
     };
-    return priorityToClass[this.props.annotation.attributes.priority];
+    return priorityToClass[this.props.annotation.priority];
   }
 
   render() {
@@ -65,7 +66,8 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
       annotationLink,
       annotationLinkTitle,
       createDate,
-    } = this.props.annotation.attributes;
+      provider,
+    } = this.props.annotation;
 
     const {
       annotation,
@@ -81,8 +83,9 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
           <div className={styles.commentDate}>
             {createDate ? moment(createDate).fromNow() : ''}
           </div>
-
-          <ViewerItemControls annotation={this.props.annotation} />
+          {provider === AnnotationProvider.USER &&
+            <ViewerItemControls annotationId={this.props.annotation.id}/>
+          }
 
         </div>
         {!comment ? '' :
@@ -110,10 +113,14 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
               {annotationLinkTitle}
             </a>
           </div>
-          <Upvote annotation={annotation} indirectChildClassName={indirectChildClassName} />
-        </div>
+          {/* TODO Upvotes are not implemented for Demagog annotations yet;
+            the code assumes user annotation for now so it would throw errors*/}
+          {provider === AnnotationProvider.USER &&
+            <Upvote annotationId={annotation.id} indirectChildClassName={indirectChildClassName}/>
+          }
+          </div>
       </li>
     );
-  }
 
+  }
 }

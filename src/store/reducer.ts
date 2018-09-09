@@ -4,9 +4,9 @@ import widgets, { WidgetReducer } from './widgets/reducers';
 import { AppModes } from './appModes/types';
 import appModes from './appModes/reducers';
 import textSelector from './textSelector/reducers';
-import { AnnotationAPIModel } from 'api/annotations';
+import { AnnotationAPIModel, AnnotationViewModel } from 'api/annotations';
 import { AnnotationUpvoteAPIModel } from 'api/annotation-upvotes';
-import { DemagogAnnotationAPIModel } from '../api/demagog-annotations';
+import demagogApi from './demagogApi/reducers';
 
 export interface ITabState {
   api: {
@@ -14,7 +14,7 @@ export interface ITabState {
     annotationUpvotes: { data: AnnotationUpvoteAPIModel[] };
   };
   demagogApi: {
-    annotations: DemagogAnnotationAPIModel[];
+    annotations: AnnotationViewModel[];
   };
   appModes: AppModes;
   widgets: WidgetReducer;
@@ -33,6 +33,7 @@ export const apiInitializedFields = {
 
 export default combineReducers<ITabState>({
   api,
+  demagogApi,
   appModes,
   widgets,
   textSelector,

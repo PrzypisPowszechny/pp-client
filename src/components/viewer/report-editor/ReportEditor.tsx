@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createResource, deleteResource } from 'redux-json-api';
 
 import {
-  AnnotationResourceType, AnnotationAPIModel,
+  AnnotationResourceType, AnnotationAPIModel, AnnotationViewModel,
 } from 'api/annotations';
 import {
   AnnotationReportResourceType, AnnotationReportAPIModel, AnnotationReportAPICreateModel, Reasons,

@@ -1,4 +1,5 @@
 import { APICreateModel, APIModel, Relation } from './json-api';
+import { DemagogAnnotationCategories } from './demagog-annotations';
 
 export const AnnotationResourceType = 'annotations';
 
@@ -52,3 +53,25 @@ export const annotationPrioritiesLabels = {
   WARNING: 'doprecyzowanie',
   ALERT: 'sprostowanie błędu',
 };
+
+export interface AnnotationViewModel {
+  // ID unique over annotations and Demagog annotations
+  id: string;
+  provider: AnnotationProvider;
+  // URL where the annotation came from
+  url?: string;
+  range: RangeAPIModel;
+  priority?: AnnotationPriorities;
+  demagogCategory?: DemagogAnnotationCategories;
+  comment: string;
+  annotationLink: string;
+  annotationLinkTitle: string;
+  upvoteCountExceptUser: number;
+  doesBelongToUser: boolean;
+  createDate?: Date;
+}
+
+export enum AnnotationProvider {
+  USER = 'USER',
+  DEMAGOG = 'DEMAGOG',
+}

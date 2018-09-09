@@ -5,7 +5,7 @@ import { createResource, deleteResource } from 'redux-json-api';
 import { Popup } from 'semantic-ui-react';
 
 import styles from './Viewer.scss';
-import { AnnotationResourceType, AnnotationAPIModel } from 'api/annotations';
+import { AnnotationResourceType, AnnotationAPIModel, AnnotationViewModel } from 'api/annotations';
 import {
   AnnotationUpvoteResourceType, AnnotationUpvoteAPIModel, AnnotationUpvoteAPICreateModel,
 } from 'api/annotation-upvotes';
@@ -13,6 +13,8 @@ import { PPScopeClass } from '../../class_consts';
 
 interface IUpvoteProps {
   indirectChildClassName: string;
+  annotationId: string;
+
   annotation: AnnotationAPIModel;
 
   deleteUpvote: (instance: AnnotationUpvoteAPIModel) => Promise<object>;
@@ -24,7 +26,9 @@ interface IUpvoteState {
 }
 
 @connect(
-  (state, props) => ({}),
+  (state, props) => ({
+    annotation: state.api.annotations.data.find(annotation => annotation.id === props.annotationId),
+  }),
   dispatch => ({
     deleteUpvote: (instance: AnnotationUpvoteAPIModel) => dispatch(deleteResource(instance)),
     createUpvote: (instance: AnnotationUpvoteAPICreateModel) => dispatch(createResource(instance)),

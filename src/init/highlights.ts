@@ -5,7 +5,7 @@ import Highlighter from 'core/Highlighter';
 import { setMouseOverViewer } from '../store/widgets/actions';
 import { selectModeForCurrentPage } from '../store/appModes/selectors';
 import _difference from 'lodash/difference';
-import { selectViewerState } from '../store/widgets/selectors';
+import { selectAnnotations, selectViewerState } from '../store/widgets/selectors';
 
 let instance;
 
@@ -30,15 +30,17 @@ function deinit() {
 
 function drawHighlights() {
   const arePageHighlightsDisabled = selectModeForCurrentPage(store.getState()).arePageHighlightsDisabled;
-  const annotations = store.getState().api.annotations.data;
+  // const annotations = store.getState().api.annotations.data;
+  const annotations = selectAnnotations(store.getState());
   if (arePageHighlightsDisabled && !instance.arePageHighlightsDisabled) {
     instance.highlighter.undrawAll();
+  // redraw annotations only when they actually need to be updated
   } else if (!arePageHighlightsDisabled &&
     (annotations !== instance.annotations || arePageHighlightsDisabled !== instance.arePageHighlightsDisabled)
   ) {
     instance.highlighter.drawAll(annotations.map(annotation => ({
       id: annotation.id,
-      range: annotation.attributes.range,
+      range: annotation.range,
       annotationData: annotation,
     })));
   }

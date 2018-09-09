@@ -2,6 +2,7 @@ import { APIModel } from './json-api';
 
 export enum DemagogAnnotationCategories {
   TRUE = 'TRUE',
+  // TODO
 }
 
 export interface DemagogAnnotationAPIModel extends APIModel {

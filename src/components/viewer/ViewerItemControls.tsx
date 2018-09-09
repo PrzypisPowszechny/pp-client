@@ -7,7 +7,7 @@ import {
   openViewerDeleteModal,
   showEditorAnnotation,
 } from 'store/widgets/actions';
-import { AnnotationAPIModel } from 'api/annotations';
+import { AnnotationAPIModel, AnnotationViewModel } from 'api/annotations';
 import Timer = NodeJS.Timer;
 import ViewerItemDialog from './ViewerItemDialog';
 
@@ -15,6 +15,8 @@ interface IViewerItemControlsProps {
   locationX: number;
   locationY: number;
   isDeleteModalOpen: boolean;
+  annotationId: string;
+
   annotation: AnnotationAPIModel;
 
   showEditorAnnotation: (x: number, y: number, id?: string) => void;
@@ -38,13 +40,15 @@ interface IViewerItemControlsState {
         isDeleteModalOpen,
       },
     } = state.widgets.viewer;
-    const viewerItem = state.widgets.viewer.viewerItems.find(item => item.annotationId === props.annotation.id);
+    const viewerItem = state.widgets.viewer.viewerItems.find(item => item.annotationId === props.annotationId);
+    const annotation = state.api.annotations.data.find(item => item.id === props.annotationId);
 
     return {
       locationX,
       locationY,
       isDeleteModalOpen,
       ...viewerItem,
+      annotation,
     };
   }, {
     showEditorAnnotation,

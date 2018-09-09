@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import styles from './report-editor/ReportEditor.scss';
 import { changeViewerReportEditorOpen } from 'store/widgets/actions';
-import { AnnotationAPIModel } from 'api/annotations';
+import { AnnotationAPIModel, AnnotationViewModel } from 'api/annotations';
 import { PPScopeClass } from '../../class_consts';
 import ReportEditor from './report-editor/ReportEditor';
 
