@@ -6,11 +6,15 @@ import appModes from './appModes/reducers';
 import textSelector from './textSelector/reducers';
 import { AnnotationAPIModel } from 'api/annotations';
 import { AnnotationUpvoteAPIModel } from 'api/annotation-upvotes';
+import { DemagogAnnotationAPIModel } from '../api/demagog-annotations';
 
 export interface ITabState {
   api: {
     annotations: { data: AnnotationAPIModel[] };
     annotationUpvotes: { data: AnnotationUpvoteAPIModel[] };
+  };
+  demagogApi: {
+    annotations: DemagogAnnotationAPIModel[];
   };
   appModes: AppModes;
   widgets: WidgetReducer;
