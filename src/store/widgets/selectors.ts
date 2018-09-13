@@ -34,10 +34,6 @@ function selectAnnotationForm(annotations, editor) {
   };
 }
 
-export function selectAnnotation(state: ITabState, annotationId: string) {
-  return state.api.annotations.data.find( annotation => annotation.id === annotationId);
-}
-
 export const selectEditorState = createSelector<ITabState, any, any, any>(
   state => state.widgets.editor,
   state => state.api.annotations.data,

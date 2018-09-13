@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 import { deleteResource } from 'redux-json-api';
 import { Button, Modal } from 'semantic-ui-react';
 
-import { selectAnnotation, selectViewerState } from 'store/widgets/selectors';
+import { selectViewerState } from 'store/widgets/selectors';
 import { hideViewerDeleteModal } from 'store/widgets/actions';
 import { AnnotationAPIModel } from 'api/annotations';
 import { PPScopeClass } from 'class_consts.ts';
 import { setMouseOverViewer } from 'store/widgets/actions';
 import ppGA from '../../pp-ga';
+import { selectAnnotation } from '../../store/api/selectors';
 
 interface IModalProps {
   deleteModalId: string;

@@ -13,6 +13,7 @@ import { extractHostname, httpPrefixed } from '../../utils/url';
 import ViewerItemControls from './ViewerItemControls';
 import Upvote from './Upvote';
 import ppGA from '../../pp-ga';
+import { selectAnnotation } from '../../store/api/selectors';
 
 interface IViewerItemProps {
   key: string;
@@ -28,12 +29,9 @@ interface IViewerItemState {
 }
 
 @connect(
-  (state, props) => {
-    const annotations = state.api.annotations.data;
-    return {
-      annotation: annotations.find(annotation => annotation.id === props.annotationId),
-    };
-  }, {
+  (state, props) => ({
+    annotation: selectAnnotation(state, props.annotationId),
+  }), {
     hideViewer,
   },
 )

@@ -6,6 +6,7 @@ import { setMouseOverViewer } from '../store/widgets/actions';
 import { selectModeForCurrentPage } from '../store/appModes/selectors';
 import _difference from 'lodash/difference';
 import { selectViewerState } from '../store/widgets/selectors';
+import { selectAnnotations } from '../store/api/selectors';
 
 let instance;
 
@@ -30,7 +31,7 @@ function deinit() {
 
 function drawHighlights() {
   const arePageHighlightsDisabled = selectModeForCurrentPage(store.getState()).arePageHighlightsDisabled;
-  const annotations = store.getState().api.annotations.data;
+  const annotations = selectAnnotations(store.getState());
   if (arePageHighlightsDisabled && !instance.arePageHighlightsDisabled) {
     instance.highlighter.undrawAll();
   } else if (!arePageHighlightsDisabled &&

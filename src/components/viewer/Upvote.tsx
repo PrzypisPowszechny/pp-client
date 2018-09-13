@@ -11,12 +11,15 @@ import {
 } from 'api/annotation-upvotes';
 import { PPScopeClass } from '../../class_consts';
 import ppGA from 'pp-ga';
+import { selectUpvote } from '../../store/api/selectors';
 
 interface IUpvoteProps {
   indirectChildClassName: string;
 
   annotation: AnnotationAPIModel;
-  upvote: AnnotationUpvoteAPIModel;
+  upvoteId?: string;
+  upvoteUrl: string;
+  upvote?: AnnotationUpvoteAPIModel;
 
   fetchUpvote: (url: string) => Promise<object>;
   deleteUpvote: (instance: AnnotationUpvoteAPIModel) => Promise<object>;
@@ -28,11 +31,19 @@ interface IUpvoteState {
 }
 
 @connect(
-  (state, props) => ({
-    upvote: props.annotation.relationships.annotationUpvote.data ? state.api.annotationUpvotes.data.find(
-      upvote => upvote.id === props.annotation.relationships.annotationUpvote.data.id,
-    ) : null,
-  }),
+  (state, props) => {
+    const {
+      data: upvoteData,
+      links: { related: upvoteUrl },
+    } = props.annotation.relationships.annotationUpvote;
+    const upvoteId = upvoteData ? upvoteData.id : null;
+
+    return {
+      upvoteId,
+      upvoteUrl,
+      upvote: upvoteId ? selectUpvote(state, upvoteId) : null,
+    };
+  },
   dispatch => ({
     fetchUpvote: (url: string) => dispatch(readEndpoint(url)),
     deleteUpvote: (instance: AnnotationUpvoteAPIModel) => dispatch(deleteResource(instance)),
@@ -44,10 +55,10 @@ export default class Upvote extends React.Component<Partial<IUpvoteProps>, Parti
   constructor(props: IUpvoteProps) {
     super(props);
 
-    if (props.annotation.relationships.annotationUpvote.data && !props.upvote) {
-      props.fetchUpvote(props.annotation.relationships.annotationUpvote.links.related).then(
-        () => this.setState({ isFetchingUpvote: false }),
-      ).catch(() => null);
+    if (props.upvoteId && !props.upvote) {
+      props.fetchUpvote(props.upvoteUrl)
+        .then(() => this.setState({ isFetchingUpvote: false }))
+        .catch(errors => console.log(errors));
       this.state =  { isFetchingUpvote: true };
     } else {
       this.state = {};
