@@ -1,5 +1,5 @@
 export interface Relation {
-  link?: string;
+  links: { related: string };
   data: APIModel | null;
 }
 
@@ -8,7 +8,7 @@ export interface CreateRelation {
 }
 
 export interface Relations {
-  link: string;
+  links: { related: string };
   data: APIModel[];
 }
 

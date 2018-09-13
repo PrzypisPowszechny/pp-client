@@ -39,3 +39,4 @@ export function sendEventByMessage(fieldsObject: FieldsObject) {
   }
   chrome.runtime.sendMessage({ action: 'SEND_GA_EVENT', fieldsObject });
 }
+

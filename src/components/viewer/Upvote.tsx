@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { createResource, deleteResource } from 'redux-json-api';
+import { createResource, deleteResource, readEndpoint } from 'redux-json-api';
 import { Popup } from 'semantic-ui-react';
 
 import styles from './Viewer.scss';
@@ -14,19 +14,27 @@ import ppGA from 'pp-ga';
 
 interface IUpvoteProps {
   indirectChildClassName: string;
-  annotation: AnnotationAPIModel;
 
+  annotation: AnnotationAPIModel;
+  upvote: AnnotationUpvoteAPIModel;
+
+  fetchUpvote: (url: string) => Promise<object>;
   deleteUpvote: (instance: AnnotationUpvoteAPIModel) => Promise<object>;
   createUpvote: (instance: AnnotationUpvoteAPICreateModel) => Promise<object>;
 }
 
 interface IUpvoteState {
-  initialView: boolean; // used to determine whether edit/delete buttons should be visible
+  isFetchingUpvote: boolean;
 }
 
 @connect(
-  (state, props) => ({}),
+  (state, props) => ({
+    upvote: props.annotation.relationships.annotationUpvote.data ? state.api.annotationUpvotes.data.find(
+      upvote => upvote.id === props.annotation.relationships.annotationUpvote.data.id,
+    ) : null,
+  }),
   dispatch => ({
+    fetchUpvote: (url: string) => dispatch(readEndpoint(url)),
     deleteUpvote: (instance: AnnotationUpvoteAPIModel) => dispatch(deleteResource(instance)),
     createUpvote: (instance: AnnotationUpvoteAPICreateModel) => dispatch(createResource(instance)),
   }),
@@ -35,23 +43,22 @@ export default class Upvote extends React.Component<Partial<IUpvoteProps>, Parti
 
   constructor(props: IUpvoteProps) {
     super(props);
+
+    if (props.annotation.relationships.annotationUpvote.data && !props.upvote) {
+      props.fetchUpvote(props.annotation.relationships.annotationUpvote.links.related).then(
+        () => this.setState({ isFetchingUpvote: false }),
+      ).catch(() => null);
+      this.state =  { isFetchingUpvote: true };
+    } else {
+      this.state = {};
+    }
   }
 
   toggleUpvote = (e) => {
-    const { annotation } = this.props;
+    const { annotation, upvote } = this.props;
     const { attributes: attrs } =  annotation;
-    if (annotation.relationships.annotationUpvote.data) {
-      this.props.deleteUpvote({
-        ...annotation.relationships.annotationUpvote.data,
-        // Include relation to remove have the reverse relation (at annotation instance) removed as well,
-        // even if this annotationUpvote is not in the store.
-        // even if this annotationUpvote is not in the store.
-        relationships: {
-          annotation: {
-            data: { id: annotation.id, type: annotation.type },
-          },
-        },
-      }).then(() => {
+    if (upvote) {
+      this.props.deleteUpvote(upvote).then(() => {
         ppGA.annotationUpvoteCancelled(annotation.id, attrs.priority, !attrs.comment, attrs.annotationLink);
       }).catch((errors) => {
         console.log(errors);
@@ -98,7 +105,7 @@ export default class Upvote extends React.Component<Partial<IUpvoteProps>, Parti
       indirectChildClassName,
     } = this.props;
 
-    return (
+    return this.state.isFetchingUpvote ? null : (
         <div className={styles.ratings}>
           <Popup
             trigger={this.renderUpvoteButton()}
