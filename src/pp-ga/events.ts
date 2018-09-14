@@ -100,9 +100,30 @@ export function annotationAdded(annotationId: string, priority: string, isCommen
   });
 }
 
+export function annotationEditFormDisplayed(annotationId: string, priority: string, isCommentBlank: boolean,
+                                            link: string) {
+  sendEventByMessage({
+    eventCategory: 'AnnotationEditForm', eventAction: 'Display', eventLabel: 'AnnotationEditFormDisplayed',
+    [GACustomFieldsIndex.annotationId]: annotationId,
+    [GACustomFieldsIndex.priority]: formatPriority(priority),
+    [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
+    [GACustomFieldsIndex.annotationLink]: link,
+  });
+}
+
 export function annotationEdited(annotationId: string, priority: string, isCommentBlank: boolean, link: string) {
   sendEventByMessage({
     eventCategory: 'Annotation', eventAction: 'Edit', eventLabel: 'AnnotationEdited',
+    [GACustomFieldsIndex.annotationId]: annotationId,
+    [GACustomFieldsIndex.priority]: formatPriority(priority),
+    [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
+    [GACustomFieldsIndex.annotationLink]: link,
+  });
+}
+
+export function annotationDeleted(annotationId: string, priority: string, isCommentBlank: boolean, link: string) {
+  sendEventByMessage({
+    eventCategory: 'Annotation', eventAction: 'Delete', eventLabel: 'AnnotationDeleted',
     [GACustomFieldsIndex.annotationId]: annotationId,
     [GACustomFieldsIndex.priority]: formatPriority(priority),
     [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
