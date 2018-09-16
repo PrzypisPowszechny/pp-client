@@ -6,10 +6,12 @@
   "dependencies": {
     "@types/google.analytics": "0.0.39",
     "classnames": "^2.2.5",
+    "crypto-js": "^3.1.9-1",
     "jquery": "^3.3.1",
     "jsx": "^0.9.89",
     "lodash": "^4.17.5",
     "moment": "^2.22.0",
+    "qs": "^6.5.2",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
     "react-redux": "^5.0.7",

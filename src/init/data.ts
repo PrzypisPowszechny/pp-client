@@ -4,6 +4,7 @@ import store from '../store';
 
 import chromeStorage from 'chrome-storage';
 import { readEndpoint } from 'redux-json-api';
+import { getFacts, getUserToken, parseFCOrigin } from './demagogAPI';
 
 export function loadInitialData() {
   // This is our root request that needs to have part of the url (path) hardcoded
@@ -25,5 +26,13 @@ export function loadDataFromChromeStorage() {
       store.dispatch(changeAppModes(newAppModes));
       resolve();
     });
+  });
+}
+
+export function loadDataFromDemagog() {
+  const url = window.location.href;
+  const origin = parseFCOrigin(url);
+  getFacts(url, getUserToken(), 'chrome_extension', origin).then((facts) => {
+    console.log(facts);
   });
 }

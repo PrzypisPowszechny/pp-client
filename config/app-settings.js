@@ -9,6 +9,7 @@ exports.appSettings = (env, argv) => {
     DEV: getDevValue(safeEnv, mode),
     SITE_URL: getHostValue(safeEnv, mode) + '/site',
     API_URL: getHostValue(safeEnv, mode) + '/api',
+    DEMAGOG_API_URL: 'https://beta.demagog.org.pl/api/v1',
   };
 }
 
