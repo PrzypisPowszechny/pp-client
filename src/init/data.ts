@@ -5,6 +5,7 @@ import store from '../store';
 import chromeStorage from 'chrome-storage';
 import { readEndpoint } from 'redux-json-api';
 
+
 export function loadInitialData() {
   // This is our root request that needs to have part of the url (path) hardcoded
   store.dispatch(readEndpoint('/annotations?url=' + window.location.href));
@@ -26,4 +27,14 @@ export function loadDataFromChromeStorage() {
       resolve();
     });
   });
+}
+
+import { API_READ } from 'redux-json-api';
+import { createAction, handleActions } from 'redux-actions';
+const apiRead = createAction('API_READ');
+import mock_response from '../mock_annotations.json';
+export function loadMockData() {
+  const endpoint = '/annotations';
+  const options = {};
+  store.dispatch(apiRead({ endpoint, options, ...mock_response }));
 }

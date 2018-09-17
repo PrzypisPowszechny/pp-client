@@ -22,7 +22,7 @@ moment.locale('pl');
 
 import PPSettings from 'PPSettings.interface';
 import initializeChromeStorageHandlers from './init/chromeStorageHandlers';
-import { loadDataFromChromeStorage, loadInitialData } from './init/data';
+import { loadDataFromChromeStorage, loadInitialData, loadMockData } from './init/data';
 
 // Declared in webpack.config through DefinePlugin
 declare global {
@@ -52,4 +52,5 @@ if (isBrowser) {
   // Optimization: load data from storage first, so annotations are not drawn before we know current application modes
   // (disabled extension mode and disabled page mode will erase them)
   loadDataFromChromeStorage().then(loadInitialData);
+  loadMockData();
 }

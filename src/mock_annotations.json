@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "pagination": {
+      "count": 19,
+      "limit": 10,
+      "offset": 0
+    }
+  },
+  "links": {
+    "first": "http://przypispowszechny.pl/api/annotations?page%5Blimit%5D=1",
+    "last": "http://przypispowszechny.pl/api/annotations?page%5Blimit%5D=1&page%5Boffset%5D=18",
+    "next": "http://przypispowszechny.pl/api/annotations?page%5Blimit%5D=1&page%5Boffset%5D=1",
+    "prev": null
+  },
+  "data": [
+    {
+      "id": "135",
+      "type": "annotations",
+      "attributes": {
+        "url": "https://zmianynaziemi.pl/wiadomosc/martin-schulz-chce-stanow-zjednoczonych-europy-i-likwidacji-panstw-narodowych",
+        "range": {
+          "start": "/div[3]/div[2]/div[1]/div[2]/div[1]/div[1]/section[1]/div[1]/article[1]/div[1]/div[4]/div[1]/div[1]/p[1]/strong[1]",
+          "startOffset": 131,
+          "end": "/div[3]/div[2]/div[1]/div[2]/div[1]/div[1]/section[1]/div[1]/article[1]/div[1]/div[4]/div[1]/div[1]/p[1]/strong[1]",
+          "endOffset": 181
+        },
+        "quote": "",
+        "priority": "NORMAL",
+        "comment": "Sam Schulz nie potwierdza swojej niechęci do Polski: \"Jestem wielbicielem Polski, uważam ją za kamień węgielny Europy i jestem przekonany, że potrzebujemy jej w centrum działań unijnych. Odróżniajmy prawo do krytycznych uwag na temat działań partii i rządu od nieodzownego szacunku dla suwerenności kraju i narodu.\"",
+        "annotationLink": "http://wyborcza.pl/",
+        "annotationLinkTitle": "Wywiad z Martinem Schulzem",
+        "createDate": "2018-08-24T16:51:17.662730Z",
+        "upvoteCountExceptUser": 0,
+        "doesBelongToUser": false
+      },
+      "relationships": {
+        "user": {
+          "data": {
+            "id": "55",
+            "type": "users"
+          },
+          "links": {
+            "related": "/api/annotations/135/user"
+          }
+        },
+        "annotationUpvote": {
+          "data": null,
+          "links": {
+            "related": "/api/annotations/135/upvote"
+          }
+        },
+        "annotationReports": {
+          "data": [],
+          "links": {
+            "related": "/api/annotations/135/reports"
+          }
+        }
+      },
+      "links": {
+        "self": "/api/annotations/135"
+      }
+    }
+  ]
+}
