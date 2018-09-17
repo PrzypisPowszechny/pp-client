@@ -27,12 +27,18 @@ export function initializeDocumentHandlers() {
   };
 
   highlights.init(highlighter);
-  chrome.runtime.onMessage.addListener(contextMenuAnnotateCallback);
+  if (chrome && chrome.runtime && chrome.runtime.onMessage) {
+        console.log(chrome.runtime);
+
+    chrome.runtime.onMessage.addListener(contextMenuAnnotateCallback);
+  }
 }
 
 export function deinitializeCoreHandlers() {
   highlights.deinit();
-  chrome.runtime.onMessage.removeListener(contextMenuAnnotateCallback);
+  if (chrome && chrome.runtime && chrome.runtime.onMessage) {
+    chrome.runtime.onMessage.removeListener(contextMenuAnnotateCallback);
+  }
 }
 
 function selectionChangeCallback(
