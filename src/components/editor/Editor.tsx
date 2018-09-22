@@ -9,7 +9,6 @@ import {
   AnnotationAPIModel,
   AnnotationAPICreateModel,
   AnnotationAPIModelAttrs,
-  AnnotationPriorities,
 } from 'api/annotations';
 import { turnOffAnnotationMode } from 'chrome-storage';
 import { PPScopeClass } from 'class_consts';
@@ -21,11 +20,12 @@ import { IEditorRange } from 'store/widgets/reducers';
 import { DraggableWidget } from 'components/widget';
 
 import NoCommentModal from './NoCommentModal';
-import PriorityButtonsBar from './PriorityButtonsBar';
+import PPCategoryButtonsBar from './PPCategoryButtonsBar';
 import * as helpers from './helpers';
 
 import styles from './Editor.scss';
 import ppGA from 'pp-ga';
+import { AnnotationPPCategories } from '../../api/annotations';
 
 interface IEditorProps {
   appModes: AppModes;
@@ -42,7 +42,7 @@ interface IEditorProps {
 
 interface IEditorState {
   annotationId: string;
-  priority: AnnotationPriorities;
+  ppCategory: AnnotationPPCategories;
   comment: string;
   annotationLink: string;
   annotationLinkTitle: string;
@@ -100,10 +100,10 @@ class Editor extends React.Component<Partial<IEditorProps>,
     locationY: 0,
   };
 
-  static priorityToClass = {
-    [AnnotationPriorities.NORMAL]: styles.priorityNormal,
-    [AnnotationPriorities.WARNING]: styles.priorityWarning,
-    [AnnotationPriorities.ALERT]: styles.priorityAlert,
+  static ppCategoryToClass = {
+    [AnnotationPPCategories.ADDITIONAL_INFO]: styles.priorityNormal,
+    [AnnotationPPCategories.CLARIFICATION]: styles.priorityWarning,
+    [AnnotationPPCategories.ERROR]: styles.priorityAlert,
   };
 
   static getDerivedStateFromProps(nextProps: IEditorProps, prevState: IEditorState) {
@@ -124,7 +124,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
       return {
         annotationId: nextAnnotation.id,
         range: nextProps.range,
-        priority: attrs.priority || AnnotationPriorities.NORMAL,
+        ppCategory: attrs.ppCategory || AnnotationPPCategories.ADDITIONAL_INFO,
         comment: attrs.comment || '',
         annotationLink: attrs.annotationLink || '',
         annotationLinkTitle: attrs.annotationLinkTitle || '',
@@ -147,9 +147,9 @@ class Editor extends React.Component<Partial<IEditorProps>,
     this.moverElement = React.createRef();
   }
 
-  handleSetPriority = (priority: AnnotationPriorities) => {
+  handleSetPPCategory = (ppCategory: AnnotationPPCategories) => {
     this.setState({
-      priority,
+      ppCategory,
     });
   }
 
@@ -196,7 +196,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
   }
 
   saveButtonClass(): string {
-    return Editor.priorityToClass[this.state.priority];
+    return Editor.ppCategoryToClass[this.state.ppCategory];
   }
 
   onSaveClick = (event: any) => {
@@ -228,7 +228,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
       attributes: {
         url: window.location.href,
         range: this.props.range,
-        priority: this.state.priority,
+        ppCategory: this.state.ppCategory,
         comment: this.state.comment,
         annotationLink: this.state.annotationLink,
         annotationLinkTitle: this.state.annotationLinkTitle,
@@ -249,9 +249,9 @@ class Editor extends React.Component<Partial<IEditorProps>,
         const attributes = instance.attributes;
         if (isNewInstance) {
           turnOffAnnotationMode(this.props.appModes);
-          ppGA.annotationAdded(instance.id, attributes.priority, !attributes.comment, attributes.annotationLink);
+          ppGA.annotationAdded(instance.id, attributes.ppCategory, !attributes.comment, attributes.annotationLink);
         } else {
-          ppGA.annotationEdited(instance.id, attributes.priority, !attributes.comment, attributes.annotationLink);
+          ppGA.annotationEdited(instance.id, attributes.ppCategory, !attributes.comment, attributes.annotationLink);
         }
       }).catch((errors) => {
         this.setState({ isCreating: false });
@@ -263,7 +263,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
 
   render() {
     const {
-      priority,
+      ppCategory,
       comment,
       commentError,
       annotationLink,
@@ -282,7 +282,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
         mover={this.moverElement}
         onMoved={this.onMoved}
       >
-        <PriorityButtonsBar onSetPriority={this.handleSetPriority} priority={priority} />
+        <PPCategoryButtonsBar onSetPPCategory={this.handleSetPPCategory} ppCategory={ppCategory} />
         <div
           className={styles.close}
           onClick={this.onCancelClick}

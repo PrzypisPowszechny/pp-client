@@ -1,31 +1,31 @@
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 
-import { AnnotationPriorities } from 'api/annotations';
 import { Popup } from 'semantic-ui-react';
 
-import styles from './PriorityButton.scss';
+import styles from './PPCategoryButton.scss';
 import { PPScopeClass } from '../../../class_consts';
+import { AnnotationPPCategories } from '../../../api/annotations';
 
-interface IPriorityButtonProps {
-  type: AnnotationPriorities;
-  priority: AnnotationPriorities;
+interface IPPCategoryButtonProps {
+  type: AnnotationPPCategories;
+  ppCategory: AnnotationPPCategories;
   tooltipText: string;
-  onClick: (priority: AnnotationPriorities) => void;
+  onClick: (category: AnnotationPPCategories) => void;
   children: React.ReactChild;
 }
 
-export default class PriorityButton extends PureComponent<IPriorityButtonProps> {
+export default class PPCategoryButton extends PureComponent<IPPCategoryButtonProps> {
 
   static defaultProps = {
     selected: false,
     className: '',
   };
 
-  priorities = {
-    [AnnotationPriorities.NORMAL]: styles.normal,
-    [AnnotationPriorities.WARNING]: styles.warning,
-    [AnnotationPriorities.ALERT]: styles.alert,
+  ppCategories = {
+    [AnnotationPPCategories.ADDITIONAL_INFO]: styles.normal,
+    [AnnotationPPCategories.CLARIFICATION]: styles.warning,
+    [AnnotationPPCategories.ERROR]: styles.alert,
   };
 
   handleClick = () => {
@@ -40,13 +40,13 @@ export default class PriorityButton extends PureComponent<IPriorityButtonProps> 
   render() {
     const {
       type,
-      priority,
+      ppCategory,
       children,
       tooltipText,
     } = this.props;
 
-    const selected = priority === type;
-    const style = this.priorities[type];
+    const selected = ppCategory === type;
+    const style = this.ppCategories[type];
     const button = (
       <button
         className={classNames(styles.self, style, { [styles.selected]: selected })}
