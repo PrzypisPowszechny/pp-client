@@ -7,7 +7,7 @@ import styles from './Viewer.scss';
 import { hideViewer } from 'store/widgets/actions';
 import {
   AnnotationAPIModel,
-  AnnotationPriorities, annotationPrioritiesLabels,
+  AnnotationPPCategories, annotationPPCategoriesLabels,
 } from 'api/annotations';
 import { extractHostname, httpPrefixed } from '../../utils/url';
 import ViewerItemControls from './ViewerItemControls';
@@ -45,28 +45,28 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
   }
 
   componentDidMount() {
-    const { priority, comment, annotationLink } = this.props.annotation.attributes;
-    ppGA.annotationDisplayed(this.props.annotationId, priority, !comment, annotationLink);
+    const { ppCategory, comment, annotationLink } = this.props.annotation.attributes;
+    ppGA.annotationDisplayed(this.props.annotationId, ppCategory, !comment, annotationLink);
   }
 
   handleAnnotationLinkClick = () => {
-    const { priority, comment, annotationLink } = this.props.annotation.attributes;
+    const { ppCategory, comment, annotationLink } = this.props.annotation.attributes;
     this.props.hideViewer();
-    ppGA.annotationLinkClicked(this.props.annotationId, priority, !comment, annotationLink);
+    ppGA.annotationLinkClicked(this.props.annotationId, ppCategory, !comment, annotationLink);
   }
 
-  headerPriorityClass() {
-    const priorityToClass = {
-      [AnnotationPriorities.NORMAL]: styles.priorityNormal,
-      [AnnotationPriorities.WARNING]: styles.priorityWarning,
-      [AnnotationPriorities.ALERT]: styles.priorityAlert,
+  headerPPCategoryClass() {
+    const ppCategoryToClass = {
+      [AnnotationPPCategories.ADDITIONAL_INFO]: styles.priorityNormal,
+      [AnnotationPPCategories.CLARIFICATION]: styles.priorityWarning,
+      [AnnotationPPCategories.ERROR]: styles.priorityAlert,
     };
-    return priorityToClass[this.props.annotation.attributes.priority];
+    return ppCategoryToClass[this.props.annotation.attributes.ppCategory];
   }
 
   render() {
     const {
-      priority,
+      ppCategory,
       comment,
       annotationLink,
       annotationLinkTitle,
@@ -81,8 +81,8 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     return (
       <li className={styles.annotation}>
         <div className={styles.headBar}>
-          <div className={classNames(styles.commentPriority, this.headerPriorityClass())}>
-            {comment ? annotationPrioritiesLabels[priority] : 'źródło'}
+          <div className={classNames(styles.commentPriority, this.headerPPCategoryClass())}>
+            {comment ? annotationPPCategoriesLabels[ppCategory] : 'źródło'}
           </div>
           <div className={styles.commentDate}>
             {createDate ? moment(createDate).fromNow() : ''}

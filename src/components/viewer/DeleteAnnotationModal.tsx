@@ -49,7 +49,7 @@ export default class DeleteAnnotationModal extends React.Component<Partial<IModa
     this.props.deleteAnnotation(this.props.annotation)
       .then(() => {
         const attrs = this.props.annotation.attributes;
-        ppGA.annotationDeleted(this.props.annotation.id,  attrs.priority, !attrs.comment, attrs.annotationLink);
+        ppGA.annotationDeleted(this.props.annotation.id,  attrs.ppCategory, !attrs.comment, attrs.annotationLink);
       })
       .catch((errors) => {
         console.log(errors);

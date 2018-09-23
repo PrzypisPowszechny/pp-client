@@ -45,11 +45,13 @@ console.log('Przypis script working!');
 
 const isBrowser = typeof window !== 'undefined';
 if (isBrowser) {
-  initializeDocumentHandlers();
-  initializeChromeStorageHandlers();
-  injectComponents();
+  window.addEventListener('load', () => {
+    initializeDocumentHandlers();
+    initializeChromeStorageHandlers();
+    injectComponents();
 
-  // Optimization: load data from storage first, so annotations are not drawn before we know current application modes
-  // (disabled extension mode and disabled page mode will erase them)
-  loadDataFromChromeStorage().then(loadInitialData);
+    // Optimization: load data from storage first, so annotations are not drawn before we know current application modes
+    // (disabled extension mode and disabled page mode will erase them)
+    loadDataFromChromeStorage().then(loadInitialData);
+  });
 }

@@ -16,19 +16,23 @@ export interface AnnotationAPICreateModel extends APICreateModel {
 export interface AnnotationAPIModelAttrs {
   url: string;
   range: RangeAPIModel;
-  priority: AnnotationPriorities;
+  quote: string;
+  publisher: AnnotationPublishers;
+  quoteContext: string;
+  ppCategory: AnnotationPPCategories;
+  demagogCategory: AnnotationDemagogCategories;
   comment: string;
   annotationLink: string;
   annotationLinkTitle: string;
+  createDate?: Date;
   upvoteCountExceptUser: number;
   doesBelongToUser: boolean;
-  createDate?: Date;
 }
 
 export interface AnnotationAPICreateModelAttrs {
   url: string;
   range: RangeAPIModel;
-  priority: AnnotationPriorities;
+  ppCategory: AnnotationPPCategories;
   comment: string;
   annotationLink: string;
   annotationLinkTitle: string;
@@ -41,14 +45,28 @@ export interface RangeAPIModel {
   endOffset: number;
 }
 
-export enum AnnotationPriorities {
-  NORMAL = 'NORMAL',
-  WARNING = 'WARNING',
-  ALERT = 'ALERT',
+export enum AnnotationPPCategories {
+  ADDITIONAL_INFO = 'ADDITIONAL_INFO',
+  CLARIFICATION = 'CLARIFICATION',
+  ERROR = 'ERROR',
 }
 
-export const annotationPrioritiesLabels = {
-  NORMAL: 'dodatkowa informacja',
-  WARNING: 'doprecyzowanie',
-  ALERT: 'sprostowanie błędu',
+export enum AnnotationDemagogCategories {
+  TRUE = 'TRUE',
+  PTRUE = 'PTRUE',
+  FALSE = 'FALSE',
+  PFALSE = 'PFALSE',
+  LIE = 'LIE',
+  UNKNOWN = 'UNKNOWN',
+}
+
+export const annotationPPCategoriesLabels = {
+  ADDITIONAL_INFO: 'dodatkowa informacja',
+  CLARIFICATION: 'doprecyzowanie',
+  ERROR: 'sprostowanie błędu',
 };
+
+export enum AnnotationPublishers {
+  PP = 'PP',
+  DEMAGOG = 'DEMAGOG',
+}

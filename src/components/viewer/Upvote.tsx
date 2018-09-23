@@ -70,7 +70,7 @@ export default class Upvote extends React.Component<Partial<IUpvoteProps>, Parti
     const { attributes: attrs } =  annotation;
     if (upvote) {
       this.props.deleteUpvote(upvote).then(() => {
-        ppGA.annotationUpvoteCancelled(annotation.id, attrs.priority, !attrs.comment, attrs.annotationLink);
+        ppGA.annotationUpvoteCancelled(annotation.id, attrs.ppCategory, !attrs.comment, attrs.annotationLink);
       }).catch((errors) => {
         console.log(errors);
       });
@@ -86,7 +86,7 @@ export default class Upvote extends React.Component<Partial<IUpvoteProps>, Parti
           },
         },
       }).then(() => {
-        ppGA.annotationUpvoted(annotation.id, attrs.priority, !attrs.comment, attrs.annotationLink);
+        ppGA.annotationUpvoted(annotation.id, attrs.ppCategory, !attrs.comment, attrs.annotationLink);
       }).catch((errors) => {
         console.log(errors);
       });

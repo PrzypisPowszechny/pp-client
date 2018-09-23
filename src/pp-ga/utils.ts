@@ -1,7 +1,7 @@
-import { annotationPrioritiesLabels } from '../api/annotations';
+import { annotationPPCategoriesLabels } from '../api/annotations';
 
 export function formatPriority(priority) {
-  return `${priority} - ${annotationPrioritiesLabels[priority]}`;
+  return `${priority} - ${annotationPPCategoriesLabels[priority]}`;
 }
 
 export function formatBoolean(val: boolean) {
