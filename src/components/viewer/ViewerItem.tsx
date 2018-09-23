@@ -13,7 +13,6 @@ import { extractHostname, httpPrefixed } from '../../utils/url';
 
 import AuthorActionControls from './viewer-elements/AuthorActionControls';
 import UserActionControls from './viewer-elements/UserActionControls';
-import Upvote from './Upvote';
 import ppGA from '../../pp-ga';
 import { selectAnnotation } from '../../store/api/selectors';
 
@@ -118,7 +117,6 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
               {annotationLinkTitle}
             </a>
           </div>
-          <Upvote annotation={annotation} indirectChildClassName={indirectChildClassName} />
           <UserActionControls annotation={this.props.annotation}/>
         </div>
       </li>

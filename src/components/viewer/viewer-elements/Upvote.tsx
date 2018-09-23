@@ -4,14 +4,14 @@ import { connect } from 'react-redux';
 import { createResource, deleteResource, readEndpoint } from 'redux-json-api';
 import { Popup } from 'semantic-ui-react';
 
-import styles from './Viewer.scss';
+import styles from '../Viewer.scss';
 import { AnnotationResourceType, AnnotationAPIModel } from 'api/annotations';
 import {
   AnnotationUpvoteResourceType, AnnotationUpvoteAPIModel, AnnotationUpvoteAPICreateModel,
 } from 'api/annotation-upvotes';
-import { PPScopeClass } from '../../class_consts';
+import { PPScopeClass } from '../../../class_consts';
 import ppGA from 'pp-ga';
-import { selectUpvote } from '../../store/api/selectors';
+import { selectUpvote } from '../../../store/api/selectors';
 
 interface IUpvoteProps {
   indirectChildClassName: string;
@@ -112,16 +112,16 @@ export default class Upvote extends React.Component<Partial<IUpvoteProps>, Parti
   }
 
   render() {
-    const {
-      indirectChildClassName,
-    } = this.props;
+    // const {
+    //   indirectChildClassName,
+    // } = this.props;
 
     return this.state.isFetchingUpvote ? null : (
         <div className={styles.ratings}>
           <Popup
             trigger={this.renderUpvoteButton()}
             size="small"
-            className={classNames(indirectChildClassName, PPScopeClass, styles.popup, 'pp-popup-small-padding')}
+            className={classNames(PPScopeClass, styles.popup, 'pp-popup-small-padding')}
             inverted={true}
           >
             Daj znać, że uważasz przypis za pomocny.
