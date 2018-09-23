@@ -10,7 +10,9 @@ import {
   AnnotationPPCategories, annotationPPCategoriesLabels,
 } from 'api/annotations';
 import { extractHostname, httpPrefixed } from '../../utils/url';
-import ViewerItemControls from './ViewerItemControls';
+
+import AuthorActionControls from './viewer-elements/AuthorActionControls';
+import UserActionControls from './viewer-elements/UserActionControls';
 import Upvote from './Upvote';
 import ppGA from '../../pp-ga';
 import { selectAnnotation } from '../../store/api/selectors';
@@ -87,9 +89,9 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
           <div className={styles.commentDate}>
             {createDate ? moment(createDate).fromNow() : ''}
           </div>
-
-          <ViewerItemControls annotation={this.props.annotation} />
-
+          {!this.props.annotation.attributes.doesBelongToUser &&
+          <AuthorActionControls annotation={this.props.annotation} />
+          }
         </div>
         {!comment ? '' :
           <div className={styles.comment}>
@@ -117,9 +119,9 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
             </a>
           </div>
           <Upvote annotation={annotation} indirectChildClassName={indirectChildClassName} />
+          <UserActionControls annotation={this.props.annotation}/>
         </div>
       </li>
     );
   }
-
 }
