@@ -1,4 +1,3 @@
-
 import rangy from 'rangy';
 import 'rangy/lib/rangy-classapplier';
 import 'rangy/lib/rangy-highlighter';
@@ -30,4 +29,9 @@ export function uniqueTextToXPathRange(text: string, element: Node): Range.Seria
   } else {
     return null;
   }
+}
+
+export interface SerializedRangeWithText {
+  range: Range.SerializedRange;
+  text: string;
 }

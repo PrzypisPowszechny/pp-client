@@ -41,10 +41,10 @@ function drawHighlights() {
     const annotationsToDraw = annotations.map((annotation) => {
       const { quote, range } = annotation.attributes;
       let locatedRange;
-      if (quote) {
-        locatedRange = uniqueTextToXPathRange(quote, document.body);
-      } else {
+      if (range) {
         locatedRange = range;
+      } else {
+        locatedRange = uniqueTextToXPathRange(quote, document.body);
       }
       if (locatedRange) {
         return {

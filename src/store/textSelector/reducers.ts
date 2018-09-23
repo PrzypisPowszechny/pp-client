@@ -17,5 +17,6 @@ function textSelectedActionHandler(state, payload) {
   return {
     ...state,
     range: payload.range,
+    text: payload.text,
   };
 }

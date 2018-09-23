@@ -11,13 +11,15 @@ import { hideMenu, setSelectionRange, showEditorAnnotation } from 'store/widgets
 import { Range } from 'xpath-range';
 import { PPScopeClass } from '../../class_consts';
 import ppGA from '../../pp-ga';
+import { SerializedRangeWithText } from '../../utils/annotations';
 
 interface IMenuProps {
   locationX: number;
   locationY: number;
   range: Range.SerializedRange;
+  text: string;
 
-  setSelectionRange: (range: Range.SerializedRange) => void;
+  setSelectionRange: (range: SerializedRangeWithText) => void;
   showEditor: (x: number, y: number) => void;
   hideMenu: () => void;
 }
@@ -33,6 +35,7 @@ interface IMenuProps {
     locationX,
     locationY,
     range: state.textSelector.range,
+    text: state.textSelector.text,
   };
 },
   {
@@ -58,10 +61,11 @@ export default class Menu extends React.Component<Partial<IMenuProps>, {}> {
       locationX,
       locationY,
       range,
+      text,
     } = this.props;
 
     this.props.hideMenu();
-    this.props.setSelectionRange(range);
+    this.props.setSelectionRange({range, text});
     this.props.showEditor(locationX, locationY);
     ppGA.annotationAddFormDisplayed('addingModeMenu');
   }

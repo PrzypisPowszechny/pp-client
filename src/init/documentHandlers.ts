@@ -11,6 +11,7 @@ import highlights from './highlights';
 import { selectModeForCurrentPage } from '../store/appModes/selectors';
 import { setSelectionRange, showEditorAnnotation } from '../store/widgets/actions';
 import ppGA from 'pp-ga';
+import { SerializedRangeWithText } from '../utils/annotations';
 
 let handlers;
 
@@ -36,19 +37,19 @@ export function deinitializeCoreHandlers() {
 }
 
 function selectionChangeCallback(
-  selection: Range.SerializedRange[],
+  selectionRangeWithText: SerializedRangeWithText[],
   isInsideArticle: boolean,
   event) {
 
   const appModes = selectModeForCurrentPage(store.getState());
   if (appModes.isAnnotationMode) {
-    if (selection.length === 0 || (selection.length === 1 && !isInsideArticle)) {
+    if (selectionRangeWithText.length === 0 || (selectionRangeWithText.length === 1 && !isInsideArticle)) {
       // Propagate to the store only selections fully inside the article (e.g. not belonging to any of PP components)
       // When we need to react also to other, we can easily expand the textSelector reducer; for now it' too eager.
       store.dispatch(makeSelection(null));
       store.dispatch(hideMenu());
-    } else if (selection.length === 1) {
-      store.dispatch(makeSelection(selection[0]));
+    } else if (selectionRangeWithText.length === 1) {
+      store.dispatch(makeSelection(selectionRangeWithText[0]));
       store.dispatch(showMenu(mousePosition(event)));
     } else {
       console.warn('PP: more than one selected range is not supported');
