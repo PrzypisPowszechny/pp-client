@@ -77,6 +77,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
       annotation,
       indirectChildClassName,
     } = this.props;
+    
     return (
       <li className={styles.annotation}>
         <div className={styles.headBar}>

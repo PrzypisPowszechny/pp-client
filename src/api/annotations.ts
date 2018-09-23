@@ -17,6 +17,7 @@ export interface AnnotationAPIModelAttrs {
   url: string;
   range: RangeAPIModel;
   quote: string;
+  publisher: AnnotationPublishers;
   quoteContext: string;
   ppCategory: AnnotationPPCategories;
   demagogCategory: AnnotationDemagogCategories;
@@ -59,14 +60,13 @@ export enum AnnotationDemagogCategories {
   UNKNOWN = 'UNKNOWN',
 }
 
-export enum AnnotationPriorities {
-  NORMAL = 'NORMAL',
-  WARNING = 'WARNING',
-  ALERT = 'ALERT',
-}
-
 export const annotationPPCategoriesLabels = {
   ADDITIONAL_INFO: 'dodatkowa informacja',
   CLARIFICATION: 'doprecyzowanie',
   ERROR: 'sprostowanie błędu',
 };
+
+export enum AnnotationPublishers {
+  PP = 'PP',
+  DEMAGOG = 'DEMAGOG',
+}
