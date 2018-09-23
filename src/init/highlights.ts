@@ -7,6 +7,7 @@ import { selectModeForCurrentPage } from '../store/appModes/selectors';
 import _difference from 'lodash/difference';
 import { selectViewerState } from '../store/widgets/selectors';
 import { selectAnnotations } from '../store/api/selectors';
+import { uniqueTextToXPathRange } from '../utils/annotations';
 
 let instance;
 
@@ -37,11 +38,26 @@ function drawHighlights() {
   } else if (!arePageHighlightsDisabled &&
     (annotations !== instance.annotations || arePageHighlightsDisabled !== instance.arePageHighlightsDisabled)
   ) {
-    instance.highlighter.drawAll(annotations.map(annotation => ({
-      id: annotation.id,
-      range: annotation.attributes.range,
-      annotationData: annotation,
-    })));
+    const annotationsToDraw = annotations.map((annotation) => {
+      const { quote, range } = annotation.attributes;
+      let locatedRange;
+      if (quote) {
+        locatedRange = uniqueTextToXPathRange(quote, document.body);
+      } else {
+        locatedRange = range;
+      }
+      if (locatedRange) {
+        return {
+          id: annotation.id,
+          range: locatedRange,
+          annotationData: annotation,
+        };
+      } else {
+        return null;
+      }
+    }).filter(annotation => annotation);
+
+    instance.highlighter.drawAll(annotationsToDraw);
   }
 
   // save for later, to check if updates are needed
