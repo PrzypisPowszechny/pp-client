@@ -100,7 +100,7 @@ export default class Upvote extends React.Component<Partial<IUpvoteProps>, Parti
     const totalUpvoteCount = annotation.attributes.upvoteCountExceptUser + (annotationUpvote.data ? 1 : 0);
     return (
       <button
-        className={classNames('ui', styles.upvote, styles.ratings, {
+        className={classNames('ui', styles.ppButton, styles.upvote, {
           [styles.selected]: Boolean(annotationUpvote.data),
         })
         }

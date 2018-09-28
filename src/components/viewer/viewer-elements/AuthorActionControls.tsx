@@ -108,6 +108,7 @@ export default class AuthorActionControls extends
     return (
       <div className={classNames(styles.controls, { [styles.visible]: this.state.initialView })}>
         <button
+          className={styles.ppButton}
           type="button"
           title="Edit"
           onClick={this.onAnnotationEditClick}
@@ -115,6 +116,7 @@ export default class AuthorActionControls extends
           <Icon icon={ic_mode_edit} size={18} />
         </button>
         <button
+          className={styles.ppButton}
           type="button"
           title="Delete"
           onClick={this.onAnnotationDeleteClick}

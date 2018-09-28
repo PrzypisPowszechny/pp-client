@@ -82,11 +82,13 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     return (
       <li className={styles.annotation}>
         <div className={styles.headBar}>
-          <div className={classNames(styles.commentPriority, this.headerPPCategoryClass())}>
-            {comment ? annotationPPCategoriesLabels[ppCategory] : 'źródło'}
-          </div>
-          <div className={styles.commentDate}>
-            {createDate ? moment(createDate).fromNow() : ''}
+          <div>
+            <div className={classNames(styles.commentPriority, this.headerPPCategoryClass())}>
+              {comment ? annotationPPCategoriesLabels[ppCategory] : 'źródło'}
+            </div>
+            <div className={styles.commentDate}>
+              {createDate ? moment(createDate).fromNow() : ''}
+            </div>
           </div>
           {!this.props.annotation.attributes.doesBelongToUser &&
           <AuthorActionControls annotation={this.props.annotation} />

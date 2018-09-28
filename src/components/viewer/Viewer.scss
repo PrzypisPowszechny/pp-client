@@ -36,19 +36,22 @@ li.annotation {
 
 /* --- Viewer head bar --- */
 .head-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding-top: 4px;
   clear: both; /* push up controls */
   font-size: $viewer-font-size;
 }
 
 .comment-priority {
-  float: left;
+  display: inline;
   margin-left: -($widget-inner-margin + 1px); /* cover the border */
-  padding-top: 3px;
-  padding-bottom: 3px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   padding-left: $widget-inner-margin + 2px; /* indent the type indication */
   padding-right: $widget-inner-margin;
-
+  font-size: 12px;
   background-color: rgb(86, 121, 176);
   font-weight: $font-semi-bold;
   color: rgb(255, 255, 255);
@@ -67,12 +70,12 @@ li.annotation {
 }
 
 .comment-date {
-  margin-top: 3px;
   margin-left: 5px;
-  float: left;
+  display: inline;
+  line-height: 24px;
   font-weight: $font-light;
-  font-size: $viewer-font-size - 2px;
-  color: rgb(86, 121, 176);
+  font-size: $viewer-font-size - 4px;
+  color: rgb(59, 67, 71);
   min-width: 30px;
 }
 
@@ -82,9 +85,8 @@ li.annotation {
   padding-right: 5px;
   opacity: 0;
   transition: opacity 0.2s ease-in; // animate on opacity change
-  color: rgb(59, 67, 71);
 
-  button {
+  .pp-Button {
     @include button-reset();
     display: flex;
     align-items: center;
@@ -95,6 +97,12 @@ li.annotation {
       margin-right: 1px;
       font-weight: bold;
       font-size: $viewer-font-size;
+      color: rgb(59, 67, 71);
+    }
+
+    // button icon
+    svg path {
+      color: rgb(59, 67, 71);
     }
 
     // buttons separator line
@@ -112,8 +120,10 @@ li.annotation {
     }
   }
 
-  button.upvote.selected {
-    color: #2b9344;
+  .pp-Button.upvote.selected {
+    svg path, .number {
+        color: #2b9344;
+    }
   }
 }
 
@@ -134,12 +144,15 @@ li.annotation {
 .comment {
   width: $widget-inner-width;
   min-height: 48px;
-  padding-top: 6px;
-  padding-bottom: 6px;
+  padding-top: 11px;
+  padding-bottom: 11px;
   clear: both;
+  line-height: 20px;
+  padding-left: 3px;
+  padding-right: 3px;
 
   font-weight: $font-light;
-  font-size: 12px;
+  font-size: 14px;
   color: rgb(0, 0, 0);
 
   /* bottom line */
@@ -176,7 +189,7 @@ li.annotation {
   vertical-align: middle;
 
   font-size: 12px;
-  line-height: 0.5em;
+  line-height: 1.4em;
   clear: both;
 }
 
@@ -192,12 +205,13 @@ li.annotation {
 
 .annotation-link-title {
   margin-left: 14px;
-  font-size: $viewer-font-size;
+  font-size: 12px;
+  line-height: 1.4em;
   overflow-wrap: break-word;
   // Normally it adjusts to $widget-inner-width or $small-widget-inner-width, but to handle extreme edge-case when
   // somebody inserted very long word, which would distort whole design
   max-width: 330px;
-  color: black;
+  color: rgb(136, 136, 136);
   display: block;
 }
 

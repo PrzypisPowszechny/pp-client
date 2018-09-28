@@ -67,6 +67,7 @@ export default class UserActionControls extends
         <div className={classNames(styles.controls, styles.visible)}>
           <Upvote annotation={this.props.annotation}  indirectChildClassName={this.props.indirectChildClassName}/>
           <button
+            className={styles.ppButton}
             type="button"
             title="Więcej"
             onClick={this.toggleDialog}
