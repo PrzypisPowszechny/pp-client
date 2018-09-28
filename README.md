@@ -1,7 +1,17 @@
 [![CircleCI master](https://circleci.com/gh/PrzypisPowszechny/pp-client/tree/master.svg?style=shield)]()
 [![CircleCI master](https://circleci.com/gh/PrzypisPowszechny/pp-client/tree/develop.svg?style=shield)]()
 
+# About project
 
+Chrome extension for enhancing websites with annotations available to the visitors at the very moment of reading. 
+Using this tool communities focused on fact-checking can serve their content contextually and effectively improve 
+the reliability of information people source from the internet.
+
+### Preview of adding an annotation
+
+![Extenion in action movie](./docs/adding-annotation-movie.gif)
+
+# Development
 
 ## Prerequisites
 
