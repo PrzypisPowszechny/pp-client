@@ -2,14 +2,16 @@ import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import styles from '../Viewer.scss';
-import {hideViewer} from 'store/widgets/actions';
+import { hideViewer } from 'store/widgets/actions';
 import { AnnotationAPIModel } from 'api/annotations';
-
 import Upvote from './Upvote';
 import UserActionDialog from './UserActionDialog';
 import ppGA from '../../../pp-ga';
+import { Icon } from 'react-icons-kit';
+import { ic_more_horiz } from 'react-icons-kit/md/ic_more_horiz';
 
 interface IUserActionControlsProps {
+  indirectChildClassName: string;
   locationX: number;
   locationY: number;
   annotation: AnnotationAPIModel;
@@ -50,7 +52,6 @@ export default class UserActionControls extends
     isDialogOpen: false,
   };
 
-
   constructor(props: IUserActionControlsProps) {
     super(props);
     this.state = UserActionControls.defaultState;
@@ -63,14 +64,14 @@ export default class UserActionControls extends
   render() {
     return (
       <div>
-        <Upvote annotation={this.props.annotation}/>
         <div className={classNames(styles.controls, styles.visible)}>
+          <Upvote annotation={this.props.annotation}  indirectChildClassName={this.props.indirectChildClassName}/>
           <button
             type="button"
-            title="Edit"
+            title="Więcej"
             onClick={this.toggleDialog}
           >
-            <span className={classNames(styles.actionsIcon)}/>
+            <Icon icon={ic_more_horiz} size={20}/>
           </button>
         </div>
         {this.state.isDialogOpen &&

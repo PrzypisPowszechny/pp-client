@@ -117,7 +117,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
               {annotationLinkTitle}
             </a>
           </div>
-          <UserActionControls annotation={this.props.annotation}/>
+          <UserActionControls annotation={this.props.annotation} indirectChildClassName={indirectChildClassName}/>
         </div>
       </li>
     );

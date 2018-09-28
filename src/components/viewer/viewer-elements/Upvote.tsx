@@ -3,7 +3,8 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createResource, deleteResource, readEndpoint } from 'redux-json-api';
 import { Popup } from 'semantic-ui-react';
-
+import { Icon } from 'react-icons-kit';
+import { ic_star } from 'react-icons-kit/md/ic_star';
 import styles from '../Viewer.scss';
 import { AnnotationResourceType, AnnotationAPIModel } from 'api/annotations';
 import {
@@ -98,35 +99,33 @@ export default class Upvote extends React.Component<Partial<IUpvoteProps>, Parti
     const { annotationUpvote } = annotation.relationships;
     const totalUpvoteCount = annotation.attributes.upvoteCountExceptUser + (annotationUpvote.data ? 1 : 0);
     return (
-      <a
-        className={classNames('ui', styles.upvote, {
+      <button
+        className={classNames('ui', styles.upvote, styles.ratings, {
           [styles.selected]: Boolean(annotationUpvote.data),
         })
         }
         onClick={this.toggleUpvote}
       >
+        <Icon icon={ic_star} size={20} />
         <span className={styles.number}>{totalUpvoteCount}</span>
-        <span className={styles.upvoteIcon}/>
-      </a>
+      </button>
     );
   }
 
   render() {
-    // const {
-    //   indirectChildClassName,
-    // } = this.props;
+    const {
+      indirectChildClassName,
+    } = this.props;
 
     return this.state.isFetchingUpvote ? null : (
-        <div className={styles.ratings}>
-          <Popup
-            trigger={this.renderUpvoteButton()}
-            size="small"
-            className={classNames(PPScopeClass, styles.popup, 'pp-popup-small-padding')}
-            inverted={true}
-          >
-            Daj znać, że uważasz przypis za pomocny.
-          </Popup>
-        </div>
+        <Popup
+          trigger={this.renderUpvoteButton()}
+          size="small"
+          className={classNames(indirectChildClassName, PPScopeClass, styles.popup, 'pp-popup-small-padding')}
+          inverted={true}
+        >
+          Daj znać, że uważasz przypis za pomocny.
+        </Popup>
     );
   }
 

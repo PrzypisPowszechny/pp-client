@@ -2,6 +2,9 @@ import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import styles from '../Viewer.scss';
+import { Icon } from 'react-icons-kit';
+import { ic_mode_edit } from 'react-icons-kit/md/ic_mode_edit';
+import { ic_delete } from 'react-icons-kit/md/ic_delete';
 import {
   hideViewer,
   openViewerDeleteModal,
@@ -101,7 +104,6 @@ export default class AuthorActionControls extends
     this.props.openViewerDeleteModal(this.props.annotation.id);
   }
 
-
   render() {
     return (
       <div className={classNames(styles.controls, { [styles.visible]: this.state.initialView })}>
@@ -110,14 +112,14 @@ export default class AuthorActionControls extends
           title="Edit"
           onClick={this.onAnnotationEditClick}
         >
-          <i className="edit icon"/>
+          <Icon icon={ic_mode_edit} size={18} />
         </button>
         <button
           type="button"
           title="Delete"
           onClick={this.onAnnotationDeleteClick}
         >
-          <i className="trash icon"/>
+          <Icon icon={ic_delete} size={18} />
         </button>
       </div>
     );
