@@ -6,7 +6,7 @@ import moment from 'moment';
 import styles from './Viewer.scss';
 import { hideViewer } from 'store/widgets/actions';
 import {
-  AnnotationAPIModel,
+  AnnotationAPIModel, AnnotationPublishers,
   AnnotationPPCategories, annotationPPCategoriesLabels,
 } from 'api/annotations';
 import { extractHostname, httpPrefixed } from '../../utils/url';
@@ -89,13 +89,13 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
             </div>
           </div>
           <div className={styles.publisherInfo}>
-            {publisher === 'DEMAGOG' &&
+            {publisher === AnnotationPublishers.DEMAGOG &&
             <a className={styles.publisherDemagog} href={'http://demagog.org.pl/'} target="_blank">
               <span className={styles.publisherName}>Dodane przez Demagoga</span>
               <span className={styles.publisherIcon} />
             </a>
             }
-            {publisher === 'PP' && doesBelongToUser &&
+            {publisher === AnnotationPublishers.PP && doesBelongToUser &&
               <AuthorActionControls annotation={this.props.annotation} />
             }
           </div>
