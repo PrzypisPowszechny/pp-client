@@ -58,9 +58,9 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
 
   headerPPCategoryClass() {
     const ppCategoryToClass = {
-      [AnnotationPPCategories.ADDITIONAL_INFO]: styles.priorityNormal,
-      [AnnotationPPCategories.CLARIFICATION]: styles.priorityWarning,
-      [AnnotationPPCategories.ERROR]: styles.priorityAlert,
+      [AnnotationPPCategories.ADDITIONAL_INFO]: styles.categoryAdditionalInfo,
+      [AnnotationPPCategories.CLARIFICATION]: styles.categoryClarification,
+      [AnnotationPPCategories.ERROR]: styles.categoryError,
     };
     return ppCategoryToClass[this.props.annotation.attributes.ppCategory];
   }
@@ -81,7 +81,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
       <li className={styles.annotation}>
         <div className={styles.headBar}>
           <div>
-            <div className={classNames(styles.commentPriority, this.headerPPCategoryClass())}>
+            <div className={classNames(styles.ppCategory, this.headerPPCategoryClass())}>
               {comment ? annotationPPCategoriesLabels[ppCategory] : 'źródło'}
             </div>
             <div className={styles.commentDate}>
@@ -125,7 +125,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
               {annotationLinkTitle}
             </a>
           </div>
-          <UserActionControls 
+          <UserActionControls
             annotation={this.props.annotation}
             indirectChildClassName={this.props.indirectChildClassName}
           />

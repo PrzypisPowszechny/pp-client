@@ -1,14 +1,15 @@
 @import 'css/common/vars/scope';
 @import "css/common/vars/sizes";
 @import "css/common/vars/colors";
-@import "css/common/vars/fonts";
 @import "css/common/mixins";
+@import "css/common/vars/fonts";
 @import "css/common/vars/z-index";
+@import "css/common/theme";
 
 /* -- PP Viewer -- */
 // The oldest CSS in the project
 // it would benefit from some refactoring in the meantime...
-$viewer-font-size: 14px;
+
 
 .self {
   background-color: white;
@@ -30,7 +31,6 @@ ul.annotation-items {
 li.annotation {
   display: block;
   list-style: none;
-  font-size: $viewer-font-size; /* for most of UI text */
   position: relative;
 }
 
@@ -40,69 +40,62 @@ li.annotation {
   align-items: center;
   justify-content: space-between;
   padding-top: 4px;
-  clear: both; /* push up controls */
-  font-size: $viewer-font-size;
 }
 
-.comment-priority {
+.pp-category {
+  @extend %pp-category-font;
   display: inline;
   margin-left: -($widget-inner-margin + 1px); /* cover the border */
   padding-top: 5px;
   padding-bottom: 5px;
   padding-left: $widget-inner-margin + 2px; /* indent the type indication */
   padding-right: $widget-inner-margin;
-  font-size: 12px;
-  background-color: rgb(86, 121, 176);
-  font-weight: $font-semi-bold;
-  color: rgb(255, 255, 255);
-  text-transform: uppercase;
 
-  &.priority-normal {
-    background-color: $normal-ref-color;
+  &.category-additional-info {
+    background-color: $additional-info-color;
   }
-  &.priority-warning {
-    background-color: $warning-ref-color;
+  &.category-clarification {
+    background-color: $clarification-color;
   }
-  &.priority-alert {
-    background-color: $alert-ref-color;
+  &.category-error {
+    background-color: $error-color;
   }
 
 }
 
 .comment-date {
-  margin-left: 5px;
   display: inline-block;
+  min-width: 60px;
+  margin-left: 5px;
+  font-size: $caption-font-size;
   line-height: 24px;
   font-weight: $font-light;
-  font-size: $viewer-font-size - 4px;
-  color: rgb(59, 67, 71);
-  min-width: 60px;
+  color: $icon-button-color;
 }
 
 .publisher-info {
   .publisher-demagog {
-    max-width: 130px;
     display: flex;
+    max-width: 130px;
 
     .publisher-name {
       display: inline-block;
-      font-size: 10px;
-      font-weight: 600;
-      line-height: 1.1em;
-      color: rgb(255,59,0);
-      text-align: right;
       max-width: 90px;
+      font-size: $caption-font-size;
+      font-weight: $font-semi-bold;
+      line-height: 1.1em;
+      color: $demagog-color;
+      text-align: right;
     }
 
     .publisher-icon {
       display: inline-block;
-      margin-left: 5px;
       width: 24px;
       height: 24px;
-      display: inline-block;
+      margin-left: 5px;
       background-image: url('../../../assets/demagog_logo.png');
-      background-position: center; /* Center the image */
-      background-repeat: no-repeat; /* Do not repeat the image */
+      background-position: center;
+      background-repeat: no-repeat;
       background-size: cover;
     }
   }
@@ -110,7 +103,6 @@ li.annotation {
 
 .controls {
   display: flex;
-  float: right;
   padding-right: 5px;
   opacity: 0;
   transition: opacity 0.2s ease-in; // animate on opacity change
@@ -122,17 +114,17 @@ li.annotation {
 
     // button icon
     svg path {
-      color: rgb(59, 67, 71);
+      color: $icon-button-color;
     }
 
     // buttons separator line
     &::after {
-        width: 1px;
-        display: inline-block;
-        height: 20px;
-        content: ' ';
-        background-color: rgb(210, 212, 210);
-        margin: 0 10px;
+      display: inline-block;
+      margin: 0 10px;
+      width: 1px;
+      height: 20px;
+      content: ' ';
+      background-color: $separator-line-color;
       }
     &:last-child::after {
       display: none
@@ -143,19 +135,18 @@ li.annotation {
       opacity: 0.8;
       margin-left: 3px;
       margin-right: 1px;
-      font-weight: bold;
-      font-size: $viewer-font-size;
-      color: rgb(59, 67, 71);
+      font-weight: $font-semi-bold;
+      font-size: $normal-font-size;
+      color: $icon-button-color;
     }
 
     &.upvote.selected {
       svg path, .number {
-          color: #2b9344;
+          color: $icon-button-color--selected;
       }
     }
   }
 }
-
 
 // both controls appearing/disappearing behaviour
 .annotation:hover .controls,
@@ -170,21 +161,14 @@ li.annotation {
 
 /* --- Viewer comment display --- */
 .comment {
+  @extend %pp-basic-font;
   width: $widget-inner-width;
   min-height: 48px;
-  padding-top: 11px;
-  padding-bottom: 11px;
   clear: both;
-  line-height: 20px;
-  padding-left: 3px;
-  padding-right: 3px;
-
-  font-weight: $font-light;
-  font-size: 14px;
-  color: rgb(0, 0, 0);
+  padding: $widget-inner-margin 3px;
 
   /* bottom line */
-  border-bottom: 1px solid rgb(210, 212, 210);
+  border-bottom: 1px solid $separator-line-color;
 
 }
 
@@ -193,16 +177,12 @@ li.annotation {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  padding-top: 6px; // = pp-viewer-widget padding-bottom
   min-height: 25px;
 
   // Display small widget by default, but if there is comment ( that widens whole widget) then keep up with its width
   min-width: $small-widget-inner-width;
   width: 100%;
-
-  padding-top: 6px; // = pp-viewer-widget padding-bottom
-
-  color: rgb(136, 136, 136);
 }
 
 .annotation-link-container {
@@ -212,41 +192,35 @@ li.annotation {
   &:hover {
     .annotation-link, .annotation-link-title {
       opacity: 0.8;
-      color: rgb(136, 136, 136);
+      color: $secondary-font-color;
     }
   }
 }
 
 .annotation-link {
+  @extend %pp-secondary-font;
   font-weight: $font-semi-bold;
-  color: rgb(136, 136, 136);
   text-transform: uppercase;
   vertical-align: middle;
-
-  font-size: 12px;
-  line-height: 1.4em;
-  clear: both;
 }
 
 .annotation-link-icon::after {
+  display: inline-block;
   margin-right: 3px;
   width: 12px;
   height: 12px;
-  top:2px;
   position: relative;
-  display: inline-block;
+  top:2px;
   content: url('../../../assets/hyperlink-icon.png');
 }
 
 .annotation-link-title {
-  margin-left: 14px;
-  font-size: 12px;
-  line-height: 1.4em;
+  @extend %pp-secondary-font;
   overflow-wrap: break-word;
+  margin-left: 14px;
   // Normally it adjusts to $widget-inner-width or $small-widget-inner-width, but to handle extreme edge-case when
   // somebody inserted very long word, which would distort whole design
   max-width: 330px;
-  color: rgb(136, 136, 136);
   display: block;
 }
 
