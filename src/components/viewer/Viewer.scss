@@ -208,6 +208,13 @@ li.annotation {
 .annotation-link-container {
   min-height: 100%;
   margin-right: 8px;
+
+  &:hover {
+    .annotation-link, .annotation-link-title {
+      opacity: 0.8;
+      color: rgb(136, 136, 136);
+    }
+  }
 }
 
 .annotation-link {
