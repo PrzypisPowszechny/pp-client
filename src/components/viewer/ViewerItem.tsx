@@ -67,17 +67,15 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
 
   render() {
     const {
-      ppCategory,
       comment,
       annotationLink,
       annotationLinkTitle,
       createDate,
+      ppCategory,
+      demagogCategory,
+      doesBelongToUser,
+      publisher,
     } = this.props.annotation.attributes;
-
-    const {
-      annotation,
-      indirectChildClassName,
-    } = this.props;
 
     return (
       <li className={styles.annotation}>
@@ -90,9 +88,17 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
               {createDate ? moment(createDate).fromNow() : ''}
             </div>
           </div>
-          {!this.props.annotation.attributes.doesBelongToUser &&
-          <AuthorActionControls annotation={this.props.annotation} />
-          }
+          <div className={styles.publisherInfo}>
+            {publisher === 'DEMAGOG' &&
+            <a className={styles.publisherDemagog} href={'http://demagog.org.pl/'} target="_blank">
+              <span className={styles.publisherName}>Dodane przez Demagoga</span>
+              <span className={styles.publisherIcon} />
+            </a>
+            }
+            {publisher === 'PP' && doesBelongToUser &&
+              <AuthorActionControls annotation={this.props.annotation} />
+            }
+          </div>
         </div>
         {!comment ? '' :
           <div className={styles.comment}>
@@ -119,7 +125,10 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
               {annotationLinkTitle}
             </a>
           </div>
-          <UserActionControls annotation={this.props.annotation} indirectChildClassName={indirectChildClassName}/>
+          <UserActionControls 
+            annotation={this.props.annotation}
+            indirectChildClassName={this.props.indirectChildClassName}
+          />
         </div>
       </li>
     );

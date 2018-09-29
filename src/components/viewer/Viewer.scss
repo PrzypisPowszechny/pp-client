@@ -71,12 +71,41 @@ li.annotation {
 
 .comment-date {
   margin-left: 5px;
-  display: inline;
+  display: inline-block;
   line-height: 24px;
   font-weight: $font-light;
   font-size: $viewer-font-size - 4px;
   color: rgb(59, 67, 71);
-  min-width: 30px;
+  min-width: 60px;
+}
+
+.publisher-info {
+  .publisher-demagog {
+    max-width: 130px;
+    display: flex;
+
+    .publisher-name {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      line-height: 1.1em;
+      color: rgb(255,59,0);
+      text-align: right;
+      max-width: 90px;
+    }
+
+    .publisher-icon {
+      display: inline-block;
+      margin-left: 5px;
+      width: 24px;
+      height: 24px;
+      display: inline-block;
+      background-image: url('../../../assets/demagog_logo.png');
+      background-position: center; /* Center the image */
+      background-repeat: no-repeat; /* Do not repeat the image */
+      background-size: cover;
+    }
+  }
 }
 
 .controls {
@@ -90,15 +119,6 @@ li.annotation {
     @include button-reset();
     display: flex;
     align-items: center;
-
-    .number {
-      opacity: 0.8;
-      margin-left: 3px;
-      margin-right: 1px;
-      font-weight: bold;
-      font-size: $viewer-font-size;
-      color: rgb(59, 67, 71);
-    }
 
     // button icon
     svg path {
@@ -114,19 +134,27 @@ li.annotation {
         background-color: rgb(210, 212, 210);
         margin: 0 10px;
       }
-
     &:last-child::after {
       display: none
     }
-  }
 
-  .pp-Button.upvote.selected {
-    svg path, .number {
-        color: #2b9344;
+    // upvote button
+    .number {
+      opacity: 0.8;
+      margin-left: 3px;
+      margin-right: 1px;
+      font-weight: bold;
+      font-size: $viewer-font-size;
+      color: rgb(59, 67, 71);
+    }
+
+    &.upvote.selected {
+      svg path, .number {
+          color: #2b9344;
+      }
     }
   }
 }
-
 
 
 // both controls appearing/disappearing behaviour
