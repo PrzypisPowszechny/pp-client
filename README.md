@@ -1,15 +1,27 @@
 [![CircleCI master](https://circleci.com/gh/PrzypisPowszechny/pp-client/tree/master.svg?style=shield)]()
 [![CircleCI master](https://circleci.com/gh/PrzypisPowszechny/pp-client/tree/develop.svg?style=shield)]()
 
-# About project
+1. [About & Preview](#about)
+2. [Development](#development)
+    - [Prerequisites](#prerequisites)
+    - [Building](#building)
+    - [Building browser extension ](#building-browser-extension )
+3. [Architecture](#architecture)
+4. [More & References](#more)
+
+---
+
+# About
 
 Chrome extension for enhancing websites with annotations available to the visitors at the very moment of reading. 
+
 Using this tool communities focused on fact-checking can serve their content contextually and effectively improve 
 the reliability of information people source from the internet.
 
 ### Preview of adding an annotation
 
-![Extenion in action movie](./docs/adding-annotation-movie.gif)
+![Extension in action movie](./docs/adding-annotation-movie.gif)
+
 
 # Development
 
@@ -70,7 +82,7 @@ Production configuration and development differences:
 - other differences can be introduced by different variables used within the application for dev and prod configuration,
  defined in `config/app-settings`.
 
-## Browser extension build
+## Building browser extension 
 
 ### development
 Both `build-dev-extension` and `start-extension` will compile to a `dist/browser-extension` directory.
