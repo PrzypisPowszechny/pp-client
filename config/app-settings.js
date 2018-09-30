@@ -25,6 +25,7 @@ function getDevValue(env, mode) {
 function getHostValue(env, mode) {
   switch (env.api) {
     case 'local':
+    case 'localhost':
         return "http://localhost:8000"
     case 'pp':
       return "https://przypispowszechny.pl"
