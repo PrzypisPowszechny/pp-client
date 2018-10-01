@@ -21,7 +21,7 @@ function get(keys, callback) {
   }
 }
 
-function set(values, callback) {
+function set(values, callback?) {
   if (typeof callback !== 'undefined') {
     callback();
   }

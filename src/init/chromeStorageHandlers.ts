@@ -13,9 +13,11 @@ const storageKeysToAppMode = {
 export default function initializeChromeStorageHandlers() {
   chromeStorage.onChanged.addListener((changes, namespace) => {
     for (const key of Object.keys(changes)) {
-      store.dispatch(
-        changeAppModes({ [storageKeysToAppMode[key]]: changes[key].newValue } as AppModes),
-      );
+      if (storageKeysToAppMode[key]) {
+          store.dispatch(
+          changeAppModes({ [storageKeysToAppMode[key]]: changes[key].newValue } as AppModes),
+        );
+      }
     }
   });
 }
