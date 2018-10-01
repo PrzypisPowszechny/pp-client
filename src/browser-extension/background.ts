@@ -36,5 +36,5 @@ chrome.contextMenus.create({
 });
 
 chrome.runtime.onInstalled.addListener(onInstalled);
-chrome.runtime.setUninstallURL(PP_SETTINGS.SITE_URL + '/extension-uninstalled');
+chrome.runtime.setUninstallURL(PP_SETTINGS.SITE_URL + '/extension-uninstalled/');
 chrome.runtime.onMessage.addListener(ppGA.sendEventFromMessage);
