@@ -3,6 +3,7 @@ import InstalledDetails = chrome.runtime.InstalledDetails;
 console.log('Przypis background script!');
 
 // NOTE: This page is also used for hot reloading in webpack-chrome-extension-reloader
+// (so it must be present at least in development)
 
 // analytics
 import ppGA from '../pp-ga';
