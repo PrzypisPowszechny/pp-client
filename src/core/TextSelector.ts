@@ -4,6 +4,7 @@ import _isEqual from 'lodash/isEqual';
 import { PPHighlightClass } from 'class_consts';
 // More on xpath-range here: https://github.com/opengovfoundation/xpath-range
 // Wondering what's inside? See https://github.com/opengovfoundation/xpath-range/blob/master/src/range.coffee#L227
+import { SerializedRangeWithText } from '../utils/annotations';
 
 const TEXTSELECTOR_NS = 'pp-textselector';
 
@@ -28,7 +29,11 @@ function hasClassParents(element, selector: string) {
   return (elAndParents.filter(selector).length !== 0);
 }
 
-export type SelectionCallback = (selection: Range.SerializedRange[], isInsideArticle: boolean, event: any) => void;
+export type SelectionCallback = (
+  selectionRangeWithText: SerializedRangeWithText[],
+  isInsideArticle: boolean,
+  event: any,
+) => void;
 
 export interface TextSelectorOptions {
   onMouseUp?: SelectionCallback;
@@ -42,7 +47,7 @@ export default class TextSelector {
   onMouseUp: SelectionCallback;
   onSelectionChange: SelectionCallback;
   outsideArticleSelector: string;
-  lastRanges: Range.SerializedRange[];
+  lastRanges: SerializedRangeWithText[];
 
   constructor(
     element: Element,
@@ -140,8 +145,10 @@ export default class TextSelector {
   serializeRanges = (ranges: Range.NormalizedRange[]) => {
     const serializedRanges = [];
     for (const range of ranges) {
-      const serializedRange = range.serialize(this.element, `.${PPHighlightClass}`);
-      serializedRanges.push(serializedRange);
+      serializedRanges.push({
+        range: range.serialize(this.element, `.${PPHighlightClass}`),
+        text: range.text(),
+      });
     }
     return serializedRanges;
   }

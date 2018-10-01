@@ -35,6 +35,7 @@ interface IEditorProps {
 
   annotation: AnnotationAPIModel;
   range: IEditorRange;
+  text: string;
 
   createOrUpdateAnnotation: (instance: AnnotationAPICreateModel) => Promise<object>;
   hideEditor: () => void;
@@ -47,6 +48,8 @@ interface IEditorState {
   annotationLink: string;
   annotationLinkTitle: string;
   range: IEditorRange;
+  text: string;
+
 
   locationX: number;
   locationY: number;
@@ -69,6 +72,7 @@ interface IEditorState {
       locationY,
 
       range,
+      text,
       annotation,
     } = selectEditorState(state);
 
@@ -78,6 +82,7 @@ interface IEditorState {
       locationY,
 
       range,
+      text,
       annotation,
     };
   },
@@ -124,6 +129,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
       return {
         annotationId: nextAnnotation.id,
         range: nextProps.range,
+        text: nextProps.text,
         ppCategory: attrs.ppCategory || AnnotationPPCategories.ADDITIONAL_INFO,
         comment: attrs.comment || '',
         annotationLink: attrs.annotationLink || '',
@@ -228,6 +234,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
       attributes: {
         url: window.location.href,
         range: this.props.range,
+        quote: this.props.text,
         ppCategory: this.state.ppCategory,
         comment: this.state.comment,
         annotationLink: this.state.annotationLink,

@@ -19,18 +19,22 @@ function selectAnnotationForm(annotations, editor) {
   // When the annotation is being created for the first time, range is stored in state.editor.range;
   // If the annotation already exists, it is taken from annotation API model.
   let range;
+  let text;
   let annotation;
   if (annotationId) {
     annotation = annotations.find(x => x.id === annotationId);
     range = annotation.attributes.range;
+    text = annotation.attributes.text;
   } else {
     annotation = null;
     range = editor.range;
+    text = editor.text;
   }
 
   return {
     annotation,
     range,
+    text,
   };
 }
 
