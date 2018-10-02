@@ -1,6 +1,7 @@
 
 // A base for future manifest.json
 // Contains only the most universal information;
+// For more details see values appended in browser-extension/*.config.js file
 const packageConf = require('../../package');
 
 const base = {
@@ -31,7 +32,8 @@ const contentScriptSettings = {
   matches: ['<all_urls>'],
   exclude_matches: [
     /* Popular websites to which PP is not applicable
-    Beware, these are not regular expressions: they are a special 3-part google URL match patterns.
+    Beware, these are not regular expressions / typical wildcard expressions:
+    they are a special 3-part google URL match patterns.
     (see https://developer.chrome.com/extensions/match_patterns)
     */
     '*://*.google.com/*',

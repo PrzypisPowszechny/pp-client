@@ -155,6 +155,8 @@ npm run build
 
 # More
 
-[More build notes](docs/build.md)
+[Development -- details](docs/dev-details.md)
+
+[More notes on building](docs/build.md)
 
 [Valuable references](docs/references.md)
