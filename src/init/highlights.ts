@@ -41,7 +41,10 @@ function drawHighlights() {
     const annotationsToDraw = annotations.map((annotation) => {
       const { quote, range } = annotation.attributes;
       let locatedRange;
-      if (range) {
+      // Currently the range returned from server is never literally empty and is always parsed to an Object;
+      // To check if range is provided, check for an Object with no keys
+      const isRangeProvided = range && Object.keys(range).length > 0;
+      if (isRangeProvided) {
         locatedRange = range;
       } else {
         locatedRange = uniqueTextToXPathRange(quote, document.body);
@@ -56,7 +59,6 @@ function drawHighlights() {
         return null;
       }
     }).filter(annotation => annotation);
-
     instance.highlighter.drawAll(annotationsToDraw);
   }
 
