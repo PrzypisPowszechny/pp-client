@@ -6,12 +6,13 @@ import moment from 'moment';
 import styles from './Viewer.scss';
 import { hideViewer } from 'store/widgets/actions';
 import {
-  AnnotationAPIModel,
+  AnnotationAPIModel, AnnotationPublishers,
   AnnotationPPCategories, annotationPPCategoriesLabels,
 } from 'api/annotations';
 import { extractHostname, httpPrefixed } from '../../utils/url';
-import ViewerItemControls from './ViewerItemControls';
-import Upvote from './Upvote';
+
+import AuthorActionControls from './viewer-elements/AuthorActionControls';
+import UserActionControls from './viewer-elements/UserActionControls';
 import ppGA from '../../pp-ga';
 import { selectAnnotation } from '../../store/api/selectors';
 
@@ -57,39 +58,47 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
 
   headerPPCategoryClass() {
     const ppCategoryToClass = {
-      [AnnotationPPCategories.ADDITIONAL_INFO]: styles.priorityNormal,
-      [AnnotationPPCategories.CLARIFICATION]: styles.priorityWarning,
-      [AnnotationPPCategories.ERROR]: styles.priorityAlert,
+      [AnnotationPPCategories.ADDITIONAL_INFO]: styles.categoryAdditionalInfo,
+      [AnnotationPPCategories.CLARIFICATION]: styles.categoryClarification,
+      [AnnotationPPCategories.ERROR]: styles.categoryError,
     };
     return ppCategoryToClass[this.props.annotation.attributes.ppCategory];
   }
 
   render() {
     const {
-      ppCategory,
       comment,
       annotationLink,
       annotationLinkTitle,
       createDate,
+      ppCategory,
+      demagogCategory,
+      doesBelongToUser,
+      publisher,
     } = this.props.annotation.attributes;
-
-    const {
-      annotation,
-      indirectChildClassName,
-    } = this.props;
 
     return (
       <li className={styles.annotation}>
         <div className={styles.headBar}>
-          <div className={classNames(styles.commentPriority, this.headerPPCategoryClass())}>
-            {comment ? annotationPPCategoriesLabels[ppCategory] : 'źródło'}
+          <div>
+            <div className={classNames(styles.ppCategory, this.headerPPCategoryClass())}>
+              {comment ? annotationPPCategoriesLabels[ppCategory] : 'źródło'}
+            </div>
+            <div className={styles.commentDate}>
+              {createDate ? moment(createDate).fromNow() : ''}
+            </div>
           </div>
-          <div className={styles.commentDate}>
-            {createDate ? moment(createDate).fromNow() : ''}
+          <div className={styles.publisherInfo}>
+            {publisher === AnnotationPublishers.DEMAGOG &&
+            <a className={styles.publisherDemagog} href={'http://demagog.org.pl/'} target="_blank">
+              <span className={styles.publisherName}>Dodane przez Demagoga</span>
+              <span className={styles.publisherIcon} />
+            </a>
+            }
+            {publisher === AnnotationPublishers.PP && doesBelongToUser &&
+              <AuthorActionControls annotation={this.props.annotation} />
+            }
           </div>
-
-          <ViewerItemControls annotation={this.props.annotation} />
-
         </div>
         {!comment ? '' :
           <div className={styles.comment}>
@@ -116,10 +125,12 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
               {annotationLinkTitle}
             </a>
           </div>
-          <Upvote annotation={annotation} indirectChildClassName={indirectChildClassName} />
+          <UserActionControls
+            annotation={this.props.annotation}
+            indirectChildClassName={this.props.indirectChildClassName}
+          />
         </div>
       </li>
     );
   }
-
 }

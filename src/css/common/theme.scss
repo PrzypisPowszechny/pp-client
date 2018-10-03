@@ -1,0 +1,57 @@
+/*
+  COLORS
+ */
+
+$primary-font-color: #000;
+$secondary-font-color: rgb(136, 136, 136);
+
+$icon-button-color: rgb(59, 67, 71);
+$icon-button-color--selected: #2b9344;
+
+$separator-line-color: rgb(210, 212, 210);
+
+$additional-info-color: #5679B0;
+$clarification-color: #FDE300;
+$error-color: #F7AB00;
+
+$demagog-color: rgb(255,59,0);
+
+/*
+  FONTS
+ */
+
+$open-sans: "Open Sans", sans-serif;
+
+$normal-font-size: 14px;
+$secondary-font-size: 12px;
+$caption-font-size: 10px;
+
+$font-light: 300;
+$font-semi-bold: 600;
+
+
+%pp-basic-font {
+  font-family: $open-sans;
+  font-size: $normal-font-size;
+  line-height: 20px;
+  font-weight: $font-light;
+  color: $primary-font-color;
+}
+
+%pp-secondary-font {
+  font-family: $open-sans;
+  font-size: $secondary-font-size;
+  line-height: 16.5px; 
+  font-weight: $font-light;
+  color: $secondary-font-color;
+}
+
+ %pp-category-font {
+  font-family: $open-sans;
+  font-weight: $font-semi-bold;
+  font-size: $secondary-font-size;
+  line-height: normal;
+  text-transform: uppercase;
+  text-shadow: none;
+  color: white;
+}

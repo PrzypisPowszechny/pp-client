@@ -1,7 +1,10 @@
 import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import styles from './Viewer.scss';
+import styles from '../Viewer.scss';
+import { Icon } from 'react-icons-kit';
+import { ic_mode_edit } from 'react-icons-kit/md/ic_mode_edit';
+import { ic_delete } from 'react-icons-kit/md/ic_delete';
 import {
   hideViewer,
   openViewerDeleteModal,
@@ -9,10 +12,9 @@ import {
 } from 'store/widgets/actions';
 import { AnnotationAPIModel } from 'api/annotations';
 import Timer = NodeJS.Timer;
-import ViewerItemDialog from './ViewerItemDialog';
-import ppGA from '../../pp-ga';
+import ppGA from '../../../pp-ga';
 
-interface IViewerItemControlsProps {
+interface IAuthorActionControlsProps {
   locationX: number;
   locationY: number;
   isDeleteModalOpen: boolean;
@@ -23,9 +25,8 @@ interface IViewerItemControlsProps {
   openViewerDeleteModal: (id: string) => void;
 }
 
-interface IViewerItemControlsState {
+interface IAuthorActionControlsState {
   initialView: boolean; // used to determine whether edit/delete buttons should be visible
-  isDialogOpen: boolean;
 }
 
 @connect(
@@ -53,23 +54,22 @@ interface IViewerItemControlsState {
     openViewerDeleteModal,
   },
 )
-export default class ViewerItemControls extends
+export default class AuthorActionControls extends
   React.Component<
-    Partial<IViewerItemControlsProps>,
-    Partial<IViewerItemControlsState>
+    Partial<IAuthorActionControlsProps>,
+    Partial<IAuthorActionControlsState>
   > {
   static editControlDisappearTimeout = 500;
 
   static defaultState = {
     initialView: true,
-    isDialogOpen: false,
   };
 
   disappearTimeoutTimer: Timer;
 
-  constructor(props: IViewerItemControlsProps) {
+  constructor(props: IAuthorActionControlsProps) {
     super(props);
-    this.state = ViewerItemControls.defaultState;
+    this.state = AuthorActionControls.defaultState;
   }
 
   componentDidMount() {
@@ -78,7 +78,7 @@ export default class ViewerItemControls extends
         this.setState({ initialView: false });
         this.disappearTimeoutTimer = null;
       },
-      ViewerItemControls.editControlDisappearTimeout,
+      AuthorActionControls.editControlDisappearTimeout,
     );
   }
 
@@ -104,45 +104,25 @@ export default class ViewerItemControls extends
     this.props.openViewerDeleteModal(this.props.annotation.id);
   }
 
-  toggleDialog = () => {
-    this.setState({ isDialogOpen: !this.state.isDialogOpen });
-  }
-
   render() {
     return (
-      <div>
-        {this.props.annotation.attributes.doesBelongToUser &&
-          <div className={classNames(styles.controls, { [styles.visible]: this.state.initialView })}>
-            <button
-              type="button"
-              title="Edit"
-              onClick={this.onAnnotationEditClick}
-            >
-              <i className="edit icon"/>
-            </button>
-            <button
-              type="button"
-              title="Delete"
-              onClick={this.onAnnotationDeleteClick}
-            >
-              <i className="trash icon"/>
-            </button>
-          </div>
-        }
-        {!this.props.annotation.attributes.doesBelongToUser &&
-          <div className={classNames(styles.controls, styles.visible)}>
-            <button
-              type="button"
-              title="Edit"
-              onClick={this.toggleDialog}
-            >
-              <span className={classNames(styles.actionsIcon)}/>
-            </button>
-          </div>
-        }
-        {this.state.isDialogOpen &&
-          <ViewerItemDialog annotation={this.props.annotation} onClose={this.toggleDialog} />
-        }
+      <div className={classNames(styles.controls, { [styles.visible]: this.state.initialView })}>
+        <button
+          className={styles.ppButton}
+          type="button"
+          title="Edit"
+          onClick={this.onAnnotationEditClick}
+        >
+          <Icon icon={ic_mode_edit} size={18} />
+        </button>
+        <button
+          className={styles.ppButton}
+          type="button"
+          title="Delete"
+          onClick={this.onAnnotationDeleteClick}
+        >
+          <Icon icon={ic_delete} size={18} />
+        </button>
       </div>
     );
   }

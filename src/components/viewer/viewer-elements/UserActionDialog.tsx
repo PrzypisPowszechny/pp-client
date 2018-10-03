@@ -1,20 +1,20 @@
 import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import styles from './report-editor/ReportEditor.scss';
+import styles from '../report-editor/ReportEditor.scss';
 import { changeViewerReportEditorOpen } from 'store/widgets/actions';
 import { AnnotationAPIModel } from 'api/annotations';
-import { PPScopeClass } from '../../class_consts';
-import ReportEditor from './report-editor/ReportEditor';
-import ppGA from '../../pp-ga';
+import { PPScopeClass } from '../../../class_consts';
+import ReportEditor from '../report-editor/ReportEditor';
+import ppGA from '../../../pp-ga';
 
-interface IViewerItemDialogProps {
+interface IUserActionDialogProps {
   annotation: AnnotationAPIModel;
   changeViewerReportEditorOpen: (annotationId, isReportEditorOpen) => void;
   onClose: () => void;
 }
 
-interface IViewerItemDialogState {
+interface IUserActionDialogState {
   initialView: boolean; // used to determine whether edit/delete buttons should be visible
   activeDialog?: Dialogs;
 }
@@ -48,16 +48,16 @@ enum Dialogs {
     changeViewerReportEditorOpen,
   },
 )
-export default class ViewerItemDialog extends React.Component<Partial<IViewerItemDialogProps>,
-  Partial<IViewerItemDialogState>> {
+export default class UserActionDialog extends React.Component<Partial<IUserActionDialogProps>,
+  Partial<IUserActionDialogState>> {
 
   static defaultState = {
     activeDialog: Dialogs.MENU,
   };
 
-  constructor(props: IViewerItemDialogProps) {
+  constructor(props: IUserActionDialogProps) {
     super(props);
-    this.state = ViewerItemDialog.defaultState;
+    this.state = UserActionDialog.defaultState;
   }
 
   selectDialog = (e: any) => {

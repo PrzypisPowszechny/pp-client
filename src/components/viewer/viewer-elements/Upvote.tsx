@@ -3,15 +3,16 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createResource, deleteResource, readEndpoint } from 'redux-json-api';
 import { Popup } from 'semantic-ui-react';
-
-import styles from './Viewer.scss';
+import { Icon } from 'react-icons-kit';
+import { ic_star } from 'react-icons-kit/md/ic_star';
+import styles from '../Viewer.scss';
 import { AnnotationResourceType, AnnotationAPIModel } from 'api/annotations';
 import {
   AnnotationUpvoteResourceType, AnnotationUpvoteAPIModel, AnnotationUpvoteAPICreateModel,
 } from 'api/annotation-upvotes';
-import { PPScopeClass } from '../../class_consts';
+import { PPScopeClass } from '../../../class_consts';
 import ppGA from 'pp-ga';
-import { selectUpvote } from '../../store/api/selectors';
+import { selectUpvote } from '../../../store/api/selectors';
 
 interface IUpvoteProps {
   indirectChildClassName: string;
@@ -98,16 +99,16 @@ export default class Upvote extends React.Component<Partial<IUpvoteProps>, Parti
     const { annotationUpvote } = annotation.relationships;
     const totalUpvoteCount = annotation.attributes.upvoteCountExceptUser + (annotationUpvote.data ? 1 : 0);
     return (
-      <a
-        className={classNames('ui', styles.upvote, {
+      <button
+        className={classNames('ui', styles.ppButton, styles.upvote, {
           [styles.selected]: Boolean(annotationUpvote.data),
         })
         }
         onClick={this.toggleUpvote}
       >
+        <Icon icon={ic_star} size={20} />
         <span className={styles.number}>{totalUpvoteCount}</span>
-        <span className={styles.upvoteIcon}/>
-      </a>
+      </button>
     );
   }
 
@@ -117,16 +118,14 @@ export default class Upvote extends React.Component<Partial<IUpvoteProps>, Parti
     } = this.props;
 
     return this.state.isFetchingUpvote ? null : (
-        <div className={styles.ratings}>
-          <Popup
-            trigger={this.renderUpvoteButton()}
-            size="small"
-            className={classNames(indirectChildClassName, PPScopeClass, styles.popup, 'pp-popup-small-padding')}
-            inverted={true}
-          >
-            Daj znać, że uważasz przypis za pomocny.
-          </Popup>
-        </div>
+        <Popup
+          trigger={this.renderUpvoteButton()}
+          size="small"
+          className={classNames(indirectChildClassName, PPScopeClass, styles.popup, 'pp-popup-small-padding')}
+          inverted={true}
+        >
+          Daj znać, że uważasz przypis za pomocny.
+        </Popup>
     );
   }
 
