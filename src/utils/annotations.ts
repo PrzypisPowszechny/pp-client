@@ -8,7 +8,7 @@ import { escapeRegExp } from 'tslint/lib/utils';
 import { PPHighlightClass } from '../class_consts';
 import { annotationRootNode } from '../core';
 
-export function uniqueTextToXPathRange(quote: string): XPathRange.SerializedRange {
+export function findUniqueTextInDOMAsRange(quote: string): XPathRange.SerializedRange {
   const searchScopeRange = rangy.createRange();
   searchScopeRange.selectNodeContents(document.body);
   const options = {

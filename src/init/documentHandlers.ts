@@ -12,6 +12,7 @@ import { selectModeForCurrentPage } from '../store/appModes/selectors';
 import { setSelectionRange, showEditorAnnotation } from '../store/widgets/actions';
 import ppGA from 'pp-ga';
 import { AnnotationLocation, fullAnnotationLocation } from '../utils/annotations';
+import processAnnotations from './processAnnotations';
 
 let handlers;
 
@@ -28,6 +29,7 @@ export function initializeDocumentHandlers() {
   };
 
   highlights.init(highlighter);
+  processAnnotations.init();
   chrome.runtime.onMessage.addListener(contextMenuAnnotateCallback);
 }
 
