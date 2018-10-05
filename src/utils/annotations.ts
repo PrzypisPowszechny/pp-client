@@ -31,7 +31,7 @@ export function uniqueTextToXPathRange(text: string, element: Node): Range.Seria
   }
 }
 
-export interface SerializedRangeWithText {
+export interface AnnotationLocation {
   range: Range.SerializedRange;
   text: string;
 }

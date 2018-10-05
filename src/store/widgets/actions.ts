@@ -1,5 +1,5 @@
 import { Range } from 'xpath-range';
-import { SerializedRangeWithText } from '../../utils/annotations';
+import { AnnotationLocation } from '../../utils/annotations';
 
 export const EDITOR_ANNOTATION = 'EDITOR_ANNOTATION';
 export const SET_EDITOR_SELECTION_RANGE = 'SET_EDITOR_SELECTION_RANGE';
@@ -23,12 +23,12 @@ export const showEditorAnnotation = (x: number, y: number, id?: string) => {
   };
 };
 
-export const setSelectionRange = (rangeWithText: SerializedRangeWithText) => {
+export const setSelectionRange = (annotationLocation: AnnotationLocation) => {
   return {
     type: SET_EDITOR_SELECTION_RANGE,
     payload: {
-      range: rangeWithText.range,
-      text: rangeWithText.text,
+      range: annotationLocation.range,
+      text: annotationLocation.text,
     },
   };
 };

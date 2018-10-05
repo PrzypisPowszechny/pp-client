@@ -11,7 +11,7 @@ import { hideMenu, setSelectionRange, showEditorAnnotation } from 'store/widgets
 import { Range } from 'xpath-range';
 import { PPScopeClass } from '../../class_consts';
 import ppGA from '../../pp-ga';
-import { SerializedRangeWithText } from '../../utils/annotations';
+import { AnnotationLocation } from '../../utils/annotations';
 
 interface IMenuProps {
   locationX: number;
@@ -19,7 +19,7 @@ interface IMenuProps {
   range: Range.SerializedRange;
   text: string;
 
-  setSelectionRange: (range: SerializedRangeWithText) => void;
+  setSelectionRange: (range: AnnotationLocation) => void;
   showEditor: (x: number, y: number) => void;
   hideMenu: () => void;
 }

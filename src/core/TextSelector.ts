@@ -4,7 +4,7 @@ import _isEqual from 'lodash/isEqual';
 import { PPHighlightClass } from 'class_consts';
 // More on xpath-range here: https://github.com/opengovfoundation/xpath-range
 // Wondering what's inside? See https://github.com/opengovfoundation/xpath-range/blob/master/src/range.coffee#L227
-import { SerializedRangeWithText } from '../utils/annotations';
+import { AnnotationLocation } from '../utils/annotations';
 
 const TEXTSELECTOR_NS = 'pp-textselector';
 
@@ -30,7 +30,7 @@ function hasClassParents(element, selector: string) {
 }
 
 export type SelectionCallback = (
-  selectionRangeWithText: SerializedRangeWithText[],
+  annotationLocations: AnnotationLocation[],
   isInsideArticle: boolean,
   event: any,
 ) => void;
@@ -47,7 +47,7 @@ export default class TextSelector {
   onMouseUp: SelectionCallback;
   onSelectionChange: SelectionCallback;
   outsideArticleSelector: string;
-  lastRanges: SerializedRangeWithText[];
+  lastAnnotationLocations: AnnotationLocation[];
 
   constructor(
     element: Element,
@@ -63,7 +63,7 @@ export default class TextSelector {
     this.onSelectionChange = options.onSelectionChange;
     // an OR selector to match any of the classes external to the article
     this.outsideArticleSelector = (options.outsideArticleClasses || []).map(cls => `.${cls}`).join(', ');
-    this.lastRanges = null;
+    this.lastAnnotationLocations = null;
 
     if (this.element.ownerDocument) {
       this.document = this.element.ownerDocument;
@@ -200,14 +200,14 @@ export default class TextSelector {
     const serializedRanges = this.serializeRanges(selectedRanges);
 
     if (this.onSelectionChange) {
-      if (!_isEqual(serializedRanges, this.lastRanges)) {
+      if (!_isEqual(serializedRanges, this.lastAnnotationLocations)) {
         this.onSelectionChange(serializedRanges, isInsideArticle, event);
       }
     }
     if (this.onMouseUp) {
       this.onMouseUp(serializedRanges, isInsideArticle, event);
     }
-    this.lastRanges = serializedRanges;
+    this.lastAnnotationLocations = serializedRanges;
   }
 
   /*

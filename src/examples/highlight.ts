@@ -2,7 +2,7 @@ import { Range } from 'xpath-range';
 import { Highlighter, TextSelector } from 'core/index';
 
 import 'css/selection.scss';
-import { SerializedRangeWithText } from '../utils/annotations';
+import { AnnotationLocation } from '../utils/annotations';
 
 /*
  * Example of selection becoming a highlight;
@@ -29,7 +29,7 @@ function initializeCoreHandlers() {
   });
 }
 
-function handleSelect(data: SerializedRangeWithText[], event) {
+function handleSelect(data: AnnotationLocation[], event) {
   console.log('data: ', data);
   console.log('event: ', event);
   if (data) {

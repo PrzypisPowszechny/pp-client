@@ -1,14 +1,14 @@
 import { Range } from 'xpath-range';
-import { SerializedRangeWithText } from '../../utils/annotations';
+import { AnnotationLocation } from '../../utils/annotations';
 
 export const TEXT_SELECTED = 'TEXT_SELECTED';
 
-export function makeSelection(rangeWithText?: SerializedRangeWithText) {
+export function makeSelection(annotationLocation?: AnnotationLocation) {
   return {
     type: TEXT_SELECTED,
-    payload: rangeWithText ? {
-      range: rangeWithText.range,
-      text: rangeWithText.text,
+    payload: annotationLocation ? {
+      range: annotationLocation.range,
+      text: annotationLocation.text,
     } : {
       range: null,
       text: '',
