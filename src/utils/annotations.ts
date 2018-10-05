@@ -25,8 +25,7 @@ export function uniqueTextToXPathRange(quote: string): XPathRange.SerializedRang
 
   // Assume there is only one text like this on the page and return the first one
   if (range.findText(new RegExp(searchRegexp), options)) {
-    const browserRange = new XPathRange.BrowserRange(range);
-    const normedRange = browserRange.normalize().limit(annotationRootNode()).serialize(annotationRootNode());
+    return new XPathRange.BrowserRange(range).normalize().limit(annotationRootNode()).serialize(annotationRootNode());
   } else {
     return null;
   }
