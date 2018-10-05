@@ -1,5 +1,5 @@
 // Url without protocol, not very strict validation
-const urlRegex = new RegExp(/^(https?:\/\/)?[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,24}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?$/gi);
+const urlRegex = new RegExp(/^(https?:\/\/)?[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,24}\b(\/[-a-zA-Z0-9@:%_\+.,~#?&//=]*)?$/gi);
 
 export function extractHostname(url) {
   let hostname;
