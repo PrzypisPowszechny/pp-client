@@ -42,6 +42,7 @@ function selectionChangeCallback(
   event) {
 
   const appModes = selectModeForCurrentPage(store.getState());
+  // Show the "add annotation" menu if in the annotation mode
   if (appModes.isAnnotationMode) {
     if (selectedRanges.length === 0 || (selectedRanges.length === 1 && !isInsideArticle)) {
       // Propagate to the store only selections fully inside the article (e.g. not belonging to any of PP components)

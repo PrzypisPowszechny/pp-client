@@ -32,15 +32,31 @@ export function uniqueTextToXPathRange(quote: string): XPathRange.SerializedRang
   }
 }
 
+export function XPathNormalizedRangeToRangyRange(xPathRange: XPathRange.NormalizedRange) {
+  const rangyRange = rangy.createRange();
+  const textNodes = xPathRange.textNodes();
+  rangyRange.setStartBefore(textNodes[0]);
+  rangyRange.setEndAfter(textNodes[textNodes.length - 1]);
+  return rangyRange;
+}
+
 export interface AnnotationLocation {
   range: XPathRange.SerializedRange;
   quote: string;
+  quoteContext: string;
 }
 
-export function fullAnnotationLocation(range: XPathRange.NormalizedRange): AnnotationLocation {
-  const serializedRanges = [];
+export function fullAnnotationLocation(normalizedRange: XPathRange.NormalizedRange): AnnotationLocation {
+  const contextWidth = 100;
+  // rangy.getSelection().setSingleRange(x);
+  const rangyRange = XPathNormalizedRangeToRangyRange(normalizedRange);
+  const quote = rangyRange.text();
+  rangyRange.moveStart('character', -contextWidth);
+  rangyRange.moveEnd('character', contextWidth);
+  const quoteContext = rangyRange.text();
   return {
-      range: range.serialize(annotationRootNode(), `.${PPHighlightClass}`),
-      quote: range.text(),
+      range: normalizedRange.serialize(annotationRootNode(), `.${PPHighlightClass}`),
+      quote,
+      quoteContext,
   };
 }

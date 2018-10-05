@@ -11,6 +11,7 @@ import { AnnotationResourceType } from 'api/annotations';
 import { combineReducers } from 'redux';
 import { MODIFY_APP_MODES } from '../appModes/actions';
 import { isAnnotationMode } from 'store/appModes/selectors';
+import { AnnotationLocation } from '../../utils/annotations';
 
 export interface IWidgetState {
   visible: boolean;
@@ -38,7 +39,7 @@ export interface IEditorRange {
 
 export interface IEditorState extends IWidgetState {
   annotationId: string;
-  range: IEditorRange;
+  annotationLocation: AnnotationLocation;
 }
 
 export interface WidgetReducer {

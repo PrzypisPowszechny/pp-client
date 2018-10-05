@@ -7,11 +7,11 @@ export function makeSelection(annotationLocation?: AnnotationLocation) {
   return {
     type: TEXT_SELECTED,
     payload: annotationLocation ? {
-      range: annotationLocation.range,
-      quote: annotationLocation.quote,
+      ...annotationLocation,
     } : {
       range: null,
       quote: '',
+      quoteContext: '',
     },
   };
 }

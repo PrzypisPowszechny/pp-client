@@ -26,6 +26,7 @@ import * as helpers from './helpers';
 import styles from './Editor.scss';
 import ppGA from 'pp-ga';
 import { AnnotationPPCategories } from '../../api/annotations';
+import { AnnotationLocation } from '../../utils/annotations';
 
 interface IEditorProps {
   appModes: AppModes;
@@ -34,8 +35,7 @@ interface IEditorProps {
   locationY: number;
 
   annotation: AnnotationAPIModel;
-  range: IEditorRange;
-  quote: string;
+  annotationLocation: AnnotationLocation;
 
   createOrUpdateAnnotation: (instance: AnnotationAPICreateModel) => Promise<object>;
   hideEditor: () => void;
@@ -47,8 +47,7 @@ interface IEditorState {
   comment: string;
   annotationLink: string;
   annotationLinkTitle: string;
-  range: IEditorRange;
-  quote: string;
+  annotationLocation: AnnotationLocation;
 
   locationX: number;
   locationY: number;
@@ -70,8 +69,7 @@ interface IEditorState {
       locationX,
       locationY,
 
-      range,
-      quote,
+      annotationLocation,
       annotation,
     } = selectEditorState(state);
 
@@ -80,8 +78,7 @@ interface IEditorState {
       locationX,
       locationY,
 
-      range,
-      quote,
+      annotationLocation,
       annotation,
     };
   },
@@ -120,15 +117,14 @@ class Editor extends React.Component<Partial<IEditorProps>,
     // Note: nextProps.annotation && nextProps.annotation.id === prevState.annotationId will generate updates
     // if only nextProps.annotation is null
     const areAnnotationsEqual = prevState.annotationId === nextAnnotation.id;
-    const areRangesEqual = _isEqual(prevState.range, nextProps.range);
+    const areRangesEqual = _isEqual(prevState.annotationLocation, nextProps.annotationLocation);
     if (areAnnotationsEqual && areRangesEqual) {
       return null;
     } else {
       const attrs: Partial<AnnotationAPIModelAttrs> = nextAnnotation.attributes || {};
       return {
         annotationId: nextAnnotation.id,
-        range: nextProps.range,
-        quote: nextProps.quote,
+        annotationLocation: nextProps.annotationLocation,
         ppCategory: attrs.ppCategory || AnnotationPPCategories.ADDITIONAL_INFO,
         comment: attrs.comment || '',
         annotationLink: attrs.annotationLink || '',
@@ -227,13 +223,20 @@ class Editor extends React.Component<Partial<IEditorProps>,
   }
 
   getAnnotationFromState() {
+    const {
+      range,
+      quote,
+      quoteContext,
+    } = this.props.annotationLocation;
+
     return {
       id: this.props.annotation ? this.props.annotation.id : null,
       type: 'annotations',
       attributes: {
         url: window.location.href,
-        range: this.props.range,
-        quote: this.props.quote,
+        range,
+        quote,
+        quoteContext,
         ppCategory: this.state.ppCategory,
         comment: this.state.comment,
         annotationLink: this.state.annotationLink,
@@ -288,7 +291,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
         mover={this.moverElement}
         onMoved={this.onMoved}
       >
-        <PPCategoryButtonsBar onSetPPCategory={this.handleSetPPCategory} ppCategory={ppCategory} />
+        <PPCategoryButtonsBar onSetPPCategory={this.handleSetPPCategory} ppCategory={ppCategory}/>
         <div
           className={styles.close}
           onClick={this.onCancelClick}
@@ -296,7 +299,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
           <i className="remove icon"/>
         </div>
         <div className={classNames(styles.editorInput)}>
-           <div className={classNames(styles.commentTextareaWrapper)}>
+          <div className={classNames(styles.commentTextareaWrapper)}>
             <textarea
               autoFocus={true}
               name="comment"
@@ -374,7 +377,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
               />
             </div>
           </div>
-          <span className={styles.moverIcon} />
+          <span className={styles.moverIcon}/>
         </div>
       </DraggableWidget>
     );

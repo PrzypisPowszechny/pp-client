@@ -69,7 +69,7 @@
   "scripts": {
     "build": "webpack --mode production --config config/client/prod.config.js",
     "start": "webpack-dev-server --mode development --config config/client/dev.config.js",
-    "start-extension": "webpack --mode development --config config/browser-extension/ext.dev.config.js --watch",
+    "start-extension": "webpack --mode development --env.api=local --config config/browser-extension/ext.dev.config.js --watch",
     "build-dev-extension": "webpack --mode development --config config/browser-extension/ext.dev.config.js",
     "build-extension": "webpack --mode production --env.api=pp --config config/browser-extension/ext.prod.config.js && cd dist && zip -r pp-chrome.zip browser-extension",
     "lint": "tslint --project tsconfig.json",

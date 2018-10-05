@@ -9,32 +9,37 @@ function selectWidgetState({ location, visible }) {
   };
 }
 
-export const selectMenuState = createSelector<ITabState, any, any>(
+export const selectMenuState = createSelector<ITabState, any, any, any>(
   state => state.widgets.menu,
-  selectWidgetState,
+    state => state.textSelector,
+  (menu, textSelector) => ({
+    ...selectWidgetState(menu),
+    annotationLocation: { ...textSelector },
+  }),
 );
 
 function selectAnnotationForm(annotations, editor) {
   const annotationId = editor.annotationId;
-  // When the annotation is being created for the first time, range is stored in state.editor.range;
+  // When the annotation is being created for the first time, annotation location is stored in
+  // state.editor.annotationLocation;
   // If the annotation already exists, it is taken from annotation API model.
   let annotation;
-  let range;
-  let quote;
+  let annotationLocation;
   if (annotationId) {
     annotation = annotations.find(x => x.id === annotationId);
-    range = annotation.attributes.range;
-    quote = annotation.attributes.quote;
+    annotationLocation = {
+      range: annotation.attributes.range,
+      quote: annotation.attributes.quote,
+      quoteContext: annotation.attributes.quoteContext,
+    };
   } else {
     annotation = null;
-    range = editor.range;
-    quote = editor.quote;
+    annotationLocation = { ...editor.annotationLocation };
   }
 
   return {
     annotation,
-    range,
-    quote,
+    annotationLocation,
   };
 }
 
