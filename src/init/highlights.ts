@@ -44,7 +44,7 @@ function drawHighlights() {
       if (range) {
         locatedRange = range;
       } else {
-        locatedRange = uniqueTextToXPathRange(quote, document.body);
+        locatedRange = uniqueTextToXPathRange(quote);
       }
       if (locatedRange) {
         return {

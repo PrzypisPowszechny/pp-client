@@ -8,7 +8,7 @@ import { escapeRegExp } from 'tslint/lib/utils';
 import { PPHighlightClass } from '../class_consts';
 import { annotationRootNode } from '../core';
 
-export function uniqueTextToXPathRange(text: string, element: Node): XPathRange.SerializedRange {
+export function uniqueTextToXPathRange(text: string): XPathRange.SerializedRange {
   const searchScopeRange = rangy.createRange();
   searchScopeRange.selectNodeContents(document.body);
   const options = {
@@ -26,8 +26,7 @@ export function uniqueTextToXPathRange(text: string, element: Node): XPathRange.
   // Assume there is only one text like this on the page and return the first one
   if (range.findText(new RegExp(searchRegexp), options)) {
     const browserRange = new XPathRange.BrowserRange(range);
-    const normedRange = browserRange.normalize().limit(document.body);
-    return normedRange.serialize(element);
+    const normedRange = browserRange.normalize().limit(annotationRootNode()).serialize(annotationRootNode());
   } else {
     return null;
   }
