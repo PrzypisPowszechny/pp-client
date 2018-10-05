@@ -4,20 +4,20 @@ import { mousePosition } from 'common/dom';
 import store from 'store';
 import { makeSelection, showMenu } from 'store/actions';
 
-import { Highlighter, TextSelector } from '../core/index';
+import { annotationRootNode, Highlighter, TextSelector } from '../core/index';
 import { hideMenu } from 'store/widgets/actions';
 import { outsideArticleClasses } from 'class_consts';
 import highlights from './highlights';
 import { selectModeForCurrentPage } from '../store/appModes/selectors';
 import { setSelectionRange, showEditorAnnotation } from '../store/widgets/actions';
 import ppGA from 'pp-ga';
-import { AnnotationLocation } from '../utils/annotations';
+import { AnnotationLocation, fullAnnotationLocation } from '../utils/annotations';
 
 let handlers;
 
 export function initializeDocumentHandlers() {
-  const highlighter = new Highlighter(document.body);
-  const selector = new TextSelector(document.body, {
+  const highlighter = new Highlighter(annotationRootNode());
+  const selector = new TextSelector(annotationRootNode(), {
     onSelectionChange: selectionChangeCallback,
     outsideArticleClasses,
   });
@@ -37,19 +37,19 @@ export function deinitializeCoreHandlers() {
 }
 
 function selectionChangeCallback(
-  annotationLocations: AnnotationLocation[],
+  selectedRanges: Range.NormalizedRange[],
   isInsideArticle: boolean,
   event) {
 
   const appModes = selectModeForCurrentPage(store.getState());
   if (appModes.isAnnotationMode) {
-    if (annotationLocations.length === 0 || (annotationLocations.length === 1 && !isInsideArticle)) {
+    if (selectedRanges.length === 0 || (selectedRanges.length === 1 && !isInsideArticle)) {
       // Propagate to the store only selections fully inside the article (e.g. not belonging to any of PP components)
       // When we need to react also to other, we can easily expand the textSelector reducer; for now it' too eager.
       store.dispatch(makeSelection(null));
       store.dispatch(hideMenu());
-    } else if (annotationLocations.length === 1) {
-      store.dispatch(makeSelection(annotationLocations[0]));
+    } else if (selectedRanges.length === 1) {
+      store.dispatch(makeSelection(fullAnnotationLocation(selectedRanges[0])));
       store.dispatch(showMenu(mousePosition(event)));
     } else {
       console.warn('PP: more than one selected range is not supported');
@@ -64,9 +64,10 @@ function contextMenuAnnotateCallback(request, sender) {
      * Reason: checking ContextMenu API selection for being insideArticle is possible, but uncomfortable,
      * as context menu actions are handled in the separate background script.
      */
-    const selection = handlers.selector.currentSerializedSelection();
+    const selection = handlers.selector.captureDocumentSelection();
     if (selection.length === 1) {
-      store.dispatch(setSelectionRange(selection[0]));
+      const annotationLocation = fullAnnotationLocation(selection[0]);
+      store.dispatch(setSelectionRange(annotationLocation));
       const selectionCenter = handlers.selector.currentSingleSelectionCenter();
       store.dispatch(showEditorAnnotation(selectionCenter.x, selectionCenter.y));
       ppGA.annotationAddFormDisplayed('rightMouseContextMenu');

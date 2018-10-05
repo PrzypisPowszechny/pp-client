@@ -28,7 +28,7 @@ declare module 'xpath-range' {
       /*
         contextElement: according to xpath comments: "A root Element from which to anchor the serialisation."
         ignoreSelector: according to xpath comments: "A selector String of elements to ignore. For example
-          elements injected by the annotator". In other words, element no to account for when calculating selection
+          elements injected by the annotator". In other words, element not to account for when calculating selection
           offset (e.g. volatile spans created by other annotations)
        */
 

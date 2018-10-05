@@ -29,13 +29,13 @@ function initializeCoreHandlers() {
   });
 }
 
-function handleSelect(data: AnnotationLocation[], event) {
+function handleSelect(data: Range.NormalizedRange[], event) {
   console.log('data: ', data);
   console.log('event: ', event);
   if (data) {
     if (data.length === 1) {
       console.log(data);
-      window.highlighter.draw(1, data[0].range, { test: 'test' });
+      window.highlighter.draw(1, data[0].serialize(document.body), { test: 'test' });
 
       // setTimeout(() => window.highlighter.undraw(1), 1000);
     } else {

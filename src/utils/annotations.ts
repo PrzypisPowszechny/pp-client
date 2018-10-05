@@ -5,6 +5,8 @@ import 'rangy/lib/rangy-textrange';
 import 'rangy/lib/rangy-serializer';
 import { Range } from 'xpath-range';
 import { escapeRegExp } from 'tslint/lib/utils';
+import { PPHighlightClass } from '../class_consts';
+import { annotationRootNode } from '../core';
 
 export function uniqueTextToXPathRange(text: string, element: Node): Range.SerializedRange {
   const searchScopeRange = rangy.createRange();
@@ -34,4 +36,12 @@ export function uniqueTextToXPathRange(text: string, element: Node): Range.Seria
 export interface AnnotationLocation {
   range: Range.SerializedRange;
   text: string;
+}
+
+export function fullAnnotationLocation(range: Range.NormalizedRange): AnnotationLocation {
+  const serializedRanges = [];
+  return {
+      range: range.serialize(annotationRootNode(), `.${PPHighlightClass}`),
+      text: range.text(),
+  };
 }
