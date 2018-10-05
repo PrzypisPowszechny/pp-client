@@ -17,7 +17,7 @@ interface IMenuProps {
   locationX: number;
   locationY: number;
   range: XPathRange.SerializedRange;
-  text: string;
+  quote: string;
 
   setSelectionRange: (range: AnnotationLocation) => void;
   showEditor: (x: number, y: number) => void;
@@ -35,7 +35,7 @@ interface IMenuProps {
     locationX,
     locationY,
     range: state.textSelector.range,
-    text: state.textSelector.text,
+    quote: state.textSelector.quote,
   };
 },
   {
@@ -61,11 +61,11 @@ export default class Menu extends React.Component<Partial<IMenuProps>, {}> {
       locationX,
       locationY,
       range,
-      text,
+      quote,
     } = this.props;
 
     this.props.hideMenu();
-    this.props.setSelectionRange({range, text});
+    this.props.setSelectionRange({ range, quote });
     this.props.showEditor(locationX, locationY);
     ppGA.annotationAddFormDisplayed('addingModeMenu');
   }

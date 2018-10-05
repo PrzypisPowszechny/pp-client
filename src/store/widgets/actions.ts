@@ -28,7 +28,7 @@ export const setSelectionRange = (annotationLocation: AnnotationLocation) => {
     type: SET_EDITOR_SELECTION_RANGE,
     payload: {
       range: annotationLocation.range,
-      text: annotationLocation.text,
+      quote: annotationLocation.quote,
     },
   };
 };
