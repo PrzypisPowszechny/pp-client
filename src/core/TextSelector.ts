@@ -1,4 +1,4 @@
-import { Range } from 'xpath-range';
+import { Range as XPathRange } from 'xpath-range';
 import $ from 'jquery';
 import _isEqual from 'lodash/isEqual';
 import { PPHighlightClass } from 'class_consts';
@@ -29,7 +29,7 @@ function hasClassParents(element, selector: string) {
 }
 
 export type SelectionCallback = (
-  selectionRanges: Range.NormalizedRange[],
+  selectionRanges: XPathRange.NormalizedRange[],
   isInsideArticle: boolean,
   event: any,
 ) => void;
@@ -46,7 +46,7 @@ export default class TextSelector {
   onMouseUp: SelectionCallback;
   onSelectionChange: SelectionCallback;
   outsideArticleSelector: string;
-  lastSelectedRanges: Range.SerializedRange[];
+  lastSelectedRanges: XPathRange.SerializedRange[];
 
   constructor(
     // Element outside which selections will be ignored
@@ -104,7 +104,7 @@ export default class TextSelector {
        TODO we could try to remove the dependency on `Range` (xpath-range) library, but that
        would require writing our own tool for this kind of logic
        */
-      const browserRange = new Range.BrowserRange(r);
+      const browserRange = new XPathRange.BrowserRange(r);
       const normedRange = browserRange.normalize().limit(this.element);
       /*
        If the new range falls fully outside our this.element, we should

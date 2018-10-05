@@ -3,12 +3,12 @@ import 'rangy/lib/rangy-classapplier';
 import 'rangy/lib/rangy-highlighter';
 import 'rangy/lib/rangy-textrange';
 import 'rangy/lib/rangy-serializer';
-import { Range } from 'xpath-range';
+import { Range as XPathRange } from 'xpath-range';
 import { escapeRegExp } from 'tslint/lib/utils';
 import { PPHighlightClass } from '../class_consts';
 import { annotationRootNode } from '../core';
 
-export function uniqueTextToXPathRange(text: string, element: Node): Range.SerializedRange {
+export function uniqueTextToXPathRange(text: string, element: Node): XPathRange.SerializedRange {
   const searchScopeRange = rangy.createRange();
   searchScopeRange.selectNodeContents(document.body);
   const options = {
@@ -25,7 +25,7 @@ export function uniqueTextToXPathRange(text: string, element: Node): Range.Seria
 
   // Assume there is only one text like this on the page and return the first one
   if (range.findText(new RegExp(searchRegexp), options)) {
-    const browserRange = new Range.BrowserRange(range);
+    const browserRange = new XPathRange.BrowserRange(range);
     const normedRange = browserRange.normalize().limit(document.body);
     return normedRange.serialize(element);
   } else {
@@ -34,11 +34,11 @@ export function uniqueTextToXPathRange(text: string, element: Node): Range.Seria
 }
 
 export interface AnnotationLocation {
-  range: Range.SerializedRange;
+  range: XPathRange.SerializedRange;
   text: string;
 }
 
-export function fullAnnotationLocation(range: Range.NormalizedRange): AnnotationLocation {
+export function fullAnnotationLocation(range: XPathRange.NormalizedRange): AnnotationLocation {
   const serializedRanges = [];
   return {
       range: range.serialize(annotationRootNode(), `.${PPHighlightClass}`),

@@ -1,4 +1,4 @@
-import { Range } from 'xpath-range';
+import { Range as XPathRange } from 'xpath-range';
 
 import { mousePosition } from 'common/dom';
 import store from 'store';
@@ -37,7 +37,7 @@ export function deinitializeCoreHandlers() {
 }
 
 function selectionChangeCallback(
-  selectedRanges: Range.NormalizedRange[],
+  selectedRanges: XPathRange.NormalizedRange[],
   isInsideArticle: boolean,
   event) {
 

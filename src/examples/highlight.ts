@@ -1,4 +1,4 @@
-import { Range } from 'xpath-range';
+import { Range as XPathRange } from 'xpath-range';
 import { Highlighter, TextSelector } from 'core/index';
 
 import 'css/selection.scss';
@@ -29,7 +29,7 @@ function initializeCoreHandlers() {
   });
 }
 
-function handleSelect(data: Range.NormalizedRange[], event) {
+function handleSelect(data: XPathRange.NormalizedRange[], event) {
   console.log('data: ', data);
   console.log('event: ', event);
   if (data) {
