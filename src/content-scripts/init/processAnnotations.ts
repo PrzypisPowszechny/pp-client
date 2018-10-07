@@ -1,5 +1,5 @@
 import store from 'content-scripts/store';
-import { mousePosition } from 'common/dom';
+import { mousePosition } from '../utils/dom';
 import _isEqual from 'lodash/isEqual';
 import { selectAnnotations } from '../store/api/selectors';
 import { findUniqueTextInDOMAsRange } from '../utils/annotations';

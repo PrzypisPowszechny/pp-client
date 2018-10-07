@@ -1,5 +1,5 @@
 import * as chromeKeys from './keys';
-import { standardizeUrlForPageSettings } from 'content-scripts/utils/url';
+import { standardizeUrlForPageSettings } from 'common/url';
 
 // todo: provide a better way of simulating extension environment
 const storage = {

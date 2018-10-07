@@ -1,4 +1,4 @@
-import { isValidUrl } from 'content-scripts/utils/url';
+import { isValidUrl } from 'common/url';
 
 const linkTitleMaxLength = 110;
 const linkMaxLength = 2048;

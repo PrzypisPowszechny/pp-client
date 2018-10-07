@@ -1,6 +1,6 @@
 import { Range as XPathRange } from 'xpath-range';
 
-import { mousePosition } from 'common/dom';
+import { mousePosition } from '../utils/dom';
 import store from 'content-scripts/store';
 import { makeSelection, showMenu } from 'content-scripts/store/actions';
 

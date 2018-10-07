@@ -1,7 +1,7 @@
 import { AppModes } from 'content-scripts/store/appModes/types';
 import _filter from 'lodash/filter';
 import * as chromeKeys from './keys';
-import { standardizeUrlForPageSettings } from 'content-scripts/utils/url';
+import { standardizeUrlForPageSettings } from 'common/url';
 import mockStorage from './mock';
 
 /*

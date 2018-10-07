@@ -9,7 +9,7 @@ import {
   AnnotationAPIModel, AnnotationPublishers,
   AnnotationPPCategories, annotationPPCategoriesLabels,
 } from 'content-scripts/api/annotations';
-import { extractHostname, httpPrefixed } from '../../utils/url';
+import { extractHostname, httpPrefixed } from '../../../common/url';
 
 import AuthorActionControls from './viewer-elements/AuthorActionControls';
 import UserActionControls from './viewer-elements/UserActionControls';

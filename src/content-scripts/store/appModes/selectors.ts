@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { ITabState } from 'content-scripts/store/reducer';
-import { standardizeUrlForPageSettings } from 'content-scripts/utils/url';
+import { standardizeUrlForPageSettings } from 'common/url';
 import { AppModes } from './types';
 
 export function isAnnotationMode(appModes: AppModes) {
