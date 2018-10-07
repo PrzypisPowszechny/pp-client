@@ -1,3 +1,3 @@
-export { default as highlightManager } from './highlightManager';
-export { default as annotationLocator } from './annotationLocator';
-export { default as appComponent } from './appComponent';
+export { default as highlightManager } from './highlight-manager';
+export { default as annotationLocator } from './annotation-locator';
+export { default as appComponent } from './app-component';

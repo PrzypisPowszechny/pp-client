@@ -16,10 +16,10 @@ import * as moment from 'moment';
 import PPSettings from 'common/PPSettings';
 import chromeStorageHandlers from './handlers/chrome-storage-handlers';
 import * as data from './init-data';
-import highlightManager from './modules/highlightManager';
-import annotationLocator from './modules/annotationLocator';
+import highlightManager from './modules/highlight-manager';
+import annotationLocator from './modules/annotation-locator';
 import annotationEventHandlers from './handlers/annotation-event-handlers';
-import appComponent from './modules/appComponent';
+import appComponent from './modules/app-component';
 
 moment.locale('pl');
 
