@@ -10,7 +10,7 @@ import styles from './Menu.scss';
 import { hideMenu, setSelectionRange, showEditorAnnotation } from 'content-scripts/store/widgets/actions';
 import { Range as XPathRange } from 'xpath-range';
 import { PPScopeClass } from 'content-scripts/class_consts';
-import ppGA from 'pp-ga';
+import ppGA from 'common/pp-ga';
 import { AnnotationLocation } from '../../utils/annotations';
 
 interface IMenuProps {

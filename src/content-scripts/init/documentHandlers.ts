@@ -10,7 +10,7 @@ import { outsideArticleClasses } from 'content-scripts/class_consts';
 import highlights from './highlights';
 import { selectModeForCurrentPage } from '../store/appModes/selectors';
 import { setSelectionRange, showEditorAnnotation } from '../store/widgets/actions';
-import ppGA from 'pp-ga';
+import ppGA from 'common/pp-ga';
 import { AnnotationLocation, fullAnnotationLocation } from '../utils/annotations';
 import processAnnotations from './processAnnotations';
 

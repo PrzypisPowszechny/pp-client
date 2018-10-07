@@ -12,7 +12,7 @@ import {
 } from 'content-scripts/store/widgets/actions';
 import { AnnotationAPIModel } from 'content-scripts/api/annotations';
 import Timer = NodeJS.Timer;
-import ppGA from 'pp-ga';
+import ppGA from 'common/pp-ga';
 
 interface IAuthorActionControlsProps {
   locationX: number;

@@ -1,6 +1,6 @@
 import { sendEvent, sendEventByMessage, GACustomFieldsIndex } from './core';
 import { formatBoolean, formatPriority, formatReason } from './utils';
-import packageConf from '../../package.json';
+import packageConf from '../../../package.json';
 
 export function extensionInstalled() {
   sendEvent({ eventCategory: 'Extension', eventAction: 'Install', eventLabel: 'ExtensionInstalled' });

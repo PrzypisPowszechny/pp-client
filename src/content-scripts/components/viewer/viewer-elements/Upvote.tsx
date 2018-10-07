@@ -11,7 +11,7 @@ import {
   AnnotationUpvoteResourceType, AnnotationUpvoteAPIModel, AnnotationUpvoteAPICreateModel,
 } from 'content-scripts/api/annotation-upvotes';
 import { PPScopeClass } from 'content-scripts/class_consts';
-import ppGA from 'pp-ga';
+import ppGA from 'common/pp-ga';
 import { selectUpvote } from '../../../store/api/selectors';
 
 interface IUpvoteProps {

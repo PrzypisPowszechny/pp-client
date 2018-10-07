@@ -8,7 +8,7 @@ import { hideViewerDeleteModal } from 'content-scripts/store/widgets/actions';
 import { AnnotationAPIModel } from 'content-scripts/api/annotations';
 import { PPScopeClass } from 'content-scripts/class_consts';
 import { setMouseOverViewer } from 'content-scripts/store/widgets/actions';
-import ppGA from 'pp-ga';
+import ppGA from 'common/pp-ga';
 import { selectAnnotation } from '../../store/api/selectors';
 
 interface IModalProps {

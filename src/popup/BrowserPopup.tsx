@@ -6,11 +6,11 @@ import switchOffIcon from '../../assets/pp-switch-off-icon.svg';
 
 import { standardizeUrlForPageSettings } from 'common/url';
 import Toggle from './toggle/toggle';
-import chromeStorage from 'chrome-storage';
-import * as chromeKeys from 'chrome-storage/keys';
+import chromeStorage from 'common/chrome-storage';
+import * as chromeKeys from 'common/chrome-storage/keys';
 import _filter from 'lodash/filter';
 import classNames from 'classnames';
-import ppGA from '../pp-ga/index';
+import ppGA from 'common/pp-ga/index';
 
 interface IBrowserPopupState {
   isLoading: boolean;

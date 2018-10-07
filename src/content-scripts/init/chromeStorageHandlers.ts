@@ -1,8 +1,8 @@
-import * as chromeKeys from 'chrome-storage/keys';
+import * as chromeKeys from 'common/chrome-storage/keys';
 import { changeAppModes } from '../store/appModes/actions';
 import store from '../store';
 import { AppModes } from 'content-scripts/store/appModes/types';
-import chromeStorage from 'chrome-storage';
+import chromeStorage from 'common/chrome-storage';
 
 const storageKeysToAppMode = {
   [chromeKeys.DISABLED_EXTENSION]: 'isExtensionDisabled',

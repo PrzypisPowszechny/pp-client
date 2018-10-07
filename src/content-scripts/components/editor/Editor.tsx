@@ -10,7 +10,7 @@ import {
   AnnotationAPICreateModel,
   AnnotationAPIModelAttrs,
 } from 'content-scripts/api/annotations';
-import { turnOffAnnotationMode } from 'chrome-storage';
+import { turnOffAnnotationMode } from 'common/chrome-storage';
 import { PPScopeClass } from 'content-scripts/class_consts';
 import { hideEditor } from 'content-scripts/store/actions';
 import { AppModes } from 'content-scripts/store/appModes/types';
@@ -24,7 +24,7 @@ import PPCategoryButtonsBar from './PPCategoryButtonsBar';
 import * as helpers from './helpers';
 
 import styles from './Editor.scss';
-import ppGA from 'pp-ga';
+import ppGA from 'common/pp-ga';
 import { AnnotationPPCategories } from '../../api/annotations';
 import { AnnotationLocation } from '../../utils/annotations';
 

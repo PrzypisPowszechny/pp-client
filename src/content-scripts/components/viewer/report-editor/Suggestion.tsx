@@ -4,7 +4,7 @@ import styles from './ReportEditor.scss';
 import { AnnotationAPIModel } from 'content-scripts/api/annotations';
 import { Reasons } from 'content-scripts/api/annotation-reports';
 import { PPScopeClass } from 'content-scripts/class_consts';
-import ppGA from 'pp-ga';
+import ppGA from 'common/pp-ga';
 import { AnnotationReportAPIModel, DataResponse } from '../../../api/annotation-reports';
 
 interface ISuggestionProps {

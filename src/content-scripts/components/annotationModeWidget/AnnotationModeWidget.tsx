@@ -4,9 +4,9 @@ import classNames from 'classnames';
 
 import styles from './AnnotationModeWidget.scss';
 import { PPScopeClass } from 'content-scripts/class_consts';
-import { turnOffAnnotationMode } from 'chrome-storage';
+import { turnOffAnnotationMode } from 'common/chrome-storage';
 import { AppModes } from 'content-scripts/store/appModes/types';
-import ppGA from 'pp-ga';
+import ppGA from 'common/pp-ga';
 
 export interface IAnnotationModeWidgetProps {
   appModes: AppModes;

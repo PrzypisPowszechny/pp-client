@@ -13,7 +13,7 @@ import { extractHostname, httpPrefixed } from '../../../common/url';
 
 import AuthorActionControls from './viewer-elements/AuthorActionControls';
 import UserActionControls from './viewer-elements/UserActionControls';
-import ppGA from 'pp-ga';
+import ppGA from 'common/pp-ga';
 import { selectAnnotation } from '../../store/api/selectors';
 
 interface IViewerItemProps {

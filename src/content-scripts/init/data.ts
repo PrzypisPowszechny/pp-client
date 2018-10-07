@@ -1,8 +1,8 @@
-import * as chromeKeys from 'chrome-storage/keys';
+import * as chromeKeys from 'common/chrome-storage/keys';
 import { changeAppModes } from '../store/appModes/actions';
 import store from '../store';
 
-import chromeStorage from 'chrome-storage';
+import chromeStorage from 'common/chrome-storage';
 import { readEndpoint } from 'redux-json-api';
 
 export function loadInitialData() {

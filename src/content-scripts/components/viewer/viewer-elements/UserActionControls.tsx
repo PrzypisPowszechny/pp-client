@@ -6,7 +6,7 @@ import { hideViewer } from 'content-scripts/store/widgets/actions';
 import { AnnotationAPIModel } from 'content-scripts/api/annotations';
 import Upvote from './Upvote';
 import UserActionDialog from './UserActionDialog';
-import ppGA from 'pp-ga';
+import ppGA from 'common/pp-ga';
 import { Icon } from 'react-icons-kit';
 import { ic_more_horiz } from 'react-icons-kit/md/ic_more_horiz';
 

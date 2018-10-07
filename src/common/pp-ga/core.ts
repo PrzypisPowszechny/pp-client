@@ -1,9 +1,9 @@
 import './ga.js';
 import FieldsObject = UniversalAnalytics.FieldsObject;
-import packageConf from '../../package.json';
+import packageConf from '../../../package.json';
 import cookie from 'cookie';
-import chromeStorage from 'chrome-storage';
-import * as chromeKeys from 'chrome-storage/keys';
+import chromeStorage from 'common/chrome-storage';
+import * as chromeKeys from 'common/chrome-storage/keys';
 
 const GA_ID_PROD = 'UA-123054125-1';
 const GA_ID_DEV = 'UA-123054125-2';
