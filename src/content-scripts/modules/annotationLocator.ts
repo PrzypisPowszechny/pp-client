@@ -12,7 +12,7 @@ import { LocatedAnnotation } from '../store/annotations/types';
 import { AnnotationAPIModel } from '../api/annotations';
 import { Range as XPathRange } from 'xpath-range';
 import { escapeRegExp } from 'tslint/lib/utils';
-import { annotationRootNode } from '../core';
+import { annotationRootNode } from '../main';
 
 let instance;
 

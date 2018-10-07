@@ -1,5 +1,5 @@
 import { Range as XPathRange } from 'xpath-range';
-import { AnnotationLocation } from '../../utils/annotations';
+import { AnnotationLocation } from '../../handlers/annotationEventHandlers';
 
 export const EDITOR_ANNOTATION = 'EDITOR_ANNOTATION';
 export const SET_EDITOR_SELECTION_RANGE = 'SET_EDITOR_SELECTION_RANGE';

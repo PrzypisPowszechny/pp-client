@@ -1,8 +1,7 @@
 import { Range as XPathRange } from 'xpath-range';
-import { Highlighter, TextSelector } from 'content-scripts/core/index';
+import { Highlighter, TextSelector } from 'content-scripts/utils';
 
 import 'css/selection.scss';
-import { AnnotationLocation } from '../utils/annotations';
 
 /*
  * Example of selection becoming a highlight;

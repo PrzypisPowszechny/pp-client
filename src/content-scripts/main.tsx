@@ -8,15 +8,11 @@ import 'css/common/pp-semantic-ui-reset.scss';
 import 'css/common/pp-semantic-ui-overrides.scss';
 
 import 'css/selection.scss';
-
 // Set moment.js language for whole package
 // Apparently, there is no clean solution to import only momentJS specific locale package
 // and set it for future momentJS calls;
 // (https://github.com/moment/moment/issues/2517)
 import * as moment from 'moment';
-
-moment.locale('pl');
-
 import PPSettings from 'common/PPSettings';
 import chromeStorageHandlers from './handlers/chromeStorageHandlers';
 import * as data from './init-data';
@@ -24,6 +20,8 @@ import highlightManager from './modules/highlightManager';
 import annotationLocator from './modules/annotationLocator';
 import annotationEventHandlers from './handlers/annotationEventHandlers';
 import appComponent from './modules/appComponent';
+
+moment.locale('pl');
 
 // Declared in webpack.config through DefinePlugin
 declare global {
@@ -66,4 +64,10 @@ if (isBrowser) {
       data.loadFromAPI,
     );
   });
+}
+
+// The node within which annotations are made
+// It's lazy so operations on DOM can be done here if needed
+export function annotationRootNode() {
+  return document.body;
 }

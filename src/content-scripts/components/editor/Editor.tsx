@@ -26,7 +26,7 @@ import * as helpers from './helpers';
 import styles from './Editor.scss';
 import ppGA from 'common/pp-ga';
 import { AnnotationPPCategories } from '../../api/annotations';
-import { AnnotationLocation } from '../../utils/annotations';
+import { AnnotationLocation } from '../../handlers/annotationEventHandlers';
 
 interface IEditorProps {
   appModes: AppModes;

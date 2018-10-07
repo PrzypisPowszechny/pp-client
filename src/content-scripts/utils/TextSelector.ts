@@ -4,7 +4,7 @@ import _isEqual from 'lodash/isEqual';
 import { PPHighlightClass } from 'content-scripts/class_consts';
 // More on xpath-range here: https://github.com/opengovfoundation/xpath-range
 // Wondering what's inside? See https://github.com/opengovfoundation/xpath-range/blob/master/src/range.coffee#L227
-import { annotationRootNode } from './index';
+import { annotationRootNode } from '../main';
 
 /**
  * TextSelector monitors a document (or a specific element) for text selections

@@ -11,7 +11,7 @@ import { hideMenu, setSelectionRange, showEditorAnnotation } from 'content-scrip
 import { Range as XPathRange } from 'xpath-range';
 import { PPScopeClass } from 'content-scripts/class_consts';
 import ppGA from 'common/pp-ga';
-import { AnnotationLocation } from '../../utils/annotations';
+import { AnnotationLocation } from '../../handlers/annotationEventHandlers';
 
 interface IMenuProps {
   locationX: number;

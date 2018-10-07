@@ -1,16 +1,22 @@
 import { Range as XPathRange } from 'xpath-range';
 
+import 'rangy/lib/rangy-classapplier';
+import 'rangy/lib/rangy-highlighter';
+import 'rangy/lib/rangy-textrange';
+import 'rangy/lib/rangy-serializer';
+import rangy from 'rangy';
+
 import { mousePosition } from '../utils/dom';
 import store from 'content-scripts/store';
 import { makeSelection, showMenu } from 'content-scripts/store/actions';
 
-import { annotationRootNode, TextSelector } from '../core/index';
+import { TextSelector } from '../utils/index';
 import { hideMenu } from 'content-scripts/store/widgets/actions';
-import { outsideArticleClasses } from 'content-scripts/class_consts';
+import { outsideArticleClasses, PPHighlightClass } from 'content-scripts/class_consts';
 import { selectModeForCurrentPage } from '../store/appModes/selectors';
 import { setSelectionRange, showEditorAnnotation } from '../store/widgets/actions';
 import ppGA from 'common/pp-ga';
-import { fullAnnotationLocation } from '../utils/annotations';
+import { annotationRootNode } from '../main';
 
 let handlers;
 
@@ -35,6 +41,35 @@ function init() {
 export function deinit() {
   chrome.runtime.onMessage.removeListener(contextMenuAnnotateCallback);
   // (todo) deinitialize TextSelector
+}
+
+export function XPathNormalizedRangeToRangyRange(xPathRange: XPathRange.NormalizedRange) {
+  const rangyRange = rangy.createRange();
+  const textNodes = xPathRange.textNodes();
+  rangyRange.setStartBefore(textNodes[0]);
+  rangyRange.setEndAfter(textNodes[textNodes.length - 1]);
+  return rangyRange;
+}
+
+export interface AnnotationLocation {
+  range: XPathRange.SerializedRange;
+  quote: string;
+  quoteContext: string;
+}
+
+export function fullAnnotationLocation(normalizedRange: XPathRange.NormalizedRange): AnnotationLocation {
+  const contextWidth = 100;
+  // rangy.getSelection().setSingleRange(x);
+  const rangyRange = XPathNormalizedRangeToRangyRange(normalizedRange);
+  const quote = rangyRange.text();
+  rangyRange.moveStart('character', -contextWidth);
+  rangyRange.moveEnd('character', contextWidth);
+  const quoteContext = rangyRange.text();
+  return {
+    range: normalizedRange.serialize(annotationRootNode(), `.${PPHighlightClass}`),
+    quote,
+    quoteContext,
+  };
 }
 
 function selectionChangeCallback(
