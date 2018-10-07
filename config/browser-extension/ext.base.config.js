@@ -12,7 +12,7 @@ const manifest = merge(manifestSettings.base, {
     js: [
       // defined in webpack.config.js
       'main.bundle.js',
-      'vendor_css.bundle.js',
+      'main_global_styles.bundle.js',
     ]
   }],
   background: {

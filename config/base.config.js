@@ -13,8 +13,8 @@ const EXT_DIR = localPath(ROOT, 'dist', 'browser-extension');
 
 const config = (env, argv) => ({
   entry: {
-    main: "./src/content-scripts/index.tsx",
-    vendor_css: "./src/content-scripts/vendor_css.ts"
+    main: "./src/content-scripts/main.tsx",
+    main_global_styles: "./src/content-scripts/main-global-styles.ts"
   },
   output: {
     path: BUILD_DIR,
