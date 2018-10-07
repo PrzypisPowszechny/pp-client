@@ -13,8 +13,8 @@ const EXT_DIR = localPath(ROOT, 'dist', 'browser-extension');
 
 const config = (env, argv) => ({
   entry: {
-    main: "./src/index.tsx",
-    vendor_css: "./src/vendor_css.ts"
+    main: "./src/content-scripts/index.tsx",
+    vendor_css: "./src/content-scripts/vendor_css.ts"
   },
   output: {
     path: BUILD_DIR,
@@ -60,8 +60,8 @@ const config = (env, argv) => ({
         /* SCSS modules */
         test: /\.scss$/,
         include: [
-          localPath(ROOT, 'src', 'components'),
-          localPath(ROOT, 'src', 'containers'),
+          localPath(ROOT, 'src', 'content-scripts', 'components'),
+          localPath(ROOT, 'src', 'content-scripts', 'containers'),
         ],
         use: [
           'style-loader',

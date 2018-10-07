@@ -1,4 +1,4 @@
-import { annotationPPCategoriesLabels } from '../api/annotations';
+import { annotationPPCategoriesLabels } from 'content-scripts/api/annotations';
 
 export function formatPriority(priority) {
   return `${priority} - ${annotationPPCategoriesLabels[priority]}`;

@@ -4,7 +4,7 @@ import addIcon from '../../assets/pp-add-icon.svg';
 import requestIcon from '../../assets/pp-request-icon.svg';
 import switchOffIcon from '../../assets/pp-switch-off-icon.svg';
 
-import { standardizeUrlForPageSettings } from 'utils/url';
+import { standardizeUrlForPageSettings } from 'content-scripts/utils/url';
 import Toggle from './toggle/toggle';
 import chromeStorage from 'chrome-storage';
 import * as chromeKeys from 'chrome-storage/keys';

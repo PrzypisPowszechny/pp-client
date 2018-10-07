@@ -1,0 +1,247 @@
+@import "css/common/vars/fonts";
+@import "css/common/vars/colors";
+@import "css/common/vars/z-index";
+@import "css/common/mixins";
+@import 'css/common/buttons.scss';
+@import "./common.scss";
+
+$editor-width: 450px;
+$editor-font-size: 14px;
+
+/* -- PP Editor -- */
+.self {
+  width: $editor-width;
+  background-color: white;
+  font-size: $editor-font-size;
+  font-family: $font-family-preset;
+  z-index: $editor-z-index;
+
+  @include pp-widget-edge();
+}
+
+/* fields: comment, annotationLink */
+.editor-input {
+  display: block;
+  padding: 0;
+  position: relative;
+  margin: 0 $editor-horizontal-spacing $editor-vertical-spacing $editor-horizontal-spacing;
+
+  input, textarea {
+    padding: 0.5em;
+    width: 100%;
+    border: 1px solid #D8DADA;
+    outline: none;
+    margin: 0;
+    display: inline-block;
+    color: #000000;
+    font-weight: $font-light;
+    line-height: 1em;
+    background: none;
+    resize: none;
+  }
+
+  textarea {
+    border-radius: 5px 5px 0 0;
+  }
+
+  input:hover, input:focus,
+  textarea:hover, textarea:focus {
+    border: 1px dashed #888888;
+    background: none;
+  }
+
+  // based on semantic-ui's .ui.input.error
+  input.error, textarea.error,
+  input.error:hover, textarea.error:hover,
+  input.error:focus, textarea.error:focus {
+    background-color: #fff6f6;
+    border-color: #e0b4b4;
+    color: #9f3a38;
+  }
+}
+
+/* comment field */
+.comment-textarea-wrapper {
+  overflow: auto;
+  textarea {
+    float: left;
+    padding: 0.5em;
+    width: 100%;
+    line-height: 1.2em;
+    height: calc(3 * 1.2em + 1.1em); // 3 lines
+  }
+
+}
+
+/* annotation link field */
+.annotation-link {
+  input[type=text] {
+    padding-left: 2em;
+  }
+  .error-msg {
+    left: 0;
+    top: 20px;
+  }
+
+  .input-icon {
+    display: block;
+    position: absolute;
+    top: 9px;
+    left: 0;
+    width: 2em;
+  }
+
+}
+
+.annotation-link-title {
+  margin-bottom: 0;
+  input[type=text] {
+    padding-left: 2em;
+    width: 381px;
+  }
+
+  .input-icon {
+    display: block;
+    position: absolute;
+    top: 9px;
+    left: 0;
+    width: 2em;
+    line-height: 1.45em;
+  }
+
+  .error-msg {
+    left: 0;
+    top: 20px;
+  }
+
+  .link-help {
+    width: 20px;
+  }
+}
+
+.mover-icon, .mover-icon::after {
+  display: none;
+  position: absolute;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  bottom: 3px;
+  width: 18px;
+
+  pointer-events: none;
+  content: url('../../../../assets/three-dots.svg');
+  opacity: 0.5;
+}
+
+.self:hover .mover-icon::after, .self .mover-icon {
+  display: block;
+}
+
+.bottom-bar {
+  position: relative;;
+  margin: 0;
+
+  // the bottom area used for dragging
+  // extend it to the very edges of the widget, so it is easy to hit
+  .mover-area {
+    display: inline-block;
+    padding: $editor-vertical-spacing $editor-horizontal-spacing;
+    width: 100%;
+    cursor: move;
+  }
+
+  .controls {
+    float: right;
+    display: inline-block;
+    padding: 5px 0;
+    min-width: 150px;
+    text-align: right;
+    vertical-align: top;
+
+    button {
+      @include submit-button();
+      @include button-color(#888888);
+    }
+
+    // use priority-specific as a baseline and darken it so it presents well as a button
+    .priority-normal {
+      @include button-color($normal-ref-color);
+    }
+
+    .priority-warning {
+      @include button-color(darken($warning-ref-color, 3%));
+    }
+
+    .priority-alert {
+      @include button-color(darken($alert-ref-color, 3%));
+    }
+  }
+}
+
+/* Some pp-editor-widget embedded elements */
+
+.error-msg {
+  font-size: 14px !important;
+  position: absolute !important; // override semantic-ui defaults
+  z-index: $editor-z-index + 1;
+}
+
+// override semantic-ui
+// TODO rewrite without important
+.tooltip {
+  z-index: $editor-z-index + 1 !important;
+}
+
+/* all cross-style close buttons */
+.close {
+  @include close-icon();
+}
+
+/* --- Help windows --- */
+.priority-help,
+.link-help {
+  display: inline-block;
+
+  margin-left: 7px;
+  border: none;
+  outline: none;
+
+  font-size: 17px;
+  color: #888888;
+
+  background: none;
+  cursor: pointer;
+}
+
+// TODO review: copied from original annotator.css (and adapted to pp-editor-widget & editor-input)
+/* --- scrollbar --- */
+// KG it's better than the default scrollbar, so we might want to make use of these
+// I leave it here until we decide we don't
+
+.editor-input textarea::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.editor-input textarea::-webkit-scrollbar-track-piece {
+  margin: 13px 0 3px;
+  background-color: #e5e5e5;
+  -webkit-border-radius: 4px;
+}
+
+.editor-input textarea::-webkit-scrollbar-thumb:vertical {
+  height: 25px;
+  background-color: #ccc;
+  -webkit-border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.editor-input textarea::-webkit-scrollbar-thumb:horizontal {
+  width: 25px;
+  background-color: #ccc;
+  -webkit-border-radius: 4px;
+}
+
+.hide {
+  display: none !important;
+}
