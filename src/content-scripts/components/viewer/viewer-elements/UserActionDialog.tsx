@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import styles from '../report-editor/ReportEditor.scss';
 import { changeViewerReportEditorOpen } from 'content-scripts/store/widgets/actions';
 import { AnnotationAPIModel } from 'content-scripts/api/annotations';
-import { PPScopeClass } from 'content-scripts/class-consts';
+import { PPScopeClass } from 'content-scripts/settings';
 import ReportEditor from '../report-editor/ReportEditor';
 import ppGA from 'common/pp-ga';
 

@@ -1,6 +1,6 @@
 import store from 'content-scripts/store';
 import { showViewer } from 'content-scripts/store/actions';
-import { mousePosition } from '../utils/mousePosition';
+import mousePosition from '../utils/mousePosition';
 import Highlighter from 'content-scripts/utils/Highlighter';
 import { setMouseOverViewer } from '../store/widgets/actions';
 import { selectModeForCurrentPage } from '../store/appModes/selectors';
@@ -8,7 +8,7 @@ import _difference from 'lodash/difference';
 import _isEqual from 'lodash/isEqual';
 import { selectViewerState } from '../store/widgets/selectors';
 import { selectAnnotation } from '../store/api/selectors';
-import { annotationRootNode } from '../main';
+import { annotationRootNode } from '../settings';
 
 let instance;
 

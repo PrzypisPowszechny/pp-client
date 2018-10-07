@@ -11,7 +11,7 @@ import {
   AnnotationAPIModelAttrs,
 } from 'content-scripts/api/annotations';
 import { turnOffAnnotationMode } from 'common/chrome-storage';
-import { PPScopeClass } from 'content-scripts/class-consts';
+import { PPScopeClass } from 'content-scripts/settings';
 import { hideEditor } from 'content-scripts/store/actions';
 import { AppModes } from 'content-scripts/store/appModes/types';
 import { selectEditorState } from 'content-scripts/store/selectors';

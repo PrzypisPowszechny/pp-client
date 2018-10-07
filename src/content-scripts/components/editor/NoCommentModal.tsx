@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Modal } from 'semantic-ui-react';
-import { PPScopeClass } from '../../class-consts';
+import { PPScopeClass } from '../../settings';
 
 interface NoCommentModalProps {
   open: boolean;

@@ -1,5 +1,5 @@
 import React, { RefObject } from 'react';
-import { DragTracker, IVec2 } from '../../utils/DragTracker';
+import { default as DragTracker, IVec2 } from '../../utils/DragTracker';
 import { default as Widget } from './Widget';
 
 export interface IDraggableWidgetProps {

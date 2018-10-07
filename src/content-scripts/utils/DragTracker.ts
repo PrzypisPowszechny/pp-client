@@ -28,7 +28,7 @@ export interface IPosition {
  * the movement is not tracked, then the amount the mouse has moved will be
  * accumulated and passed to the next mousemove event.
  */
-export class DragTracker {
+export default class DragTracker {
 
   lastPos: IPosition;
   throttled: boolean;

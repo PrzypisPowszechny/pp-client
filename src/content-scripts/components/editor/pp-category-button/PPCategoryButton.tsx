@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { Popup } from 'semantic-ui-react';
 
 import styles from './PPCategoryButton.scss';
-import { PPScopeClass } from 'content-scripts/class-consts';
+import { PPScopeClass } from 'content-scripts/settings';
 import { AnnotationPPCategories } from '../../../api/annotations';
 
 interface IPPCategoryButtonProps {

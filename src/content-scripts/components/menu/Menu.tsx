@@ -9,7 +9,7 @@ import Widget from 'content-scripts/components/widget';
 import styles from './Menu.scss';
 import { hideMenu, setSelectionRange, showEditorAnnotation } from 'content-scripts/store/widgets/actions';
 import { Range as XPathRange } from 'xpath-range';
-import { PPScopeClass } from 'content-scripts/class-consts';
+import { PPScopeClass } from 'content-scripts/settings';
 import ppGA from 'common/pp-ga';
 import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
 

@@ -6,17 +6,21 @@ import 'rangy/lib/rangy-textrange';
 import 'rangy/lib/rangy-serializer';
 import rangy from 'rangy';
 
-import { mousePosition } from '../utils/mousePosition';
+import mousePosition from '../utils/mousePosition';
 import store from 'content-scripts/store';
 import { makeSelection, showMenu } from 'content-scripts/store/actions';
 
 import { TextSelector } from '../utils/index';
 import { hideMenu } from 'content-scripts/store/widgets/actions';
-import { outsideArticleClasses, PPHighlightClass } from 'content-scripts/class-consts';
+import {
+  outsideArticleClasses,
+  PPHighlightClass,
+  annotationRootNode,
+  quoteContextWidth,
+} from 'content-scripts/settings';
 import { selectModeForCurrentPage } from '../store/appModes/selectors';
 import { setSelectionRange, showEditorAnnotation } from '../store/widgets/actions';
 import ppGA from 'common/pp-ga';
-import { annotationRootNode } from '../main';
 
 let handlers;
 
@@ -24,6 +28,12 @@ export default {
   init,
   deinit,
 };
+
+export interface AnnotationLocation {
+  range: XPathRange.SerializedRange;
+  quote: string;
+  quoteContext: string;
+}
 
 function init() {
   const selector = new TextSelector(annotationRootNode(), {
@@ -41,35 +51,6 @@ function init() {
 export function deinit() {
   chrome.runtime.onMessage.removeListener(contextMenuAnnotateCallback);
   // (todo) deinitialize TextSelector
-}
-
-export function XPathNormalizedRangeToRangyRange(xPathRange: XPathRange.NormalizedRange) {
-  const rangyRange = rangy.createRange();
-  const textNodes = xPathRange.textNodes();
-  rangyRange.setStartBefore(textNodes[0]);
-  rangyRange.setEndAfter(textNodes[textNodes.length - 1]);
-  return rangyRange;
-}
-
-export interface AnnotationLocation {
-  range: XPathRange.SerializedRange;
-  quote: string;
-  quoteContext: string;
-}
-
-export function fullAnnotationLocation(normalizedRange: XPathRange.NormalizedRange): AnnotationLocation {
-  const contextWidth = 100;
-  // rangy.getSelection().setSingleRange(x);
-  const rangyRange = XPathNormalizedRangeToRangyRange(normalizedRange);
-  const quote = rangyRange.text();
-  rangyRange.moveStart('character', -contextWidth);
-  rangyRange.moveEnd('character', contextWidth);
-  const quoteContext = rangyRange.text();
-  return {
-    range: normalizedRange.serialize(annotationRootNode(), `.${PPHighlightClass}`),
-    quote,
-    quoteContext,
-  };
 }
 
 function selectionChangeCallback(
@@ -112,4 +93,25 @@ function contextMenuAnnotateCallback(request, sender) {
       console.warn('PP: more than one selected range is not supported');
     }
   }
+}
+
+function XPathNormalizedRangeToRangyRange(xPathRange: XPathRange.NormalizedRange) {
+  const rangyRange = rangy.createRange();
+  const textNodes = xPathRange.textNodes();
+  rangyRange.setStartBefore(textNodes[0]);
+  rangyRange.setEndAfter(textNodes[textNodes.length - 1]);
+  return rangyRange;
+}
+
+function fullAnnotationLocation(normalizedRange: XPathRange.NormalizedRange): AnnotationLocation {
+  const rangyRange = XPathNormalizedRangeToRangyRange(normalizedRange);
+  const quote = rangyRange.text();
+  rangyRange.moveStart('character', -quoteContextWidth);
+  rangyRange.moveEnd('character', quoteContextWidth);
+  const quoteContext = rangyRange.text();
+  return {
+    range: normalizedRange.serialize(annotationRootNode(), `.${PPHighlightClass}`),
+    quote,
+    quoteContext,
+  };
 }

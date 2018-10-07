@@ -4,7 +4,7 @@ import { selectViewerState } from 'content-scripts/store/widgets/selectors';
 import { hideViewer, setMouseOverViewer } from 'content-scripts/store/widgets/actions';
 import Viewer from './Viewer';
 import Timer = NodeJS.Timer;
-import { PPViewerHoverContainerClass } from 'content-scripts/class-consts';
+import { PPViewerHoverContainerClass } from 'content-scripts/settings';
 
 interface IViewerManagerState {
   isMouseOver: boolean;

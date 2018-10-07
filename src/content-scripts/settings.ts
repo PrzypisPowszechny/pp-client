@@ -21,3 +21,11 @@ export const outsideArticleClasses = [
 ];
 
 export const PPHighlightClass = selectionStyles['pp-highlight-class'];
+
+// The node within which annotations are made
+// It's lazy so operations on DOM can be done here if needed
+export function annotationRootNode() {
+  return document.body;
+}
+
+export const quoteContextWidth = 100;
