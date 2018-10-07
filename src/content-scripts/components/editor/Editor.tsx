@@ -11,7 +11,7 @@ import {
   AnnotationAPIModelAttrs,
 } from 'content-scripts/api/annotations';
 import { turnOffAnnotationMode } from 'common/chrome-storage';
-import { PPScopeClass } from 'content-scripts/class_consts';
+import { PPScopeClass } from 'content-scripts/class-consts';
 import { hideEditor } from 'content-scripts/store/actions';
 import { AppModes } from 'content-scripts/store/appModes/types';
 import { selectEditorState } from 'content-scripts/store/selectors';
@@ -26,7 +26,7 @@ import * as helpers from './helpers';
 import styles from './Editor.scss';
 import ppGA from 'common/pp-ga';
 import { AnnotationPPCategories } from '../../api/annotations';
-import { AnnotationLocation } from '../../handlers/annotationEventHandlers';
+import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
 
 interface IEditorProps {
   appModes: AppModes;

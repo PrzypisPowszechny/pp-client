@@ -4,7 +4,7 @@ import 'rangy/lib/rangy-highlighter';
 import 'rangy/lib/rangy-textrange';
 import 'rangy/lib/rangy-serializer';
 import store from 'content-scripts/store';
-import { mousePosition } from '../utils/dom';
+import { mousePosition } from '../utils/mousePosition';
 import _isEqual from 'lodash/isEqual';
 import { selectAnnotations } from '../store/api/selectors';
 import { locateAnnotations } from '../store/annotations/actions';

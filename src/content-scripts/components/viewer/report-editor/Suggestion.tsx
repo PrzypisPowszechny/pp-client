@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import styles from './ReportEditor.scss';
 import { AnnotationAPIModel } from 'content-scripts/api/annotations';
 import { Reasons } from 'content-scripts/api/annotation-reports';
-import { PPScopeClass } from 'content-scripts/class_consts';
+import { PPScopeClass } from 'content-scripts/class-consts';
 import ppGA from 'common/pp-ga';
 import { AnnotationReportAPIModel, DataResponse } from '../../../api/annotation-reports';
 

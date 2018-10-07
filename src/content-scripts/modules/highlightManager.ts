@@ -1,6 +1,6 @@
 import store from 'content-scripts/store';
 import { showViewer } from 'content-scripts/store/actions';
-import { mousePosition } from '../utils/dom';
+import { mousePosition } from '../utils/mousePosition';
 import Highlighter from 'content-scripts/utils/Highlighter';
 import { setMouseOverViewer } from '../store/widgets/actions';
 import { selectModeForCurrentPage } from '../store/appModes/selectors';

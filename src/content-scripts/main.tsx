@@ -14,11 +14,11 @@ import 'css/selection.scss';
 // (https://github.com/moment/moment/issues/2517)
 import * as moment from 'moment';
 import PPSettings from 'common/PPSettings';
-import chromeStorageHandlers from './handlers/chromeStorageHandlers';
+import chromeStorageHandlers from './handlers/chrome-storage-handlers';
 import * as data from './init-data';
 import highlightManager from './modules/highlightManager';
 import annotationLocator from './modules/annotationLocator';
-import annotationEventHandlers from './handlers/annotationEventHandlers';
+import annotationEventHandlers from './handlers/annotation-event-handlers';
 import appComponent from './modules/appComponent';
 
 moment.locale('pl');

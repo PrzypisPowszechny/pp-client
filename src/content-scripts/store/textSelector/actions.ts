@@ -1,5 +1,5 @@
 import { Range as XPathRange } from 'xpath-range';
-import { AnnotationLocation } from '../../handlers/annotationEventHandlers';
+import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
 
 export const TEXT_SELECTED = 'TEXT_SELECTED';
 

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { PPHighlightClass } from 'content-scripts/class_consts';
+import { PPHighlightClass } from 'content-scripts/class-consts';
 import { Range as XPathRange } from 'xpath-range';
 
 /**

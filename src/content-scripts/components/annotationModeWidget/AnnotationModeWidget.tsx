@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 
 import styles from './AnnotationModeWidget.scss';
-import { PPScopeClass } from 'content-scripts/class_consts';
+import { PPScopeClass } from 'content-scripts/class-consts';
 import { turnOffAnnotationMode } from 'common/chrome-storage';
 import { AppModes } from 'content-scripts/store/appModes/types';
 import ppGA from 'common/pp-ga';

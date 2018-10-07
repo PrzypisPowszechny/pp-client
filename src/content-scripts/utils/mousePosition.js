@@ -1,4 +1,4 @@
-export function mousePosition(event) {
+export default function mousePosition(event) {
   const body = global.document.body;
   let offset = { top: 0, left: 0 };
 

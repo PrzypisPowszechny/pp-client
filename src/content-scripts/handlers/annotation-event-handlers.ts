@@ -6,13 +6,13 @@ import 'rangy/lib/rangy-textrange';
 import 'rangy/lib/rangy-serializer';
 import rangy from 'rangy';
 
-import { mousePosition } from '../utils/dom';
+import { mousePosition } from '../utils/mousePosition';
 import store from 'content-scripts/store';
 import { makeSelection, showMenu } from 'content-scripts/store/actions';
 
 import { TextSelector } from '../utils/index';
 import { hideMenu } from 'content-scripts/store/widgets/actions';
-import { outsideArticleClasses, PPHighlightClass } from 'content-scripts/class_consts';
+import { outsideArticleClasses, PPHighlightClass } from 'content-scripts/class-consts';
 import { selectModeForCurrentPage } from '../store/appModes/selectors';
 import { setSelectionRange, showEditorAnnotation } from '../store/widgets/actions';
 import ppGA from 'common/pp-ga';

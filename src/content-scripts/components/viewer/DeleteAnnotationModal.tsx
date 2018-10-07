@@ -6,7 +6,7 @@ import { Button, Modal } from 'semantic-ui-react';
 import { selectViewerState } from 'content-scripts/store/widgets/selectors';
 import { hideViewerDeleteModal } from 'content-scripts/store/widgets/actions';
 import { AnnotationAPIModel } from 'content-scripts/api/annotations';
-import { PPScopeClass } from 'content-scripts/class_consts';
+import { PPScopeClass } from 'content-scripts/class-consts';
 import { setMouseOverViewer } from 'content-scripts/store/widgets/actions';
 import ppGA from 'common/pp-ga';
 import { selectAnnotation } from '../../store/api/selectors';

@@ -11,7 +11,7 @@ import { AnnotationResourceType } from 'content-scripts/api/annotations';
 import { combineReducers } from 'redux';
 import { MODIFY_APP_MODES } from '../appModes/actions';
 import { isAnnotationMode } from 'content-scripts/store/appModes/selectors';
-import { AnnotationLocation } from '../../handlers/annotationEventHandlers';
+import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
 
 export interface IWidgetState {
   visible: boolean;

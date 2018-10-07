@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 import styles from './ReportEditor.scss';
-import { PPScopeClass } from 'content-scripts/class_consts';
+import { PPScopeClass } from 'content-scripts/class-consts';
 import Timer = NodeJS.Timer;
 
 interface ISuccessToastProps {

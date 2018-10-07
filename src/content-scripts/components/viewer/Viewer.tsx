@@ -7,7 +7,7 @@ import Widget from 'content-scripts/components/widget';
 import ViewerItem from './ViewerItem';
 import styles from './Viewer.scss';
 import { selectViewerState } from 'content-scripts/store/widgets/selectors';
-import { PPScopeClass, PPViewerHoverContainerClass, PPViewerIndirectChildClass } from 'content-scripts/class_consts';
+import { PPScopeClass, PPViewerHoverContainerClass, PPViewerIndirectChildClass } from 'content-scripts/class-consts';
 import { setMouseOverViewer } from 'content-scripts/store/widgets/actions';
 import DeleteAnnotationModal from './DeleteAnnotationModal';
 

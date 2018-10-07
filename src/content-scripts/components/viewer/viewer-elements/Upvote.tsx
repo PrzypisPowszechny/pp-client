@@ -10,7 +10,7 @@ import { AnnotationResourceType, AnnotationAPIModel } from 'content-scripts/api/
 import {
   AnnotationUpvoteResourceType, AnnotationUpvoteAPIModel, AnnotationUpvoteAPICreateModel,
 } from 'content-scripts/api/annotation-upvotes';
-import { PPScopeClass } from 'content-scripts/class_consts';
+import { PPScopeClass } from 'content-scripts/class-consts';
 import ppGA from 'common/pp-ga';
 import { selectUpvote } from '../../../store/api/selectors';
 
