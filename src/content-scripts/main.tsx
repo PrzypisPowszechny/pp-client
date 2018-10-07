@@ -20,7 +20,7 @@ import * as moment from 'moment';
 
 moment.locale('pl');
 
-import PPSettings from 'content-scripts/PPSettings.interface';
+import PPSettings from 'common/PPSettings';
 import initializeChromeStorageHandlers from './init/chromeStorageHandlers';
 import { loadDataFromChromeStorage, loadInitialData } from './init/data';
 

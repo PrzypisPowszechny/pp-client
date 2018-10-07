@@ -1,10 +1,10 @@
 import React from 'react';
-import Menu from '../components/menu';
-import Editor from '../components/editor';
+import Menu from './menu/index';
+import Editor from './editor/index';
 import { connect } from 'react-redux';
-import ViewerManager from '../components/viewer/ViewerManager';
+import ViewerManager from './viewer/ViewerManager';
 import { selectModeForCurrentPage } from '../store/appModes/selectors';
-import AnnotationModeWidget from '../components/annotationModeWidget/AnnotationModeWidget';
+import AnnotationModeWidget from './annotationModeWidget/AnnotationModeWidget';
 
 interface AppProps {
   editor: any;

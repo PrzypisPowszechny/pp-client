@@ -10,7 +10,7 @@ export interface IPosition {
   left: number;
 }
 
-// ANNOTATOR FUNCTIONS (copied from annotator.ui.editor)
+// ANNOTATOR FUNCTIONS (copied from annotator.ui.editor and typed)
 
 /**
  * dragTracker is a function which allows a callback to track changes made to

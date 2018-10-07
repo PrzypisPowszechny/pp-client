@@ -6,7 +6,7 @@ import 'rangy/lib/rangy-serializer';
 import { Range as XPathRange } from 'xpath-range';
 import { escapeRegExp } from 'tslint/lib/utils';
 import { PPHighlightClass } from 'content-scripts/class_consts';
-import { annotationRootNode } from '../core/index';
+import { annotationRootNode } from '../core';
 
 export function findUniqueTextInDOMAsRange(quote: string): XPathRange.SerializedRange {
   const searchScopeRange = rangy.createRange();
