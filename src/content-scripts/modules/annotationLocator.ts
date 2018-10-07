@@ -1,17 +1,29 @@
+import rangy from 'rangy';
+import 'rangy/lib/rangy-classapplier';
+import 'rangy/lib/rangy-highlighter';
+import 'rangy/lib/rangy-textrange';
+import 'rangy/lib/rangy-serializer';
 import store from 'content-scripts/store';
 import { mousePosition } from '../utils/dom';
 import _isEqual from 'lodash/isEqual';
 import { selectAnnotations } from '../store/api/selectors';
-import { findUniqueTextInDOMAsRange } from '../utils/annotations';
 import { locateAnnotations } from '../store/annotations/actions';
 import { LocatedAnnotation } from '../store/annotations/types';
 import { AnnotationAPIModel } from '../api/annotations';
+import { Range as XPathRange } from 'xpath-range';
+import { escapeRegExp } from 'tslint/lib/utils';
+import { annotationRootNode } from '../core';
 
 let instance;
 
+export default {
+  init,
+  deinit,
+};
+
 function init() {
   // subscribe to store changes and return unsubscribe fn
-  const unsubscribe = store.subscribe(processAnnotations);
+  const unsubscribe = store.subscribe(annotationLocator);
 
   // store objects required for later operations
   instance = {
@@ -23,7 +35,7 @@ function deinit() {
   instance.unsubscribe();
 }
 
-function processAnnotations() {
+function annotationLocator() {
   const annotations: AnnotationAPIModel[] = selectAnnotations(store.getState());
   const annotationIds: string[] = annotations.map(annotation => annotation.id);
 
@@ -56,7 +68,25 @@ function processAnnotations() {
 
 }
 
-export default {
-  init,
-  deinit,
-};
+function findUniqueTextInDOMAsRange(quote: string): XPathRange.SerializedRange {
+  const searchScopeRange = rangy.createRange();
+  searchScopeRange.selectNodeContents(document.body);
+  const options = {
+    caseSensitive: false,
+    wholeWordsOnly: false,
+    withinRange: searchScopeRange,
+    direction: 'forward',
+  };
+  const range = rangy.createRange();
+  // 1. Escape the characters (e.g. '.', '(', ')') having special meaning in regex
+  // 2. Replace spaces with \s+ for more robustness
+  // todo consider removing some other characters not essential to the sentence content
+  const searchRegexp = escapeRegExp(quote.trim()).replace(/\s/, '\\s+');
+
+  // Assume there is only one text like this on the page and return the first one
+  if (range.findText(new RegExp(searchRegexp), options)) {
+    return new XPathRange.BrowserRange(range).normalize().limit(annotationRootNode()).serialize(annotationRootNode());
+  } else {
+    return null;
+  }
+}

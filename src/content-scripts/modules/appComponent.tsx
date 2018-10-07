@@ -4,7 +4,12 @@ import store from '../store/index';
 import { Provider } from 'react-redux';
 import App from '../components/App';
 
-export function injectComponents() {
+export default {
+  init,
+  deinit,
+};
+
+function init() {
   const documentContainer = document.createElement('div');
   documentContainer.id = 'pp-document-container';
   window.document.body.appendChild(documentContainer);
@@ -15,4 +20,8 @@ export function injectComponents() {
     </Provider>,
     documentContainer,
   );
+}
+
+export function deinit() {
+  // (todo) remove App component
 }

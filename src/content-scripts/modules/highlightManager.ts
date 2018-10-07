@@ -8,10 +8,13 @@ import _difference from 'lodash/difference';
 import _isEqual from 'lodash/isEqual';
 import { selectViewerState } from '../store/widgets/selectors';
 import { selectAnnotation } from '../store/api/selectors';
+import { annotationRootNode } from '../core';
 
 let instance;
 
-function init(highlighter: Highlighter) {
+function init() {
+  const highlighter = new Highlighter(annotationRootNode());
+
   // This event subscription will last irrespective of whether annotations are redrawn or not
   highlighter.onHighlightEvent('mouseover', handleHighlightMouseEnter);
   highlighter.onHighlightEvent('mouseleave', handleHighlightMouseLeave);

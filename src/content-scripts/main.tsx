@@ -1,9 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import { initializeDocumentHandlers } from './init/documentHandlers';
-import { injectComponents } from './init/components';
-
 import '../css/common/base.scss';
 // semantic-ui minimum defaults for semantic-ui to work
 import 'css/common/pp-semantic-ui-reset.scss';
@@ -21,8 +18,12 @@ import * as moment from 'moment';
 moment.locale('pl');
 
 import PPSettings from 'common/PPSettings';
-import initializeChromeStorageHandlers from './init/chromeStorageHandlers';
-import { loadDataFromChromeStorage, loadInitialData } from './init/data';
+import chromeStorageHandlers from './handlers/chromeStorageHandlers';
+import * as data from './init-data';
+import highlightManager from './modules/highlightManager';
+import annotationLocator from './modules/annotationLocator';
+import annotationEventHandlers from './handlers/annotationEventHandlers';
+import appComponent from './modules/appComponent';
 
 // Declared in webpack.config through DefinePlugin
 declare global {
@@ -46,12 +47,23 @@ console.log('Przypis script working!');
 const isBrowser = typeof window !== 'undefined';
 if (isBrowser) {
   window.addEventListener('load', () => {
-    initializeDocumentHandlers();
-    initializeChromeStorageHandlers();
-    injectComponents();
+    /*
+     * Modules hooked to asynchronous events
+     */
+    annotationEventHandlers.init();
+    chromeStorageHandlers.appModes.init();
+
+    /*
+     * Modules hooked to Redux store
+     */
+    highlightManager.init();
+    annotationLocator.init();
+    appComponent.init();
 
     // Optimization: load data from storage first, so annotations are not drawn before we know current application modes
     // (disabled extension mode and disabled page mode will erase them)
-    loadDataFromChromeStorage().then(loadInitialData);
+    data.loadFromChromeStorage().then(
+      data.loadFromAPI,
+    );
   });
 }

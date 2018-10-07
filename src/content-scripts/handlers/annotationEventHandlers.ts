@@ -4,38 +4,37 @@ import { mousePosition } from '../utils/dom';
 import store from 'content-scripts/store';
 import { makeSelection, showMenu } from 'content-scripts/store/actions';
 
-import { annotationRootNode, Highlighter, TextSelector } from '../core/index';
+import { annotationRootNode, TextSelector } from '../core/index';
 import { hideMenu } from 'content-scripts/store/widgets/actions';
 import { outsideArticleClasses } from 'content-scripts/class_consts';
-import highlights from './highlights';
 import { selectModeForCurrentPage } from '../store/appModes/selectors';
 import { setSelectionRange, showEditorAnnotation } from '../store/widgets/actions';
 import ppGA from 'common/pp-ga';
-import { AnnotationLocation, fullAnnotationLocation } from '../utils/annotations';
-import processAnnotations from './processAnnotations';
+import { fullAnnotationLocation } from '../utils/annotations';
 
 let handlers;
 
-export function initializeDocumentHandlers() {
-  const highlighter = new Highlighter(annotationRootNode());
+export default {
+  init,
+  deinit,
+};
+
+function init() {
   const selector = new TextSelector(annotationRootNode(), {
     onSelectionChange: selectionChangeCallback,
     outsideArticleClasses,
   });
 
   handlers = {
-    highlighter,
     selector,
   };
 
-  highlights.init(highlighter);
-  processAnnotations.init();
   chrome.runtime.onMessage.addListener(contextMenuAnnotateCallback);
 }
 
-export function deinitializeCoreHandlers() {
-  highlights.deinit();
+export function deinit() {
   chrome.runtime.onMessage.removeListener(contextMenuAnnotateCallback);
+  // (todo) deinitialize TextSelector
 }
 
 function selectionChangeCallback(

@@ -1,16 +1,16 @@
 import * as chromeKeys from 'common/chrome-storage/keys';
-import { changeAppModes } from '../store/appModes/actions';
-import store from '../store';
+import { changeAppModes } from './store/appModes/actions';
+import store from './store';
 
 import chromeStorage from 'common/chrome-storage';
 import { readEndpoint } from 'redux-json-api';
 
-export function loadInitialData() {
+export function loadFromAPI() {
   // This is our root request that needs to have part of the url (path) hardcoded
   store.dispatch(readEndpoint('/annotations?url=' + window.location.href));
 }
 
-export function loadDataFromChromeStorage() {
+export function loadFromChromeStorage() {
   return new Promise((resolve, reject) => {
     chromeStorage.get([
       chromeKeys.ANNOTATION_MODE_PAGES,
