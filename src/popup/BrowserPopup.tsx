@@ -1,8 +1,8 @@
 import React, { ChangeEvent } from 'react';
 
-import addIcon from '../../../assets/pp-add-icon.svg';
-import requestIcon from '../../../assets/pp-request-icon.svg';
-import switchOffIcon from '../../../assets/pp-switch-off-icon.svg';
+import addIcon from '../../assets/pp-add-icon.svg';
+import requestIcon from '../../assets/pp-request-icon.svg';
+import switchOffIcon from '../../assets/pp-switch-off-icon.svg';
 
 import { standardizeUrlForPageSettings } from 'utils/url';
 import Toggle from './toggle/toggle';
@@ -10,7 +10,7 @@ import chromeStorage from 'chrome-storage';
 import * as chromeKeys from 'chrome-storage/keys';
 import _filter from 'lodash/filter';
 import classNames from 'classnames';
-import ppGA from '../../pp-ga';
+import ppGA from '../pp-ga/index';
 
 interface IBrowserPopupState {
   isLoading: boolean;

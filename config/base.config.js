@@ -52,7 +52,7 @@ const config = (env, argv) => ({
         test: /\.scss$/,
         include: [
           localPath(ROOT, 'src', 'css'),
-          localPath(ROOT, 'src', 'browser-extension')
+          localPath(ROOT, 'src', 'popup')
         ],
         use: ['style-loader', 'css-loader', 'cssimportant-loader', 'sass-loader'],
       },

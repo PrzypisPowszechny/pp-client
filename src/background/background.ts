@@ -6,7 +6,7 @@ console.log('Przypis background script!');
 // (so it must be present at least in development)
 
 // analytics
-import ppGA from '../pp-ga';
+import ppGA from '../pp-ga/index';
 
 function onContextMenuAnnotate() {
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
