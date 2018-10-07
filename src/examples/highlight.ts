@@ -1,8 +1,8 @@
-import { Range } from 'xpath-range';
+import { Range as XPathRange } from 'xpath-range';
 import { Highlighter, TextSelector } from 'core/index';
 
 import 'css/selection.scss';
-import { SerializedRangeWithText } from '../utils/annotations';
+import { AnnotationLocation } from '../utils/annotations';
 
 /*
  * Example of selection becoming a highlight;
@@ -29,13 +29,13 @@ function initializeCoreHandlers() {
   });
 }
 
-function handleSelect(data: SerializedRangeWithText[], event) {
+function handleSelect(data: XPathRange.NormalizedRange[], event) {
   console.log('data: ', data);
   console.log('event: ', event);
   if (data) {
     if (data.length === 1) {
       console.log(data);
-      window.highlighter.draw(1, data[0].range, { test: 'test' });
+      window.highlighter.draw(1, data[0].serialize(document.body), { test: 'test' });
 
       // setTimeout(() => window.highlighter.undraw(1), 1000);
     } else {

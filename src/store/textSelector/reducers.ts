@@ -16,7 +16,6 @@ export default function textSelector(state = initialState, action) {
 function textSelectedActionHandler(state, payload) {
   return {
     ...state,
-    range: payload.range,
-    text: payload.text,
+    ...payload,
   };
 }

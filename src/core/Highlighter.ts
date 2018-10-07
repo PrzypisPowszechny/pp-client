@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { PPHighlightClass } from 'class_consts';
-import { Range } from 'xpath-range';
+import { Range as XPathRange } from 'xpath-range';
 
 /**
  * highlightRange wraps the DOM Nodes within the provided range with a highlight
@@ -36,16 +36,16 @@ function highlightRange(normedRange, cssClass) {
 }
 
 /**
- * reanchorRange will attempt to normalize a range, swallowing Range.RangeErrors
+ * reanchorRange will attempt to normalize a range, swallowing XPathRange.RangeErrors
  * for those ranges which are not reanchorable in the current document.
  */
-function reanchorRange(range, rootElement): Range.NormalizedRange {
-  const sniffedRange = Range.sniff(range);
+function reanchorRange(range, rootElement): XPathRange.NormalizedRange {
+  const sniffedRange = XPathRange.sniff(range);
   if (sniffedRange) {
     try {
       return sniffedRange.normalize(rootElement);
     } catch (e) {
-      if (!(e instanceof Range.RangeError)) {
+      if (!(e instanceof XPathRange.RangeError)) {
         // Oh Javascript, why you so crap? This will lose the traceback.
         throw(e);
       }

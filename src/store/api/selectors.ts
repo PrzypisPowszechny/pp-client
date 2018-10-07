@@ -1,6 +1,5 @@
 import { ITabState } from '../reducer';
 
-
 export function selectAnnotations(state: ITabState) {
   return state.api.annotations.data;
 }

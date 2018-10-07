@@ -5,9 +5,9 @@ import Highlighter from 'core/Highlighter';
 import { setMouseOverViewer } from '../store/widgets/actions';
 import { selectModeForCurrentPage } from '../store/appModes/selectors';
 import _difference from 'lodash/difference';
+import _isEqual from 'lodash/isEqual';
 import { selectViewerState } from '../store/widgets/selectors';
-import { selectAnnotations } from '../store/api/selectors';
-import { uniqueTextToXPathRange } from '../utils/annotations';
+import { selectAnnotation } from '../store/api/selectors';
 
 let instance;
 
@@ -32,37 +32,26 @@ function deinit() {
 
 function drawHighlights() {
   const arePageHighlightsDisabled = selectModeForCurrentPage(store.getState()).arePageHighlightsDisabled;
-  const annotations = selectAnnotations(store.getState());
+  const locatedAnnotationsIds = store.getState().annotations.located.map(annotation => annotation.annotationId);
   if (arePageHighlightsDisabled && !instance.arePageHighlightsDisabled) {
     instance.highlighter.undrawAll();
   } else if (!arePageHighlightsDisabled &&
-    (annotations !== instance.annotations || arePageHighlightsDisabled !== instance.arePageHighlightsDisabled)
+    (!_isEqual(locatedAnnotationsIds, instance.locatedAnnotationsIds)
+      || arePageHighlightsDisabled !== instance.arePageHighlightsDisabled
+    )
   ) {
-    const annotationsToDraw = annotations.map((annotation) => {
-      const { quote, range } = annotation.attributes;
-      let locatedRange;
-      if (range) {
-        locatedRange = range;
-      } else {
-        locatedRange = uniqueTextToXPathRange(quote, document.body);
-      }
-      if (locatedRange) {
-        return {
-          id: annotation.id,
-          range: locatedRange,
-          annotationData: annotation,
-        };
-      } else {
-        return null;
-      }
-    }).filter(annotation => annotation);
-
-    instance.highlighter.drawAll(annotationsToDraw);
+    // located annotations have changed, so redraw them
+    instance.highlighter.drawAll(store.getState().annotations.located.map(({ annotationId, range }) => {
+      return {
+        id: annotationId,
+        range,
+        annotationData: selectAnnotation(store.getState(), annotationId),
+      };
+    }));
   }
 
-  // save for later, to check if updates are needed
-  instance.annotations = annotations;
   instance.arePageHighlightsDisabled = arePageHighlightsDisabled;
+  instance.locatedAnnotationsIds = locatedAnnotationsIds;
 }
 
 function handleHighlightMouseLeave(e, annotations) {

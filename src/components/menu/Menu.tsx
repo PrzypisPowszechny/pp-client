@@ -8,18 +8,17 @@ import Widget from 'components/widget';
 
 import styles from './Menu.scss';
 import { hideMenu, setSelectionRange, showEditorAnnotation } from 'store/widgets/actions';
-import { Range } from 'xpath-range';
+import { Range as XPathRange } from 'xpath-range';
 import { PPScopeClass } from '../../class_consts';
 import ppGA from '../../pp-ga';
-import { SerializedRangeWithText } from '../../utils/annotations';
+import { AnnotationLocation } from '../../utils/annotations';
 
 interface IMenuProps {
   locationX: number;
   locationY: number;
-  range: Range.SerializedRange;
-  text: string;
+  annotationLocation: AnnotationLocation;
 
-  setSelectionRange: (range: SerializedRangeWithText) => void;
+  setSelectionRange: (range: AnnotationLocation) => void;
   showEditor: (x: number, y: number) => void;
   hideMenu: () => void;
 }
@@ -29,13 +28,13 @@ interface IMenuProps {
   const {
     locationX,
     locationY,
+    annotationLocation,
   } = selectMenuState(state);
 
   return {
     locationX,
     locationY,
-    range: state.textSelector.range,
-    text: state.textSelector.text,
+    annotationLocation,
   };
 },
   {
@@ -60,12 +59,11 @@ export default class Menu extends React.Component<Partial<IMenuProps>, {}> {
     const {
       locationX,
       locationY,
-      range,
-      text,
+      annotationLocation,
     } = this.props;
 
     this.props.hideMenu();
-    this.props.setSelectionRange({range, text});
+    this.props.setSelectionRange(annotationLocation);
     this.props.showEditor(locationX, locationY);
     ppGA.annotationAddFormDisplayed('addingModeMenu');
   }

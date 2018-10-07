@@ -1,28 +1,27 @@
-import { Range } from 'xpath-range';
+import { Range as XPathRange } from 'xpath-range';
 import $ from 'jquery';
 import _isEqual from 'lodash/isEqual';
 import { PPHighlightClass } from 'class_consts';
 // More on xpath-range here: https://github.com/opengovfoundation/xpath-range
 // Wondering what's inside? See https://github.com/opengovfoundation/xpath-range/blob/master/src/range.coffee#L227
-import { SerializedRangeWithText } from '../utils/annotations';
-
-const TEXTSELECTOR_NS = 'pp-textselector';
+import { annotationRootNode } from './index';
 
 /**
  * TextSelector monitors a document (or a specific element) for text selections
- * and can notify another object of a selection event
+ * and can call selection events.
  *
- * It is PP's adaptation of annotator's TextSelectors
+ * It is free from application business logic and provides very primary functionality
+ * TextSelector currently:
+ * - calls text selection events (selection made / selection changed)
+ * - returns a range normalized over different browsers (as a xpath-range NormalizedRange)
+ * - may provide some other DOM related functionality such as filtering out selection made outside provided DOM nodes
+ * It handles all kinds of selection (also multi-range selection).
+ * Although we further assume that no more than one range can be selected for an annotation, there is no reason to
+ * stop supporting it at such an early stage. If we ever stumble across multi-range selections
+ * we will discover it from TextSelectors output (while no exceptions will be thrown)
  */
 
-/*
- * IMPORTANT NOTE on SELECTION RANGES
- * We leave annotator's TextSelector more or less as it is;
- * It can handle all kinds of selection (also multi-range selection). Although our application further assumes that
- * no more than one range can be selected for an annotation, there is no reason to stop supporting it at such an early
- * stage. If we ever stumble across multi-range selections it will be clear based on TextSelectors output
- * (rather than exceptions).
- */
+const TEXTSELECTOR_EVENT_NS = 'pp-textselector';
 
 function hasClassParents(element, selector: string) {
   const elAndParents = $(element).parents().addBack();
@@ -30,7 +29,7 @@ function hasClassParents(element, selector: string) {
 }
 
 export type SelectionCallback = (
-  selectionRangeWithText: SerializedRangeWithText[],
+  selectionRanges: XPathRange.NormalizedRange[],
   isInsideArticle: boolean,
   event: any,
 ) => void;
@@ -47,13 +46,15 @@ export default class TextSelector {
   onMouseUp: SelectionCallback;
   onSelectionChange: SelectionCallback;
   outsideArticleSelector: string;
-  lastRanges: SerializedRangeWithText[];
+  lastSelectedRanges: XPathRange.SerializedRange[];
 
   constructor(
+    // Element outside which selections will be ignored
     element: Element,
     options: TextSelectorOptions,
   ) {
     /*
+     * options:
      * onMouseUp - called on every mouseUp event, passing current selection;
      * onSelectionChange - called only when the selection has changed
      */
@@ -63,12 +64,12 @@ export default class TextSelector {
     this.onSelectionChange = options.onSelectionChange;
     // an OR selector to match any of the classes external to the article
     this.outsideArticleSelector = (options.outsideArticleClasses || []).map(cls => `.${cls}`).join(', ');
-    this.lastRanges = null;
+    this.lastSelectedRanges = null;
 
     if (this.element.ownerDocument) {
       this.document = this.element.ownerDocument;
 
-      $(this.document.body).on(`mouseup.${TEXTSELECTOR_NS}`, this.checkForEndSelection);
+      $(this.document.body).on(`mouseup.${TEXTSELECTOR_EVENT_NS}`, this.checkForEndSelection);
     } else {
       console.warn(`You created an instance of the TextSelector on an element
        that doesn't have an ownerDocument. This won't work! Please ensure the element is added
@@ -78,7 +79,7 @@ export default class TextSelector {
 
   destroy = () => {
     if (this.document) {
-      $(this.document.body).off(`.${TEXTSELECTOR_NS}`);
+      $(this.document.body).off(`.${TEXTSELECTOR_EVENT_NS}`);
     }
   }
 
@@ -103,7 +104,7 @@ export default class TextSelector {
        TODO we could try to remove the dependency on `Range` (xpath-range) library, but that
        would require writing our own tool for this kind of logic
        */
-      const browserRange = new Range.BrowserRange(r);
+      const browserRange = new XPathRange.BrowserRange(r);
       const normedRange = browserRange.normalize().limit(this.element);
       /*
        If the new range falls fully outside our this.element, we should
@@ -137,22 +138,6 @@ export default class TextSelector {
     return ranges;
   }
 
-  currentSerializedSelection = () => {
-    const selectedRanges = this.captureDocumentSelection();
-    return this.serializeRanges(selectedRanges);
-  }
-
-  serializeRanges = (ranges: Range.NormalizedRange[]) => {
-    const serializedRanges = [];
-    for (const range of ranges) {
-      serializedRanges.push({
-        range: range.serialize(this.element, `.${PPHighlightClass}`),
-        text: range.text(),
-      });
-    }
-    return serializedRanges;
-  }
-
   currentSingleSelectionCenter = () => {
     /*
      * We assume only a single selection is made
@@ -179,6 +164,7 @@ export default class TextSelector {
    *
    * Returns nothing.
    */
+
   checkForEndSelection = (event) => {
 
     // Get the currently selected ranges.
@@ -197,17 +183,19 @@ export default class TextSelector {
       }
     }
 
-    const serializedRanges = this.serializeRanges(selectedRanges);
-
     if (this.onSelectionChange) {
-      if (!_isEqual(serializedRanges, this.lastRanges)) {
-        this.onSelectionChange(serializedRanges, isInsideArticle, event);
+      // Serialize ranges so they can be compared for equality
+      const serializedRanges = selectedRanges.map(range =>
+        range.serialize(annotationRootNode()),
+      );
+      if (!_isEqual(serializedRanges, this.lastSelectedRanges)) {
+        this.onSelectionChange(selectedRanges, isInsideArticle, event);
       }
+      this.lastSelectedRanges = serializedRanges;
     }
     if (this.onMouseUp) {
-      this.onMouseUp(serializedRanges, isInsideArticle, event);
+      this.onMouseUp(selectedRanges, isInsideArticle, event);
     }
-    this.lastRanges = serializedRanges;
   }
 
   /*

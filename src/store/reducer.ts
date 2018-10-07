@@ -6,12 +6,15 @@ import appModes from './appModes/reducers';
 import textSelector from './textSelector/reducers';
 import { AnnotationAPIModel } from 'api/annotations';
 import { AnnotationUpvoteAPIModel } from 'api/annotation-upvotes';
+import { AnnotationsState } from './annotations/types';
+import annotations from './annotations/reducers';
 
 export interface ITabState {
   api: {
     annotations: { data: AnnotationAPIModel[] };
     annotationUpvotes: { data: AnnotationUpvoteAPIModel[] };
   };
+  annotations: AnnotationsState;
   appModes: AppModes;
   widgets: WidgetReducer;
   textSelector: any;
@@ -29,6 +32,7 @@ export const apiInitializedFields = {
 
 export default combineReducers<ITabState>({
   api,
+  annotations,
   appModes,
   widgets,
   textSelector,

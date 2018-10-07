@@ -159,4 +159,6 @@ npm run build
 
 [More notes on building](docs/build.md)
 
+[Annotating DOM](docs/DOM-annotation.md)
+
 [Valuable references](docs/references.md)
