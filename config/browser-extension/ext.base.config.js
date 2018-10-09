@@ -12,7 +12,7 @@ const manifest = merge(manifestSettings.base, {
     js: [
       // defined in webpack.config.js
       'main.bundle.js',
-      'vendor_css.bundle.js',
+      'main_global_styles.bundle.js',
     ]
   }],
   background: {
@@ -30,8 +30,8 @@ const manifest = merge(manifestSettings.base, {
 
 const config = (env, argv) => merge(common.config(env, argv), {
   entry: {
-    background: './src/browser-extension/background.ts',
-    popup: './src/browser-extension/popup/popup.tsx',
+    background: './src/background/background.ts',
+    popup: './src/popup/popup.tsx',
   },
   output: {
     path: common.EXT_DIR,
@@ -43,13 +43,13 @@ const config = (env, argv) => merge(common.config(env, argv), {
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Przypis Powszechny -- pomoc',
-      template: 'src/browser-extension/popup/popup.html',
+      template: 'src/popup/popup.html',
       filename: 'popup.html',
       chunks: ['popup']
     }),
     new CopyWebpackPlugin([
       {
-        from: 'src/browser-extension/help',
+        from: 'src/pages/help',
         to: 'help'
       }
     ])
