@@ -156,29 +156,25 @@ npm start
 npm run build
 ```
 
-
 ## Connecting to backend
 
 This application works with PrzypisPowszechny API server - https://github.com/PrzypisPowszechny/pp.
 
 #### Default instance
-By default it set to connect to public development instance of the server. 
+By default it's set to connect to a public instance of the development server. 
 
 #### Local instance
-If you want to connect with your local instance, add `--env.api=local` arg to command starting client, e.g.
+If you want to connect to your local instance, add `--env.api=local` arg to the command starting client, e.g.
 ```
 npm run start-extension -- --env.api=local
 ```
 #### Documentation of API
 
-**[Documentation of the latest release](https://przypispowszechny.pl/api/docs/)**
+Documentation of the whole REST API is available at **```/api/docs/```** path of the backend.
 
-For every instance there is a swagger documentation of all endpoints, hosted at the below path (note ending slash)
-```
- /api/docs/
- ```
+Here's the online :desktop_computer: **[documentation of the latest release](https://przypispowszechny.pl/api/docs/)**
 
-So for example, to see the shape of the backend you are developing to, when running a backend instance locally, just visit:
+And to see the shape of the backend you are developing to, when running a backend instance locally, just visit:
 ```
 http://localhost:8000/api/docs/
 ```
