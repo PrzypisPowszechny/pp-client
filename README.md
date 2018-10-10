@@ -1,11 +1,13 @@
-[![CircleCI master](https://circleci.com/gh/PrzypisPowszechny/pp-client/tree/master.svg?style=shield)]()
-[![CircleCI master](https://circleci.com/gh/PrzypisPowszechny/pp-client/tree/develop.svg?style=shield)]()
+[![CircleCI](https://circleci.com/gh/PrzypisPowszechny/pp-client/tree/master.svg?style=shield)](https://circleci.com/gh/PrzypisPowszechny/pp-client/tree/master)
+
+
 
 1. [About & Preview](#about)
 2. [Development](#development)
     - [Prerequisites](#prerequisites)
     - [Building](#building)
     - [Building browser extension ](#building-browser-extension )
+    - [Connecting to backend](#connecting-to-backend)
 3. [Architecture](#architecture)
 4. [More & References](#more)
 
@@ -46,7 +48,8 @@ npm install
 ## pp-client as a browser extension
 
 Chrome extensions have very clear constraints on their structure.
-Although we currently only support Chrome, browser extensions as such have largely been standardized, so we can roughly talk about browser extensions in general.
+Although we currently only support Chrome, browser extensions as such have largely been standardized, so we can roughly talk
+about browser extensions in general.
 
 Full extension configuration is defined in `manifest.json`.
 
@@ -77,7 +80,8 @@ Exploiting the analogy, we can call this part of the application shortly the **c
 
 ### dev / prod configuration
 Production configuration and development differences:
-- many introduced by default by Webpack 4 itself (which is nice) -- by default it builds bundles differently for development and production settings
+- many introduced by default by Webpack 4 itself (which is nice) -- by default it builds bundles differently for development and
+production settings
 (e.g. minifies bundles in production settings)
 - other differences can be introduced by different variables used within the application for dev and prod configuration,
  defined in `config/app-settings`.
@@ -99,7 +103,8 @@ npm run build-dev-extension
 npm run start-extension
 ```
 
-Go to Chrome extension page and load the extension (to see how to load an extension go to [Chrome developer docs](https://developer.chrome.com/extensions/getstarted#unpacked)
+Go to Chrome extension page and load the extension (to see how to load an extension go to
+[Chrome developer docs](https://developer.chrome.com/extensions/getstarted#unpacked)
 to **Load the extension** section). Choose `dist/browser-extension` directory as the app root.
 
 A rebuild of the browser package (`dist/browser-extension`) won't normally reload the browser extension already loaded by Chrome.
@@ -127,7 +132,8 @@ and introduce changes to the code just then, rather than build only when it's ne
     - a separate monitor with the current tab on top is also very handy in subconsciously supervising the refreshing
 
 - if you're not sure the extension has been reloaded by Chrome, you can do it manually;
-but rather than use Chrome extension page, it's quicker to use [this reloading app](https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid).
+but rather than use Chrome extension page, it's quicker to use 
+[this reloading app](https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid).
 
 ### production
 ```
@@ -149,6 +155,34 @@ npm start
 ```
 npm run build
 ```
+
+
+## Connecting to backend
+
+This application works with PrzypisPowszechny API server - https://github.com/PrzypisPowszechny/pp.
+
+#### Default instance
+By default it set to connect to public development instance of the server. 
+
+#### Local instance
+If you want to connect with your local instance, add `--env.api=local` arg to command starting client, e.g.
+```
+npm run start-extension -- --env.api=local
+```
+#### Documentation of API
+
+**[Documentation of the latest release](https://przypispowszechny.pl/api/docs/)**
+
+For every instance there is a swagger documentation of all endpoints, hosted at the below path (note ending slash)
+```
+ /api/docs/
+ ```
+
+So for example, to see the shape of the backend you are developing to, when running a backend instance locally, just visit:
+```
+http://localhost:8000/api/docs/
+```
+
 # Architecture
 
 ![pp-0 2-architecture](https://user-images.githubusercontent.com/6314663/43015120-ddd489cc-8c4e-11e8-84da-2a5e9a374396.png)
