@@ -1,5 +1,5 @@
-[![CircleCI master](https://circleci.com/gh/PrzypisPowszechny/pp-client/tree/master.svg?style=shield)]()
-[![CircleCI master](https://circleci.com/gh/PrzypisPowszechny/pp-client/tree/develop.svg?style=shield)]()
+[![CircleCI](https://circleci.com/gh/PrzypisPowszechny/pp-client/tree/master.svg?style=shield)](https://circleci.com/gh/PrzypisPowszechny/pp-client/tree/master)
+
 
 1. [About & Preview](#about)
 2. [Development](#development)
