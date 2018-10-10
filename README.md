@@ -48,7 +48,8 @@ npm install
 ## pp-client as a browser extension
 
 Chrome extensions have very clear constraints on their structure.
-Although we currently only support Chrome, browser extensions as such have largely been standardized, so we can roughly talk about browser extensions in general.
+Although we currently only support Chrome, browser extensions as such have largely been standardized, so we can roughly talk
+about browser extensions in general.
 
 Full extension configuration is defined in `manifest.json`.
 
@@ -79,7 +80,8 @@ Exploiting the analogy, we can call this part of the application shortly the **c
 
 ### dev / prod configuration
 Production configuration and development differences:
-- many introduced by default by Webpack 4 itself (which is nice) -- by default it builds bundles differently for development and production settings
+- many introduced by default by Webpack 4 itself (which is nice) -- by default it builds bundles differently for development and
+production settings
 (e.g. minifies bundles in production settings)
 - other differences can be introduced by different variables used within the application for dev and prod configuration,
  defined in `config/app-settings`.
@@ -101,7 +103,8 @@ npm run build-dev-extension
 npm run start-extension
 ```
 
-Go to Chrome extension page and load the extension (to see how to load an extension go to [Chrome developer docs](https://developer.chrome.com/extensions/getstarted#unpacked)
+Go to Chrome extension page and load the extension (to see how to load an extension go to
+[Chrome developer docs](https://developer.chrome.com/extensions/getstarted#unpacked)
 to **Load the extension** section). Choose `dist/browser-extension` directory as the app root.
 
 A rebuild of the browser package (`dist/browser-extension`) won't normally reload the browser extension already loaded by Chrome.
@@ -129,7 +132,8 @@ and introduce changes to the code just then, rather than build only when it's ne
     - a separate monitor with the current tab on top is also very handy in subconsciously supervising the refreshing
 
 - if you're not sure the extension has been reloaded by Chrome, you can do it manually;
-but rather than use Chrome extension page, it's quicker to use [this reloading app](https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid).
+but rather than use Chrome extension page, it's quicker to use 
+[this reloading app](https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid).
 
 ### production
 ```
