@@ -1,11 +1,13 @@
 [![CircleCI](https://circleci.com/gh/PrzypisPowszechny/pp-client/tree/master.svg?style=shield)](https://circleci.com/gh/PrzypisPowszechny/pp-client/tree/master)
 
 
+
 1. [About & Preview](#about)
 2. [Development](#development)
     - [Prerequisites](#prerequisites)
     - [Building](#building)
     - [Building browser extension ](#building-browser-extension )
+    - [Connecting to backend](#connecting-to-backend)
 3. [Architecture](#architecture)
 4. [More & References](#more)
 
@@ -149,6 +151,34 @@ npm start
 ```
 npm run build
 ```
+
+
+## Connecting to backend
+
+This application works with PrzypisPowszechny API server - https://github.com/PrzypisPowszechny/pp.
+
+#### Default instance
+By default it set to connect to public development instance of the server. 
+
+#### Local instance
+If you want to connect with your local instance, add `--env.api=local` arg to command starting client, e.g.
+```
+npm run start-extension -- --env.api=local
+```
+#### Documentation of API
+
+**[Documentation of the latest release](https://przypispowszechny.pl/api/docs/)**
+
+For every instance there is a swagger documentation of all endpoints, hosted at the below path (note ending slash)
+```
+ /api/docs/
+ ```
+
+So for example, to see the shape of the backend you are developing to, when running a backend instance locally, just visit:
+```
+http://localhost:8000/api/docs/
+```
+
 # Architecture
 
 ![pp-0 2-architecture](https://user-images.githubusercontent.com/6314663/43015120-ddd489cc-8c4e-11e8-84da-2a5e9a374396.png)
