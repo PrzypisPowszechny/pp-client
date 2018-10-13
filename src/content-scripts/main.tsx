@@ -20,6 +20,8 @@ import highlightManager from './modules/highlight-manager';
 import annotationLocator from './modules/annotation-locator';
 import annotationEventHandlers from './handlers/annotation-event-handlers';
 import appComponent from './modules/app-component';
+import store from './store/store';
+import { configureAPIRequests } from './init-API';
 
 moment.locale('pl');
 
@@ -42,6 +44,7 @@ console.log('Przypis script working!');
  * we commit changes to browser storage and recalculate state.appMode on storage change.
  */
 
+
 const isBrowser = typeof window !== 'undefined';
 if (isBrowser) {
   window.addEventListener('load', () => {
@@ -57,6 +60,9 @@ if (isBrowser) {
     highlightManager.init();
     annotationLocator.init();
     appComponent.init();
+
+    // API settings
+    configureAPIRequests();
 
     // Optimization: load data from storage first, so annotations are not drawn before we know current application modes
     // (disabled extension mode and disabled page mode will erase them)

@@ -1,13 +1,12 @@
 import * as chromeKeys from 'common/chrome-storage/keys';
 import { changeAppModes } from './store/appModes/actions';
 import store from './store';
-
+import axios from 'axios';
 import chromeStorage from 'common/chrome-storage';
 import { readEndpoint } from 'redux-json-api';
 
 export function loadFromAPI() {
-  // This is our root request that needs to have part of the url (path) hardcoded
-  store.dispatch(readEndpoint('/annotations?url=' + window.location.href));
+  store.dispatch(readEndpoint('/annotations'));
 }
 
 export function loadFromChromeStorage() {

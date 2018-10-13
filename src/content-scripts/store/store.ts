@@ -3,7 +3,6 @@ import thunk from 'redux-thunk';
 import rootReducer, { apiInitializedFields, ITabState } from './reducer';
 import promise from 'redux-promise';
 import { createLogger } from 'redux-logger';
-import { setAxiosConfig } from 'redux-json-api';
 
 // TS override
 declare global {
@@ -26,10 +25,5 @@ const store: Store<ITabState> = createStore(
     applyMiddleware(...middlewares),
   ),
 );
-
-store.dispatch(setAxiosConfig({
-  baseURL: PP_SETTINGS.API_URL,
-  withCredentials: true,
-}));
 
 export default store;
