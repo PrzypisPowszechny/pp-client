@@ -28,6 +28,12 @@ import ppGA from 'common/pp-ga';
 import { AnnotationPPCategories } from '../../api/annotations';
 import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
 
+import { Icon } from 'react-icons-kit';
+import { link } from 'react-icons-kit/icomoon/link'
+import { priceTag } from 'react-icons-kit/icomoon/priceTag'
+import { ic_close } from 'react-icons-kit/md/ic_close'
+import {move} from 'react-icons-kit/iconic/move'
+
 interface IEditorProps {
   appModes: AppModes;
 
@@ -102,9 +108,9 @@ class Editor extends React.Component<Partial<IEditorProps>,
   };
 
   static ppCategoryToClass = {
-    [AnnotationPPCategories.ADDITIONAL_INFO]: styles.priorityNormal,
-    [AnnotationPPCategories.CLARIFICATION]: styles.priorityWarning,
-    [AnnotationPPCategories.ERROR]: styles.priorityAlert,
+    [AnnotationPPCategories.ADDITIONAL_INFO]: styles.categoryAdditionalInfo,
+    [AnnotationPPCategories.CLARIFICATION]: styles.categoryClarification,
+    [AnnotationPPCategories.ERROR]: styles.categoryError,
   };
 
   static getDerivedStateFromProps(nextProps: IEditorProps, prevState: IEditorState) {
@@ -296,7 +302,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
           className={styles.close}
           onClick={this.onCancelClick}
         >
-          <i className="remove icon"/>
+          <Icon icon={ic_close} size={18} />
         </div>
         <div className={classNames(styles.editorInput)}>
           <div className={classNames(styles.commentTextareaWrapper)}>
@@ -324,7 +330,16 @@ class Editor extends React.Component<Partial<IEditorProps>,
             onChange={this.handleInputChange}
             placeholder="Wklej link do źródła"
           />
-          <i className={classNames(styles.inputIcon, 'linkify', 'icon')}/>
+          <Popup
+            className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
+            hideOnScroll={true}
+            trigger={<Icon className={styles.inputIcon} icon={link} size={15} />}
+            flowing={true}
+            hoverable={true}
+            position="top left"
+          >
+            Adres strony, z której pochodzą <br/> informacje zawarte w przypisie
+          </Popup>
           <div
             className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
               { [styles.hide]: annotationLinkError === '' })}
@@ -341,22 +356,22 @@ class Editor extends React.Component<Partial<IEditorProps>,
             onChange={this.handleInputChange}
             placeholder="Wpisz tytuł źródła"
           />
-          <i className={classNames(styles.inputIcon, 'tags', 'icon')}/>
+          <Popup
+            className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
+            hideOnScroll={true}
+            trigger={<Icon className={styles.inputIcon} icon={priceTag} size={15} />}
+            flowing={true}
+            hoverable={true}
+            position="top left"
+          >
+            np. <i>Treść ustawy</i>, <i>Artykuł na Wikipedii</i>,<br/> <i>Nagranie wypowiedzi ministra</i>
+          </Popup>
           <div
             className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
               { [styles.hide]: annotationLinkTitleError === '' })}
           >
             {annotationLinkTitleError}
           </div>
-          <Popup
-            className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
-            hideOnScroll={true}
-            trigger={<div className={styles.linkHelp}><i className="help circle icon"/></div>}
-            flowing={true}
-            hoverable={true}
-          >
-            np. <i>Treść ustawy</i>, <i>Artykuł na Wikipedii</i>,<br/> <i>Nagranie wypowiedzi ministra</i>
-          </Popup>
         </div>
         <div className={styles.bottomBar}>
           <div
@@ -377,7 +392,6 @@ class Editor extends React.Component<Partial<IEditorProps>,
               />
             </div>
           </div>
-          <span className={styles.moverIcon}/>
         </div>
       </DraggableWidget>
     );

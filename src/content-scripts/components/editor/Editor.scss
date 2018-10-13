@@ -35,13 +35,9 @@ $editor-font-size: 14px;
     display: inline-block;
     color: #000000;
     font-weight: $font-light;
-    line-height: 1em;
+    line-height: 1.5em;
     background: none;
     resize: none;
-  }
-
-  textarea {
-    border-radius: 5px 5px 0 0;
   }
 
   input:hover, input:focus,
@@ -74,21 +70,25 @@ $editor-font-size: 14px;
 }
 
 /* annotation link field */
+.input-icon {
+  display: block;
+  position: absolute;
+  top: 10px;
+  left: 9px;
+  cursor: pointer;
+
+  &:hover {
+    color: rgb(136, 136, 136);
+  }
+}
+
 .annotation-link {
   input[type=text] {
-    padding-left: 2em;
+    padding-left: 2.1em;
   }
   .error-msg {
     left: 0;
     top: 20px;
-  }
-
-  .input-icon {
-    display: block;
-    position: absolute;
-    top: 9px;
-    left: 0;
-    width: 2em;
   }
 
 }
@@ -96,17 +96,11 @@ $editor-font-size: 14px;
 .annotation-link-title {
   margin-bottom: 0;
   input[type=text] {
-    padding-left: 2em;
-    width: 381px;
+    padding-left: 2.1em;
   }
 
   .input-icon {
-    display: block;
-    position: absolute;
-    top: 9px;
-    left: 0;
-    width: 2em;
-    line-height: 1.45em;
+    top: 11px;
   }
 
   .error-msg {
@@ -119,7 +113,7 @@ $editor-font-size: 14px;
   }
 }
 
-.mover-icon, .mover-icon::after {
+.mover-icon{
   display: none;
   position: absolute;
   margin: 0 auto;
@@ -129,7 +123,6 @@ $editor-font-size: 14px;
   width: 18px;
 
   pointer-events: none;
-  content: url('../../../../assets/three-dots.svg');
   opacity: 0.5;
 }
 
@@ -144,19 +137,16 @@ $editor-font-size: 14px;
   // the bottom area used for dragging
   // extend it to the very edges of the widget, so it is easy to hit
   .mover-area {
-    display: inline-block;
+    display: block;
     padding: $editor-vertical-spacing $editor-horizontal-spacing;
     width: 100%;
     cursor: move;
   }
 
   .controls {
-    float: right;
-    display: inline-block;
-    padding: 5px 0;
-    min-width: 150px;
-    text-align: right;
-    vertical-align: top;
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px 3px;
 
     button {
       @include submit-button();
@@ -164,15 +154,15 @@ $editor-font-size: 14px;
     }
 
     // use priority-specific as a baseline and darken it so it presents well as a button
-    .priority-normal {
+    .category-additional-info {
       @include button-color($normal-ref-color);
     }
 
-    .priority-warning {
+    .category-clarification {
       @include button-color(darken($warning-ref-color, 3%));
     }
 
-    .priority-alert {
+    .category-error {
       @include button-color(darken($alert-ref-color, 3%));
     }
   }

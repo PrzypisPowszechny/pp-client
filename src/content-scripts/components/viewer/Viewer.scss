@@ -215,8 +215,8 @@ li.annotation {
 
   &:hover {
     .annotation-link, .annotation-link-title {
+      @extend %pp-secondary-font;
       opacity: 0.8;
-      color: $secondary-font-color;
     }
   }
 }
@@ -226,16 +226,12 @@ li.annotation {
   font-weight: $font-semi-bold;
   text-transform: uppercase;
   vertical-align: middle;
+  transition: none;
 }
 
-.annotation-link-icon::after {
-  display: inline-block;
+.annotation-link-icon {
+  color: $secondary-font-color;
   margin-right: 3px;
-  width: 12px;
-  height: 12px;
-  position: relative;
-  top:2px;
-  content: url('../../../../assets/hyperlink-icon.png');
 }
 
 .annotation-link-title {
