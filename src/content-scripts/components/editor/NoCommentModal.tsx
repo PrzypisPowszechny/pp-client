@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { Modal } from 'semantic-ui-react';
 import { PPScopeClass } from '../../settings';
 
@@ -8,7 +8,7 @@ interface NoCommentModalProps {
   onModalSaveClick: () => void;
 }
 
-export default class NoCommentModal extends PureComponent<NoCommentModalProps> {
+export default class NoCommentModal extends React.PureComponent<NoCommentModalProps> {
   render() {
     const {
       open,

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 
 import { AnnotationPPCategories, annotationPPCategoriesLabels } from 'content-scripts/api/annotations';
 
@@ -10,7 +10,7 @@ interface PPCategoryBarProps {
   onSetPPCategory: (category: AnnotationPPCategories) => void;
 }
 
-export default class PPCategoryButtonsBar extends PureComponent<PPCategoryBarProps> {
+export default class PPCategoryButtonsBar extends React.PureComponent<PPCategoryBarProps> {
   render() {
     const {
       onSetPPCategory,
