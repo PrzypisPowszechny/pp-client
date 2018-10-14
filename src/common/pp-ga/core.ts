@@ -1,4 +1,4 @@
-import './ga.js';
+import gaScript from './ga.js';
 import FieldsObject = UniversalAnalytics.FieldsObject;
 import packageConf from '../../../package.json';
 import cookie from 'cookie';
@@ -19,6 +19,7 @@ export const GACustomFieldsIndex = {
 };
 
 export function init() {
+  gaScript();
   ga('create', PP_SETTINGS.DEV ? GA_ID_DEV : GA_ID_PROD);
   // Our extension protocol is chrome which is not what GA expects. It will fall back to http(s)
   ga('set', 'checkProtocolTask', () => { /* nothing */ });
@@ -57,7 +58,7 @@ function setIamstaff(val) {
 
 function getIamstaff(): Promise<boolean> {
   return new Promise<boolean>((resolve, reject) => {
-    chromeStorage.get([chromeKeys.IAMSTAFF], (result) => resolve(result[chromeKeys.IAMSTAFF]));
+    chromeStorage.get([chromeKeys.IAMSTAFF], result => resolve(result[chromeKeys.IAMSTAFF]));
   });
 }
 

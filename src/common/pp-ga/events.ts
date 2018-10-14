@@ -16,7 +16,7 @@ export function extensionUpgraded(previousVersion: string) {
 
 // This need to be in fact implemented on our site frontend, not in the extension
 export function extensionUninstalled() {
-  sendEvent({eventCategory: 'Extension', eventAction: 'Uninstall', eventLabel: 'ExtensionUninstalled' });
+  sendEvent({ eventCategory: 'Extension', eventAction: 'Uninstall', eventLabel: 'ExtensionUninstalled' });
 }
 
 export function extensionDisabledOnAllSites(currentUrl: string) {
