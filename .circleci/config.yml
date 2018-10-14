@@ -8,7 +8,7 @@ jobs:
     docker:
       # node 8.x - this is newest version recommended for production and so most widely supported by packages,
       # this will change in April 2019 (https://github.com/nodejs/Release)
-      - image: circleci/node:8
+      - image: circleci/node:8-browsers
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -34,5 +34,8 @@ jobs:
             - node_modules
           key: v1-node-8-dependencies-{{ checksum "package.json" }}
 
-      # run tests!
+      - run: npm run e2e
+
+      - run: npm run test
+
       - run: npm run build
