@@ -4,10 +4,22 @@ import store from './store';
 
 import chromeStorage from 'common/chrome-storage';
 import { readEndpoint } from 'redux-json-api';
+import readEndpointCustom from './utils/redux-json-api/readEndpointCustom';
 
 export function loadFromAPI() {
-  // This is our root request that needs to have part of the url (path) hardcoded
-  store.dispatch(readEndpoint('/annotations?url=' + window.location.href));
+  store.dispatch(readEndpointCustom(
+    '/annotations-sensitive', {
+      customSettings: {
+        method: 'post',
+        data: {
+          url: window.location.href,
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.api+json',
+        },
+      },
+  }));
 }
 
 export function loadFromChromeStorage() {
