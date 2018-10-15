@@ -6,7 +6,7 @@ const CreateFileWebpack = require('create-file-webpack');
 const common = require('../base.config');
 const manifestSettings = require('./manifest');
 
-const manifest = merge(manifestSettings.base, {
+const manifest = (env, argv) => merge(manifestSettings.base(env, argv), {
   content_scripts: [{
     ...manifestSettings.contentScriptSettings,
     js: [

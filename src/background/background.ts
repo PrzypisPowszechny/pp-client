@@ -26,16 +26,32 @@ function onInstalled(details: InstalledDetails) {
       // ignore 'chrome_update' and 'shared_module_update'
       break;
   }
+
+  chrome.contextMenus.create({
+    title: 'Dodaj przypis',
+    contexts: ['selection'],
+    onclick: onContextMenuAnnotate,
+  });
+}
+
+function returnExtensionCookie(request, sender, sendResponse) {
+  if (request.action === 'GET_COOKIE') {
+    chrome.cookies.get({
+      url: PP_SETTINGS.API_URL,
+      name: request.name,
+    }, (cookie: chrome.cookies.Cookie) => {
+      sendResponse({
+        name: cookie.name,
+        value: cookie.value,
+      });
+    });
+  }
+  return true;
 }
 
 ppGA.init();
 
-chrome.contextMenus.create({
-  title: 'Dodaj przypis',
-  contexts: ['selection'],
-  onclick: onContextMenuAnnotate,
-});
-
 chrome.runtime.onInstalled.addListener(onInstalled);
 chrome.runtime.setUninstallURL(PP_SETTINGS.SITE_URL + '/extension-uninstalled/');
 chrome.runtime.onMessage.addListener(ppGA.sendEventFromMessage);
+chrome.runtime.onMessage.addListener(returnExtensionCookie);
