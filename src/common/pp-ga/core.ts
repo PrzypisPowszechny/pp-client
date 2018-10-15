@@ -26,8 +26,6 @@ export function init() {
   ga('set', 'appVersion', packageConf.version);
 
   sendInitPing();
-  const cookies = cookie.parse(document.cookie);
-  console.log(cookies);
 }
 
 interface InitPingResponseData {
