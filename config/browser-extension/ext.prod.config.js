@@ -12,17 +12,23 @@ const manifest = merge(common.manifest, {
   key: KEY,
 });
 
-module.exports = (env, argv) => merge(common.config(env, argv), {
-  output: {
-    publicPath: `chrome-extension://${APP_ID}/`,
-  },
-  plugins: [
-    // Generate manifest.json
-    new CreateFileWebpack({
-      path: common.EXT_DIR,
-      fileName: 'manifest.json',
-      content: JSON.stringify(manifest, null, 2),
-    }),
-  ]
-});
+module.exports = (env, argv) => {
+  const manifest = merge(common.manifest(env, argv), {
+    key: KEY,
+  });
+
+  return merge(common.config(env, argv), {
+    output: {
+      publicPath: `chrome-extension://${APP_ID}/`,
+    },
+    plugins: [
+      // Generate manifest.json
+      new CreateFileWebpack({
+        path: common.EXT_DIR,
+        fileName: 'manifest.json',
+        content: JSON.stringify(manifest, null, 2),
+      }),
+    ]
+  });
+};
 

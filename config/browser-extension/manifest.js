@@ -3,8 +3,9 @@
 // Contains only the most universal information;
 // For more details see values appended in browser-extension/*.config.js file
 const packageConf = require('../../package');
+const appSettings = require('../app-settings').appSettings;
 
-const base = {
+const base = (env, argv) => ({
   manifest_version: 2,
   name: 'Przypis Powszechny',
   description: '',
@@ -15,9 +16,12 @@ const base = {
     'storage',
     'activeTab',
     'contextMenus',
+    'cookies',
+    // API URL must be included so we can read cookies for this host
+    appSettings(env, argv).API_URL,
   ],
-  content_security_policy: "script-src 'self' 'unsafe-eval' https://www.google-analytics.com; object-src 'self'",
-  browser_action: {
+    content_security_policy: "script-src 'self' 'unsafe-eval' https://www.google-analytics.com; object-src 'self'",
+    browser_action: {
     default_title: 'Przypis Powszechny - wersja testowa'
   },
   web_accessible_resources: [
@@ -26,7 +30,7 @@ const base = {
     'node_modules/*',
     'fonts/*'
   ]
-};
+});
 
 const contentScriptSettings = {
   matches: ['<all_urls>'],
