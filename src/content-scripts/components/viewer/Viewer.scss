@@ -172,6 +172,30 @@ li.annotation {
 
 }
 
+.demagog-category {
+  @extend %pp-basic-font;
+  font-weight: $font-semi-bold;
+  display: inline;
+
+  &:after {
+    content: ': '
+  }
+
+  &.dg-category-true {
+    color: $demagog-true-color;
+  }
+  &.dg-category-false {
+    color: $demagog-false-color;
+  }
+  &.dg-category-lie {
+    color: $demagog-lie-color;
+  }
+  &.dg-category-unknown {
+    color: $demagog-unknown-color;
+  }
+
+}
+
 /* --- Viewer bottom bar --- */
 .bottom-bar {
   display: flex;

@@ -7,7 +7,8 @@ import styles from './Viewer.scss';
 import { hideViewer } from 'content-scripts/store/widgets/actions';
 import {
   AnnotationAPIModel, AnnotationPublishers,
-  AnnotationPPCategories, annotationPPCategoriesLabels,
+  AnnotationPPCategories, AnnotationDemagogCategories,
+  annotationPPCategoriesLabels, annotationDemagogCategoriesLabels,
 } from 'content-scripts/api/annotations';
 import { extractHostname, httpPrefixed } from '../../../common/url';
 
@@ -65,6 +66,27 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     return ppCategoryToClass[this.props.annotation.attributes.ppCategory];
   }
 
+  ppCategoryToClass(ppCategory) {
+    const ppCategoryToClass = {
+      [AnnotationPPCategories.ADDITIONAL_INFO]: styles.categoryAdditionalInfo,
+      [AnnotationPPCategories.CLARIFICATION]: styles.categoryClarification,
+      [AnnotationPPCategories.ERROR]: styles.categoryError,
+    };
+    return ppCategoryToClass[ppCategory];
+  }
+
+  demagogCategoryToClass(demagogCategory) {
+    const ppCategoryToClass = {
+      [AnnotationDemagogCategories.TRUE]: styles.dgCategoryTrue,
+      [AnnotationDemagogCategories.PTRUE]: styles.dgCategoryTrue,
+      [AnnotationDemagogCategories.FALSE]: styles.dgCategoryFalse,
+      [AnnotationDemagogCategories.PFALSE]: styles.dgCategoryFalse,
+      [AnnotationDemagogCategories.LIE]: styles.dgCategoryLie,
+      [AnnotationDemagogCategories.UNKNOWN]: styles.dgCategoryUnknown,
+    };
+    return ppCategoryToClass[demagogCategory];
+  }
+
   render() {
     const {
       comment,
@@ -81,7 +103,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
       <li className={styles.annotation}>
         <div className={styles.headBar}>
           <div>
-            <div className={classNames(styles.ppCategory, this.headerPPCategoryClass())}>
+            <div className={classNames(styles.ppCategory, this.ppCategoryToClass(ppCategory))}>
               {comment ? annotationPPCategoriesLabels[ppCategory] : 'źródło'}
             </div>
             <div className={styles.commentDate}>
@@ -102,6 +124,11 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
         </div>
         {!comment ? '' :
           <div className={styles.comment}>
+            {publisher === AnnotationPublishers.DEMAGOG &&
+              <span className={classNames(styles.demagogCategory, this.demagogCategoryToClass(demagogCategory))}>
+                {annotationDemagogCategoriesLabels[demagogCategory]}
+              </span>
+              }
             {comment}
           </div>
         }

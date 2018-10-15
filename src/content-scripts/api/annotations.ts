@@ -66,6 +66,15 @@ export const annotationPPCategoriesLabels = {
   ERROR: 'sprostowanie błędu',
 };
 
+export const annotationDemagogCategoriesLabels = {
+  TRUE: 'Prawda',
+  PTRUE: 'Prawda',
+  FALSE: 'Fałsz',
+  PFALSE: 'Fałsz',
+  LIE: 'Manipulacja',
+  UNKNOWN: 'Nieweryfikowalne',
+};
+
 export enum AnnotationPublishers {
   PP = 'PP',
   DEMAGOG = 'DEMAGOG',
