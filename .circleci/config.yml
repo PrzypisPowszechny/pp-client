@@ -34,8 +34,10 @@ jobs:
             - node_modules
           key: v1-node-8-dependencies-{{ checksum "package.json" }}
 
-      - run: npm run e2e
-
       - run: npm run test
+
+      - run: npm run build-dev-extension-local
+
+      - run: npm run e2e
 
       - run: npm run build

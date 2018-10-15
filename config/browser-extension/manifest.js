@@ -29,7 +29,7 @@ const base = (env, argv) => ({
     'help/*',
     'node_modules/*',
     'fonts/*'
-  ]
+  ],
 });
 
 const contentScriptSettings = {
