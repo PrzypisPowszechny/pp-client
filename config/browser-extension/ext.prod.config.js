@@ -8,10 +8,6 @@ const KEY = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArkmF/06jK2b976qLc1RoSyr
 // App id is generated deterministically from the app key
 const APP_ID = 'afephghdinbdpfmfdkgbhbolflhnbbdf';
 
-const manifest = merge(common.manifest, {
-  key: KEY,
-});
-
 module.exports = (env, argv) => {
   const manifest = merge(common.manifest(env, argv), {
     key: KEY,
@@ -31,4 +27,3 @@ module.exports = (env, argv) => {
     ]
   });
 };
-
