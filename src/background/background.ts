@@ -26,6 +26,12 @@ function onInstalled(details: InstalledDetails) {
       // ignore 'chrome_update' and 'shared_module_update'
       break;
   }
+
+  chrome.contextMenus.create({
+    title: 'Dodaj przypis',
+    contexts: ['selection'],
+    onclick: onContextMenuAnnotate,
+  });
 }
 
 function returnExtensionCookie(request, sender, sendResponse) {
@@ -44,12 +50,6 @@ function returnExtensionCookie(request, sender, sendResponse) {
 }
 
 ppGA.init();
-
-chrome.contextMenus.create({
-  title: 'Dodaj przypis',
-  contexts: ['selection'],
-  onclick: onContextMenuAnnotate,
-});
 
 chrome.runtime.onInstalled.addListener(onInstalled);
 chrome.runtime.setUninstallURL(PP_SETTINGS.SITE_URL + '/extension-uninstalled/');
