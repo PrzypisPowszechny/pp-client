@@ -17,7 +17,6 @@ jobs:
           keys:
           # Some dependencies may vary also on a per node version basis
           - v1-node-8-dependencies-{{ checksum "package.json" }}
-          # Fall back to using the latest cache if no exact match is found
           - v1-node-8-dependencies-
       - run: npm install
       - save_cache:
