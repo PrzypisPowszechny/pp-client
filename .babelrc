@@ -4,5 +4,12 @@
       "modules": false
     }],
     "react"
-  ]
+  ],
+  "env": {
+    "test": {
+      "presets": [
+        ["es2015"], "react"
+      ],
+    }
+  }
 }

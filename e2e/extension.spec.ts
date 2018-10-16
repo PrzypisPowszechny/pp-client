@@ -13,10 +13,14 @@ const screen = {
 };
 const TIMEOUT = 10000;
 const BROWSER = 'chrome';
-const API_PORT = 8000;
+const PPSettings = loadSettings();
+
 const ADD_ANNOTATION_ACTION = 'EMULATE_ON_CONTEXT_MENU_ANNOTATE';
 const PP_CSS_SCOPE_CLASS = 'pp-ui';
 const PP_CSS_EDITOR_CLASS_PREFIX = 'Editor__self';
+
+
+jasmine.DEFAULT_TIMEOUT_INTERVAL = TIMEOUT;
 
 describe('extension runs normally', () => {
   let browser;
@@ -24,7 +28,7 @@ describe('extension runs normally', () => {
   let apiServer;
 
   const apiApp = express();
-  apiApp.get('/some-text', (req, res) => {
+  apiApp.get('/site/some-text/', (req, res) => {
     res.send('<p>some text</p> here');
   });
   apiApp.post('/site/pings/init/', (req, res) => {
@@ -34,7 +38,7 @@ describe('extension runs normally', () => {
 
   beforeAll( async () => {
     await new Promise( (resolve, reject) => {
-      apiServer = apiApp.listen(API_PORT, resolve);
+      apiServer = apiApp.listen(new URL(PPSettings.API_URL).port, resolve);
     });
 
     browser = new Builder().forBrowser(BROWSER)
@@ -63,7 +67,7 @@ describe('extension runs normally', () => {
   }, TIMEOUT);
 
   test('opens editor', async () => {
-    await browser.get(`localhost:${API_PORT}/some-text/`);
+    await browser.get(`${PPSettings.SITE_URL}/some-text/`);
     const someText = await browser.findElement(By.tagName('p'));
     await browser.actions().doubleClick(someText).perform();
     // Use special hook to emmit and open editor on this event as context menu click is out of selenium's control...

@@ -10,21 +10,19 @@ jobs:
       # this will change in April 2019 (https://github.com/nodejs/Release)
       - image: circleci/node:8-browsers
 
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
-
     working_directory: ~/repo
+
+    environment:
+      PP_API=local
 
     steps:
       - checkout
 
-      # Download and cache dependencies, some dependencies may vary also on a per node version basis
       - restore_cache:
           keys:
+          # Some dependencies may vary also on a per node version basis
           - v1-node-8-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
+          # Fall back to using the latest cache if no exact match is found
           - v1-node-8-dependencies-
 
       - run: npm install
@@ -36,8 +34,8 @@ jobs:
 
       - run: npm run test
 
-      - run: npm run build-dev-extension-local
+      - run: npm run build
 
       - run: npm run e2e
 
-      - run: npm run build
+      - run: npm run build-optimized
