@@ -40,7 +40,7 @@ export function configureAPIRequests() {
 
   // settings for redux-json-api
   store.dispatch(setAxiosConfig({
-    baseURL: PP_SETTINGS.API_URL,
+    baseURL: PPSettings.API_URL,
     withCredentials: true,
   }));
 }

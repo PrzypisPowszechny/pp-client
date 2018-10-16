@@ -13,7 +13,7 @@ import 'css/selection.scss';
 // and set it for future momentJS calls;
 // (https://github.com/moment/moment/issues/2517)
 import * as moment from 'moment';
-import PPSettings from 'common/PPSettings';
+import IPPSettings from 'common/PPSettings';
 import chromeStorageHandlers from './handlers/chrome-storage-handlers';
 import * as data from './init-data';
 import highlightManager from './modules/highlight-manager';
@@ -27,7 +27,7 @@ moment.locale('pl');
 
 // Declared in webpack.config through DefinePlugin
 declare global {
-  const PP_SETTINGS: PPSettings;
+  const PPSettings: IPPSettings;
 }
 
 console.log('Przypis script working!');

@@ -3,7 +3,7 @@
 // Contains only the most universal information;
 // For more details see values appended in browser-extension/*.config.js file
 const packageConf = require('../../package');
-const appSettings = require('../app-settings').appSettings;
+const loadSettings = require('../pp-settings').loadSettings;
 
 const base = (env, argv) => ({
   manifest_version: 2,
@@ -18,7 +18,7 @@ const base = (env, argv) => ({
     'contextMenus',
     'cookies',
     // API URL must be included so we can read cookies for this host
-    appSettings(env, argv).API_URL,
+    loadSettings(env, argv).API_URL,
   ],
     content_security_policy: "script-src 'self' 'unsafe-eval' https://www.google-analytics.com; object-src 'self'",
     browser_action: {

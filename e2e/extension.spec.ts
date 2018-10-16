@@ -1,4 +1,5 @@
 const packageConf = require('../package');
+import { loadSettings } from '../config/pp-settings';
 import express from 'express';
 import { Builder, By, Key, ActionSequence, Button } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome';

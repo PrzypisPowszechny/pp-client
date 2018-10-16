@@ -20,7 +20,7 @@ export const GACustomFieldsIndex = {
 
 export function init() {
   gaScript();
-  ga('create', PP_SETTINGS.DEV ? GA_ID_DEV : GA_ID_PROD);
+  ga('create', PPSettings.DEV ? GA_ID_DEV : GA_ID_PROD);
   // Our extension protocol is chrome which is not what GA expects. It will fall back to http(s)
   ga('set', 'checkProtocolTask', () => { /* nothing */ });
   ga('set', 'appName', 'PP browser extension');
@@ -38,7 +38,7 @@ function sendInitPing() {
   // but website. Use neutral name of the endpoint used.
   // If anything more ever needs to be send on init it is good starting point - it can be added here.
   const cookies = cookie.parse(document.cookie);
-  fetch(PP_SETTINGS.SITE_URL + '/pings/init/', {
+  fetch(PPSettings.SITE_URL + '/pings/init/', {
     headers: {
       'content-type': 'application/x-www-form-urlencoded',
       'accept': 'application/json',

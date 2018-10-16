@@ -3,7 +3,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
 
 // app-specific settings (enabled features etc.)
-const { appSettings } = require('./app-settings');
+const { loadSettings } = require('./pp-settings');
 
 const localPath = (...args) => path.resolve(__dirname, ...args);
 
@@ -101,10 +101,10 @@ const config = (env, argv) => ({
     ],
   },
   plugins: [
-    new CleanWebpackPlugin([BUILD_DIR, EXT_DIR]),
+    new CleanWebpackPlugin([BUILD_DIR, EXT_DIR], { root: ROOT}),
     new webpack.DefinePlugin({
       // use appropriate (development or production) PP settings
-      PP_SETTINGS: JSON.stringify(appSettings(env, argv)),
+      PPSettings: JSON.stringify(loadSettings(env, argv)),
     }),
     // JQuery is assumed by semantic ui, so we need to define it
     new webpack.ProvidePlugin({

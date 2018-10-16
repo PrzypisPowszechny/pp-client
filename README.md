@@ -84,7 +84,7 @@ Production configuration and development differences:
 production settings
 (e.g. minifies bundles in production settings)
 - other differences can be introduced by different variables used within the application for dev and prod configuration,
- defined in `config/app-settings`.
+ defined in `config/pp-settings`.
 
 ## Building browser extension 
 
