@@ -95,7 +95,7 @@
     "lint": "tslint --project tsconfig.json",
     "lint-fix": "npm run lint -- --fix",
     "test": "jest src",
-    "e2e": "jest e2e"
+    "e2e": "jest e2e --maxWorkers=1"
   },
   "repository": {
     "type": "git",

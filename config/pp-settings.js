@@ -31,7 +31,7 @@ function getDev(env, mode) {
     case '':
       return true;
     default:
-      console.warn(`Unknown value of PP_DEV, so it's still active! To disable PP_DEV flag set it to 'false' or '0'.`);
+      console.warn(`Ignoring unknown value of PP_DEV! To disable PP_DEV flag set it to 'false' or '0'.`);
       return true;
   }
 }
