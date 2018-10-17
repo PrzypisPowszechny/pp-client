@@ -1,3 +1,4 @@
+import { waitUntil } from './utils';
 // noinspection TsLint
 const packageConf = require('../package');
 import express from 'express';
@@ -30,8 +31,8 @@ describe('extension runs normally', () => {
   });
 
   test('calls init ping', async () => {
-    // Load any page, by that time ping should have been made
     await browser.get('data:');
+    await waitUntil( () => initPingsCount > 0);
     expect(initPingsCount).toEqual(1);
   }, e2ePPSettings.TIMEOUT);
 
