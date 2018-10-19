@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 
 import { Popup } from 'semantic-ui-react';
@@ -15,7 +15,7 @@ interface IPPCategoryButtonProps {
   children: React.ReactChild;
 }
 
-export default class PPCategoryButton extends PureComponent<IPPCategoryButtonProps> {
+export default class PPCategoryButton extends React.PureComponent<IPPCategoryButtonProps> {
 
   static defaultProps = {
     selected: false,

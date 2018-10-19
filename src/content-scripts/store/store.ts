@@ -12,7 +12,7 @@ declare global {
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const middlewares = [thunk, promise];
 
-if (PP_SETTINGS.DEV) {
+if (PPSettings.DEV) {
   const logger = createLogger();
   middlewares.push(logger);
 }

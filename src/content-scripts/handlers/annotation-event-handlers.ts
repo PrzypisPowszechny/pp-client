@@ -46,6 +46,9 @@ function init() {
   };
 
   chrome.runtime.onMessage.addListener(contextMenuAnnotateCallback);
+
+  // This special hook for selenium e2e test to open editor as context menu click is out of selenium's control...
+  document.addEventListener('EMULATE_ON_CONTEXT_MENU_ANNOTATE', annotateCommand);
 }
 
 export function deinit() {
@@ -77,21 +80,25 @@ function selectionChangeCallback(
 
 function contextMenuAnnotateCallback(request, sender) {
   if (request.action === 'ANNOTATE') {
-    /*
-     * For now, do not check for being inside article.
-     * Reason: checking ContextMenu API selection for being insideArticle is possible, but uncomfortable,
-     * as context menu actions are handled in the separate background script.
-     */
-    const selection = handlers.selector.captureDocumentSelection();
-    if (selection.length === 1) {
-      const annotationLocation = fullAnnotationLocation(selection[0]);
-      store.dispatch(setSelectionRange(annotationLocation));
-      const selectionCenter = handlers.selector.currentSingleSelectionCenter();
-      store.dispatch(showEditorAnnotation(selectionCenter.x, selectionCenter.y));
-      ppGA.annotationAddFormDisplayed('rightMouseContextMenu');
-    } else if (selection.length > 1) {
-      console.warn('PP: more than one selected range is not supported');
-    }
+    annotateCommand();
+  }
+}
+
+function annotateCommand() {
+  /*
+   * For now, do not check for being inside article.
+   * Reason: checking ContextMenu API selection for being insideArticle is possible, but uncomfortable,
+   * as context menu actions are handled in the separate background script.
+   */
+  const selection = handlers.selector.captureDocumentSelection();
+  if (selection.length === 1) {
+    const annotationLocation = fullAnnotationLocation(selection[0]);
+    store.dispatch(setSelectionRange(annotationLocation));
+    const selectionCenter = handlers.selector.currentSingleSelectionCenter();
+    store.dispatch(showEditorAnnotation(selectionCenter.x, selectionCenter.y));
+    ppGA.annotationAddFormDisplayed('rightMouseContextMenu');
+  } else if (selection.length > 1) {
+    console.warn('PP: more than one selected range is not supported');
   }
 }
 

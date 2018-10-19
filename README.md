@@ -6,8 +6,8 @@
 2. [Development](#development)
     - [Prerequisites](#prerequisites)
     - [Building](#building)
-    - [Building browser extension ](#building-browser-extension )
     - [Connecting to backend](#connecting-to-backend)
+    - [Tests](#tests)
 3. [Architecture](#architecture)
 4. [More & References](#more)
 
@@ -64,44 +64,50 @@ We further use some resources unique to Chrome extensions
 - chrome storage
 - chrome message API
 
-## Building
 
-Long story short: for hot reloading development you probably just want to run:
-```
-npm run start-extension
-```
+#### _Client_ term
 
-### Introduction
-
-Since content scripts are injected to every page visited by the extension's user,
+Since **content scripts** are injected to every page visited by the extension's user,
 they are technically very much like regular scripts attached by the website author himself (except we are injecting them, yes).
 
 Exploiting the analogy, we can call this part of the application shortly the **client** part.
 
-### dev / prod configuration
-Production configuration and development differences:
-- many introduced by default by Webpack 4 itself (which is nice) -- by default it builds bundles differently for development and
-production settings
-(e.g. minifies bundles in production settings)
-- other differences can be introduced by different variables used within the application for dev and prod configuration,
- defined in `config/app-settings`.
+## Building
 
-## Building browser extension 
-
-### development
-Both `build-dev-extension` and `start-extension` will compile to a `dist/browser-extension` directory.
-
-**single build**
-
+Long story short: for hot reloading development you probably just want to run:
 ```
-npm run build-dev-extension
+npm run start
 ```
+_How to install it in the browser?_ Go to [installing extension](#installing-extension).
+
+### Building browser extension 
+
+Builds vary in speed, size and debuggability. On the one end there is `start` script which is hot reloding while on the other you have `build-optimized` and `build-package` which use the same configuration as produciton builds (with the only differences being the servers and services the extension connects to).
+
+Both `build` and `start` builds will compile to a `dist/browser-extension` directory. More about adding the extension to chrome in next section [installing extension](#installing-extension).
 
 **hot reloading**
+```
+npm run start
+```
 
+**single build**
 ```
-npm run start-extension
+npm run build
 ```
+
+**single _production-like_ build**  - Optimized, minified and obfusticated.
+```
+npm run build-optimized
+```  
+
+**single packed _production-like_ build** - Packed to `dist/pp-chrome.zip` and ready for uploading to Chrome Web Store.
+```
+npm run build-package
+```
+
+
+### Installing extension
 
 Go to Chrome extension page and load the extension (to see how to load an extension go to
 [Chrome developer docs](https://developer.chrome.com/extensions/getstarted#unpacked)
@@ -117,13 +123,14 @@ which are marked as either `content_script` or `default_popup` in `manifest.json
 
 When the extension has been reloaded, you still need to refresh each opened tab for the change to take effect in that very tab.
 
+### Further notes on (hot) reloading
+
 As for now, this part of the hot reloading plugin is not fully clear.
 It reloads some of the open tabs (I'm not sure how it chooses which).
 Most of the time, only the last used.
 
 Needless to say, without hot reloading you need to reload the tab manually.
 
-#### Further notes (but no less important)
 - Hot reloading **does not reload anything on the first build**; it's best to start off with running it,
 and introduce changes to the code just then, rather than build only when it's needed.
 - If you don't see a change you expect to have made in the extension,
@@ -135,25 +142,19 @@ and introduce changes to the code just then, rather than build only when it's ne
 but rather than use Chrome extension page, it's quicker to use 
 [this reloading app](https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid).
 
-### production
+## Content script (= client-only) builds
+All builds compile to a `dist/client` directory.
+
+**~~client + hot reloading~~**
+_Out of operation for now._ 
 ```
-npm run build-extension
-```
-Modifies `dist/browser-extension` as a side effect.
-
-A package ready to upload to Chrome Web Store is `dist/pp-chrome.zip`.
-
-## Content script (= client) build
-
-
-### client + hot reloading + dev configuration
-```
-npm start
+npm run start-client
 ```
 
-### client + prod configuration
+**~~client compilation~~** 
+_Out of operation for now._ 
 ```
-npm run build
+npm run build-client
 ```
 
 
@@ -165,11 +166,21 @@ This application works with PrzypisPowszechny API server - https://github.com/Pr
 By default it set to connect to public development instance of the server. 
 
 #### Local instance
-If you want to connect with your local instance, add `--env.api=local` arg to command starting client, e.g.
+If you want to connect to your local instance, add `--env.PP_API=local` arg to command starting client or just set `PP_API=local` environment var, e.g.
 ```
-npm run start-extension -- --env.api=local
+npm run start -- --env.PP_API=local
 ```
-#### Documentation of API
+which is equivalent to
+```
+PP_API=local npm run start
+```
+All development values of `PP_API`:
+ - `local` - localhost port 8000
+ - `local-alt` - localhost port 8080
+ - `devdeploy1` - (default) remote development instace, always online
+
+
+### Documentation of the backend API
 
 **[Documentation of the latest release](https://przypispowszechny.pl/api/docs/)**
 
@@ -182,6 +193,25 @@ So for example, to see the shape of the backend you are developing to, when runn
 ```
 http://localhost:8000/api/docs/
 ```
+
+## Tests
+
+Just run
+```
+npm run test
+```
+
+### e2e Tests
+
+Build and then run e2e tests, for example:
+```
+PP_API=local npm run build && PP_API=local npm run e2e 
+```
+Notes:
+- `PP_API` for **build and e2e have to match**
+- only localhost with free port are valid for e2e, so you can set either `local` or `local-alt` (not to clash with local dev server) 
+- you **can** run e2e tests against hot reloading build, just remember about `PP_API` match ;)  
+
 
 # Architecture
 
