@@ -1,3 +1,6 @@
+import * as sentry from '../common/sentry';
+sentry.init();
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import BrowserPopup from './BrowserPopup';

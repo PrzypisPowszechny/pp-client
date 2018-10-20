@@ -1,3 +1,6 @@
+import * as sentry from '../common/sentry';
+sentry.init();
+
 import InstalledDetails = chrome.runtime.InstalledDetails;
 
 console.log('Przypis background script!');

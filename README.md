@@ -113,6 +113,12 @@ Go to Chrome extension page and load the extension (to see how to load an extens
 [Chrome developer docs](https://developer.chrome.com/extensions/getstarted#unpacked)
 to **Load the extension** section). Choose `dist/browser-extension` directory as the app root.
 
+**Alternatively**: spare yourself few clicks and use commandline: 
+```
+chromium-browser --load-extension=./dist/browser-extension
+```  
+You may also replace `chromium-browser` with `google-chrome`. 
+
 A rebuild of the browser package (`dist/browser-extension`) won't normally reload the browser extension already loaded by Chrome.
 
 **If you're using hot reloading**, each change to one of the content scripts or popup window
