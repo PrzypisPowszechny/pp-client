@@ -26,7 +26,7 @@ export function configureAPIRequests() {
   axios.interceptors.request.use((config) => {
     config.headers['PP-SITE-URL'] = window.location.href;
 
-    if (['POST', 'PATCH', 'PUT'].indexOf(config.method) >= 0) {
+    if (['OPTIONS', 'GET', 'HEAD'].indexOf(config.method) === -1) {
       return getExtensionCookie('csrftoken').then((csrfToken) => {
         if (!csrfToken) {
           return Promise.reject(`CSRF token is not available when initiating a ${config.method} request!`);
