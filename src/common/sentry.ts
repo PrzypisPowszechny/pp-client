@@ -8,5 +8,6 @@ export function init() {
   Sentry.init({
     dsn: PPSettings.DEV ? SENTRY_DSN_DEV : SENTRY_DSN_PROD,
     debug: PPSettings.DEV,
+    release: PPSettings.VERSION,
   });
 }
