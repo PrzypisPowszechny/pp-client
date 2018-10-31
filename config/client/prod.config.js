@@ -11,7 +11,7 @@ module.exports = (env, argv) => merge(common.config(env, argv), {
   output: {
     path: common.BUILD_DIR,
     publicPath: './',
-    filename: '[name].bundle.js',
+    filename: '[name].pp-bundle.js',
   },
   plugins: [
     new ForkTsCheckerWebpackPlugin({
