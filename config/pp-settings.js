@@ -1,6 +1,7 @@
 const process = require('process');
 let settingsLogged = false;
 
+const packageConf = require('../package');
 
 exports.loadSettings = (environment, argv) => {
   const env = environment || process.env;
@@ -11,6 +12,7 @@ exports.loadSettings = (environment, argv) => {
     DEV: getDev(env, mode),
     SITE_URL: getApi(env, mode) + '/site',
     API_URL: getApi(env, mode) + '/api',
+    VERSION: packageConf.version,
   };
   if (!settingsLogged) {
     settingsLogged = true;

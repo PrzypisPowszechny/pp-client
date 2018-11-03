@@ -47,7 +47,6 @@ console.log('Przypis script working!');
  * we commit changes to browser storage and recalculate state.appMode on storage change.
  */
 
-
 const isBrowser = typeof window !== 'undefined';
 if (isBrowser) {
   window.addEventListener('load', () => {

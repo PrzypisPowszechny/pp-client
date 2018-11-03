@@ -11,7 +11,7 @@ const ROOT = localPath('..');
 const BUILD_DIR = localPath(ROOT, 'dist', 'client');
 const EXT_DIR = localPath(ROOT, 'dist', 'browser-extension');
 
-const config = (env, argv) => ({
+const getConfig = (env, argv) => ({
   entry: {
     main: "./src/content-scripts/main.tsx",
     main_global_styles: "./src/content-scripts/main-global-styles.ts"
@@ -19,7 +19,7 @@ const config = (env, argv) => ({
   output: {
     path: BUILD_DIR,
     publicPath: '/',
-    filename: '[name].bundle.js',
+    filename: '[name].pp-bundle.js',
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json"],
@@ -116,7 +116,7 @@ const config = (env, argv) => ({
 });
 
 module.exports = {
-  config: config,
+  getConfig: getConfig,
   BUILD_DIR: BUILD_DIR,
   EXT_DIR: EXT_DIR,
 };

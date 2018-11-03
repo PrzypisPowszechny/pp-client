@@ -9,8 +9,9 @@ const base = (env, argv) => ({
   manifest_version: 2,
   name: 'Przypis Powszechny',
   description: '',
-  version: packageConf.version,
-  version_name: `${packageConf.version} test`,
+  // chrome version can be composed of integers only, so strip alpha/beta/rc/etc part
+  version: packageConf.version.split('-')[0],
+  version_name: `${packageConf.version}`,
 
   permissions: [
     'storage',
