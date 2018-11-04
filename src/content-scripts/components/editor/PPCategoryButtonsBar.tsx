@@ -19,7 +19,6 @@ export default class PPCategoryButtonsBar extends PureComponent<PPCategoryBarPro
 
     return (
       <div className={styles.self}>
-        <label className={styles.priorityHeader}> Co dodajesz? </label>
         <div className={styles.headerButtons}>
           <PPCategoryButton
             type={AnnotationPPCategories.ADDITIONAL_INFO}
