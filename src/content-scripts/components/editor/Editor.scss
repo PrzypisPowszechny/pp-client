@@ -161,7 +161,7 @@ $editor-font-size: 14px;
   justify-content: flex-end;
   padding: 5px 3px;
 
-  button {
+  .submitButton {
     @include submit-button();
     @include button-color(#888888);
   }

@@ -19,8 +19,8 @@ import { IEditorRange } from 'content-scripts/store/widgets/reducers';
 
 import { DraggableWidget } from 'content-scripts/components/widget';
 
-import NoCommentModal from './NoCommentModal';
-import PPCategoryButtonsBar from './PPCategoryButtonsBar';
+import NoCommentModal from 'content-scripts/components/editor/NoCommentModal/NoCommentModal';
+import PPCategoryButtonsBar from 'content-scripts/components/editor/PPCategoryButtonBar/PPCategoryButtonsBar';
 import * as helpers from './helpers';
 
 import styles from './Editor.scss';
@@ -29,10 +29,9 @@ import { AnnotationPPCategories } from '../../api/annotations';
 import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
 
 import { Icon } from 'react-icons-kit';
-import { link } from 'react-icons-kit/icomoon/link'
-import { priceTag } from 'react-icons-kit/icomoon/priceTag'
-import { ic_close } from 'react-icons-kit/md/ic_close'
-import {move} from 'react-icons-kit/iconic/move'
+import { link } from 'react-icons-kit/icomoon/link';
+import { priceTag } from 'react-icons-kit/icomoon/priceTag';
+import { ic_close } from 'react-icons-kit/md/ic_close';
 
 interface IEditorProps {
   appModes: AppModes;
@@ -376,17 +375,17 @@ class Editor extends React.Component<Partial<IEditorProps>,
             </div>
           </div>
           <div className={styles.controls}>
-            <button className={styles.cancel} onClick={this.onCancelClick}>
+            <button className={classNames(styles.submitButton, styles.cancel)} onClick={this.onCancelClick}>
               {' '}Anuluj{' '}
             </button>
-            <button className={classNames(styles.save, this.saveButtonClass())} onClick={this.onSaveClick}>
+            <button className={classNames(styles.submitButton, styles.save, this.saveButtonClass())} onClick={this.onSaveClick}>
               {' '}Zapisz{' '}
             </button>
+            {noCommentModalOpen &&
             <NoCommentModal
-              open={noCommentModalOpen}
               onCloseCommentModal={this.handleCloseCommentModal}
               onModalSaveClick={this.handleModalSaveClick}
-            />
+          />}
           </div>
         </div>
       </DraggableWidget>

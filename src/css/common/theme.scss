@@ -56,6 +56,14 @@ $font-semi-bold: 600;
   color: $secondary-font-color;
 }
 
+%pp-header-font {
+  font-family: $open-sans;
+  font-weight: $font-semi-bold;
+  font-size: $normal-font-size;
+  user-select: none;
+  font-size: 16px;
+}
+
  %pp-category-font {
   font-family: $open-sans;
   font-weight: $font-semi-bold;

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 
 import { AnnotationPPCategories, annotationPPCategoriesLabels } from 'content-scripts/api/annotations';
 
-import PPCategoryButton from './pp-category-button/PPCategoryButton';
+import PPCategoryButton from '../PPCategoryButton/PPCategoryButton';
 import styles from './PPCategoryButtonsBar.scss';
 
 interface PPCategoryBarProps {
