@@ -1,5 +1,4 @@
-import React, { PureComponent } from 'react';
-import { PPScopeClass } from 'content-scripts/settings';
+import React from 'react';
 import Modal from 'content-scripts/components/elements/Modal/Modal';
 import classNames from 'classnames';
 import styles from './NoCommentModal.scss';
@@ -9,7 +8,7 @@ interface NoCommentModalProps {
   onModalSaveClick: () => void;
 }
 
-export default class NoCommentModal extends PureComponent<NoCommentModalProps> {
+export default class NoCommentModal extends React.PureComponent<NoCommentModalProps> {
   render() {
     const {
       onCloseCommentModal,

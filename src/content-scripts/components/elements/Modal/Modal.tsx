@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { PPScopeClass } from '../../../settings';
 
@@ -8,7 +8,7 @@ interface ModalProps {
 
 import styles from './Modal.scss';
 
-export default class Modal extends PureComponent<ModalProps> {
+export default class Modal extends React.PureComponent<ModalProps> {
     handleContentClick = (e) => {
         e.stopPropagation();
     }
