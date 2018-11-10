@@ -296,7 +296,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
         mover={this.moverElement}
         onMoved={this.onMoved}
       >
-        <div className={classNames(styles.moverFrame, styles.moverArea)} ref={this.moverElement}>
+        <div className={classNames(styles.moverFrame)} ref={this.moverElement}>
           <label className={styles.editorHeader}> Co dodajesz? </label>
           <PPCategoryButtonsBar onSetPPCategory={this.handleSetPPCategory} ppCategory={ppCategory}/>
           <div
