@@ -147,7 +147,6 @@ export default class ViewerManager extends React.Component<Partial<IViewerManage
   }
 
   render() {
-    // return this.props.visible && <Viewer/>;
-    return  <Viewer/>;
+    return this.props.visible && <Viewer/>;
   }
 }
