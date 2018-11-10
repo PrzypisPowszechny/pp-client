@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
-import styles from './Viewer.scss';
 import { hideViewer } from 'content-scripts/store/widgets/actions';
 import {
   AnnotationAPIModel, AnnotationPublishers,
@@ -16,6 +15,10 @@ import AuthorActionControls from './viewer-elements/AuthorActionControls';
 import UserActionControls from './viewer-elements/UserActionControls';
 import ppGA from 'common/pp-ga';
 import { selectAnnotation } from '../../store/api/selectors';
+
+import styles from './Viewer.scss';
+import { Icon } from 'react-icons-kit';
+import { link } from 'react-icons-kit/icomoon/link'
 
 interface IViewerItemProps {
   key: string;
@@ -140,7 +143,8 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
               onClick={this.handleAnnotationLinkClick}
               target="_blank"
             >
-              <span className={styles.annotationLinkIcon}/>
+              {/* <span className={styles.annotationLinkIcon}/> */}
+              <Icon className={styles.annotationLinkIcon} icon={link} size={11} />
               {extractHostname(annotationLink)}
             </a>
             <a

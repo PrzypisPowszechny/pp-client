@@ -2,13 +2,10 @@
   COLORS
  */
 
-$primary-font-color: #000;
-$secondary-font-color: rgb(136, 136, 136);
-
-$icon-button-color: rgb(59, 67, 71);
-$icon-button-color--selected: #2b9344;
-
-$separator-line-color: rgb(210, 212, 210);
+// color palette
+$grey-01: rgb(210, 212, 210);
+$grey-02: rgb(136, 136, 136);
+$grey-03: rgb(59, 67, 71);
 
 $additional-info-color: #5679B0;
 $clarification-color: #FDE300;
@@ -19,6 +16,15 @@ $demagog-true-color: #6ABA43;
 $demagog-false-color: #E84F2B;
 $demagog-lie-color: #FEBC1E;
 $demagog-unknown-color: #229EE5;
+
+// color usage
+$primary-font-color: #000;
+$secondary-font-color: $grey-02;
+
+$icon-button-color: $grey-03;
+$icon-button-color--selected: #2b9344;
+
+$separator-line-color: $grey-01;
 
 /*
   FONTS
@@ -48,6 +54,14 @@ $font-semi-bold: 600;
   line-height: 16.5px; 
   font-weight: $font-light;
   color: $secondary-font-color;
+}
+
+%pp-header-font {
+  font-family: $open-sans;
+  font-weight: $font-semi-bold;
+  font-size: $normal-font-size;
+  user-select: none;
+  font-size: 16px;
 }
 
  %pp-category-font {

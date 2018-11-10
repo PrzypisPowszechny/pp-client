@@ -23,9 +23,9 @@ export default class PPCategoryButton extends React.PureComponent<IPPCategoryBut
   };
 
   ppCategories = {
-    [AnnotationPPCategories.ADDITIONAL_INFO]: styles.normal,
-    [AnnotationPPCategories.CLARIFICATION]: styles.warning,
-    [AnnotationPPCategories.ERROR]: styles.alert,
+    [AnnotationPPCategories.ADDITIONAL_INFO]: styles.categoryAdditionalInfo,
+    [AnnotationPPCategories.CLARIFICATION]: styles.categoryClarification,
+    [AnnotationPPCategories.ERROR]: styles.categoryError,
   };
 
   handleClick = () => {

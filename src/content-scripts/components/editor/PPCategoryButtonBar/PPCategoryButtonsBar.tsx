@@ -2,7 +2,7 @@ import React from 'react';
 
 import { AnnotationPPCategories, annotationPPCategoriesLabels } from 'content-scripts/api/annotations';
 
-import PPCategoryButton from './pp-category-button/PPCategoryButton';
+import PPCategoryButton from '../PPCategoryButton/PPCategoryButton';
 import styles from './PPCategoryButtonsBar.scss';
 
 interface PPCategoryBarProps {
@@ -19,7 +19,6 @@ export default class PPCategoryButtonsBar extends React.PureComponent<PPCategory
 
     return (
       <div className={styles.self}>
-        <label className={styles.priorityHeader}> Co dodajesz? </label>
         <div className={styles.headerButtons}>
           <PPCategoryButton
             type={AnnotationPPCategories.ADDITIONAL_INFO}

@@ -1,0 +1,18 @@
+@import "css/common/vars/fonts";
+@import "../common.scss";
+
+.self {
+  // padding: 0 $editor-horizontal-spacing 0 $editor-horizontal-spacing;
+  // margin: $editor-vertical-spacing 0 $editor-vertical-spacing 0;
+  margin-bottom: $editor-vertical-spacing;
+
+  .headerButtons {
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+
+    :not(:first-child):not(:last-child) {
+      margin: 0 10px;
+    }
+  }
+}

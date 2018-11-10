@@ -1,7 +1,6 @@
-@import 'css/common/vars/colors';
-@import 'css/common/vars/fonts';
 @import 'css/common/buttons.scss';
 @import "css/common/vars/z-index";
+@import "css/common/theme";
 
 
 
@@ -14,33 +13,29 @@
   height: 48px;
   background-color: #D8DADA;
 
-  @extend %annotation-priority-font;
+  @extend %pp-category-font;
   text-align: center;
 
 
   &:hover,&.selected {
-    @extend %annotation-priority-font;
+    @extend %pp-category-font;
   }
 
-
-  &.normal {
-    &:hover,
-    &.selected {
-      background-color: $normal-ref-color;
+  &.category-additional-info {
+    &:hover, &.selected {
+      background-color: $additional-info-color;
     }
   }
 
-  &.warning {
-    &:hover,
-    &.selected {
-      background-color: $warning-ref-color;
+  &.category-clarification {
+    &:hover, &.selected {
+      background-color: $clarification-color;
     }
   }
 
-  &.alert {
-    &:hover,
-    &.selected {
-      background-color: $alert-ref-color;
+  &.category-error {
+    &:hover, &.selected {
+      background-color: $error-color;
     }
   }
 }
