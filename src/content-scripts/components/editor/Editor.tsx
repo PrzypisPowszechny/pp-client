@@ -19,14 +19,19 @@ import { IEditorRange } from 'content-scripts/store/widgets/reducers';
 
 import { DraggableWidget } from 'content-scripts/components/widget';
 
-import NoCommentModal from './NoCommentModal';
-import PPCategoryButtonsBar from './PPCategoryButtonsBar';
+import NoCommentModal from 'content-scripts/components/editor/NoCommentModal/NoCommentModal';
+import PPCategoryButtonsBar from 'content-scripts/components/editor/PPCategoryButtonBar/PPCategoryButtonsBar';
 import * as helpers from './helpers';
 
 import styles from './Editor.scss';
 import ppGA from 'common/pp-ga';
 import { AnnotationPPCategories } from '../../api/annotations';
 import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
+
+import { Icon } from 'react-icons-kit';
+import { link } from 'react-icons-kit/icomoon/link';
+import { priceTag } from 'react-icons-kit/icomoon/priceTag';
+import { ic_close } from 'react-icons-kit/md/ic_close';
 
 interface IEditorProps {
   appModes: AppModes;
@@ -102,9 +107,9 @@ class Editor extends React.Component<Partial<IEditorProps>,
   };
 
   static ppCategoryToClass = {
-    [AnnotationPPCategories.ADDITIONAL_INFO]: styles.priorityNormal,
-    [AnnotationPPCategories.CLARIFICATION]: styles.priorityWarning,
-    [AnnotationPPCategories.ERROR]: styles.priorityAlert,
+    [AnnotationPPCategories.ADDITIONAL_INFO]: styles.categoryAdditionalInfo,
+    [AnnotationPPCategories.CLARIFICATION]: styles.categoryClarification,
+    [AnnotationPPCategories.ERROR]: styles.categoryError,
   };
 
   static getDerivedStateFromProps(nextProps: IEditorProps, prevState: IEditorState) {
@@ -291,93 +296,97 @@ class Editor extends React.Component<Partial<IEditorProps>,
         mover={this.moverElement}
         onMoved={this.onMoved}
       >
-        <PPCategoryButtonsBar onSetPPCategory={this.handleSetPPCategory} ppCategory={ppCategory}/>
-        <div
-          className={styles.close}
-          onClick={this.onCancelClick}
-        >
-          <i className="remove icon"/>
-        </div>
-        <div className={classNames(styles.editorInput)}>
-          <div className={classNames(styles.commentTextareaWrapper)}>
-            <textarea
-              autoFocus={true}
-              name="comment"
-              value={comment}
-              onChange={this.handleInputChange}
-              placeholder="Dodaj treść przypisu"
-            />
-          </div>
+        <div className={classNames(styles.moverFrame, styles.moverArea)} ref={this.moverElement}>
+          <label className={styles.editorHeader}> Co dodajesz? </label>
+          <PPCategoryButtonsBar onSetPPCategory={this.handleSetPPCategory} ppCategory={ppCategory}/>
           <div
-            className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { [styles.hide]: commentError === '' })}
+            className={styles.close}
+            onClick={this.onCancelClick}
           >
-            {commentError}
+            <Icon icon={ic_close} size={18} />
           </div>
-        </div>
-        <div className={classNames(styles.editorInput, styles.annotationLink)}>
-          <input
-            type="text"
-            name="annotationLink"
-            className={annotationLinkError ? styles.error : ''}
-            value={annotationLink}
-            onChange={this.handleInputChange}
-            placeholder="Wklej link do źródła"
-          />
-          <i className={classNames(styles.inputIcon, 'linkify', 'icon')}/>
-          <div
-            className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { [styles.hide]: annotationLinkError === '' })}
-          >
-            {annotationLinkError}
-          </div>
-        </div>
-        <div className={classNames(styles.editorInput, styles.annotationLinkTitle)}>
-          <input
-            type="text"
-            name="annotationLinkTitle"
-            className={annotationLinkTitleError ? styles.error : ''}
-            value={annotationLinkTitle}
-            onChange={this.handleInputChange}
-            placeholder="Wpisz tytuł źródła"
-          />
-          <i className={classNames(styles.inputIcon, 'tags', 'icon')}/>
-          <div
-            className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { [styles.hide]: annotationLinkTitleError === '' })}
-          >
-            {annotationLinkTitleError}
-          </div>
-          <Popup
-            className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
-            hideOnScroll={true}
-            trigger={<div className={styles.linkHelp}><i className="help circle icon"/></div>}
-            flowing={true}
-            hoverable={true}
-          >
-            np. <i>Treść ustawy</i>, <i>Artykuł na Wikipedii</i>,<br/> <i>Nagranie wypowiedzi ministra</i>
-          </Popup>
-        </div>
-        <div className={styles.bottomBar}>
-          <div
-            className={styles.moverArea}
-            ref={this.moverElement}
-          >
-            <div className={styles.controls}>
-              <button className={styles.cancel} onClick={this.onCancelClick}>
-                {' '}Anuluj{' '}
-              </button>
-              <button className={classNames(styles.save, this.saveButtonClass())} onClick={this.onSaveClick}>
-                {' '}Zapisz{' '}
-              </button>
-              <NoCommentModal
-                open={noCommentModalOpen}
-                onCloseCommentModal={this.handleCloseCommentModal}
-                onModalSaveClick={this.handleModalSaveClick}
+          <div className={classNames(styles.editorInput)}>
+            <div className={classNames(styles.commentTextareaWrapper)}>
+              <textarea
+                autoFocus={true}
+                name="comment"
+                value={comment}
+                onChange={this.handleInputChange}
+                placeholder="Dodaj treść przypisu"
               />
             </div>
+            <div
+              className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
+                { [styles.hide]: commentError === '' })}
+            >
+              {commentError}
+            </div>
           </div>
-          <span className={styles.moverIcon}/>
+          <div className={classNames(styles.editorInput, styles.annotationLink)}>
+            <input
+              type="text"
+              name="annotationLink"
+              className={annotationLinkError ? styles.error : ''}
+              value={annotationLink}
+              onChange={this.handleInputChange}
+              placeholder="Wklej link do źródła"
+            />
+            <Popup
+              className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
+              hideOnScroll={true}
+              trigger={<Icon className={styles.inputIcon} icon={link} size={15} />}
+              flowing={true}
+              hoverable={true}
+              position="top left"
+            >
+              Adres strony, z której pochodzą <br/> informacje zawarte w przypisie
+            </Popup>
+            <div
+              className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
+                { [styles.hide]: annotationLinkError === '' })}
+            >
+              {annotationLinkError}
+            </div>
+          </div>
+          <div className={classNames(styles.editorInput, styles.annotationLinkTitle)}>
+            <input
+              type="text"
+              name="annotationLinkTitle"
+              className={annotationLinkTitleError ? styles.error : ''}
+              value={annotationLinkTitle}
+              onChange={this.handleInputChange}
+              placeholder="Wpisz tytuł źródła"
+            />
+            <Popup
+              className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
+              hideOnScroll={true}
+              trigger={<Icon className={styles.inputIcon} icon={priceTag} size={15} />}
+              flowing={true}
+              hoverable={true}
+              position="top left"
+            >
+              np. <i>Treść ustawy</i>, <i>Artykuł na Wikipedii</i>,<br/> <i>Nagranie wypowiedzi ministra</i>
+            </Popup>
+            <div
+              className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
+                { [styles.hide]: annotationLinkTitleError === '' })}
+            >
+              {annotationLinkTitleError}
+            </div>
+          </div>
+          <div className={styles.controls}>
+            <button className={classNames(styles.submitButton, styles.cancel)} onClick={this.onCancelClick}>
+              {' '}Anuluj{' '}
+            </button>
+            <button className={classNames(styles.submitButton, styles.save, this.saveButtonClass())} onClick={this.onSaveClick}>
+              {' '}Zapisz{' '}
+            </button>
+            {noCommentModalOpen &&
+            <NoCommentModal
+              onCloseCommentModal={this.handleCloseCommentModal}
+              onModalSaveClick={this.handleModalSaveClick}
+          />}
+          </div>
         </div>
       </DraggableWidget>
     );

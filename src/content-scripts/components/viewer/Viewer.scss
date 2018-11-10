@@ -209,33 +209,18 @@ li.annotation {
   width: 100%;
 }
 
-.annotation-link-container {
-  min-height: 100%;
-  margin-right: 8px;
-
-  &:hover {
-    .annotation-link, .annotation-link-title {
-      opacity: 0.8;
-      color: $secondary-font-color;
-    }
-  }
-}
-
 .annotation-link {
   @extend %pp-secondary-font;
   font-weight: $font-semi-bold;
   text-transform: uppercase;
   vertical-align: middle;
+  transition: none;
 }
 
-.annotation-link-icon::after {
-  display: inline-block;
+.annotation-link-icon {
+  color: $secondary-font-color;
   margin-right: 3px;
-  width: 12px;
-  height: 12px;
-  position: relative;
-  top:2px;
-  content: url('../../../../assets/hyperlink-icon.png');
+  transition: none;
 }
 
 .annotation-link-title {
@@ -246,6 +231,29 @@ li.annotation {
   // somebody inserted very long word, which would distort whole design
   max-width: 330px;
   display: block;
+}
+
+.annotation-link-container {
+  min-height: 100%;
+  margin-right: 8px;
+
+  &:hover {
+    .annotation-link {
+      @extend .annotation-link;
+      opacity: 0.8;
+    }
+    .annotation-link-title {
+      @extend .annotation-link-title;
+      opacity: 0.8;
+    }
+    .annotation-link-icon {
+      @extend .annotation-link-icon;
+      & * {
+        color: $secondary-font-color;
+        transition: none;
+      }
+    }
+  }
 }
 
 

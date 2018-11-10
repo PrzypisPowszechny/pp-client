@@ -19,12 +19,20 @@ $editor-font-size: 14px;
   @include pp-widget-edge();
 }
 
+.editorHeader {
+  display: inline-block;
+  font-weight: $font-semi-bold;
+  margin: 0 0 15px 0;
+  padding-top: 10px;
+  user-select: none;
+}
+
 /* fields: comment, annotationLink */
 .editor-input {
   display: block;
   padding: 0;
   position: relative;
-  margin: 0 $editor-horizontal-spacing $editor-vertical-spacing $editor-horizontal-spacing;
+  margin-bottom: $editor-horizontal-spacing;
 
   input, textarea {
     padding: 0.5em;
@@ -35,13 +43,9 @@ $editor-font-size: 14px;
     display: inline-block;
     color: #000000;
     font-weight: $font-light;
-    line-height: 1em;
+    line-height: 1.5em;
     background: none;
     resize: none;
-  }
-
-  textarea {
-    border-radius: 5px 5px 0 0;
   }
 
   input:hover, input:focus,
@@ -74,21 +78,25 @@ $editor-font-size: 14px;
 }
 
 /* annotation link field */
+.input-icon {
+  display: block;
+  position: absolute;
+  top: 10px;
+  left: 9px;
+  cursor: pointer;
+
+  &:hover {
+    color: rgb(136, 136, 136);
+  }
+}
+
 .annotation-link {
   input[type=text] {
-    padding-left: 2em;
+    padding-left: 2.1em;
   }
   .error-msg {
     left: 0;
     top: 20px;
-  }
-
-  .input-icon {
-    display: block;
-    position: absolute;
-    top: 9px;
-    left: 0;
-    width: 2em;
   }
 
 }
@@ -96,17 +104,11 @@ $editor-font-size: 14px;
 .annotation-link-title {
   margin-bottom: 0;
   input[type=text] {
-    padding-left: 2em;
-    width: 381px;
+    padding-left: 2.1em;
   }
 
   .input-icon {
-    display: block;
-    position: absolute;
-    top: 9px;
-    left: 0;
-    width: 2em;
-    line-height: 1.45em;
+    top: 11px;
   }
 
   .error-msg {
@@ -119,7 +121,7 @@ $editor-font-size: 14px;
   }
 }
 
-.mover-icon, .mover-icon::after {
+.mover-icon{
   display: none;
   position: absolute;
   margin: 0 auto;
@@ -129,7 +131,6 @@ $editor-font-size: 14px;
   width: 18px;
 
   pointer-events: none;
-  content: url('../../../../assets/three-dots.svg');
   opacity: 0.5;
 }
 
@@ -137,46 +138,48 @@ $editor-font-size: 14px;
   display: block;
 }
 
-.bottom-bar {
-  position: relative;;
-  margin: 0;
+// .bottom-bar {
+  // position: absolute;
+  // right: 20px;
+  // float: right;
+  // margin: 0;
 
   // the bottom area used for dragging
   // extend it to the very edges of the widget, so it is easy to hit
-  .mover-area {
-    display: inline-block;
-    padding: $editor-vertical-spacing $editor-horizontal-spacing;
-    width: 100%;
-    cursor: move;
+  // .mover-area {
+  //   display: block;
+  //   padding: $editor-vertical-spacing $editor-horizontal-spacing;
+  //   width: 100%;
+  //   cursor: move;
+  // }
+
+.controls {
+  float: right;
+  margin: 0;
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  padding: 5px 3px;
+
+  .submitButton {
+    @include submit-button();
+    @include button-color(#888888);
   }
 
-  .controls {
-    float: right;
-    display: inline-block;
-    padding: 5px 0;
-    min-width: 150px;
-    text-align: right;
-    vertical-align: top;
+  // use priority-specific as a baseline and darken it so it presents well as a button
+  .category-additional-info {
+    @include button-color($normal-ref-color);
+  }
 
-    button {
-      @include submit-button();
-      @include button-color(#888888);
-    }
+  .category-clarification {
+    @include button-color(darken($warning-ref-color, 3%));
+  }
 
-    // use priority-specific as a baseline and darken it so it presents well as a button
-    .priority-normal {
-      @include button-color($normal-ref-color);
-    }
-
-    .priority-warning {
-      @include button-color(darken($warning-ref-color, 3%));
-    }
-
-    .priority-alert {
-      @include button-color(darken($alert-ref-color, 3%));
-    }
+  .category-error {
+    @include button-color(darken($alert-ref-color, 3%));
   }
 }
+// }
 
 /* Some pp-editor-widget embedded elements */
 
@@ -244,4 +247,12 @@ $editor-font-size: 14px;
 
 .hide {
   display: none !important;
+}
+
+.moverFrame {
+  padding-top: $editor-horizontal-spacing;
+  padding-bottom: $editor-horizontal-spacing + 40px;
+  padding-left: $editor-vertical-spacing;
+  padding-right: $editor-vertical-spacing;
+  cursor: move;
 }
