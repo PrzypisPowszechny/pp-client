@@ -15,7 +15,9 @@ export function init() {
       // them out. That's why we look for our prefix (in webpack development mode) or suffix to collect only our errors.
       if (event.message && event.message.startsWith('ReportingObserver') && event.extra.body) {
         const { sourceFile } = event.extra.body;
-        if (sourceFile && !sourceFile.startsWith('pp-webpack://') && sourceFile.indexOf('.pp-bundle.js') === -1) {
+        if (sourceFile && (sourceFile.startsWith('pp-webpack://') || sourceFile.indexOf('.pp-bundle.js') !== -1)) {
+          return event;
+        } else {
           return null;
         }
       }
