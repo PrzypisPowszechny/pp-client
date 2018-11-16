@@ -18,7 +18,7 @@ import { selectAnnotation } from '../../store/api/selectors';
 
 import styles from './Viewer.scss';
 import { Icon } from 'react-icons-kit';
-import { link } from 'react-icons-kit/icomoon/link'
+import { link } from 'react-icons-kit/icomoon/link';
 
 interface IViewerItemProps {
   key: string;

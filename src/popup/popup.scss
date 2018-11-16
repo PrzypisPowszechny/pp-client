@@ -1,7 +1,18 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
 html, body {
   height: 171px;
   border: none;
   border-color: rgba(0, 0, 0, 0.08);
+  font-family: 'Roboto', sans-serif;
+
+  a {
+    text-decoration: none;
+    color: #000000;
+  }
+  span, p {
+    user-select: none;
+  }
 }
 
 body {
@@ -10,62 +21,112 @@ body {
 }
 
 .pp-popup {
-  max-width: 230px;
-  min-width: 230px;
+  width: 310px;
   background-color: #FFFFFF;
+}
 
-  .menu {
-    list-style: none;
-    margin: 0;
-    padding: 8px 0;
+.menu {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+}
 
-    &__item {
-      padding: 12px;
-      font-size: 14px;
-      display: flex;
-      line-height: 1.5em;
+.icon {
+  color: #757575;
+  margin-right: 10px;
+}
 
-      &__icon {
-        height: 22px;
-        margin-right: 12px;
-      }
+.menu-logo {
+  background-image: url('../../assets/popup-logo.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 80px;
+  width: 100%;
+}
 
-      a {
-        text-decoration: none;
-        color: #000000;
-      }
-    }
+.menu-item {
+  padding: 10px 20px;
+  font-size: 14px;
+  display: flex;
+  line-height: 1.5em;
+  align-items: center;
+  user-select: none;
 
-    &__sub-item {
-      @extend .menu__item;
-      margin-left: 34px;
-    }
+}
 
-    .clickable:hover {
-      background-color: rgba(0, 0, 0, 0.08);
-      cursor: pointer;
-    }
+.menu-subitem {
+  @extend .menu-item;
+  margin-left: 34px;
+}
 
-    .clickable.disabled:hover {
-      background-color: #FFFFFF;
-    }
+.clickable:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
 
-    .clickable.disabled {
-      cursor: inherit;
-      a {
-        //TODO change the icon color for disabled
-        color: #ccc;
-      }
+.negativeActive {
+  color: #e67e22;
+}
 
-    }
 
-    .clickable a.active-mode {
-      color: #603cb1;
-    }
-
-    &__separator {
-      border-color: rgba(0, 0, 0, 0.08);
-    }
-
+.clickable.disabled {
+  cursor: inherit;
+  span, .icon {
+    color: #ccc;
   }
+  &:hover {
+    background-color: #FFFFFF;
+  }
+}
+
+.clickable.active {
+  cursor: inherit;
+  span, .icon  {
+    color: #2ecc71
+  }
+  &:hover {
+    background-color: #FFFFFF;
+  }
+}
+
+.menu-separator {
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+
+.menu-bottom {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 20px;
+}
+
+.menu-header {
+  font-weight: 600;
+}
+
+.menu-text {
+  color: #616161;
+}
+
+.cta-Button {
+  background-color: #34495E;
+  color: white;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 64px;
+  box-sizing: border-box;
+  min-height: 36px;
+  border-radius: 4px;
+  border: 0;
+  margin: 0;
+  cursor: pointer;
+  display: inline-flex;
+  outline: none;
+  align-items: center;
+  user-select: none;
+  vertical-align: middle;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
 }
