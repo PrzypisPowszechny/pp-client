@@ -1,8 +1,10 @@
 import React, { ChangeEvent } from 'react';
 
-import addIcon from '../../assets/pp-add-icon.svg';
-import requestIcon from '../../assets/pp-request-icon.svg';
-import switchOffIcon from '../../assets/pp-switch-off-icon.svg';
+import { Icon } from 'react-icons-kit';
+import { ic_add_circle } from 'react-icons-kit/md/ic_add_circle';
+import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
+import { ic_block } from 'react-icons-kit/md/ic_block';
+import { ic_info_outline } from 'react-icons-kit/md/ic_info_outline';
 
 import { standardizeUrlForPageSettings } from 'common/url';
 import Toggle from './toggle/toggle';
@@ -159,33 +161,62 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
     return (
       <div className="pp-popup">
         <ul className="menu">
+          <div>
+            <div className="menu-logo"/>
+          </div>
+          <hr className="menu-separator"/>
           <li
-            className={classNames('menu__item', 'clickable',
-              { disabled: isAnnotationMode || isExtensionDisabled || isCurrentPageDisabled })}
+            className={classNames('menu-item', 'clickable',
+              { disabled: isExtensionDisabled || isCurrentPageDisabled },
+              { active: isAnnotationMode })}
             onClick={this.handleAnnotationModeClick}
           >
-            <img className="menu__item__icon" src={addIcon}/>
+            <Icon className="icon" icon={ic_add_circle} size={25} />
             {isAnnotationMode ?
-              <a className="active-mode">Dodajesz przypis... </a>
-              : <a>Dodaj przypis</a>
+              <span className="active-mode">Dodajesz przypis </span>
+              : <span>Dodaj przypis</span>
             }
           </li>
-          <hr className="menu__separator"/>
-          <li className="menu__item">
-            <img className="menu__item__icon" src={switchOffIcon}/>
-            <span>Ukryj przypisy</span>
-            <Toggle
-              checked={isExtensionDisabled}
-              onChange={this.handleDisabledExtensionChange}
-            />
+          <li
+            className={classNames('menu-item', 'clickable')}
+          >
+            <Icon className="icon" icon={ic_live_help} size={25} />
+            <span>Poproś o przypis</span>
           </li>
-          <li className="menu__sub-item">
-            <span>tylko na tej stronie</span>
+          <hr className="menu-separator"/>
+          <li className="menu-item">
+            <Icon className="icon" icon={ic_block} size={25} />
+            <span>Wyłącz przypisy</span>
+          </li>
+          <li className="menu-subitem">
+            <span className={classNames({ negativeActive: isCurrentPageDisabled })}>na tej stronie</span>
             <Toggle
               checked={isCurrentPageDisabled}
               onChange={this.handleDisabledPageChange}
             />
           </li>
+          <li className="menu-subitem">
+            <span className={classNames({ negativeActive: isExtensionDisabled })}>wszędzie</span>
+            <Toggle
+              checked={isExtensionDisabled}
+              onChange={this.handleDisabledExtensionChange}
+            />
+          </li>
+          <hr className="menu-separator"/>
+          <a
+            href="https://przypispowszechny.pl/site/about/"
+            className={classNames('menu-item', 'clickable')}
+            target="_blank"
+          >
+            <Icon className="icon" icon={ic_info_outline} size={25} />
+            <span>O projekcie</span>
+          </a>
+          <hr className="menu-separator"/>
+          <div className="menu-bottom">
+            <p className="menu-header">Pomóż nam ulepszać Przypis Powszechny</p>
+            <p className="menu-text">Coś nie działa? Uważasz, że czegoś brakuje? Coś Cię zirytowało?</p>
+            <button className="cta-Button">Powiedz nam o tym!</button>
+          </div>
         </ul>
       </div>
     );
