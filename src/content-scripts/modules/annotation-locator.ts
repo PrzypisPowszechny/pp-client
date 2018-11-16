@@ -65,6 +65,10 @@ function annotationLocator() {
     const locatedNumber = locatedAnnotations.length;
     setExtensionBadge(locatedNumber > 0 ? locatedNumber.toString() : '');
 
+    if (unlocatedAnnotations.length > 0) {
+      console.warn(`${unlocatedAnnotations.length} annotations have not been located`);
+    }
+    console.info(`${locatedAnnotations.length} annotations have been located`);
     // save for later, to check if updates are needed
     // Do i before dispatching, or we'll into inifite dispatch loop!
     instance.annotationIds = annotationIds;
