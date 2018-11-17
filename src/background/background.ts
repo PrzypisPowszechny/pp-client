@@ -43,10 +43,17 @@ function returnExtensionCookie(request, sender, sendResponse) {
       url: PPSettings.API_URL,
       name: request.name,
     }, (cookie: chrome.cookies.Cookie) => {
-      sendResponse({
-        name: cookie.name,
-        value: cookie.value,
-      });
+      if (cookie) {
+        sendResponse({
+          name: cookie.name,
+          value: cookie.value,
+        });
+      } else {
+        sendResponse({
+          name: request.name,
+          value: null,
+        });
+      }
     });
   }
   return true;
