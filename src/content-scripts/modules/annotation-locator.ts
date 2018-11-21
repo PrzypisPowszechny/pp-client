@@ -14,6 +14,7 @@ import { Range as XPathRange } from 'xpath-range';
 import { escapeRegExp } from 'tslint/lib/utils';
 import { annotationRootNode } from '../settings';
 import * as Sentry from '@sentry/browser';
+import { setAnnotationLocationInfo } from '../dom-notifications';
 
 let instance;
 
@@ -83,6 +84,9 @@ function annotationLocator() {
       console.warn(`${unlocatedAnnotations.length} annotations have not been located`);
     }
     console.info(`${locatedAnnotations.length} annotations have been located`);
+
+    // Save the information to DOM for reads in selenium
+    setAnnotationLocationInfo(locatedAnnotations.length, unlocatedAnnotations.length);
 
     // save for later, to check if updates are needed
     // Do it before dispatching, or we'll get into inifite dispatch loop!
