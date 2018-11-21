@@ -7,7 +7,7 @@ const common = require('../base.config');
 
 const localPath = (...args) => path.resolve(__dirname, ...args);
 
-module.exports = (env, argv) => merge(common.config(env, argv), {
+module.exports = (env, argv) => merge(common.getConfig(env, argv), {
   output: {
     path: common.BUILD_DIR,
     publicPath: './',

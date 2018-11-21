@@ -7,7 +7,7 @@ const devPlugins = require('../dev.plugins');
 
 const localPath = (...args) => path.resolve(__dirname, ...args);
 
-module.exports = (env, argv) => merge(common.config(env, argv), {
+module.exports = (env, argv) => merge(common.getConfig(env, argv), {
   devtool: 'inline-source-map',
   devServer: {
     contentBase: '/dist',
