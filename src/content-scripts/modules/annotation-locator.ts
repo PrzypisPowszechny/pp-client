@@ -13,6 +13,7 @@ import { AnnotationAPIModel } from '../api/annotations';
 import { Range as XPathRange } from 'xpath-range';
 import { escapeRegExp } from 'tslint/lib/utils';
 import { annotationRootNode } from '../settings';
+import * as Sentry from '@sentry/browser';
 
 let instance;
 
@@ -35,14 +36,28 @@ function deinit() {
   instance.unsubscribe();
 }
 
+function sendLocationEvent(located: boolean, annotation: AnnotationAPIModel) {
+  Sentry.withScope((scope) => {
+    scope.setExtra('details', `quote=${annotation.attributes.quote}`);
+    if (located) {
+      Sentry.captureEvent({
+        message: `annotation_located:${window.location.href}`,
+      });
+    } else {
+      Sentry.captureEvent({
+        message: `annotation_unlocated:${window.location.href}`,
+      });
+    }
+  });
+}
+
 function annotationLocator() {
   const annotations: AnnotationAPIModel[] = selectAnnotations(store.getState());
   const annotationIds: string[] = annotations.map(annotation => annotation.id);
-
   // if annotation items have changed, locate them within the DOM
   if (!_isEqual(annotationIds, instance.annotationIds)) {
     const locatedAnnotations: LocatedAnnotation[] = [];
-    const unlocatedAnnotations: string[] = [];
+    const unlocatedAnnotations: AnnotationAPIModel[] = [];
     for (const annotation of annotations) {
       const { quote, range } = annotation.attributes;
       let locatedRange;
@@ -57,7 +72,10 @@ function annotationLocator() {
           range: locatedRange,
         });
       } else {
-        unlocatedAnnotations.push(annotation.id);
+        unlocatedAnnotations.push(annotation);
+        if (!PPSettings.DEV_SENTRY_UNLOCATED_IGNORE) {
+          sendLocationEvent(false, annotation);
+        }
       }
     }
 
@@ -65,12 +83,12 @@ function annotationLocator() {
       console.warn(`${unlocatedAnnotations.length} annotations have not been located`);
     }
     console.info(`${locatedAnnotations.length} annotations have been located`);
-    // save for later, to check if updates are needed
-    // Do i before dispatching, or we'll into inifite dispatch loop!
-    instance.annotationIds = annotationIds;
-    store.dispatch(locateAnnotations(locatedAnnotations, unlocatedAnnotations));
-  }
 
+    // save for later, to check if updates are needed
+    // Do it before dispatching, or we'll get into inifite dispatch loop!
+    instance.annotationIds = annotationIds;
+    store.dispatch(locateAnnotations(locatedAnnotations, unlocatedAnnotations.map(annotation => annotation.id)));
+  }
 }
 
 function findUniqueTextInDOMAsRange(quote: string): XPathRange.SerializedRange {
