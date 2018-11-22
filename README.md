@@ -219,6 +219,14 @@ Notes:
 - you **can** run e2e tests against hot reloading build, just remember about `PP_API` match ;)  
 
 
+### annotation validation
+```
+npm run validate-annotations
+```
+Notes:
+- sentry information is logged in a separate sentry project
+- only actual exceptions are logged to sentry (not unlocated annotations)
+
 # Architecture
 
 ![pp-0 2-architecture](https://user-images.githubusercontent.com/6314663/43015120-ddd489cc-8c4e-11e8-84da-2a5e9a374396.png)

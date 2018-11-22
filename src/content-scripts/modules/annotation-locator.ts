@@ -56,8 +56,9 @@ function sendLocationEvent(located: boolean, annotation: AnnotationAPIModel) {
 function annotationLocator() {
   const annotations: AnnotationAPIModel[] = selectAnnotations(store.getState());
   const annotationIds: string[] = annotations.map(annotation => annotation.id);
+  const hasLoaded: boolean = store.getState().annotations.hasLoaded;
   // if annotation items have changed, locate them within the DOM
-  if (!_isEqual(annotationIds, instance.annotationIds)) {
+  if (!_isEqual(annotationIds, instance.annotationIds) || hasLoaded !== instance.hasLoaded) {
     const locatedAnnotations: LocatedAnnotation[] = [];
     const unlocatedAnnotations: AnnotationAPIModel[] = [];
     for (const annotation of annotations) {
@@ -89,18 +90,17 @@ function annotationLocator() {
     }
     console.info(`${locatedAnnotations.length} annotations have been located`);
 
-    // Save the information to DOM for reads in selenium
-    setAnnotationLocationInfo(locatedAnnotations.length, unlocatedAnnotations.length);
+    if (store.getState().annotations.hasLoaded) {
+      // If the annotations (or lack thereof) have been returned from the server,
+      // save the information to DOM for reads in selenium
+      setAnnotationLocationInfo(locatedAnnotations.length, unlocatedAnnotations.length);
+    }
 
     // save for later, to check if updates are needed
     // Do it before dispatching, or we'll get into inifite dispatch loop!
     instance.annotationIds = annotationIds;
-<<<<<<< HEAD
-    store.dispatch(locateAnnotations(locatedAnnotations, unlocatedAnnotations));
-
-=======
+    instance.hasLoaded = hasLoaded;
     store.dispatch(locateAnnotations(locatedAnnotations, unlocatedAnnotations.map(annotation => annotation.id)));
->>>>>>> Add sending to sentry "unlocated_annotation" information + additional sentry switches
   }
 }
 
