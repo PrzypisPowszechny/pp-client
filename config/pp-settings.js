@@ -68,7 +68,6 @@ function getApi(env, mode) {
 }
 
 
-
 const SENTRY_DSN_DEV = 'https://3166a82a0a684e459e01b69db6d4db61@sentry.io/1305142';
 const SENTRY_DSN_PROD = 'https://d2b3d8c96d404a44b41d9334e1b6733d@sentry.io/1305137';
 const SENTRY_DSN_ANN_VALIDATE = 'https://207c88378fc246498a3403e284a7b43d@sentry.io/1324868';
