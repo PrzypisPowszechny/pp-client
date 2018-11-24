@@ -14,7 +14,7 @@ import { Range as XPathRange } from 'xpath-range';
 import { escapeRegExp } from 'tslint/lib/utils';
 import { annotationRootNode } from '../settings';
 import * as Sentry from '@sentry/browser';
-import { setAnnotationLocationInfo } from '../dom-notifications';
+import * as DOMNotifications from '../dom-notifications';
 
 let instance;
 
@@ -58,7 +58,8 @@ function annotationLocator() {
   const hasLoaded: boolean = store.getState().annotations.hasLoaded;
   // if annotation items have changed, locate them within the DOM
   if (!_isEqual(annotationIds, instance.annotationIds) || hasLoaded !== instance.hasLoaded) {
-    const locatedAnnotations: LocatedAnnotation[] = [];
+    const annotationLocations: LocatedAnnotation[] = [];
+    const locatedAnnotations: AnnotationAPIModel[] = [];
     const unlocatedAnnotations: AnnotationAPIModel[] = [];
     for (const annotation of annotations) {
       const { quote, range } = annotation.attributes;
@@ -69,7 +70,8 @@ function annotationLocator() {
         locatedRange = findUniqueTextInDOMAsRange(quote);
       }
       if (locatedRange) {
-        locatedAnnotations.push({
+        locatedAnnotations.push(annotation);
+        annotationLocations.push({
           annotationId: annotation.id,
           range: locatedRange,
         });
@@ -89,14 +91,14 @@ function annotationLocator() {
     if (store.getState().annotations.hasLoaded) {
       // If the annotations (or lack thereof) have been returned from the server,
       // save the information to DOM for reads in selenium
-      setAnnotationLocationInfo(locatedAnnotations.length, unlocatedAnnotations.length);
+      DOMNotifications.setAnnotationLocationInfo({ located: locatedAnnotations, unlocated: unlocatedAnnotations });
     }
 
     // save for later, to check if updates are needed
     // Do it before dispatching, or we'll get into inifite dispatch loop!
     instance.annotationIds = annotationIds;
     instance.hasLoaded = hasLoaded;
-    store.dispatch(locateAnnotations(locatedAnnotations, unlocatedAnnotations.map(annotation => annotation.id)));
+    store.dispatch(locateAnnotations(annotationLocations, unlocatedAnnotations.map(annotation => annotation.id)));
   }
 }
 

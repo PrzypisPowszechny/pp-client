@@ -4,28 +4,32 @@
  * useful for selenium automation, where console logs cannot be easily accessed
  */
 
+import { AnnotationAPIModel } from './api/annotations';
+
 export const PP_DOM_NOTIFICATION_ID = 'pp-dom-notification-element';
 
-function getOrCreatePPNotificationDiv() {
+function getPPNotificationDiv() {
   let node = document.getElementById(PP_DOM_NOTIFICATION_ID);
   if (!node) {
     node = document.createElement('div');
     node.id = PP_DOM_NOTIFICATION_ID;
-    window.document.body.appendChild(node);
   }
   return node;
 }
 
-export function setAnnotationLocationInfo(located: number, unlocated: number) {
-  const node = getOrCreatePPNotificationDiv();
-  node.dataset.located = String(located);
-  node.dataset.unlocated = String(unlocated);
+export interface DomNotificationsLocationInfo {
+  located: AnnotationAPIModel[];
+  unlocated: AnnotationAPIModel[];
 }
 
-export async function seleniumGetAnnotationLocationInfo(seleniumNode) {
-  return {
-    located: Number(await seleniumNode.getAttribute('data-located')),
-    unlocated: Number(await seleniumNode.getAttribute('data-unlocated')),
-  };
+export function setAnnotationLocationInfo(info: DomNotificationsLocationInfo) {
+  const node = getPPNotificationDiv();
+  node.dataset.location_info = JSON.stringify(info);
+  // Insert the div with the data set (so selenium does not capture it with missing attributes)
+  window.document.body.appendChild(node);
 
+}
+
+export async function seleniumGetAnnotationLocationInfo(seleniumNode): Promise<DomNotificationsLocationInfo> {
+  return await JSON.parse(await seleniumNode.getAttribute('data-location_info'));
 }
