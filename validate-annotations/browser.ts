@@ -1,23 +1,23 @@
 import { Builder, By, Key, ActionSequence, Button } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome';
 import firefox from 'selenium-webdriver/firefox';
-import * as e2ePPSettings from './settings';
+import * as settings from './settings';
 
 export async function buildBrowser() {
-  const browser = new Builder().forBrowser(e2ePPSettings.BROWSER)
+  const browser = new Builder().forBrowser(settings.BROWSER)
   // In chrome extension are disabled when running headless
   .setChromeOptions(new chrome.Options().addArguments('load-extension=./dist/browser-extension'))
   // Firefox not used currently
-  .setFirefoxOptions(new firefox.Options().headless().windowSize(e2ePPSettings.SCREEN))
+  .setFirefoxOptions(new firefox.Options().headless().windowSize(settings.SCREEN))
   .build();
 
   await browser.manage().setTimeouts({
-    implicit: e2ePPSettings.TIMEOUT,
-    pageLoad: e2ePPSettings.TIMEOUT,
-    script: e2ePPSettings.TIMEOUT,
+    implicit: 100000,
+    pageLoad: 10000,
+    script: 10000,
   });
 
-  jasmine.DEFAULT_TIMEOUT_INTERVAL = e2ePPSettings.TIMEOUT;
+  jasmine.DEFAULT_TIMEOUT_INTERVAL = settings.TIMEOUT;
 
   return browser;
 }
