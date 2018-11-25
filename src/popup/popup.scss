@@ -32,8 +32,22 @@ body {
 }
 
 .icon {
-  color: #757575;
+  color: #34495E;
   margin-right: 10px;
+}
+
+.menu-top {
+  display: flex;
+
+  .icon {
+    margin: 0;
+    cursor: pointer;
+    height: 18px;
+
+    &:hover {
+      color: #ccc;
+    }
+  }
 }
 
 .menu-logo {
@@ -41,26 +55,33 @@ body {
   background-size: contain;
   background-repeat: no-repeat;
   height: 80px;
-  width: 100%;
+  width: 90%;
 }
 
 .menu-item {
   padding: 10px 20px;
   font-size: 14px;
-  display: flex;
   line-height: 1.5em;
-  align-items: center;
   user-select: none;
 
 }
 
 .menu-subitem {
   @extend .menu-item;
-  margin-left: 34px;
+  padding: 7px 20px;
+  margin-left: 36px;
+  display: flex;
+  align-items: center;
+}
+
+.menu-item.primary {
+  span, .icon  {
+    color: #34495E;
+  }
 }
 
 .clickable:hover {
-  background-color: rgba(0, 0, 0, 0.08);
+  background-color: rgba(116, 23, 23, 0.08);
   cursor: pointer;
 }
 
@@ -106,6 +127,13 @@ body {
 
 .menu-text {
   color: #616161;
+  font-size: 12px;
+}
+
+.caption {
+  color: #616161;
+  font-size: 11px;
+  margin-left: 36px;
 }
 
 .cta-Button {
