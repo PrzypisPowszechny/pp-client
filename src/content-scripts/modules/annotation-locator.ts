@@ -111,14 +111,23 @@ function findUniqueTextInDOMAsRange(quote: string): XPathRange.SerializedRange {
     withinRange: searchScopeRange,
     direction: 'forward',
   };
+
   const range = rangy.createRange();
   // 1. Escape the characters (e.g. '.', '(', ')') having special meaning in regex
   // 2. Replace spaces with \s+ for more robustness
   // todo consider removing some other characters not essential to the sentence content
-  const searchRegexp = escapeRegExp(quote.trim()).replace(/\s/, '\\s+');
+
+  // const modifiedQuote = quote.trim();
+  const modifiedQuote = quote.split('\n')[0].replace(/\s*\([^()]+przyp\.\sred\.\)\s*/gi, ' ').replace(/\s*\([….]+\)\s*/g, ' ').trim();
+  console.log(modifiedQuote);
+  // let searchRegexp = modifiedQuote.replace(/[.,-]/g, '$1?');
+  const searchRegexp = escapeRegExp(modifiedQuote).replace(/\s/g, '\\s*').replace(/([-,–„”…]|\\\.)/g, '.');
+  // const searchRegexp = modifiedQuote;
+  console.log(searchRegexp);
 
   // Assume there is only one text like this on the page and return the first one
-  if (range.findText(new RegExp(searchRegexp), options)) {
+  if (range.findText(new RegExp(searchRegexp, 'i'), options)) {
+    // if (range.findText(new RegExp(searchRegexp), options)) {
     return new XPathRange.BrowserRange(range).normalize().limit(annotationRootNode()).serialize(annotationRootNode());
   } else {
     return null;
