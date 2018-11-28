@@ -13,6 +13,7 @@ import { AnnotationAPIModel } from '../api/annotations';
 import { Range as XPathRange } from 'xpath-range';
 import { escapeRegExp } from 'tslint/lib/utils';
 import { annotationRootNode } from '../settings';
+import { setExtensionBadge } from '../messages';
 
 let instance;
 
@@ -60,10 +61,15 @@ function annotationLocator() {
         unlocatedAnnotations.push(annotation.id);
       }
     }
+
+    const locatedNumber = locatedAnnotations.length;
+    setExtensionBadge(locatedNumber > 0 ? locatedNumber.toString() : '');
+
     // save for later, to check if updates are needed
     // Do i before dispatching, or we'll into inifite dispatch loop!
     instance.annotationIds = annotationIds;
     store.dispatch(locateAnnotations(locatedAnnotations, unlocatedAnnotations));
+
   }
 
 }

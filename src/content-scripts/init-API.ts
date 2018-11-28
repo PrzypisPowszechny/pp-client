@@ -1,20 +1,7 @@
 import store from './store/store';
 import axios from 'axios';
 import { setAxiosConfig } from 'redux-json-api';
-
-function getExtensionCookie(name: string) {
-  // Read special per-extension cookie
-  // available not for the host domain (unlike traditional website cookies) but for this particular extension client
-  return new Promise((resolve) => {
-    chrome.runtime.sendMessage({ action: 'GET_COOKIE', name }, (response) => {
-      if (response) {
-        resolve(response.value);
-      } else {
-        resolve(null);
-      }
-    });
-  });
-}
+import { getExtensionCookie } from './messages';
 
 export function configureAPIRequests() {
   /*

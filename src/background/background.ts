@@ -1,4 +1,5 @@
 import * as sentry from '../common/sentry';
+
 sentry.init();
 
 import InstalledDetails = chrome.runtime.InstalledDetails;
@@ -10,6 +11,7 @@ console.log('Przypis background script!');
 
 // analytics
 import ppGA from 'common/pp-ga/index';
+import { returnExtensionCookie, setBadge } from './messages';
 
 function onContextMenuAnnotate() {
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
@@ -37,31 +39,13 @@ function onInstalled(details: InstalledDetails) {
   });
 }
 
-function returnExtensionCookie(request, sender, sendResponse) {
-  if (request.action === 'GET_COOKIE') {
-    chrome.cookies.get({
-      url: PPSettings.API_URL,
-      name: request.name,
-    }, (cookie: chrome.cookies.Cookie) => {
-      if (cookie) {
-        sendResponse({
-          name: cookie.name,
-          value: cookie.value,
-        });
-      } else {
-        sendResponse({
-          name: request.name,
-          value: null,
-        });
-      }
-    });
-  }
-  return true;
-}
-
 ppGA.init();
 
 chrome.runtime.onInstalled.addListener(onInstalled);
 chrome.runtime.setUninstallURL(PPSettings.SITE_URL + '/extension-uninstalled/');
 chrome.runtime.onMessage.addListener(ppGA.sendEventFromMessage);
+/*
+ * Message handlers
+ */
+chrome.runtime.onMessage.addListener(setBadge);
 chrome.runtime.onMessage.addListener(returnExtensionCookie);
