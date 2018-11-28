@@ -12,8 +12,8 @@ export async function buildBrowser() {
   .build();
 
   await browser.manage().setTimeouts({
-    implicit: 100000,
-    pageLoad: 10000,
+    implicit: 5000,
+    pageLoad: 8000,
     script: 10000,
   });
 
