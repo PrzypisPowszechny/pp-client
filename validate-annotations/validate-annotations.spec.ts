@@ -22,6 +22,19 @@ const fileConfig = {
   summary: `${outputDir}/summary.txt`,
 };
 
+async function fetchRetry(url, options, n) {
+  let error;
+  for (let i = 0; i < n; i++) {
+    try {
+      return await fetch(url, options);
+    } catch (err) {
+      error = err;
+      await sleep(2000);
+    }
+  }
+  throw error;
+}
+
 async function clearOutputDir() {
   return await new Promise((resolve) => {
     rimraf(outputDir, () => {
@@ -36,6 +49,10 @@ async function clearOutputDir() {
   });
 }
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 describe('Extension locates annotations', () => {
   let browser;
 
@@ -44,7 +61,7 @@ describe('Extension locates annotations', () => {
   });
 
   // Time to wait after the document is initialised until annotations are located
-  const locateAnnotationsTimeout = 10000;
+  const locateAnnotationsTimeout = 3000;
 
   test('Count all annotations', async () => {
     await clearOutputDir();
@@ -54,17 +71,18 @@ describe('Extension locates annotations', () => {
     let websiteFails = 0;
     let annotationCount = 0;
     const visitedURLs = [];
-
-    const pageLimit = 10;
+    const skip = 0;
+    const pageLimit = 100;
+    const sample = 100000000000;
     let page = 0;
     let response;
 
-    while (!response || response.data.length > 0) {
+    while ((!response || response.data.length > 0) && locatedSum + unlocatedSum <= sample) {
       const annotationEndpoint = `${validateAnnotationsPPSettings.API_URL}/annotations`;
-      const url = encodeURI(`${annotationEndpoint}?page[limit]=${pageLimit}&page[offset]=${page * pageLimit}`);
+      const url = encodeURI(`${annotationEndpoint}?page[limit]=${pageLimit}&page[offset]=${page * (pageLimit + skip)}`);
       console.log(`fetching annotations: ${url}`);
-      response = await fetch(url)
-        .catch(error => fail(`Could not receive annotation from the endpoint: ${url}`))
+      response = await fetchRetry(url, {}, 10)
+        .catch(error => fail(`Could not receive annotation from the endpoint: ${url}, error: ${error}`))
         .then(res => res.json())
         .then(async (res) => {
           for (const annotation of res.data) {
@@ -78,13 +96,14 @@ describe('Extension locates annotations', () => {
                 await browser.get(siteUrl);
               } catch (err) {
                 // todo check error type
+                console.log(`Timeout loading website! Ignoring website ${siteUrl}`);
                 fs.appendFile(fileConfig.websites,
                   [siteUrl, 'NaN', 'NaN', 'Unsuccessful loading website (perhaps timeout)'].join('\t') + '\n', (err) => {
                   });
                 websiteFails++;
                 continue;
               }
-
+              console.log(`Waiting until annotations are located: ${siteUrl}`);
               let node;
               // wait until annotations are located
               const hrstart = process.hrtime();
@@ -94,6 +113,7 @@ describe('Extension locates annotations', () => {
                   locateAnnotationsTimeout);
               } catch (err) {
                 // todo check error type
+                console.log(`Timeout locating annotations! Ignoring website ${siteUrl}`);
                 fs.appendFile(fileConfig.websites,
                   [siteUrl, 'NaN', 'NaN', 'Unsuccessful retrieving annotation location info (perhaps timeout)'].join('\t') + '\n', (err) => {
                   });
