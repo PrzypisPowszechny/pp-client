@@ -1,17 +1,14 @@
-import * as sentry from '../common/sentry';
-
-sentry.init();
-
-import InstalledDetails = chrome.runtime.InstalledDetails;
-
-console.log('Przypis background script!');
-
 // NOTE: This page is also used for hot reloading in webpack-chrome-extension-reloader
 // (so it must be present at least in development)
 
-// analytics
-import ppGA from 'common/pp-ga/index';
+import * as sentry from '../common/sentry';
+sentry.init();
+
+console.log('Przypis background script!');
+
+import InstalledDetails = chrome.runtime.InstalledDetails;
 import { returnExtensionCookie, setBadge } from './messages';
+import ppGA from 'common/pp-ga/index';
 
 function onContextMenuAnnotate() {
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
@@ -19,7 +16,15 @@ function onContextMenuAnnotate() {
   });
 }
 
-function onInstalled(details: InstalledDetails) {
+function contextMenuOnInstalled(details: InstalledDetails) {
+  chrome.contextMenus.create({
+    title: 'Dodaj przypis',
+    contexts: ['selection'],
+    onclick: onContextMenuAnnotate,
+  });
+}
+
+function ppGAOnInstalled(details: InstalledDetails) {
   switch (details.reason) {
     case 'install':
       ppGA.extensionInstalled();
@@ -31,21 +36,24 @@ function onInstalled(details: InstalledDetails) {
       // ignore 'chrome_update' and 'shared_module_update'
       break;
   }
-
-  chrome.contextMenus.create({
-    title: 'Dodaj przypis',
-    contexts: ['selection'],
-    onclick: onContextMenuAnnotate,
-  });
 }
 
-ppGA.init();
-
-chrome.runtime.onInstalled.addListener(onInstalled);
+/*
+ * Basic extension settings
+ */
 chrome.runtime.setUninstallURL(PPSettings.SITE_URL + '/extension-uninstalled/');
-chrome.runtime.onMessage.addListener(ppGA.sendEventFromMessage);
+chrome.runtime.onInstalled.addListener(contextMenuOnInstalled);
+
 /*
  * Message handlers
  */
 chrome.runtime.onMessage.addListener(setBadge);
 chrome.runtime.onMessage.addListener(returnExtensionCookie);
+
+/*
+ * Google analytics
+ */
+
+ppGA.init();
+chrome.runtime.onInstalled.addListener(ppGAOnInstalled);
+chrome.runtime.onMessage.addListener(ppGA.sendEventFromMessage);
