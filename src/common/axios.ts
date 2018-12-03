@@ -3,7 +3,9 @@ import { getExtensionCookie } from './messages';
 
 export function configureAxios(getUrl: () => Promise<string>) {
   /*
-   * Crucial configuration:
+   * Crucial configuration needed for (almost) all API requests
+   * -- common for content scripts, popup and background part of the extension
+   *
    * 1. Add PP-SITE-URL header (used to protect browsing history as opposed to ordinary GET parameters)
    * consumed by API in annotation list endpoint
    * 2. ADD CSRF token header for all state-changing requests

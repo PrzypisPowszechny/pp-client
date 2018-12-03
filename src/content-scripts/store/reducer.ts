@@ -4,8 +4,8 @@ import widgets, { WidgetReducer } from './widgets/reducers';
 import { AppModes } from './appModes/types';
 import appModes from './appModes/reducers';
 import textSelector from './textSelector/reducers';
-import { AnnotationAPIModel } from 'content-scripts/api/annotations';
-import { AnnotationUpvoteAPIModel } from 'content-scripts/api/annotation-upvotes';
+import { AnnotationAPIModel } from 'common/api/annotations';
+import { AnnotationUpvoteAPIModel } from 'common/api/annotation-upvotes';
 import { AnnotationsState } from './annotations/types';
 import annotations from './annotations/reducers';
 

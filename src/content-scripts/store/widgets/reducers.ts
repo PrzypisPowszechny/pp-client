@@ -7,7 +7,7 @@ import {
 } from './actions';
 import _difference from 'lodash/difference';
 import { API_DELETED } from 'redux-json-api/lib/constants';
-import { AnnotationResourceType } from 'content-scripts/api/annotations';
+import { AnnotationResourceType } from 'common/api/annotations';
 import { combineReducers } from 'redux';
 import { MODIFY_APP_MODES } from '../appModes/actions';
 import { isAnnotationMode } from 'content-scripts/store/appModes/selectors';

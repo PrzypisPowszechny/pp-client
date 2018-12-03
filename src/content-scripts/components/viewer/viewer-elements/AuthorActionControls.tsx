@@ -10,7 +10,7 @@ import {
   openViewerDeleteModal,
   showEditorAnnotation,
 } from 'content-scripts/store/widgets/actions';
-import { AnnotationAPIModel } from 'content-scripts/api/annotations';
+import { AnnotationAPIModel } from 'common/api/annotations';
 import Timer = NodeJS.Timer;
 import ppGA from 'common/pp-ga';
 

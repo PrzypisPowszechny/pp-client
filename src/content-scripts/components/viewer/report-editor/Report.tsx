@@ -2,8 +2,8 @@ import React from 'react';
 import classNames from 'classnames';
 
 import styles from './ReportEditor.scss';
-import { AnnotationAPIModel } from 'content-scripts/api/annotations';
-import { AnnotationReportAPIModel, DataResponse, Reasons } from 'content-scripts/api/annotation-reports';
+import { AnnotationAPIModel } from 'common/api/annotations';
+import { AnnotationReportAPIModel, DataResponse, Reasons } from 'common/api/annotation-reports';
 import { PPScopeClass } from 'content-scripts/settings';
 import ppGA from 'common/pp-ga';
 

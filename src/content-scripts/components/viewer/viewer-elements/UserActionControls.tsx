@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import styles from '../Viewer.scss';
 import { hideViewer } from 'content-scripts/store/widgets/actions';
-import { AnnotationAPIModel } from 'content-scripts/api/annotations';
+import { AnnotationAPIModel } from 'common/api/annotations';
 import Upvote from './Upvote';
 import UserActionDialog from './UserActionDialog';
 import ppGA from 'common/pp-ga';

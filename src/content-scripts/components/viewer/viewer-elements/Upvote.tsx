@@ -6,10 +6,10 @@ import { Popup } from 'semantic-ui-react';
 import { Icon } from 'react-icons-kit';
 import { ic_star } from 'react-icons-kit/md/ic_star';
 import styles from '../Viewer.scss';
-import { AnnotationResourceType, AnnotationAPIModel } from 'content-scripts/api/annotations';
+import { AnnotationResourceType, AnnotationAPIModel } from 'common/api/annotations';
 import {
   AnnotationUpvoteResourceType, AnnotationUpvoteAPIModel, AnnotationUpvoteAPICreateModel,
-} from 'content-scripts/api/annotation-upvotes';
+} from 'common/api/annotation-upvotes';
 import { PPScopeClass } from 'content-scripts/settings';
 import ppGA from 'common/pp-ga';
 import { selectUpvote } from '../../../store/api/selectors';
