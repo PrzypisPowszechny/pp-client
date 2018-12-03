@@ -21,6 +21,8 @@ import {
 import { selectModeForCurrentPage } from '../store/appModes/selectors';
 import { setSelectionRange, showEditorAnnotation } from '../store/widgets/actions';
 import ppGA from 'common/pp-ga';
+import axios from 'axios';
+import { saveAnnotationRequest } from '../../common/api/utils';
 
 let handlers;
 
@@ -45,14 +47,15 @@ function init() {
     selector,
   };
 
-  chrome.runtime.onMessage.addListener(contextMenuAnnotateCallback);
+  chrome.runtime.onMessage.addListener(contextMenuCallback);
 
   // This special hook for selenium e2e test to open editor as context menu click is out of selenium's control...
   document.addEventListener('EMULATE_ON_CONTEXT_MENU_ANNOTATE', annotateCommand);
+  document.addEventListener('EMULATE_ON_CONTEXT_MENU_ANNOTATION_REQUEST', annotationRequestCommand);
 }
 
 export function deinit() {
-  chrome.runtime.onMessage.removeListener(contextMenuAnnotateCallback);
+  chrome.runtime.onMessage.removeListener(contextMenuCallback);
   // (todo) deinitialize TextSelector
 }
 
@@ -78,9 +81,37 @@ function selectionChangeCallback(
   }
 }
 
-function contextMenuAnnotateCallback(request, sender) {
+function contextMenuCallback(request, sender) {
   if (request.action === 'ANNOTATE') {
     annotateCommand();
+  }
+  if (request.action === 'ANNOTATION_REQUEST') {
+    annotationRequestCommand();
+  }
+}
+
+function tryGetSingleSelection() {
+  const selection = handlers.selector.captureDocumentSelection();
+  if (selection.length === 1) {
+    return selection[0];
+  } else if (selection.length > 1) {
+    console.warn('PP: more than one selected range is not supported');
+    return null;
+  }
+}
+
+function annotationRequestCommand() {
+  const selection = tryGetSingleSelection();
+  if (selection) {
+    const currentUrl = window.location.href;
+    const annotationLocation = fullAnnotationLocation(selection);
+    saveAnnotationRequest({
+      url: currentUrl,
+      quote: annotationLocation.quote
+    }).then((response) => {
+      // TODO notify
+      console.log('annotation request sent!');
+    });
   }
 }
 
@@ -90,15 +121,13 @@ function annotateCommand() {
    * Reason: checking ContextMenu API selection for being insideArticle is possible, but uncomfortable,
    * as context menu actions are handled in the separate background script.
    */
-  const selection = handlers.selector.captureDocumentSelection();
-  if (selection.length === 1) {
-    const annotationLocation = fullAnnotationLocation(selection[0]);
+  const selection = tryGetSingleSelection();
+  if (selection) {
+    const annotationLocation = fullAnnotationLocation(selection);
     store.dispatch(setSelectionRange(annotationLocation));
     const selectionCenter = handlers.selector.currentSingleSelectionCenter();
     store.dispatch(showEditorAnnotation(selectionCenter.x, selectionCenter.y));
     ppGA.annotationAddFormDisplayed('rightMouseContextMenu');
-  } else if (selection.length > 1) {
-    console.warn('PP: more than one selected range is not supported');
   }
 }
 

@@ -15,6 +15,7 @@ import classNames from 'classnames';
 import ppGA from 'common/pp-ga/index';
 import axios from 'axios';
 import { getCurrentTabUrl } from './utils';
+import { saveAnnotationRequest } from '../common/api/utils';
 
 interface IBrowserPopupState {
   isLoading: boolean;
@@ -108,17 +109,8 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
 
   handleAnnotationRequestClick = (e) => {
     getCurrentTabUrl().then((url) => {
-      axios({
-        method: 'post',
-        url: `${PPSettings.API_URL}/annotationRequests`,
-        data: {
-          data: { attributes: { url } },
-        },
-        headers: {
-          'Content-Type': 'application/vnd.api+json',
-        },
-      }).then((response) => {
-        // TODO
+      saveAnnotationRequest({ url }).then((response) => {
+        // TODO notify
         console.log('annotation request sent!');
       });
     });

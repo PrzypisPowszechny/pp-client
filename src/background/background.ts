@@ -2,6 +2,7 @@
 // (so it must be present at least in development)
 
 import * as sentry from '../common/sentry';
+
 sentry.init();
 
 console.log('Przypis background script!');
@@ -16,11 +17,23 @@ function onContextMenuAnnotate() {
   });
 }
 
+function onContextMenuAnnotationRequest() {
+  chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+    chrome.tabs.sendMessage(tabs[0].id, { action: 'ANNOTATION_REQUEST' });
+  });
+}
+
 function contextMenuOnInstalled(details: InstalledDetails) {
   chrome.contextMenus.create({
     title: 'Dodaj przypis',
     contexts: ['selection'],
     onclick: onContextMenuAnnotate,
+  });
+
+  chrome.contextMenus.create({
+    title: 'Poproś o przypis',
+    contexts: ['selection'],
+    onclick: onContextMenuAnnotationRequest,
   });
 }
 
