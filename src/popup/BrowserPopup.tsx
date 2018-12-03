@@ -13,6 +13,8 @@ import * as chromeKeys from 'common/chrome-storage/keys';
 import _filter from 'lodash/filter';
 import classNames from 'classnames';
 import ppGA from 'common/pp-ga/index';
+import axios from 'axios';
+import { getCurrentTabUrl } from './utils';
 
 interface IBrowserPopupState {
   isLoading: boolean;
@@ -104,6 +106,25 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
     }
   }
 
+  handleAnnotationRequestClick = (e) => {
+    getCurrentTabUrl().then((url) => {
+      axios({
+        method: 'post',
+        url: `${PPSettings.API_URL}/annotationRequests`,
+        data: {
+          data: { attributes: { url } },
+        },
+        headers: {
+          'Content-Type': 'application/vnd.api+json',
+        },
+      }).then((response) => {
+        // TODO
+        console.log('annotation request sent!');
+      });
+    });
+
+  }
+
   handleDisabledExtensionChange = (e: ChangeEvent<HTMLInputElement>) => {
     const isDisabledNewValue = e.target.checked;
     this.setState({ isExtensionDisabled: isDisabledNewValue });
@@ -171,7 +192,7 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
               { active: isAnnotationMode })}
             onClick={this.handleAnnotationModeClick}
           >
-            <Icon className="icon" icon={ic_add_circle} size={25} />
+            <Icon className="icon" icon={ic_add_circle} size={25}/>
             {isAnnotationMode ?
               <span className="active-mode">Dodajesz przypis </span>
               : <span>Dodaj przypis</span>
@@ -179,13 +200,14 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
           </li>
           <li
             className={classNames('menu-item', 'clickable')}
+            onClick={this.handleAnnotationRequestClick}
           >
-            <Icon className="icon" icon={ic_live_help} size={25} />
+            <Icon className="icon" icon={ic_live_help} size={25}/>
             <span>Poproś o przypis</span>
           </li>
           <hr className="menu-separator"/>
           <li className="menu-item">
-            <Icon className="icon" icon={ic_block} size={25} />
+            <Icon className="icon" icon={ic_block} size={25}/>
             <span>Wyłącz przypisy</span>
           </li>
           <li className="menu-subitem">
@@ -208,7 +230,7 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
             className={classNames('menu-item', 'clickable')}
             target="_blank"
           >
-            <Icon className="icon" icon={ic_info_outline} size={25} />
+            <Icon className="icon" icon={ic_info_outline} size={25}/>
             <span>O projekcie</span>
           </a>
           <hr className="menu-separator"/>

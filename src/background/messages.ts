@@ -1,3 +1,4 @@
+// Message handlers
 
 export function returnExtensionCookie(request, sender, sendResponse) {
   if (request.action === 'GET_COOKIE') {
