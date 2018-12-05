@@ -114,7 +114,7 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
         console.log('annotation request sent!');
       });
     });
-
+    ppGA.annotationRequestLinkClicked(this.state.currentTabUrl);
   }
 
   handleDisabledExtensionChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -158,7 +158,6 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
   }
 
   handleReportButtonClick = () => {
-    console.log(this.state.currentTabUrl);
     ppGA.reportPopupClicked(this.state.currentTabUrl);
   }
 

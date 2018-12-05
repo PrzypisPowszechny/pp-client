@@ -91,6 +91,13 @@ export function annotationAddingModeCancelled() {
   });
 }
 
+export function annotationRequestLinkClicked(url: string) {
+  sendEventByMessage({
+    eventCategory: 'AnnotationRequest', eventAction: 'Init', eventLabel: 'AnnotationAddingModeInited',
+    [GACustomFieldsIndex.eventUrl]: url,
+  });
+}
+
 export function annotationAddFormDisplayed(triggeredBy: string) {
   sendEventByMessage({
     eventCategory: 'AnnotationAddForm', eventAction: 'Display', eventLabel: 'AnnotationAddFormDisplayed',
