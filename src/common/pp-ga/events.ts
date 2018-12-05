@@ -51,6 +51,14 @@ export function extensionEnabledOnSite(url: string) {
   });
 }
 
+export function reportPopupClicked(url: string) {
+  sendEventByMessage({
+    eventCategory: 'ExtensionReport', eventAction: 'Click', eventLabel: 'ReportButtonClicked',
+    [GACustomFieldsIndex.eventUrl]: url,
+    location: url,
+  });
+}
+
 export function annotationDisplayed(annotationId: string, priority: string, isCommentBlank: boolean, link: string) {
   sendEventByMessage({
     eventCategory: 'Annotation', eventAction: 'Display', eventLabel: 'AnnotationDisplayed',
