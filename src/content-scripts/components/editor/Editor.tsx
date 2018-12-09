@@ -9,7 +9,7 @@ import {
   AnnotationAPIModel,
   AnnotationAPICreateModel,
   AnnotationAPIModelAttrs,
-} from 'content-scripts/api/annotations';
+} from 'common/api/annotations';
 import { turnOffAnnotationMode } from 'common/chrome-storage';
 import { PPScopeClass } from 'content-scripts/settings';
 import { hideEditor } from 'content-scripts/store/actions';
@@ -25,7 +25,7 @@ import * as helpers from './helpers';
 
 import styles from './Editor.scss';
 import ppGA from 'common/pp-ga';
-import { AnnotationPPCategories } from '../../api/annotations';
+import { AnnotationPPCategories } from '../../../common/api/annotations';
 import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
 
 import { Icon } from 'react-icons-kit';

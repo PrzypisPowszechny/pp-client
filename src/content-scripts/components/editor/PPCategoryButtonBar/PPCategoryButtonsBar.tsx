@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { AnnotationPPCategories, annotationPPCategoriesLabels } from 'content-scripts/api/annotations';
+import { AnnotationPPCategories, annotationPPCategoriesLabels } from 'common/api/annotations';
 
 import PPCategoryButton from '../PPCategoryButton/PPCategoryButton';
 import styles from './PPCategoryButtonsBar.scss';

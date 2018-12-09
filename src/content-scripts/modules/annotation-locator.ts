@@ -9,11 +9,11 @@ import _isEqual from 'lodash/isEqual';
 import { selectAnnotations } from '../store/api/selectors';
 import { locateAnnotations } from '../store/annotations/actions';
 import { LocatedAnnotation } from '../store/annotations/types';
-import { AnnotationAPIModel } from '../api/annotations';
+import { AnnotationAPIModel } from '../../common/api/annotations';
 import { Range as XPathRange } from 'xpath-range';
 import { escapeRegExp } from 'tslint/lib/utils';
 import { annotationRootNode } from '../settings';
-import { setExtensionBadge } from '../messages';
+import { setExtensionBadge } from '../../common/messages';
 
 let instance;
 

@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createResource, deleteResource } from 'redux-json-api';
 
-import { AnnotationAPIModel, AnnotationResourceType } from 'content-scripts/api/annotations';
+import { AnnotationAPIModel, AnnotationResourceType } from 'common/api/annotations';
 import {
   AnnotationReportAPICreateModel,
   AnnotationReportAPIModel,
   AnnotationReportResourceType, DataResponse,
   Reasons,
-} from 'content-scripts/api/annotation-reports';
+} from 'common/api/annotation-reports';
 import Report from './Report';
 import Suggestion from './Suggestion';
 import SuccessToast from './SuccessToast';

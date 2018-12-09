@@ -8,7 +8,7 @@ import {
   AnnotationAPIModel, AnnotationPublishers,
   AnnotationPPCategories, AnnotationDemagogCategories,
   annotationPPCategoriesLabels, annotationDemagogCategoriesLabels,
-} from 'content-scripts/api/annotations';
+} from 'common/api/annotations';
 import { extractHostname, httpPrefixed } from '../../../common/url';
 
 import AuthorActionControls from './viewer-elements/AuthorActionControls';

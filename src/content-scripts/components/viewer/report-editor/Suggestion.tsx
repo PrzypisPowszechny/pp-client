@@ -1,11 +1,11 @@
 import React from 'react';
 import classNames from 'classnames';
 import styles from './ReportEditor.scss';
-import { AnnotationAPIModel } from 'content-scripts/api/annotations';
-import { Reasons } from 'content-scripts/api/annotation-reports';
+import { AnnotationAPIModel } from 'common/api/annotations';
+import { Reasons } from 'common/api/annotation-reports';
 import { PPScopeClass } from 'content-scripts/settings';
 import ppGA from 'common/pp-ga';
-import { AnnotationReportAPIModel, DataResponse } from '../../../api/annotation-reports';
+import { AnnotationReportAPIModel, DataResponse } from '../../../../common/api/annotation-reports';
 
 interface ISuggestionProps {
   annotation: AnnotationAPIModel;
