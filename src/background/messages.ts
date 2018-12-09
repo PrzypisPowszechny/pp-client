@@ -31,3 +31,16 @@ export function setBadge(request, sender, sendResponse) {
   }
   return true;
 }
+
+export function openAnnotationForm(request, sender, sendResponse) {
+  if (request.action === 'OPEN_ANNOTATION_FORM') {
+    chrome.windows.create({
+      url: 'annotation_request_popup.html',
+      type: 'popup',
+      focused: true,
+      width: 310,
+      height: 300,
+    });
+    sendResponse(null);
+  }
+}

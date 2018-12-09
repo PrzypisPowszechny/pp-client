@@ -12,7 +12,7 @@ import '../../assets/icon.png';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import BrowserPopup from './components/BrowserPopup';
+import AnnotationRequestBrowserPopup from './components/AnnotationRequestBrowserPopup';
 
 import initWindow from './init';
 
@@ -21,7 +21,7 @@ window.addEventListener('load', () => {
   initWindow();
 
   ReactDOM.render(
-    <BrowserPopup/>,
+    <AnnotationRequestBrowserPopup/>,
     document.body,
   );
 

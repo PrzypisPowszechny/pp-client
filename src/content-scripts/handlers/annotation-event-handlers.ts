@@ -23,6 +23,7 @@ import { setSelectionRange, showEditorAnnotation } from '../store/widgets/action
 import ppGA from 'common/pp-ga';
 import axios from 'axios';
 import { saveAnnotationRequest } from '../../common/api/utils';
+import { ANNOTATION_REQUEST_FORM_DATA } from '../../common/chrome-storage/keys';
 
 let handlers;
 
@@ -105,12 +106,20 @@ function annotationRequestCommand() {
   if (selection) {
     const currentUrl = window.location.href;
     const annotationLocation = fullAnnotationLocation(selection);
-    saveAnnotationRequest({
-      url: currentUrl,
-      quote: annotationLocation.quote
-    }).then((response) => {
-      // TODO notify
-      console.log('annotation request sent!');
+
+    const formData = {
+      url: window.location.href,
+      quote: annotationLocation.quote,
+      notificationEmail: '',
+      comment: '',
+    };
+
+    chrome.storage.local.set({ ANNOTATION_REQUEST_FORM_DATA: formData }, () => {
+      chrome.runtime.sendMessage({
+        action: 'OPEN_ANNOTATION_FORM',
+      }, () => {
+        console.log('annotation request window opened!');
+      });
     });
   }
 }
