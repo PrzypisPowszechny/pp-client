@@ -12,7 +12,9 @@ export interface AnnotationRequestFormProps {
   formData: AnnotationRequestFormData;
 }
 
-type AnnotationRequestFormState = AnnotationRequestFormData;
+interface AnnotationRequestFormState extends AnnotationRequestFormData {
+  isSent: boolean;
+}
 
 export default class AnnotationRequestForm extends React.Component<Partial<AnnotationRequestFormProps>,
   Partial<AnnotationRequestFormState>> {
@@ -29,7 +31,16 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
 
   handleSubmit = (e) => {
     const { url, quote, comment, notificationEmail } = this.state;
-    //TODO save
+
+    // TODO validate
+    saveAnnotationRequest({
+      url, quote, comment, notificationEmail,
+    }).then((response) => {
+      // TODO notify
+      console.log('annotation request sent!');
+    });
+
+
   }
 
   render() {
