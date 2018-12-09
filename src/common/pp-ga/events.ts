@@ -51,6 +51,14 @@ export function extensionEnabledOnSite(url: string) {
   });
 }
 
+export function reportPopupClicked(url: string) {
+  sendEventByMessage({
+    eventCategory: 'ExtensionReport', eventAction: 'Click', eventLabel: 'ReportButtonClicked',
+    [GACustomFieldsIndex.eventUrl]: url,
+    location: url,
+  });
+}
+
 export function annotationDisplayed(annotationId: string, priority: string, isCommentBlank: boolean, link: string) {
   sendEventByMessage({
     eventCategory: 'Annotation', eventAction: 'Display', eventLabel: 'AnnotationDisplayed',
@@ -80,6 +88,13 @@ export function annotationAddingModeInited() {
 export function annotationAddingModeCancelled() {
   sendEventByMessage({
     eventCategory: 'AnnotationAddingMode', eventAction: 'Cancel', eventLabel: 'AnnotationAddingModeCancelled',
+  });
+}
+
+export function annotationRequestLinkClicked(url: string) {
+  sendEventByMessage({
+    eventCategory: 'AnnotationRequest', eventAction: 'Init', eventLabel: 'AnnotationAddingModeInited',
+    [GACustomFieldsIndex.eventUrl]: url,
   });
 }
 

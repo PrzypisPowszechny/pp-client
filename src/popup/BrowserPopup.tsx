@@ -4,7 +4,7 @@ import { Icon } from 'react-icons-kit';
 import { ic_add_circle } from 'react-icons-kit/md/ic_add_circle';
 import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
 import { ic_block } from 'react-icons-kit/md/ic_block';
-import { ic_info_outline } from 'react-icons-kit/md/ic_info_outline';
+import { ic_home } from 'react-icons-kit/md/ic_home';
 
 import { standardizeUrlForPageSettings } from 'common/url';
 import Toggle from './toggle/toggle';
@@ -114,7 +114,7 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
         console.log('annotation request sent!');
       });
     });
-
+    ppGA.annotationRequestLinkClicked(this.state.currentTabUrl);
   }
 
   handleDisabledExtensionChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -157,6 +157,10 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
     });
   }
 
+  handleReportButtonClick = () => {
+    ppGA.reportPopupClicked(this.state.currentTabUrl);
+  }
+
   render() {
     const {
       isLoading,
@@ -174,12 +178,15 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
     return (
       <div className="pp-popup">
         <ul className="menu">
-          <div>
+          <div className="menu-top">
             <div className="menu-logo"/>
+            <a href="https://przypispowszechny.pl/site/about/" target="_blank">
+              <Icon className="icon" icon={ic_home} size={20} />
+            </a>
           </div>
           <hr className="menu-separator"/>
           <li
-            className={classNames('menu-item', 'clickable',
+            className={classNames('menu-item', 'clickable', 'primary',
               { disabled: isExtensionDisabled || isCurrentPageDisabled },
               { active: isAnnotationMode })}
             onClick={this.handleAnnotationModeClick}
@@ -189,6 +196,9 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
               <span className="active-mode">Dodajesz przypis </span>
               : <span>Dodaj przypis</span>
             }
+            <p className="caption">
+              Dodaj przypis, aby podzielić się wartościową informacją ze społecznością *PP
+            </p>
           </li>
           <li
             className={classNames('menu-item', 'clickable')}
@@ -196,6 +206,9 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
           >
             <Icon className="icon" icon={ic_live_help} size={25}/>
             <span>Poproś o przypis</span>
+            <p className="caption">Możesz poprosić o sprawdzenie wybranego fragmentu artykułu.
+              Twoje zgłoszenie zostanie przekazane do redaktorów Demagoga.
+            </p>
           </li>
           <hr className="menu-separator"/>
           <li className="menu-item">
@@ -217,19 +230,12 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
             />
           </li>
           <hr className="menu-separator"/>
-          <a
-            href="https://przypispowszechny.pl/site/about/"
-            className={classNames('menu-item', 'clickable')}
-            target="_blank"
-          >
-            <Icon className="icon" icon={ic_info_outline} size={25}/>
-            <span>O projekcie</span>
-          </a>
-          <hr className="menu-separator"/>
           <div className="menu-bottom">
             <p className="menu-header">Pomóż nam ulepszać Przypis Powszechny</p>
             <p className="menu-text">Coś nie działa? Uważasz, że czegoś brakuje? Coś Cię zirytowało?</p>
-            <button className="cta-Button">Powiedz nam o tym!</button>
+            <a className="cta-Button" href="https://przypispowszechny.pl/site/report/" target="_blank" onClick={this.handleReportButtonClick}>
+              Powiedz nam o tym!
+            </a>
           </div>
         </ul>
       </div>
