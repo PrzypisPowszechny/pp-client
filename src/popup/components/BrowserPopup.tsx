@@ -14,8 +14,8 @@ import _filter from 'lodash/filter';
 import classNames from 'classnames';
 import ppGA from 'common/pp-ga/index';
 import axios from 'axios';
-import { getCurrentTabUrl } from './utils';
-import { saveAnnotationRequest } from '../common/api/utils';
+import { getCurrentTabUrl } from '../utils';
+import { saveAnnotationRequest } from '../../common/api/utils';
 
 interface IBrowserPopupState {
   isLoading: boolean;

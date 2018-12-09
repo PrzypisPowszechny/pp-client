@@ -4,7 +4,7 @@ sentry.init();
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import BrowserPopup from './BrowserPopup';
+import BrowserPopup from './components/BrowserPopup';
 // import Semantic-ui packages
 import 'semantic-ui-css/semantic.min.css';
 import './popup.scss';
