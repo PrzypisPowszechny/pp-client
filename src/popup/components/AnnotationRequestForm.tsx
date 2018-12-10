@@ -46,14 +46,14 @@ export default class AnnotationRequestForm extends React.Component<AnnotationReq
 
   render() {
     const { url, quote, comment, notificationEmail } = this.state;
-    // TODO make a form
     if (this.state.isSent) {
       return (
         <div> Dziękujemy za zgłoszenie! </div>
       );
     } else {
       return (
-        <div> {url}, {quote}, {comment}
+        // TODO make a form
+        <div> {url}, {quote}, {comment}, {notificationEmail}
           <button onClick={this.handleSubmit}> Wyślij</button>
         </div>
       );

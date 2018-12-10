@@ -12,17 +12,17 @@ import '../../assets/icon.png';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import BrowserPopup from './components/BrowserPopup';
+import BrowserPopupMenu from './components/BrowserPopupMenu';
 
 import initWindow from './init';
-import BrowserPopupNavigator from './components/BrowserPopupNavigator';
+import BrowserPopup from './components/BrowserPopup';
 
 window.addEventListener('load', () => {
 
   initWindow();
 
   ReactDOM.render(
-    <BrowserPopupNavigator/>,
+    <BrowserPopup/>,
     document.body,
   );
 
