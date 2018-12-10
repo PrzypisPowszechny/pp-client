@@ -13,9 +13,10 @@ import * as chromeKeys from 'common/chrome-storage/keys';
 import _filter from 'lodash/filter';
 import classNames from 'classnames';
 import ppGA from 'common/pp-ga/index';
-import axios from 'axios';
-import { getCurrentTabUrl } from '../utils';
-import { saveAnnotationRequest } from '../../common/api/utils';
+
+export interface IBrowserPopupProps {
+  onAnnotationRequestSelect: () => void;
+}
 
 interface IBrowserPopupState {
   isLoading: boolean;
@@ -25,7 +26,7 @@ interface IBrowserPopupState {
   disabledPages: string[];
 }
 
-export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPopupState>> {
+export default class BrowserPopup extends React.Component<Partial<IBrowserPopupProps>, Partial<IBrowserPopupState>> {
   constructor(props: {}) {
     super(props);
 
@@ -108,13 +109,11 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
   }
 
   handleAnnotationRequestClick = (e) => {
-    getCurrentTabUrl().then((url) => {
-      saveAnnotationRequest({ url }).then((response) => {
-        // TODO notify
-        console.log('annotation request sent!');
-      });
-    });
     ppGA.annotationRequestLinkClicked(this.state.currentTabUrl);
+    const { onAnnotationRequestSelect } = this.props;
+    if (onAnnotationRequestSelect) {
+      onAnnotationRequestSelect();
+    }
   }
 
   handleDisabledExtensionChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -181,7 +180,7 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
           <div className="menu-top">
             <div className="menu-logo"/>
             <a href="https://przypispowszechny.pl/site/about/" target="_blank">
-              <Icon className="icon" icon={ic_home} size={20} />
+              <Icon className="icon" icon={ic_home} size={20}/>
             </a>
           </div>
           <hr className="menu-separator"/>
@@ -233,7 +232,8 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
           <div className="menu-bottom">
             <p className="menu-header">Pomóż nam ulepszać Przypis Powszechny</p>
             <p className="menu-text">Coś nie działa? Uważasz, że czegoś brakuje? Coś Cię zirytowało?</p>
-            <a className="cta-Button" href="https://przypispowszechny.pl/site/report/" target="_blank" onClick={this.handleReportButtonClick}>
+            <a className="cta-Button" href="https://przypispowszechny.pl/site/report/" target="_blank"
+               onClick={this.handleReportButtonClick}>
               Powiedz nam o tym!
             </a>
           </div>

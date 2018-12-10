@@ -9,24 +9,27 @@ export interface AnnotationRequestFormData {
 }
 
 export interface AnnotationRequestFormProps {
-  formData: AnnotationRequestFormData;
+  formData: Partial<AnnotationRequestFormData>;
 }
 
 interface AnnotationRequestFormState extends AnnotationRequestFormData {
   isSent: boolean;
 }
 
-export default class AnnotationRequestForm extends React.Component<Partial<AnnotationRequestFormProps>,
+export default class AnnotationRequestForm extends React.Component<AnnotationRequestFormProps,
   Partial<AnnotationRequestFormState>> {
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    return { ...nextProps.formData };
+    return {
+      isSent: false,
+      ...nextProps.formData,
+    };
   }
 
-  constructor(props: {}) {
+  constructor(props: AnnotationRequestFormProps) {
     super(props);
 
-    this.state = { ...props };
+    this.state = { ...props.formData };
   }
 
   handleSubmit = (e) => {
@@ -36,21 +39,25 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
     saveAnnotationRequest({
       url, quote, comment, notificationEmail,
     }).then((response) => {
-      // TODO notify
       console.log('annotation request sent!');
+      this.setState({ isSent: true });
     });
-
-
   }
 
   render() {
-    // TODO
     const { url, quote, comment, notificationEmail } = this.state;
-    return (
-      <div> {url}, {quote}, {comment}
-      <button onClick={this.handleSubmit}> Wyślij </button>
-      </div>
-    );
+    // TODO make a form
+    if (this.state.isSent) {
+      return (
+        <div> Dziękujemy za zgłoszenie! </div>
+      );
+    } else {
+      return (
+        <div> {url}, {quote}, {comment}
+          <button onClick={this.handleSubmit}> Wyślij</button>
+        </div>
+      );
+    }
   }
 
 }

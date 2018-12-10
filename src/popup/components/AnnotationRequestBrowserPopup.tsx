@@ -16,7 +16,6 @@ export default class AnnotationRequestBrowserPopup extends React.Component<{}, P
   componentDidMount() {
     chrome.storage.local.get([ANNOTATION_REQUEST_FORM_DATA], (result) => {
       this.setState({ formData: result[ANNOTATION_REQUEST_FORM_DATA] });
-      console.log(result[ANNOTATION_REQUEST_FORM_DATA]['url']);
     });
   }
 
