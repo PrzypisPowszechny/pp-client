@@ -188,7 +188,7 @@ All development values of `PP_API`:
 
 ### Documentation of the backend API
 
-**[Documentation of the latest release](https://przypispowszechny.pl/api/docs/)**
+**[Documentation of the latest release](https://app.przypispowszechny.pl/api/docs/)**
 
 For every instance there is a swagger documentation of all endpoints, hosted at the below path (note ending slash)
 ```

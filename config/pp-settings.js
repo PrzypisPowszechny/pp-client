@@ -48,7 +48,7 @@ function getApi(env, mode) {
     case 'localhost-alt':
         return "http://localhost:8080"
     case 'pp':
-      return "https://przypispowszechny.pl"
+      return "https://app.przypispowszechny.pl"
     case 'devdeploy1':
     default:
       return "https://devdeploy1.przypispowszechny.pl"

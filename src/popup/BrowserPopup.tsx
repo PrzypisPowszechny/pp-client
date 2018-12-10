@@ -180,7 +180,7 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
         <ul className="menu">
           <div className="menu-top">
             <div className="menu-logo"/>
-            <a href="https://przypispowszechny.pl/site/about/" target="_blank">
+            <a href="https://app.przypispowszechny.pl/site/about/" target="_blank">
               <Icon className="icon" icon={ic_home} size={20} />
             </a>
           </div>
@@ -233,7 +233,7 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
           <div className="menu-bottom">
             <p className="menu-header">Pomóż nam ulepszać Przypis Powszechny</p>
             <p className="menu-text">Coś nie działa? Uważasz, że czegoś brakuje? Coś Cię zirytowało?</p>
-            <a className="cta-Button" href="https://przypispowszechny.pl/site/report/" target="_blank" onClick={this.handleReportButtonClick}>
+            <a className="cta-Button" href="https://app.przypispowszechny.pl/site/report/" target="_blank" onClick={this.handleReportButtonClick}>
               Powiedz nam o tym!
             </a>
           </div>
