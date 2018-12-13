@@ -1,6 +1,6 @@
 {
   "name": "pp-client",
-  "version": "0.3.1-api-dev",
+  "version": "0.3.2-api-dev",
   "description": "",
   "main": "index.js",
   "dependencies": {
