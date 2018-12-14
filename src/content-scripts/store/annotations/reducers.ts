@@ -1,7 +1,7 @@
 import { LOCATE_ANNOTATIONS } from './actions';
 import { AnnotationsState, LocatedAnnotation } from './types';
 import { API_READ } from 'redux-json-api/lib/constants';
-import * as endpoints from '../../api/endpoints';
+import * as endpoints from 'common/api/endpoints';
 
 const initialState: AnnotationsState = {
   hasLoaded: false,
@@ -24,8 +24,9 @@ export default function annotations(state = initialState, action): AnnotationsSt
           ...state,
           hasLoaded: true,
         };
+      } else {
+        return state;
       }
-      break;
     default:
       return state;
   }

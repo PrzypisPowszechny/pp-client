@@ -1,5 +1,5 @@
 // noinspection TsLint
-import { AnnotationPublishers } from '../src/content-scripts/api/annotations';
+import { AnnotationPublishers } from '../src/common/api/annotations';
 import { Builder, By, Key, ActionSequence, Button, until } from 'selenium-webdriver';
 
 const packageConf = require('../package');
@@ -12,7 +12,6 @@ import {
   PP_DOM_NOTIFICATION_ID,
   seleniumGetAnnotationLocationInfo,
 } from '../src/content-scripts/dom-notifications';
-
 
 const outputDir = 'out-validate-annotations';
 const fileConfig = {

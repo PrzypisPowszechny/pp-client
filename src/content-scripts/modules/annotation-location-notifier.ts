@@ -34,8 +34,6 @@ function markLocatedAnnotations() {
       selectAnnotation(state, id),
     );
 
-    console.log(located, unlocated);
-
     if (unlocated.length > 0) {
       console.warn(`${unlocated.length} annotations have not been located`);
     }

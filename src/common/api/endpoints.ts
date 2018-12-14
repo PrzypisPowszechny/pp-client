@@ -1,0 +1,2 @@
+
+export const ANNOTATIONS = 'annotations';
