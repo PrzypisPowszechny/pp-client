@@ -1,4 +1,5 @@
 import * as sentry from '../common/sentry';
+
 sentry.init();
 
 import React from 'react';
@@ -23,8 +24,8 @@ import highlightManager from './modules/highlight-manager';
 import annotationLocator from './modules/annotation-locator';
 import annotationEventHandlers from './handlers/annotation-event-handlers';
 import appComponent from './modules/app-component';
-import store from './store/store';
 import { configureAPIRequests } from './init-API';
+import { annotationLocationNotifier } from './modules';
 
 moment.locale('pl');
 
@@ -59,17 +60,22 @@ if (isBrowser) {
     /*
      * Modules hooked to Redux store
      */
-    highlightManager.init();
-    annotationLocator.init();
+    // Injecting React components into DOM
     appComponent.init();
+    // Locating annotations in DOM
+    annotationLocator.init();
+    // Saving the annotation location information to DOM for reads in selenium + in console
+    annotationLocationNotifier.init();
+    // Rendering annotations in DOM
+    highlightManager.init();
 
     // API settings
     configureAPIRequests();
 
     // Optimization: load data from storage first, so annotations are not drawn before we know current application modes
     // (disabled extension mode and disabled page mode will erase them)
-    data.loadFromChromeStorage().then(
-      data.loadFromAPI,
-    );
+    data.loadFromChromeStorage()
+      .then(data.loadFromAPI);
   });
 }
+

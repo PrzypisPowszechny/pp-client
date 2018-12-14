@@ -56,11 +56,9 @@ function sendLocationEvent(located: boolean, annotation: AnnotationAPIModel) {
 function annotationLocator() {
   const annotations: AnnotationAPIModel[] = selectAnnotations(store.getState());
   const annotationIds: string[] = annotations.map(annotation => annotation.id);
-  const hasLoaded: boolean = store.getState().annotations.hasLoaded;
   // if annotation items have changed, locate them within the DOM
-  if (!_isEqual(annotationIds, instance.annotationIds) || hasLoaded !== instance.hasLoaded) {
+  if (!_isEqual(annotationIds, instance.annotationIds)) {
     const annotationLocations: LocatedAnnotation[] = [];
-    const locatedAnnotations: AnnotationAPIModel[] = [];
     const unlocatedAnnotations: AnnotationAPIModel[] = [];
     for (const annotation of annotations) {
       const { quote, range } = annotation.attributes;
@@ -71,7 +69,6 @@ function annotationLocator() {
         locatedRange = findUniqueTextInDOMAsRange(quote);
       }
       if (locatedRange) {
-        locatedAnnotations.push(annotation);
         annotationLocations.push({
           annotationId: annotation.id,
           range: locatedRange,
@@ -84,24 +81,12 @@ function annotationLocator() {
       }
     }
 
-    const locatedNumber = locatedAnnotations.length;
+    const locatedNumber = annotationLocations.length;
     setExtensionBadge(locatedNumber > 0 ? locatedNumber.toString() : '');
-
-    if (unlocatedAnnotations.length > 0) {
-      console.warn(`${unlocatedAnnotations.length} annotations have not been located`);
-    }
-    console.info(`${locatedAnnotations.length} annotations have been located`);
-
-    if (store.getState().annotations.hasLoaded) {
-      // If the annotations (or lack thereof) have been returned from the server,
-      // save the information to DOM for reads in selenium
-      DOMNotifications.setAnnotationLocationInfo({ located: locatedAnnotations, unlocated: unlocatedAnnotations });
-    }
 
     // save for later, to check if updates are needed
     // Do it before dispatching, or we'll get into inifite dispatch loop!
     instance.annotationIds = annotationIds;
-    instance.hasLoaded = hasLoaded;
     store.dispatch(locateAnnotations(annotationLocations, unlocatedAnnotations.map(annotation => annotation.id)));
   }
 }
