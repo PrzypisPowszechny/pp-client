@@ -2,6 +2,7 @@ module.exports = {
   "roots": [
     "<rootDir>/src",
     "<rootDir>/e2e",
+    "<rootDir>/validate-annotations",
   ],
   "transform": {
     "^.+\\.tsx?$": "ts-jest",

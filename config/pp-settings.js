@@ -12,8 +12,20 @@ exports.loadSettings = (environment, argv) => {
     DEV: getDev(env, mode),
     SITE_URL: getApi(env, mode) + '/site',
     API_URL: getApi(env, mode) + '/api',
+    DEV_SENTRY_UNLOCATED_IGNORE: getDevSentryUnlocatedIgnore(env, mode),
+    SENTRY_DSN: getSentryDSN(env, mode),
     VERSION: packageConf.version,
   };
+  // Additional checks for production mode
+  if (!settings.DEV) {
+    if (settings.DEV_SENTRY_UNLOCATED_IGNORE) {
+      throw Error('DEV_SENTRY_UNLOCATED_IGNORE set in production mode');
+    }
+    if (settings.SENTRY_DSN !== SENTRY_DSN_PROD) {
+      throw Error('SENTRY_DSN not set to SENTRY_DSN_PROD in production mode');
+    }
+  }
+
   if (!settingsLogged) {
     settingsLogged = true;
     console.info(`PPSettings loaded from env:\n`, settings, `\n`);
@@ -52,5 +64,39 @@ function getApi(env, mode) {
     case 'devdeploy1':
     default:
       return "https://devdeploy1.przypispowszechny.pl"
+  }
+}
+
+
+const SENTRY_DSN_DEV = 'https://3166a82a0a684e459e01b69db6d4db61@sentry.io/1305142';
+const SENTRY_DSN_PROD = 'https://d2b3d8c96d404a44b41d9334e1b6733d@sentry.io/1305137';
+const SENTRY_DSN_ANN_VALIDATE = 'https://207c88378fc246498a3403e284a7b43d@sentry.io/1324868';
+
+function getSentryDSN(env, mode) {
+  const dev = getDev(env, mode);
+  switch(env.PP_DEV_SENTRY_ALT) {
+    case 'ann-validate':
+      return SENTRY_DSN_ANN_VALIDATE;
+    default:
+      if (dev) {
+        return SENTRY_DSN_DEV;
+      } else {
+        return SENTRY_DSN_PROD;
+      }
+  }
+}
+
+
+function getDevSentryUnlocatedIgnore(env, mode) {
+  switch (env.PP_DEV_SENTRY_UNLOCATED_IGNORE) {
+    case 'false':
+    case '0':
+    case '':
+      return false;
+    case 'true':
+    case '1':
+      return true;
+    default:
+      return false;
   }
 }
