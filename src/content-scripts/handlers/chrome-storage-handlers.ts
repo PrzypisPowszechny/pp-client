@@ -14,6 +14,7 @@ export default {
 const storageKeysToAppMode = {
   [chromeKeys.DISABLED_EXTENSION]: 'isExtensionDisabled',
   [chromeKeys.ANNOTATION_MODE_PAGES]: 'annotationModePages',
+  [chromeKeys.REQUEST_MODE_PAGES]: 'requestModePages',
   [chromeKeys.DISABLED_PAGES]: 'disabledPages',
 };
 

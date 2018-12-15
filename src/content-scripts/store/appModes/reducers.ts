@@ -4,6 +4,7 @@ import { AppModes } from './types';
 const initialState: AppModes = {
   isExtensionDisabled: false,
   annotationModePages: [],
+  requestModePages: [],
   disabledPages: [],
 };
 

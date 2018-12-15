@@ -22,6 +22,7 @@ interface IBrowserPopupState {
   isLoading: boolean;
   currentStandardizedTabUrl: string;
   annotationModePages: string[];
+  requestModePages: string[];
   isExtensionDisabled: boolean;
   disabledPages: string[];
 }
@@ -35,6 +36,7 @@ export default class BrowserPopupMenu extends React.Component<Partial<IBrowserPo
       isLoading: true,
       currentStandardizedTabUrl: null,
       annotationModePages: [],
+      requestModePages: [],
       isExtensionDisabled: false,
       disabledPages: [],
     };
@@ -49,12 +51,14 @@ export default class BrowserPopupMenu extends React.Component<Partial<IBrowserPo
     if (this.state.isLoading) {
       chromeStorage.get([
         chromeKeys.ANNOTATION_MODE_PAGES,
+        chromeKeys.REQUEST_MODE_PAGES,
         chromeKeys.DISABLED_EXTENSION,
         chromeKeys.DISABLED_PAGES,
       ], (result) => {
         this.setState({
           isLoading: false,
           annotationModePages: result[chromeKeys.ANNOTATION_MODE_PAGES] || [],
+          requestModePages: result[chromeKeys.REQUEST_MODE_PAGES] || [],
           isExtensionDisabled: result[chromeKeys.DISABLED_EXTENSION] || false,
           disabledPages: result[chromeKeys.DISABLED_PAGES] || [],
         });
@@ -84,6 +88,10 @@ export default class BrowserPopupMenu extends React.Component<Partial<IBrowserPo
     return (this.state.annotationModePages || []).indexOf(this.state.currentStandardizedTabUrl) !== -1;
   }
 
+  isRequestModeForCurrentTab() {
+    return (this.state.requestModePages || []).indexOf(this.state.currentStandardizedTabUrl) !== -1;
+  }
+
   /*
    * ON POPUP STATE PERSISTENCE
    * We need to both update the storage and the local state
@@ -94,26 +102,53 @@ export default class BrowserPopupMenu extends React.Component<Partial<IBrowserPo
    */
   handleAnnotationModeClick = (e) => {
     const {
+      requestModePages,
       annotationModePages,
       currentStandardizedTabUrl,
     } = this.state;
+
 
     const isAnnotationMode = this.isAnnotationModeForCurrentTab();
     if (!isAnnotationMode) {
       let newAnnotationModePages;
       newAnnotationModePages = [...annotationModePages, currentStandardizedTabUrl];
-      this.setState({ annotationModePages: newAnnotationModePages });
-      chromeStorage.set({ [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages });
+
+      let newRequestModePages = requestModePages;
+      if (this.isRequestModeForCurrentTab()) {
+        newRequestModePages = _filter(requestModePages, url => url !== currentStandardizedTabUrl);
+      }
+
+      this.setState({ annotationModePages: newAnnotationModePages, requestModePages: newRequestModePages });
+      chromeStorage.set({ [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages, [chromeKeys.REQUEST_MODE_PAGES]: newRequestModePages });
       window.close();
       ppGA.annotationAddingModeInited();
     }
   }
 
+  // handleAnnotationRequestClick = (e) => {
+  //   ppGA.annotationRequestLinkClicked(this.state.currentStandardizedTabUrl);
+  //   const { onAnnotationRequestSelect } = this.props;
+  //   if (onAnnotationRequestSelect) {
+  //     onAnnotationRequestSelect();
+  //   }
+  // }
+
+
+
   handleAnnotationRequestClick = (e) => {
-    ppGA.annotationRequestLinkClicked(this.state.currentStandardizedTabUrl);
-    const { onAnnotationRequestSelect } = this.props;
-    if (onAnnotationRequestSelect) {
-      onAnnotationRequestSelect();
+    const {
+      requestModePages,
+      currentStandardizedTabUrl,
+    } = this.state;
+
+    const isRequestMode = this.isRequestModeForCurrentTab();
+    if (!isRequestMode) {
+      let newRequestModePages;
+      newRequestModePages = [...requestModePages, currentStandardizedTabUrl];
+      this.setState({ requestModePages: newRequestModePages });
+      chromeStorage.set({ [chromeKeys.REQUEST_MODE_PAGES]: newRequestModePages });
+      window.close();
+      // ppGA.annotationAddingModeInited();
     }
   }
 
@@ -134,6 +169,7 @@ export default class BrowserPopupMenu extends React.Component<Partial<IBrowserPo
       disabledPages,
       currentStandardizedTabUrl,
       annotationModePages,
+      requestModePages,
     } = this.state;
 
     let newDisabledPages;
@@ -146,14 +182,17 @@ export default class BrowserPopupMenu extends React.Component<Partial<IBrowserPo
     }
     // Permanently turn off the annotation mode for the disabled pages
     const newAnnotationModePages = _filter(annotationModePages, url => !newDisabledPages.includes(url));
+    const newRequestnModePages = _filter(requestModePages, url => !newDisabledPages.includes(url));
 
     this.setState({
       disabledPages: newDisabledPages,
       annotationModePages: newAnnotationModePages,
+      requestModePages: newRequestnModePages,
     });
     chromeStorage.set({
       [chromeKeys.DISABLED_PAGES]: newDisabledPages,
       [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages,
+      [chromeKeys.REQUEST_MODE_PAGES]: newRequestnModePages,
     });
   }
 

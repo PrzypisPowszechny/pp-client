@@ -40,3 +40,9 @@ export function turnOffAnnotationMode(appModes: AppModes) {
   const newAnnotationModePages = _filter(appModes.annotationModePages, url => url !== currentStandardizedURL);
   storage.set({ [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages });
 }
+
+export function turnOffRequestMode(appModes: AppModes) {
+  const currentStandardizedURL = standardizeUrlForPageSettings(window.location.href);
+  const newRequestModePages = _filter(appModes.requestModePages, url => url !== currentStandardizedURL);
+  storage.set({ [chromeKeys.REQUEST_MODE_PAGES]: newRequestModePages });
+}
