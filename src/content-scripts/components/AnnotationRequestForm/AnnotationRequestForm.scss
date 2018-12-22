@@ -1,0 +1,100 @@
+@import "css/common/theme";
+@import 'css/common/buttons.scss';
+
+.self {
+    padding: 20px;
+    text-align: left;
+
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 16px;
+    line-height: 1.5em;
+    color: #778ca3;
+    font-weight: 600;
+
+    .headerIcon {
+        margin-right: 10px;
+    }
+}
+
+p.description {
+    font-size: 0.9em;
+    line-height: 1.5em;
+    margin: 0 0 20px 0;
+}
+
+p.caption {
+    font-size: 0.8em;
+    line-height: 1.5em;
+    margin: 0 0 5px 0;
+}
+
+.label {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.formField {
+    font-size: 0.9em;
+    width: 100%;
+    padding: 0.5em;
+    border: 1px solid #D8DADA;
+    outline: none;
+    margin: 0;
+    color: #000000;
+    line-height: 1.3em;
+    background: none;
+    resize: none;
+    margin-bottom: 20px;
+
+    &:hover, &:focus {
+        border: 1px dashed #888888;
+        background: none;
+    }
+}
+
+textarea.formField {
+    height: calc(4 * 1.3em + 1.1em); // 3 lines
+}
+
+// .actions {
+//     display: flex;
+//     justify-content: space-between;
+// }
+
+.formButton {
+    padding: 7px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    min-width: 64px;
+    box-sizing: border-box;
+    border-radius: 3px;
+    border: 0;
+    margin: 0;
+    cursor: pointer;
+    display: inline-flex;
+    outline: none;
+    align-items: center;
+    user-select: none;
+    vertical-align: middle;
+    justify-content: center;
+    text-decoration: none;
+    line-height: 1.3em;
+    // box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+
+    &.cancel {
+        color: $grey-02;
+        background-color: transparent;
+        margin-right: 30px;
+    }
+
+    &.save {
+        background-color: #778ca3;
+        color: white;
+    }
+
+}

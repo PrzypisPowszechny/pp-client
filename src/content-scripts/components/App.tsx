@@ -1,11 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { selectModeForCurrentPage } from '../store/appModes/selectors';
+
 import Menu from './menu/index';
 import Editor from './editor/index';
-import { connect } from 'react-redux';
 import ViewerManager from './viewer/ViewerManager';
-import { selectModeForCurrentPage } from '../store/appModes/selectors';
-import AnnotationModeWidget from './annotationModeWidget/AnnotationModeWidget';
-import RequestModeWidget from './annotationModeWidget/RequestModeWidget';
+import AnnotationModeWidget from './AnnotationModeWidget/AnnotationModeWidget';
+import AnnotationRequestForm from './AnnotationRequestForm/AnnotationRequestForm';
+import SideWidget from './elements/SideWidget/SideWidget';
 
 interface AppProps {
   editor: any;
@@ -31,7 +33,7 @@ export default class App extends React.Component<Partial<AppProps>> {
         {this.props.editor.visible && <Editor/>}
         {this.props.menuVisible && <Menu/>}
         {this.props.annotationModeWidgetVisible && <AnnotationModeWidget/>}
-        {this.props.requestModeWidgetVisible && <RequestModeWidget/>}
+        {this.props.requestModeWidgetVisible && <SideWidget><AnnotationRequestForm/></SideWidget>}
         <ViewerManager/>
       </div>
     );

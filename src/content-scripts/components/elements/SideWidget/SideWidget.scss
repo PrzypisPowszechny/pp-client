@@ -1,0 +1,39 @@
+@import "css/common/vars/fonts";
+@import "css/common/vars/z-index";
+@import "css/common/mixins";
+
+/* -- PP Action menu -- */
+.self {
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: $annotation-mode-widget-z-index;
+
+  font-size: 14px;
+  font-family: $font-family-preset;
+  line-height: 1.5em;
+  color: #222222;
+  max-width: 350px;
+
+  background-color: white;
+
+  @include pp-widget-edge();
+}
+
+
+.collapsed {
+    width: 20px;
+}
+
+.collapseButton {
+    background-color: white;
+    outline: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 5px;
+    left: -12px;
+    padding: 0;
+    text-align: center;
+}

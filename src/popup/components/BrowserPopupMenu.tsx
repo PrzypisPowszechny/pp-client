@@ -107,37 +107,30 @@ export default class BrowserPopupMenu extends React.Component<Partial<IBrowserPo
       currentStandardizedTabUrl,
     } = this.state;
 
-
     const isAnnotationMode = this.isAnnotationModeForCurrentTab();
     if (!isAnnotationMode) {
       let newAnnotationModePages;
       newAnnotationModePages = [...annotationModePages, currentStandardizedTabUrl];
 
+      // switch off request mode
       let newRequestModePages = requestModePages;
       if (this.isRequestModeForCurrentTab()) {
         newRequestModePages = _filter(requestModePages, url => url !== currentStandardizedTabUrl);
       }
 
       this.setState({ annotationModePages: newAnnotationModePages, requestModePages: newRequestModePages });
-      chromeStorage.set({ [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages, [chromeKeys.REQUEST_MODE_PAGES]: newRequestModePages });
+      chromeStorage.set({
+        [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages,
+        [chromeKeys.REQUEST_MODE_PAGES]: newRequestModePages });
       window.close();
       ppGA.annotationAddingModeInited();
     }
   }
 
-  // handleAnnotationRequestClick = (e) => {
-  //   ppGA.annotationRequestLinkClicked(this.state.currentStandardizedTabUrl);
-  //   const { onAnnotationRequestSelect } = this.props;
-  //   if (onAnnotationRequestSelect) {
-  //     onAnnotationRequestSelect();
-  //   }
-  // }
-
-
-
   handleAnnotationRequestClick = (e) => {
     const {
       requestModePages,
+      annotationModePages,
       currentStandardizedTabUrl,
     } = this.state;
 
@@ -145,10 +138,19 @@ export default class BrowserPopupMenu extends React.Component<Partial<IBrowserPo
     if (!isRequestMode) {
       let newRequestModePages;
       newRequestModePages = [...requestModePages, currentStandardizedTabUrl];
-      this.setState({ requestModePages: newRequestModePages });
-      chromeStorage.set({ [chromeKeys.REQUEST_MODE_PAGES]: newRequestModePages });
+
+      // switch off annotation mode
+      let newAnnotationModePages = annotationModePages;
+      if (this.isAnnotationModeForCurrentTab()) {
+        newAnnotationModePages = _filter(annotationModePages, url => url !== currentStandardizedTabUrl);
+      }
+
+      this.setState({ annotationModePages: newAnnotationModePages, requestModePages: newRequestModePages });
+      chromeStorage.set({
+        [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages,
+        [chromeKeys.REQUEST_MODE_PAGES]: newRequestModePages });
       window.close();
-      // ppGA.annotationAddingModeInited();
+      ppGA.annotationRequestLinkClicked(this.state.currentStandardizedTabUrl);
     }
   }
 
