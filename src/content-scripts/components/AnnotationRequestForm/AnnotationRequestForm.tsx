@@ -1,17 +1,29 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-
-import styles from './AnnotationRequestForm.scss';
 import { PPScopeClass } from 'content-scripts/settings';
 import { turnOffRequestMode } from 'common/chrome-storage';
 import { AppModes } from 'content-scripts/store/appModes/types';
-import { Icon } from 'react-icons-kit';
-import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
+import { saveAnnotationRequest } from 'common/api/utils';
 import ppGA from 'common/pp-ga';
 
-export interface IAnnotationRequestFormProps {
+import styles from './AnnotationRequestForm.scss';
+import { Icon } from 'react-icons-kit';
+import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
+
+export interface AnnotationRequestFormData {
+  quote: string;
+  comment: string;
+  notificationEmail: string;
+}
+
+export interface AnnotationRequestFormProps {
   appModes: AppModes;
+}
+
+interface AnnotationRequestFormState extends AnnotationRequestFormData {
+  // formData: AnnotationRequestFormData;
+  isSent: boolean;
 }
 
 @connect(
@@ -19,15 +31,38 @@ export interface IAnnotationRequestFormProps {
     appModes: state.appModes,
   }),
 )
-export default class AnnotationRequestForm extends React.Component<Partial<IAnnotationRequestFormProps>, {}> {
+export default class AnnotationRequestForm extends React.Component< Partial<AnnotationRequestFormProps>, Partial<AnnotationRequestFormState>> {
+
+  constructor(props: AnnotationRequestFormProps) {
+    super(props);
+
+    this.state = {
+      quote: '',
+      comment: '',
+      notificationEmail: '',
+     };
+  }
 
   handleCancelClick = (e: any) => {
     turnOffRequestMode(this.props.appModes);
-    // ppGA.annotationAddingModeCancelled();
+    ppGA.annotationAddingModeCancelled();
   }
 
+  handleSubmit = (e) => {
+    const { quote, comment, notificationEmail } = this.state;
+    const url = window.location.href;
+
+    // TODO validate
+    saveAnnotationRequest({
+      url, quote, comment, notificationEmail,
+    }).then((response) => {
+      console.log('annotation request sent!');
+      this.setState({ isSent: true });
+    });
+  }
 
   render() {
+    const { quote, comment, notificationEmail } = this.state;
     return (
       <div
         className={classNames(PPScopeClass, styles.self)}
@@ -47,12 +82,16 @@ export default class AnnotationRequestForm extends React.Component<Partial<IAnno
             autoFocus={true}
             name="quote"
             placeholder="Przeklej fragment artykułu"
+            value={this.state.quote}
+            onChange={(e) => this.setState({quote: e.target.value})}
         />
         <div className={styles.label}>Komentarz (opcjonalny)</div>
         <textarea
             className={styles.formField}
             name="quote"
             placeholder="Napisz, na co zwrócić szczególną uwagę"
+            value={this.state.comment}
+            onChange={(e) => this.setState({comment: e.target.value})}
         />
         <div className={styles.label}>Twój adres e-mail (opcjonalny)</div>
         <p className={styles.caption}>Zostaw adres e-mail, jeśli chcesz żebyśmy powiadomili Cię, kiedy dodamy w tym miejscu przypis
@@ -60,6 +99,8 @@ export default class AnnotationRequestForm extends React.Component<Partial<IAnno
         <input
             className={styles.formField}
             name="email"
+            value={this.state.notificationEmail}
+            onChange={(e) => this.setState({notificationEmail: e.target.value})}
         />
         <div className={styles.actions}>
             <button
@@ -70,7 +111,7 @@ export default class AnnotationRequestForm extends React.Component<Partial<IAnno
             </button>
             <button
                 className={classNames(styles.formButton, styles.save)}
-                onClick={this.handleCancelClick}
+                onClick={this.handleSubmit}
             >
             Wyślij
             </button>
