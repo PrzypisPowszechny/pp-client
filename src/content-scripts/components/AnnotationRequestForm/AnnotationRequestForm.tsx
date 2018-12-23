@@ -18,6 +18,7 @@ export interface AnnotationRequestFormData {
 }
 
 export interface AnnotationRequestFormProps {
+  showNotification: (message: string) => void;
   appModes: AppModes;
 }
 
@@ -58,11 +59,12 @@ export default class AnnotationRequestForm extends React.Component< Partial<Anno
     }).then((response) => {
       console.log('annotation request sent!');
       this.setState({ isSent: true });
+      this.props.showNotification('Twoja prośba o przypis została wysłana');
+      turnOffRequestMode(this.props.appModes);
     });
   }
 
   render() {
-    const { quote, comment, notificationEmail } = this.state;
     return (
       <div
         className={classNames(PPScopeClass, styles.self)}
@@ -73,7 +75,8 @@ export default class AnnotationRequestForm extends React.Component< Partial<Anno
                 Poproś o przypis
             </div>
             <p className={styles.description}>Masz wątpliwości, czy to, co czytasz, ma sens? <br />
-              Zgłoś do sprawdzenia fragment z tej strony, a dodamy jego miejscu przypis z naszą oceną wiarygodności i źródłem.
+              Zgłoś do sprawdzenia fragment z tej strony,
+               a dodamy jego miejscu przypis z naszą oceną wiarygodności i źródłem.
             </p>
         </div>
         <div className={styles.label}>Fragment do sprawdzenia</div>
@@ -83,7 +86,7 @@ export default class AnnotationRequestForm extends React.Component< Partial<Anno
             name="quote"
             placeholder="Przeklej fragment artykułu"
             value={this.state.quote}
-            onChange={(e) => this.setState({quote: e.target.value})}
+            onChange={(e) => this.setState({ quote: e.target.value })}
         />
         <div className={styles.label}>Komentarz (opcjonalny)</div>
         <textarea
@@ -91,16 +94,17 @@ export default class AnnotationRequestForm extends React.Component< Partial<Anno
             name="quote"
             placeholder="Napisz, na co zwrócić szczególną uwagę"
             value={this.state.comment}
-            onChange={(e) => this.setState({comment: e.target.value})}
+            onChange={(e) => this.setState({ comment: e.target.value })}
         />
         <div className={styles.label}>Twój adres e-mail (opcjonalny)</div>
-        <p className={styles.caption}>Zostaw adres e-mail, jeśli chcesz żebyśmy powiadomili Cię, kiedy dodamy w tym miejscu przypis
+        <p className={styles.caption}>
+          Zostaw adres e-mail, jeśli chcesz żebyśmy powiadomili Cię, kiedy dodamy w tym miejscu przypis
         </p>
         <input
             className={styles.formField}
             name="email"
             value={this.state.notificationEmail}
-            onChange={(e) => this.setState({notificationEmail: e.target.value})}
+            onChange={(e) => this.setState({ notificationEmail: e.target.value })}
         />
         <div className={styles.actions}>
             <button
