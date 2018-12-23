@@ -12,7 +12,7 @@ module.exports = (env, argv) => merge(extBaseConfig.getConfig(env, argv), {
           port: 9090, // Which port use to create the server
           reloadPage: true, // Force the reload of the page also
           entries: { //The entries used for the content/background scripts
-            contentScript: ['main', 'main_global_styles', 'popup', 'annotation_request_popup'], //Use the entry names, not the file name or the path
+            contentScript: ['main', 'main_global_styles', 'popup'], //Use the entry names, not the file name or the path
             background: 'background'
           }
         })

@@ -37,7 +37,6 @@ const getConfig = (env, argv) => merge(baseConfig.getConfig(env, argv), {
   entry: {
     background: './src/background/background.ts',
     popup: './src/popup/popup.tsx',
-    annotation_request_popup: './src/popup/annotation_request_popup.tsx',
   },
   output: {
     path: baseConfig.EXT_DIR,
@@ -56,12 +55,6 @@ const getConfig = (env, argv) => merge(baseConfig.getConfig(env, argv), {
       template: 'src/popup/window.html',
       filename: 'popup.html',
       chunks: ['popup']
-    }),
-    new HtmlWebpackPlugin({
-      title: 'Przypis Powszechny -- poproś o przypis',
-      template: 'src/popup/window.html',
-      filename: 'annotation_request_popup.html',
-      chunks: ['annotation_request_popup']
     }),
     new CopyWebpackPlugin([
       {

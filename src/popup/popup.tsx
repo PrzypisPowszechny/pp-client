@@ -12,7 +12,6 @@ import '../../assets/icon.png';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import BrowserPopupMenu from './components/BrowserPopupMenu';
 
 import initWindow from './init';
 import BrowserPopup from './components/BrowserPopup';

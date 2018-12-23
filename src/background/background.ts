@@ -8,7 +8,7 @@ sentry.init();
 console.log('Przypis background script!');
 
 import InstalledDetails = chrome.runtime.InstalledDetails;
-import { openAnnotationForm, returnExtensionCookie, setBadge } from './messages';
+import { returnExtensionCookie, setBadge } from './messages';
 import ppGA from 'common/pp-ga/index';
 
 function onContextMenuAnnotate() {
@@ -62,7 +62,6 @@ chrome.runtime.onInstalled.addListener(contextMenuOnInstalled);
  */
 chrome.runtime.onMessage.addListener(setBadge);
 chrome.runtime.onMessage.addListener(returnExtensionCookie);
-chrome.runtime.onMessage.addListener(openAnnotationForm);
 
 /*
  * Google analytics

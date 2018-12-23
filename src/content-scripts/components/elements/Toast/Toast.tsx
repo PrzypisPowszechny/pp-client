@@ -27,7 +27,7 @@ export default class Toast extends React.Component <Partial<ToastProps>, Partial
     setTimeout(() => this.setState({ hidden: false }), 500);
     setTimeout(() => this.setState({ hidden: true }), 3000);
   }
-  
+
   render() {
     return (
       <div className={classNames(PPScopeClass, styles.self, { [styles.hidden]: this.state.hidden })}>

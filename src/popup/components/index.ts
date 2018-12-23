@@ -1,1 +1,1 @@
-export { default } from './BrowserPopupMenu';
+export { default } from './BrowserPopup';
