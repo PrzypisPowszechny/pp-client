@@ -121,7 +121,8 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
       this.setState({ annotationModePages: newAnnotationModePages, requestModePages: newRequestModePages });
       chromeStorage.set({
         [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages,
-        [chromeKeys.REQUEST_MODE_PAGES]: newRequestModePages });
+        [chromeKeys.REQUEST_MODE_PAGES]: newRequestModePages
+      });
       window.close();
       ppGA.annotationAddingModeInited();
     }
@@ -196,6 +197,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
 
     const isCurrentPageDisabled = this.isExtensionDisabledForCurrentTab();
     const isAnnotationMode = this.isAnnotationModeForCurrentTab();
+    const isRequestMode = this.isRequestModeForCurrentTab();
 
     if (isLoading) {
       // Do not display the page already, when loading; otherwise we'll always see the toggle transition...
@@ -220,7 +222,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
           >
             <Icon className="icon" icon={ic_add_circle} size={25}/>
             {isAnnotationMode ?
-              <span className="active-mode">Dodajesz przypis </span>
+              <span>Dodajesz przypis </span>
               : <span>Dodaj przypis</span>
             }
             <p className="caption">
@@ -228,11 +230,16 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
             </p>
           </li>
           <li
-            className={classNames('menu-item', 'clickable')}
+            className={classNames('menu-item', 'clickable',
+              { disabled: isExtensionDisabled || isCurrentPageDisabled },
+              { active: isRequestMode })}
             onClick={this.handleAnnotationRequestClick}
           >
             <Icon className="icon" icon={ic_live_help} size={25}/>
-            <span>Poproś o przypis</span>
+            {isRequestMode ?
+              <span>Zgłaszasz prośbę o przypis </span>
+              : <span>Poproś o przypis</span>
+            }
             <p className="caption">Możesz poprosić o sprawdzenie wybranego fragmentu artykułu.
               Twoje zgłoszenie zostanie przekazane do redaktorów Demagoga.
             </p>
@@ -260,12 +267,14 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
           <div className="menu-bottom">
             <p className="menu-header">Pomóż nam ulepszać Przypis Powszechny</p>
             <p className="menu-text">Coś nie działa? Uważasz, że czegoś brakuje? Coś Cię zirytowało?</p>
-            <a className="cta-Button" href="https://przypispowszechny.pl/site/report/" target="_blank" onClick={this.handleReportButtonClick}>
+            <a className="cta-Button" href="https://przypispowszechny.pl/site/report/" target="_blank"
+               onClick={this.handleReportButtonClick}>
               Powiedz nam o tym!
             </a>
           </div>
         </ul>
       </div>
-    );
+    )
+      ;
   }
 }
