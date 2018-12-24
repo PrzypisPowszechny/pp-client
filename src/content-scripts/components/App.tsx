@@ -15,6 +15,7 @@ interface AppProps {
   menuVisible: boolean;
   annotationModeWidgetVisible: boolean;
   requestModeWidgetVisible: boolean;
+  notificationVisible: boolean;
 }
 
 interface AppState {
@@ -26,6 +27,7 @@ interface AppState {
   state => ({
     editor: state.widgets.editor,
     menuVisible: state.widgets.menu.visible,
+    notificationVisible: state.widgets.notification.visible,
     annotationModeWidgetVisible: selectModeForCurrentPage(state).isAnnotationMode,
     requestModeWidgetVisible: selectModeForCurrentPage(state).isRequestMode,
   }),
@@ -55,8 +57,8 @@ export default class App extends React.Component<Partial<AppProps>, Partial<AppS
         {this.props.menuVisible && <Menu/>}
         {this.props.annotationModeWidgetVisible && <AnnotationModeWidget/>}
         {this.props.requestModeWidgetVisible &&
-          <SideWidget><AnnotationRequestForm showNotification={this.setNotification} /></SideWidget>}
-        {this.state.showNotification && <Toast message={this.state.notificationMessage} />}
+          <SideWidget><AnnotationRequestForm/></SideWidget>}
+        {this.props.notificationVisible && <Toast/>}
         <ViewerManager/>
       </div>
     );

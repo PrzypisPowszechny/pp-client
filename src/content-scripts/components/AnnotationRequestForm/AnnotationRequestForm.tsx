@@ -10,6 +10,7 @@ import ppGA from 'common/pp-ga';
 import styles from './AnnotationRequestForm.scss';
 import { Icon } from 'react-icons-kit';
 import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
+import { changeNotification } from '../../store/widgets/actions';
 
 export interface AnnotationRequestFormData {
   quote: string;
@@ -18,8 +19,9 @@ export interface AnnotationRequestFormData {
 }
 
 export interface AnnotationRequestFormProps {
-  showNotification: (message: string) => void;
+  // showNotification: (message: string) => void;
   appModes: AppModes;
+  changeNotification: (visible: boolean, message?: string) => void;
 }
 
 interface AnnotationRequestFormState extends AnnotationRequestFormData {
@@ -31,6 +33,7 @@ interface AnnotationRequestFormState extends AnnotationRequestFormData {
   state => ({
     appModes: state.appModes,
   }),
+  { changeNotification },
 )
 export default class AnnotationRequestForm extends React.Component< Partial<AnnotationRequestFormProps>, Partial<AnnotationRequestFormState>> {
 
@@ -59,7 +62,8 @@ export default class AnnotationRequestForm extends React.Component< Partial<Anno
     }).then((response) => {
       console.log('annotation request sent!');
       this.setState({ isSent: true });
-      this.props.showNotification('Twoja prośba o przypis została wysłana');
+      // this.props.showNotification('Twoja prośba o przypis została wysłana');
+      this.props.changeNotification(true, 'Twoja prośba o przypis została wysłana')
       turnOffRequestMode(this.props.appModes);
     });
   }
