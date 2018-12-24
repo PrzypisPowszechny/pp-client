@@ -24,6 +24,8 @@ import ppGA from 'common/pp-ga';
 import axios from 'axios';
 import { saveAnnotationRequest } from '../../common/api/utils';
 import { ANNOTATION_REQUEST_FORM_DATA } from '../../common/chrome-storage/keys';
+import { standardizeUrlForPageSettings } from '../../common/url';
+import { turnOnRequestMode } from '../../common/chrome-storage';
 
 let handlers;
 
@@ -107,20 +109,24 @@ function annotationRequestCommand() {
     const currentUrl = window.location.href;
     const annotationLocation = fullAnnotationLocation(selection);
 
-    const formData = {
-      url: window.location.href,
-      quote: annotationLocation.quote,
-      notificationEmail: '',
-      comment: '',
-    };
+    //TODO send form data
+    // const formData = {
+    //   url: window.location.href,
+    //   quote: annotationLocation.quote,
+    //   notificationEmail: '',
+    //   comment: '',
+    // };
 
-    chrome.storage.local.set({ ANNOTATION_REQUEST_FORM_DATA: formData }, () => {
-      chrome.runtime.sendMessage({
-        action: 'OPEN_ANNOTATION_FORM',
-      }, () => {
-        console.log('annotation request window opened!');
-      });
-    });
+    const currentStandardizedTabUrl = standardizeUrlForPageSettings(window.location.href);
+
+    turnOnRequestMode(store.getState().appModes, currentStandardizedTabUrl);
+    // chrome.storage.local.set({ ANNOTATION_REQUEST_FORM_DATA: formData }, () => {
+      // chrome.runtime.sendMessage({
+      //   action: 'OPEN_ANNOTATION_FORM',
+      // }, () => {
+      //   console.log('annotation request window opened!');
+      // });
+    // });
   }
 }
 

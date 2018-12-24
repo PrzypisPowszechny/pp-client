@@ -8,7 +8,7 @@ import { ic_home } from 'react-icons-kit/md/ic_home';
 
 import { standardizeUrlForPageSettings } from 'common/url';
 import Toggle from './toggle/toggle';
-import chromeStorage from 'common/chrome-storage';
+import chromeStorage, { turnOnRequestMode } from 'common/chrome-storage';
 import * as chromeKeys from 'common/chrome-storage/keys';
 import _filter from 'lodash/filter';
 import classNames from 'classnames';
@@ -129,26 +129,12 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
 
   handleAnnotationRequestClick = (e) => {
     const {
-      requestModePages,
-      annotationModePages,
       currentStandardizedTabUrl,
     } = this.state;
 
     const isRequestMode = this.isRequestModeForCurrentTab();
     if (!isRequestMode) {
-      let newRequestModePages;
-      newRequestModePages = [...requestModePages, currentStandardizedTabUrl];
-
-      // switch off annotation mode
-      let newAnnotationModePages = annotationModePages;
-      if (this.isAnnotationModeForCurrentTab()) {
-        newAnnotationModePages = _filter(annotationModePages, url => url !== currentStandardizedTabUrl);
-      }
-
-      this.setState({ annotationModePages: newAnnotationModePages, requestModePages: newRequestModePages });
-      chromeStorage.set({
-        [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages,
-        [chromeKeys.REQUEST_MODE_PAGES]: newRequestModePages });
+      turnOnRequestMode(this.state, currentStandardizedTabUrl);
       window.close();
       ppGA.annotationRequestLinkClicked(this.state.currentStandardizedTabUrl);
     }
