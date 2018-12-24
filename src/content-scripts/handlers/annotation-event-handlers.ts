@@ -109,24 +109,19 @@ function annotationRequestCommand() {
     const currentUrl = window.location.href;
     const annotationLocation = fullAnnotationLocation(selection);
 
-    //TODO send form data
-    // const formData = {
-    //   url: window.location.href,
-    //   quote: annotationLocation.quote,
-    //   notificationEmail: '',
-    //   comment: '',
-    // };
+    const formData = {
+      url: window.location.href,
+      quote: annotationLocation.quote,
+      notificationEmail: '',
+      comment: '',
+    };
 
     const currentStandardizedTabUrl = standardizeUrlForPageSettings(window.location.href);
 
     turnOnRequestMode(store.getState().appModes, currentStandardizedTabUrl);
-    // chrome.storage.local.set({ ANNOTATION_REQUEST_FORM_DATA: formData }, () => {
-      // chrome.runtime.sendMessage({
-      //   action: 'OPEN_ANNOTATION_FORM',
-      // }, () => {
-      //   console.log('annotation request window opened!');
-      // });
-    // });
+    chrome.storage.local.set({ ANNOTATION_REQUEST_FORM_DATA: formData }, () => {
+      console.log('annotation request window opened!');
+    });
   }
 }
 
