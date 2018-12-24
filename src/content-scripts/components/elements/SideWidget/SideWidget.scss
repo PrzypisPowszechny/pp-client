@@ -49,14 +49,9 @@ $widget-width: 350px;
     &:hover {
         background-color: darken(white, 5%);
     }
-
 }
 
-.collapseIcon {
-  margin: auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
+// Centering that works for some websites
+.collapseIcon svg {
+  font-size: initial;
 }
