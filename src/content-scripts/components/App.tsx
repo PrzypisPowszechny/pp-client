@@ -18,11 +18,6 @@ interface AppProps {
   notificationVisible: boolean;
 }
 
-interface AppState {
-  showNotification: boolean;
-  notificationMessage: string;
-}
-
 @connect(
   state => ({
     editor: state.widgets.editor,
@@ -32,20 +27,10 @@ interface AppState {
     requestModeWidgetVisible: selectModeForCurrentPage(state).isRequestMode,
   }),
 )
-export default class App extends React.Component<Partial<AppProps>, Partial<AppState>> {
+export default class App extends React.Component<Partial<AppProps>, {}> {
 
   constructor(props: AppProps) {
     super(props);
-
-    this.state = {
-      showNotification: false,
-     };
-  }
-
-  setNotification = (message: string) => {
-    this.setState({ showNotification: true, notificationMessage: message },
-      () => setTimeout(() => this.setState({ showNotification: false, notificationMessage: null }), 6000),
-      );
   }
 
   // always updates...:

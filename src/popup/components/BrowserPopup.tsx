@@ -267,8 +267,11 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
           <div className="menu-bottom">
             <p className="menu-header">Pomóż nam ulepszać Przypis Powszechny</p>
             <p className="menu-text">Coś nie działa? Uważasz, że czegoś brakuje? Coś Cię zirytowało?</p>
-            <a className="cta-Button" href="https://przypispowszechny.pl/site/report/" target="_blank"
-               onClick={this.handleReportButtonClick}>
+            <a
+              className="cta-Button"
+              href="https://przypispowszechny.pl/site/report/"
+              target="_blank"
+              onClick={this.handleReportButtonClick}>
               Powiedz nam o tym!
             </a>
           </div>

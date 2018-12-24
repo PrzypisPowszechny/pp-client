@@ -83,7 +83,7 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
   }
 
   handleCancelClick = (e: any) => {
-    turnOffRequestMode(this.props.appModes);
+    turnOffRequestMode(this.props.appModes, window.location.href);
     ppGA.annotationAddingModeCancelled();
   }
 
@@ -95,7 +95,7 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
         url, quote, comment, notificationEmail,
       }).then((response) => {
         this.props.changeNotification(true, 'Twoja prośba o przypis została wysłana');
-        turnOffRequestMode(this.props.appModes);
+        turnOffRequestMode(this.props.appModes, window.location.href);
       });
     }
   }

@@ -38,20 +38,20 @@ if (typeof chrome.storage !== 'undefined') {
 
 export default storage;
 
-export function turnOffAnnotationMode(appModes: AppModes) {
-  const currentStandardizedTabUrl = standardizeUrlForPageSettings(window.location.href);
+export function turnOffAnnotationMode(appModes: AppModes, currentTabUrl: string) {
+  const currentStandardizedTabUrl = standardizeUrlForPageSettings(currentTabUrl);
   const newAnnotationModePages = _filter(appModes.annotationModePages, url => url !== currentStandardizedTabUrl);
   storage.set({ [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages });
 }
 
-export function turnOffRequestMode(appModes: AppModes) {
-  const currentStandardizedTabUrl = standardizeUrlForPageSettings(window.location.href);
+export function turnOffRequestMode(appModes: AppModes, currentTabUrl: string) {
+  const currentStandardizedTabUrl = standardizeUrlForPageSettings(currentTabUrl);
   const newRequestModePages = _filter(appModes.requestModePages, url => url !== currentStandardizedTabUrl);
   storage.set({ [chromeKeys.REQUEST_MODE_PAGES]: newRequestModePages });
 }
 
-export function turnOnRequestMode(appModes: Partial<AppModes>, url: string) {
-  const currentStandardizedTabUrl = standardizeUrlForPageSettings(url);
+export function turnOnRequestMode(appModes: Partial<AppModes>, currentTabUrl: string) {
+  const currentStandardizedTabUrl = standardizeUrlForPageSettings(currentTabUrl);
   // let newRequestModePages = appModes.requestModePages;
   const newRequestModePages = [...appModes.requestModePages, currentStandardizedTabUrl];
 

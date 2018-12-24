@@ -70,6 +70,3 @@ chrome.runtime.onMessage.addListener(returnExtensionCookie);
 ppGA.init();
 chrome.runtime.onInstalled.addListener(ppGAOnInstalled);
 chrome.runtime.onMessage.addListener(ppGA.sendEventFromMessage);
-
-
-
