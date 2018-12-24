@@ -21,7 +21,7 @@ export default class SideWidget extends React.Component <{}, Partial<SideWidgetS
       <div className={classNames(PPScopeClass, styles.self, { [styles.collapsed]: this.state.collapsed })}>
         <div>
           <button className={styles.collapseButton} onClick={() => this.setState({ collapsed: !this.state.collapsed })}>
-            <Icon className={styles.icon} icon={this.state.collapsed ? chevronLeft : chevronRight} size={16}/>
+            <Icon className={styles.collapseIcon} icon={this.state.collapsed ? chevronLeft : chevronRight} size={16}/>
           </button>
           {this.props.children}
         </div>
