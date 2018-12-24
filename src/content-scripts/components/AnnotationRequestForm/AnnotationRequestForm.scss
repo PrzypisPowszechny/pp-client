@@ -1,5 +1,8 @@
 @import "css/common/theme";
+@import "css/common/vars/z-index.scss";
 @import 'css/common/buttons.scss';
+
+$textarea-height: calc(4 * 1.3em + 1.1em); // 3 lines
 
 .self {
     padding: 20px;
@@ -58,7 +61,40 @@ p.caption {
 }
 
 textarea.formField {
-    height: calc(4 * 1.3em + 1.1em); // 3 lines
+  height: $textarea-height;
+}
+
+
+.quote,
+.comment,
+.notification-email {
+  position: relative;
+}
+
+.quote,
+.comment {
+  .error-msg {
+    left: 0;
+    top: $textarea-height;
+  }
+}
+
+.notification-email {
+  .error-msg {
+    left: 0;
+    top: 20px;
+  }
+}
+
+
+.error-msg {
+  font-size: 14px !important;
+  position: absolute !important; // override semantic-ui defaults
+  z-index: $annotation-mode-widget-z-index + 1;
+}
+
+.hide {
+  display: none !important;
 }
 
 // .actions {

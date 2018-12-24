@@ -11,13 +11,18 @@ import styles from './AnnotationRequestForm.scss';
 import { Icon } from 'react-icons-kit';
 import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
 import { changeNotification } from '../../store/widgets/actions';
+import * as helpers from './helpers';
 
 export interface AnnotationRequestFormProps {
   appModes: AppModes;
   changeNotification: (visible: boolean, message?: string) => void;
 }
 
-type AnnotationRequestFormState = AnnotationRequestFormData;
+interface AnnotationRequestFormState extends AnnotationRequestFormData {
+  commentError: string;
+  quoteError: string;
+  notificationEmailError: string;
+}
 
 @connect(
   state => ({
@@ -34,11 +39,47 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
       comment: '',
       notificationEmail: '',
       ...nextProps.appModes.requestModeFormData,
+      commentError: '',
+      quoteError: '',
+      notificationEmailError: '',
     };
   }
 
   constructor(props: AnnotationRequestFormProps) {
     super(props);
+    this.state = {};
+  }
+
+  handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const target = e.currentTarget;
+    const stateUpdate = { [target.name]: target.value };
+
+    // Whenever the field has changed, eradicate the error message
+    if (stateUpdate.quote) {
+      stateUpdate.quoteError = '';
+    }
+    if (stateUpdate.comment) {
+      stateUpdate.commentError = '';
+    }
+    if (stateUpdate.notificationEmail) {
+      stateUpdate.notificationEmailError = '';
+    }
+    this.setState(stateUpdate);
+  }
+
+  validateForm(): boolean {
+    const { quote, comment, notificationEmail, quoteError, notificationEmailError } = this.state;
+
+    const validationResult = helpers.validateAnnotationRequestForm({ quote, comment, notificationEmail });
+    console.log(validationResult)
+
+    if (validationResult.valid) {
+      return true;
+    }
+    this.setState({
+      ...validationResult.errors,
+    });
+    return false;
   }
 
   handleCancelClick = (e: any) => {
@@ -47,20 +88,21 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
   }
 
   handleSubmit = (e) => {
-    const { quote, comment, notificationEmail } = this.state;
-    const url = window.location.href;
-
-    // TODO validate
-    saveAnnotationRequest({
-      url, quote, comment, notificationEmail,
-    }).then((response) => {
-      console.log('annotation request sent!');
-      this.props.changeNotification(true, 'Twoja prośba o przypis została wysłana')
-      turnOffRequestMode(this.props.appModes);
-    });
+    if (this.validateForm()) {
+      const { quote, comment, notificationEmail } = this.state;
+      const url = window.location.href;
+      saveAnnotationRequest({
+        url, quote, comment, notificationEmail,
+      }).then((response) => {
+        this.props.changeNotification(true, 'Twoja prośba o przypis została wysłana');
+        turnOffRequestMode(this.props.appModes);
+      });
+    }
   }
 
   render() {
+    const { quote, comment, notificationEmail, quoteError, commentError, notificationEmailError } = this.state;
+
     return (
       <div
         className={classNames(PPScopeClass, styles.self)}
@@ -76,32 +118,58 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
           </p>
         </div>
         <div className={styles.label}>Fragment do sprawdzenia</div>
-        <textarea
-          className={styles.formField}
-          autoFocus={true}
-          name="quote"
-          placeholder="Przeklej fragment artykułu"
-          value={this.state.quote}
-          onChange={(e) => this.setState({ quote: e.target.value })}
-        />
+        <div className={styles.quote}>
+          <textarea
+            className={styles.formField}
+            autoFocus={true}
+            name="quote"
+            placeholder="Przeklej fragment artykułu"
+            value={quote}
+            onChange={this.handleInputChange}
+          />
+          <div
+            className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
+              { [styles.hide]: quoteError === '' })}
+          >
+            {quoteError}
+          </div>
+        </div>
         <div className={styles.label}>Komentarz (opcjonalny)</div>
-        <textarea
-          className={styles.formField}
-          name="quote"
-          placeholder="Napisz, na co zwrócić szczególną uwagę"
-          value={this.state.comment}
-          onChange={(e) => this.setState({ comment: e.target.value })}
-        />
+        <div className={styles.comment}>
+
+          <textarea
+            className={styles.formField}
+            name="comment"
+            placeholder="Napisz, na co zwrócić szczególną uwagę"
+            value={comment}
+            onChange={this.handleInputChange}
+          />
+          <div
+            className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
+              { [styles.hide]: commentError === '' })}
+          >
+            {commentError}
+          </div>
+        </div>
+
         <div className={styles.label}>Twój adres e-mail (opcjonalny)</div>
         <p className={styles.caption}>
           Zostaw adres e-mail, jeśli chcesz żebyśmy powiadomili Cię, kiedy dodamy w tym miejscu przypis
         </p>
-        <input
-          className={styles.formField}
-          name="email"
-          value={this.state.notificationEmail}
-          onChange={(e) => this.setState({ notificationEmail: e.target.value })}
-        />
+        <div className={styles.notificationEmail}>
+          <input
+            className={styles.formField}
+            name="notificationEmail"
+            value={notificationEmail}
+            onChange={this.handleInputChange}
+          />
+          <div
+            className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
+              { [styles.hide]: notificationEmailError === '' })}
+          >
+            {notificationEmailError}
+          </div>
+        </div>
         <div className={styles.actions}>
           <button
             className={classNames(styles.formButton, styles.cancel)}
