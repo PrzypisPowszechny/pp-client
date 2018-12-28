@@ -5,5 +5,4 @@ dist-ext
 .DS_Store
 .awcache
 .cache-loader
-.circleci
 semantic
