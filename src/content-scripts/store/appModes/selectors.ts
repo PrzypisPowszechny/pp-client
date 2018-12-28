@@ -8,6 +8,11 @@ export function isAnnotationMode(appModes: AppModes) {
   return (appModes.annotationModePages || []).includes(currentStandardizedUrl) && !appModes.isExtensionDisabled;
 }
 
+export function isRequestMode(appModes: AppModes) {
+  const currentStandardizedUrl = standardizeUrlForPageSettings(window.location.href);
+  return (appModes.requestModePages || []).includes(currentStandardizedUrl) && !appModes.isExtensionDisabled;
+}
+
 export const selectModeForCurrentPage = createSelector<ITabState, any, any>(
   state => state.appModes,
   (appModes) => {
@@ -22,6 +27,7 @@ export const selectModeForCurrentPage = createSelector<ITabState, any, any>(
       // - the current URL is included in annotationModePages
       // - the extension is not globally disabled
       isAnnotationMode: isAnnotationMode(appModes),
+      isRequestMode: isRequestMode(appModes),
     };
   },
 );

@@ -262,7 +262,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
         // Do it by directly changing Chrome storage. Changes to the Redux store will follow thanks to subscription.
         const attributes = instance.attributes;
         if (isNewInstance) {
-          turnOffAnnotationMode(this.props.appModes);
+          turnOffAnnotationMode(this.props.appModes, window.location.href);
           ppGA.annotationAdded(instance.id, attributes.ppCategory, !attributes.comment, attributes.annotationLink);
         } else {
           ppGA.annotationEdited(instance.id, attributes.ppCategory, !attributes.comment, attributes.annotationLink);

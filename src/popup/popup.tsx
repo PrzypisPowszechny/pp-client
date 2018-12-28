@@ -2,21 +2,27 @@ import * as sentry from '../common/sentry';
 
 sentry.init();
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import BrowserPopup from './BrowserPopup';
-// import Semantic-ui packages
-import 'semantic-ui-css/semantic.min.css';
-import './popup.scss';
-import '../../assets/icon.png';
-import { configureAxios } from '../common/axios';
-import { getCurrentTabUrl } from './utils';
-
 console.log('Przypis Powszechny popup script working!');
 
-configureAxios(getCurrentTabUrl);
+// import Semantic-ui packages
+import 'semantic-ui-css/semantic.min.css';
 
-ReactDOM.render(
-  <BrowserPopup/>,
-  document.body,
-);
+import './popup.scss';
+import '../../assets/icon.png';
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import initWindow from './init';
+import BrowserPopup from './components/BrowserPopup';
+
+window.addEventListener('load', () => {
+
+  initWindow();
+
+  ReactDOM.render(
+    <BrowserPopup/>,
+    document.body,
+  );
+
+});

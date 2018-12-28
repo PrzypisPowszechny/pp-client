@@ -4,4 +4,5 @@ dist-ext
 .idea
 .DS_Store
 .awcache
+.cache-loader
 semantic

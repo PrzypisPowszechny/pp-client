@@ -1,7 +1,7 @@
 import {
   EDITOR_ANNOTATION,
   EDITOR_VISIBLE_CHANGE,
-  MENU_WIDGET_CHANGE,
+  MENU_WIDGET_CHANGE, NOTIFICATION_CHANGE,
   SET_EDITOR_SELECTION_RANGE, VIEWER_MODAL_CHANGE, VIEWER_REPORT_EDITOR_CHANGE,
   VIEWER_VISIBLE_CHANGE,
 } from './actions';
@@ -42,10 +42,16 @@ export interface IEditorState extends IWidgetState {
   annotationLocation: AnnotationLocation;
 }
 
+export interface INotificationState {
+  message?: string;
+  visible: boolean;
+}
+
 export interface WidgetReducer {
   editor: IEditorState;
   menu: IWidgetState;
   viewer: IViewerState;
+  notification: INotificationState;
 }
 
 const initialWidgetState = {
@@ -106,15 +112,6 @@ function viewer(state = initialViewerState, action) {
   }
 }
 
-function menu(state = initialWidgetState, action) {
-  switch (action.type) {
-    case MENU_WIDGET_CHANGE:
-      return { ...state, ...action.payload };
-    default:
-      return state;
-  }
-}
-
 function editor(state = { annotationId: null, range: null, ...initialWidgetState }, action) {
   switch (action.type) {
     case EDITOR_VISIBLE_CHANGE:
@@ -130,10 +127,29 @@ function editor(state = { annotationId: null, range: null, ...initialWidgetState
     default:
       return state;
   }
+
+}
+
+function menu(state = initialWidgetState, action) {
+  switch (action.type) {
+    case MENU_WIDGET_CHANGE:
+      return { ...state, ...action.payload };
+    default:
+      return state;
+  }
+}
+
+function notification(state = { visible: false }, action) {
+  switch (action.type) {
+    case NOTIFICATION_CHANGE:
+      return { ...state, ...action.payload };
+    default:
+      return state;
+  }
 }
 
 const widgets = combineReducers({
-  menu, viewer, editor,
+  menu, viewer, editor, notification,
 });
 
 export default widgets;

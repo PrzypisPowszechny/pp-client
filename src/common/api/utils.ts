@@ -3,14 +3,13 @@ import axios from 'axios';
 
 export function saveAnnotationRequest(attributes: AnnotationRequestAttributes) {
   const data: AnnotationRequestAPICreateModel = {
-    data: {
-      attributes,
-    },
+    type: 'annotation_requests',
+    attributes,
   };
   return axios({
     method: 'post',
     url: `${PPSettings.API_URL}/annotationRequests`,
-    data,
+    data: { data },
     headers: {
       'Content-Type': 'application/vnd.api+json',
     },

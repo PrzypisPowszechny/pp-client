@@ -1,0 +1,57 @@
+@import "css/common/vars/fonts";
+@import "css/common/vars/z-index";
+@import "css/common/mixins";
+
+$widget-width: 350px;
+
+.self {
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: $annotation-mode-widget-z-index;
+
+  font-size: 14px;
+  font-family: $font-family-preset;
+  line-height: 1.5em;
+  color: #222222;
+  width: $widget-width;
+
+  background-color: white;
+  transition: 0.5s ease;
+  @include pp-widget-edge();
+}
+
+
+.collapsed {
+    transform: translate($widget-width, 0);
+
+    .collapseButton {
+        left: -40px;
+        transform: scale(1.5);
+    }
+}
+
+.collapseButton {
+    background-color: white;
+    outline: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 10px;
+    left: -12px;
+    padding: 0;
+    text-align: center;
+    border: 1px solid #d2d4d2;
+    cursor: pointer;
+    transition: 0.5s ease;
+
+    &:hover {
+        background-color: darken(white, 5%);
+    }
+}
+
+// Centering that works for some websites
+.collapseIcon svg {
+  font-size: initial;
+}
