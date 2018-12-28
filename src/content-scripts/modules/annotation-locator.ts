@@ -15,7 +15,6 @@ import { escapeRegExp } from 'tslint/lib/utils';
 import { annotationRootNode } from '../settings';
 import { setExtensionBadge } from '../../common/messages';
 import * as Sentry from '@sentry/browser';
-import * as DOMNotifications from '../dom-notifications';
 
 let instance;
 
@@ -66,7 +65,7 @@ function annotationLocator() {
       if (range) {
         locatedRange = range;
       } else {
-        locatedRange = findUniqueTextInDOMAsRange(quote);
+        locatedRange = findUniqueTextInDOMAsRange(quote, annotation.id);
       }
       if (locatedRange) {
         annotationLocations.push({
@@ -91,7 +90,7 @@ function annotationLocator() {
   }
 }
 
-function findUniqueTextInDOMAsRange(quote: string): XPathRange.SerializedRange {
+function findUniqueTextInDOMAsRange(quote: string, debugId?: string): XPathRange.SerializedRange {
   const searchScopeRange = rangy.createRange();
   searchScopeRange.selectNodeContents(document.body);
   const options = {
@@ -102,12 +101,18 @@ function findUniqueTextInDOMAsRange(quote: string): XPathRange.SerializedRange {
   const range = rangy.createRange();
   // 1. Escape the characters (e.g. '.', '(', ')') having special meaning in regex
   // 2. Make the match more robust by:
-  // - Replacing spaces with \s+
-  // todo consider removing some other characters not essential to the sentence content
+  // - Allowing for multiple whitespaces (\s) and &nbsp;
+  // &nbsp; appears naturally in HTML articles and is copy-pasted as a normal space;
+  // As a result, we must take into account that each space may have been generated from a &nbsp;
+
   const searchRegexp = escapeRegExp(quote.trim()).replace(/\s/g, '(\\s|&nbsp;)+');
+  if (PPSettings.DEV) {
+    const annotationId = debugId ? debugId : 'no details';
+    console.debug(`Locating annotation (${annotationId}) by regex: ${searchRegexp}`);
+  }
   // We do not use the rangy explicit option "caseSensitive" -- setting "i" flag in Regex seems to work better
-  // Assume there is only one text like this on the page and return the first one
   if (range.findText(new RegExp(searchRegexp, 'i'), options)) {
+    // Assume there is only one text like this on the page and return the first one
     return new XPathRange.BrowserRange(range).normalize().limit(annotationRootNode()).serialize(annotationRootNode());
   } else {
     return null;
