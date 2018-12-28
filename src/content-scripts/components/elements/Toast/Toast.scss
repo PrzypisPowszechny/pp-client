@@ -1,0 +1,34 @@
+@import "css/common/vars/fonts";
+@import "css/common/vars/z-index";
+@import "css/common/mixins";
+
+$toast-width: 255px;
+
+.self {
+  position: fixed;
+  right: 0;
+  top: 30px;
+  z-index: $annotation-mode-widget-z-index;
+  padding: 20px;
+  font-size: 13px;
+  font-family: $font-family-preset;
+  line-height: 1.4em;
+  color: white;
+  width: $toast-width;
+  background-color: #778ca3;
+  border-left: 5px solid #2ecc71;
+  display: flex;
+  transition: 0.5s ease;
+}
+
+.hidden {
+  transform: translate($toast-width, 0);
+}
+
+.iconBox {
+  margin-right: 20px;
+}
+
+.icon {
+  color:white;
+}

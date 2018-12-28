@@ -8,6 +8,7 @@ export const VIEWER_VISIBLE_CHANGE = 'VIEWER_VISIBLE_CHANGE';
 export const VIEWER_MODAL_CHANGE = 'VIEWER_MODAL_CHANGE';
 export const VIEWER_REPORT_EDITOR_CHANGE = 'VIEWER_REPORT_EDITOR_CHANGE';
 export const MENU_WIDGET_CHANGE = 'MENU_WIDGET_CHANGE';
+export const NOTIFICATION_CHANGE = 'NOTIFICATION_CHANGE';
 
 export const showEditorAnnotation = (x: number, y: number, id?: string) => {
   return {
@@ -127,3 +128,13 @@ export const changeViewerReportEditorOpen = (annotationId: string, isReportEdito
     },
   };
 };
+
+export const changeNotification = (visible: boolean, message?: string) => {
+    return {
+    type: NOTIFICATION_CHANGE,
+    payload: {
+      message,
+      visible,
+    },
+  };
+}

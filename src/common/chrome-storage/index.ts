@@ -15,7 +15,10 @@ import mockStorage from './mock';
 let storage;
 
 // Firefox fix for chrome global interface
-interface CustomWindow extends Window { chrome: any; }
+interface CustomWindow extends Window {
+  chrome: any;
+}
+
 declare let window: CustomWindow;
 window.chrome = window.chrome || {};
 
@@ -35,8 +38,27 @@ if (typeof chrome.storage !== 'undefined') {
 
 export default storage;
 
-export function turnOffAnnotationMode(appModes: AppModes) {
-  const currentStandardizedURL = standardizeUrlForPageSettings(window.location.href);
-  const newAnnotationModePages = _filter(appModes.annotationModePages, url => url !== currentStandardizedURL);
+export function turnOffAnnotationMode(appModes: AppModes, currentTabUrl: string) {
+  const currentStandardizedTabUrl = standardizeUrlForPageSettings(currentTabUrl);
+  const newAnnotationModePages = _filter(appModes.annotationModePages, url => url !== currentStandardizedTabUrl);
   storage.set({ [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages });
+}
+
+export function turnOffRequestMode(appModes: AppModes, currentTabUrl: string) {
+  const currentStandardizedTabUrl = standardizeUrlForPageSettings(currentTabUrl);
+  const newRequestModePages = _filter(appModes.requestModePages, url => url !== currentStandardizedTabUrl);
+  storage.set({ [chromeKeys.REQUEST_MODE_PAGES]: newRequestModePages });
+}
+
+export function turnOnRequestMode(appModes: Partial<AppModes>, currentTabUrl: string) {
+  const currentStandardizedTabUrl = standardizeUrlForPageSettings(currentTabUrl);
+  // let newRequestModePages = appModes.requestModePages;
+  const newRequestModePages = [...appModes.requestModePages, currentStandardizedTabUrl];
+
+  // switch off annotation mode
+  const newAnnotationModePages = _filter(appModes.annotationModePages, url => url !== currentStandardizedTabUrl);
+  storage.set({
+    [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages,
+    [chromeKeys.REQUEST_MODE_PAGES]: newRequestModePages
+  });
 }

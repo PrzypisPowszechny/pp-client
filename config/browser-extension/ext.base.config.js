@@ -51,8 +51,8 @@ const getConfig = (env, argv) => merge(baseConfig.getConfig(env, argv), {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Przypis Powszechny -- pomoc',
-      template: 'src/popup/popup.html',
+      title: 'Przypis Powszechny -- menu',
+      template: 'src/popup/window.html',
       filename: 'popup.html',
       chunks: ['popup']
     }),

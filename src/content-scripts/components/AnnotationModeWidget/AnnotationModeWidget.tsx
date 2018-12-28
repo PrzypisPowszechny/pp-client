@@ -20,7 +20,7 @@ export interface IAnnotationModeWidgetProps {
 export default class AnnotationModeWidget extends React.Component<Partial<IAnnotationModeWidgetProps>, {}> {
 
   handleCancelClick = (e: any) => {
-    turnOffAnnotationMode(this.props.appModes);
+    turnOffAnnotationMode(this.props.appModes, window.location.href);
     ppGA.annotationAddingModeCancelled();
   }
 

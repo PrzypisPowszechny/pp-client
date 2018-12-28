@@ -24,6 +24,9 @@ describe('App component', () => {
         viewer: {
           visible: false,
         },
+        notification: {
+          visible: false,
+        },
       },
       appModes: {
         isExtensionDisabled: false,
@@ -74,6 +77,9 @@ describe('App component', () => {
           viewerItems: [],
           deleteModal: false,
           mouseOver: false,
+        },
+        notification: {
+          visible: false,
         },
       },
       appModes: {

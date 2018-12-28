@@ -8,31 +8,35 @@ import { ic_home } from 'react-icons-kit/md/ic_home';
 
 import { standardizeUrlForPageSettings } from 'common/url';
 import Toggle from './toggle/toggle';
-import chromeStorage from 'common/chrome-storage';
+import chromeStorage, { turnOnRequestMode } from 'common/chrome-storage';
 import * as chromeKeys from 'common/chrome-storage/keys';
 import _filter from 'lodash/filter';
 import classNames from 'classnames';
 import ppGA from 'common/pp-ga/index';
-import axios from 'axios';
-import { getCurrentTabUrl } from './utils';
-import { saveAnnotationRequest } from '../common/api/utils';
+
+export interface IBrowserPopupProps {
+  onAnnotationRequestSelect: () => void;
+}
 
 interface IBrowserPopupState {
   isLoading: boolean;
-  currentTabUrl: string;
+  currentStandardizedTabUrl: string;
   annotationModePages: string[];
+  requestModePages: string[];
   isExtensionDisabled: boolean;
   disabledPages: string[];
 }
 
-export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPopupState>> {
+export default class BrowserPopup extends React.Component<Partial<IBrowserPopupProps>,
+  Partial<IBrowserPopupState>> {
   constructor(props: {}) {
     super(props);
 
     this.state = {
       isLoading: true,
-      currentTabUrl: null,
+      currentStandardizedTabUrl: null,
       annotationModePages: [],
+      requestModePages: [],
       isExtensionDisabled: false,
       disabledPages: [],
     };
@@ -47,12 +51,14 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
     if (this.state.isLoading) {
       chromeStorage.get([
         chromeKeys.ANNOTATION_MODE_PAGES,
+        chromeKeys.REQUEST_MODE_PAGES,
         chromeKeys.DISABLED_EXTENSION,
         chromeKeys.DISABLED_PAGES,
       ], (result) => {
         this.setState({
           isLoading: false,
           annotationModePages: result[chromeKeys.ANNOTATION_MODE_PAGES] || [],
+          requestModePages: result[chromeKeys.REQUEST_MODE_PAGES] || [],
           isExtensionDisabled: result[chromeKeys.DISABLED_EXTENSION] || false,
           disabledPages: result[chromeKeys.DISABLED_PAGES] || [],
         });
@@ -64,7 +70,7 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
   componentDidMount() {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const tab = tabs[0];
-      this.setState({ currentTabUrl: standardizeUrlForPageSettings(tab.url) });
+      this.setState({ currentStandardizedTabUrl: standardizeUrlForPageSettings(tab.url) });
     });
 
     this.loadStateFromStorage();
@@ -75,11 +81,15 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
   }
 
   isExtensionDisabledForCurrentTab() {
-    return (this.state.disabledPages || []).indexOf(this.state.currentTabUrl) !== -1;
+    return (this.state.disabledPages || []).indexOf(this.state.currentStandardizedTabUrl) !== -1;
   }
 
   isAnnotationModeForCurrentTab() {
-    return (this.state.annotationModePages || []).indexOf(this.state.currentTabUrl) !== -1;
+    return (this.state.annotationModePages || []).indexOf(this.state.currentStandardizedTabUrl) !== -1;
+  }
+
+  isRequestModeForCurrentTab() {
+    return (this.state.requestModePages || []).indexOf(this.state.currentStandardizedTabUrl) !== -1;
   }
 
   /*
@@ -92,29 +102,43 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
    */
   handleAnnotationModeClick = (e) => {
     const {
+      requestModePages,
       annotationModePages,
-      currentTabUrl,
+      currentStandardizedTabUrl,
     } = this.state;
 
     const isAnnotationMode = this.isAnnotationModeForCurrentTab();
     if (!isAnnotationMode) {
       let newAnnotationModePages;
-      newAnnotationModePages = [...annotationModePages, currentTabUrl];
-      this.setState({ annotationModePages: newAnnotationModePages });
-      chromeStorage.set({ [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages });
+      newAnnotationModePages = [...annotationModePages, currentStandardizedTabUrl];
+
+      // switch off request mode
+      let newRequestModePages = requestModePages;
+      if (this.isRequestModeForCurrentTab()) {
+        newRequestModePages = _filter(requestModePages, url => url !== currentStandardizedTabUrl);
+      }
+
+      this.setState({ annotationModePages: newAnnotationModePages, requestModePages: newRequestModePages });
+      chromeStorage.set({
+        [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages,
+        [chromeKeys.REQUEST_MODE_PAGES]: newRequestModePages
+      });
       window.close();
       ppGA.annotationAddingModeInited();
     }
   }
 
   handleAnnotationRequestClick = (e) => {
-    getCurrentTabUrl().then((url) => {
-      saveAnnotationRequest({ url }).then((response) => {
-        // TODO notify
-        console.log('annotation request sent!');
-      });
-    });
-    ppGA.annotationRequestLinkClicked(this.state.currentTabUrl);
+    const {
+      currentStandardizedTabUrl,
+    } = this.state;
+
+    const isRequestMode = this.isRequestModeForCurrentTab();
+    if (!isRequestMode) {
+      turnOnRequestMode(this.state, currentStandardizedTabUrl);
+      window.close();
+      ppGA.annotationRequestLinkClicked(this.state.currentStandardizedTabUrl);
+    }
   }
 
   handleDisabledExtensionChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -122,9 +146,9 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
     this.setState({ isExtensionDisabled: isDisabledNewValue });
     chromeStorage.set({ [chromeKeys.DISABLED_EXTENSION]: isDisabledNewValue });
     if (isDisabledNewValue) {
-      ppGA.extensionDisabledOnAllSites(this.state.currentTabUrl);
+      ppGA.extensionDisabledOnAllSites(this.state.currentStandardizedTabUrl);
     } else {
-      ppGA.extensionEnabledOnAllSites(this.state.currentTabUrl);
+      ppGA.extensionEnabledOnAllSites(this.state.currentStandardizedTabUrl);
     }
   }
 
@@ -132,33 +156,37 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
     const checked = e.target.checked;
     const {
       disabledPages,
-      currentTabUrl,
+      currentStandardizedTabUrl,
       annotationModePages,
+      requestModePages,
     } = this.state;
 
     let newDisabledPages;
     if (checked) {
-      newDisabledPages = [...disabledPages, currentTabUrl];
-      ppGA.extensionDisabledOnSite(currentTabUrl);
+      newDisabledPages = [...disabledPages, currentStandardizedTabUrl];
+      ppGA.extensionDisabledOnSite(currentStandardizedTabUrl);
     } else {
-      newDisabledPages = _filter(disabledPages, url => url !== currentTabUrl);
-      ppGA.extensionEnabledOnSite(currentTabUrl);
+      newDisabledPages = _filter(disabledPages, url => url !== currentStandardizedTabUrl);
+      ppGA.extensionEnabledOnSite(currentStandardizedTabUrl);
     }
     // Permanently turn off the annotation mode for the disabled pages
     const newAnnotationModePages = _filter(annotationModePages, url => !newDisabledPages.includes(url));
+    const newRequestnModePages = _filter(requestModePages, url => !newDisabledPages.includes(url));
 
     this.setState({
       disabledPages: newDisabledPages,
       annotationModePages: newAnnotationModePages,
+      requestModePages: newRequestnModePages,
     });
     chromeStorage.set({
       [chromeKeys.DISABLED_PAGES]: newDisabledPages,
       [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages,
+      [chromeKeys.REQUEST_MODE_PAGES]: newRequestnModePages,
     });
   }
 
   handleReportButtonClick = () => {
-    ppGA.reportPopupClicked(this.state.currentTabUrl);
+    ppGA.reportPopupClicked(this.state.currentStandardizedTabUrl);
   }
 
   render() {
@@ -169,6 +197,7 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
 
     const isCurrentPageDisabled = this.isExtensionDisabledForCurrentTab();
     const isAnnotationMode = this.isAnnotationModeForCurrentTab();
+    const isRequestMode = this.isRequestModeForCurrentTab();
 
     if (isLoading) {
       // Do not display the page already, when loading; otherwise we'll always see the toggle transition...
@@ -181,7 +210,7 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
           <div className="menu-top">
             <div className="menu-logo"/>
             <a href="https://app.przypispowszechny.pl/site/about/" target="_blank">
-              <Icon className="icon" icon={ic_home} size={20} />
+              <Icon className="icon" icon={ic_home} size={20}/>
             </a>
           </div>
           <hr className="menu-separator"/>
@@ -193,7 +222,7 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
           >
             <Icon className="icon" icon={ic_add_circle} size={25}/>
             {isAnnotationMode ?
-              <span className="active-mode">Dodajesz przypis </span>
+              <span>Dodajesz przypis </span>
               : <span>Dodaj przypis</span>
             }
             <p className="caption">
@@ -201,11 +230,16 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
             </p>
           </li>
           <li
-            className={classNames('menu-item', 'clickable')}
+            className={classNames('menu-item', 'clickable',
+              { disabled: isExtensionDisabled || isCurrentPageDisabled },
+              { active: isRequestMode })}
             onClick={this.handleAnnotationRequestClick}
           >
             <Icon className="icon" icon={ic_live_help} size={25}/>
-            <span>Poproś o przypis</span>
+            {isRequestMode ?
+              <span>Zgłaszasz prośbę o przypis </span>
+              : <span>Poproś o przypis</span>
+            }
             <p className="caption">Możesz poprosić o sprawdzenie wybranego fragmentu artykułu.
               Twoje zgłoszenie zostanie przekazane do redaktorów Demagoga.
             </p>
@@ -233,12 +267,18 @@ export default class BrowserPopup extends React.Component<{}, Partial<IBrowserPo
           <div className="menu-bottom">
             <p className="menu-header">Pomóż nam ulepszać Przypis Powszechny</p>
             <p className="menu-text">Coś nie działa? Uważasz, że czegoś brakuje? Coś Cię zirytowało?</p>
-            <a className="cta-Button" href="https://app.przypispowszechny.pl/site/report/" target="_blank" onClick={this.handleReportButtonClick}>
+            <a
+              className="cta-Button"
+              href="https://app.przypispowszechny.pl/site/report/"
+              target="_blank"
+              onClick={this.handleReportButtonClick}
+            >
               Powiedz nam o tym!
             </a>
           </div>
         </ul>
       </div>
-    );
+    )
+      ;
   }
 }

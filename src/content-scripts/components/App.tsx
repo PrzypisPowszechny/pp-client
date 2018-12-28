@@ -1,25 +1,38 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { selectModeForCurrentPage } from '../store/appModes/selectors';
+
 import Menu from './menu/index';
 import Editor from './editor/index';
-import { connect } from 'react-redux';
 import ViewerManager from './viewer/ViewerManager';
-import { selectModeForCurrentPage } from '../store/appModes/selectors';
-import AnnotationModeWidget from './annotationModeWidget/AnnotationModeWidget';
+import AnnotationModeWidget from './AnnotationModeWidget/AnnotationModeWidget';
+import AnnotationRequestForm from './AnnotationRequestForm/AnnotationRequestForm';
+import SideWidget from './elements/SideWidget/SideWidget';
+import Toast from './elements/Toast/Toast';
 
 interface AppProps {
   editor: any;
   menuVisible: boolean;
   annotationModeWidgetVisible: boolean;
+  requestModeWidgetVisible: boolean;
+  notificationVisible: boolean;
 }
 
 @connect(
   state => ({
     editor: state.widgets.editor,
     menuVisible: state.widgets.menu.visible,
+    notificationVisible: state.widgets.notification.visible,
     annotationModeWidgetVisible: selectModeForCurrentPage(state).isAnnotationMode,
+    requestModeWidgetVisible: selectModeForCurrentPage(state).isRequestMode,
   }),
 )
-export default class App extends React.Component<Partial<AppProps>> {
+export default class App extends React.Component<Partial<AppProps>, {}> {
+
+  constructor(props: AppProps) {
+    super(props);
+  }
+
   // always updates...:
   // <Editor key={JSON.stringify(this.props.editor.range) + JSON.stringify(this.props.editor.annotationId)}/>
   render() {
@@ -28,6 +41,9 @@ export default class App extends React.Component<Partial<AppProps>> {
         {this.props.editor.visible && <Editor/>}
         {this.props.menuVisible && <Menu/>}
         {this.props.annotationModeWidgetVisible && <AnnotationModeWidget/>}
+        {this.props.requestModeWidgetVisible &&
+          <SideWidget><AnnotationRequestForm/></SideWidget>}
+        {this.props.notificationVisible && <Toast/>}
         <ViewerManager/>
       </div>
     );
