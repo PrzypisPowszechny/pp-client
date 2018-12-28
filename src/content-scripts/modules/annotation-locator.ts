@@ -95,19 +95,19 @@ function findUniqueTextInDOMAsRange(quote: string): XPathRange.SerializedRange {
   const searchScopeRange = rangy.createRange();
   searchScopeRange.selectNodeContents(document.body);
   const options = {
-    caseSensitive: false,
     wholeWordsOnly: false,
     withinRange: searchScopeRange,
     direction: 'forward',
   };
   const range = rangy.createRange();
   // 1. Escape the characters (e.g. '.', '(', ')') having special meaning in regex
-  // 2. Replace spaces with \s+ for more robustness
+  // 2. Make the match more robust by:
+  // - Replacing spaces with \s+
   // todo consider removing some other characters not essential to the sentence content
   const searchRegexp = escapeRegExp(quote.trim()).replace(/\s/, '\\s+');
-
+  // We do not use the rangy explicit option "caseSensitive" -- setting "i" flag in Regex seems to work better
   // Assume there is only one text like this on the page and return the first one
-  if (range.findText(new RegExp(searchRegexp), options)) {
+  if (range.findText(new RegExp(searchRegexp, 'i'), options)) {
     return new XPathRange.BrowserRange(range).normalize().limit(annotationRootNode()).serialize(annotationRootNode());
   } else {
     return null;
