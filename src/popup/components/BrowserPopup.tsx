@@ -209,7 +209,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
         <ul className="menu">
           <div className="menu-top">
             <div className="menu-logo"/>
-            <a href="https://app.przypispowszechny.pl/site/about/" target="_blank">
+            <a href={`${PPSettings.SITE_URL}/about/`} target="_blank">
               <Icon className="icon" icon={ic_home} size={20}/>
             </a>
           </div>
@@ -269,7 +269,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
             <p className="menu-text">Coś nie działa? Uważasz, że czegoś brakuje? Coś Cię zirytowało?</p>
             <a
               className="cta-Button"
-              href="https://app.przypispowszechny.pl/site/report/"
+              href={`${PPSettings.SITE_URL}/report/`}
               target="_blank"
               onClick={this.handleReportButtonClick}
             >
