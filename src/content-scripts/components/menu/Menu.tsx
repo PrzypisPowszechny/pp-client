@@ -3,15 +3,18 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 
 import { selectMenuState } from 'content-scripts/store/selectors';
+import { hideMenu, setSelectionRange, showEditorAnnotation } from 'content-scripts/store/widgets/actions';
+import { Range as XPathRange } from 'xpath-range';
+import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
 
 import Widget from 'content-scripts/components/widget';
 
 import styles from './Menu.scss';
-import { hideMenu, setSelectionRange, showEditorAnnotation } from 'content-scripts/store/widgets/actions';
-import { Range as XPathRange } from 'xpath-range';
 import { PPScopeClass } from 'content-scripts/settings';
+import { Icon } from 'react-icons-kit';
+import { ic_add_circle } from 'react-icons-kit/md/ic_add_circle';
+
 import ppGA from 'common/pp-ga';
-import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
 
 interface IMenuProps {
   locationX: number;
@@ -75,13 +78,13 @@ export default class Menu extends React.Component<Partial<IMenuProps>, {}> {
         locationX={this.props.locationX}
         locationY={this.props.locationY}
       >
-        <button
-          className={classNames(styles.createAnnotation, 'ui', 'basic', 'pointing', 'below', 'label', 'large')}
+        <div
+          className={classNames(styles.createAnnotation)}
           onClick={this.onClick}
         >
-          <i className="plus icon" />
-          Dodaj przypis
-        </button>
+          <Icon className={styles.icon} icon={ic_add_circle} size={18}/>
+          <span> Dodaj przypis </span>
+        </div>
       </Widget>
     );
   }
