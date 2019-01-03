@@ -37,7 +37,7 @@ curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
 sudo apt-get install -y nodejs build-essential
 ```
 
-macOS / Windows - install newest (LTS) version available from [official website](https://nodejs.org/en/).
+macOS - install newest (LTS) version available from [official website](https://nodejs.org/en/).
 
 Install packages
 
@@ -87,9 +87,23 @@ Builds vary in speed, size and debuggability. On the one end there is `start` sc
 Both `build` and `start` builds will compile to a `dist/browser-extension` directory. More about adding the extension to chrome in next section [installing extension](#installing-extension).
 
 **hot reloading**
+
+It is best to develop on Chromium, since it is more or less the same as Chrome and it does not interfere with personal tabs (reloading them etc.).
+To install Chromium on Ubuntu, run:
+```
+sudo apt-get install chromium-browser
+```
+
+Start work with no Chromium open.
+
 ```
 npm run start
 ```
+
+When there is no running Chrome instance, one will be opened and the extension will be loaded.
+There is currently no way to programatically load an extension to a running Chrome instance (for security reasons).
+
+An already running Chrome extension may result in errors and the extension will have to be removed and loaded manually.
 
 **single build**
 ```
