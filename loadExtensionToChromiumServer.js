@@ -62,7 +62,7 @@ function message(data) {
         console.log(`${__filename}: Open Chromium instance has been found; doing nothing...`);
       } else {
         console.log(`${__filename}: Opening Chromium instance...`);
-        exec(`chromium-browser --load-extension=~/repos/przypis/pp-client/dist/browser-extension/ "${ChromeInitURL}"`,
+        exec(`chromium-browser --load-extension=./dist/browser-extension/ "${ChromeInitURL}"`,
           (err, stdout, stderr) => {
             console.log(err, stdout, stderr);
           }

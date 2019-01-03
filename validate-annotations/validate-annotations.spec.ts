@@ -71,8 +71,8 @@ describe('Extension locates annotations', () => {
     let annotationCount = 0;
     const visitedURLs = [];
     const skip = 0;
-    const pageLimit = 100;
-    const sample = 100000000000;
+    const pageLimit = 10;
+    const sample = 10;
     let page = 0;
     let response;
 
