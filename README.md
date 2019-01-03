@@ -88,7 +88,13 @@ Both `build` and `start` builds will compile to a `dist/browser-extension` direc
 
 **hot reloading**
 
-It is optimal to start work with no Chrome instance open.
+It is best to develop on Chromium, since it is more or less the same as Chrome and it does not interfere with personal tabs (reloading them etc.).
+To install Chromium on Ubuntu, run:
+```
+sudo apt-get install chromium-browser
+```
+
+Start work with no Chromium open.
 
 ```
 npm run start

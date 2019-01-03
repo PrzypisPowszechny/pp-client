@@ -31,10 +31,10 @@ process.on('uncaughtException', function (err) {
   }
 });
 
-function isChromeOpen() {
+function isChromiumOpen() {
   return new Promise((resolve) => {
     ps.lookup({
-        command: /(\/|\s)chrome(\s|$)/,
+        command: /(\/|\s)chromium-browser(\s|$)/,
       }, function (err, resultList) {
         if (resultList.length > 0) {
           resolve(true);
@@ -55,13 +55,14 @@ function open() {
 function message(data) {
   const type = JSON.parse(data).type;
   if (type === 'SIGN_CHANGE') {
-    console.log(`${__filename}: Received a change signal from the hot reload server, opening Chrome`);
+    console.log(`${__filename}: Received a change signal from the hot reload server`);
 
-    isChromeOpen().then(result => {
+    isChromiumOpen().then(result => {
       if (result) {
-        console.log(`${__filename}: Open Chrome instance has been found; doing nothing...`);
+        console.log(`${__filename}: Open Chromium instance has been found; doing nothing...`);
       } else {
-        exec(`google-chrome --load-extension=~/repos/przypis/pp-client/dist/browser-extension/ "${ChromeInitURL}"`,
+        console.log(`${__filename}: Opening Chromium instance...`);
+        exec(`chromium-browser --load-extension=~/repos/przypis/pp-client/dist/browser-extension/ "${ChromeInitURL}"`,
           (err, stdout, stderr) => {
             console.log(err, stdout, stderr);
           }
