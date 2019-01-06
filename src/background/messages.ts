@@ -24,10 +24,7 @@ export function returnExtensionCookie(request, sender, sendResponse) {
 
 export function setBadge(request, sender, sendResponse) {
   if (request.action === 'SET_BADGE') {
-    chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
-      chrome.browserAction.setBadgeText({ text: request.text, tabId: tabs[0].id });
-      sendResponse(request.text);
-    });
+    chrome.browserAction.setBadgeText({ text: request.text, tabId: sender.tab.id });
+    sendResponse(request.text);
   }
-  return true;
 }
