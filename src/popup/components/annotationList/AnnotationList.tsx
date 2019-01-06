@@ -1,12 +1,7 @@
 import React from 'react';
 import { loadAnnotationLocationData, PopupAnnotationLocationData } from '../../messages';
-import {
-  AnnotationAPIModel,
-  AnnotationPPCategories,
-  annotationPPCategoriesLabels,
-} from 'common/api/annotations';
-import _countBy from 'lodash/countBy';
 import { PopupPages } from '../BrowserPopupNavigator';
+import styles from './AnnotationList.scss';
 
 export interface IAnnotationListProps {
   onPageChange: (Event) => void;
@@ -42,12 +37,12 @@ export default class AnnotationList extends React.Component<Partial<IAnnotationL
   render() {
     if (this.state.isLoading) {
       return (
-        <div className="annotation-list">
+        <div className={styles.self}>
           loading...
         </div>);
     } else {
       return (
-        <div className="annotation-list">
+        <div className={styles.self}>
           <button onClick={this.handleGoBackClick}>Wróć</button>
           {this.state.annotationLocationData.located.map(annotation => (
             <div>

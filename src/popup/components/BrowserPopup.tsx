@@ -16,6 +16,7 @@ import ppGA from 'common/pp-ga/index';
 import { AnnotationAPIModel } from 'common/api/annotations';
 import AnnotationSummary from './annotationSummary/AnnotationSummary';
 import { PopupPages } from './BrowserPopupNavigator';
+import '../css/popup.scss';
 
 export interface IBrowserPopupProps {
   onAnnotationRequestSelect: () => void;

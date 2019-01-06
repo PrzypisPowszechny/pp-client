@@ -6,6 +6,7 @@ import {
   annotationPPCategoriesLabels,
 } from 'common/api/annotations';
 import _countBy from 'lodash/countBy';
+import styles from './AnnotationSummary.scss';
 
 export interface IAnnotationSummaryProps {
   onFullViewClick: (Event) => void;
@@ -62,19 +63,19 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
   render() {
     if (this.state.willNotLoad) {
       return (
-        <div className="annotation-summary">
+        <div className={styles.self}>
           Ta strona nie wyświetla przypisów.
         </div>
       );
     }
     if (this.state.isLoading) {
       return (
-        <div className="annotation-summary">
+        <div className={styles.self}>
           Ładuję przypisy...
         </div>);
     } else {
       return (
-        <div className="annotation-summary" onClick={this.props.onFullViewClick}>
+        <div className={styles.self} onClick={this.props.onFullViewClick}>
           {this.renderSummary()}
         </div>
       );
