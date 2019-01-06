@@ -18,13 +18,13 @@ export function loadAnnotationLocationData(): Promise<PopupAnnotationLocationDat
       chrome.tabs.sendMessage(tabs[0].id, { action: 'GET_ANNOTATIONS' }, (response) => {
         const annotationLocationData: PopupAnnotationLocationData = response;
         if (annotationLocationData && annotationLocationData.hasLoaded) {
-          console.debug('Received annotations via direct response to the message');
+          console.debug('Received annotations via direct response to the message', annotationLocationData);
           resolve(annotationLocationData);
         } else {
           chrome.storage.onChanged.addListener((changes, namespace) => {
-            console.debug('Received annotations via browser storage');
             const locationDataChange = changes[chromeKeys.ANNOTATION_LOCATION];
-            if (locationDataChange) {
+            if (locationDataChange && locationDataChange.newValue.hasLoaded) {
+              console.debug('Received annotations via browser storage', locationDataChange);
               resolve(locationDataChange.newValue);
             }
           });

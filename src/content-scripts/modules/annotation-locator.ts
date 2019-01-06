@@ -61,7 +61,6 @@ function annotationLocator() {
   // if annotation items have changed, locate them within the DOM
   if (!_isEqual(annotationIds, instance.annotationIds)) {
     const annotationLocations: LocatedAnnotation[] = [];
-    const locatedAnnotations: AnnotationAPIModel[] = [];
     const unlocatedAnnotations: AnnotationAPIModel[] = [];
     for (const annotation of annotations) {
       const { quote, range } = annotation.attributes;
@@ -72,7 +71,6 @@ function annotationLocator() {
         locatedRange = findUniqueTextInDOMAsRange(quote, annotation.id);
       }
       if (locatedRange) {
-        locatedAnnotations.push(annotation);
         annotationLocations.push({
           annotationId: annotation.id,
           range: locatedRange,
