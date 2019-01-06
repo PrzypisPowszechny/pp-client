@@ -13,6 +13,8 @@ import * as chromeKeys from 'common/chrome-storage/keys';
 import _filter from 'lodash/filter';
 import classNames from 'classnames';
 import ppGA from 'common/pp-ga/index';
+import { AnnotationAPIModel } from 'common/api/annotations';
+import AnnotationSummary from './annotationSummary/AnnotationSummary';
 
 export interface IBrowserPopupProps {
   onAnnotationRequestSelect: () => void;
@@ -42,7 +44,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     };
   }
 
-  loadStateFromStorage() {
+  loadStateFromAppModes() {
     /* Use data from chrome storage to update popup state
      * It is assumed that there are no other sources of data;
      * In the future:
@@ -73,11 +75,11 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
       this.setState({ currentStandardizedTabUrl: standardizeUrlForPageSettings(tab.url) });
     });
 
-    this.loadStateFromStorage();
+    this.loadStateFromAppModes();
   }
 
   componentDidUpdate() {
-    this.loadStateFromStorage();
+    this.loadStateFromAppModes();
   }
 
   isExtensionDisabledForCurrentTab() {
@@ -90,6 +92,10 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
 
   isRequestModeForCurrentTab() {
     return (this.state.requestModePages || []).indexOf(this.state.currentStandardizedTabUrl) !== -1;
+  }
+
+  handleFullAnnotationViewClick = (e) => {
+    // TODO
   }
 
   /*
@@ -213,6 +219,8 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
               <Icon className="icon" icon={ic_home} size={20}/>
             </a>
           </div>
+          <hr className="menu-separator"/>
+          <AnnotationSummary onFullViewClick={this.handleFullAnnotationViewClick}/>
           <hr className="menu-separator"/>
           <li
             className={classNames('menu-item', 'clickable', 'primary',
