@@ -58,8 +58,9 @@ function sendLocationEvent(located: boolean, annotation: AnnotationAPIModel) {
 function annotationLocator() {
   const annotations: AnnotationAPIModel[] = selectAnnotations(store.getState());
   const annotationIds: string[] = annotations.map(annotation => annotation.id);
+  const hasLoaded: boolean = store.getState().annotations.hasLoaded;
   // if annotation items have changed, locate them within the DOM
-  if (!_isEqual(annotationIds, instance.annotationIds)) {
+  if (!_isEqual(annotationIds, instance.annotationIds) || hasLoaded !== instance.hasLoaded) {
     const annotationLocations: LocatedAnnotation[] = [];
     const unlocatedAnnotations: AnnotationAPIModel[] = [];
     for (const annotation of annotations) {
@@ -89,14 +90,16 @@ function annotationLocator() {
     // save for later, to check if updates are needed
     // Do it before dispatching, or we'll get into inifite dispatch loop!
     instance.annotationIds = annotationIds;
+    instance.hasLoaded = hasLoaded;
 
     // Update the data
     store.dispatch(locateAnnotations(annotationLocations, unlocatedAnnotations.map(annotation => annotation.id)));
-    // Save for popup reads
+    // Save in store for popup reads
     chrome.storage.local.set({
-      [chromeKeys.ANNOTATION_LOCATION]: selectAnnotationLocationForBrowserStorage(store.getState()),
+        [chromeKeys.ANNOTATION_LOCATION]: selectAnnotationLocationForBrowserStorage(store.getState()),
     });
   }
+
 }
 
 function findUniqueTextInDOMAsRange(quote: string, debugId?: string): XPathRange.SerializedRange {

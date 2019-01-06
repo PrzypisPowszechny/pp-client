@@ -13,6 +13,7 @@ export interface IAnnotationSummaryProps {
 
 interface IAnnotationSummaryState {
   isLoading: boolean;
+  willNotLoad: boolean;
   annotationLocationData: PopupAnnotationLocationData;
 }
 
@@ -22,6 +23,7 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
     super(props);
     this.state = {
       isLoading: true,
+      willNotLoad: false,
     };
   }
 
@@ -30,6 +32,10 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
       this.setState({
         annotationLocationData: data,
         isLoading: false,
+      });
+    }).catch(() => {
+      this.setState({
+        willNotLoad: true,
       });
     });
   }
@@ -54,6 +60,13 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
   }
 
   render() {
+    if (this.state.willNotLoad) {
+      return (
+        <div className="annotation-summary">
+          Ta strona nie wyświetla przypisów.
+        </div>
+      );
+    }
     if (this.state.isLoading) {
       return (
         <div className="annotation-summary">
