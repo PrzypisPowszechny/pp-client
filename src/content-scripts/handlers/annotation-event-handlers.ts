@@ -111,7 +111,7 @@ function displayAnnotationMenuForCurrentSelection() {
 
 function popupGetAnnotationMessageHandler(request, sender, sendResponse) {
   if (request.action === 'GET_ANNOTATIONS') {
-    console.debug('Annotations requested from popup');
+    console.debug(`Annotations requested from popup`);
     const response: PopupAnnotationLocationData = selectAnnotationLocationForBrowserStorage(store.getState());
     sendResponse(response);
   }

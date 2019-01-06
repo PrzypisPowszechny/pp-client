@@ -9,6 +9,8 @@ import _isEqual from 'lodash/isEqual';
 import { selectViewerState } from '../store/widgets/selectors';
 import { selectAnnotation } from '../store/api/selectors';
 import { annotationRootNode } from '../settings';
+import { PopupAnnotationLocationData } from '../../popup/messages';
+import { selectAnnotationLocationForBrowserStorage } from '../store/annotations/selectors';
 
 let instance;
 
@@ -22,6 +24,8 @@ function init() {
   // subscribe to store changes and return unsubscribe fn
   const unsubscribe = store.subscribe(drawHighlights);
 
+  chrome.runtime.onMessage.addListener(popupScrollToAnnotationHandler);
+
   // store objects required for later operations
   instance = {
     highlighter,
@@ -31,6 +35,7 @@ function init() {
 
 function deinit() {
   instance.unsubscribe();
+  chrome.runtime.onMessage.removeListener(popupScrollToAnnotationHandler);
 }
 
 function drawHighlights() {
@@ -93,6 +98,14 @@ function handleHighlightMouseEnter(e, annotations) {
         annotations.map(annotation => annotation.id),
       ));
     }
+  }
+}
+
+function popupScrollToAnnotationHandler(request, sender, sendResponse) {
+  if (request.action === 'SCROLL_TO_ANNOTATION') {
+    const { annotationId } = request.payload;
+    console.debug(`Request from popup to scroll to annotation id: ${annotationId}`);
+    instance.highlighter.scrollToAnnotation(annotationId);
   }
 }
 

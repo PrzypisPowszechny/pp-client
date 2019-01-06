@@ -1,4 +1,3 @@
-// Messages sent
 import * as chromeKeys from '../common/chrome-storage/keys';
 import { AnnotationAPIModel } from '../common/api/annotations';
 import Tab = chrome.tabs.Tab;
@@ -47,30 +46,40 @@ export function loadAnnotationLocationData(): Promise<PopupAnnotationLocationDat
 
       console.debug('The active tab loading has been completed');
       chrome.tabs.sendMessage(tab.id,
-      { action: 'GET_ANNOTATIONS' }, (response: PopupAnnotationLocationData) => {
-        console.debug('The active tab has responded to GET_ANNOTATIONS', response);
-        if (!response) {
-          reject('No response from content script though the tab has loaded');
-        }
+        { action: 'GET_ANNOTATIONS' }, (response: PopupAnnotationLocationData) => {
+          console.debug('The active tab has responded to GET_ANNOTATIONS', response);
+          if (!response) {
+            reject('No response from content script though the tab has loaded');
+          }
 
-        const annotationLocationData: PopupAnnotationLocationData = response;
-        if (annotationLocationData && annotationLocationData.hasLoaded) {
-          console.debug('Received annotations via direct response to the message', annotationLocationData);
-          resolve(annotationLocationData);
-        } else {
-          chrome.storage.onChanged.addListener(function onStorageChange(changes, namespace) {
-            const locationDataChange = changes[chromeKeys.ANNOTATION_LOCATION];
-            console.log(locationDataChange);
-            if (locationDataChange && locationDataChange.newValue.hasLoaded) {
-              console.debug('Received annotations via browser storage', locationDataChange);
-              chrome.storage.onChanged.removeListener(onStorageChange);
-              resolve(locationDataChange.newValue);
-            }
-          });
-        }
+          const annotationLocationData: PopupAnnotationLocationData = response;
+          if (annotationLocationData && annotationLocationData.hasLoaded) {
+            console.debug('Received annotations via direct response to the message', annotationLocationData);
+            resolve(annotationLocationData);
+          } else {
+            chrome.storage.onChanged.addListener(function onStorageChange(changes, namespace) {
+              const locationDataChange = changes[chromeKeys.ANNOTATION_LOCATION];
+              console.log(locationDataChange);
+              if (locationDataChange && locationDataChange.newValue.hasLoaded) {
+                console.debug('Received annotations via browser storage', locationDataChange);
+                chrome.storage.onChanged.removeListener(onStorageChange);
+                resolve(locationDataChange.newValue);
+              }
+            });
+          }
 
-      });
+        });
     });
 
+  });
+}
+
+export function sendScrollToAnnotation(annotationId: string) {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.tabs.sendMessage(tabs[0].id,
+      {
+        action: 'SCROLL_TO_ANNOTATION',
+        payload: { annotationId },
+      });
   });
 }

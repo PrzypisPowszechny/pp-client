@@ -238,6 +238,15 @@ export default class Highlighter {
     delete this.highlightRegistry[normedId];
   }
 
+  scrollToAnnotation = (id: number | string) => {
+    const normedId = Highlighter.coerceId(id);
+    const data = this.highlightRegistry[normedId];
+    data.highlightElements[0].scrollIntoView({
+      block: 'center',
+      behavior: 'smooth',
+    });
+  }
+
   /**
    * Public: Redraw the highlights for the given annotation.
    *

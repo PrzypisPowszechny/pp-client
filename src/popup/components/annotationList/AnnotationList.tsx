@@ -1,5 +1,5 @@
 import React from 'react';
-import { loadAnnotationLocationData, PopupAnnotationLocationData } from '../../messages';
+import { loadAnnotationLocationData, PopupAnnotationLocationData, sendScrollToAnnotation } from '../../messages';
 import { PopupPages } from '../BrowserPopupNavigator';
 import styles from './AnnotationList.scss';
 
@@ -34,6 +34,12 @@ export default class AnnotationList extends React.Component<Partial<IAnnotationL
     this.props.onPageChange(PopupPages.main);
   }
 
+  onAnnotationClick = (e) => {
+    console.log(e.target);
+    const { annotationId } = e.target.dataset;
+    sendScrollToAnnotation(annotationId);
+  }
+
   render() {
     if (this.state.isLoading) {
       return (
@@ -44,11 +50,17 @@ export default class AnnotationList extends React.Component<Partial<IAnnotationL
       return (
         <div className={styles.self}>
           <button onClick={this.handleGoBackClick}>Wróć</button>
+          <ul>
           {this.state.annotationLocationData.located.map(annotation => (
-            <div>
+            <li
+              key={annotation.id}
+              data-annotation-id={annotation.id}
+              onClick={this.onAnnotationClick}
+            >
               annotation
-            </div>
+            </li>
           ))}
+          </ul>
         </div>
       );
     }
