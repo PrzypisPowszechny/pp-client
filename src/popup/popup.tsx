@@ -7,7 +7,7 @@ console.log('Przypis Powszechny popup script working!');
 // import Semantic-ui packages
 import 'semantic-ui-css/semantic.min.css';
 
-import './popup.scss';
+import './css/popup.scss';
 import '../../assets/icon.png';
 
 import React from 'react';
