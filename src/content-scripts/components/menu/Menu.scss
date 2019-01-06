@@ -4,26 +4,51 @@
 /* -- PP Action menu -- */
 .self {
   position: absolute;
-  width: 160px;
-  height: 40px;
+  width: 130px;
+  height: 37px;
   margin-left: -70px;
   margin-top: -48px;
   z-index: $menu-z-index;
+  background-color: #34495E;
+  border-radius: 4px;
 
-  .create-annotation {
-    border-color: #2185D0 !important; // override semantic ui
-    color: #2185D0 !important; // override semantic ui
+  &:hover {
+    background-color: lighten(#34495E, 10%);
+
+    &:after {
+      border-top: 10px solid lighten(#34495E, 10%);
+    }
+  }
+
+  .createAnnotation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
     cursor: pointer;
-    outline: none;
   }
 
-  .create-annotation:hover {
-    color: darken(#2185D0, 10%) !important; // override semantic ui
+  .icon, span {
+    color: white;
+    user-select: none;
+    font-size: 12px;
+    @extend %font-external-styling-reset
   }
 
-  button {
-    font-family: $font-family-preset;
-    font-weight: $font-semi-bold;
-    font-size: $default-font-size !important;
+  .icon {
+    margin-right: 7px;
   }
+
+  &:after {
+    content: '';
+    width: 0px;
+    height: 0px;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #34495E;
+    position: absolute;
+    bottom: -10px;
+    left: 55px;
+  }
+
 }

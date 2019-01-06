@@ -16,15 +16,11 @@
   line-height: 1.5em;
   color: #222222;
 
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: white;
 
   @include pp-widget-edge();
   text-align: center;
   transition: background-color 0.15s;
-
-  &:hover {
-    background-color: rgba(255, 255, 255, 1);
-  }
 
   .msg {
     text-align: center;
