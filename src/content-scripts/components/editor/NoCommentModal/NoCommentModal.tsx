@@ -2,6 +2,7 @@ import React from 'react';
 import Modal from 'content-scripts/components/elements/Modal/Modal';
 import classNames from 'classnames';
 import styles from './NoCommentModal.scss';
+import Button from '../../elements/Button/Button';
 
 interface NoCommentModalProps {
   onCloseCommentModal: () => void;
@@ -30,18 +31,12 @@ export default class NoCommentModal extends React.PureComponent<NoCommentModalPr
             </p>
           </div>
           <div className={styles.controls}>
-            <button
-              onClick={onCloseCommentModal}
-              className={classNames(styles.modalButton, styles.cancel)}
-            >
+            <Button onClick={onCloseCommentModal}>
               Wróć
-            </button>
-            <button
-              onClick={onModalSaveClick}
-              className={classNames(styles.modalButton, styles.save)}
-            >
-              Dodaj przypis
-            </button>
+            </Button>
+            <Button appearance="primary" onClick={onModalSaveClick}>
+              Tak, dodaj przypis
+            </Button>
           </div>
         </div>
       </Modal>
