@@ -10,6 +10,7 @@ import { PPScopeClass } from 'content-scripts/settings';
 import { setMouseOverViewer } from 'content-scripts/store/widgets/actions';
 import ppGA from 'common/pp-ga';
 import { selectAnnotation } from '../../store/api/selectors';
+import { changeNotification } from '../../store/widgets/actions';
 
 interface IModalProps {
   deleteModalId: string;
@@ -20,6 +21,7 @@ interface IModalProps {
   deleteAnnotation: (instance: AnnotationAPIModel) => Promise<object>;
   setMouseOverViewer: (value: boolean) => void;
   hideViewerDeleteModal: () => void;
+  changeNotification: (visible: boolean, message?: string) => void;
 }
 
 @connect(
@@ -40,6 +42,7 @@ interface IModalProps {
   {
     setMouseOverViewer,
     hideViewerDeleteModal,
+    changeNotification,
     deleteAnnotation: deleteResource,
   },
 )
@@ -50,6 +53,7 @@ export default class DeleteAnnotationModal extends React.Component<Partial<IModa
       .then(() => {
         const attrs = this.props.annotation.attributes;
         ppGA.annotationDeleted(this.props.annotation.id,  attrs.ppCategory, !attrs.comment, attrs.annotationLink);
+        this.props.changeNotification(true, 'Usunięto przypis');
       })
       .catch((errors) => {
         console.log(errors);
