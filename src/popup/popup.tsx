@@ -14,14 +14,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import initWindow from './init';
-import BrowserPopup from './components/BrowserPopup';
+import BrowserPopupNavigator from './components/BrowserPopupNavigator';
 
 window.addEventListener('load', () => {
 
   initWindow();
 
   ReactDOM.render(
-    <BrowserPopup/>,
+    <BrowserPopupNavigator/>,
     document.body,
   );
 

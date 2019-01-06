@@ -15,9 +15,11 @@ import classNames from 'classnames';
 import ppGA from 'common/pp-ga/index';
 import { AnnotationAPIModel } from 'common/api/annotations';
 import AnnotationSummary from './annotationSummary/AnnotationSummary';
+import { PopupPages } from './BrowserPopupNavigator';
 
 export interface IBrowserPopupProps {
   onAnnotationRequestSelect: () => void;
+  onPageChange: (PopupPages) => void;
 }
 
 interface IBrowserPopupState {
@@ -95,7 +97,10 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
   }
 
   handleFullAnnotationViewClick = (e) => {
-    // TODO
+    const { onPageChange } = this.props;
+    if (onPageChange) {
+      onPageChange(PopupPages.annotationList);
+    }
   }
 
   /*

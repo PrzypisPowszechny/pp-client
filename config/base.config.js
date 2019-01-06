@@ -61,7 +61,6 @@ const getConfig = (env, argv) => ({
         test: /\.scss$/,
         include: [
           localPath(ROOT, 'src', 'content-scripts', 'components'),
-          localPath(ROOT, 'src', 'content-scripts', 'containers'),
         ],
         use: [
           'style-loader',

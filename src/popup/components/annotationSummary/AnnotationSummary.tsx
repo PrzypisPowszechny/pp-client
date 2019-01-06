@@ -57,12 +57,11 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
     if (this.state.isLoading) {
       return (
         <div className="annotation-summary">
-          loading...
+          Ładuję przypisy...
         </div>);
     } else {
       return (
-        <div className="annotation-summary">
-          <button onClick={this.props.onFullViewClick}>See more</button>
+        <div className="annotation-summary" onClick={this.props.onFullViewClick}>
           {this.renderSummary()}
         </div>
       );
