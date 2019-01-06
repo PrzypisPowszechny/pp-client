@@ -13,17 +13,14 @@ import { makeSelection, showMenu } from 'content-scripts/store/actions';
 import { TextSelector } from '../utils/index';
 import { hideMenu } from 'content-scripts/store/widgets/actions';
 import {
+  annotationRootNode,
   outsideArticleClasses,
   PPHighlightClass,
-  annotationRootNode,
   quoteContextWidth,
 } from 'content-scripts/settings';
 import { selectModeForCurrentPage } from '../store/appModes/selectors';
 import { setSelectionRange, showEditorAnnotation } from '../store/widgets/actions';
 import ppGA from 'common/pp-ga';
-import axios from 'axios';
-import { saveAnnotationRequest } from '../../common/api/utils';
-import { ANNOTATION_REQUEST_FORM_DATA } from '../../common/chrome-storage/keys';
 import { standardizeUrlForPageSettings } from '../../common/url';
 import { turnOnRequestMode } from '../../common/chrome-storage';
 
@@ -31,6 +28,7 @@ let handlers;
 
 export default {
   init,
+  displayAnnotationMenuForCurrentSelection,
   deinit,
 };
 
@@ -70,17 +68,40 @@ function selectionChangeCallback(
   const appModes = selectModeForCurrentPage(store.getState());
   // Show the "add annotation" menu if in the annotation mode
   if (appModes.isAnnotationMode) {
-    if (selectedRanges.length === 0 || (selectedRanges.length === 1 && !isInsideArticle)) {
-      // Propagate to the store only selections fully inside the article (e.g. not belonging to any of PP components)
-      // When we need to react also to other, we can easily expand the textSelector reducer; for now it' too eager.
-      store.dispatch(makeSelection(null));
-      store.dispatch(hideMenu());
-    } else if (selectedRanges.length === 1) {
-      store.dispatch(makeSelection(fullAnnotationLocation(selectedRanges[0])));
-      store.dispatch(showMenu(mousePosition(event)));
-    } else {
-      console.warn('PP: more than one selected range is not supported');
-    }
+    if (selectedRanges && selectedRanges.length === 0 || (selectedRanges.length === 1 && !isInsideArticle)) {
+    // Propagate to the store only selections fully inside the article (e.g. not belonging to any of PP components)
+    // When we need to react also to other, we can easily expand the textSelector reducer; for now it' too eager.
+    updateMenuForNoSelection();
+  } else if (selectedRanges.length === 1) {
+    updateMenuForSelection(selectedRanges[0], mousePosition(event));
+  } else {
+    console.warn('PP: more than one selected range is not supported');
+  }
+  }
+}
+
+function updateMenuForNoSelection() {
+  store.dispatch(makeSelection(null));
+  store.dispatch(hideMenu());
+}
+
+function updateMenuForSelection(selectedRange: XPathRange.NormalizedRange, position?) {
+  // When position is null, use the center of selection to display the menu
+  store.dispatch(makeSelection(fullAnnotationLocation(selectedRange)));
+  if (!position) {
+      position = handlers.selector.currentSingleSelectionCenter();
+  }
+  store.dispatch(showMenu(position));
+}
+
+function displayAnnotationMenuForCurrentSelection() {
+  const selection = tryGetSingleSelection();
+  /*
+   * For now, do not check for being inside article.
+   * Reason: huge refactor coming soon
+   */
+  if (selection) {
+    updateMenuForSelection(selection);
   }
 }
 
