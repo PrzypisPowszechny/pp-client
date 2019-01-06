@@ -12,10 +12,11 @@ import { Icon } from 'react-icons-kit';
 import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
 import { changeNotification } from '../../store/widgets/actions';
 import * as helpers from './helpers';
+import { ToastType } from '../elements/Toast/Toast';
 
 export interface AnnotationRequestFormProps {
   appModes: AppModes;
-  changeNotification: (visible: boolean, message?: string) => void;
+  changeNotification: (visible: boolean, message?: string, type?: ToastType) => void;
 }
 
 interface AnnotationRequestFormState extends AnnotationRequestFormData {
@@ -96,6 +97,9 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
       }).then((response) => {
         this.props.changeNotification(true, 'Twoja prośba o przypis została wysłana');
         turnOffRequestMode(this.props.appModes, window.location.href);
+      }).catch((error) => {
+        console.log(error);
+        this.props.changeNotification(true, 'Błąd! Nie udało się wysłać prośby', ToastType.failure);
       });
     }
   }

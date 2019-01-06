@@ -1,5 +1,6 @@
 import { Range as XPathRange } from 'xpath-range';
 import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
+import { ToastType } from '../../components/elements/Toast/Toast';
 
 export const EDITOR_ANNOTATION = 'EDITOR_ANNOTATION';
 export const SET_EDITOR_SELECTION_RANGE = 'SET_EDITOR_SELECTION_RANGE';
@@ -129,12 +130,13 @@ export const changeViewerReportEditorOpen = (annotationId: string, isReportEdito
   };
 };
 
-export const changeNotification = (visible: boolean, message?: string) => {
+export const changeNotification = (visible: boolean, message?: string, type?: ToastType) => {
     return {
     type: NOTIFICATION_CHANGE,
     payload: {
       message,
       visible,
+      type,
     },
   };
 }

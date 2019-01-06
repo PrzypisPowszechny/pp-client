@@ -3,14 +3,20 @@ import classNames from 'classnames';
 import { PPScopeClass } from 'content-scripts/settings';
 import styles from './Toast.scss';
 import { Icon } from 'react-icons-kit';
-import { check } from 'react-icons-kit/feather/check';
+import { check, x } from 'react-icons-kit/feather';
 import { changeNotification } from '../../../store/widgets/actions';
 import { connect } from 'react-redux';
+
+export enum ToastType {
+  success,
+  failure,
+}
 
 interface ToastProps {
   message: string;
   visible: boolean;
-  changeNotification: (visible: boolean, message?: string) => void;
+  type: ToastType;
+  changeNotification: (visible: boolean, message?: string, type?: ToastType) => void;
 }
 
 interface ToastState {
@@ -42,11 +48,31 @@ export default class Toast extends React.Component <Partial<ToastProps>, Partial
     setTimeout(() => this.props.changeNotification(false), 4000);
   }
 
+  getIcon() {
+    switch (this.props.type) {
+      case ToastType.failure:
+        return x;
+      case ToastType.success:
+      default:
+        return check;
+    }
+  }
+
   render() {
+    const { type } = this.props;
+
     return (
-      <div className={classNames(PPScopeClass, styles.self, { [styles.hidden]: !this.state.visible })}>
+      <div
+        className={classNames(
+          PPScopeClass,
+          styles.self, {
+            [styles.hidden]: !this.state.visible,
+            [styles.success]: type === ToastType.success,
+            [styles.failure]: type === ToastType.failure,
+          })}
+      >
         <div className={styles.iconBox}>
-          <Icon className={styles.icon} icon={check} size={26}/>
+          <Icon className={styles.icon} icon={this.getIcon()} size={26}/>
         </div>
         <div className={styles.message}>
           {this.props.message}

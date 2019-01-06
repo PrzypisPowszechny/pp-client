@@ -5,17 +5,12 @@ import classNames from 'classnames';
 import { Popup } from 'semantic-ui-react';
 import _isEqual from 'lodash/isEqual';
 
-import {
-  AnnotationAPIModel,
-  AnnotationAPICreateModel,
-  AnnotationAPIModelAttrs,
-} from 'common/api/annotations';
+import { AnnotationAPICreateModel, AnnotationAPIModel, AnnotationAPIModelAttrs, } from 'common/api/annotations';
 import { turnOffAnnotationMode } from 'common/chrome-storage';
 import { PPScopeClass } from 'content-scripts/settings';
 import { hideEditor } from 'content-scripts/store/actions';
 import { AppModes } from 'content-scripts/store/appModes/types';
 import { selectEditorState } from 'content-scripts/store/selectors';
-import { IEditorRange } from 'content-scripts/store/widgets/reducers';
 
 import { DraggableWidget } from 'content-scripts/components/widget';
 
@@ -34,6 +29,7 @@ import { priceTag } from 'react-icons-kit/icomoon/priceTag';
 import { ic_close } from 'react-icons-kit/md/ic_close';
 import { changeNotification } from '../../store/widgets/actions';
 import { bindActionCreators } from 'redux';
+import { ToastType } from '../elements/Toast/Toast';
 
 interface IEditorProps {
   appModes: AppModes;
@@ -46,7 +42,7 @@ interface IEditorProps {
 
   createOrUpdateAnnotation: (instance: AnnotationAPICreateModel) => Promise<object>;
   hideEditor: () => void;
-  changeNotification: (visible: boolean, message?: string) => void;
+  changeNotification: (visible: boolean, message?: string, type?: ToastType) => void;
 }
 
 interface IEditorState {
@@ -271,15 +267,15 @@ class Editor extends React.Component<Partial<IEditorProps>,
         if (isNewInstance) {
           turnOffAnnotationMode(this.props.appModes, window.location.href);
           ppGA.annotationAdded(instance.id, attributes.ppCategory, !attributes.comment, attributes.annotationLink);
-          this.props.changeNotification(true, 'Dodałeś/aś przypis');
+          this.props.changeNotification(true, 'Dodałeś/aś przypis', ToastType.success);
         } else {
           ppGA.annotationEdited(instance.id, attributes.ppCategory, !attributes.comment, attributes.annotationLink);
-          this.props.changeNotification(true, 'Edytowałeś/aś przypis');
+          this.props.changeNotification(true, 'Edytowałeś/aś przypis', ToastType.success);
         }
       }).catch((errors) => {
         this.setState({ isCreating: false });
         console.log(errors);
-        // TODO: show error toast here
+        this.props.changeNotification(true, 'Błąd! Nie udało się zapisać przypisu', ToastType.failure);
       });
     }
   }
