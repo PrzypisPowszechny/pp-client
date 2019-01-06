@@ -105,7 +105,11 @@ function popupScrollToAnnotationHandler(request, sender, sendResponse) {
   if (request.action === 'SCROLL_TO_ANNOTATION') {
     const { annotationId } = request.payload;
     console.debug(`Request from popup to scroll to annotation id: ${annotationId}`);
-    instance.highlighter.scrollToAnnotation(annotationId);
+    try {
+      instance.highlighter.scrollToAnnotation(annotationId);
+    } catch (e) {
+      console.warn(`Could not scroll to annotation ${annotationId}: ${e.message}`);
+    }
   }
 }
 

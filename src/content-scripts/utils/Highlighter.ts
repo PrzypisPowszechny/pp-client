@@ -241,6 +241,10 @@ export default class Highlighter {
   scrollToAnnotation = (id: number | string) => {
     const normedId = Highlighter.coerceId(id);
     const data = this.highlightRegistry[normedId];
+    // Take an arbitrary first span (there are hardly any multiline annotations anyway)
+    if (!data) {
+      throw new Error('Annotation has not been rendered and may not be scrolled to');
+    }
     data.highlightElements[0].scrollIntoView({
       block: 'center',
       behavior: 'smooth',
