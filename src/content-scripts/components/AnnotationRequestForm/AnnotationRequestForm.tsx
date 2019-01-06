@@ -12,6 +12,7 @@ import { Icon } from 'react-icons-kit';
 import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
 import { changeNotification } from '../../store/widgets/actions';
 import * as helpers from './helpers';
+import Button from '../elements/Button/Button';
 import { ToastType } from '../elements/Toast/Toast';
 
 export interface AnnotationRequestFormProps {
@@ -175,18 +176,12 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
           </div>
         </div>
         <div className={styles.actions}>
-          <button
-            className={classNames(styles.formButton, styles.cancel)}
-            onClick={this.handleCancelClick}
-          >
+          <Button appearance="subtle" onClick={this.handleCancelClick}>
             Anuluj
-          </button>
-          <button
-            className={classNames(styles.formButton, styles.save)}
-            onClick={this.handleSubmit}
-          >
+          </Button>
+          <Button className={styles.submitButton} appearance="primary" onClick={this.handleSubmit}>
             Wyślij
-          </button>
+          </Button>
         </div>
       </div>
     );
