@@ -5,17 +5,12 @@ import classNames from 'classnames';
 import { Popup } from 'semantic-ui-react';
 import _isEqual from 'lodash/isEqual';
 
-import {
-  AnnotationAPIModel,
-  AnnotationAPICreateModel,
-  AnnotationAPIModelAttrs,
-} from 'common/api/annotations';
+import { AnnotationAPICreateModel, AnnotationAPIModel, AnnotationAPIModelAttrs, } from 'common/api/annotations';
 import { turnOffAnnotationMode } from 'common/chrome-storage';
 import { PPScopeClass } from 'content-scripts/settings';
 import { hideEditor } from 'content-scripts/store/actions';
 import { AppModes } from 'content-scripts/store/appModes/types';
 import { selectEditorState } from 'content-scripts/store/selectors';
-import { IEditorRange } from 'content-scripts/store/widgets/reducers';
 
 import { DraggableWidget } from 'content-scripts/components/widget';
 
@@ -32,6 +27,9 @@ import { Icon } from 'react-icons-kit';
 import { link } from 'react-icons-kit/icomoon/link';
 import { priceTag } from 'react-icons-kit/icomoon/priceTag';
 import { ic_close } from 'react-icons-kit/md/ic_close';
+import { changeNotification } from '../../store/widgets/actions';
+import { bindActionCreators } from 'redux';
+import { ToastType } from '../elements/Toast/Toast';
 
 interface IEditorProps {
   appModes: AppModes;
@@ -44,6 +42,7 @@ interface IEditorProps {
 
   createOrUpdateAnnotation: (instance: AnnotationAPICreateModel) => Promise<object>;
   hideEditor: () => void;
+  changeNotification: (visible: boolean, message?: string, type?: ToastType) => void;
 }
 
 interface IEditorState {
@@ -88,7 +87,11 @@ interface IEditorState {
     };
   },
   dispatch => ({
-    hideEditor: () => dispatch(hideEditor()),
+    ...bindActionCreators({
+      hideEditor,
+      changeNotification,
+    },
+    dispatch),
     createOrUpdateAnnotation: (instance: AnnotationAPICreateModel) => {
       if (instance.id) {
         return dispatch(updateResource(instance));
@@ -264,13 +267,15 @@ class Editor extends React.Component<Partial<IEditorProps>,
         if (isNewInstance) {
           turnOffAnnotationMode(this.props.appModes, window.location.href);
           ppGA.annotationAdded(instance.id, attributes.ppCategory, !attributes.comment, attributes.annotationLink);
+          this.props.changeNotification(true, 'Dodałeś/aś przypis', ToastType.success);
         } else {
           ppGA.annotationEdited(instance.id, attributes.ppCategory, !attributes.comment, attributes.annotationLink);
+          this.props.changeNotification(true, 'Edytowałeś/aś przypis', ToastType.success);
         }
       }).catch((errors) => {
         this.setState({ isCreating: false });
         console.log(errors);
-        // TODO: show error toast here
+        this.props.changeNotification(true, 'Błąd! Nie udało się zapisać przypisu', ToastType.failure);
       });
     }
   }
@@ -303,7 +308,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
             className={styles.close}
             onClick={this.onCancelClick}
           >
-            <Icon icon={ic_close} size={18} />
+            <Icon icon={ic_close} size={18}/>
           </div>
           <div className={classNames(styles.editorInput)}>
             <div className={classNames(styles.commentTextareaWrapper)}>
@@ -334,7 +339,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
             <Popup
               className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
               hideOnScroll={true}
-              trigger={<Icon className={styles.inputIcon} icon={link} size={15} />}
+              trigger={<Icon className={styles.inputIcon} icon={link} size={15}/>}
               flowing={true}
               hoverable={true}
               position="top left"
@@ -360,7 +365,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
             <Popup
               className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
               hideOnScroll={true}
-              trigger={<Icon className={styles.inputIcon} icon={priceTag} size={15} />}
+              trigger={<Icon className={styles.inputIcon} icon={priceTag} size={15}/>}
               flowing={true}
               hoverable={true}
               position="top left"
@@ -378,14 +383,15 @@ class Editor extends React.Component<Partial<IEditorProps>,
             <button className={classNames(styles.submitButton, styles.cancel)} onClick={this.onCancelClick}>
               {' '}Anuluj{' '}
             </button>
-            <button className={classNames(styles.submitButton, styles.save, this.saveButtonClass())} onClick={this.onSaveClick}>
+            <button className={classNames(styles.submitButton, styles.save, this.saveButtonClass())}
+                    onClick={this.onSaveClick}>
               {' '}Zapisz{' '}
             </button>
             {noCommentModalOpen &&
             <NoCommentModal
               onCloseCommentModal={this.handleCloseCommentModal}
               onModalSaveClick={this.handleModalSaveClick}
-          />}
+            />}
           </div>
         </div>
       </DraggableWidget>

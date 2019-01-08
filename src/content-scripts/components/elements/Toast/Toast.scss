@@ -16,10 +16,18 @@ $toast-width: 255px;
   color: white;
   width: $toast-width;
   background-color: #778ca3;
-  border-left: 5px solid #2ecc71;
   display: flex;
   transition: 0.5s ease;
+
+  &.success {
+    border-left: 5px solid #2ecc71;
+  }
+
+  &.failure {
+    border-left: 5px solid #cc3e32;
+  }
 }
+
 
 .hidden {
   transform: translate($toast-width, 0);
