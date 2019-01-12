@@ -13,6 +13,7 @@ import { AppModes } from 'content-scripts/store/appModes/types';
 import { selectEditorState } from 'content-scripts/store/selectors';
 
 import { DraggableWidget } from 'content-scripts/components/widget';
+import Button from '../elements/Button/Button';
 
 import NoCommentModal from 'content-scripts/components/editor/NoCommentModal/NoCommentModal';
 import PPCategoryButtonsBar from 'content-scripts/components/editor/PPCategoryButtonBar/PPCategoryButtonsBar';
@@ -109,12 +110,6 @@ class Editor extends React.Component<Partial<IEditorProps>,
     locationY: 0,
   };
 
-  static ppCategoryToClass = {
-    [AnnotationPPCategories.ADDITIONAL_INFO]: styles.categoryAdditionalInfo,
-    [AnnotationPPCategories.CLARIFICATION]: styles.categoryClarification,
-    [AnnotationPPCategories.ERROR]: styles.categoryError,
-  };
-
   static getDerivedStateFromProps(nextProps: IEditorProps, prevState: IEditorState) {
     /*
      * The window should update whenever either annotation or range changes
@@ -202,10 +197,6 @@ class Editor extends React.Component<Partial<IEditorProps>,
       ...validationResult.errors,
     });
     return false;
-  }
-
-  saveButtonClass(): string {
-    return Editor.ppCategoryToClass[this.state.ppCategory];
   }
 
   onSaveClick = (event: any) => {
@@ -380,13 +371,12 @@ class Editor extends React.Component<Partial<IEditorProps>,
             </div>
           </div>
           <div className={styles.controls}>
-            <button className={classNames(styles.submitButton, styles.cancel)} onClick={this.onCancelClick}>
-              {' '}Anuluj{' '}
-            </button>
-            <button className={classNames(styles.submitButton, styles.save, this.saveButtonClass())}
-                    onClick={this.onSaveClick}>
-              {' '}Zapisz{' '}
-            </button>
+            <Button className={styles.cancelButton} onClick={this.onCancelClick}>
+              Anuluj
+            </Button>
+            <Button className={styles.saveButton} appearance="primary" onClick={this.onSaveClick}>
+              Zapisz
+            </Button>
             {noCommentModalOpen &&
             <NoCommentModal
               onCloseCommentModal={this.handleCloseCommentModal}

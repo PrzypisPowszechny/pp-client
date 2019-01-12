@@ -6,6 +6,7 @@ import styles from './AnnotationModeWidget.scss';
 import { PPScopeClass } from 'content-scripts/settings';
 import { turnOffAnnotationMode } from 'common/chrome-storage';
 import { AppModes } from 'content-scripts/store/appModes/types';
+import Button from '../elements/Button/Button';
 import ppGA from 'common/pp-ga';
 import { hideMenu } from '../../store/widgets/actions';
 
@@ -36,12 +37,9 @@ export default class AnnotationModeWidget extends React.Component<Partial<IAnnot
         <div className={styles.msg}>
           Zaznacz fragment tekstu, aby <br/> dodać przypis.
         </div>
-        <button
-          className={styles.cancelButton}
-          onClick={this.handleCancelClick}
-        >
-          Anuluj
-        </button>
+        <Button appearance="primary" onClick={this.handleCancelClick}>
+            Zakończ dodawanie
+        </Button>
       </div>
     );
   }

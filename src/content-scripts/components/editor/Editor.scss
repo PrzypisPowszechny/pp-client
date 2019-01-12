@@ -139,32 +139,21 @@ $editor-font-size: 14px;
 }
 
 .controls {
-  float: right;
+  position: relative;
   margin: 0;
-  margin-top: 10px;
-  display: flex;
-  justify-content: flex-end;
-  padding: 5px 3px;
+  margin-top: 20px;
 
-  .submitButton {
-    @include submit-button();
-    @include button-color(#888888);
+  .cancelButton {
+    position: absolute;
+    left: 3px;
   }
 
-  // use priority-specific as a baseline and darken it so it presents well as a button
-  .category-additional-info {
-    @include button-color($normal-ref-color);
+  .saveButton {
+    position: absolute;
+    right: 3px;
   }
 
-  .category-clarification {
-    @include button-color(darken($warning-ref-color, 3%));
-  }
-
-  .category-error {
-    @include button-color(darken($alert-ref-color, 3%));
-  }
 }
-// }
 
 /* Some pp-editor-widget embedded elements */
 
@@ -236,7 +225,7 @@ $editor-font-size: 14px;
 
 .moverFrame {
   padding-top: $editor-horizontal-spacing;
-  padding-bottom: $editor-horizontal-spacing + 40px;
+  padding-bottom: $editor-horizontal-spacing + 35px;
   padding-left: $editor-vertical-spacing;
   padding-right: $editor-vertical-spacing;
   cursor: move;
