@@ -1,6 +1,7 @@
 import React from 'react';
 
-import './toggle.scss';
+import styles from './Toggle.scss';
+import classNames from 'classnames';
 
 interface IToggleProps {
   checked: boolean;
@@ -15,13 +16,13 @@ export default class Toggle extends React.Component<IToggleProps, {}> {
   render() {
     const { checked } = this.props;
     return (
-      <label className="switch">
+      <label className={styles.self}>
         <input
           type="checkbox"
           checked={checked}
           onChange={this.props.onChange}
         />
-        <span className="slider round"/>
+        <span className={classNames(styles.slider, styles.round)}/>
       </label>
     );
   }

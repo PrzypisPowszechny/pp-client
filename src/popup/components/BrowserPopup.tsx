@@ -7,15 +7,20 @@ import { ic_block } from 'react-icons-kit/md/ic_block';
 import { ic_home } from 'react-icons-kit/md/ic_home';
 
 import { standardizeUrlForPageSettings } from 'common/url';
-import Toggle from './toggle/toggle';
+import Toggle from './toggle/Toggle';
 import chromeStorage, { turnOnRequestMode } from 'common/chrome-storage';
 import * as chromeKeys from 'common/chrome-storage/keys';
 import _filter from 'lodash/filter';
 import classNames from 'classnames';
 import ppGA from 'common/pp-ga/index';
+import { AnnotationAPIModel } from 'common/api/annotations';
+import AnnotationSummary from './annotationSummary/AnnotationSummary';
+import { PopupPages } from './BrowserPopupNavigator';
+import '../css/popup.scss';
 
 export interface IBrowserPopupProps {
   onAnnotationRequestSelect: () => void;
+  onPageChange: (PopupPages) => void;
 }
 
 interface IBrowserPopupState {
@@ -42,7 +47,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     };
   }
 
-  loadStateFromStorage() {
+  loadStateFromAppModes() {
     /* Use data from chrome storage to update popup state
      * It is assumed that there are no other sources of data;
      * In the future:
@@ -73,11 +78,11 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
       this.setState({ currentStandardizedTabUrl: standardizeUrlForPageSettings(tab.url) });
     });
 
-    this.loadStateFromStorage();
+    this.loadStateFromAppModes();
   }
 
   componentDidUpdate() {
-    this.loadStateFromStorage();
+    this.loadStateFromAppModes();
   }
 
   isExtensionDisabledForCurrentTab() {
@@ -90,6 +95,13 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
 
   isRequestModeForCurrentTab() {
     return (this.state.requestModePages || []).indexOf(this.state.currentStandardizedTabUrl) !== -1;
+  }
+
+  handleFullAnnotationViewClick = (e) => {
+    const { onPageChange } = this.props;
+    if (onPageChange) {
+      onPageChange(PopupPages.annotationList);
+    }
   }
 
   /*
@@ -213,6 +225,8 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
               <Icon className="icon" icon={ic_home} size={20}/>
             </a>
           </div>
+          <hr className="menu-separator"/>
+          <AnnotationSummary onFullViewClick={this.handleFullAnnotationViewClick}/>
           <hr className="menu-separator"/>
           <li
             className={classNames('menu-item', 'clickable', 'primary',

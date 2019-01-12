@@ -7,7 +7,6 @@ import 'rangy/lib/rangy-serializer';
 import rangy from 'rangy';
 
 import mousePosition from '../utils/mousePosition';
-import store from 'content-scripts/store';
 import { makeSelection, showMenu } from 'content-scripts/store/actions';
 
 import { TextSelector } from '../utils/index';
@@ -23,6 +22,9 @@ import { setSelectionRange, showEditorAnnotation } from '../store/widgets/action
 import ppGA from 'common/pp-ga';
 import { standardizeUrlForPageSettings } from '../../common/url';
 import { turnOnRequestMode } from '../../common/chrome-storage';
+import store from '../store';
+import { selectAnnotationLocationForBrowserStorage } from '../store/annotations/selectors';
+import { PopupAnnotationLocationData } from '../../popup/messages';
 
 let handlers;
 
@@ -49,6 +51,7 @@ function init() {
   };
 
   chrome.runtime.onMessage.addListener(contextMenuCallback);
+  chrome.runtime.onMessage.addListener(popupGetAnnotationMessageHandler);
 
   // This special hook for selenium e2e test to open editor as context menu click is out of selenium's control...
   document.addEventListener('EMULATE_ON_CONTEXT_MENU_ANNOTATE', annotateCommand);
@@ -57,6 +60,7 @@ function init() {
 
 export function deinit() {
   chrome.runtime.onMessage.removeListener(contextMenuCallback);
+  chrome.runtime.onMessage.removeListener(popupGetAnnotationMessageHandler);
   // (todo) deinitialize TextSelector
 }
 
@@ -69,14 +73,14 @@ function selectionChangeCallback(
   // Show the "add annotation" menu if in the annotation mode
   if (appModes.isAnnotationMode) {
     if (selectedRanges && selectedRanges.length === 0 || (selectedRanges.length === 1 && !isInsideArticle)) {
-    // Propagate to the store only selections fully inside the article (e.g. not belonging to any of PP components)
-    // When we need to react also to other, we can easily expand the textSelector reducer; for now it' too eager.
-    updateMenuForNoSelection();
-  } else if (selectedRanges.length === 1) {
-    updateMenuForSelection(selectedRanges[0], mousePosition(event));
-  } else {
-    console.warn('PP: more than one selected range is not supported');
-  }
+      // Propagate to the store only selections fully inside the article (e.g. not belonging to any of PP components)
+      // When we need to react also to other, we can easily expand the textSelector reducer; for now it' too eager.
+      updateMenuForNoSelection();
+    } else if (selectedRanges.length === 1) {
+      updateMenuForSelection(selectedRanges[0], mousePosition(event));
+    } else {
+      console.warn('PP: more than one selected range is not supported');
+    }
   }
 }
 
@@ -89,7 +93,7 @@ function updateMenuForSelection(selectedRange: XPathRange.NormalizedRange, posit
   // When position is null, use the center of selection to display the menu
   store.dispatch(makeSelection(fullAnnotationLocation(selectedRange)));
   if (!position) {
-      position = handlers.selector.currentSingleSelectionCenter();
+    position = handlers.selector.currentSingleSelectionCenter();
   }
   store.dispatch(showMenu(position));
 }
@@ -102,6 +106,14 @@ function displayAnnotationMenuForCurrentSelection() {
    */
   if (selection) {
     updateMenuForSelection(selection);
+  }
+}
+
+function popupGetAnnotationMessageHandler(request, sender, sendResponse) {
+  if (request.action === 'GET_ANNOTATIONS') {
+    console.debug(`Annotations requested from popup`);
+    const response: PopupAnnotationLocationData = selectAnnotationLocationForBrowserStorage(store.getState());
+    sendResponse(response);
   }
 }
 

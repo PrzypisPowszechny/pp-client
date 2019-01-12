@@ -1,7 +1,11 @@
+// Messages sent by content script to background
 
 export function setExtensionBadge(text: string) {
   return new Promise((resolve) => {
-    chrome.runtime.sendMessage({ action: 'SET_BADGE', text }, (response) => {
+    chrome.runtime.sendMessage({
+      action: 'SET_BADGE',
+      text,
+    }, (response) => {
       if (response) {
         resolve(response);
       } else {

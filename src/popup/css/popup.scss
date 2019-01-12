@@ -1,3 +1,7 @@
+/*
+ * Global styles for the whole popup window
+ */
+
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
 html, body {
@@ -51,7 +55,7 @@ body {
 }
 
 .menu-logo {
-  background-image: url('../../assets/popup-logo.png');
+  background-image: url('../../../assets/popup-logo.png');
   background-size: contain;
   background-repeat: no-repeat;
   height: 80px;
