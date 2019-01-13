@@ -56,18 +56,27 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
     // TODO style
     return (
       <ul className={styles.summaryList}>
-        <li className={classNames(styles.summaryItem, styles.additionalInfo)}>
-          <div className={styles.marker} />
-          {counts[AnnotationPPCategories.ADDITIONAL_INFO]}
-        </li>
-        <li className={classNames(styles.summaryItem, styles.clarification)}>
-          <div className={styles.marker} />
-          {counts[AnnotationPPCategories.CLARIFICATION]}
-        </li>
-        <li className={classNames(styles.summaryItem, styles.error)}>
-          <div className={styles.marker} />
-          {counts[AnnotationPPCategories.ERROR]}
-        </li>
+        {
+          counts[AnnotationPPCategories.ADDITIONAL_INFO] > 0 &&
+          <li className={classNames(styles.summaryItem, styles.additionalInfo)}>
+            <div className={styles.marker} />
+            {counts[AnnotationPPCategories.ADDITIONAL_INFO]}
+          </li>
+        }
+        {
+          counts[AnnotationPPCategories.CLARIFICATION] > 0 &&
+          <li className={classNames(styles.summaryItem, styles.clarification)}>
+            <div className={styles.marker} />
+            {counts[AnnotationPPCategories.CLARIFICATION]}
+          </li>
+        }
+        {
+          counts[AnnotationPPCategories.ERROR] > 0 &&
+          <li className={classNames(styles.summaryItem, styles.error)}>
+            <div className={styles.marker} />
+            {counts[AnnotationPPCategories.ERROR]}
+          </li>
+        }
       </ul>
     );
   }
