@@ -9,7 +9,7 @@ import styles from './Viewer.scss';
 import { selectViewerState } from 'content-scripts/store/widgets/selectors';
 import { PPScopeClass, PPViewerHoverContainerClass, PPViewerIndirectChildClass } from 'content-scripts/settings';
 import { setMouseOverViewer } from 'content-scripts/store/widgets/actions';
-import _DeleteAnnotationModal, { default as DeleteAnnotationModal } from './DeleteAnnotationModal';
+import DeleteAnnotationModal from './DeleteAnnotationModal';
 
 interface IViewerProps {
   locationX: number;

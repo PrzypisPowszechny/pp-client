@@ -9,7 +9,7 @@ import {
   AnnotationPPCategories, AnnotationDemagogCategories,
   annotationPPCategoriesLabels, annotationDemagogCategoriesLabels,
 } from 'common/api/annotations';
-import { extractHostname, extractMinimalLabel, httpPrefixed } from '../../../common/url';
+import { extractMinimalLabel, httpPrefixed } from '../../../common/url';
 
 import AuthorActionControls from './viewer-elements/AuthorActionControls';
 import UserActionControls from './viewer-elements/UserActionControls';
