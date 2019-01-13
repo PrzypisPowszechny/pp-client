@@ -8,6 +8,7 @@ import { ic_home } from 'react-icons-kit/md/ic_home';
 
 import { standardizeUrlForPageSettings } from 'common/url';
 import Toggle from './toggle/Toggle';
+import Button from 'content-scripts/components/elements/Button/Button';
 import chromeStorage, { turnOnRequestMode } from 'common/chrome-storage';
 import * as chromeKeys from 'common/chrome-storage/keys';
 import _filter from 'lodash/filter';
@@ -225,9 +226,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
               <Icon className="icon" icon={ic_home} size={20}/>
             </a>
           </div>
-          <hr className="menu-separator"/>
           <AnnotationSummary onFullViewClick={this.handleFullAnnotationViewClick}/>
-          <hr className="menu-separator"/>
           <li
             className={classNames('menu-item', 'clickable', 'primary',
               { disabled: isExtensionDisabled || isCurrentPageDisabled },
@@ -281,14 +280,13 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
           <div className="menu-bottom">
             <p className="menu-header">Pomóż nam ulepszać Przypis Powszechny</p>
             <p className="menu-text">Coś nie działa? Uważasz, że czegoś brakuje? Coś Cię zirytowało?</p>
-            <a
-              className="cta-Button"
-              href={`${PPSettings.SITE_URL}/report/`}
-              target="_blank"
+            <Button
+              // className="cta-Button"
+              appearance="subtle"
               onClick={this.handleReportButtonClick}
             >
-              Powiedz nam o tym!
-            </a>
+              Powiedz nam o tym
+            </Button>
           </div>
         </ul>
       </div>

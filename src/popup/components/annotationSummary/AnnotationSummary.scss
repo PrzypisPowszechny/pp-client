@@ -1,4 +1,69 @@
+@import "css/common/theme";
 
 .self {
-  height: 100px;
+  background: #F7F7F7;
+  padding: 17px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+}
+
+.summaryContainer {
+
+}
+
+.header {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.chevronButton {
+  margin-left: auto;
+  cursor: pointer;
+  border-radius: 50%;
+
+  &:hover {
+    background-color: darken(#F7F7F7, 10%)
+  }
+}
+
+.summaryList {
+  list-style: none;
+  padding: 0 0 0 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 10px;
+
+  .summaryItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 25px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .marker {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+  }
+
+  .additionalInfo .marker {
+    background-color: $additional-info-color;
+  }
+
+  .clarification .marker {
+    background-color: $clarification-color;
+  }
+
+  .error .marker {
+    background-color: $error-color;
+  }
+
 }

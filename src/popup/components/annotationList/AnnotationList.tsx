@@ -2,6 +2,8 @@ import React from 'react';
 import { loadAnnotationLocationData, PopupAnnotationLocationData, sendScrollToAnnotation } from '../../messages';
 import { PopupPages } from '../BrowserPopupNavigator';
 import styles from './AnnotationList.scss';
+import { Icon } from 'react-icons-kit';
+import { ic_chevron_left } from 'react-icons-kit/md/ic_chevron_left';
 
 export interface IAnnotationListProps {
   onPageChange: (Event) => void;
@@ -49,7 +51,9 @@ export default class AnnotationList extends React.Component<Partial<IAnnotationL
     } else {
       return (
         <div className={styles.self}>
-          <button onClick={this.handleGoBackClick}>Wróć</button>
+          <div onClick={this.handleGoBackClick}>
+            <Icon className="icon" icon={ic_chevron_left} size={25}/>
+          </div>
           <ul>
           {this.state.annotationLocationData.located.map(annotation => (
             <li
