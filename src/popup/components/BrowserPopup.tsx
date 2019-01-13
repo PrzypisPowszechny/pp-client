@@ -5,6 +5,7 @@ import { ic_add_circle } from 'react-icons-kit/md/ic_add_circle';
 import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
 import { ic_block } from 'react-icons-kit/md/ic_block';
 import { ic_home } from 'react-icons-kit/md/ic_home';
+import {send} from 'react-icons-kit/fa/send';
 
 import { standardizeUrlForPageSettings } from 'common/url';
 import Toggle from './toggle/Toggle';
@@ -279,13 +280,14 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
           <hr className="menu-separator"/>
           <div className="menu-bottom">
             <p className="menu-header">Pomóż nam ulepszać Przypis Powszechny</p>
-            <p className="menu-text">Coś nie działa? Uważasz, że czegoś brakuje? Coś Cię zirytowało?</p>
+            <p className="menu-text">Coś nie działa? Uważasz, że czegoś brakuje?</p>
             <Button
               // className="cta-Button"
-              appearance="subtle"
+              iconBefore={<Icon icon={send} size={14}/>}
+              appearance="link"
               onClick={this.handleReportButtonClick}
             >
-              Powiedz nam o tym
+              Daj znać, co myślisz
             </Button>
           </div>
         </ul>
