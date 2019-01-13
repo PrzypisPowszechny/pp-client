@@ -96,12 +96,12 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
         </div>);
     } else {
       return (
-        <div className={styles.self}>
+        <div className={styles.self} onClick={this.props.onFullViewClick}>
           <div className={styles.summaryContainer}>
             <span className={styles.header}>Przypisy na tej stronie</span>
             {this.renderSummary()}
           </div>
-          <div className={styles.chevronButton} onClick={this.props.onFullViewClick}>
+          <div className={styles.chevronButton}>
             <Icon icon={ic_chevron_right} size={25}/>
           </div>
         </div>

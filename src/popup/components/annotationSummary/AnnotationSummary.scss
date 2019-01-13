@@ -1,13 +1,18 @@
 @import "css/common/theme";
 
 .self {
-  background: #F7F7F7;
+  background-color: #fafbfd;
   padding: 17px 20px;
   display: flex;
   flex-direction: row;
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+  &:hover {
+    background-color: #ebecf0;
+    cursor: pointer;
+  }
 }
 
 .header {
@@ -19,10 +24,6 @@
   margin-left: auto;
   cursor: pointer;
   border-radius: 50%;
-
-  &:hover {
-    background-color: darken(#F7F7F7, 10%)
-  }
 }
 
 .summaryList {
