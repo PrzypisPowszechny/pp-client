@@ -3,6 +3,14 @@ const urlRegex = new RegExp(
   /^(https?:\/\/)?[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,24}\b(\/[-a-zA-Z0-9@:%_\+.,~#?&//=]*)?$/gi,
 );
 
+export function extractMinimalLabel(url) {
+  const hostname = extractHostname(url);
+  if (hostname.split('.')[0] === 'www') {
+    return hostname.slice(4);
+  }
+  return hostname;
+}
+
 export function extractHostname(url) {
   let hostname;
   // find & remove protocol (http, ftp, etc.) and get hostname

@@ -9,7 +9,7 @@ import {
   AnnotationPPCategories, AnnotationDemagogCategories,
   annotationPPCategoriesLabels, annotationDemagogCategoriesLabels,
 } from 'common/api/annotations';
-import { extractHostname, httpPrefixed } from '../../../common/url';
+import { extractHostname, extractMinimalLabel, httpPrefixed } from '../../../common/url';
 
 import AuthorActionControls from './viewer-elements/AuthorActionControls';
 import UserActionControls from './viewer-elements/UserActionControls';
@@ -146,7 +146,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
             >
               {/* <span className={styles.annotationLinkIcon}/> */}
               <Icon className={styles.annotationLinkIcon} icon={link} size={11} />
-              {extractHostname(annotationLink)}
+              {extractMinimalLabel(annotationLink)}
             </a>
             <a
               className={styles.annotationLinkTitle}
