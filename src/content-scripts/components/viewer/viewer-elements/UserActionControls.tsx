@@ -63,7 +63,7 @@ export default class UserActionControls extends
 
   render() {
     return (
-      <div>
+      <div className={styles.controlsContainer}>
         <div className={classNames(styles.controls, styles.visible)}>
           <Upvote annotation={this.props.annotation}  indirectChildClassName={this.props.indirectChildClassName}/>
           <button

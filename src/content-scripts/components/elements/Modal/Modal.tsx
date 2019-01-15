@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { PPScopeClass } from '../../../settings';
 
 interface ModalProps {
-  onCloseModal: () => void;
+  onCloseModal: (e) => void;
 }
 
 import styles from './Modal.scss';
@@ -15,7 +15,7 @@ export default class Modal extends React.PureComponent<ModalProps> {
 
     render() {
         return (
-            <div className={classNames(PPScopeClass, styles.modal)} onClick={() => this.props.onCloseModal()}>
+            <div className={classNames(PPScopeClass, styles.modal)} onClick={this.props.onCloseModal}>
                 <div className={styles.modalContent} onClick={this.handleContentClick}>
                     {this.props.children}
                 </div>

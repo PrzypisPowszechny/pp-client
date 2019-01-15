@@ -11,7 +11,6 @@
     vertical-align: middle;
     white-space: nowrap;
     width: auto;
-    color: rgb(80, 95, 121);
     background: rgba(9, 30, 66, 0.04);
     border-radius: 3px;
     border-width: 0px;
@@ -20,6 +19,10 @@
     text-decoration: none;
     transition: background 0.1s ease-out 0s, box-shadow 0.15s cubic-bezier(0.47, 0.03, 0.49, 1.38) 0s;
     outline: none;
+
+    span {
+        color: rgb(80, 95, 121);
+    }
 
     .buttonContent {
         align-self: center;
@@ -59,7 +62,10 @@
     }
 
     &.primary {
+        span {
         color: white;
+
+        }
         background:  rgb(52, 73, 94);
 
         &:hover {

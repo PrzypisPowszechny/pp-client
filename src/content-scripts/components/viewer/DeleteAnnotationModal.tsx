@@ -1,17 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { deleteResource } from 'redux-json-api';
-import { Button, Modal } from 'semantic-ui-react';
-
-import { selectViewerState } from 'content-scripts/store/widgets/selectors';
-import { hideViewerDeleteModal } from 'content-scripts/store/widgets/actions';
-import { AnnotationAPIModel } from 'common/api/annotations';
-import { PPScopeClass } from 'content-scripts/settings';
-import { setMouseOverViewer } from 'content-scripts/store/widgets/actions';
-import ppGA from 'common/pp-ga';
+import Modal from 'content-scripts/components/elements/Modal/Modal';
+import styles from './DeleteAnnotationModal.scss';
+import Button from '../elements/Button';
+import { changeNotification, hideViewerDeleteModal, setMouseOverViewer } from '../../store/widgets/actions';
+import { ToastType } from '../elements/Toast/Toast';
+import { selectViewerState } from '../../store/widgets/selectors';
 import { selectAnnotation } from '../../store/api/selectors';
-import { changeNotification } from '../../store/widgets/actions';
-import { default as Toast, ToastType } from '../elements/Toast/Toast';
+import { AnnotationAPIModel } from '../../../common/api/annotations';
+import ppGA from '../../../common/pp-ga';
 
 interface IModalProps {
   deleteModalId: string;
@@ -47,13 +45,13 @@ interface IModalProps {
     deleteAnnotation: deleteResource,
   },
 )
-export default class DeleteAnnotationModal extends React.Component<Partial<IModalProps>, {}> {
+export default class DeleteAnnotationModal extends React.PureComponent<Partial<IModalProps>> {
 
   handleConfirmDelete = (e) => {
     this.props.deleteAnnotation(this.props.annotation)
       .then(() => {
         const attrs = this.props.annotation.attributes;
-        ppGA.annotationDeleted(this.props.annotation.id,  attrs.ppCategory, !attrs.comment, attrs.annotationLink);
+        ppGA.annotationDeleted(this.props.annotation.id, attrs.ppCategory, !attrs.comment, attrs.annotationLink);
         this.props.changeNotification(true, 'Usunięto przypis', ToastType.success);
       })
       .catch((errors) => {
@@ -69,25 +67,30 @@ export default class DeleteAnnotationModal extends React.Component<Partial<IModa
   }
 
   render() {
-    return (
-      <Modal
-        size="mini"
-        className={PPScopeClass}
-        open={this.props.isDeleteModalOpen}
-      >
-        <Modal.Content>
-          <p>Czy na pewno chcesz usunąć przypis?</p>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button onClick={this.handleCancel} size="tiny" negative={true}>
-            Nie
-          </Button>
-          <Button onClick={this.handleConfirmDelete} size="tiny" positive={true}>
-            Tak
-          </Button>
-        </Modal.Actions>
-      </Modal>
-    );
-  }
+    const {
+      isDeleteModalOpen,
+    } = this.props;
 
+    if (isDeleteModalOpen) {
+      return (
+        <Modal onCloseModal={this.handleCancel}>
+          <div className={styles.modalContent}>
+            <div className={styles.modalHeader}>
+              Czy na pewno chcesz usunąć przypis?
+            </div>
+            <div className={styles.controls}>
+              <Button onClick={this.handleCancel}>
+                Nie
+              </Button>
+              <Button appearance="primary" onClick={this.handleConfirmDelete}>
+                Tak
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      );
+    } else {
+      return null;
+    }
+  }
 }
