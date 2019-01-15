@@ -44,40 +44,45 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
     });
   }
 
-  renderSummary() {
+  categoryCounts() {
     const annotations: AnnotationAPIModel[] = this.state.annotationLocationData.located;
-    const counts = {
+    return {
       [AnnotationPPCategories.ADDITIONAL_INFO]: 0,
       [AnnotationPPCategories.CLARIFICATION]: 0,
       [AnnotationPPCategories.ERROR]: 0,
       ..._.countBy(annotations.map(annotation => annotation.attributes.ppCategory)),
     };
-    // TODO ignore annotations with zero count
-    // TODO style
+  }
+
+  renderSummary(categoryCounts) {
     return (
-      <ul className={styles.summaryList}>
-        {
-          counts[AnnotationPPCategories.ADDITIONAL_INFO] > 0 &&
-          <li className={classNames(styles.summaryItem, styles.additionalInfo)}>
-            <div className={styles.marker} />
-            {counts[AnnotationPPCategories.ADDITIONAL_INFO]}
-          </li>
-        }
-        {
-          counts[AnnotationPPCategories.CLARIFICATION] > 0 &&
-          <li className={classNames(styles.summaryItem, styles.clarification)}>
-            <div className={styles.marker} />
-            {counts[AnnotationPPCategories.CLARIFICATION]}
-          </li>
-        }
-        {
-          counts[AnnotationPPCategories.ERROR] > 0 &&
-          <li className={classNames(styles.summaryItem, styles.error)}>
-            <div className={styles.marker} />
-            {counts[AnnotationPPCategories.ERROR]}
-          </li>
-        }
-      </ul>
+      <div className={styles.summaryContainer}>
+        <span className={styles.header}>Przypisy na tej stronie</span>
+        <ul className={styles.summaryList}>
+          {
+            categoryCounts[AnnotationPPCategories.ADDITIONAL_INFO] > 0 &&
+            <li className={classNames(styles.summaryItem, styles.additionalInfo)}>
+              <div className={styles.marker}/>
+              {categoryCounts[AnnotationPPCategories.ADDITIONAL_INFO]}
+            </li>
+          }
+          {
+            categoryCounts[AnnotationPPCategories.CLARIFICATION] > 0 &&
+            <li className={classNames(styles.summaryItem, styles.clarification)}>
+              <div className={styles.marker}/>
+              {categoryCounts[AnnotationPPCategories.CLARIFICATION]}
+            </li>
+          }
+          {
+            categoryCounts[AnnotationPPCategories.ERROR] > 0 &&
+            <li className={classNames(styles.summaryItem, styles.error)}>
+              <div className={styles.marker}/>
+              {categoryCounts[AnnotationPPCategories.ERROR]}
+            </li>
+          }
+        </ul>
+      </div>
+
     );
   }
 
@@ -95,17 +100,24 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
           Ładuję przypisy...
         </div>);
     } else {
-      return (
-        <div className={styles.self} onClick={this.props.onFullViewClick}>
-          <div className={styles.summaryContainer}>
-            <span className={styles.header}>Przypisy na tej stronie</span>
-            {this.renderSummary()}
+      const categoryCounts = this.categoryCounts();
+      const allCount = _.sum(Object.keys(categoryCounts).map(category => categoryCounts[category]));
+      if (allCount > 0) {
+        return (
+          <div className={classNames(styles.self, styles.anyFound)} onClick={this.props.onFullViewClick}>
+            {this.renderSummary(categoryCounts)}
+            <div className={styles.chevronButton}>
+              <Icon icon={ic_chevron_right} size={25}/>
+            </div>
           </div>
-          <div className={styles.chevronButton}>
-            <Icon icon={ic_chevron_right} size={25}/>
+        );
+      } else {
+        return (
+          <div className={styles.self}>
+            Brak przypisów na stronie
           </div>
-        </div>
-      );
+        );
+      }
     }
   }
 }

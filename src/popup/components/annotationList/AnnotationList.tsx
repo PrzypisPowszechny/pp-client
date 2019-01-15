@@ -45,11 +45,16 @@ export default class AnnotationList extends React.Component<Partial<IAnnotationL
     this.props.onPageChange(PopupPages.main);
   }
 
+  onAnnotationClick = (e) => {
+    const { annotationId } = e.target.dataset;
+    sendScrollToAnnotation(annotationId);
+  }
+
   render() {
     if (this.state.isLoading) {
       return (
         <div className={styles.self}>
-          loading...
+          Ładuję...
         </div>);
     } else {
       return (
@@ -63,7 +68,7 @@ export default class AnnotationList extends React.Component<Partial<IAnnotationL
               className={styles.listItem}
               key={annotation.id}
               data-annotation-id={annotation.id}
-              onClick={() => sendScrollToAnnotation(annotation.id)}
+              onClick={this.onAnnotationClick}
             >
               <div className={classNames(styles.marker, this.markerStyles[annotation.attributes.ppCategory])}/>
               <div className={styles.annotationTexts}>
