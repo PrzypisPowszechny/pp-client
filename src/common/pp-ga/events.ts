@@ -2,6 +2,8 @@ import { sendEvent, sendEventByMessage, GACustomFieldsIndex } from './core';
 import { formatBoolean, formatPriority, formatReason } from './utils';
 import packageConf from '../../../package.json';
 
+// Extension Installation events
+
 export function extensionInstalled() {
   sendEvent({ eventCategory: 'Extension', eventAction: 'Install', eventLabel: 'ExtensionInstalled' });
 }
@@ -27,6 +29,8 @@ export function extensionDisabledOnAllSites(currentUrl: string) {
   });
 }
 
+// Extension Mode events
+
 export function extensionEnabledOnAllSites(currentUrl: string) {
   sendEventByMessage({
     eventCategory: 'Extension', eventAction: 'EnableOnAllSites', eventLabel: 'ExtensionEnabledOnAllSites',
@@ -51,13 +55,17 @@ export function extensionEnabledOnSite(url: string) {
   });
 }
 
-export function reportPopupClicked(url: string) {
+// Other extension-wide events
+
+export function extensionReportButtonClicked(url: string) {
   sendEventByMessage({
-    eventCategory: 'ExtensionReport', eventAction: 'Click', eventLabel: 'ReportButtonClicked',
+    eventCategory: 'ExtensionReport', eventAction: 'Click', eventLabel: 'ExtensionReportButtonClicked',
     [GACustomFieldsIndex.eventUrl]: url,
     location: url,
   });
 }
+
+// Annotation events
 
 export function annotationDisplayed(annotationId: string, priority: string, isCommentBlank: boolean, link: string) {
   sendEventByMessage({
@@ -88,13 +96,6 @@ export function annotationAddingModeInited() {
 export function annotationAddingModeCancelled() {
   sendEventByMessage({
     eventCategory: 'AnnotationAddingMode', eventAction: 'Cancel', eventLabel: 'AnnotationAddingModeCancelled',
-  });
-}
-
-export function annotationRequestLinkClicked(url: string) {
-  sendEventByMessage({
-    eventCategory: 'AnnotationRequest', eventAction: 'Init', eventLabel: 'AnnotationAddingModeInited',
-    [GACustomFieldsIndex.eventUrl]: url,
   });
 }
 
@@ -152,9 +153,20 @@ export function annotationFormMoved() {
   });
 }
 
+// Annotation Request events
+
+export function annotationRequestLinkClicked(url: string) {
+  sendEventByMessage({
+    eventCategory: 'AnnotationRequest', eventAction: 'ClickRe', eventLabel: 'AnnotationRequestLinkClicked',
+    [GACustomFieldsIndex.eventUrl]: url,
+  });
+}
+
+// Annotation Upvote events
+
 export function annotationUpvoted(annotationId: string, priority: string, isCommentBlank: boolean, link: string) {
   sendEventByMessage({
-    eventCategory: 'Annotation', eventAction: 'Upvote', eventLabel: 'AnnotationUpvoted',
+    eventCategory: 'AnnotationUpvote', eventAction: 'Add', eventLabel: 'AnnotationUpvoted',
     [GACustomFieldsIndex.annotationId]: annotationId,
     [GACustomFieldsIndex.priority]: formatPriority(priority),
     [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
@@ -165,13 +177,15 @@ export function annotationUpvoted(annotationId: string, priority: string, isComm
 export function annotationUpvoteCancelled(annotationId: string, priority: string, isCommentBlank: boolean,
                                           link: string) {
   sendEventByMessage({
-    eventCategory: 'Annotation', eventAction: 'UpvoteCancel', eventLabel: 'AnnotationUpvoteCancelled',
+    eventCategory: 'AnnotationUpvote', eventAction: 'Cancel', eventLabel: 'AnnotationUpvoteCancelled',
     [GACustomFieldsIndex.annotationId]: annotationId,
     [GACustomFieldsIndex.priority]: formatPriority(priority),
     [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
     [GACustomFieldsIndex.annotationLink]: link,
   });
 }
+
+// Annotation Report events
 
 export function annotationReportFormOpened(annotationId: string) {
   sendEventByMessage({

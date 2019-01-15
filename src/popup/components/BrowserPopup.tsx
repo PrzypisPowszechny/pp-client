@@ -200,7 +200,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
   }
 
   handleReportButtonClick = () => {
-    ppGA.reportPopupClicked(this.state.currentStandardizedTabUrl);
+    ppGA.extensionReportButtonClicked(this.state.currentStandardizedTabUrl);
     window.open(`${PPSettings.SITE_URL}/report/`, '_blank');
   }
 
