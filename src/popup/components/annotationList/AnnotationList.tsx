@@ -46,7 +46,7 @@ export default class AnnotationList extends React.Component<Partial<IAnnotationL
   }
 
   onAnnotationClick = (e) => {
-    const { annotationId } = e.target.dataset;
+    const { annotationId } = e.currentTarget.dataset;
     sendScrollToAnnotation(annotationId);
   }
 
