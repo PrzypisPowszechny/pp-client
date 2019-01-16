@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import classNames from 'classnames';
 import { PPScopeClass } from 'content-scripts/settings';
 
@@ -8,8 +8,9 @@ interface ButtonProps {
   className: string;
   label: string;
   isDisabled: boolean;
-  appearance: 'default' | 'primary' | 'subtle';
+  appearance: 'default' | 'primary' | 'subtle' | 'link';
   onClick: (e: any) => void;
+  iconBefore: ReactNode;
 }
 
 export default class Button extends React.Component <Partial<ButtonProps>, {}> {
@@ -18,6 +19,7 @@ export default class Button extends React.Component <Partial<ButtonProps>, {}> {
     default: styles.default,
     primary: styles.primary,
     subtle: styles.subtle,
+    link: styles.link,
   };
 
   render() {
@@ -33,6 +35,9 @@ export default class Button extends React.Component <Partial<ButtonProps>, {}> {
         onClick={this.props.onClick}
         disabled={this.props.isDisabled}
     >
+      {
+        this.props.iconBefore && <div className={styles.iconBefore}>{this.props.iconBefore}</div>
+      }
       <span className={styles.buttonContent}>
         <span className={styles.label}>{this.props.children}</span>
       </span>

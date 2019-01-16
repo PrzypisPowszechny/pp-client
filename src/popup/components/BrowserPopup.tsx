@@ -5,9 +5,11 @@ import { ic_add_circle } from 'react-icons-kit/md/ic_add_circle';
 import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
 import { ic_block } from 'react-icons-kit/md/ic_block';
 import { ic_home } from 'react-icons-kit/md/ic_home';
+import {send} from 'react-icons-kit/fa/send';
 
 import { standardizeUrlForPageSettings } from 'common/url';
 import Toggle from './toggle/Toggle';
+import Button from 'content-scripts/components/elements/Button/Button';
 import chromeStorage, { turnOnRequestMode } from 'common/chrome-storage';
 import * as chromeKeys from 'common/chrome-storage/keys';
 import _filter from 'lodash/filter';
@@ -199,6 +201,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
 
   handleReportButtonClick = () => {
     ppGA.reportPopupClicked(this.state.currentStandardizedTabUrl);
+    window.open(`${PPSettings.SITE_URL}/report/`, '_blank');
   }
 
   render() {
@@ -225,9 +228,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
               <Icon className="icon" icon={ic_home} size={20}/>
             </a>
           </div>
-          <hr className="menu-separator"/>
           <AnnotationSummary onFullViewClick={this.handleFullAnnotationViewClick}/>
-          <hr className="menu-separator"/>
           <li
             className={classNames('menu-item', 'clickable', 'primary',
               { disabled: isExtensionDisabled || isCurrentPageDisabled },
@@ -280,15 +281,15 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
           <hr className="menu-separator"/>
           <div className="menu-bottom">
             <p className="menu-header">Pomóż nam ulepszać Przypis Powszechny</p>
-            <p className="menu-text">Coś nie działa? Uważasz, że czegoś brakuje? Coś Cię zirytowało?</p>
-            <a
-              className="cta-Button"
-              href={`${PPSettings.SITE_URL}/report/`}
-              target="_blank"
+            <p className="menu-text">Coś nie działa? Uważasz, że czegoś brakuje?</p>
+            <Button
+              // className="cta-Button"
+              iconBefore={<Icon icon={send} size={14}/>}
+              appearance="link"
               onClick={this.handleReportButtonClick}
             >
-              Powiedz nam o tym!
-            </a>
+              Daj znać, co myślisz
+            </Button>
           </div>
         </ul>
       </div>

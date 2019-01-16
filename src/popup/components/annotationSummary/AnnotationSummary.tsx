@@ -5,7 +5,10 @@ import {
   AnnotationPPCategories,
   annotationPPCategoriesLabels,
 } from 'common/api/annotations';
-import _countBy from 'lodash/countBy';
+import _ from 'lodash';
+import { Icon } from 'react-icons-kit';
+import { ic_chevron_right } from 'react-icons-kit/md/ic_chevron_right';
+import classNames from 'classnames';
 import styles from './AnnotationSummary.scss';
 
 export interface IAnnotationSummaryProps {
@@ -47,15 +50,33 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
       [AnnotationPPCategories.ADDITIONAL_INFO]: 0,
       [AnnotationPPCategories.CLARIFICATION]: 0,
       [AnnotationPPCategories.ERROR]: 0,
-      ..._countBy(annotations.map(annotation => annotation.attributes.ppCategory)),
+      ..._.countBy(annotations.map(annotation => annotation.attributes.ppCategory)),
     };
     // TODO ignore annotations with zero count
     // TODO style
     return (
-      <ul>
-        <li>{annotationPPCategoriesLabels.ADDITIONAL_INFO} : {counts[AnnotationPPCategories.ADDITIONAL_INFO]}</li>
-        <li>{annotationPPCategoriesLabels.CLARIFICATION} : {counts[AnnotationPPCategories.CLARIFICATION]}</li>
-        <li>{annotationPPCategoriesLabels.ERROR} : {counts[AnnotationPPCategories.ERROR]}</li>
+      <ul className={styles.summaryList}>
+        {
+          counts[AnnotationPPCategories.ADDITIONAL_INFO] > 0 &&
+          <li className={classNames(styles.summaryItem, styles.additionalInfo)}>
+            <div className={styles.marker} />
+            {counts[AnnotationPPCategories.ADDITIONAL_INFO]}
+          </li>
+        }
+        {
+          counts[AnnotationPPCategories.CLARIFICATION] > 0 &&
+          <li className={classNames(styles.summaryItem, styles.clarification)}>
+            <div className={styles.marker} />
+            {counts[AnnotationPPCategories.CLARIFICATION]}
+          </li>
+        }
+        {
+          counts[AnnotationPPCategories.ERROR] > 0 &&
+          <li className={classNames(styles.summaryItem, styles.error)}>
+            <div className={styles.marker} />
+            {counts[AnnotationPPCategories.ERROR]}
+          </li>
+        }
       </ul>
     );
   }
@@ -64,7 +85,7 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
     if (this.state.willNotLoad) {
       return (
         <div className={styles.self}>
-          Ta strona nie wyświetla przypisów.
+          Na tej stronie nie ma przypisów.
         </div>
       );
     }
@@ -76,7 +97,13 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
     } else {
       return (
         <div className={styles.self} onClick={this.props.onFullViewClick}>
-          {this.renderSummary()}
+          <div className={styles.summaryContainer}>
+            <span className={styles.header}>Przypisy na tej stronie</span>
+            {this.renderSummary()}
+          </div>
+          <div className={styles.chevronButton}>
+            <Icon icon={ic_chevron_right} size={25}/>
+          </div>
         </div>
       );
     }

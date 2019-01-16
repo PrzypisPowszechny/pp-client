@@ -2,6 +2,7 @@
     align-items: baseline;
     box-sizing: border-box;
     display: inline-flex;
+    justify-content: center;
     font-size: inherit;
     font-style: normal;
     height: 2.3em;
@@ -45,6 +46,10 @@
         }
     }
 
+    .iconBefore {
+        margin-right: 3px;
+    }
+
     &:hover {
         cursor: pointer;
         background: rgba(9, 30, 66, 0.08);
@@ -83,6 +88,20 @@
 
         &:hover {
             background: rgba(9, 30, 66, 0.08);
+        }
+
+        &.disabled:hover {
+            background: none;
+        }
+    }
+
+    &.link {
+        background: none;
+        font-weight: 600;
+        color: rgb(52, 73, 94);
+
+        &:hover {
+            text-decoration: underline;
         }
 
         &.disabled:hover {

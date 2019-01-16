@@ -1,4 +1,67 @@
+@import "css/common/theme";
 
 .self {
-  height: 100px;
+  background-color: #fafbfd;
+  padding: 17px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+  &:hover {
+    background-color: #ebecf0;
+    cursor: pointer;
+  }
+}
+
+.header {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.chevronButton {
+  margin-left: auto;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.summaryList {
+  list-style: none;
+  padding: 0 0 0 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 10px;
+
+  .summaryItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 25px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .marker {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+  }
+
+  .additionalInfo .marker {
+    background-color: $additional-info-color;
+  }
+
+  .clarification .marker {
+    background-color: $clarification-color;
+  }
+
+  .error .marker {
+    background-color: $error-color;
+  }
+
 }

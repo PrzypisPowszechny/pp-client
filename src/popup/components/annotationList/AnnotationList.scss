@@ -1,6 +1,71 @@
+@import "css/common/theme";
 
 .self {
-  // TODO
-  width: 100px;
-  height: 200px;
+  width: 310px;
+}
+
+.chevronButton {
+  margin: 5px 17px;
+  cursor: pointer;
+  border-radius: 50%;
+
+  &:hover {
+    background-color: darken(#F7F7F7, 10%)
+  }
+}
+
+.annotationList {
+  list-style: none;
+  padding: 0 20px;
+  max-height: 600px;
+  overflow-y: auto;
+  margin-top: 0;
+}
+
+.listItem {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 3px;
+  background-color: #fafbfd;
+  border-radius: 3px;
+  border: 1px solid #ebecf0;
+  padding: 5px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #ebecf0;
+  }
+}
+
+.annotationTexts {
+  max-width: 200px;
+}
+
+.quote {
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.comment {
+  font-size: 11px;
+}
+
+.marker {
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  margin: 3px;
+  margin-right: 10px;
+}
+
+.additionalInfo.marker {
+  background-color: $additional-info-color;
+}
+
+.clarification.marker {
+  background-color: $clarification-color;
+}
+
+.error.marker {
+  background-color: $error-color;
 }
