@@ -114,17 +114,17 @@ export function annotationDeleted(annotationId: string, priority: string, isComm
 
 // Annotation Form events
 
-export function annotationAddFormDisplayed(triggeredBy: string) {
+export function annotationAddFormOpened(triggeredBy: string) {
   sendEventByMessage({
-    eventCategory: 'AnnotationAddForm', eventAction: 'Display', eventLabel: 'AnnotationAddFormDisplayed',
+    eventCategory: 'AnnotationForm', eventAction: 'Open', eventLabel: 'AnnotationAddFormOpened',
     [GACustomFieldsIndex.triggeredBy]: triggeredBy,
   });
 }
 
-export function annotationEditFormDisplayed(annotationId: string, priority: string, isCommentBlank: boolean,
+export function annotationEditFormOpened(annotationId: string, priority: string, isCommentBlank: boolean,
                                             link: string) {
   sendEventByMessage({
-    eventCategory: 'AnnotationEditForm', eventAction: 'Display', eventLabel: 'AnnotationEditFormDisplayed',
+    eventCategory: 'AnnotationForm', eventAction: 'Open', eventLabel: 'AnnotationEditFormOpened',
     [GACustomFieldsIndex.annotationId]: annotationId,
     [GACustomFieldsIndex.priority]: formatPriority(priority),
     [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
@@ -154,9 +154,9 @@ export function annotationAddingModeCancelled() {
 
 // Annotation Request events
 
-export function annotationRequestLinkClicked(url: string) {
+export function annotationRequestFormDisplayed(url: string) {
   sendEventByMessage({
-    eventCategory: 'AnnotationRequest', eventAction: 'ClickRe', eventLabel: 'AnnotationRequestLinkClicked',
+    eventCategory: 'AnnotationRequest', eventAction: 'Click', eventLabel: 'AnnotationRequestLinkClicked',
     [GACustomFieldsIndex.eventUrl]: url,
   });
 }

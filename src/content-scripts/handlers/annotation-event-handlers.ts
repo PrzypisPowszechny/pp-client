@@ -170,7 +170,7 @@ function annotateCommand() {
     store.dispatch(setSelectionRange(annotationLocation));
     const selectionCenter = handlers.selector.currentSingleSelectionCenter();
     store.dispatch(showEditorAnnotation(selectionCenter.x, selectionCenter.y));
-    ppGA.annotationAddFormDisplayed('rightMouseContextMenu');
+    ppGA.annotationAddFormOpened('rightMouseContextMenu');
   }
 }
 
