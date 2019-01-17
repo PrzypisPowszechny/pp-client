@@ -169,18 +169,23 @@ export function annotationAddingModeCancelled(options?: EventOptions) {
 
 // Annotation Request events
 
-export function annotationRequestFormOpened(triggeredBy: string, options?: EventOptions) {
+export function annotationRequestFormOpened(triggeredBy: string, isQuoteBlank: boolean = true,
+                                            options?: EventOptions) {
   sendEventByMessage({
     eventCategory: 'AnnotationRequestForm', eventAction: 'Open', eventLabel: 'AnnotationRequestFormOpened',
     [GACustomFieldsIndex.triggeredBy]: triggeredBy,
+    [GACustomFieldsIndex.isQuoteBlank]: formatBoolean(isQuoteBlank),
   }, options);
 }
 
-export function annotationRequestSent(options?: EventOptions) {
-  sendEventByMessage(
-    { eventCategory: 'AnnotationRequest', eventAction: 'Send', eventLabel: 'AnnotationRequestSent' },
-    options,
-  );
+export function annotationRequestSent(isQuoteBlank: boolean, isCommentBlank: boolean, isEmailBlank: boolean,
+                                      options?: EventOptions) {
+  sendEventByMessage({
+      eventCategory: 'AnnotationRequest', eventAction: 'Send', eventLabel: 'AnnotationRequestSent',
+      [GACustomFieldsIndex.isQuoteBlank]: formatBoolean(isQuoteBlank),
+      [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
+      [GACustomFieldsIndex.isEmailBlank]: formatBoolean(isEmailBlank),
+    }, options);
 }
 
 // Annotation Upvote events

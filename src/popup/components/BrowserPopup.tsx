@@ -152,7 +152,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     if (!isRequestMode) {
       turnOnRequestMode(this.state, currentStandardizedTabUrl);
       window.close();
-      ppGA.annotationRequestFormOpened('popup', { location: this.state.currentStandardizedTabUrl });
+      ppGA.annotationRequestFormOpened('popup', true, { location: this.state.currentStandardizedTabUrl });
     }
   }
 

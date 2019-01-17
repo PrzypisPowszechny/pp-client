@@ -98,7 +98,7 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
       }).then((response) => {
         this.props.changeNotification(true, 'Twoja prośba o przypis została wysłana');
         turnOffRequestMode(this.props.appModes, window.location.href);
-        ppGA.annotationRequestSent();
+        ppGA.annotationRequestSent(!quote, !comment, !notificationEmail);
       }).catch((error) => {
         console.log(error);
         this.props.changeNotification(true, 'Błąd! Nie udało się wysłać prośby', ToastType.failure);

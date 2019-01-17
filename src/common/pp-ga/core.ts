@@ -1,8 +1,7 @@
 import gaScript from './ga.js';
 import FieldsObject = UniversalAnalytics.FieldsObject;
 import cookie from 'cookie';
-import chromeStorage from 'common/chrome-storage';
-import * as chromeKeys from 'common/chrome-storage/keys';
+import { getIamstaff, setIamstaff } from './utils';
 
 const GA_ID_PROD = 'UA-123054125-1';
 const GA_ID_DEV = 'UA-123054125-2';
@@ -20,6 +19,8 @@ export const GACustomFieldsIndex = {
   isCommentBlank: 'dimension5',
   annotationId: 'dimension6',
   annotationLink: 'dimension7',
+  isQuoteBlank: 'dimension8',
+  isEmailBlank: 'dimension9',
 };
 
 export function init() {
@@ -56,33 +57,22 @@ function sendInitPing() {
     .catch(errors => console.log(errors));
 }
 
-function setIamstaff(val) {
-  chromeStorage.set({ [chromeKeys.IAMSTAFF]: Boolean(val) });
-}
-
-function getIamstaff(): Promise<boolean> {
-  return new Promise<boolean>((resolve, reject) => {
-    chromeStorage.get([chromeKeys.IAMSTAFF], result => resolve(result[chromeKeys.IAMSTAFF]));
-  });
-}
-
 export function sendEventFromMessage(request) {
   if (request.action === 'SEND_GA_EVENT') {
-    sendEvent(request.fieldsObject, request.options);
+    sendEvent(request.fieldsObject, request.options).then(() => null);
   }
 }
 
 // TODO: use iamstaff value from local store which would be synced with chrome storage
-export function sendEvent(fieldsObject: FieldsObject, options: EventOptions = {}) {
-  getIamstaff().then( (iamstaff) => {
-    if (iamstaff) {
-      return;
-    }
-    if (options.location) {
-      fieldsObject[GACustomFieldsIndex.eventUrl] = fieldsObject.location = options.location;
-    }
-    ga('send', 'event', fieldsObject);
-  });
+export async function sendEvent(fieldsObject: FieldsObject, options: EventOptions = {}) {
+  const iamstaff = await getIamstaff();
+  if (iamstaff) {
+    return;
+  }
+  if (options.location) {
+    fieldsObject[GACustomFieldsIndex.eventUrl] = fieldsObject.location = options.location;
+  }
+  ga('send', 'event', fieldsObject);
 }
 
 export function sendEventByMessage(fieldsObject: FieldsObject, options: EventOptions = {}) {

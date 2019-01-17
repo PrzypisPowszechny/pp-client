@@ -155,7 +155,7 @@ function annotationRequestCommand() {
     chrome.storage.local.set({ ANNOTATION_REQUEST_FORM_DATA: formData }, () => {
       console.log('annotation request window opened!');
     });
-    ppGA.annotationRequestFormOpened('rightMouseContextMenu');
+    ppGA.annotationRequestFormOpened('rightMouseContextMenu', !selection);
   }
 }
 
