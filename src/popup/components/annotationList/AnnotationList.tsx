@@ -50,6 +50,13 @@ export default class AnnotationList extends React.Component<Partial<IAnnotationL
   onAnnotationClick = (e) => {
     const { annotationId } = e.currentTarget.dataset;
     sendScrollToAnnotation(annotationId);
+
+    // TODO: such tabs query already takes in BrowserPopup component, pass those data using store to be DRY
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const tab = tabs[0];
+      ppGA.annotationSummaryAnnotationClicked(annotationId, { location: standardizeUrlForPageSettings(tab.url) });
+    });
+
   }
 
   render() {

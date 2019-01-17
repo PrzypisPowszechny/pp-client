@@ -104,6 +104,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     if (onPageChange) {
       onPageChange(PopupPages.annotationList);
     }
+    ppGA.annotationSummaryClicked({ location: this.state.currentStandardizedTabUrl });
   }
 
   /*
@@ -151,7 +152,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     if (!isRequestMode) {
       turnOnRequestMode(this.state, currentStandardizedTabUrl);
       window.close();
-      ppGA.annotationRequestLinkClicked(this.state.currentStandardizedTabUrl);
+      ppGA.annotationRequestFormOpened('popup', { location: this.state.currentStandardizedTabUrl });
     }
   }
 
