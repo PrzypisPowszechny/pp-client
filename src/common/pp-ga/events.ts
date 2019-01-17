@@ -1,24 +1,19 @@
 import { sendEvent, sendEventByMessage, GACustomFieldsIndex } from './core';
 import { formatBoolean, formatPriority, formatReason } from './utils';
-import packageConf from '../../../package.json';
 
 // Extension Installation events
 
 export function extensionInstalled() {
+  // ExtensionUninstalled is implemented by backend using uninstalledUrl
   sendEvent({ eventCategory: 'Extension', eventAction: 'Install', eventLabel: 'ExtensionInstalled' });
 }
 
 export function extensionUpgraded(previousVersion: string) {
-  if (packageConf.version === previousVersion) {
+  if (PPSettings.VERSION === previousVersion) {
     sendEvent({ eventCategory: 'Extension', eventAction: 'Reinstall', eventLabel: 'ExtensionReinstalled' });
   } else {
     sendEvent({ eventCategory: 'Extension', eventAction: 'Upgrade', eventLabel: 'ExtensionUpgraded' });
   }
-}
-
-// This need to be in fact implemented on our site frontend, not in the extension
-export function extensionUninstalled() {
-  sendEvent({ eventCategory: 'Extension', eventAction: 'Uninstall', eventLabel: 'ExtensionUninstalled' });
 }
 
 export function extensionDisabledOnAllSites(currentUrl: string) {
@@ -87,39 +82,9 @@ export function annotationLinkClicked(annotationId: string, priority: string, is
   });
 }
 
-export function annotationAddingModeInited() {
-  sendEventByMessage({
-    eventCategory: 'AnnotationAddingMode', eventAction: 'Init', eventLabel: 'AnnotationAddingModeInited',
-  });
-}
-
-export function annotationAddingModeCancelled() {
-  sendEventByMessage({
-    eventCategory: 'AnnotationAddingMode', eventAction: 'Cancel', eventLabel: 'AnnotationAddingModeCancelled',
-  });
-}
-
-export function annotationAddFormDisplayed(triggeredBy: string) {
-  sendEventByMessage({
-    eventCategory: 'AnnotationAddForm', eventAction: 'Display', eventLabel: 'AnnotationAddFormDisplayed',
-    [GACustomFieldsIndex.triggeredBy]: triggeredBy,
-  });
-}
-
 export function annotationAdded(annotationId: string, priority: string, isCommentBlank: boolean, link: string) {
   sendEventByMessage({
     eventCategory: 'Annotation', eventAction: 'Add', eventLabel: 'AnnotationAdded',
-    [GACustomFieldsIndex.annotationId]: annotationId,
-    [GACustomFieldsIndex.priority]: formatPriority(priority),
-    [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
-    [GACustomFieldsIndex.annotationLink]: link,
-  });
-}
-
-export function annotationEditFormDisplayed(annotationId: string, priority: string, isCommentBlank: boolean,
-                                            link: string) {
-  sendEventByMessage({
-    eventCategory: 'AnnotationEditForm', eventAction: 'Display', eventLabel: 'AnnotationEditFormDisplayed',
     [GACustomFieldsIndex.annotationId]: annotationId,
     [GACustomFieldsIndex.priority]: formatPriority(priority),
     [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
@@ -147,9 +112,43 @@ export function annotationDeleted(annotationId: string, priority: string, isComm
   });
 }
 
+// Annotation Form events
+
+export function annotationAddFormDisplayed(triggeredBy: string) {
+  sendEventByMessage({
+    eventCategory: 'AnnotationAddForm', eventAction: 'Display', eventLabel: 'AnnotationAddFormDisplayed',
+    [GACustomFieldsIndex.triggeredBy]: triggeredBy,
+  });
+}
+
+export function annotationEditFormDisplayed(annotationId: string, priority: string, isCommentBlank: boolean,
+                                            link: string) {
+  sendEventByMessage({
+    eventCategory: 'AnnotationEditForm', eventAction: 'Display', eventLabel: 'AnnotationEditFormDisplayed',
+    [GACustomFieldsIndex.annotationId]: annotationId,
+    [GACustomFieldsIndex.priority]: formatPriority(priority),
+    [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
+    [GACustomFieldsIndex.annotationLink]: link,
+  });
+}
+
 export function annotationFormMoved() {
   sendEventByMessage({
     eventCategory: 'AnnotationForm', eventAction: 'Move', eventLabel: 'AnnotationFormMoved',
+  });
+}
+
+// Annotation Adding Mode events
+
+export function annotationAddingModeInited() {
+  sendEventByMessage({
+    eventCategory: 'AnnotationAddingMode', eventAction: 'Init', eventLabel: 'AnnotationAddingModeInited',
+  });
+}
+
+export function annotationAddingModeCancelled() {
+  sendEventByMessage({
+    eventCategory: 'AnnotationAddingMode', eventAction: 'Cancel', eventLabel: 'AnnotationAddingModeCancelled',
   });
 }
 

@@ -1,6 +1,5 @@
 import gaScript from './ga.js';
 import FieldsObject = UniversalAnalytics.FieldsObject;
-import packageConf from '../../../package.json';
 import cookie from 'cookie';
 import chromeStorage from 'common/chrome-storage';
 import * as chromeKeys from 'common/chrome-storage/keys';
@@ -24,7 +23,7 @@ export function init() {
   // Our extension protocol is chrome which is not what GA expects. It will fall back to http(s)
   ga('set', 'checkProtocolTask', () => { /* nothing */ });
   ga('set', 'appName', 'PP browser extension');
-  ga('set', 'appVersion', packageConf.version);
+  ga('set', 'appVersion', PPSettings.VERSION);
 
   sendInitPing();
 }
