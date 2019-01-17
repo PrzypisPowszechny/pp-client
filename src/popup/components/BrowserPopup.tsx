@@ -138,7 +138,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
         [chromeKeys.REQUEST_MODE_PAGES]: newRequestModePages
       });
       window.close();
-      ppGA.annotationAddingModeInited();
+      ppGA.annotationAddingModeInited({ location: currentStandardizedTabUrl });
     }
   }
 
@@ -160,9 +160,9 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     this.setState({ isExtensionDisabled: isDisabledNewValue });
     chromeStorage.set({ [chromeKeys.DISABLED_EXTENSION]: isDisabledNewValue });
     if (isDisabledNewValue) {
-      ppGA.extensionDisabledOnAllSites(this.state.currentStandardizedTabUrl);
+      ppGA.extensionDisabledOnAllSites({ location: this.state.currentStandardizedTabUrl });
     } else {
-      ppGA.extensionEnabledOnAllSites(this.state.currentStandardizedTabUrl);
+      ppGA.extensionEnabledOnAllSites({ location: this.state.currentStandardizedTabUrl });
     }
   }
 
@@ -178,10 +178,10 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     let newDisabledPages;
     if (checked) {
       newDisabledPages = [...disabledPages, currentStandardizedTabUrl];
-      ppGA.extensionDisabledOnSite(currentStandardizedTabUrl);
+      ppGA.extensionDisabledOnSite({ location: currentStandardizedTabUrl });
     } else {
       newDisabledPages = _filter(disabledPages, url => url !== currentStandardizedTabUrl);
-      ppGA.extensionEnabledOnSite(currentStandardizedTabUrl);
+      ppGA.extensionEnabledOnSite({ location: currentStandardizedTabUrl });
     }
     // Permanently turn off the annotation mode for the disabled pages
     const newAnnotationModePages = _filter(annotationModePages, url => !newDisabledPages.includes(url));
@@ -200,8 +200,8 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
   }
 
   handleReportButtonClick = () => {
-    ppGA.extensionReportButtonClicked(this.state.currentStandardizedTabUrl);
     window.open(`${PPSettings.SITE_URL}/report/`, '_blank');
+    ppGA.extensionReportButtonClicked({ location: this.state.currentStandardizedTabUrl });
   }
 
   render() {

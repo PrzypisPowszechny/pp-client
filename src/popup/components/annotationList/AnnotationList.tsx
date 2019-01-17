@@ -6,6 +6,8 @@ import styles from './AnnotationList.scss';
 import { Icon } from 'react-icons-kit';
 import { ic_chevron_left } from 'react-icons-kit/md/ic_chevron_left';
 import classNames from 'classnames';
+import ppGA from '../../../common/pp-ga';
+import { standardizeUrlForPageSettings } from '../../../common/url';
 
 export interface IAnnotationListProps {
   onPageChange: (Event) => void;
