@@ -101,7 +101,7 @@
     "lint-fix": "npm run lint -- --fix",
     "test": "jest src",
     "e2e": "jest e2e --maxWorkers=1",
-    "validate-annotations": "PP_DEV_SENTRY_ALT=ann-validate PP_DEV_SENTRY_UNLOCATED_IGNORE=true npm run build && PP_API=devdeploy1 jest validate-annotations"
+    "validate-annotations": "PP_DEV_SENTRY_ALT=true PP_DEV_SENTRY_UNLOCATED_IGNORE=true npm run build && PP_API=devdeploy1 jest validate-annotations"
   },
   "repository": {
     "type": "git",

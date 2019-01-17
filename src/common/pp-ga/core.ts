@@ -3,8 +3,6 @@ import FieldsObject = UniversalAnalytics.FieldsObject;
 import cookie from 'cookie';
 import { getIamstaff, setIamstaff } from './utils';
 
-const GA_ID_PROD = 'UA-123054125-1';
-const GA_ID_DEV = 'UA-123054125-2';
 
 export interface EventOptions {
   // Specify this option if the location cannot be sourced from window.location.href or want to override it
@@ -25,7 +23,7 @@ export const GACustomFieldsIndex = {
 
 export function init() {
   gaScript();
-  ga('create', PPSettings.DEV ? GA_ID_DEV : GA_ID_PROD);
+  ga('create', PPSettings.GA_ID);
   // Our extension protocol is chrome which is not what GA expects. It will fall back to http(s)
   ga('set', 'checkProtocolTask', () => { /* nothing */ });
   ga('set', 'appName', 'PP browser extension');
