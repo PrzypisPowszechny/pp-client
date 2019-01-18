@@ -24,12 +24,7 @@ window.chrome = window.chrome || {};
 
 // Mock storage for non-extension environment
 if (typeof chrome.storage !== 'undefined') {
-  if (PPSettings.DEV) {
-    storage = chrome.storage.local;
-  } else {
-    // Saves to this storage go to Google servers and are synced between many Google sessions on different PCs.
-    storage = chrome.storage.sync;
-  }
+  storage = chrome.storage.local;
   // Rewrite onChanged to allow get, set and onChanged as one object attributes;
   storage.onChanged = chrome.storage.onChanged;
 } else {
