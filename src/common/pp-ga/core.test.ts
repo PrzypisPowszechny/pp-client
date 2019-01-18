@@ -12,7 +12,7 @@ describe('sendMessage', () => {
     const gaMock = jest.fn();
     const getIamstaffMock = jest.fn();
     getIamstaffMock.mockReturnValue(Promise.resolve(false));
-    Object.defineProperty(utils, 'getIamstaff', { value:  getIamstaffMock });
+    Object.defineProperty(utils, 'getIamstaffFromCookie', { value:  getIamstaffMock });
     Object.defineProperty(global, 'ga', { value:  gaMock, writable: true });
 
     await core.sendEvent(fieldsObject);
@@ -26,7 +26,7 @@ describe('sendMessage', () => {
     const gaMock = jest.fn();
     const getIamstaffMock = jest.fn();
     getIamstaffMock.mockReturnValue(Promise.resolve(false));
-    Object.defineProperty(utils, 'getIamstaff', { value:  getIamstaffMock });
+    Object.defineProperty(utils, 'getIamstaffFromCookie', { value:  getIamstaffMock });
     Object.defineProperty(global, 'ga', { value:  gaMock, writable: true });
 
     const location = 'http://example.com/test';
@@ -43,7 +43,7 @@ describe('sendMessage', () => {
     const gaMock = jest.fn();
     const getIamstaffMock = jest.fn();
     getIamstaffMock.mockReturnValue(Promise.resolve(true));
-    Object.defineProperty(utils, 'getIamstaff', { value:  getIamstaffMock });
+    Object.defineProperty(utils, 'getIamstaffFromCookie', { value:  getIamstaffMock });
     Object.defineProperty(global, 'ga', { value:  gaMock, writable: true });
 
     await core.sendEvent(fieldsObject);

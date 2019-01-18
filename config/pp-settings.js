@@ -11,8 +11,8 @@ exports.loadSettings = (environment, argv) => {
   const settings = {
     DEV: getDev(env, mode),
     VERSION: packageConf.version,
-    SITE_URL: getApi(env, mode) + '/site',
     API_URL: getApi(env, mode) + '/api',
+    SITE_URL: getApi(env, mode) + '/site',
     GA_ID: getGaId(env, mode),
     DEV_SENTRY_UNLOCATED_IGNORE: getDevSentryUnlocatedIgnore(env, mode),
     SENTRY_DSN: getSentryDSN(env, mode),

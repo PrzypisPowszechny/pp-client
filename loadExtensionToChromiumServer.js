@@ -10,7 +10,7 @@ const ps = require('ps-node');
  */
 
 const hotReloadWsPath = 'ws://localhost:9090';
-const ChromeInitURL = 'data:';
+const ChromeInitURL = '';
 const N_ATTEMPTS = 100;
 const ATTEMPT_INTERVAL = 500;
 

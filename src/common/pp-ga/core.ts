@@ -1,8 +1,8 @@
 import gaScript from './ga.js';
 import FieldsObject = UniversalAnalytics.FieldsObject;
-import cookie from 'cookie';
-import { getIamstaff, setIamstaff } from './utils';
-
+import cookieLib from 'cookie';
+import { getIamstaff, getIamstaffFromCookie, setIamstaff } from './utils';
+import * as Sentry from '@sentry/browser';
 
 export interface EventOptions {
   // Specify this option if the location cannot be sourced from window.location.href or want to override it
@@ -23,36 +23,31 @@ export const GACustomFieldsIndex = {
 
 export function init() {
   gaScript();
-  ga('create', PPSettings.GA_ID);
+  ga('create', PPSettings.GA_ID, { cookieDomain: 'localhost'/* PPSettings.API_HOST */  });
   // Our extension protocol is chrome which is not what GA expects. It will fall back to http(s)
   ga('set', 'checkProtocolTask', () => { /* nothing */ });
   ga('set', 'appName', 'PP browser extension');
   ga('set', 'appVersion', PPSettings.VERSION);
 
-  sendInitPing();
+  setDomainCookies();
 }
 
-interface InitPingResponseData {
-  iamstaff: boolean;
+function setDomainCookies() {
+  const cookies = cookieLib.parse(document.cookie);
+  setChromeCookie(PPSettings.SITE_URL, '_ga', cookies._ga);
+  setChromeCookie(PPSettings.SITE_URL, '_gid', cookies._gid);
 }
 
-function sendInitPing() {
-  // Use help of our server to set GA cookies for our domain just as it would normally happen if we were not extension
-  // but website. Use neutral name of the endpoint used.
-  // If anything more ever needs to be send on init it is good starting point - it can be added here.
-  const cookies = cookie.parse(document.cookie);
-  fetch(PPSettings.SITE_URL + '/pings/init/', {
-    headers: {
-      'content-type': 'application/x-www-form-urlencoded',
-      'accept': 'application/json',
-    },
-    method: 'post',
-    body: `ga_cookie=${cookies._ga}&gid_cookie=${cookies._gid}`,
-  }).then(response => response.json())
-    .then((data: InitPingResponseData) => {
-      setIamstaff(data.iamstaff);
-    })
-    .catch(errors => console.log(errors));
+function setChromeCookie(url: string, name: string, value: string) {
+  chrome.cookies.set({
+    url,
+    name,
+    value,
+  }, (cookie: chrome.cookies.Cookie) => {
+    if (!cookie) {
+      Sentry.captureException(chrome.runtime.lastError);
+    }
+  });
 }
 
 export function sendEventFromMessage(request) {
@@ -61,9 +56,8 @@ export function sendEventFromMessage(request) {
   }
 }
 
-// TODO: use iamstaff value from local store which would be synced with chrome storage
 export async function sendEvent(fieldsObject: FieldsObject, options: EventOptions = {}) {
-  const iamstaff = await getIamstaff();
+  const iamstaff = await getIamstaffFromCookie();
   if (iamstaff) {
     return;
   }

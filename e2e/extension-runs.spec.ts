@@ -1,4 +1,3 @@
-import { waitUntil } from './utils';
 // noinspection TsLint
 const packageConf = require('../package');
 import express from 'express';
@@ -14,27 +13,16 @@ const PP_CSS_EDITOR_CLASS_PREFIX = 'Editor__self';
 describe('extension runs normally', () => {
   let browser;
   let apiServer;
-  let initPingsCount = 0;
 
   const apiApp = express();
   apiApp.get('/site/some-text/', (req, res) => {
     res.send('<p>some text</p> here');
-  });
-  apiApp.post('/site/pings/init/', (req, res) => {
-    initPingsCount++;
-    res.send('Success!');
   });
 
   beforeAll( async () => {
     browser = await buildBrowser();
     await new Promise( res => apiServer = http.createServer(apiApp).listen(e2ePPSettings.API_PORT, res));
   });
-
-  test('calls init ping', async () => {
-    await browser.get('data:');
-    await waitUntil( () => initPingsCount > 0);
-    expect(initPingsCount).toEqual(1);
-  }, e2ePPSettings.TIMEOUT);
 
   test('loads background page', async () => {
     await browser.get(`chrome-extension://${packageConf.pp.devAppID}/_generated_background_page.html`);
