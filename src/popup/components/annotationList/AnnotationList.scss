@@ -4,6 +4,17 @@
   width: 310px;
 }
 
+.topBar {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+
+  .header {
+    font-size: 12px;
+    font-weight: 600;
+  }
+}
+
 .chevronButton {
   margin: 5px 17px;
   cursor: pointer;
