@@ -120,7 +120,7 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
           </div>
           <p className={styles.description}>Masz wątpliwości, czy to, co czytasz, ma sens? <br/>
             Zgłoś do sprawdzenia fragment z tej strony,
-            a dodamy jego miejscu przypis z naszą oceną wiarygodności i źródłem.
+            a dodamy jego miejscu przypis z oceną wiarygodności i źródłem.
           </p>
         </div>
         <div className={styles.label}>Fragment do sprawdzenia</div>

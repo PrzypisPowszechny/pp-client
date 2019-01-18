@@ -28,6 +28,8 @@ import { Icon } from 'react-icons-kit';
 import { link } from 'react-icons-kit/icomoon/link';
 import { priceTag } from 'react-icons-kit/icomoon/priceTag';
 import { ic_close } from 'react-icons-kit/md/ic_close';
+import { ic_help_outline } from 'react-icons-kit/md/ic_help_outline'
+import { ic_add_circle } from 'react-icons-kit/md/ic_add_circle';
 import { changeNotification } from '../../store/widgets/actions';
 import { bindActionCreators } from 'redux';
 import { ToastType } from '../elements/Toast/Toast';
@@ -293,7 +295,23 @@ class Editor extends React.Component<Partial<IEditorProps>,
         onMoved={this.onMoved}
       >
         <div className={classNames(styles.moverFrame)} ref={this.moverElement}>
-          <label className={styles.editorHeader}> Co dodajesz? </label>
+          <label className={styles.editorHeader}>
+            <Icon className={styles.icon} icon={ic_add_circle} size={20}/>
+            Dodajesz przypis
+          </label>
+
+          <Popup
+              className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
+              hideOnScroll={true}
+              trigger={<div className={styles.label}>Typ przypisu</div>}
+              flowing={true}
+              hoverable={true}
+              position="left center"
+            >
+              Typ sygnalizuje innym użytkownikom, na ile <br/>
+              przypis jest zgodny z fragmentem artykułu, którego <br/>
+              dotyczy.
+            </Popup>
           <PPCategoryButtonsBar onSetPPCategory={this.handleSetPPCategory} ppCategory={ppCategory}/>
           <div
             className={styles.close}
@@ -301,6 +319,23 @@ class Editor extends React.Component<Partial<IEditorProps>,
           >
             <Icon icon={ic_close} size={18}/>
           </div>
+
+          <Popup
+              className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
+              hideOnScroll={true}
+              trigger={<div className={styles.label}>Treść przypisu</div>}
+              flowing={true}
+              hoverable={true}
+              position="left center"
+            >
+              Treść powinna krótko informować o najważniejszych<br/>
+              wnioskach z załączonego w przypisie źródła. <br/>
+              Np. "Zgodnie z raportem ONZ ta informacja<br/>
+              jest nieprawdziwa, ponieważ...". <br/>
+              Możesz nie wpisywać treści, jeśli np. tylko <br/>
+              podlinkowujesz źródło, w którym można doczytać <br/>
+              więcej na dany temat.
+            </Popup>
           <div className={classNames(styles.editorInput)}>
             <div className={classNames(styles.commentTextareaWrapper)}>
               <textarea
@@ -308,7 +343,6 @@ class Editor extends React.Component<Partial<IEditorProps>,
                 name="comment"
                 value={comment}
                 onChange={this.handleInputChange}
-                placeholder="Dodaj treść przypisu"
               />
             </div>
             <div
@@ -318,6 +352,18 @@ class Editor extends React.Component<Partial<IEditorProps>,
               {commentError}
             </div>
           </div>
+          <Popup
+              className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
+              hideOnScroll={true}
+              trigger={ <div className={styles.label}>Link do źródła</div>}
+              flowing={true}
+              hoverable={true}
+              position="left center"
+            >
+              Każdy przypis musi mieć swoje źródło. Pozwala ono <br/>
+              innym czytelnikom zweryfikować informację, której <br/>
+              dotyczy przypis i doczytać więcej na dany temat.
+            </Popup>
           <div className={classNames(styles.editorInput, styles.annotationLink)}>
             <input
               type="text"
@@ -325,18 +371,8 @@ class Editor extends React.Component<Partial<IEditorProps>,
               className={annotationLinkError ? styles.error : ''}
               value={annotationLink}
               onChange={this.handleInputChange}
-              placeholder="Wklej link do źródła"
+              placeholder="Wklej link do strony, na podstawie której dodajesz przypis"
             />
-            <Popup
-              className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
-              hideOnScroll={true}
-              trigger={<Icon className={styles.inputIcon} icon={link} size={15}/>}
-              flowing={true}
-              hoverable={true}
-              position="top left"
-            >
-              Adres strony, z której pochodzą <br/> informacje zawarte w przypisie
-            </Popup>
             <div
               className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
                 { [styles.hide]: annotationLinkError === '' })}
@@ -344,6 +380,21 @@ class Editor extends React.Component<Partial<IEditorProps>,
               {annotationLinkError}
             </div>
           </div>
+
+          <Popup
+              className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
+              hideOnScroll={true}
+              trigger={
+                <div className={styles.label}>
+                  Tytuł źródła
+                </div>
+              }
+              flowing={true}
+              hoverable={true}
+              position="left center"
+            >
+              Co znajduje się pod linkiem? Artykuł? <br/> Raport? O czym?
+          </Popup>
           <div className={classNames(styles.editorInput, styles.annotationLinkTitle)}>
             <input
               type="text"
@@ -351,18 +402,8 @@ class Editor extends React.Component<Partial<IEditorProps>,
               className={annotationLinkTitleError ? styles.error : ''}
               value={annotationLinkTitle}
               onChange={this.handleInputChange}
-              placeholder="Wpisz tytuł źródła"
+              placeholder="np. Treść ustawy, Nagranie wypowiedzi, Artykuł na Wikipedii"
             />
-            <Popup
-              className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
-              hideOnScroll={true}
-              trigger={<Icon className={styles.inputIcon} icon={priceTag} size={15}/>}
-              flowing={true}
-              hoverable={true}
-              position="top left"
-            >
-              np. <i>Treść ustawy</i>, <i>Artykuł na Wikipedii</i>,<br/> <i>Nagranie wypowiedzi ministra</i>
-            </Popup>
             <div
               className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
                 { [styles.hide]: annotationLinkTitleError === '' })}
@@ -370,6 +411,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
               {annotationLinkTitleError}
             </div>
           </div>
+
           <div className={styles.controls}>
             <Button className={styles.cancelButton} onClick={this.onCancelClick}>
               Anuluj

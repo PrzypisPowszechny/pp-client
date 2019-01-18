@@ -68,8 +68,11 @@ export default class AnnotationList extends React.Component<Partial<IAnnotationL
     } else {
       return (
         <div className={styles.self}>
-          <div onClick={this.handleGoBackClick}>
-            <Icon className={styles.chevronButton} icon={ic_chevron_left} size={25}/>
+          <div className={styles.topBar}>
+            <div onClick={this.handleGoBackClick}>
+              <Icon className={styles.chevronButton} icon={ic_chevron_left} size={25}/>
+            </div>
+            <span className={styles.header}>Przypisy dodane na tej stronie</span>
           </div>
           <ul className={styles.annotationList}>
           {this.state.annotationLocationData.located.map(annotation => (
