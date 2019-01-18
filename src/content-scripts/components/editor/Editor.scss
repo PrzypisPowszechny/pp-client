@@ -20,11 +20,16 @@ $editor-font-size: 14px;
 }
 
 .editorHeader {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   font-weight: $font-semi-bold;
-  margin: 0 0 15px 0;
-  padding-top: 10px;
+  margin-bottom: 20px;
+  padding: 0;
   user-select: none;
+
+  .icon {
+    margin-right: 5px;
+  }
 }
 
 /* fields: comment, annotationLink */
@@ -54,6 +59,7 @@ $editor-font-size: 14px;
     background: none;
   }
 
+
   // based on semantic-ui's .ui.input.error
   input.error, textarea.error,
   input.error:hover, textarea.error:hover,
@@ -62,6 +68,14 @@ $editor-font-size: 14px;
     border-color: #e0b4b4;
     color: #9f3a38;
   }
+}
+
+.label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  font-size: 12px;
+  cursor: help;
+  user-select: none;
 }
 
 /* comment field */
@@ -91,9 +105,9 @@ $editor-font-size: 14px;
 }
 
 .annotation-link {
-  input[type=text] {
-    padding-left: 2.1em;
-  }
+  // input[type=text] {
+  //   padding-left: 2.1em;
+  // }
   .error-msg {
     left: 0;
     top: 20px;
@@ -103,9 +117,9 @@ $editor-font-size: 14px;
 
 .annotation-link-title {
   margin-bottom: 0;
-  input[type=text] {
-    padding-left: 2.1em;
-  }
+  // input[type=text] {
+  //   padding-left: 2.1em;
+  // }
 
   .input-icon {
     top: 11px;
@@ -141,7 +155,7 @@ $editor-font-size: 14px;
 .controls {
   position: relative;
   margin: 0;
-  margin-top: 20px;
+  margin-top: 30px;
 
   .cancelButton {
     position: absolute;
