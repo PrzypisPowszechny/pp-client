@@ -155,6 +155,7 @@ function annotationRequestCommand() {
     chrome.storage.local.set({ ANNOTATION_REQUEST_FORM_DATA: formData }, () => {
       console.log('annotation request window opened!');
     });
+    ppGA.annotationRequestFormOpened('rightMouseContextMenu', !selection);
   }
 }
 
@@ -170,7 +171,7 @@ function annotateCommand() {
     store.dispatch(setSelectionRange(annotationLocation));
     const selectionCenter = handlers.selector.currentSingleSelectionCenter();
     store.dispatch(showEditorAnnotation(selectionCenter.x, selectionCenter.y));
-    ppGA.annotationAddFormDisplayed('rightMouseContextMenu');
+    ppGA.annotationAddFormOpened('rightMouseContextMenu');
   }
 }
 

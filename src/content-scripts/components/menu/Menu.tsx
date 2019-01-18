@@ -68,7 +68,7 @@ export default class Menu extends React.Component<Partial<IMenuProps>, {}> {
     this.props.hideMenu();
     this.props.setSelectionRange(annotationLocation);
     this.props.showEditor(locationX, locationY);
-    ppGA.annotationAddFormDisplayed('addingModeMenu');
+    ppGA.annotationAddFormOpened('addingModeMenu');
   }
 
   render() {

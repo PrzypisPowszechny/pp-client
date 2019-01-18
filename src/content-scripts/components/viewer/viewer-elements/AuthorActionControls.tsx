@@ -97,7 +97,7 @@ export default class AuthorActionControls extends
     const attrs = annotation.attributes;
     this.props.showEditorAnnotation(locationX, locationY, annotation.id);
     this.props.hideViewer();
-    ppGA.annotationEditFormDisplayed(annotation.id, attrs.ppCategory, !attrs.comment, attrs.annotationLink);
+    ppGA.annotationEditFormOpened(annotation.id, attrs.ppCategory, !attrs.comment, attrs.annotationLink);
   }
 
   onAnnotationDeleteClick = () => {

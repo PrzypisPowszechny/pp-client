@@ -20,6 +20,7 @@ const base = (env, argv) => ({
     'cookies',
     // API URL must be included so we can read cookies for this host
     loadSettings(env, argv).API_URL,
+    loadSettings(env, argv).SITE_URL,
   ],
     content_security_policy: "script-src 'self' 'unsafe-eval' https://www.google-analytics.com; object-src 'self'",
     browser_action: {

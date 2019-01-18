@@ -6,6 +6,8 @@ import styles from './AnnotationList.scss';
 import { Icon } from 'react-icons-kit';
 import { ic_chevron_left } from 'react-icons-kit/md/ic_chevron_left';
 import classNames from 'classnames';
+import ppGA from '../../../common/pp-ga';
+import { standardizeUrlForPageSettings } from '../../../common/url';
 
 export interface IAnnotationListProps {
   onPageChange: (Event) => void;
@@ -48,6 +50,13 @@ export default class AnnotationList extends React.Component<Partial<IAnnotationL
   onAnnotationClick = (e) => {
     const { annotationId } = e.currentTarget.dataset;
     sendScrollToAnnotation(annotationId);
+
+    // TODO: such tabs query already takes in BrowserPopup component, pass those data using store to be DRY
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const tab = tabs[0];
+      ppGA.annotationSummaryAnnotationClicked(annotationId, { location: standardizeUrlForPageSettings(tab.url) });
+    });
+
   }
 
   render() {

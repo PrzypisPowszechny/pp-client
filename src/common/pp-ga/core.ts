@@ -1,12 +1,13 @@
 import gaScript from './ga.js';
 import FieldsObject = UniversalAnalytics.FieldsObject;
-import packageConf from '../../../package.json';
-import cookie from 'cookie';
-import chromeStorage from 'common/chrome-storage';
-import * as chromeKeys from 'common/chrome-storage/keys';
+import cookieLib from 'cookie';
+import { getIamstaff, getIamstaffFromCookie, setIamstaff } from './utils';
+import * as Sentry from '@sentry/browser';
 
-const GA_ID_PROD = 'UA-123054125-1';
-const GA_ID_DEV = 'UA-123054125-2';
+export interface EventOptions {
+  // Specify this option if the location cannot be sourced from window.location.href or want to override it
+  location?: string;
+}
 
 export const GACustomFieldsIndex = {
   eventUrl: 'dimension1',
@@ -16,71 +17,59 @@ export const GACustomFieldsIndex = {
   isCommentBlank: 'dimension5',
   annotationId: 'dimension6',
   annotationLink: 'dimension7',
+  isQuoteBlank: 'dimension8',
+  isEmailBlank: 'dimension9',
 };
 
 export function init() {
   gaScript();
-  ga('create', PPSettings.DEV ? GA_ID_DEV : GA_ID_PROD);
+  ga('create', PPSettings.GA_ID, { cookieDomain: 'localhost'/* PPSettings.API_HOST */  });
   // Our extension protocol is chrome which is not what GA expects. It will fall back to http(s)
   ga('set', 'checkProtocolTask', () => { /* nothing */ });
   ga('set', 'appName', 'PP browser extension');
-  ga('set', 'appVersion', packageConf.version);
+  ga('set', 'appVersion', PPSettings.VERSION);
 
-  sendInitPing();
+  setDomainCookies();
 }
 
-interface InitPingResponseData {
-  iamstaff: boolean;
+function setDomainCookies() {
+  const cookies = cookieLib.parse(document.cookie);
+  setChromeCookie(PPSettings.SITE_URL, '_ga', cookies._ga);
+  setChromeCookie(PPSettings.SITE_URL, '_gid', cookies._gid);
 }
 
-function sendInitPing() {
-  // Use help of our server to set GA cookies for our domain just as it would normally happen if we were not extension
-  // but website. Use neutral name of the endpoint used.
-  // If anything more ever needs to be send on init it is good starting point - it can be added here.
-  const cookies = cookie.parse(document.cookie);
-  fetch(PPSettings.SITE_URL + '/pings/init/', {
-    headers: {
-      'content-type': 'application/x-www-form-urlencoded',
-      'accept': 'application/json',
-    },
-    method: 'post',
-    body: `ga_cookie=${cookies._ga}&gid_cookie=${cookies._gid}`,
-  }).then(response => response.json())
-    .then((data: InitPingResponseData) => {
-      setIamstaff(data.iamstaff);
-    })
-    .catch(errors => console.log(errors));
-}
-
-function setIamstaff(val) {
-  chromeStorage.set({ [chromeKeys.IAMSTAFF]: Boolean(val) });
-}
-
-function getIamstaff(): Promise<boolean> {
-  return new Promise<boolean>((resolve, reject) => {
-    chromeStorage.get([chromeKeys.IAMSTAFF], result => resolve(result[chromeKeys.IAMSTAFF]));
+function setChromeCookie(url: string, name: string, value: string) {
+  chrome.cookies.set({
+    url,
+    name,
+    value,
+  }, (cookie: chrome.cookies.Cookie) => {
+    if (!cookie) {
+      Sentry.captureException(chrome.runtime.lastError);
+    }
   });
 }
 
 export function sendEventFromMessage(request) {
   if (request.action === 'SEND_GA_EVENT') {
-    sendEvent(request.fieldsObject);
+    sendEvent(request.fieldsObject, request.options).then(() => null);
   }
 }
 
-// TODO: use iamstaff value from local store which would be synced with chrome storage
-export function sendEvent(fieldsObject: FieldsObject) {
-  getIamstaff().then( (iamstaff) => {
-    if (iamstaff) {
-      return;
-    }
-    ga('send', 'event', fieldsObject);
-  });
+export async function sendEvent(fieldsObject: FieldsObject, options: EventOptions = {}) {
+  const iamstaff = await getIamstaffFromCookie();
+  if (iamstaff) {
+    return;
+  }
+  if (options.location) {
+    fieldsObject[GACustomFieldsIndex.eventUrl] = fieldsObject.location = options.location;
+  }
+  ga('send', 'event', fieldsObject);
 }
 
-export function sendEventByMessage(fieldsObject: FieldsObject) {
-  if (window.location.href.startsWith('http')) {
-    fieldsObject[GACustomFieldsIndex.eventUrl] = fieldsObject.location = window.location.href;
+export function sendEventByMessage(fieldsObject: FieldsObject, options: EventOptions = {}) {
+  if (!options.location && window.location.href.startsWith('http')) {
+    options.location = window.location.href;
   }
-  chrome.runtime.sendMessage({ action: 'SEND_GA_EVENT', fieldsObject });
+  chrome.runtime.sendMessage({ action: 'SEND_GA_EVENT', fieldsObject, options });
 }
