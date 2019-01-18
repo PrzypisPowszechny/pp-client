@@ -306,7 +306,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
               trigger={<div className={styles.label}>Typ przypisu</div>}
               flowing={true}
               hoverable={true}
-              position="center left"
+              position="left center"
             >
               Typ sygnalizuje innym użytkownikom, na ile <br/>
               przypis jest zgodny z fragmentem artykułu, którego <br/>
@@ -326,12 +326,12 @@ class Editor extends React.Component<Partial<IEditorProps>,
               trigger={<div className={styles.label}>Treść przypisu</div>}
               flowing={true}
               hoverable={true}
-              position="center left"
+              position="left center"
             >
-              Treść przypisu powinna krótko informować <br/>
-              o najważniejszych wnioskach z załączonego <br/>
-              w przypisie źródła. Np. "Zgodnie z raportem ONZ <br/>
-              ta informacja jest nieprawdziwa, ponieważ...". <br/>
+              Treść powinna krótko informować o najważniejszych<br/>
+              wnioskach z załączonego w przypisie źródła. <br/>
+              Np. "Zgodnie z raportem ONZ ta informacja<br/>
+              jest nieprawdziwa, ponieważ...". <br/>
               Możesz nie wpisywać treści, jeśli np. tylko <br/>
               podlinkowujesz źródło, w którym można doczytać <br/>
               więcej na dany temat.
@@ -358,7 +358,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
               trigger={ <div className={styles.label}>Link do źródła</div>}
               flowing={true}
               hoverable={true}
-              position="center left"
+              position="left center"
             >
               Każdy przypis musi mieć swoje źródło. Pozwala ono <br/>
               innym czytelnikom zweryfikować informację, której <br/>
@@ -371,7 +371,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
               className={annotationLinkError ? styles.error : ''}
               value={annotationLink}
               onChange={this.handleInputChange}
-              placeholder="Wklej link do źródła, na podstawie którego dodajesz przypis"
+              placeholder="Wklej link do strony, na podstawie której dodajesz przypis"
             />
             <div
               className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
@@ -391,7 +391,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
               }
               flowing={true}
               hoverable={true}
-              position="center left"
+              position="left center"
             >
               Co znajduje się pod linkiem? Artykuł? <br/> Raport? O czym?
           </Popup>
