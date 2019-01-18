@@ -254,7 +254,3 @@ Notes:
 [Annotating DOM](docs/DOM-annotation.md)
 
 [Valuable references](docs/references.md)
-
-
-# It's Christmas!
-Santa hat thanks to http://www.transparentpng.com/cats/santa-hat-1922.html
