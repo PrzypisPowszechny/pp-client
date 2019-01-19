@@ -5,7 +5,7 @@ import styles from './ReportEditor.scss';
 import { AnnotationAPIModel } from 'common/api/annotations';
 import { AnnotationReportAPIModel, DataResponse, Reasons } from 'common/api/annotation-reports';
 import { PPScopeClass } from 'content-scripts/settings';
-import ppGA from 'common/pp-ga';
+import ppGa from 'common/pp-ga';
 
 interface IReportProps {
   annotation: AnnotationAPIModel;
@@ -26,7 +26,7 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
   }
 
   componentDidMount() {
-    ppGA.annotationReportFormOpened(this.props.annotation.id);
+    ppGa.annotationReportFormOpened(this.props.annotation.id);
   }
 
   handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -47,7 +47,7 @@ export default class Report extends React.Component<Partial<IReportProps>, Parti
       this.setState({ showReasonError: true });
     } else {
       this.props.onSubmit(this.state.reason, this.state.comment).then( () => {
-        ppGA.annotationReportSent(this.props.annotation.id, this.state.reason, !this.state.comment);
+        ppGa.annotationReportSent(this.props.annotation.id, this.state.reason, !this.state.comment);
       }).catch(() => null);
     }
   }

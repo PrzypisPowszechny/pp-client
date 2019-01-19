@@ -6,7 +6,7 @@ import { changeViewerReportEditorOpen } from 'content-scripts/store/widgets/acti
 import { AnnotationAPIModel } from 'common/api/annotations';
 import { PPScopeClass } from 'content-scripts/settings';
 import ReportEditor from '../report-editor/ReportEditor';
-import ppGA from 'common/pp-ga';
+import ppGa from 'common/pp-ga';
 
 interface IUserActionDialogProps {
   annotation: AnnotationAPIModel;

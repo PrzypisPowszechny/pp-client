@@ -11,7 +11,7 @@ import {
   AnnotationUpvoteResourceType, AnnotationUpvoteAPIModel, AnnotationUpvoteAPICreateModel,
 } from 'common/api/annotation-upvotes';
 import { PPScopeClass } from 'content-scripts/settings';
-import ppGA from 'common/pp-ga';
+import ppGa from 'common/pp-ga';
 import { selectUpvote } from '../../../store/api/selectors';
 
 interface IUpvoteProps {
@@ -71,7 +71,7 @@ export default class Upvote extends React.Component<Partial<IUpvoteProps>, Parti
     const { attributes: attrs } =  annotation;
     if (upvote) {
       this.props.deleteUpvote(upvote).then(() => {
-        ppGA.annotationUpvoteCancelled(annotation.id, attrs.ppCategory, !attrs.comment, attrs.annotationLink);
+        ppGa.annotationUpvoteCancelled(annotation.id, attrs.ppCategory, !attrs.comment, attrs.annotationLink);
       }).catch((errors) => {
         console.log(errors);
       });
@@ -87,7 +87,7 @@ export default class Upvote extends React.Component<Partial<IUpvoteProps>, Parti
           },
         },
       }).then(() => {
-        ppGA.annotationUpvoted(annotation.id, attrs.ppCategory, !attrs.comment, attrs.annotationLink);
+        ppGa.annotationUpvoted(annotation.id, attrs.ppCategory, !attrs.comment, attrs.annotationLink);
       }).catch((errors) => {
         console.log(errors);
       });

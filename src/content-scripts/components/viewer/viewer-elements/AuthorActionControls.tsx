@@ -12,7 +12,7 @@ import {
 } from 'content-scripts/store/widgets/actions';
 import { AnnotationAPIModel } from 'common/api/annotations';
 import Timer = NodeJS.Timer;
-import ppGA from 'common/pp-ga';
+import ppGa from 'common/pp-ga';
 
 interface IAuthorActionControlsProps {
   locationX: number;
@@ -97,7 +97,7 @@ export default class AuthorActionControls extends
     const attrs = annotation.attributes;
     this.props.showEditorAnnotation(locationX, locationY, annotation.id);
     this.props.hideViewer();
-    ppGA.annotationEditFormOpened(annotation.id, attrs.ppCategory, !attrs.comment, attrs.annotationLink);
+    ppGa.annotationEditFormOpened(annotation.id, attrs.ppCategory, !attrs.comment, attrs.annotationLink);
   }
 
   onAnnotationDeleteClick = () => {

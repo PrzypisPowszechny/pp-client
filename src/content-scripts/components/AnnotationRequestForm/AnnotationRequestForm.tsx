@@ -5,7 +5,7 @@ import { PPScopeClass } from 'content-scripts/settings';
 import { turnOffRequestMode } from 'common/chrome-storage';
 import { AnnotationRequestFormData, AppModes } from 'content-scripts/store/appModes/types';
 import { saveAnnotationRequest } from 'common/api/utils';
-import ppGA from 'common/pp-ga';
+import ppGa from 'common/pp-ga';
 
 import styles from './AnnotationRequestForm.scss';
 import { Icon } from 'react-icons-kit';
@@ -86,7 +86,7 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
 
   handleCancelClick = (e: any) => {
     turnOffRequestMode(this.props.appModes, window.location.href);
-    ppGA.annotationAddingModeCancelled();
+    ppGa.annotationAddingModeCancelled();
   }
 
   handleSubmit = (e) => {
@@ -98,7 +98,7 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
       }).then((response) => {
         this.props.changeNotification(true, 'Twoja prośba o przypis została wysłana', ToastType.success);
         turnOffRequestMode(this.props.appModes, window.location.href);
-        ppGA.annotationRequestSent(!quote, !comment, !notificationEmail);
+        ppGa.annotationRequestSent(!quote, !comment, !notificationEmail);
       }).catch((error) => {
         console.log(error);
         this.props.changeNotification(true, 'Błąd! Nie udało się wysłać prośby', ToastType.failure);

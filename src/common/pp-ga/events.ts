@@ -1,5 +1,6 @@
-import { sendEvent, sendEventByMessage, GACustomFieldsIndex, EventOptions } from './core';
+import { sendEvent } from './client';
 import { formatBoolean, formatPriority, formatReason } from './utils';
+import { EventOptions, GACustomFieldsIndex } from './types';
 
 // Extension Installation events
 
@@ -17,7 +18,7 @@ export function extensionUpgraded(previousVersion: string) {
 }
 
 export function extensionDisabledOnAllSites(options?: EventOptions) {
-  sendEventByMessage(
+  sendEvent(
     { eventCategory: 'Extension', eventAction: 'DisableOnAllSites', eventLabel: 'ExtensionDisabledOnSite' },
     options,
   );
@@ -26,21 +27,21 @@ export function extensionDisabledOnAllSites(options?: EventOptions) {
 // Extension Mode events
 
 export function extensionEnabledOnAllSites(options?: EventOptions) {
-  sendEventByMessage(
+  sendEvent(
     { eventCategory: 'Extension', eventAction: 'EnableOnAllSites', eventLabel: 'ExtensionEnabledOnAllSites' },
     options,
   );
 }
 
 export function extensionDisabledOnSite(options?: EventOptions) {
-  sendEventByMessage(
+  sendEvent(
     { eventCategory: 'Extension', eventAction: 'DisableOnSite', eventLabel: 'ExtensionDisabledOnSite' },
     options,
   );
 }
 
 export function extensionEnabledOnSite(options?: EventOptions) {
-  sendEventByMessage(
+  sendEvent(
     { eventCategory: 'Extension', eventAction: 'EnableOnSite', eventLabel: 'ExtensionEnabledOnSite' },
     options,
   );
@@ -49,7 +50,7 @@ export function extensionEnabledOnSite(options?: EventOptions) {
 // Other extension-wide events
 
 export function extensionReportButtonClicked(options?: EventOptions) {
-  sendEventByMessage(
+  sendEvent(
     { eventCategory: 'ExtensionReport', eventAction: 'Click', eventLabel: 'ExtensionReportButtonClicked' },
     options,
   );
@@ -59,7 +60,7 @@ export function extensionReportButtonClicked(options?: EventOptions) {
 
 export function annotationDisplayed(annotationId: string, priority: string, isCommentBlank: boolean, link: string,
                                     options?: EventOptions) {
-  sendEventByMessage({
+  sendEvent({
     eventCategory: 'Annotation', eventAction: 'Display', eventLabel: 'AnnotationDisplayed',
     [GACustomFieldsIndex.annotationId]: annotationId,
     [GACustomFieldsIndex.priority]: formatPriority(priority),
@@ -70,7 +71,7 @@ export function annotationDisplayed(annotationId: string, priority: string, isCo
 
 export function annotationLinkClicked(annotationId: string, priority: string, isCommentBlank: boolean, link: string,
                                       options?: EventOptions) {
-  sendEventByMessage({
+  sendEvent({
     eventCategory: 'Annotation', eventAction: 'Click', eventLabel: 'AnnotationLinkClicked',
     [GACustomFieldsIndex.annotationId]: annotationId,
     [GACustomFieldsIndex.priority]: formatPriority(priority),
@@ -81,7 +82,7 @@ export function annotationLinkClicked(annotationId: string, priority: string, is
 
 export function annotationAdded(annotationId: string, priority: string, isCommentBlank: boolean, link: string,
                                 options?: EventOptions) {
-  sendEventByMessage({
+  sendEvent({
     eventCategory: 'Annotation', eventAction: 'Add', eventLabel: 'AnnotationAdded',
     [GACustomFieldsIndex.annotationId]: annotationId,
     [GACustomFieldsIndex.priority]: formatPriority(priority),
@@ -92,7 +93,7 @@ export function annotationAdded(annotationId: string, priority: string, isCommen
 
 export function annotationEdited(annotationId: string, priority: string, isCommentBlank: boolean, link: string,
                                  options?: EventOptions) {
-  sendEventByMessage({
+  sendEvent({
     eventCategory: 'Annotation', eventAction: 'Edit', eventLabel: 'AnnotationEdited',
     [GACustomFieldsIndex.annotationId]: annotationId,
     [GACustomFieldsIndex.priority]: formatPriority(priority),
@@ -103,7 +104,7 @@ export function annotationEdited(annotationId: string, priority: string, isComme
 
 export function annotationDeleted(annotationId: string, priority: string, isCommentBlank: boolean, link: string,
                                   options?: EventOptions) {
-  sendEventByMessage({
+  sendEvent({
     eventCategory: 'Annotation', eventAction: 'Delete', eventLabel: 'AnnotationDeleted',
     [GACustomFieldsIndex.annotationId]: annotationId,
     [GACustomFieldsIndex.priority]: formatPriority(priority),
@@ -115,7 +116,7 @@ export function annotationDeleted(annotationId: string, priority: string, isComm
 // Annotation Form events
 
 export function annotationAddFormOpened(triggeredBy: string, options?: EventOptions) {
-  sendEventByMessage({
+  sendEvent({
     eventCategory: 'AnnotationForm', eventAction: 'Open', eventLabel: 'AnnotationAddFormOpened',
     [GACustomFieldsIndex.triggeredBy]: triggeredBy,
   }, options);
@@ -123,7 +124,7 @@ export function annotationAddFormOpened(triggeredBy: string, options?: EventOpti
 
 export function annotationEditFormOpened(annotationId: string, priority: string, isCommentBlank: boolean,
                                          link: string, options?: EventOptions) {
-  sendEventByMessage({
+  sendEvent({
     eventCategory: 'AnnotationForm', eventAction: 'Open', eventLabel: 'AnnotationEditFormOpened',
     [GACustomFieldsIndex.annotationId]: annotationId,
     [GACustomFieldsIndex.priority]: formatPriority(priority),
@@ -133,7 +134,7 @@ export function annotationEditFormOpened(annotationId: string, priority: string,
 }
 
 export function annotationFormMoved(options?: EventOptions) {
-  sendEventByMessage({
+  sendEvent({
     eventCategory: 'AnnotationForm', eventAction: 'Move', eventLabel: 'AnnotationFormMoved',
   }, options);
 }
@@ -141,13 +142,13 @@ export function annotationFormMoved(options?: EventOptions) {
 // Annotation Summary events
 
 export function annotationSummaryClicked(options?: EventOptions) {
-  sendEventByMessage({
+  sendEvent({
     eventCategory: 'AnnotationSummary', eventAction: 'Click', eventLabel: 'AnnotationSummaryClicked',
   }, options);
 }
 
 export function annotationSummaryAnnotationClicked(annotationId: string, options?: EventOptions) {
-  sendEventByMessage({
+  sendEvent({
     eventCategory: 'AnnotationSummary', eventAction: 'Click', eventLabel: 'AnnotationSummaryAnnotationClicked',
     [GACustomFieldsIndex.annotationId]: annotationId,
   }, options);
@@ -156,13 +157,13 @@ export function annotationSummaryAnnotationClicked(annotationId: string, options
 // Annotation Adding Mode events
 
 export function annotationAddingModeInited(options?: EventOptions) {
-  sendEventByMessage({
+  sendEvent({
     eventCategory: 'AnnotationAddingMode', eventAction: 'Init', eventLabel: 'AnnotationAddingModeInited',
   }, options);
 }
 
 export function annotationAddingModeCancelled(options?: EventOptions) {
-  sendEventByMessage({
+  sendEvent({
     eventCategory: 'AnnotationAddingMode', eventAction: 'Cancel', eventLabel: 'AnnotationAddingModeCancelled',
   }, options);
 }
@@ -171,7 +172,7 @@ export function annotationAddingModeCancelled(options?: EventOptions) {
 
 export function annotationRequestFormOpened(triggeredBy: string, isQuoteBlank: boolean = true,
                                             options?: EventOptions) {
-  sendEventByMessage({
+  sendEvent({
     eventCategory: 'AnnotationRequestForm', eventAction: 'Open', eventLabel: 'AnnotationRequestFormOpened',
     [GACustomFieldsIndex.triggeredBy]: triggeredBy,
     [GACustomFieldsIndex.isQuoteBlank]: formatBoolean(isQuoteBlank),
@@ -180,7 +181,7 @@ export function annotationRequestFormOpened(triggeredBy: string, isQuoteBlank: b
 
 export function annotationRequestSent(isQuoteBlank: boolean, isCommentBlank: boolean, isEmailBlank: boolean,
                                       options?: EventOptions) {
-  sendEventByMessage({
+  sendEvent({
       eventCategory: 'AnnotationRequest', eventAction: 'Send', eventLabel: 'AnnotationRequestSent',
       [GACustomFieldsIndex.isQuoteBlank]: formatBoolean(isQuoteBlank),
       [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
@@ -192,7 +193,7 @@ export function annotationRequestSent(isQuoteBlank: boolean, isCommentBlank: boo
 
 export function annotationUpvoted(annotationId: string, priority: string, isCommentBlank: boolean, link: string,
                                   options?: EventOptions) {
-  sendEventByMessage({
+  sendEvent({
     eventCategory: 'AnnotationUpvote', eventAction: 'Add', eventLabel: 'AnnotationUpvoted',
     [GACustomFieldsIndex.annotationId]: annotationId,
     [GACustomFieldsIndex.priority]: formatPriority(priority),
@@ -203,7 +204,7 @@ export function annotationUpvoted(annotationId: string, priority: string, isComm
 
 export function annotationUpvoteCancelled(annotationId: string, priority: string, isCommentBlank: boolean,
                                           link: string, options?: EventOptions) {
-  sendEventByMessage({
+  sendEvent({
     eventCategory: 'AnnotationUpvote', eventAction: 'Cancel', eventLabel: 'AnnotationUpvoteCancelled',
     [GACustomFieldsIndex.annotationId]: annotationId,
     [GACustomFieldsIndex.priority]: formatPriority(priority),
@@ -215,7 +216,7 @@ export function annotationUpvoteCancelled(annotationId: string, priority: string
 // Annotation Report events
 
 export function annotationReportFormOpened(annotationId: string, options?: EventOptions) {
-  sendEventByMessage({
+  sendEvent({
     eventCategory: 'AnnotationReportForm', eventAction: 'Open', eventLabel: 'AnnotationReportFormOpened',
     [GACustomFieldsIndex.annotationId]: annotationId,
   }, options);
@@ -223,7 +224,7 @@ export function annotationReportFormOpened(annotationId: string, options?: Event
 
 export function annotationReportSent(annotationId: string, reason: string, isCommentBlank: boolean,
                                      options?: EventOptions) {
-  sendEventByMessage({
+  sendEvent({
     eventCategory: 'AnnotationReport', eventAction: 'Send', eventLabel: 'AnnotationReportSent',
     [GACustomFieldsIndex.annotationId]: annotationId,
     [GACustomFieldsIndex.reason]: formatReason(reason),
@@ -232,14 +233,14 @@ export function annotationReportSent(annotationId: string, reason: string, isCom
 }
 
 export function annotationSuggestionFormOpened(annotationId: string, options?: EventOptions) {
-  sendEventByMessage({
+  sendEvent({
     eventCategory: 'AnnotationSuggestionForm', eventAction: 'Open', eventLabel: 'AnnotationSuggestionFormOpened',
     [GACustomFieldsIndex.annotationId]: annotationId,
   }, options);
 }
 
 export function annotationSuggestionSent(annotationId: string, isCommentBlank: boolean, options?: EventOptions) {
-  sendEventByMessage({
+  sendEvent({
     eventCategory: 'AnnotationSuggestion', eventAction: 'Send', eventLabel: 'AnnotationSuggestionSent',
     [GACustomFieldsIndex.annotationId]: annotationId,
     [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
