@@ -2,6 +2,7 @@ import gaScript from './ga.js';
 import FieldsObject = UniversalAnalytics.FieldsObject;
 import cookieLib from 'cookie';
 import { getIamstaff, getIamstaffFromCookie, setIamstaff } from './utils';
+import { setChromeCookie, getChromeCookie } from '../chrome-cookies';
 import * as Sentry from '@sentry/browser';
 
 export interface EventOptions {
@@ -21,33 +22,36 @@ export const GACustomFieldsIndex = {
   isEmailBlank: 'dimension9',
 };
 
-export function init() {
+export async function init() {
   gaScript();
-  ga('create', PPSettings.GA_ID, { cookieDomain: 'localhost'/* PPSettings.API_HOST */  });
+
+  const bgCookies = cookieLib.parse(document.cookie);
+
+  // If chrome cookies are set for SITE and not set for bg, copy those cookies to bg
+  const siteGaCookie = await getChromeCookie(PPSettings.SITE_URL, '_ga');
+  const siteGidCookie = await getChromeCookie(PPSettings.SITE_URL, '_gid');
+  if (siteGaCookie && siteGidCookie && !bgCookies._ga && !bgCookies._gid) {
+    document.cookie = cookieLib.serialize('_ga', siteGaCookie);
+    document.cookie = cookieLib.serialize('_gid', siteGidCookie);
+  }
+
+  ga('create', PPSettings.GA_ID);
   // Our extension protocol is chrome which is not what GA expects. It will fall back to http(s)
   ga('set', 'checkProtocolTask', () => { /* nothing */ });
   ga('set', 'appName', 'PP browser extension');
   ga('set', 'appVersion', PPSettings.VERSION);
 
-  setDomainCookies();
+  // If SITE cookies are not set, wait for ga to finish the setup and propagate bg cookies to SITE
+  if (!siteGaCookie && !siteGidCookie) {
+    ga(setDomainCookiesOnGaReady);
+  }
 }
 
-function setDomainCookies() {
-  const cookies = cookieLib.parse(document.cookie);
-  setChromeCookie(PPSettings.SITE_URL, '_ga', cookies._ga);
-  setChromeCookie(PPSettings.SITE_URL, '_gid', cookies._gid);
-}
+function setDomainCookiesOnGaReady() {
+  const bgCookies = cookieLib.parse(document.cookie);
 
-function setChromeCookie(url: string, name: string, value: string) {
-  chrome.cookies.set({
-    url,
-    name,
-    value,
-  }, (cookie: chrome.cookies.Cookie) => {
-    if (!cookie) {
-      Sentry.captureException(chrome.runtime.lastError);
-    }
-  });
+  setChromeCookie(PPSettings.SITE_URL, '_ga', bgCookies._ga);
+  setChromeCookie(PPSettings.SITE_URL, '_gid', bgCookies._gid);
 }
 
 export function sendEventFromMessage(request) {
