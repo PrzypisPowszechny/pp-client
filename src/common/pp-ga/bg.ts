@@ -4,15 +4,37 @@ import cookieLib from 'cookie';
 import { getIamstaffFromCookie } from './utils';
 import { setChromeCookie, getChromeCookie } from '../chrome-cookies';
 import { EventOptions, GACustomFieldsIndex } from './types';
+import * as retry from 'retry';
 
 let bgInited = false;
+let gaReady = false;
 
-export function isBg() {
+export function isGaRunningInWindow() {
   return bgInited;
 }
 
+function setGaReady() {
+  gaReady = true;
+}
+
 export async function init() {
-  gaScript();
+  bgInited = true;
+
+  // GA needs to fetch actual script from external resource, so in case somebody starts browser without internet
+  // we are going to retry it using exponential formula: minTimeout * 2**retriesNum. First retry in 5s, last after 60d.
+  const operation = retry.operation({ minTimeout: 5000, retries: 20 });
+  operation.attempt((num) => {
+    gaScript();
+  }, {
+    // 3s timeout for ga to become ready
+    timeout: 3000,
+    cb: () => {
+      if (!gaReady) {
+        operation.retry(Error(`timeout: ga is not ready after 3s, it might be caused by being offline`));
+      }
+    },
+  });
+
   const domain = window.location.host;
 
   // If chrome cookies are set for SITE and not set for bg, copy those cookies to bg
@@ -24,6 +46,7 @@ export async function init() {
     document.cookie = cookieLib.serialize('_gid', siteGidCookie.value, { domain });
   }
 
+  // Al ga() are async in the way that those calls (args) are queued. When GA script is ready, it consumes all records.
   ga('create', PPSettings.GA_ID, domain);
   // Our extension protocol is chrome which is not what GA expects. It will fall back to http(s)
   ga('set', 'checkProtocolTask', () => { /* nothing */ });
@@ -34,8 +57,7 @@ export async function init() {
   if (!siteGaCookie && !siteGidCookie) {
     ga(setDomainCookiesOnGaReady);
   }
-
-  bgInited = true;
+  ga(setGaReady);
 }
 
 function setDomainCookiesOnGaReady() {
