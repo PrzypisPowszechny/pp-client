@@ -9,7 +9,8 @@ console.log('Przypis background script!');
 
 import InstalledDetails = chrome.runtime.InstalledDetails;
 import { returnExtensionCookie, setBadge } from './messages';
-import ppGA from 'common/pp-ga/index';
+import * as ppGABg from 'common/pp-ga/bg';
+import ppGA from 'common/pp-ga';
 
 function onContextMenuAnnotate() {
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
@@ -67,6 +68,6 @@ chrome.runtime.onMessage.addListener(returnExtensionCookie);
  * Google analytics
  */
 
-ppGA.init();
+ppGABg.init().then( () => null);
 chrome.runtime.onInstalled.addListener(ppGAOnInstalled);
-chrome.runtime.onMessage.addListener(ppGA.sendEventFromMessage);
+chrome.runtime.onMessage.addListener(ppGABg.sendEventFromMessage);

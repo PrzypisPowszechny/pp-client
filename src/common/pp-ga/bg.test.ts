@@ -1,6 +1,6 @@
-import * as core from './core';
+import * as bg from './bg';
 import * as utils from './utils';
-import { GACustomFieldsIndex } from './core';
+import { GACustomFieldsIndex } from './types';
 
 jest.mock('common/pp-ga/ga', () => null);
 
@@ -15,7 +15,7 @@ describe('sendMessage', () => {
     Object.defineProperty(utils, 'getIamstaffFromCookie', { value:  getIamstaffMock });
     Object.defineProperty(global, 'ga', { value:  gaMock, writable: true });
 
-    await core.sendEvent(fieldsObject);
+    await bg.sendEvent(fieldsObject);
 
     expect(gaMock).toBeCalled();
     expect(gaMock).toBeCalledWith('send', 'event', { ...fieldsObject });
@@ -30,7 +30,7 @@ describe('sendMessage', () => {
     Object.defineProperty(global, 'ga', { value:  gaMock, writable: true });
 
     const location = 'http://example.com/test';
-    await core.sendEvent(fieldsObject, { location });
+    await bg.sendEvent(fieldsObject, { location });
 
     expect(gaMock).toBeCalled();
     expect(gaMock).toBeCalledWith('send', 'event',
@@ -46,7 +46,7 @@ describe('sendMessage', () => {
     Object.defineProperty(utils, 'getIamstaffFromCookie', { value:  getIamstaffMock });
     Object.defineProperty(global, 'ga', { value:  gaMock, writable: true });
 
-    await core.sendEvent(fieldsObject);
+    await bg.sendEvent(fieldsObject);
 
     expect(gaMock).toBeCalledTimes(0);
   });
