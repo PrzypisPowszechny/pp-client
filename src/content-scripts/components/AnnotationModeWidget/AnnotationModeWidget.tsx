@@ -7,7 +7,7 @@ import { PPScopeClass } from 'content-scripts/settings';
 import { turnOffAnnotationMode } from 'common/chrome-storage';
 import { AppModes } from 'content-scripts/store/appModes/types';
 import Button from '../elements/Button/Button';
-import ppGA from 'common/pp-ga';
+import ppGa from 'common/pp-ga';
 import { hideMenu } from '../../store/widgets/actions';
 
 export interface IAnnotationModeWidgetProps {
@@ -26,7 +26,7 @@ export default class AnnotationModeWidget extends React.Component<Partial<IAnnot
   handleCancelClick = (e: any) => {
     this.props.hideMenu();
     turnOffAnnotationMode(this.props.appModes, window.location.href);
-    ppGA.annotationAddingModeCancelled();
+    ppGa.annotationAddingModeCancelled();
   }
 
   render() {

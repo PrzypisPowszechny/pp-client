@@ -9,8 +9,8 @@ console.log('Przypis background script!');
 
 import InstalledDetails = chrome.runtime.InstalledDetails;
 import { returnExtensionCookie, setBadge } from './messages';
-import * as ppGABg from 'common/pp-ga/bg';
-import ppGA from 'common/pp-ga';
+import * as ppGaBg from 'common/pp-ga/bg';
+import ppGa from 'common/pp-ga';
 
 function onContextMenuAnnotate() {
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
@@ -38,13 +38,13 @@ function contextMenuOnInstalled(details: InstalledDetails) {
   });
 }
 
-function ppGAOnInstalled(details: InstalledDetails) {
+function ppGaOnInstalled(details: InstalledDetails) {
   switch (details.reason) {
     case 'install':
-      ppGA.extensionInstalled();
+      ppGa.extensionInstalled();
       break;
     case 'update':
-      ppGA.extensionUpgraded(details.previousVersion);
+      ppGa.extensionUpgraded(details.previousVersion);
       break;
     default:
       // ignore 'chrome_update' and 'shared_module_update'
@@ -68,6 +68,6 @@ chrome.runtime.onMessage.addListener(returnExtensionCookie);
  * Google analytics
  */
 
-ppGABg.init().then( () => null);
-chrome.runtime.onInstalled.addListener(ppGAOnInstalled);
-chrome.runtime.onMessage.addListener(ppGABg.sendEventFromMessage);
+ppGaBg.init().then( () => null);
+chrome.runtime.onInstalled.addListener(ppGaOnInstalled);
+chrome.runtime.onMessage.addListener(ppGaBg.sendEventFromMessage);

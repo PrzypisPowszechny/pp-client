@@ -13,7 +13,7 @@ import { extractMinimalLabel, httpPrefixed } from '../../../common/url';
 
 import AuthorActionControls from './viewer-elements/AuthorActionControls';
 import UserActionControls from './viewer-elements/UserActionControls';
-import ppGA from 'common/pp-ga';
+import ppGa from 'common/pp-ga';
 import { selectAnnotation } from '../../store/api/selectors';
 
 import styles from './Viewer.scss';
@@ -51,13 +51,13 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
 
   componentDidMount() {
     const { ppCategory, comment, annotationLink } = this.props.annotation.attributes;
-    ppGA.annotationDisplayed(this.props.annotationId, ppCategory, !comment, annotationLink);
+    ppGa.annotationDisplayed(this.props.annotationId, ppCategory, !comment, annotationLink);
   }
 
   handleAnnotationLinkClick = () => {
     const { ppCategory, comment, annotationLink } = this.props.annotation.attributes;
     this.props.hideViewer();
-    ppGA.annotationLinkClicked(this.props.annotationId, ppCategory, !comment, annotationLink);
+    ppGa.annotationLinkClicked(this.props.annotationId, ppCategory, !comment, annotationLink);
   }
 
   headerPPCategoryClass() {

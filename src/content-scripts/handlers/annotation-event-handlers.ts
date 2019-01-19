@@ -19,7 +19,7 @@ import {
 } from 'content-scripts/settings';
 import { selectModeForCurrentPage } from '../store/appModes/selectors';
 import { setSelectionRange, showEditorAnnotation } from '../store/widgets/actions';
-import ppGA from 'common/pp-ga';
+import ppGa from 'common/pp-ga';
 import { standardizeUrlForPageSettings } from '../../common/url';
 import { turnOnRequestMode } from '../../common/chrome-storage';
 import store from '../store';
@@ -155,7 +155,7 @@ function annotationRequestCommand() {
     chrome.storage.local.set({ ANNOTATION_REQUEST_FORM_DATA: formData }, () => {
       console.log('annotation request window opened!');
     });
-    ppGA.annotationRequestFormOpened('rightMouseContextMenu', !selection);
+    ppGa.annotationRequestFormOpened('rightMouseContextMenu', !selection);
   }
 }
 
@@ -171,7 +171,7 @@ function annotateCommand() {
     store.dispatch(setSelectionRange(annotationLocation));
     const selectionCenter = handlers.selector.currentSingleSelectionCenter();
     store.dispatch(showEditorAnnotation(selectionCenter.x, selectionCenter.y));
-    ppGA.annotationAddFormOpened('rightMouseContextMenu');
+    ppGa.annotationAddFormOpened('rightMouseContextMenu');
   }
 }
 

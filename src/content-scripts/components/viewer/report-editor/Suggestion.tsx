@@ -4,7 +4,7 @@ import styles from './ReportEditor.scss';
 import { AnnotationAPIModel } from 'common/api/annotations';
 import { Reasons } from 'common/api/annotation-reports';
 import { PPScopeClass } from 'content-scripts/settings';
-import ppGA from 'common/pp-ga';
+import ppGa from 'common/pp-ga';
 import { AnnotationReportAPIModel, DataResponse } from '../../../../common/api/annotation-reports';
 
 interface ISuggestionProps {
@@ -25,7 +25,7 @@ export default class Suggestion extends React.Component<Partial<ISuggestionProps
   }
 
   componentDidMount() {
-    ppGA.annotationSuggestionFormOpened(this.props.annotation.id);
+    ppGa.annotationSuggestionFormOpened(this.props.annotation.id);
   }
 
   handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -42,7 +42,7 @@ export default class Suggestion extends React.Component<Partial<ISuggestionProps
       this.setState({ showCommentError: true });
     } else {
       this.props.onSubmit(Reasons.SUGGESTED_CORRECTION, this.state.comment).then( () => {
-        ppGA.annotationSuggestionSent(this.props.annotation.id, !this.state.comment);
+        ppGa.annotationSuggestionSent(this.props.annotation.id, !this.state.comment);
       }).catch(() => null);
     }
   }

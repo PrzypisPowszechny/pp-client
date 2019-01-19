@@ -14,7 +14,7 @@ import { PPScopeClass } from 'content-scripts/settings';
 import { Icon } from 'react-icons-kit';
 import { ic_add_circle } from 'react-icons-kit/md/ic_add_circle';
 
-import ppGA from 'common/pp-ga';
+import ppGa from 'common/pp-ga';
 
 interface IMenuProps {
   locationX: number;
@@ -68,7 +68,7 @@ export default class Menu extends React.Component<Partial<IMenuProps>, {}> {
     this.props.hideMenu();
     this.props.setSelectionRange(annotationLocation);
     this.props.showEditor(locationX, locationY);
-    ppGA.annotationAddFormOpened('addingModeMenu');
+    ppGa.annotationAddFormOpened('addingModeMenu');
   }
 
   render() {

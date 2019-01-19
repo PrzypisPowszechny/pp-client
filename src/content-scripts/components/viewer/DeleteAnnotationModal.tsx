@@ -9,7 +9,7 @@ import { ToastType } from '../elements/Toast/Toast';
 import { selectViewerState } from '../../store/widgets/selectors';
 import { selectAnnotation } from '../../store/api/selectors';
 import { AnnotationAPIModel } from '../../../common/api/annotations';
-import ppGA from '../../../common/pp-ga';
+import ppGa from '../../../common/pp-ga';
 
 interface IModalProps {
   deleteModalId: string;
@@ -51,7 +51,7 @@ export default class DeleteAnnotationModal extends React.PureComponent<Partial<I
     this.props.deleteAnnotation(this.props.annotation)
       .then(() => {
         const attrs = this.props.annotation.attributes;
-        ppGA.annotationDeleted(this.props.annotation.id, attrs.ppCategory, !attrs.comment, attrs.annotationLink);
+        ppGa.annotationDeleted(this.props.annotation.id, attrs.ppCategory, !attrs.comment, attrs.annotationLink);
         this.props.changeNotification(true, 'Usunięto przypis', ToastType.success);
       })
       .catch((errors) => {

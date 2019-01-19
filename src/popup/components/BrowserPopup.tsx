@@ -14,7 +14,7 @@ import chromeStorage, { turnOnRequestMode } from 'common/chrome-storage';
 import * as chromeKeys from 'common/chrome-storage/keys';
 import _filter from 'lodash/filter';
 import classNames from 'classnames';
-import ppGA from 'common/pp-ga/index';
+import ppGa from 'common/pp-ga/index';
 import { AnnotationAPIModel } from 'common/api/annotations';
 import AnnotationSummary from './annotationSummary/AnnotationSummary';
 import { PopupPages } from './BrowserPopupNavigator';
@@ -104,7 +104,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     if (onPageChange) {
       onPageChange(PopupPages.annotationList);
     }
-    ppGA.annotationSummaryClicked({ location: this.state.currentStandardizedTabUrl });
+    ppGa.annotationSummaryClicked({ location: this.state.currentStandardizedTabUrl });
   }
 
   /*
@@ -139,7 +139,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
         [chromeKeys.REQUEST_MODE_PAGES]: newRequestModePages
       });
       window.close();
-      ppGA.annotationAddingModeInited({ location: currentStandardizedTabUrl });
+      ppGa.annotationAddingModeInited({ location: currentStandardizedTabUrl });
     }
   }
 
@@ -152,7 +152,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     if (!isRequestMode) {
       turnOnRequestMode(this.state, currentStandardizedTabUrl);
       window.close();
-      ppGA.annotationRequestFormOpened('popup', true, { location: this.state.currentStandardizedTabUrl });
+      ppGa.annotationRequestFormOpened('popup', true, { location: this.state.currentStandardizedTabUrl });
     }
   }
 
@@ -161,9 +161,9 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     this.setState({ isExtensionDisabled: isDisabledNewValue });
     chromeStorage.set({ [chromeKeys.DISABLED_EXTENSION]: isDisabledNewValue });
     if (isDisabledNewValue) {
-      ppGA.extensionDisabledOnAllSites({ location: this.state.currentStandardizedTabUrl });
+      ppGa.extensionDisabledOnAllSites({ location: this.state.currentStandardizedTabUrl });
     } else {
-      ppGA.extensionEnabledOnAllSites({ location: this.state.currentStandardizedTabUrl });
+      ppGa.extensionEnabledOnAllSites({ location: this.state.currentStandardizedTabUrl });
     }
   }
 
@@ -179,10 +179,10 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     let newDisabledPages;
     if (checked) {
       newDisabledPages = [...disabledPages, currentStandardizedTabUrl];
-      ppGA.extensionDisabledOnSite({ location: currentStandardizedTabUrl });
+      ppGa.extensionDisabledOnSite({ location: currentStandardizedTabUrl });
     } else {
       newDisabledPages = _filter(disabledPages, url => url !== currentStandardizedTabUrl);
-      ppGA.extensionEnabledOnSite({ location: currentStandardizedTabUrl });
+      ppGa.extensionEnabledOnSite({ location: currentStandardizedTabUrl });
     }
     // Permanently turn off the annotation mode for the disabled pages
     const newAnnotationModePages = _filter(annotationModePages, url => !newDisabledPages.includes(url));
@@ -202,7 +202,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
 
   handleReportButtonClick = () => {
     window.open(`${PPSettings.SITE_URL}/report/`, '_blank');
-    ppGA.extensionReportButtonClicked({ location: this.state.currentStandardizedTabUrl });
+    ppGa.extensionReportButtonClicked({ location: this.state.currentStandardizedTabUrl });
   }
 
   render() {

@@ -20,7 +20,7 @@ import PPCategoryButtonsBar from 'content-scripts/components/editor/PPCategoryBu
 import * as helpers from './helpers';
 
 import styles from './Editor.scss';
-import ppGA from 'common/pp-ga';
+import ppGa from 'common/pp-ga';
 import { AnnotationPPCategories } from '../../../common/api/annotations';
 import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
 
@@ -220,7 +220,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
   }
 
   onMoved = () => {
-    ppGA.annotationFormMoved();
+    ppGa.annotationFormMoved();
   }
 
   getAnnotationFromState() {
@@ -259,10 +259,10 @@ class Editor extends React.Component<Partial<IEditorProps>,
         const attributes = instance.attributes;
         if (isNewInstance) {
           turnOffAnnotationMode(this.props.appModes, window.location.href);
-          ppGA.annotationAdded(instance.id, attributes.ppCategory, !attributes.comment, attributes.annotationLink);
+          ppGa.annotationAdded(instance.id, attributes.ppCategory, !attributes.comment, attributes.annotationLink);
           this.props.changeNotification(true, 'Dodałeś/aś przypis', ToastType.success);
         } else {
-          ppGA.annotationEdited(instance.id, attributes.ppCategory, !attributes.comment, attributes.annotationLink);
+          ppGa.annotationEdited(instance.id, attributes.ppCategory, !attributes.comment, attributes.annotationLink);
           this.props.changeNotification(true, 'Edytowałeś/aś przypis', ToastType.success);
         }
       }).catch((errors) => {
