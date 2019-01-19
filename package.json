@@ -1,6 +1,6 @@
 {
   "name": "pp-client",
-  "version": "0.5.0-alpha",
+  "version": "0.5.0-beta",
   "description": "",
   "main": "index.js",
   "dependencies": {
