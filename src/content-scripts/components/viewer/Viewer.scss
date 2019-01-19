@@ -42,17 +42,6 @@ li.annotation {
   padding-top: 4px;
 }
 
-.pp-santa-hat {
-  position: absolute;
-  background-image: url('../../../../assets/santa-hat.png');
-  background-repeat: no-repeat;
-  background-size: contain;
-  height: 35px;
-  width: 100px;
-  left: -30px;
-  top: -20px;
-}
-
 .pp-category {
   @extend %pp-category-font;
   display: inline;

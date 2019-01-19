@@ -106,7 +106,6 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
       <li className={styles.annotation}>
         <div className={styles.headBar}>
           <div>
-            <div className={styles.ppSantaHat}></div>
             <div className={classNames(styles.ppCategory, this.ppCategoryToClass(ppCategory))}>
               {comment ? annotationPPCategoriesLabels[ppCategory] : 'źródło'}
             </div>
