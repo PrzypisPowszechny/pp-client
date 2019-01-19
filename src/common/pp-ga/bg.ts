@@ -13,17 +13,18 @@ export function isBg() {
 
 export async function init() {
   gaScript();
+  const domain = window.location.host;
 
   // If chrome cookies are set for SITE and not set for bg, copy those cookies to bg
   const siteGaCookie = await getChromeCookie(PPSettings.SITE_URL, '_ga');
   const siteGidCookie = await getChromeCookie(PPSettings.SITE_URL, '_gid');
   const bgCookies = cookieLib.parse(document.cookie);
   if (siteGaCookie && siteGidCookie && !bgCookies._ga && !bgCookies._gid) {
-    document.cookie = cookieLib.serialize('_ga', siteGaCookie);
-    document.cookie = cookieLib.serialize('_gid', siteGidCookie);
+    document.cookie = cookieLib.serialize('_ga', siteGaCookie.value, { domain });
+    document.cookie = cookieLib.serialize('_gid', siteGidCookie.value, { domain });
   }
 
-  ga('create', PPSettings.GA_ID);
+  ga('create', PPSettings.GA_ID, domain);
   // Our extension protocol is chrome which is not what GA expects. It will fall back to http(s)
   ga('set', 'checkProtocolTask', () => { /* nothing */ });
   ga('set', 'appName', 'PP browser extension');
