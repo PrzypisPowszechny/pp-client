@@ -1,21 +1,34 @@
+# Currently using node 8.x - this is newest version recommended for production and so most widely supported by packages,
+# this will change in April 2019 (https://github.com/nodejs/Release)
+#
+# When caching node dependencies we include node version as some dependencies may vary also on a per node version basis.
+
+
 version: 2.1
 executors:
-  node-with-browsers-and-env:
+  node-browsers-local-api:
     docker:
-      # node 8.x - this is newest version recommended for production and so most widely supported by packages,
-      # this will change in April 2019 (https://github.com/nodejs/Release)
       - image: circleci/node:8-browsers
     working_directory: ~/repo
     environment:
       PP_API=local
+
+  node-pp-api:
+    docker:
+      - image: circleci/node:8
+    working_directory: ~/repo
+    environment:
+      PP_API=pp
+      PP_DEV=false
+
 jobs:
   install:
-    executor: node-with-browsers-and-env
+    executor: node-browsers-local-api
     steps:
       - checkout
       - restore_cache:
           keys:
-          # Some dependencies may vary also on a per node version basis
+
           - v1-node-8-dependencies-{{ checksum "package-lock.json" }}
       - run: npm install
       - save_cache:
@@ -24,46 +37,85 @@ jobs:
           key: v1-node-8-dependencies-{{ checksum "package-lock.json" }}
 
   test:
-    executor: node-with-browsers-and-env
+    executor: node-browsers-local-api
     steps:
       - checkout
       - restore_cache:
           keys:
-          - v1-node-8-dependencies-{{ checksum "package-lock.json" }}
+            - v1-node-8-dependencies-{{ checksum "package-lock.json" }}
       - run: npm run test
 
   e2e-build:
-    executor: node-with-browsers-and-env
+    executor: node-browsers-local-api
     steps:
-    - checkout
-    - restore_cache:
-        keys:
-        - v1-node-8-dependencies-{{ checksum "package-lock.json" }}
-    - run: npm run build
-    - run: npm run e2e
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-node-8-dependencies-{{ checksum "package-lock.json" }}
+      - run: npm run build
+      - run: npm run e2e
 
   e2e-build-optimized:
-    executor: node-with-browsers-and-env
+    executor: node-browsers-local-api
     steps:
-    - checkout
-    - restore_cache:
-        keys:
-        - v1-node-8-dependencies-{{ checksum "package-lock.json" }}
-    - run: npm run build-optimized
-    - run: npm run e2e
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-node-8-dependencies-{{ checksum "package-lock.json" }}
+      - run: npm run build-optimized
+      - run: npm run e2e
 
+  release:
+    executor: node-pp-api
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-node-8-dependencies-{{ checksum "package-lock.json" }}
+      - run: npm run build-package
+      - run:
+          name: add version number to the package
+          command: |
+            mkdir dist/package;
+            mv dist/pp-chrome.zip dist/package/pp-chrome-$CIRCLE_TAG.zip;
+      - store_artifacts:
+          path: dist/package/
+          destination: package
 
 workflows:
   version: 2
-  install_build_test_e2e:
+  install-test-release:
     jobs:
-      - install
+      - install:
+          filters:
+            tags: # required since `release` has tag filters AND requires this job
+              only: /.*/
       - test:
           requires:
             - install
+          filters:
+            tags: # required since `release` has tag filters AND requires this job
+              only: /.*/
       - e2e-build:
           requires:
             - install
+          filters:
+            tags: # required since `release` has tag filters AND requires this job
+              only: /.*/
       - e2e-build-optimized:
           requires:
             - install
+          filters:
+            tags: # required since `release` has tag filters AND requires this job
+              only: /.*/
+      - release:
+          requires:
+            - install
+            - test
+            - e2e-build
+            - e2e-build-optimized
+          filters:
+            branches: # no branches, now tag condition can filter commits with proper tag
+              ignore: /.*/
+            tags:
+              only: /v.+/
