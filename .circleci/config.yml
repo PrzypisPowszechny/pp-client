@@ -16,13 +16,12 @@ jobs:
       - restore_cache:
           keys:
           # Some dependencies may vary also on a per node version basis
-          - v1-node-8-dependencies-{{ checksum "package.json" }}
-          - v1-node-8-dependencies-
+          - v1-node-8-dependencies-{{ checksum "package-lock.json" }}
       - run: npm install
       - save_cache:
           paths:
             - node_modules
-          key: v1-node-8-dependencies-{{ checksum "package.json" }}
+          key: v1-node-8-dependencies-{{ checksum "package-lock.json" }}
 
   test:
     executor: node-with-browsers-and-env
@@ -30,8 +29,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v1-node-8-dependencies-{{ checksum "package.json" }}
-          - v1-node-8-dependencies-
+          - v1-node-8-dependencies-{{ checksum "package-lock.json" }}
       - run: npm run test
 
   e2e-build:
@@ -40,8 +38,7 @@ jobs:
     - checkout
     - restore_cache:
         keys:
-        - v1-node-8-dependencies-{{ checksum "package.json" }}
-        - v1-node-8-dependencies-
+        - v1-node-8-dependencies-{{ checksum "package-lock.json" }}
     - run: npm run build
     - run: npm run e2e
 
@@ -51,8 +48,7 @@ jobs:
     - checkout
     - restore_cache:
         keys:
-        - v1-node-8-dependencies-{{ checksum "package.json" }}
-        - v1-node-8-dependencies-
+        - v1-node-8-dependencies-{{ checksum "package-lock.json" }}
     - run: npm run build-optimized
     - run: npm run e2e
 

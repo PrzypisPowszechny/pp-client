@@ -1,9 +1,9 @@
 import FieldsObject = UniversalAnalytics.FieldsObject;
 import { EventOptions } from './types';
-import { isBg, sendEvent as bgSendEvent } from './bg';
+import { isGaRunningInWindow, sendEvent as bgSendEvent } from './bg';
 
 export function sendEvent(fieldsObject: FieldsObject, options: EventOptions = {}) {
-  if (isBg()) {
+  if (isGaRunningInWindow()) {
     // Bypass sending message if we are already in background page
     bgSendEvent(fieldsObject, options).then( () => null);
   } else {
