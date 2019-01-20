@@ -1,6 +1,6 @@
 {
   "name": "pp-client",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "",
   "main": "index.js",
   "dependencies": {
@@ -96,7 +96,7 @@
     "build": "npm install && webpack --mode development --config config/browser-extension/ext.dev.config.js",
     "build-optimized": "webpack --mode production --config config/browser-extension/ext.prod.config.js",
     "build-package": "npm run build-optimized && cd ./dist && npm run pack",
-    "release": "rm -r node_modules && npm install && PP_API=pp PP_DEV=false npm run build-optimized && npm run pack",
+    "release": "rm -rf node_modules && npm install && PP_API=pp PP_DEV=false npm run build-optimized && npm run pack",
     "pack": "cd ./dist && zip -r pp-chrome.zip ./browser-extension",
     "lint": "tslint --project tsconfig.json",
     "lint-fix": "npm run lint -- --fix",
