@@ -11,15 +11,15 @@ executors:
       - image: circleci/node:8-browsers
     working_directory: ~/repo
     environment:
-      PP_API=local
+      PP_API: local
 
   node-pp-api:
     docker:
       - image: circleci/node:8
     working_directory: ~/repo
     environment:
-      PP_API=pp
-      PP_DEV=false
+      PP_API: pp
+      PP_DEV: false
 
 jobs:
   install:
