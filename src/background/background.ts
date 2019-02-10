@@ -8,9 +8,13 @@ sentry.init();
 console.log('Przypis background script!');
 
 import InstalledDetails = chrome.runtime.InstalledDetails;
-import { returnExtensionCookie, setBadge } from './messages';
+import { returnExtensionCookie, returnCurrentTabId, setBadge } from './messages';
 import * as ppGaBg from 'common/pp-ga/bg';
 import ppGa from 'common/pp-ga';
+import { getCurrentTabId, initCurrentTabId } from './tab';
+
+// initialize Redux store
+import './store';
 
 function onContextMenuAnnotate() {
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
@@ -63,6 +67,13 @@ chrome.runtime.onInstalled.addListener(contextMenuOnInstalled);
  */
 chrome.runtime.onMessage.addListener(setBadge);
 chrome.runtime.onMessage.addListener(returnExtensionCookie);
+
+/*
+ * Init current tab id tracking
+ */
+
+initCurrentTabId();
+chrome.runtime.onMessage.addListener(returnCurrentTabId);
 
 /*
  * Google analytics

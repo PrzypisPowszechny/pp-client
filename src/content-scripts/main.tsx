@@ -26,6 +26,10 @@ import annotationEventHandlers from './handlers/annotation-event-handlers';
 import appComponent from './modules/app-component';
 import { configureAPIRequests } from './init-API';
 import { annotationLocationNotifier } from './modules';
+import ReactDOM from 'react-dom';
+import { initializeTabId } from '../common/store/tab-init';
+import store from '../popup/store';
+import initWindow from '../popup/init';
 
 moment.locale('pl');
 
@@ -50,7 +54,28 @@ console.log('Przypis script working!');
 
 const isBrowser = typeof window !== 'undefined';
 if (isBrowser) {
-  window.addEventListener('load', () => {
+  // Wait until first update before initializing components so the store has been initialized with default reducers
+  const waitUntilFirstUpdate = new Promise((resolve) => {
+    const unsubscribe = store.subscribe(() => {
+      unsubscribe(); // make sure to only fire once
+      resolve();
+    });
+  });
+
+  const waitUntilPageLoaded = new Promise((resolve) => {
+    window.addEventListener('load', () => {
+      resolve();
+    });
+  });
+
+  Promise.all([
+    initWindow(),
+    waitUntilFirstUpdate,
+    waitUntilPageLoaded,
+    initializeTabId(),
+  ]).then(() => {
+    console.log('Store hydrated from background page.');
+
     /*
      * Modules hooked to asynchronous events
      */
@@ -76,6 +101,7 @@ if (isBrowser) {
     // (disabled extension mode and disabled page mode will erase them)
     data.loadFromChromeStorage()
       .then(data.loadFromAPI);
+
   });
 }
 
