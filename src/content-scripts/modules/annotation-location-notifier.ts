@@ -1,6 +1,7 @@
 import store from 'content-scripts/store';
 import { selectAnnotation } from '../store/api/selectors';
 import * as DOMNotifications from '../dom-notifications';
+import { selectTab } from '../../common/store/tabs/selectors';
 
 let instance;
 
@@ -23,15 +24,16 @@ function deinit() {
   instance.unsubscribe();
 }
 
+
 // save the annotation location information to DOM for reads in selenium + in console
 function markLocatedAnnotations() {
   const state = store.getState();
-  if (state.annotations.hasLoaded) {
-    const located = state.annotations.located.map(location =>
-      selectAnnotation(state, location.annotationId),
+  if (selectTab(state).annotations.hasLoaded) {
+    const located = selectTab(state).annotations.located.map(location =>
+      selectAnnotation(store.getState(), location.annotationId),
     );
-    const unlocated = state.annotations.unlocated.map(id =>
-      selectAnnotation(state, id),
+    const unlocated = selectTab(state).annotations.unlocated.map(id =>
+      selectAnnotation(store.getState(), id),
     );
 
     if (unlocated.length > 0) {

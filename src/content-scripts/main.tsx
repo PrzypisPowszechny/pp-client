@@ -30,6 +30,7 @@ import { initializeTabId } from '../common/store/tab-init';
 import store from '../popup/store';
 import initWindow from '../popup/init';
 import { updateTabInfo } from '../common/store/tabs/tab/tabInfo/actions';
+import { TAB_INIT } from '../common/store/tabs/actions';
 
 moment.locale('pl');
 
@@ -70,13 +71,13 @@ if (isBrowser) {
   });
 
   Promise.all([
-    initWindow(),
     waitUntilFirstUpdate,
     waitUntilPageLoaded,
     initializeTabId(),
   ]).then(() => {
     console.log('Store hydrated from background page.');
     // initialize tab state in the store
+    store.dispatch({ type: TAB_INIT });
     return store.dispatch(updateTabInfo({
       currentUrl: window.location.href,
     }));

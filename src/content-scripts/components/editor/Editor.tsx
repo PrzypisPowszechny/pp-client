@@ -1,6 +1,7 @@
 import React, { RefObject } from 'react';
 import { connect } from 'react-redux';
-import { createResource, updateResource } from 'redux-json-api';
+import { createResource, updateResource } from 'common/store/tabs/tab/api';
+
 import classNames from 'classnames';
 import { Popup } from 'semantic-ui-react';
 import _isEqual from 'lodash/isEqual';
@@ -33,6 +34,7 @@ import { ic_add_circle } from 'react-icons-kit/md/ic_add_circle';
 import { changeNotification } from '../../store/widgets/actions';
 import { bindActionCreators } from 'redux';
 import { ToastType } from '../elements/Toast/Toast';
+import { selectTab } from '../../../common/store/tabs/selectors';
 
 interface IEditorProps {
   appModes: AppModes;
@@ -81,7 +83,7 @@ interface IEditorState {
     } = selectEditorState(state);
 
     return {
-      appModes: state.appModes,
+      appModes: selectTab(state).appModes,
       locationX,
       locationY,
 

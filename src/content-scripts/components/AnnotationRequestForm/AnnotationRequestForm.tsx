@@ -14,6 +14,7 @@ import { changeNotification } from '../../store/widgets/actions';
 import * as helpers from './helpers';
 import Button from '../elements/Button/Button';
 import { ToastType } from '../elements/Toast/Toast';
+import { selectTab } from '../../../common/store/tabs/selectors';
 
 export interface AnnotationRequestFormProps {
   appModes: AppModes;
@@ -28,7 +29,7 @@ interface AnnotationRequestFormState extends AnnotationRequestFormData {
 
 @connect(
   state => ({
-    appModes: state.appModes,
+    appModes: selectTab(state).appModes,
   }),
   { changeNotification },
 )

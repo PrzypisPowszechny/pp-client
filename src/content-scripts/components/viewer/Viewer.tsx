@@ -1,7 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { createResource, deleteResource } from 'redux-json-api';
 import Widget from 'content-scripts/components/widget';
 
 import ViewerItem from './ViewerItem';

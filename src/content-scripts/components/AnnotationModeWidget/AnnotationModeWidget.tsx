@@ -9,6 +9,7 @@ import { AppModes } from 'content-scripts/store/appModes/types';
 import Button from '../elements/Button/Button';
 import ppGa from 'common/pp-ga';
 import { hideMenu } from '../../store/widgets/actions';
+import { selectTab } from '../../../common/store/tabs/selectors';
 
 export interface IAnnotationModeWidgetProps {
   appModes: AppModes;
@@ -17,7 +18,7 @@ export interface IAnnotationModeWidgetProps {
 
 @connect(
   state => ({
-    appModes: state.appModes,
+    appModes: selectTab(state).appModes,
   }),
   { hideMenu },
 )

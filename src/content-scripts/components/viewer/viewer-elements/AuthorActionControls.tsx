@@ -13,6 +13,7 @@ import {
 import { AnnotationAPIModel } from 'common/api/annotations';
 import Timer = NodeJS.Timer;
 import ppGa from 'common/pp-ga';
+import { selectTab } from '../../../../common/store/tabs/selectors';
 
 interface IAuthorActionControlsProps {
   locationX: number;
@@ -39,8 +40,8 @@ interface IAuthorActionControlsState {
       deleteModal: {
         isDeleteModalOpen,
       },
-    } = state.widgets.viewer;
-    const viewerItem = state.widgets.viewer.viewerItems.find(item => item.annotationId === props.annotation.id);
+    } = selectTab(state).widgets.viewer;
+    const viewerItem = selectTab(state).widgets.viewer.viewerItems.find(item => item.annotationId === props.annotation.id);
 
     return {
       locationX,

@@ -11,6 +11,7 @@ import { selectAnnotation } from '../store/api/selectors';
 import { annotationRootNode } from '../settings';
 import { PopupAnnotationLocationData } from '../../popup/messages';
 import { selectAnnotationLocationForBrowserStorage } from '../store/annotations/selectors';
+import { selectTab } from '../../common/store/tabs/selectors';
 
 let instance;
 
@@ -40,7 +41,7 @@ function deinit() {
 
 function drawHighlights() {
   const arePageHighlightsDisabled = selectModeForCurrentPage(store.getState()).arePageHighlightsDisabled;
-  const locatedAnnotationsIds = store.getState().annotations.located.map(annotation => annotation.annotationId);
+  const locatedAnnotationsIds = selectTab(store.getState()).annotations.located.map(annotation => annotation.annotationId);
   if (arePageHighlightsDisabled && !instance.arePageHighlightsDisabled) {
     instance.highlighter.undrawAll();
   } else if (!arePageHighlightsDisabled &&
@@ -49,7 +50,7 @@ function drawHighlights() {
     )
   ) {
     // located annotations have changed, so redraw them
-    instance.highlighter.drawAll(store.getState().annotations.located.map(({ annotationId, range }) => {
+    instance.highlighter.drawAll(selectTab(store.getState()).annotations.located.map(({ annotationId, range }) => {
       return {
         id: annotationId,
         range,

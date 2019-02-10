@@ -17,6 +17,7 @@ import store from './store';
 import initWindow from './init';
 import BrowserPopupNavigator from './components/BrowserPopupNavigator';
 import { initializeTabId } from 'common/store/tab-init';
+import { TAB_INIT } from '../common/store/tabs/actions';
 
 // Wait until first update before initializing components so the store has been initialized with default reducers
 const waitUntilFirstUpdate = new Promise((resolve) => {
@@ -39,6 +40,9 @@ Promise.all([
   initializeTabId(),
 ]).then(() => {
   console.log('Store hydrated from background page. Rendering components.');
+  // initialize tab state in the store
+  return store.dispatch({ type: TAB_INIT });
+}).then(() => {
   ReactDOM.render(
     <Provider store={store}>
       <BrowserPopupNavigator/>

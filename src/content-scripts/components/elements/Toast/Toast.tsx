@@ -6,6 +6,7 @@ import { Icon } from 'react-icons-kit';
 import { check, x } from 'react-icons-kit/feather';
 import { changeNotification } from '../../../store/widgets/actions';
 import { connect } from 'react-redux';
+import { selectTab } from '../../../../common/store/tabs/selectors';
 
 export enum ToastType {
   success,
@@ -24,7 +25,7 @@ interface ToastState {
 }
 
 @connect(
-  state => state.widgets.notification,
+  state => selectTab(state).widgets.notification,
   { changeNotification },
 )
 export default class Toast extends React.Component <Partial<ToastProps>, Partial<ToastState>> {

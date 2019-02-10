@@ -2,8 +2,8 @@ import * as chromeKeys from 'common/chrome-storage/keys';
 import { changeAppModes } from './store/appModes/actions';
 import store from './store';
 import chromeStorage from 'common/chrome-storage';
-import { readEndpoint } from 'redux-json-api';
 import * as endpoints from 'common/api/endpoints';
+import { readEndpoint } from 'common/store/tabs/tab/api';
 
 export function loadFromAPI() {
   store.dispatch(readEndpoint(endpoints.ANNOTATIONS));

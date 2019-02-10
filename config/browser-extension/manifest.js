@@ -18,6 +18,8 @@ const base = (env, argv) => ({
     'activeTab',
     'contextMenus',
     'cookies',
+    //TODO temporary so tab.url can be read in the background page;
+    'tabs',
     // API URL must be included so we can read cookies for this host
     loadSettings(env, argv).API_URL,
     loadSettings(env, argv).SITE_URL,

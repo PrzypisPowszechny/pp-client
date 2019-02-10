@@ -25,6 +25,7 @@ import { turnOnRequestMode } from '../../common/chrome-storage';
 import store from '../store';
 import { selectAnnotationLocationForBrowserStorage } from '../store/annotations/selectors';
 import { PopupAnnotationLocationData } from '../../popup/messages';
+import { selectTab } from '../../common/store/tabs/selectors';
 
 let handlers;
 
@@ -151,7 +152,7 @@ function annotationRequestCommand() {
 
     const currentStandardizedTabUrl = standardizeUrlForPageSettings(window.location.href);
 
-    turnOnRequestMode(store.getState().appModes, currentStandardizedTabUrl);
+    turnOnRequestMode(selectTab(store.getState()).appModes, currentStandardizedTabUrl);
     chrome.storage.local.set({ ANNOTATION_REQUEST_FORM_DATA: formData }, () => {
       console.log('annotation request window opened!');
     });
@@ -159,7 +160,7 @@ function annotationRequestCommand() {
   }
 }
 
-function annotateCommand() {
+async function annotateCommand() {
   /*
    * For now, do not check for being inside article.
    * Reason: checking ContextMenu API selection for being insideArticle is possible, but uncomfortable,
@@ -168,9 +169,9 @@ function annotateCommand() {
   const selection = tryGetSingleSelection();
   if (selection) {
     const annotationLocation = fullAnnotationLocation(selection);
-    store.dispatch(setSelectionRange(annotationLocation));
+    await store.dispatch(setSelectionRange(annotationLocation));
     const selectionCenter = handlers.selector.currentSingleSelectionCenter();
-    store.dispatch(showEditorAnnotation(selectionCenter.x, selectionCenter.y));
+    await store.dispatch(showEditorAnnotation(selectionCenter.x, selectionCenter.y));
     ppGa.annotationAddFormOpened('rightMouseContextMenu');
   }
 }

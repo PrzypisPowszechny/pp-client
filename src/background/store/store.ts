@@ -5,6 +5,7 @@ import promise from 'redux-promise';
 import { createLogger } from 'redux-logger';
 import { wrapStore, alias } from 'react-chrome-redux';
 import deepDiff from 'react-chrome-redux/lib/strategies/deepDiff/diff';
+import { reduxJsonApiAliases } from '../../common/store/tabs/tab/bgApi';
 
 const middlewares = [thunk, promise];
 
@@ -13,7 +14,9 @@ if (PPSettings.DEV) {
   middlewares.push(logger);
 }
 
-const aliases = {};
+const aliases = {
+  ...reduxJsonApiAliases,
+};
 
 const store: Store<IState> = createStore(
   rootReducer,

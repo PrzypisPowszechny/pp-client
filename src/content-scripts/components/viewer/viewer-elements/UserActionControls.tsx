@@ -9,6 +9,7 @@ import UserActionDialog from './UserActionDialog';
 import ppGa from 'common/pp-ga';
 import { Icon } from 'react-icons-kit';
 import { ic_more_horiz } from 'react-icons-kit/md/ic_more_horiz';
+import { selectTab } from '../../../../common/store/tabs/selectors';
 
 interface IUserActionControlsProps {
   indirectChildClassName: string;
@@ -30,8 +31,8 @@ interface IUserActionControlsState {
           x: locationX,
           y: locationY,
       },
-    } = state.widgets.viewer;
-    const viewerItem = state.widgets.viewer.viewerItems.find(item => item.annotationId === props.annotation.id);
+    } = selectTab(state).widgets.viewer;
+    const viewerItem = selectTab(state).widgets.viewer.viewerItems.find(item => item.annotationId === props.annotation.id);
 
     return {
       locationX,

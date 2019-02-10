@@ -18,6 +18,7 @@ import * as chromeKeys from 'common/chrome-storage/keys';
 import * as Sentry from '@sentry/browser';
 
 import { selectAnnotationLocationForBrowserStorage } from '../store/annotations/selectors';
+import { selectTab } from '../../common/store/tabs/selectors';
 
 let instance;
 
@@ -58,7 +59,7 @@ function sendLocationEvent(located: boolean, annotation: AnnotationAPIModel) {
 function annotationLocator() {
   const annotations: AnnotationAPIModel[] = selectAnnotations(store.getState());
   const annotationIds: string[] = annotations.map(annotation => annotation.id);
-  const hasLoaded: boolean = store.getState().annotations.hasLoaded;
+  const hasLoaded: boolean = selectTab(store.getState()).annotations.hasLoaded;
   // if annotation items have changed, locate them within the DOM
   if (!_isEqual(annotationIds, instance.annotationIds) || hasLoaded !== instance.hasLoaded) {
     const annotationLocations: LocatedAnnotation[] = [];

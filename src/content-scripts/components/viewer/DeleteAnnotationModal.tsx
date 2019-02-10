@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { deleteResource } from 'redux-json-api';
 import Modal from 'content-scripts/components/elements/Modal/Modal';
 import styles from './DeleteAnnotationModal.scss';
 import Button from '../elements/Button';
@@ -10,6 +9,7 @@ import { selectViewerState } from '../../store/widgets/selectors';
 import { selectAnnotation } from '../../store/api/selectors';
 import { AnnotationAPIModel } from '../../../common/api/annotations';
 import ppGa from '../../../common/pp-ga';
+import { deleteResource } from '../../../common/store/tabs/tab/api';
 
 interface IModalProps {
   deleteModalId: string;
@@ -48,10 +48,12 @@ interface IModalProps {
 export default class DeleteAnnotationModal extends React.PureComponent<Partial<IModalProps>> {
 
   handleConfirmDelete = (e) => {
+    // Save annotation for when it is already deleted
+    const annotation = this.props.annotation;
     this.props.deleteAnnotation(this.props.annotation)
       .then(() => {
-        const attrs = this.props.annotation.attributes;
-        ppGa.annotationDeleted(this.props.annotation.id, attrs.ppCategory, !attrs.comment, attrs.annotationLink);
+        const attrs = annotation.attributes;
+        ppGa.annotationDeleted(annotation.id, attrs.ppCategory, !attrs.comment, attrs.annotationLink);
         this.props.changeNotification(true, 'Usunięto przypis', ToastType.success);
       })
       .catch((errors) => {

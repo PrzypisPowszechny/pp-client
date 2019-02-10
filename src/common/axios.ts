@@ -1,7 +1,9 @@
 import axios from 'axios';
-import { getExtensionCookie } from './messages';
 
-export function configureAxios(getUrl: () => Promise<string>) {
+export function configureAxios(
+  getUrl: () => Promise<string>,
+  getExtensionCookie: (key: string) => Promise<string>,
+) {
   /*
    * Crucial configuration needed for (almost) all API requests
    * -- common for content scripts, popup and background part of the extension
@@ -12,7 +14,9 @@ export function configureAxios(getUrl: () => Promise<string>) {
    */
   axios.interceptors.request.use((config) => {
     return getUrl().then((url) => {
-
+      if (!url) {
+        return Promise.reject(`url is not available when initiating a request!`);
+      }
       config.headers['PP-SITE-URL'] = url;
 
       if (['options', 'get', 'head'].indexOf(config.method) === -1) {
