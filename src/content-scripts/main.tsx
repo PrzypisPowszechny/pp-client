@@ -30,6 +30,7 @@ import ReactDOM from 'react-dom';
 import { initializeTabId } from '../common/store/tab-init';
 import store from '../popup/store';
 import initWindow from '../popup/init';
+import { updateTabInfo } from '../common/store/tabs/tab/actions';
 
 moment.locale('pl');
 
@@ -54,8 +55,9 @@ console.log('Przypis script working!');
 
 const isBrowser = typeof window !== 'undefined';
 if (isBrowser) {
-  // Wait until first update before initializing components so the store has been initialized with default reducers
   const waitUntilFirstUpdate = new Promise((resolve) => {
+    // Wait until Redux store first update before initializing components
+    // so the store has been initialized with default reducers
     const unsubscribe = store.subscribe(() => {
       unsubscribe(); // make sure to only fire once
       resolve();
@@ -75,6 +77,11 @@ if (isBrowser) {
     initializeTabId(),
   ]).then(() => {
     console.log('Store hydrated from background page.');
+    // initialize tab state in the store
+    return store.dispatch(updateTabInfo({
+      currentUrl: window.location.href,
+    }));
+  }).then(() => {
 
     /*
      * Modules hooked to asynchronous events
@@ -104,4 +111,3 @@ if (isBrowser) {
 
   });
 }
-
