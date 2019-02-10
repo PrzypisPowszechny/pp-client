@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import { ITabState } from 'content-scripts/store/reducer';
 import { standardizeUrlForPageSettings } from 'common/url';
 import { AppModes } from './types';
+import { selectTab } from 'common/store/tabs/selectors';
 
 export function isAnnotationMode(appModes: AppModes) {
   const currentStandardizedUrl = standardizeUrlForPageSettings(window.location.href);
@@ -14,7 +15,7 @@ export function isRequestMode(appModes: AppModes) {
 }
 
 export const selectModeForCurrentPage = createSelector<ITabState, any, any>(
-  state => state.appModes,
+  state => selectTab(state).appModes,
   (appModes) => {
     // Standardize the URL by disregarding stuff that does not identify a page like URL parameters etc.
     const currentStandardizedUrl = standardizeUrlForPageSettings(window.location.href);

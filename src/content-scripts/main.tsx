@@ -26,11 +26,10 @@ import annotationEventHandlers from './handlers/annotation-event-handlers';
 import appComponent from './modules/app-component';
 import { configureAPIRequests } from './init-API';
 import { annotationLocationNotifier } from './modules';
-import ReactDOM from 'react-dom';
 import { initializeTabId } from '../common/store/tab-init';
 import store from '../popup/store';
 import initWindow from '../popup/init';
-import { updateTabInfo } from '../common/store/tabs/tab/actions';
+import { updateTabInfo } from '../common/store/tabs/tab/tabInfo/actions';
 
 moment.locale('pl');
 

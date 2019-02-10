@@ -1,13 +1,14 @@
 import { ITabState } from '../reducer';
+import { selectTab } from 'common/store/tabs/selectors';
 
 export function selectAnnotations(state: ITabState) {
-  return state.api.annotations.data;
+  return selectTab(state).api.annotations.data;
 }
 
 export function selectAnnotation(state: ITabState, annotationId: string) {
-  return state.api.annotations.data.find( annotation => annotation.id === annotationId);
+  return selectTab(state).api.annotations.data.find( annotation => annotation.id === annotationId);
 }
 
 export function selectUpvote(state: ITabState, upvoteId: string) {
-  return state.api.annotationUpvotes.data.find(upvote => upvote.id === upvoteId);
+  return selectTab(state).api.annotationUpvotes.data.find(upvote => upvote.id === upvoteId);
 }

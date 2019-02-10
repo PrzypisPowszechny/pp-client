@@ -9,6 +9,7 @@ import AnnotationModeWidget from './AnnotationModeWidget/AnnotationModeWidget';
 import AnnotationRequestForm from './AnnotationRequestForm/AnnotationRequestForm';
 import SideWidget from './elements/SideWidget/SideWidget';
 import Toast from './elements/Toast/Toast';
+import { selectTab } from 'common/store/tabs/selectors';
 
 interface AppProps {
   editor: any;
@@ -19,13 +20,16 @@ interface AppProps {
 }
 
 @connect(
-  state => ({
-    editor: state.widgets.editor,
-    menuVisible: state.widgets.menu.visible,
-    notificationVisible: state.widgets.notification.visible,
-    annotationModeWidgetVisible: selectModeForCurrentPage(state).isAnnotationMode,
-    requestModeWidgetVisible: selectModeForCurrentPage(state).isRequestMode,
-  }),
+  (state) => {
+    const tab = selectTab(state);
+    return {
+      editor: tab.widgets.editor,
+      menuVisible: tab.widgets.menu.visible,
+      notificationVisible: tab.widgets.notification.visible,
+      annotationModeWidgetVisible: selectModeForCurrentPage(state).isAnnotationMode,
+      requestModeWidgetVisible: selectModeForCurrentPage(state).isRequestMode,
+    };
+  },
 )
 export default class App extends React.Component<Partial<AppProps>, {}> {
 
@@ -42,7 +46,7 @@ export default class App extends React.Component<Partial<AppProps>, {}> {
         {this.props.menuVisible && <Menu/>}
         {this.props.annotationModeWidgetVisible && <AnnotationModeWidget/>}
         {this.props.requestModeWidgetVisible &&
-          <SideWidget><AnnotationRequestForm/></SideWidget>}
+        <SideWidget><AnnotationRequestForm/></SideWidget>}
         {this.props.notificationVisible && <Toast/>}
         <ViewerManager/>
       </div>
