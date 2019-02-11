@@ -1,4 +1,4 @@
-// Messages sent by content script to background
+// Messages sent by content script / popup to background
 
 export function setExtensionBadge(text: string) {
   return new Promise((resolve) => {
