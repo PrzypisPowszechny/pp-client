@@ -8,7 +8,11 @@ let currentTabId;
 function initCurrentTabId() {
   return new Promise((resolve) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      currentTabId = tabs[0].id;
+      if (tabs[0]) {
+        currentTabId = tabs[0].id;
+      } else {
+        currentTabId = null;
+      }
       resolve(currentTabId);
       console.debug(`Initial tab id: ${currentTabId}`);
     });
@@ -22,7 +26,7 @@ function setCurrentTabId({ tabId, windowId }) {
   console.debug(`New tab id: ${currentTabId}`);
 }
 
-function getCurrentTabId() {
+function getCurrentActiveTabId() {
   if (currentTabId === undefined) {
     throw new Error('Current tab id not set');
   }
@@ -31,5 +35,5 @@ function getCurrentTabId() {
 
 export {
   initCurrentTabId,
-  getCurrentTabId,
+  getCurrentActiveTabId,
 };

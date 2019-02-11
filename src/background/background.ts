@@ -7,8 +7,8 @@ sentry.init();
 
 console.log('Przypis background script!');
 
-// set script type for future introspection
-setScriptType(ScriptType.background);
+// Set script type by importing (so other imports such as redux are executed afterwards)
+import './meta';
 
 // initialize Redux store
 import './store';
@@ -20,7 +20,6 @@ import ppGa from 'common/pp-ga';
 import { initCurrentTabId } from './tab';
 
 import { configureAxios } from '../common/axios';
-import { ScriptType, setScriptType } from '../common/meta';
 
 function onContextMenuAnnotate() {
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
@@ -79,6 +78,9 @@ function getCurrentTabUrl(): Promise<string> {
   return new Promise((resolve) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       console.log(tabs[0]);
+      if (!tabs[0]) {
+        resolve(null);
+      }
       resolve(tabs[0].url);
     });
   });

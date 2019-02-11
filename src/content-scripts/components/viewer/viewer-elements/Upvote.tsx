@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { createResource, deleteResource, readEndpoint } from 'common/store/tabs/tab/api';
+import { createResource, deleteResource, readEndpoint } from 'common/store/tabs/tab/api/actions';
 
 import { Popup } from 'semantic-ui-react';
 import { Icon } from 'react-icons-kit';

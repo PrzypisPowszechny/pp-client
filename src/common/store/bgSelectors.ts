@@ -1,7 +1,7 @@
-import { getCurrentTabId } from '../../background/tab';
+import { getCurrentActiveTabId } from '../../background/tab';
 
 export const bgSelectTab = (state) => {
-  const tabId = getCurrentTabId();
+  const tabId = getCurrentActiveTabId();
   if (tabId === undefined) {
     throw new Error('Tab id not set in selectTab selector');
   }

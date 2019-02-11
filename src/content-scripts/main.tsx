@@ -28,10 +28,9 @@ import { configureAPIRequests } from './init-API';
 import { annotationLocationNotifier } from './modules';
 import { initializeTabId } from '../common/store/tab-init';
 import store from '../popup/store';
-import initWindow from '../popup/init';
 import { updateTabInfo } from '../common/store/tabs/tab/tabInfo/actions';
-import { TAB_INIT } from '../common/store/tabs/actions';
-import { ScriptType, setScriptType } from '../common/meta';
+import { TAB_INIT } from 'common/store/tabs/actions';
+import { ScriptType, setScriptType } from 'common/meta';
 
 // set script type for future introspection
 setScriptType(ScriptType.contentScript);

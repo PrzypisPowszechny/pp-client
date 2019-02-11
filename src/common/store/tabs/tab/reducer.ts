@@ -9,7 +9,7 @@ import appModes from '../../../../content-scripts/store/appModes/reducers';
 import annotations from '../../../../content-scripts/store/annotations/reducers';
 import widgets from '../../../../content-scripts/store/widgets/reducers';
 import textSelector from '../../../../content-scripts/store/textSelector/reducers';
-import { initializedApi } from './api';
+import api from './api';
 
 export interface ITabState {
   api: {
@@ -24,7 +24,7 @@ export interface ITabState {
 
 export default combineReducers<ITabState>({
   tabInfo,
-  api: initializedApi,
+  api,
   annotations,
   appModes,
   widgets,

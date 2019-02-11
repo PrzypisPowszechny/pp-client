@@ -9,7 +9,7 @@ import { selectViewerState } from '../../store/widgets/selectors';
 import { selectAnnotation } from '../../store/api/selectors';
 import { AnnotationAPIModel } from '../../../common/api/annotations';
 import ppGa from '../../../common/pp-ga';
-import { deleteResource } from '../../../common/store/tabs/tab/api';
+import { deleteResource } from 'common/store/tabs/tab/api/actions';
 
 interface IModalProps {
   deleteModalId: string;

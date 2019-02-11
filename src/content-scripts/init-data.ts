@@ -3,7 +3,7 @@ import { changeAppModes } from './store/appModes/actions';
 import store from './store';
 import chromeStorage from 'common/chrome-storage';
 import * as endpoints from 'common/api/endpoints';
-import { readEndpoint } from 'common/store/tabs/tab/api';
+import { readEndpoint } from 'common/store/tabs/tab/api/actions';
 
 export function loadFromAPI() {
   store.dispatch(readEndpoint(endpoints.ANNOTATIONS));

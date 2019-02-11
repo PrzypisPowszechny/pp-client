@@ -20,8 +20,8 @@ import store from './store';
 import initWindow from './init';
 import BrowserPopupNavigator from './components/BrowserPopupNavigator';
 import { initializeTabId } from 'common/store/tab-init';
-import { TAB_INIT } from '../common/store/tabs/actions';
-import { ScriptType, setScriptType } from '../common/meta';
+import { TAB_INIT } from 'common/store/tabs/actions';
+import { ScriptType, setScriptType } from 'common/meta';
 
 // Wait until first update before initializing components so the store has been initialized with default reducers
 const waitUntilFirstUpdate = new Promise((resolve) => {

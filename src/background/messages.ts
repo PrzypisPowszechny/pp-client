@@ -1,8 +1,9 @@
 // Message handlers
 
-import { getCurrentTabId } from './tab';
+import { getCurrentActiveTabId } from './tab';
 
 export function returnExtensionCookie(request, sender, sendResponse) {
+  console.log(request.action);
   if (request.action === 'GET_COOKIE') {
     chrome.cookies.get({
       url: PPSettings.API_URL,
@@ -32,6 +33,7 @@ export function setBadge(request, sender, sendResponse) {
 }
 
 export function returnCurrentTabId(request, sender, sendResponse) {
+  console.log(request.action);
   if (request.action === 'GET_TAB_ID') {
     if (sender.tab) {
       // content script
@@ -40,7 +42,7 @@ export function returnCurrentTabId(request, sender, sendResponse) {
     } else {
       // popup
       console.debug('popup');
-      sendResponse(getCurrentTabId());
+      sendResponse(getCurrentActiveTabId());
     }
   }
 }
