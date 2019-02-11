@@ -1,5 +1,4 @@
 import store from './store/store';
-import axios from 'axios';
 import { setAxiosConfig } from 'redux-json-api';
 import { getExtensionCookie } from 'common/messages';
 import { configureAxios } from 'common/axios';

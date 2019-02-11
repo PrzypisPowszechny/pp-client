@@ -7,6 +7,13 @@ import ConnectedApp from './App';
 jest.mock('common/pp-ga/ga', () => null);
 jest.mock('common/chrome-storage', () => null);
 
+const mockTabId = 1;
+jest.mock('common/tab-id', () => ({
+  __esModule: true,
+  initializeTabId: () => null,
+  getTabId: () => mockTabId,
+}));
+
 Enzyme.configure({ adapter: new AdapterReact16() });
 const middlewares = [];
 const mockStore = configureStore(middlewares);
@@ -14,23 +21,27 @@ const mockStore = configureStore(middlewares);
 describe('App component', () => {
   it('shallow renders without crashing', () => {
     const initialState = {
-      widgets: {
-        menu: {
-          visible: false,
+      tabs: {
+        [mockTabId]: {
+          widgets: {
+            menu: {
+              visible: false,
+            },
+            editor: {
+              visible: false,
+            },
+            viewer: {
+              visible: false,
+            },
+            notification: {
+              visible: false,
+            },
+          },
+          appModes: {
+            isExtensionDisabled: false,
+            disabledPages: [],
+          },
         },
-        editor: {
-          visible: false,
-        },
-        viewer: {
-          visible: false,
-        },
-        notification: {
-          visible: false,
-        },
-      },
-      appModes: {
-        isExtensionDisabled: false,
-        disabledPages: [],
       },
     };
     const store = mockStore(initialState);
@@ -53,38 +64,42 @@ describe('App component', () => {
 
   it('mounts without crashing', () => {
     const initialState = {
-      widgets: {
-        menu: {
-          location: {
-            x: 0,
-            y: 0,
+      tabs: {
+        [mockTabId]: {
+          widgets: {
+            menu: {
+              location: {
+                x: 0,
+                y: 0,
+              },
+              visible: false,
+            },
+            editor: {
+              location: {
+                x: 0,
+                y: 0,
+              },
+              visible: false,
+            },
+            viewer: {
+              location: {
+                x: 0,
+                y: 0,
+              },
+              visible: false,
+              viewerItems: [],
+              deleteModal: false,
+              mouseOver: false,
+            },
+            notification: {
+              visible: false,
+            },
           },
-          visible: false,
-        },
-        editor: {
-          location: {
-            x: 0,
-            y: 0,
+          appModes: {
+            isExtensionDisabled: false,
+            disabledPages: [],
           },
-          visible: false,
         },
-        viewer: {
-          location: {
-            x: 0,
-            y: 0,
-          },
-          visible: false,
-          viewerItems: [],
-          deleteModal: false,
-          mouseOver: false,
-        },
-        notification: {
-          visible: false,
-        },
-      },
-      appModes: {
-        isExtensionDisabled: false,
-        disabledPages: [],
       },
     };
 

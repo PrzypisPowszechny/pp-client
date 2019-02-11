@@ -26,7 +26,7 @@ import annotationEventHandlers from './handlers/annotation-event-handlers';
 import appComponent from './modules/app-component';
 import { configureAPIRequests } from './init-API';
 import { annotationLocationNotifier } from './modules';
-import { initializeTabId } from 'common/store/tab-init';
+import { initializeTabId } from 'common/tab-init';
 import store from '../popup/store';
 import { updateTabInfo } from 'common/store/tabs/tab/tabInfo/actions';
 import { TAB_INIT } from 'common/store/tabs/actions';
