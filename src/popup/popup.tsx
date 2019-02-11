@@ -4,6 +4,9 @@ sentry.init();
 
 console.log('Przypis Powszechny popup script working!');
 
+// set script type for future introspection
+setScriptType(ScriptType.popup);
+
 // import Semantic-ui packages
 import 'semantic-ui-css/semantic.min.css';
 
@@ -18,6 +21,7 @@ import initWindow from './init';
 import BrowserPopupNavigator from './components/BrowserPopupNavigator';
 import { initializeTabId } from 'common/store/tab-init';
 import { TAB_INIT } from '../common/store/tabs/actions';
+import { ScriptType, setScriptType } from '../common/meta';
 
 // Wait until first update before initializing components so the store has been initialized with default reducers
 const waitUntilFirstUpdate = new Promise((resolve) => {
