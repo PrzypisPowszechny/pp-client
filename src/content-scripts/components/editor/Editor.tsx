@@ -9,9 +9,9 @@ import _isEqual from 'lodash/isEqual';
 import { AnnotationAPICreateModel, AnnotationAPIModel, AnnotationAPIModelAttrs, } from 'common/api/annotations';
 import { turnOffAnnotationMode } from 'common/chrome-storage';
 import { PPScopeClass } from 'content-scripts/settings';
-import { hideEditor } from 'content-scripts/store/actions';
-import { AppModes } from 'content-scripts/store/appModes/types';
-import { selectEditorState } from 'content-scripts/store/selectors';
+import { hideEditor } from 'common/store/tabs/tab/actions';
+import { AppModes } from 'common/store/tabs/tab/appModes/types';
+import { selectEditorState } from 'common/store/tabs/tab/selectors';
 
 import { DraggableWidget } from 'content-scripts/components/widget';
 import Button from '../elements/Button/Button';
@@ -22,7 +22,7 @@ import * as helpers from './helpers';
 
 import styles from './Editor.scss';
 import ppGa from 'common/pp-ga';
-import { AnnotationPPCategories } from '../../../common/api/annotations';
+import { AnnotationPPCategories } from 'common/api/annotations';
 import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
 
 import { Icon } from 'react-icons-kit';
@@ -31,10 +31,10 @@ import { priceTag } from 'react-icons-kit/icomoon/priceTag';
 import { ic_close } from 'react-icons-kit/md/ic_close';
 import { ic_help_outline } from 'react-icons-kit/md/ic_help_outline'
 import { ic_add_circle } from 'react-icons-kit/md/ic_add_circle';
-import { changeNotification } from '../../store/widgets/actions';
+import { changeNotification } from 'common/store/tabs/tab/widgets/actions';
 import { bindActionCreators } from 'redux';
 import { ToastType } from '../elements/Toast/Toast';
-import { selectTab } from '../../../common/store/tabs/selectors';
+import { selectTab } from 'common/store/tabs/selectors';
 
 interface IEditorProps {
   appModes: AppModes;

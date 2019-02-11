@@ -1,9 +1,9 @@
 import * as chromeKeys from 'common/chrome-storage/keys';
-import { changeAppModes } from '../store/appModes/actions';
+import { changeAppModes } from 'common/store/tabs/tab/appModes/actions';
 import store from '../store';
-import { AppModes } from 'content-scripts/store/appModes/types';
+import { AppModes } from 'common/store/tabs/tab/appModes/types';
 import chromeStorage from 'common/chrome-storage';
-import { selectModeForCurrentPage } from '../store/appModes/selectors';
+import { selectModeForCurrentPage } from 'common/store/tabs/tab/appModes/selectors';
 import selector from './annotation-event-handlers';
 
 export default {

@@ -1,6 +1,6 @@
 import { selectAnnotation } from '../api/selectors';
 import { ITabState } from '../reducer';
-import { PopupAnnotationLocationData } from '../../../popup/messages';
+import { PopupAnnotationLocationData } from '../../../../../popup/messages';
 import { selectTab } from 'common/store/tabs/selectors';
 
 export function selectAnnotationLocationForBrowserStorage(state: ITabState): PopupAnnotationLocationData {

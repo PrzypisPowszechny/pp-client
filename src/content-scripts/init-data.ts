@@ -1,5 +1,5 @@
 import * as chromeKeys from 'common/chrome-storage/keys';
-import { changeAppModes } from './store/appModes/actions';
+import { changeAppModes } from 'common/store/tabs/tab/appModes/actions';
 import store from './store';
 import chromeStorage from 'common/chrome-storage';
 import * as endpoints from 'common/api/endpoints';

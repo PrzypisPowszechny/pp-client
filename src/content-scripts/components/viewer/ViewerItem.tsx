@@ -3,18 +3,18 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
-import { hideViewer } from 'content-scripts/store/widgets/actions';
+import { hideViewer } from 'common/store/tabs/tab/widgets/actions';
 import {
   AnnotationAPIModel, AnnotationPublishers,
   AnnotationPPCategories, AnnotationDemagogCategories,
   annotationPPCategoriesLabels, annotationDemagogCategoriesLabels,
 } from 'common/api/annotations';
-import { extractMinimalLabel, httpPrefixed } from '../../../common/url';
+import { extractMinimalLabel, httpPrefixed } from 'common/url';
 
 import AuthorActionControls from './viewer-elements/AuthorActionControls';
 import UserActionControls from './viewer-elements/UserActionControls';
 import ppGa from 'common/pp-ga';
-import { selectAnnotation } from '../../store/api/selectors';
+import { selectAnnotation } from 'common/store/tabs/tab/api/selectors';
 
 import styles from './Viewer.scss';
 import { Icon } from 'react-icons-kit';

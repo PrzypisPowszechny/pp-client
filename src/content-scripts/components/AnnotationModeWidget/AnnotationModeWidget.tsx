@@ -5,11 +5,11 @@ import classNames from 'classnames';
 import styles from './AnnotationModeWidget.scss';
 import { PPScopeClass } from 'content-scripts/settings';
 import { turnOffAnnotationMode } from 'common/chrome-storage';
-import { AppModes } from 'content-scripts/store/appModes/types';
+import { AppModes } from 'common/store/tabs/tab/appModes/types';
 import Button from '../elements/Button/Button';
 import ppGa from 'common/pp-ga';
-import { hideMenu } from '../../store/widgets/actions';
-import { selectTab } from '../../../common/store/tabs/selectors';
+import { hideMenu } from 'common/store/tabs/tab/widgets/actions';
+import { selectTab } from 'common/store/tabs/selectors';
 
 export interface IAnnotationModeWidgetProps {
   appModes: AppModes;

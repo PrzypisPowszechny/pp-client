@@ -1,6 +1,5 @@
-import { Range as XPathRange } from 'xpath-range';
-import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
-import { ToastType } from '../../components/elements/Toast/Toast';
+import { AnnotationLocation } from 'content-scripts/handlers/annotation-event-handlers';
+import { ToastType } from 'content-scripts/components/elements/Toast/Toast';
 
 export const EDITOR_ANNOTATION = 'EDITOR_ANNOTATION';
 export const SET_EDITOR_SELECTION_RANGE = 'SET_EDITOR_SELECTION_RANGE';

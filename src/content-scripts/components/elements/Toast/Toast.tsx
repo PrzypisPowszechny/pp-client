@@ -4,9 +4,9 @@ import { PPScopeClass } from 'content-scripts/settings';
 import styles from './Toast.scss';
 import { Icon } from 'react-icons-kit';
 import { check, x } from 'react-icons-kit/feather';
-import { changeNotification } from '../../../store/widgets/actions';
+import { changeNotification } from 'common/store/tabs/tab/widgets/actions';
 import { connect } from 'react-redux';
-import { selectTab } from '../../../../common/store/tabs/selectors';
+import { selectTab } from 'common/store/tabs/selectors';
 
 export enum ToastType {
   success,

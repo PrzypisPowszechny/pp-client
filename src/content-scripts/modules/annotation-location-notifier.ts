@@ -1,7 +1,7 @@
 import store from 'content-scripts/store';
-import { selectAnnotation } from '../store/api/selectors';
+import { selectAnnotation } from 'common/store/tabs/tab/api/selectors';
 import * as DOMNotifications from '../dom-notifications';
-import { selectTab } from '../../common/store/tabs/selectors';
+import { selectTab } from 'common/store/tabs/selectors';
 
 let instance;
 

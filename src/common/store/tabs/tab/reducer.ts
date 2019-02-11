@@ -1,14 +1,14 @@
 import { combineReducers } from 'redux';
-import { AnnotationsState } from '../../../../content-scripts/store/annotations/types';
+import { AnnotationsState } from './annotations/types';
 import { AnnotationUpvoteAPIModel } from '../../../api/annotation-upvotes';
-import { AppModes } from '../../../../content-scripts/store/appModes/types';
+import { AppModes } from './appModes/types';
 import { AnnotationAPIModel } from '../../../api/annotations';
-import { WidgetReducer } from '../../../../content-scripts/store/widgets';
+import { WidgetReducer } from './widgets';
 import { tabInfo } from './tabInfo';
-import appModes from '../../../../content-scripts/store/appModes/reducers';
-import annotations from '../../../../content-scripts/store/annotations/reducers';
-import widgets from '../../../../content-scripts/store/widgets/reducers';
-import textSelector from '../../../../content-scripts/store/textSelector/reducers';
+import appModes from './appModes/reducers';
+import annotations from './annotations/reducers';
+import widgets from './widgets/reducers';
+import textSelector from './textSelector/reducers';
 import api from './api';
 
 export interface ITabState {

@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import Modal from 'content-scripts/components/elements/Modal/Modal';
 import styles from './DeleteAnnotationModal.scss';
 import Button from '../elements/Button';
-import { changeNotification, hideViewerDeleteModal, setMouseOverViewer } from '../../store/widgets/actions';
+import { changeNotification, hideViewerDeleteModal, setMouseOverViewer } from 'common/store/tabs/tab/widgets/actions';
 import { ToastType } from '../elements/Toast/Toast';
-import { selectViewerState } from '../../store/widgets/selectors';
-import { selectAnnotation } from '../../store/api/selectors';
-import { AnnotationAPIModel } from '../../../common/api/annotations';
-import ppGa from '../../../common/pp-ga';
+import { selectViewerState } from 'common/store/tabs/tab/widgets/selectors';
+import { selectAnnotation } from 'common/store/tabs/tab/api/selectors';
+import { AnnotationAPIModel } from 'common/api/annotations';
+import ppGa from 'common/pp-ga';
 import { deleteResource } from 'common/store/tabs/tab/api/actions';
 
 interface IModalProps {

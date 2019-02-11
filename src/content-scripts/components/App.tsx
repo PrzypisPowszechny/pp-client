@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { selectModeForCurrentPage } from '../store/appModes/selectors';
+import { selectModeForCurrentPage } from 'common/store/tabs/tab/appModes/selectors';
 
 import Menu from './menu/index';
 import Editor from './editor/index';

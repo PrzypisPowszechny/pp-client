@@ -7,25 +7,25 @@ import 'rangy/lib/rangy-serializer';
 import rangy from 'rangy';
 
 import mousePosition from '../utils/mousePosition';
-import { makeSelection, showMenu } from 'content-scripts/store/actions';
+import { makeSelection, showMenu } from 'common/store/tabs/tab/actions';
 
 import { TextSelector } from '../utils/index';
-import { hideMenu } from 'content-scripts/store/widgets/actions';
+import { hideMenu } from 'common/store/tabs/tab/widgets/actions';
 import {
   annotationRootNode,
   outsideArticleClasses,
   PPHighlightClass,
   quoteContextWidth,
 } from 'content-scripts/settings';
-import { selectModeForCurrentPage } from '../store/appModes/selectors';
-import { setSelectionRange, showEditorAnnotation } from '../store/widgets/actions';
+import { selectModeForCurrentPage } from 'common/store/tabs/tab/appModes/selectors';
+import { setSelectionRange, showEditorAnnotation } from 'common/store/tabs/tab/widgets/actions';
 import ppGa from 'common/pp-ga';
-import { standardizeUrlForPageSettings } from '../../common/url';
-import { turnOnRequestMode } from '../../common/chrome-storage';
+import { standardizeUrlForPageSettings } from 'common/url';
+import { turnOnRequestMode } from 'common/chrome-storage';
 import store from '../store';
-import { selectAnnotationLocationForBrowserStorage } from '../store/annotations/selectors';
+import { selectAnnotationLocationForBrowserStorage } from 'common/store/tabs/tab/annotations/selectors';
 import { PopupAnnotationLocationData } from '../../popup/messages';
-import { selectTab } from '../../common/store/tabs/selectors';
+import { selectTab } from 'common/store/tabs/selectors';
 
 let handlers;
 

@@ -13,7 +13,7 @@ import {
 } from 'common/api/annotation-upvotes';
 import { PPScopeClass } from 'content-scripts/settings';
 import ppGa from 'common/pp-ga';
-import { selectUpvote } from '../../../store/api/selectors';
+import { selectUpvote } from 'common/store/tabs/tab/api/selectors';
 
 interface IUpvoteProps {
   indirectChildClassName: string;

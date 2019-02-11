@@ -9,11 +9,11 @@ import {
   hideViewer,
   openViewerDeleteModal,
   showEditorAnnotation,
-} from 'content-scripts/store/widgets/actions';
+} from 'common/store/tabs/tab/widgets/actions';
 import { AnnotationAPIModel } from 'common/api/annotations';
 import Timer = NodeJS.Timer;
 import ppGa from 'common/pp-ga';
-import { selectTab } from '../../../../common/store/tabs/selectors';
+import { selectTab } from 'common/store/tabs/selectors';
 
 interface IAuthorActionControlsProps {
   locationX: number;

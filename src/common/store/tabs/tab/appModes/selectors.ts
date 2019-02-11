@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { ITabState } from 'content-scripts/store/reducer';
+import { ITabState } from 'common/store/tabs/tab/reducer';
 import { standardizeUrlForPageSettings } from 'common/url';
 import { AppModes } from './types';
 import { selectTab } from 'common/store/tabs/selectors';
