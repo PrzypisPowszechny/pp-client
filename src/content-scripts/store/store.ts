@@ -3,7 +3,7 @@ import promise from 'redux-promise';
 import { createLogger } from 'redux-logger';
 import { Store, applyMiddleware } from 'react-chrome-redux';
 import patchDeepDiff from 'react-chrome-redux/lib/strategies/deepDiff/patch';
-import { getTabId } from 'common/tab-init';
+import { getTabId } from 'common/tab-id';
 
 const middlewares = [thunk, promise];
 

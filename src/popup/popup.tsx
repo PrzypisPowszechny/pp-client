@@ -19,7 +19,7 @@ import store from './store';
 
 import initWindow from './init';
 import BrowserPopupNavigator from './components/BrowserPopupNavigator';
-import { initializeTabId } from 'common/tab-init';
+import { initializeTabId } from 'common/tab-id';
 import { TAB_INIT } from 'common/store/tabs/actions';
 import { ScriptType, setScriptType } from 'common/meta';
 

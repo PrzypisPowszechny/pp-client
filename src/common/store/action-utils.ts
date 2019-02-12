@@ -15,12 +15,11 @@ export function aliasActionToTabMarkedThunk(originalThunk) {
   return (aliasAction) => {
     return (dispatch, getState) => {
       const tabId = retrieveAnyActionTab(aliasAction);
-      const newGetState = () => {
-        return getState().tabs[tabId];
-      };
       // attach the sender to all actions dispatched within the thunk
       const newDispatch = action => dispatch(markInThunkActionWithTabId(action, tabId));
-      return originalThunk(...aliasAction.args)(newDispatch, newGetState);
+      return originalThunk(...aliasAction.args)(newDispatch, getState);
     };
   };
 }
+
+
