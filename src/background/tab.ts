@@ -27,7 +27,7 @@ function setCurrentTabId({ tabId, windowId }) {
 }
 
 function getCurrentActiveTabId() {
-  if (currentTabId === undefined) {
+  if (currentTabId === undefined || currentTabId === null) {
     throw new Error('Current tab id not set');
   }
   return currentTabId;

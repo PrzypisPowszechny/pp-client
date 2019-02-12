@@ -97,7 +97,7 @@ function annotationLocator() {
     store.dispatch(locateAnnotations(annotationLocations, unlocatedAnnotations.map(annotation => annotation.id)));
     // Save in store for popup reads
     chrome.storage.local.set({
-        [chromeKeys.ANNOTATION_LOCATION]: selectAnnotationLocationForBrowserStorage(store.getState()),
+      [chromeKeys.ANNOTATION_LOCATION]: selectAnnotationLocationForBrowserStorage(store.getState()),
     });
   }
 
