@@ -1,10 +1,10 @@
 import tab from './tab/reducer';
-import { retrieveAnyActionTab } from './action-tab';
+import { retrieveActionTab } from './action-tab';
 
 export default function tabs(state = {}, action) {
   console.log(action);
   // Only actions coming from content script or popup should modify the state
-  const tabId = retrieveAnyActionTab(action);
+  const tabId = retrieveActionTab(action);
 
   if (tabId !== undefined) {
     const tabState = state[tabId] || {};

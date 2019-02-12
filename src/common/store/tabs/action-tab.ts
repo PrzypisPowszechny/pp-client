@@ -8,7 +8,7 @@ import { getCurrentActiveTabId } from '../../../background/tab';
 /*
  * Retrieve tab id for an primary action (transported from a different browser extension part or not)
  */
-export function retrieveActionTab(action) {
+export function retrievePrimaryActionTab(action) {
   if (getScriptType() !== ScriptType.background) {
     throw new Error('This util can only be called within background page');
   }
@@ -24,6 +24,7 @@ export function retrieveActionTab(action) {
   if (sender.tab === undefined) {
     // popup is always related to the currently active tab (it disappears when it loses focus)
     // so the tab id can be correctly associated with the id of the currently active tab
+    // Hopefully activeTab permission always allows to retrieve it: https://developer.chrome.com/extensions/activeTab
     return getCurrentActiveTabId();
   }
 
@@ -40,7 +41,7 @@ export function retrieveActionTab(action) {
  * - primary action (transported from a different browser extension part or not)
  * - an action dispatched within a thunk action, additionally marked
  */
-export function retrieveAnyActionTab(action) {
+export function retrieveActionTab(action) {
   if (getScriptType() !== ScriptType.background) {
     throw new Error('This util can only be called within background page');
   }
@@ -50,7 +51,7 @@ export function retrieveAnyActionTab(action) {
     return action._meta.tabId;
   }
 
-  return retrieveActionTab(action);
+  return retrievePrimaryActionTab(action);
 }
 
 export function markInThunkActionWithTabId(action, tabId) {

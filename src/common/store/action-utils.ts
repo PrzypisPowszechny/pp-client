@@ -1,4 +1,4 @@
-import { markInThunkActionWithTabId, retrieveAnyActionTab } from './tabs/action-tab';
+import { markInThunkActionWithTabId, retrieveActionTab } from './tabs/action-tab';
 
 /*
  * The primary actions (ordinary objects {} ) are marked by react-chrome-redux with _sender.
@@ -14,7 +14,7 @@ import { markInThunkActionWithTabId, retrieveAnyActionTab } from './tabs/action-
 export function aliasActionToTabMarkedThunk(originalThunk) {
   return (aliasAction) => {
     return (dispatch, getState) => {
-      const tabId = retrieveAnyActionTab(aliasAction);
+      const tabId = retrieveActionTab(aliasAction);
       // attach the sender to all actions dispatched within the thunk
       const newDispatch = action => dispatch(markInThunkActionWithTabId(action, tabId));
       return originalThunk(...aliasAction.args)(newDispatch, getState);
