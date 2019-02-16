@@ -19,6 +19,7 @@ import { AnnotationAPIModel } from 'common/api/annotations';
 import AnnotationSummary from './annotationSummary/AnnotationSummary';
 import { PopupPages } from './BrowserPopupNavigator';
 import '../css/popup.scss';
+import Login from 'popup/components/Login';
 
 export interface IBrowserPopupProps {
   onAnnotationRequestSelect: () => void;
@@ -229,6 +230,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
               <Icon className="icon" icon={ic_home} size={20}/>
             </a>
           </div>
+          <Login />
           <AnnotationSummary onFullViewClick={this.handleFullAnnotationViewClick}/>
           <li
             className={classNames('menu-item', 'clickable', 'primary',

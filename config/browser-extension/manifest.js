@@ -18,6 +18,7 @@ const base = (env, argv) => ({
     'activeTab',
     'contextMenus',
     'cookies',
+    'identity',
     // API URL must be included so we can read cookies for this host
     loadSettings(env, argv).API_URL,
     loadSettings(env, argv).SITE_URL,
