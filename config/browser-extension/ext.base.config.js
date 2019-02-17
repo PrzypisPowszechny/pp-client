@@ -62,6 +62,12 @@ const getConfig = (env, argv) => merge(baseConfig.getConfig(env, argv), {
         to: 'help'
       }
     ]),
+    new CopyWebpackPlugin([
+      {
+        from: 'src/pages/social_login_demo.html',
+        to: 'social_login_demo.html'
+      }
+    ]),
     // Generate manifest.json
     new CreateFileWebpack({
       path: baseConfig.EXT_DIR,

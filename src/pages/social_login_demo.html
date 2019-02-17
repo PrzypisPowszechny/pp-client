@@ -1,0 +1,125 @@
+<!Doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>PP Social login demo</title>
+
+</head>
+<body>
+
+  <div style="margin: auto; width: 600px">
+    <h4> Click and login. In the end i should result in response containing 'data.access' field</h4>
+
+    <!-- Facebook button -->
+
+    <button id="fb-button">Custom Facebook Sign In</button>
+
+    <!-- Google button -->
+
+    <button id="google-button">Google Sign In</button>
+
+    <!-- Response -->
+
+    <div id="pp-response-container"></div>
+  </div>
+
+
+  <!-- Common utils -->
+
+  <script>
+    window.ppAuth = function(authResponse, provider) {
+      fetch(`/api/auth/${provider}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type':  'application/vnd.api+json'
+        },
+        body: JSON.stringify({
+          data: {
+            // fb uses camelcase while google underscores
+            accessToken: authResponse.accessToken || authResponse.access_token,
+            expiresIn: authResponse.expiresIn || authResponse.expires_in,
+            tokenType: authResponse.tokenType || authResponse.token_type
+          }
+        })
+      })
+      .then(response => response.json())
+      .then(printToDiv);
+    };
+
+    window.printToDiv = function(data) {
+      var text = JSON.stringify(data, null, '  ');
+
+      document.getElementById('pp-response-container').innerHTML += text;
+    }
+  </script>
+
+  <!-- Google scripts -->
+
+  <script src="https://apis.google.com/js/api.js"></script>
+  <script type="text/javascript">
+    // Docs and examples:
+    // https://developers.google.com/api-client-library/javascript/samples/samples
+    // https://developers.google.com/api-client-library/javascript/reference/referencedocs
+
+    window.ppGoogleInitClient = function () {
+      // Initialize the client with API key and People API, and initialize OAuth with an
+      // OAuth 2.0 client ID and scopes (space delimited string) to request access.
+      gapi.client.init({
+        clientId: '823340157121-mplb4uvgu5ena8fuuuvvnpn773hpjim4.apps.googleusercontent.com',
+        scope: 'email profile'
+      })
+    };
+
+    window.ppGoogleHandleSignInClick = function() {
+      gapi.auth2.getAuthInstance().signIn().then( googleUser => {
+        if(googleUser.isSignedIn()) {
+          console.log(googleUser.getAuthResponse());
+          ppAuth(googleUser.getAuthResponse(), 'google')
+        }
+      });
+    };
+
+    // Loads the JavaScript client library and invokes `initClient` afterwards.
+    gapi.load('client', ppGoogleInitClient);
+
+    document.getElementById('google-button').addEventListener('click', ppGoogleHandleSignInClick)
+  </script>
+
+  <!-- Facebook scripts -->
+
+  <script>
+    // Docs and examples:
+    // https://developers.facebook.com/docs/facebook-login/web
+
+    // fbAsyncInit is facebook interface hook
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId            : '2290339024350798',
+        autoLogAppEvents : true,
+        xfbml            : true,  // render ui using <fb: > tags
+        version          : 'v2.9'
+      });
+    };
+
+    (function(d, s, id){
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/pl_PL/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    window.ppFbLogin = function() {
+      console.log('trigger');
+      FB.login(function(response) {
+        console.log(response);
+        if (response.status === 'connected') {
+          ppAuth(response.authResponse, 'facebook');
+        }
+      }, { scope: 'email,public_profile' });
+    };
+
+    document.getElementById('fb-button').addEventListener('click', ppFbLogin)
+  </script>
+</body>
+</html>

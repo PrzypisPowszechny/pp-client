@@ -23,7 +23,13 @@ const base = (env, argv) => ({
     loadSettings(env, argv).API_URL,
     loadSettings(env, argv).SITE_URL,
   ],
-  content_security_policy: "script-src 'self' 'unsafe-eval' https://www.google-analytics.com; object-src 'self'",
+  content_security_policy: "script-src 'self' 'unsafe-eval' " +
+    "'sha256-f+jtQqnAOWw13zFV9cOoh2WD8+RB3JRJO+woYF/SDXE=' 'sha256-WBYdb3/MnwLecWA4GzzLBt3UJUojiveB4rGQSbn4F8Q=' " +
+    "'sha256-HROwaOTY1vFxe7kzvbifq2xfIujew6iGbGsQ4ojPrd8=' 'sha256-BVTSC+YHi+LH7Ddi95E+Axi3JgO1qroFDIgIKG9xn48=' " +
+    "'sha256-crnHhEX/6UNPmaIMhop20ilw90xxhnqSpajisArxH2s=' " +
+    "https://www.google-analytics.com https://apis.google.com https://connect.facebook.net" +
+    "; " +
+    "object-src 'self'",
   browser_action: {
     default_title: 'Przypis Powszechny - wersja testowa'
   },
