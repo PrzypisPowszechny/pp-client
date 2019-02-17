@@ -23,9 +23,13 @@ const base = (env, argv) => ({
     loadSettings(env, argv).API_URL,
     loadSettings(env, argv).SITE_URL,
   ],
-    content_security_policy: "script-src 'self' 'unsafe-eval' https://www.google-analytics.com; object-src 'self'",
-    browser_action: {
+  content_security_policy: "script-src 'self' 'unsafe-eval' https://www.google-analytics.com; object-src 'self'",
+  browser_action: {
     default_title: 'Przypis Powszechny - wersja testowa'
+  },
+  oauth2: {
+    client_id: loadSettings(env, argv).CHROME_OAUTH_CLIENT_ID,
+    scopes: ['email', 'profile']
   },
   web_accessible_resources: [
     'assets/*',

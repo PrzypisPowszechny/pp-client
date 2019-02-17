@@ -1,11 +1,11 @@
 import React from 'react';
 
-export default class Toggle extends React.Component<{}, {}> {
+export default class Login extends React.Component<{}, {}> {
   constructor(props) {
     super(props);
   }
 
-  parseQuery (queryString): any {
+  static parseQuery (queryString): any {
     const query = {};
     const pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
     for (let i = 0; i < pairs.length; i++) {
@@ -24,9 +24,9 @@ export default class Toggle extends React.Component<{}, {}> {
     // The alert does not appear unless inspection window is open, so we can be sure popup window really gets killed
     alert(redirectUrl);
 
-    // This is not real queruString, in OAuth is is queryString passed in hash fragment
+    // This is not real queryString, in OAuth is is queryString passed in hash fragment
     const queryString = redirectUrl.substr(redirectUrl.indexOf('#') + 1);
-    const data = this.parseQuery(queryString);
+    const data = Login.parseQuery(queryString);
 
     const ppAuthParams = {
       expiresIn: data.expires_in,
@@ -36,9 +36,7 @@ export default class Toggle extends React.Component<{}, {}> {
     console.log(ppAuthParams);
 
     // TODO: pass ppAuthParams to /api/auth/{provider}/ endpoint and receive PP access token for PP frontend app
-  }
-
-  ;
+  };
 
   googleAuthorize = () => {
     const redirectURL = chrome.identity.getRedirectURL();
@@ -56,6 +54,11 @@ export default class Toggle extends React.Component<{}, {}> {
       interactive: true,
       url: authURL
     }, this.getAuthData);
+  };
+
+  googleChromeAuthorize = () => {
+    //chrome.identity.getAuthToken(null,token => console.log(token));
+    chrome.identity.getAuthToken({interactive: true}, token => console.log(token));
   };
 
   fbAuthorize = () => {
@@ -77,7 +80,7 @@ export default class Toggle extends React.Component<{}, {}> {
         url: authURL
       }, getAuthData);
     };
-    // This is 'asyn' implementation and it works (popup is not blocked by browser),
+    // This simulates 'async' implementation and it works (popup is not blocked by browser),
     // so we can assume it should work from background page as well
     setTimeout(func, 100);
   };
@@ -85,8 +88,9 @@ export default class Toggle extends React.Component<{}, {}> {
   render() {
     return (
       <div>
-        <button onClick={this.googleAuthorize}>Google log in</button>
-        <button onClick={this.fbAuthorize}>Facebook log in</button>
+        <button onClick={this.googleAuthorize}>Google log in (as web app)</button>
+        <button onClick={this.googleChromeAuthorize}>Google log in (as chrome app)</button>
+        <button onClick={this.fbAuthorize}>Facebook log in (as web app)</button>
       </div>
     )
   }
