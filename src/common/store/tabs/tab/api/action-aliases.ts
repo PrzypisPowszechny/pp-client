@@ -6,6 +6,7 @@ import {
   requireResource as originalRequireResource,
 } from 'redux-json-api';
 import { markInThunkActionWithTabId, retrieveActionTab } from '../../action-tab';
+import { readEndpointWithCustomOptions as originalReadEndpointWithCustomOptions } from 'common/api/redux-json-api-patch';
 
 // A redux-json-api version of common/action-utils converter
 // Amend getState to return current tab state (since redux-json-api assumes its state is preserved in the root)
@@ -24,6 +25,7 @@ export function reduxJsonApiAliasActionToTabMarkedThunk(originalThunk) {
 export const reduxJsonApiAliases = {
   createResource: reduxJsonApiAliasActionToTabMarkedThunk(originalcreateResource),
   readEndpoint: reduxJsonApiAliasActionToTabMarkedThunk(originalReadEndpoint),
+  readEndpointWithCustomOptions: reduxJsonApiAliasActionToTabMarkedThunk(originalReadEndpointWithCustomOptions),
   updateResource: reduxJsonApiAliasActionToTabMarkedThunk(originalUpdateResource),
   deleteResource: reduxJsonApiAliasActionToTabMarkedThunk(originalDeleteResource),
   requireResource: reduxJsonApiAliasActionToTabMarkedThunk(originalRequireResource),

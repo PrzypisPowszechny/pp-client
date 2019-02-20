@@ -5,8 +5,6 @@ import { getExtensionCookie } from '../common/messages';
 
 export default function initWindow() {
   return Promise.resolve(
-    configureAxios(
-      getCurrentTabUrl,
-      getExtensionCookie,
-    ));
+    configureAxios(getExtensionCookie),
+  );
 }

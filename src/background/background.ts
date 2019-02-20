@@ -86,12 +86,8 @@ function getCurrentTabUrl(): Promise<string> {
   });
 }
 
-// TODO refactor
-// TODO retrieve URL in a different way (this IS NOT correct)
-configureAxios(
-  getCurrentTabUrl,
-  getCookie,
-);
+configureAxios(getCookie);
+
 /*
  * Basic extension settings
  */

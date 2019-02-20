@@ -4,11 +4,7 @@ import { getExtensionCookie } from 'common/messages';
 import { configureAxios } from 'common/axios';
 
 export function configureAPIRequests() {
-  const getCurrentTabUrl = () => Promise.resolve(window.location.href);
-  configureAxios(
-    getCurrentTabUrl,
-    getExtensionCookie,
-    );
+  configureAxios(getExtensionCookie);
 
   // settings for redux-json-api
   store.dispatch(setAxiosConfig({

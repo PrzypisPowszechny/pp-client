@@ -14,6 +14,10 @@ export function readEndpoint(...args) {
   return { type: 'readEndpoint', args };
 }
 
+export function readEndpointWithCustomOptions(...args) {
+  return { type: 'readEndpointWithCustomOptions', args };
+}
+
 export function updateResource(...args) {
   return { type: 'updateResource', args };
 }
