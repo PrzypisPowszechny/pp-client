@@ -11,7 +11,7 @@ console.log('Przypis background script!');
 import './meta';
 
 // initialize Redux store
-import store from './store';
+import './store';
 
 import InstalledDetails = chrome.runtime.InstalledDetails;
 import { returnExtensionCookie, returnCurrentTabId, setBadge } from './messages';
