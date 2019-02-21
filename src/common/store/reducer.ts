@@ -1,15 +1,16 @@
 import { combineReducers } from 'redux';
-import tab, { ITabState } from './tabs/tab/reducer';
+import { ITabState } from './tabs/tab/reducer';
+import runtime, { IRuntimeState } from './runtime/reducer';
 import tabs from './tabs/reducer';
 
 export interface IState {
   tabs: {
     [tabId: number]: ITabState,
   };
-  // TODO: runtime: IRuntimeState;
+  runtime: IRuntimeState;
 }
 
 export default combineReducers<IState>({
   tabs,
-  // TODO: runtime
+  runtime,
 });
