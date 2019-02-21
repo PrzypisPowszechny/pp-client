@@ -20,7 +20,7 @@ import store from './store';
 import initWindow from './init';
 import BrowserPopupNavigator from './components/BrowserPopupNavigator';
 import { initializeTabId } from 'common/tab-id';
-import { TAB_INIT } from 'common/store/tabs/actions';
+import { TAB_POPUP_INIT } from 'common/store/tabs/actions';
 import { ScriptType, setScriptType } from 'common/meta';
 
 // Wait until first update before initializing components so the store has been initialized with default reducers
@@ -45,7 +45,7 @@ Promise.all([
 ]).then(() => {
   console.log('Store hydrated from background page. Rendering components.');
   // initialize tab state in the store
-  return store.dispatch({ type: TAB_INIT });
+  return store.dispatch({ type: TAB_POPUP_INIT });
 }).then(() => {
   ReactDOM.render(
     <Provider store={store}>
