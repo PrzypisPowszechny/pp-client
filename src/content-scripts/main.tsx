@@ -27,10 +27,11 @@ import appComponent from './modules/app-component';
 import { configureAPIRequests } from './init-API';
 import { annotationLocationNotifier } from './modules';
 import { initializeTabId } from 'common/tab-id';
-import store from '../popup/store';
+import store from './store';
 import { updateTabInfo } from 'common/store/tabs/tab/tabInfo/actions';
-import { TAB_INIT } from 'common/store/tabs/actions';
+import { TAB_INIT, tabInit } from 'common/store/tabs/actions';
 import { ScriptType, setScriptType } from 'common/meta';
+import { waitUntilPageAndStoreReady } from '../common/utils/init';
 
 // set script type for future introspection
 setScriptType(ScriptType.contentScript);
@@ -56,35 +57,16 @@ console.log('Przypis script working!');
  * we commit changes to browser storage and recalculate state.appMode on storage change.
  */
 
-const isBrowser = typeof window !== 'undefined';
-if (isBrowser) {
-  const waitUntilFirstUpdate = new Promise((resolve) => {
-    // Wait until Redux store first update before initializing components
-    // so the store has been initialized with default reducers
-    const unsubscribe = store.subscribe(() => {
-      unsubscribe(); // make sure to only fire once
-      resolve();
-    });
-  });
-
-  const waitUntilPageLoaded = new Promise((resolve) => {
-    window.addEventListener('load', () => {
-      resolve();
-    });
-  });
-
-  Promise.all([
-    waitUntilFirstUpdate,
-    waitUntilPageLoaded,
-    initializeTabId(),
-  ]).then(() => {
-    console.log('Store hydrated from background page.');
-    // initialize tab state in the store
-    store.dispatch({ type: TAB_INIT });
-    return store.dispatch(updateTabInfo({
-      currentUrl: window.location.href,
-    }));
-  }).then(() => {
+Promise.all([
+  waitUntilPageAndStoreReady(store),
+  initializeTabId(),
+]).then(() => {
+  console.debug('Store hydrated from background page.');
+  // initialize tab state in the store
+  return store.dispatch(tabInit());
+})
+  .then(() => store.dispatch(updateTabInfo({ currentUrl: window.location.href })))
+  .then(() => {
 
     /*
      * Modules hooked to asynchronous events
@@ -111,6 +93,4 @@ if (isBrowser) {
     // (disabled extension mode and disabled page mode will erase them)
     data.loadFromChromeStorage()
       .then(data.loadFromAPI);
-
   });
-}

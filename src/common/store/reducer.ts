@@ -12,5 +12,5 @@ export interface IState {
 
 export default combineReducers<IState>({
   tabs,
-  runtime,
+  // runtime, //todo uncomment
 });

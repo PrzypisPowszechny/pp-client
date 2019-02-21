@@ -1,9 +1,9 @@
 // Message handlers
 
-import { getCurrentActiveTabId } from './tab';
+import { getCurrentActiveTabId, initCurrentTabId } from './tab';
+import tabId = chrome.devtools.inspectedWindow.tabId;
 
 export function returnExtensionCookie(request, sender, sendResponse) {
-  console.log(request.action);
   if (request.action === 'GET_COOKIE') {
     chrome.cookies.get({
       url: PPSettings.API_URL,
@@ -33,16 +33,17 @@ export function setBadge(request, sender, sendResponse) {
 }
 
 export function returnCurrentTabId(request, sender, sendResponse) {
-  console.log(request.action);
   if (request.action === 'GET_TAB_ID') {
     if (sender.tab) {
       // content script
       console.debug('content script');
-      sendResponse(sender.tab.id);
+      return sendResponse(sender.tab.id);
     } else {
       // popup
       console.debug('popup');
-      sendResponse(getCurrentActiveTabId());
+      // the current tab id may not have been initialized before this message; request it
+      initCurrentTabId().then(sendResponse);
     }
+    return true;
   }
 }

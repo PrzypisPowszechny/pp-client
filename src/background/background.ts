@@ -7,11 +7,11 @@ sentry.init();
 
 console.log('Przypis background script!');
 
-// Set script type by importing (so other imports such as redux are executed afterwards)
+// Set script type by importing (so ALL other imports such as redux are executed afterwards)
 import './meta';
 
 // initialize Redux store
-import './store';
+import store from './store';
 
 import InstalledDetails = chrome.runtime.InstalledDetails;
 import { returnExtensionCookie, returnCurrentTabId, setBadge } from './messages';
@@ -26,6 +26,7 @@ function onContextMenuAnnotate() {
     chrome.tabs.sendMessage(tabs[0].id, { action: 'ANNOTATE' });
   });
 }
+
 
 function onContextMenuAnnotationRequest() {
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
@@ -72,18 +73,6 @@ function getCookie(name: string): Promise<string | null> {
       resolve(null);
     }
   }));
-}
-
-function getCurrentTabUrl(): Promise<string> {
-  return new Promise((resolve) => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      console.log(tabs[0]);
-      if (!tabs[0]) {
-        resolve(null);
-      }
-      resolve(tabs[0].url);
-    });
-  });
 }
 
 configureAxios(getCookie);

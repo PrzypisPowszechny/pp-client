@@ -23,9 +23,9 @@ const store: Store<IState> = createStore(
   applyMiddleware(alias(aliases), ...middlewares),
 );
 
-const wrappedStore = wrapStore(store, {
+wrapStore(store, {
   portName: 'PP',
   diffStrategy: deepDiff,
 });
 
-export default wrappedStore;
+export default store;
