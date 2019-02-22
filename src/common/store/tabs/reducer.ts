@@ -3,8 +3,6 @@ import { retrieveActionTab } from './action-tab';
 import { TAB_INIT, TAB_POPUP_INIT } from './actions';
 
 export default function tabs(state = {}, action) {
-  console.log(action)
-
   const tabId = retrieveActionTab(action);
   // Only actions coming from content script or popup should modify the state
   if (tabId !== null && tabId !== undefined) {
@@ -15,7 +13,7 @@ export default function tabs(state = {}, action) {
         tabState = undefined;
         break;
       case TAB_POPUP_INIT:
-        // initiate but do not reset
+        // initiate but do not reset if already initiated
         tabState = state[tabId];
         break;
       default:
