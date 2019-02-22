@@ -4,13 +4,13 @@
 ### Redux architecture
 
 #### Differences
-Since we use [react-chrome-redux](https://github.com/tshaddix/react-chrome-redux)
+Since we use [webext-redux](https://github.com/tshaddix/webext-redux)
 there are some changes to note in respect to the normal Redux store:
 
 ##### Aliases
 
 Asynchronous actions must be sent via
-[aliases](https://github.com/tshaddix/react-chrome-redux#4-optional-implement-actions-whose-logic-only-happens-in-the-background-script-we-call-them-aliases).
+[aliases](https://github.com/tshaddix/webext-redux#4-optional-implement-actions-whose-logic-only-happens-in-the-background-script-we-call-them-aliases).
 
 
 ##### dispatch

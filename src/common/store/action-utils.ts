@@ -1,7 +1,7 @@
 import { markInThunkActionWithTabId, retrieveActionTab } from './tabs/action-tab';
 
 /*
- * The primary actions (ordinary objects {} ) are marked by react-chrome-redux with _sender.
+ * The primary actions (ordinary objects {} ) are marked by webext-redux with _sender.
  * This allows to establish the tab for which the action was issued in the reducer
  * Thunk actions, however, are functions issuing more functions within their body.
  * These must carry the tab information, too.
