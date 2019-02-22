@@ -9,17 +9,12 @@ export const apiInitializedFields = {
   annotationUpvotes: { data: [] },
 };
 
-export default function initializedApi(state = {}, action) {
-  if (action.type === TAB_INIT) {
-    return {
-      ...apiInitializedFields,
-      // reducer call mirroring store initialisation with combineReducers
-      ...api(undefined, {}),
-      // do not clear the API state, if it has been populated with models already
-      // (this action can be called by content script/popup in any order)
-      ...state,
-    };
-  } else {
-    return api(state, action);
-  }
+const initialState = {
+  ...apiInitializedFields,
+  // reducer call mirroring store initialisation with combineReducers
+  ...api(undefined, {}),
+}
+
+export default function initializedApi(state = initialState, action) {
+  return api(state, action);
 }
