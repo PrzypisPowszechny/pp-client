@@ -57,6 +57,7 @@ console.log('Przypis script working!');
  * we commit changes to browser storage and recalculate state.appMode on storage change.
  */
 
+
 Promise.all([
   waitUntilPageAndStoreReady(store),
   initializeTabId(),

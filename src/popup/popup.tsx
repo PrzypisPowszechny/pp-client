@@ -19,26 +19,31 @@ import store from './store';
 
 import BrowserPopupNavigator from './components/BrowserPopupNavigator';
 import { initializeTabId } from 'common/tab-id';
-import { TAB_POPUP_INIT, tabPopupInit } from 'common/store/tabs/actions';
+import { tabPopupInit } from 'common/store/tabs/actions';
 import { ScriptType, setScriptType } from 'common/meta';
 import { getExtensionCookie } from '../common/messages';
 import { configureAxios } from '../common/axios';
-import { waitUntilPageAndStoreReady } from '../common/utils/init';
+import { waitUntilFirstStoreUpdate, waitUntilPageLoaded } from '../common/utils/init';
+
+// initialize id of the tab for which the popup is displayed
+initializeTabId();
+configureAxios(getExtensionCookie);
 
 Promise.all([
-  waitUntilPageAndStoreReady(store),
-  initializeTabId(),
-]).then(() => {
-  console.log('Store hydrated from background page. Rendering components.');
+  waitUntilPageLoaded(),
+])
+  .then(() => {
+    ReactDOM.render(
+      <Provider store={store}>
+        <BrowserPopupNavigator/>
+      </Provider>,
+      document.body,
+    );
+  });
+
+waitUntilFirstStoreUpdate(store)
+  .then(() => {
+  console.log('Store hydrated from background page.');
   // initialize tab state in the store
   return store.dispatch(tabPopupInit());
-}).then(() => {
-  configureAxios(getExtensionCookie);
-
-  ReactDOM.render(
-    <Provider store={store}>
-      <BrowserPopupNavigator/>
-    </Provider>,
-    document.body,
-  );
-});
+})

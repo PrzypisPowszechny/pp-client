@@ -14,3 +14,8 @@ export const selectTab = (state) => {
   }
   return tab;
 }
+
+export const selectIsTabInitialized = (state) => {
+  const tabId = getTabId();
+  return Boolean(tabId !== undefined && state.tabs && state.tabs[tabId]);
+}
