@@ -5,7 +5,7 @@ import { ic_add_circle } from 'react-icons-kit/md/ic_add_circle';
 import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
 import { ic_block } from 'react-icons-kit/md/ic_block';
 import { ic_home } from 'react-icons-kit/md/ic_home';
-import {send} from 'react-icons-kit/fa/send';
+import { send } from 'react-icons-kit/fa/send';
 
 import { standardizeUrlForPageSettings } from 'common/url';
 import Toggle from './toggle/Toggle';

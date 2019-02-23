@@ -1,7 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { createResource, deleteResource, readEndpoint } from 'redux-json-api';
+import { createResource, deleteResource, readEndpoint } from 'common/store/tabs/tab/api/actions';
+
 import { Popup } from 'semantic-ui-react';
 import { Icon } from 'react-icons-kit';
 import { ic_star } from 'react-icons-kit/md/ic_star';
@@ -12,7 +13,7 @@ import {
 } from 'common/api/annotation-upvotes';
 import { PPScopeClass } from 'content-scripts/settings';
 import ppGa from 'common/pp-ga';
-import { selectUpvote } from '../../../store/api/selectors';
+import { selectUpvote } from 'common/store/tabs/tab/api/selectors';
 
 interface IUpvoteProps {
   indirectChildClassName: string;

@@ -1,4 +1,4 @@
-// Messages sent by content script to background
+// Messages sent by content script / popup to background
 
 export function setExtensionBadge(text: string) {
   return new Promise((resolve) => {
@@ -15,7 +15,7 @@ export function setExtensionBadge(text: string) {
   });
 }
 
-export function getExtensionCookie(name: string) {
+export function getExtensionCookie(name: string): Promise<string|null> {
   // Read special per-extension cookie
   // available not for the host domain (unlike traditional website cookies) but for this particular extension client
   return new Promise((resolve) => {

@@ -31,7 +31,7 @@ const getConfig = (env, argv) => ({
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.(tsx?|js)$/,
         use: [
           {
             loader: "ts-loader",

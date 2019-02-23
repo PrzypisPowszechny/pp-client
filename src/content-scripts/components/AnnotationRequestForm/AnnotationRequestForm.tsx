@@ -3,17 +3,18 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { PPScopeClass } from 'content-scripts/settings';
 import { turnOffRequestMode } from 'common/chrome-storage';
-import { AnnotationRequestFormData, AppModes } from 'content-scripts/store/appModes/types';
+import { AnnotationRequestFormData, AppModes } from 'common/store/tabs/tab/appModes/types';
 import { saveAnnotationRequest } from 'common/api/utils';
 import ppGa from 'common/pp-ga';
 
 import styles from './AnnotationRequestForm.scss';
 import { Icon } from 'react-icons-kit';
 import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
-import { changeNotification } from '../../store/widgets/actions';
+import { changeNotification } from 'common/store/tabs/tab/widgets/actions';
 import * as helpers from './helpers';
 import Button from '../elements/Button/Button';
 import { ToastType } from '../elements/Toast/Toast';
+import { selectTab } from 'common/store/tabs/selectors';
 
 export interface AnnotationRequestFormProps {
   appModes: AppModes;
@@ -28,7 +29,7 @@ interface AnnotationRequestFormState extends AnnotationRequestFormData {
 
 @connect(
   state => ({
-    appModes: state.appModes,
+    appModes: selectTab(state).appModes,
   }),
   { changeNotification },
 )

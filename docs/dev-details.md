@@ -1,8 +1,54 @@
 
 ## Development -- details
 
+### Redux architecture
 
-### Mocking API
+#### Differences
+Since we use [webext-redux](https://github.com/tshaddix/webext-redux)
+there are some changes to note in respect to the normal Redux store:
+
+##### Aliases
+
+Asynchronous actions must be sent via
+[aliases](https://github.com/tshaddix/webext-redux#4-optional-implement-actions-whose-logic-only-happens-in-the-background-script-we-call-them-aliases).
+
+
+##### dispatch
+
+**All** dispatches are asynchronous and return a `Promise`.
+This is because browser messaging API is asynchronous.
+
+##### dispatches / renders
+
+React rerenders are more likely to take place between different threads.
+While the code below worked (luckily?) in classical Redux,
+it does not anymore since annotation has already been removed in the promise handler:
+```js
+this.props.deleteAnnotation(this.props.annotation)
+  .then(() => {
+    const attrs = this.props.annotation.attributes;
+    (...)
+```
+
+This works:
+```js
+const annotation = this.props.annotation;
+this.props.deleteAnnotation(this.props.annotation)
+  .then(() => {
+    const attrs = annotation.attributes;
+    (...)
+```
+
+#### Tab state
+
+We keep tab state in Redux store.
+Results of many actions depend on the tab for which the action was dispatched.
+For this reason, we need to maintain this information so it is accessible in `tabs` reducer.
+
+
+### Other
+
+#### Mocking API
 
 Since we use `redux-json-api` module as a Redux-state intermediary
 between the actual HTTP API (at least our own, PP API) and the application,

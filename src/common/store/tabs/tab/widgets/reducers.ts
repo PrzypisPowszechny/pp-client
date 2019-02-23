@@ -10,8 +10,8 @@ import { API_DELETED } from 'redux-json-api/lib/constants';
 import { AnnotationResourceType } from 'common/api/annotations';
 import { combineReducers } from 'redux';
 import { MODIFY_APP_MODES } from '../appModes/actions';
-import { isAnnotationMode } from 'content-scripts/store/appModes/selectors';
-import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
+import { isAnnotationMode } from 'common/store/tabs/tab/appModes/selectors';
+import { AnnotationLocation } from 'content-scripts/handlers/annotation-event-handlers';
 
 export interface IWidgetState {
   visible: boolean;

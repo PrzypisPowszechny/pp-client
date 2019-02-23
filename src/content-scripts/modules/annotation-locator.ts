@@ -6,18 +6,19 @@ import 'rangy/lib/rangy-serializer';
 import store from 'content-scripts/store';
 import { mousePosition } from '../utils/mousePosition';
 import _isEqual from 'lodash/isEqual';
-import { selectAnnotation, selectAnnotations } from '../store/api/selectors';
-import { locateAnnotations } from '../store/annotations/actions';
-import { LocatedAnnotation } from '../store/annotations/types';
-import { AnnotationAPIModel } from '../../common/api/annotations';
+import { selectAnnotation, selectAnnotations } from 'common/store/tabs/tab/api/selectors';
+import { locateAnnotations } from 'common/store/tabs/tab/annotations/actions';
+import { LocatedAnnotation } from 'common/store/tabs/tab/annotations/types';
+import { AnnotationAPIModel } from 'common/api/annotations';
 import { Range as XPathRange } from 'xpath-range';
 import { escapeRegExp } from 'tslint/lib/utils';
 import { annotationRootNode } from '../settings';
-import { setExtensionBadge } from '../../common/messages';
+import { setExtensionBadge } from 'common/messages';
 import * as chromeKeys from 'common/chrome-storage/keys';
 import * as Sentry from '@sentry/browser';
 
-import { selectAnnotationLocationForBrowserStorage } from '../store/annotations/selectors';
+import { selectAnnotationLocationForBrowserStorage } from 'common/store/tabs/tab/annotations/selectors';
+import { selectTab } from 'common/store/tabs/selectors';
 
 let instance;
 
@@ -58,7 +59,7 @@ function sendLocationEvent(located: boolean, annotation: AnnotationAPIModel) {
 function annotationLocator() {
   const annotations: AnnotationAPIModel[] = selectAnnotations(store.getState());
   const annotationIds: string[] = annotations.map(annotation => annotation.id);
-  const hasLoaded: boolean = store.getState().annotations.hasLoaded;
+  const hasLoaded: boolean = selectTab(store.getState()).annotations.hasLoaded;
   // if annotation items have changed, locate them within the DOM
   if (!_isEqual(annotationIds, instance.annotationIds) || hasLoaded !== instance.hasLoaded) {
     const annotationLocations: LocatedAnnotation[] = [];
@@ -96,7 +97,7 @@ function annotationLocator() {
     store.dispatch(locateAnnotations(annotationLocations, unlocatedAnnotations.map(annotation => annotation.id)));
     // Save in store for popup reads
     chrome.storage.local.set({
-        [chromeKeys.ANNOTATION_LOCATION]: selectAnnotationLocationForBrowserStorage(store.getState()),
+      [chromeKeys.ANNOTATION_LOCATION]: selectAnnotationLocationForBrowserStorage(store.getState()),
     });
   }
 

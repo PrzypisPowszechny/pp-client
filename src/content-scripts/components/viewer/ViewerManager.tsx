@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { selectViewerState } from 'content-scripts/store/widgets/selectors';
-import { hideViewer, setMouseOverViewer } from 'content-scripts/store/widgets/actions';
+import { selectViewerState } from 'common/store/tabs/tab/widgets/selectors';
+import { hideViewer, setMouseOverViewer } from 'common/store/tabs/tab/widgets/actions';
 import Viewer from './Viewer';
 import Timer = NodeJS.Timer;
 import { PPViewerHoverContainerClass } from 'content-scripts/settings';

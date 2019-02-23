@@ -7,16 +7,27 @@ sentry.init();
 
 console.log('Przypis background script!');
 
+// Set script type by importing (so ALL other imports such as redux are executed afterwards)
+import './meta';
+
+// initialize Redux store
+import './store';
+
 import InstalledDetails = chrome.runtime.InstalledDetails;
-import { returnExtensionCookie, setBadge } from './messages';
+import { returnExtensionCookie, returnCurrentTabId, setBadge } from './messages';
 import * as ppGaBg from 'common/pp-ga/bg';
 import ppGa from 'common/pp-ga';
+import { initCurrentTabId } from './tab';
+
+import { configureAxios } from '../common/axios';
+import { getChromeCookie } from '../common/chrome-cookies';
 
 function onContextMenuAnnotate() {
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
     chrome.tabs.sendMessage(tabs[0].id, { action: 'ANNOTATE' });
   });
 }
+
 
 function onContextMenuAnnotationRequest() {
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
@@ -52,6 +63,8 @@ function ppGaOnInstalled(details: InstalledDetails) {
   }
 }
 
+configureAxios(name => getChromeCookie(PPSettings.API_URL, name).then(cookie => cookie.value));
+
 /*
  * Basic extension settings
  */
@@ -65,9 +78,16 @@ chrome.runtime.onMessage.addListener(setBadge);
 chrome.runtime.onMessage.addListener(returnExtensionCookie);
 
 /*
+ * Init current tab id tracking
+ */
+
+initCurrentTabId();
+chrome.runtime.onMessage.addListener(returnCurrentTabId);
+
+/*
  * Google analytics
  */
 
-ppGaBg.init().then( () => null);
+ppGaBg.init().then(() => null);
 chrome.runtime.onInstalled.addListener(ppGaOnInstalled);
 chrome.runtime.onMessage.addListener(ppGaBg.sendEventFromMessage);

@@ -5,7 +5,7 @@ import { AnnotationAPIModel } from 'common/api/annotations';
 import { Reasons } from 'common/api/annotation-reports';
 import { PPScopeClass } from 'content-scripts/settings';
 import ppGa from 'common/pp-ga';
-import { AnnotationReportAPIModel, DataResponse } from '../../../../common/api/annotation-reports';
+import { AnnotationReportAPIModel, DataResponse } from 'common/api/annotation-reports';
 
 interface ISuggestionProps {
   annotation: AnnotationAPIModel;

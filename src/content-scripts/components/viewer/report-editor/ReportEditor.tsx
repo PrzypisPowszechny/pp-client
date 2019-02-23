@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createResource, deleteResource } from 'redux-json-api';
+import { createResource } from 'common/store/tabs/tab/api/actions';
+
 
 import { AnnotationAPIModel, AnnotationResourceType } from 'common/api/annotations';
 import {

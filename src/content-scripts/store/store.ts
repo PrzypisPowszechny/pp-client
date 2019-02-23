@@ -1,29 +1,33 @@
-import { applyMiddleware, compose, createStore, Store } from 'redux';
 import thunk from 'redux-thunk';
-import rootReducer, { apiInitializedFields, ITabState } from './reducer';
 import promise from 'redux-promise';
 import { createLogger } from 'redux-logger';
+import { Store, applyMiddleware } from 'webext-redux';
+import patchDeepDiff from 'webext-redux/lib/strategies/deepDiff/patch';
+import { getTabId } from 'common/tab-id';
 
-// TS override
-declare global {
-  interface Window { __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any; }
-}
-
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const middlewares = [thunk, promise];
+
+function tabOnlyPatch(obj, difference: any[]) {
+  const tabId = getTabId();
+  if (difference.every((item) =>
+    item.key === 'tabs' && item.value.every(subitem => subitem.key !== tabId.toString(),
+    ))) {
+    console.debug('Ignoring patch (not applicable):', difference);
+    return obj;
+  }
+
+  return patchDeepDiff(obj, difference);
+}
 
 if (PPSettings.DEV) {
   const logger = createLogger();
   middlewares.push(logger);
 }
-const store: Store<ITabState> = createStore(
-  rootReducer,
-  {
-    ...apiInitializedFields,
-  } as ITabState,
-  composeEnhancers(
-    applyMiddleware(...middlewares),
-  ),
-);
+const proxyStore = new Store({
+  portName: 'PP',
+  patchStrategy: tabOnlyPatch,
+});
 
-export default store;
+const storeWithMiddleware = applyMiddleware(proxyStore, ...middlewares);
+
+export default storeWithMiddleware;

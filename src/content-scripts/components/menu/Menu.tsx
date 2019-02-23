@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 
-import { selectMenuState } from 'content-scripts/store/selectors';
-import { hideMenu, setSelectionRange, showEditorAnnotation } from 'content-scripts/store/widgets/actions';
+import { selectMenuState } from 'common/store/tabs/tab/selectors';
+import { hideMenu, setSelectionRange, showEditorAnnotation } from 'common/store/tabs/tab/widgets/actions';
 import { Range as XPathRange } from 'xpath-range';
 import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
 

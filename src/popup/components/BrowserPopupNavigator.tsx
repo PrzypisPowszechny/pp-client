@@ -1,17 +1,29 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import BrowserPopup from './BrowserPopup';
 import AnnotationList from './annotationList/AnnotationList';
+import { selectIsTabInitialized } from '../../common/store/tabs/selectors';
+import { connect } from 'react-redux';
 
 export enum PopupPages {
   main,
   annotationList,
 }
 
+export interface IBrowserPopupNavigatorProps {
+  isTabInitialized: boolean;
+}
+
 interface IBrowserPopupNavigatorState {
   page: PopupPages;
 }
 
-export default class BrowserPopupNavigator extends React.Component<{}, Partial<IBrowserPopupNavigatorState>> {
+@connect(
+  state => ({
+    isTabInitialized: selectIsTabInitialized(state),
+  }),
+)
+export default class BrowserPopupNavigator extends React.Component<Partial<IBrowserPopupNavigatorProps>,
+  Partial<IBrowserPopupNavigatorState>> {
   constructor(props: {}) {
     super(props);
 
@@ -25,6 +37,13 @@ export default class BrowserPopupNavigator extends React.Component<{}, Partial<I
   }
 
   render() {
+    const {
+      isTabInitialized,
+    } = this.props;
+    if (!isTabInitialized) {
+      return (<div/>);
+    }
+
     switch (this.state.page) {
       case PopupPages.annotationList:
         return (<AnnotationList onPageChange={this.handlePageChange}/>);

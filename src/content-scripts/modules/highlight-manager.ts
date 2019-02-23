@@ -1,16 +1,17 @@
 import store from 'content-scripts/store';
-import { showViewer } from 'content-scripts/store/actions';
+import { showViewer } from 'common/store/tabs/tab/actions';
 import mousePosition from '../utils/mousePosition';
 import Highlighter from 'content-scripts/utils/Highlighter';
-import { setMouseOverViewer } from '../store/widgets/actions';
-import { selectModeForCurrentPage } from '../store/appModes/selectors';
+import { setMouseOverViewer } from 'common/store/tabs/tab/widgets/actions';
+import { selectModeForCurrentPage } from 'common/store/tabs/tab/appModes/selectors';
 import _difference from 'lodash/difference';
 import _isEqual from 'lodash/isEqual';
-import { selectViewerState } from '../store/widgets/selectors';
-import { selectAnnotation } from '../store/api/selectors';
+import { selectViewerState } from 'common/store/tabs/tab/widgets/selectors';
+import { selectAnnotation } from 'common/store/tabs/tab/api/selectors';
 import { annotationRootNode } from '../settings';
 import { PopupAnnotationLocationData } from '../../popup/messages';
-import { selectAnnotationLocationForBrowserStorage } from '../store/annotations/selectors';
+import { selectAnnotationLocationForBrowserStorage } from 'common/store/tabs/tab/annotations/selectors';
+import { selectTab } from 'common/store/tabs/selectors';
 
 let instance;
 
@@ -40,7 +41,7 @@ function deinit() {
 
 function drawHighlights() {
   const arePageHighlightsDisabled = selectModeForCurrentPage(store.getState()).arePageHighlightsDisabled;
-  const locatedAnnotationsIds = store.getState().annotations.located.map(annotation => annotation.annotationId);
+  const locatedAnnotationsIds = selectTab(store.getState()).annotations.located.map(annotation => annotation.annotationId);
   if (arePageHighlightsDisabled && !instance.arePageHighlightsDisabled) {
     instance.highlighter.undrawAll();
   } else if (!arePageHighlightsDisabled &&
@@ -49,7 +50,7 @@ function drawHighlights() {
     )
   ) {
     // located annotations have changed, so redraw them
-    instance.highlighter.drawAll(store.getState().annotations.located.map(({ annotationId, range }) => {
+    instance.highlighter.drawAll(selectTab(store.getState()).annotations.located.map(({ annotationId, range }) => {
       return {
         id: annotationId,
         range,

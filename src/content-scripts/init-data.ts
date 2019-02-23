@@ -1,12 +1,18 @@
 import * as chromeKeys from 'common/chrome-storage/keys';
-import { changeAppModes } from './store/appModes/actions';
+import { changeAppModes } from 'common/store/tabs/tab/appModes/actions';
 import store from './store';
 import chromeStorage from 'common/chrome-storage';
-import { readEndpoint } from 'redux-json-api';
 import * as endpoints from 'common/api/endpoints';
+import { selectTab } from '../common/store/tabs/selectors';
+import { readEndpointWithCustomOptions } from '../common/store/tabs/tab/api/actions';
 
 export function loadFromAPI() {
-  store.dispatch(readEndpoint(endpoints.ANNOTATIONS));
+  const requestOptions = {
+    headers: {
+      'PP-SITE-URL': selectTab(store.getState()).tabInfo.currentUrl,
+    },
+  };
+  store.dispatch(readEndpointWithCustomOptions(endpoints.ANNOTATIONS, { requestOptions }));
 }
 
 export function loadFromChromeStorage() {

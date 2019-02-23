@@ -4,7 +4,7 @@
  * useful for selenium automation, where console logs cannot be easily accessed
  */
 
-import { AnnotationAPIModel } from '../common/api/annotations';
+import { AnnotationAPIModel } from 'common/api/annotations';
 
 export const PP_DOM_NOTIFICATION_ID = 'pp-dom-notification-element';
 

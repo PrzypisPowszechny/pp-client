@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
-import { ITabState } from 'content-scripts/store/reducer';
+import { selectTab } from 'common/store/tabs/selectors';
+import { ITabState } from '../reducer';
 
 function selectWidgetState({ location, visible }) {
   return {
@@ -10,8 +11,8 @@ function selectWidgetState({ location, visible }) {
 }
 
 export const selectMenuState = createSelector<ITabState, any, any, any>(
-  state => state.widgets.menu,
-    state => state.textSelector,
+  state => selectTab(state).widgets.menu,
+    state => selectTab(state).textSelector,
   (menu, textSelector) => ({
     ...selectWidgetState(menu),
     annotationLocation: { ...textSelector },
@@ -44,8 +45,8 @@ function selectAnnotationForm(annotations, editor) {
 }
 
 export const selectEditorState = createSelector<ITabState, any, any, any>(
-  state => state.widgets.editor,
-  state => state.api.annotations.data,
+  state => selectTab(state).widgets.editor,
+  state => selectTab(state).api.annotations.data,
   (editor, annotations) => ({
     ...selectWidgetState(editor),
     ...selectAnnotationForm(annotations, editor),
@@ -53,7 +54,7 @@ export const selectEditorState = createSelector<ITabState, any, any, any>(
 );
 
 export const selectViewerState = createSelector<ITabState, any, any>(
-  state => state.widgets.viewer,
+  state => selectTab(state).widgets.viewer,
   viewer => ({
     ...selectWidgetState(viewer),
     annotationIds: viewer.viewerItems.map(annotation => annotation.annotationId),

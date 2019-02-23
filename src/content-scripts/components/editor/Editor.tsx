@@ -1,6 +1,7 @@
 import React, { RefObject } from 'react';
 import { connect } from 'react-redux';
-import { createResource, updateResource } from 'redux-json-api';
+import { createResource, updateResource } from 'common/store/tabs/tab/api/actions';
+
 import classNames from 'classnames';
 import { Popup } from 'semantic-ui-react';
 import _isEqual from 'lodash/isEqual';
@@ -8,9 +9,9 @@ import _isEqual from 'lodash/isEqual';
 import { AnnotationAPICreateModel, AnnotationAPIModel, AnnotationAPIModelAttrs, } from 'common/api/annotations';
 import { turnOffAnnotationMode } from 'common/chrome-storage';
 import { PPScopeClass } from 'content-scripts/settings';
-import { hideEditor } from 'content-scripts/store/actions';
-import { AppModes } from 'content-scripts/store/appModes/types';
-import { selectEditorState } from 'content-scripts/store/selectors';
+import { hideEditor } from 'common/store/tabs/tab/actions';
+import { AppModes } from 'common/store/tabs/tab/appModes/types';
+import { selectEditorState } from 'common/store/tabs/tab/selectors';
 
 import { DraggableWidget } from 'content-scripts/components/widget';
 import Button from '../elements/Button/Button';
@@ -21,7 +22,7 @@ import * as helpers from './helpers';
 
 import styles from './Editor.scss';
 import ppGa from 'common/pp-ga';
-import { AnnotationPPCategories } from '../../../common/api/annotations';
+import { AnnotationPPCategories } from 'common/api/annotations';
 import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
 
 import { Icon } from 'react-icons-kit';
@@ -30,9 +31,10 @@ import { priceTag } from 'react-icons-kit/icomoon/priceTag';
 import { ic_close } from 'react-icons-kit/md/ic_close';
 import { ic_help_outline } from 'react-icons-kit/md/ic_help_outline'
 import { ic_add_circle } from 'react-icons-kit/md/ic_add_circle';
-import { changeNotification } from '../../store/widgets/actions';
+import { changeNotification } from 'common/store/tabs/tab/widgets/actions';
 import { bindActionCreators } from 'redux';
 import { ToastType } from '../elements/Toast/Toast';
+import { selectTab } from 'common/store/tabs/selectors';
 
 interface IEditorProps {
   appModes: AppModes;
@@ -81,7 +83,7 @@ interface IEditorState {
     } = selectEditorState(state);
 
     return {
-      appModes: state.appModes,
+      appModes: selectTab(state).appModes,
       locationX,
       locationY,
 
@@ -91,10 +93,10 @@ interface IEditorState {
   },
   dispatch => ({
     ...bindActionCreators({
-      hideEditor,
-      changeNotification,
-    },
-    dispatch),
+        hideEditor,
+        changeNotification,
+      },
+      dispatch),
     createOrUpdateAnnotation: (instance: AnnotationAPICreateModel) => {
       if (instance.id) {
         return dispatch(updateResource(instance));
@@ -301,17 +303,17 @@ class Editor extends React.Component<Partial<IEditorProps>,
           </label>
 
           <Popup
-              className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
-              hideOnScroll={true}
-              trigger={<div className={styles.label}>Typ przypisu</div>}
-              flowing={true}
-              hoverable={true}
-              position="left center"
-            >
-              Typ sygnalizuje innym użytkownikom, na ile <br/>
-              przypis jest zgodny z fragmentem artykułu, którego <br/>
-              dotyczy.
-            </Popup>
+            className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
+            hideOnScroll={true}
+            trigger={<div className={styles.label}>Typ przypisu</div>}
+            flowing={true}
+            hoverable={true}
+            position="left center"
+          >
+            Typ sygnalizuje innym użytkownikom, na ile <br/>
+            przypis jest zgodny z fragmentem artykułu, którego <br/>
+            dotyczy.
+          </Popup>
           <PPCategoryButtonsBar onSetPPCategory={this.handleSetPPCategory} ppCategory={ppCategory}/>
           <div
             className={styles.close}
@@ -321,21 +323,21 @@ class Editor extends React.Component<Partial<IEditorProps>,
           </div>
 
           <Popup
-              className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
-              hideOnScroll={true}
-              trigger={<div className={styles.label}>Treść przypisu</div>}
-              flowing={true}
-              hoverable={true}
-              position="left center"
-            >
-              Treść powinna krótko informować o najważniejszych<br/>
-              wnioskach z załączonego w przypisie źródła. <br/>
-              Np. "Zgodnie z raportem ONZ ta informacja<br/>
-              jest nieprawdziwa, ponieważ...". <br/>
-              Możesz nie wpisywać treści, jeśli np. tylko <br/>
-              podlinkowujesz źródło, w którym można doczytać <br/>
-              więcej na dany temat.
-            </Popup>
+            className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
+            hideOnScroll={true}
+            trigger={<div className={styles.label}>Treść przypisu</div>}
+            flowing={true}
+            hoverable={true}
+            position="left center"
+          >
+            Treść powinna krótko informować o najważniejszych<br/>
+            wnioskach z załączonego w przypisie źródła. <br/>
+            Np. "Zgodnie z raportem ONZ ta informacja<br/>
+            jest nieprawdziwa, ponieważ...". <br/>
+            Możesz nie wpisywać treści, jeśli np. tylko <br/>
+            podlinkowujesz źródło, w którym można doczytać <br/>
+            więcej na dany temat.
+          </Popup>
           <div className={classNames(styles.editorInput)}>
             <div className={classNames(styles.commentTextareaWrapper)}>
               <textarea
@@ -353,17 +355,17 @@ class Editor extends React.Component<Partial<IEditorProps>,
             </div>
           </div>
           <Popup
-              className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
-              hideOnScroll={true}
-              trigger={ <div className={styles.label}>Link do źródła</div>}
-              flowing={true}
-              hoverable={true}
-              position="left center"
-            >
-              Każdy przypis musi mieć swoje źródło. Pozwala ono <br/>
-              innym czytelnikom zweryfikować informację, której <br/>
-              dotyczy przypis i doczytać więcej na dany temat.
-            </Popup>
+            className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
+            hideOnScroll={true}
+            trigger={<div className={styles.label}>Link do źródła</div>}
+            flowing={true}
+            hoverable={true}
+            position="left center"
+          >
+            Każdy przypis musi mieć swoje źródło. Pozwala ono <br/>
+            innym czytelnikom zweryfikować informację, której <br/>
+            dotyczy przypis i doczytać więcej na dany temat.
+          </Popup>
           <div className={classNames(styles.editorInput, styles.annotationLink)}>
             <input
               type="text"
@@ -382,18 +384,18 @@ class Editor extends React.Component<Partial<IEditorProps>,
           </div>
 
           <Popup
-              className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
-              hideOnScroll={true}
-              trigger={
-                <div className={styles.label}>
-                  Tytuł źródła
-                </div>
-              }
-              flowing={true}
-              hoverable={true}
-              position="left center"
-            >
-              Co znajduje się pod linkiem? Artykuł? <br/> Raport? O czym?
+            className={classNames(PPScopeClass, styles.tooltip, 'small-padding')}
+            hideOnScroll={true}
+            trigger={
+              <div className={styles.label}>
+                Tytuł źródła
+              </div>
+            }
+            flowing={true}
+            hoverable={true}
+            position="left center"
+          >
+            Co znajduje się pod linkiem? Artykuł? <br/> Raport? O czym?
           </Popup>
           <div className={classNames(styles.editorInput, styles.annotationLinkTitle)}>
             <input

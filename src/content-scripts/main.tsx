@@ -1,4 +1,4 @@
-import * as sentry from '../common/sentry';
+import * as sentry from 'common/sentry';
 
 sentry.init();
 
@@ -26,6 +26,15 @@ import annotationEventHandlers from './handlers/annotation-event-handlers';
 import appComponent from './modules/app-component';
 import { configureAPIRequests } from './init-API';
 import { annotationLocationNotifier } from './modules';
+import { initializeTabId } from 'common/tab-id';
+import store from './store';
+import { updateTabInfo } from 'common/store/tabs/tab/tabInfo/actions';
+import { TAB_INIT, tabInit } from 'common/store/tabs/actions';
+import { ScriptType, setScriptType } from 'common/meta';
+import { waitUntilPageAndStoreReady } from '../common/utils/init';
+
+// set script type for future introspection
+setScriptType(ScriptType.contentScript);
 
 moment.locale('pl');
 
@@ -48,9 +57,18 @@ console.log('Przypis script working!');
  * we commit changes to browser storage and recalculate state.appMode on storage change.
  */
 
-const isBrowser = typeof window !== 'undefined';
-if (isBrowser) {
-  window.addEventListener('load', () => {
+
+Promise.all([
+  waitUntilPageAndStoreReady(store),
+  initializeTabId(),
+]).then(() => {
+  console.debug('Store hydrated from background page.');
+  // initialize tab state in the store
+  return store.dispatch(tabInit());
+})
+  .then(() => store.dispatch(updateTabInfo({ currentUrl: window.location.href })))
+  .then(() => {
+
     /*
      * Modules hooked to asynchronous events
      */
@@ -77,5 +95,3 @@ if (isBrowser) {
     data.loadFromChromeStorage()
       .then(data.loadFromAPI);
   });
-}
-
