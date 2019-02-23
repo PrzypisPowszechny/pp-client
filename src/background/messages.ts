@@ -36,12 +36,11 @@ export function returnCurrentTabId(request, sender, sendResponse) {
   if (request.action === 'GET_TAB_ID') {
     if (sender.tab) {
       // content script
-      console.debug('content script');
       return sendResponse(sender.tab.id);
     } else {
       // popup
-      console.debug('popup');
-      // the current tab id may not have been initialized before this message; request it
+      // there is an edge case (not very easy to find out) when the tab is just becoming active with the popup icon click
+      // in such cases current tab id will not have been set before receiving this message; request it asynchronously
       initCurrentTabId().then(sendResponse);
     }
     return true;

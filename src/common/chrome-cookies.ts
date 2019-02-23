@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/browser';
 import Cookie = chrome.cookies.Cookie;
 
-export function getChromeCookie(url, name): Promise<Cookie> {
+export function getChromeCookie(url: string, name: string): Promise<Cookie> {
   return new Promise<Cookie>((resolve, reject) => {
       chrome.cookies.get(
         { url, name },

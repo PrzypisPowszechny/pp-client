@@ -20,6 +20,7 @@ import ppGa from 'common/pp-ga';
 import { initCurrentTabId } from './tab';
 
 import { configureAxios } from '../common/axios';
+import { getChromeCookie } from '../common/chrome-cookies';
 
 function onContextMenuAnnotate() {
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
@@ -62,20 +63,7 @@ function ppGaOnInstalled(details: InstalledDetails) {
   }
 }
 
-function getCookie(name: string): Promise<string | null> {
-  return new Promise(resolve => chrome.cookies.get({
-    url: PPSettings.API_URL,
-    name,
-  }, (cookie: chrome.cookies.Cookie) => {
-    if (cookie) {
-      resolve(cookie.value);
-    } else {
-      resolve(null);
-    }
-  }));
-}
-
-configureAxios(getCookie);
+configureAxios(name => getChromeCookie(PPSettings.API_URL, name).then(cookie => cookie.value));
 
 /*
  * Basic extension settings
