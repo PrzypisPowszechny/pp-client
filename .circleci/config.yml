@@ -28,13 +28,12 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-
-          - v2-node-8-dependencies-{{ checksum "package-lock.json" }}
-      - run: npm install
+          - v2-node-8-dependencies-{{ checksum "package-lock.json" }}-and-{{ checksum "package.json" }}
+      - run: test -e node_modules || npm ci
       - save_cache:
           paths:
             - node_modules
-          key: v2-node-8-dependencies-{{ checksum "package-lock.json" }}
+          key: v2-node-8-dependencies-{{ checksum "package-lock.json" }}-and-{{ checksum "package.json" }}
 
   test:
     executor: node-browsers-local-api
@@ -42,7 +41,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v2-node-8-dependencies-{{ checksum "package-lock.json" }}
+            - v2-node-8-dependencies-{{ checksum "package-lock.json" }}-and-{{ checksum "package.json" }}
       - run: npm run test
 
   e2e-build:
@@ -51,7 +50,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v2-node-8-dependencies-{{ checksum "package-lock.json" }}
+            - v2-node-8-dependencies-{{ checksum "package-lock.json" }}-and-{{ checksum "package.json" }}
       - run: npm run build
       - run: npm run e2e
 
@@ -61,7 +60,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v2-node-8-dependencies-{{ checksum "package-lock.json" }}
+            - v2-node-8-dependencies-{{ checksum "package-lock.json" }}-and-{{ checksum "package.json" }}
       - run: npm run build-optimized
       - run: npm run e2e
 
@@ -71,7 +70,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v2-node-8-dependencies-{{ checksum "package-lock.json" }}
+            - v2-node-8-dependencies-{{ checksum "package-lock.json" }}-and-{{ checksum "package.json" }}
       - run: npm run build-package
       - run:
           name: add version number to the package
