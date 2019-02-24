@@ -94,7 +94,7 @@
     "build-client": "webpack --mode development --config config/client/prod.config.js",
     "start-client": "webpack-dev-server --mode development --config config/client/dev.config.js",
     "start": "node loadExtensionToChromiumServer.js & webpack --mode development --config config/browser-extension/ext.dev.config.js --watch",
-    "build": "npm install && webpack --mode development --config config/browser-extension/ext.dev.config.js",
+    "build": "webpack --mode development --config config/browser-extension/ext.dev.config.js",
     "build-optimized": "webpack --mode production --config config/browser-extension/ext.prod.config.js",
     "build-package": "npm run build-optimized && npm run pack",
     "release": "rm -rf node_modules && npm install && PP_API=pp PP_DEV=false npm run build-optimized && npm run pack",
