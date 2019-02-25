@@ -1,14 +1,16 @@
 import * as utils from './utils';
 import * as chromeKeys from '../chrome-storage/keys';
 
-jest.mock('common/chrome-storage',
-  () => (
-    { get: (keys, callback) => callback({ [chromeKeys.IAMSTAFF]: iamstaffValue }) }
-  ),
-);
+// @ts-ignore
+global.chrome = {
+  storage: {
+    local: {
+      get: (keys, callback) => callback({ [chromeKeys.IAMSTAFF]: iamstaffValue }),
+    },
+  },
+};
 
 let iamstaffValue;
-
 /*
  This more a demo of dealing with storage rather than a real test, although it does some simply checks
  */
