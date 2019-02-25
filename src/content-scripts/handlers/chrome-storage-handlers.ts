@@ -2,7 +2,6 @@ import * as chromeKeys from 'common/chrome-storage/keys';
 import { changeAppModes } from 'common/store/tabs/tab/appModes/actions';
 import store from '../store';
 import { AppModes } from 'common/store/tabs/tab/appModes/types';
-import chromeStorage from 'common/chrome-storage';
 import { selectModeForCurrentPage } from 'common/store/tabs/tab/appModes/selectors';
 import selector from './annotation-event-handlers';
 
@@ -22,7 +21,7 @@ const storageKeysToAppMode = {
 };
 
 function init() {
-  chromeStorage.onChanged.addListener((changes, namespace) => {
+  chrome.storage.onChanged.addListener((changes, namespace) => {
     for (const key of Object.keys(changes)) {
       const storeKey = storageKeysToAppMode[key];
       switch (storeKey) {

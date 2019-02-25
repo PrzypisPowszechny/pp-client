@@ -1,5 +1,4 @@
 import { annotationPPCategoriesLabels } from 'common/api/annotations';
-import chromeStorage from '../chrome-storage';
 import * as chromeKeys from '../chrome-storage/keys';
 import { getChromeCookie } from '../chrome-cookies';
 
@@ -16,12 +15,12 @@ export function formatReason(reason) {
 }
 
 export function setIamstaff(val) {
-  chromeStorage.set({ [chromeKeys.IAMSTAFF]: Boolean(val) });
+  chrome.storage.local.set({ [chromeKeys.IAMSTAFF]: Boolean(val) });
 }
 
 export function getIamstaff(): Promise<boolean> {
   return new Promise<boolean>((resolve, reject) => {
-    chromeStorage.get([chromeKeys.IAMSTAFF], result => resolve(result[chromeKeys.IAMSTAFF]));
+    chrome.storage.local.get([chromeKeys.IAMSTAFF], result => resolve(result[chromeKeys.IAMSTAFF]));
   });
 }
 
