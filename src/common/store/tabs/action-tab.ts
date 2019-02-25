@@ -3,7 +3,7 @@
  */
 
 import { getScriptType, ScriptType } from 'common/meta/script-type';
-import { getCurrentActiveTabId } from '../../../background/tab';
+import { getActiveTabId } from '../../../background/tab';
 
 /*
  * Retrieve tab id for an primary action (transported from a different browser extension part or not)
@@ -25,7 +25,7 @@ export function retrievePrimaryActionTab(action) {
     // popup is always related to the currently active tab (it disappears when it loses focus)
     // so the tab id can be correctly associated with the id of the currently active tab
     // Hopefully activeTab permission always allows to retrieve it: https://developer.chrome.com/extensions/activeTab
-    return getCurrentActiveTabId();
+    return getActiveTabId();
   }
 
   // It must be from content script

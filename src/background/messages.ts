@@ -1,6 +1,6 @@
 // Message handlers
 
-import { initCurrentTabId } from './tab';
+import { initTrackActiveTabId } from './tab';
 import * as Sentry from '@sentry/browser';
 
 export function returnExtensionCookie(request, sender, sendResponse) {
@@ -45,7 +45,7 @@ export function returnCurrentTabId(request, sender, sendResponse) {
       // popup
       // there is an edge case (not very easy to find out) when the tab is just becoming active with the popup icon click
       // in such cases current tab id will not have been set before receiving this message; request it asynchronously
-      initCurrentTabId().then(tabId => sendResponse({ value: tabId }));
+      initTrackActiveTabId().then(tabId => sendResponse({ value: tabId }));
     }
     return true;
   }

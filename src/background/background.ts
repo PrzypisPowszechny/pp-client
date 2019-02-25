@@ -17,7 +17,7 @@ import InstalledDetails = chrome.runtime.InstalledDetails;
 import { returnExtensionCookie, returnCurrentTabId, setBadge } from './messages';
 import * as ppGaBg from 'common/pp-ga/bg';
 import ppGa from 'common/pp-ga';
-import { initCurrentTabId } from './tab';
+import { initTrackActiveTabId } from './tab';
 
 import { configureAxios } from '../common/axios';
 import { getChromeCookie } from '../common/chrome-cookies';
@@ -86,7 +86,7 @@ chrome.runtime.onMessage.addListener(returnCurrentTabId);
 /*
  * Init current tab id tracking
  */
-initCurrentTabId();
+initTrackActiveTabId();
 
 /*
  * Google analytics
