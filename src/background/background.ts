@@ -21,6 +21,8 @@ import { initCurrentTabId } from './tab';
 
 import { configureAxios } from '../common/axios';
 import { getChromeCookie } from '../common/chrome-cookies';
+import store from '../content-scripts/store/store';
+import { setAxiosConfig } from 'redux-json-api';
 
 function onContextMenuAnnotate() {
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
@@ -63,7 +65,16 @@ function ppGaOnInstalled(details: InstalledDetails) {
   }
 }
 
+/*
+ * API settings
+ */
+// settings for all HTTP requests
 configureAxios(name => getChromeCookie(PPSettings.API_URL, name).then(cookie => cookie.value));
+// settings for redux-json-api
+store.dispatch(setAxiosConfig({
+  baseURL: PPSettings.API_URL,
+  withCredentials: true,
+}));
 
 /*
  * Basic extension settings
