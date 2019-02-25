@@ -1,4 +1,5 @@
 import React from 'react';
+import { FacebookLoginButton, GoogleLoginButton } from 'react-social-login-buttons';
 
 export default class Login extends React.Component<{}, {}> {
   constructor(props) {
@@ -88,9 +89,9 @@ export default class Login extends React.Component<{}, {}> {
   render() {
     return (
       <div>
-        <button onClick={this.googleAuthorize}>Google log in (as web app)</button>
-        <button onClick={this.googleChromeAuthorize}>Google log in (as chrome app)</button>
-        <button onClick={this.fbAuthorize}>Facebook log in (as web app)</button>
+        <GoogleLoginButton onClick={this.googleAuthorize}>Google log in (as web app)</GoogleLoginButton>
+        <GoogleLoginButton onClick={this.googleChromeAuthorize}>Google log in (as chrome app)</GoogleLoginButton>
+        <FacebookLoginButton onClick={this.fbAuthorize}>Facebook log in (as web app)</FacebookLoginButton>
       </div>
     )
   }
