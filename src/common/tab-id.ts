@@ -1,21 +1,24 @@
 /*
  * Module that synchronously returns content script's / popup's tab id
  */
+
+import { checkResponse } from './messages/utils';
+
 let tabId;
 
 function initializeTabId() {
   if (tabId !== undefined) {
     return Promise.resolve(tabId);
   }
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     chrome.runtime.sendMessage({
       action: 'GET_TAB_ID',
     }, (response) => {
-      if (!response) {
-        throw Error('Tab id not retrieved');
+      let error;
+      [tabId, error] = checkResponse(response, 'initializeTabId');
+      if (error) {
+        reject(error);
       }
-      tabId = response;
-      console.log('Retrieved tab Id', tabId);
       resolve(tabId);
     });
   });

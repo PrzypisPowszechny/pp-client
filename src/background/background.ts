@@ -1,7 +1,7 @@
 // NOTE: This page is also used for hot reloading in webpack-chrome-extension-reloader
 // (so it must be present at least in development)
 
-import * as sentry from '../common/sentry';
+import * as sentry from 'common/sentry';
 
 sentry.init();
 
@@ -76,13 +76,12 @@ chrome.runtime.onInstalled.addListener(contextMenuOnInstalled);
  */
 chrome.runtime.onMessage.addListener(setBadge);
 chrome.runtime.onMessage.addListener(returnExtensionCookie);
+chrome.runtime.onMessage.addListener(returnCurrentTabId);
 
 /*
  * Init current tab id tracking
  */
-
 initCurrentTabId();
-chrome.runtime.onMessage.addListener(returnCurrentTabId);
 
 /*
  * Google analytics
