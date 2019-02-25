@@ -26,7 +26,7 @@ export function getExtensionCookie(name: string): Promise<string | null> {
     chrome.runtime.sendMessage({ action: 'GET_COOKIE', name }, (response) => {
       let cookie;
       let error;
-      [cookie, error] = checkResponse(response, 'initializeTabId');
+      [cookie, error] = checkResponse(response, 'getExtensionCookie');
       if (error) {
         reject(error);
       }

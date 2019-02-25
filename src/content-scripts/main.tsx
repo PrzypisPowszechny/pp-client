@@ -33,6 +33,7 @@ import { ScriptType, setScriptType } from 'common/meta';
 import { waitUntilPageAndStoreReady } from '../common/utils/init';
 import { configureAxios } from '../common/axios';
 import { getExtensionCookie } from '../common/messages';
+import { setAxiosConfig } from 'redux-json-api';
 
 // set script type for future introspection
 setScriptType(ScriptType.contentScript);
@@ -88,6 +89,11 @@ Promise.all([
     highlightManager.init();
 
     configureAxios(getExtensionCookie);
+    // tab-specific settings for redux-json-api
+    store.dispatch(setAxiosConfig({
+      baseURL: PPSettings.API_URL,
+      withCredentials: true,
+    }));
 
     // Optimization: load data from storage first, so annotations are not drawn before we know current application modes
     // (disabled extension mode and disabled page mode will erase them)

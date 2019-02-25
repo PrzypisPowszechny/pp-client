@@ -2,7 +2,6 @@
 
 import { initCurrentTabId } from './tab';
 import * as Sentry from '@sentry/browser';
-import tabId = chrome.devtools.inspectedWindow.tabId;
 
 export function returnExtensionCookie(request, sender, sendResponse) {
   if (request.action === 'GET_COOKIE') {
