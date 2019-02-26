@@ -6,6 +6,7 @@ import { createLogger } from 'redux-logger';
 import { wrapStore, alias } from 'webext-redux';
 import deepDiff from 'webext-redux/lib/strategies/deepDiff/diff';
 import actionAliases from 'common/store/action-aliases';
+import StorageSync from '../storage-sync';
 
 const middlewares = [thunk, promise];
 
@@ -27,5 +28,7 @@ wrapStore(store, {
   portName: 'PP',
   diffStrategy: deepDiff,
 });
+
+new StorageSync(store, chrome.storage.local).init();
 
 export default store;

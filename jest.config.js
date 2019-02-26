@@ -31,4 +31,7 @@ module.exports = {
       "tsConfig": "tsconfig.test.json"
     }
   },
+  "setupFiles": [
+    "jest-webextension-mock",
+  ]
 }
