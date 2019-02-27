@@ -19,6 +19,7 @@ import * as Sentry from '@sentry/browser';
 
 import { selectAnnotationLocationForBrowserStorage } from 'common/store/tabs/tab/annotations/selectors';
 import { selectTab } from 'common/store/tabs/selectors';
+import { selectIsStorageInitialized, selectUser } from '../../common/store/storage/selectors';
 
 let instance;
 
@@ -59,9 +60,13 @@ function sendLocationEvent(located: boolean, annotation: AnnotationAPIModel) {
 function annotationLocator() {
   const annotations: AnnotationAPIModel[] = selectAnnotations(store.getState());
   const annotationIds: string[] = annotations.map(annotation => annotation.id);
+  const user = selectUser(store.getState());
+  const isStorageInitialized = selectIsStorageInitialized(store.getState());
   const hasLoaded: boolean = selectTab(store.getState()).annotations.hasLoaded;
   // if annotation items have changed, locate them within the DOM
-  if (!_isEqual(annotationIds, instance.annotationIds) || hasLoaded !== instance.hasLoaded) {
+  if (isStorageInitialized && user &&
+    (!_isEqual(annotationIds, instance.annotationIds) || hasLoaded !== instance.hasLoaded)
+  ) {
     const annotationLocations: LocatedAnnotation[] = [];
     const unlocatedAnnotations: AnnotationAPIModel[] = [];
     for (const annotation of annotations) {

@@ -10,9 +10,15 @@ import AnnotationRequestForm from './AnnotationRequestForm/AnnotationRequestForm
 import SideWidget from './elements/SideWidget/SideWidget';
 import Toast from './elements/Toast/Toast';
 import { selectTab } from 'common/store/tabs/selectors';
+import { selectIsStorageInitialized, selectUser } from '../../common/store/storage/selectors';
+import annotationLocator from '../modules/annotation-locator';
+import { annotationLocationNotifier } from '../modules';
+import highlightManager from '../modules/highlight-manager';
 
 interface AppProps {
-  editor: any;
+  isStorageInitialized: boolean;
+  user: any;
+  editorVisible: boolean;
   menuVisible: boolean;
   annotationModeWidgetVisible: boolean;
   requestModeWidgetVisible: boolean;
@@ -23,7 +29,9 @@ interface AppProps {
   (state) => {
     const tab = selectTab(state);
     return {
-      editor: tab.widgets.editor,
+      isStorageInitialized: selectIsStorageInitialized(state),
+      user: selectUser(state),
+      editorVisible: tab.widgets.editor.visible,
       menuVisible: tab.widgets.menu.visible,
       notificationVisible: tab.widgets.notification.visible,
       annotationModeWidgetVisible: selectModeForCurrentPage(state).isAnnotationMode,
@@ -37,19 +45,29 @@ export default class App extends React.Component<Partial<AppProps>, {}> {
     super(props);
   }
 
-  // always updates...:
-  // <Editor key={JSON.stringify(this.props.editor.range) + JSON.stringify(this.props.editor.annotationId)}/>
+  componentDidMount() {
+    // Locating annotations in DOM
+    annotationLocator.init();
+    // Saving the annotation location information to DOM for reads in selenium + in console
+    annotationLocationNotifier.init();
+    // Rendering annotations in DOM
+    highlightManager.init();
+  }
+
   render() {
-    return (
-      <div>
-        {this.props.editor.visible && <Editor/>}
-        {this.props.menuVisible && <Menu/>}
-        {this.props.annotationModeWidgetVisible && <AnnotationModeWidget/>}
-        {this.props.requestModeWidgetVisible &&
-        <SideWidget><AnnotationRequestForm/></SideWidget>}
-        {this.props.notificationVisible && <Toast/>}
-        <ViewerManager/>
-      </div>
-    );
+    if (this.props.isStorageInitialized && this.props.user) {
+      return (
+        <div>
+          {this.props.editorVisible && <Editor/>}
+          {this.props.menuVisible && <Menu/>}
+          {this.props.annotationModeWidgetVisible && <AnnotationModeWidget/>}
+          {this.props.requestModeWidgetVisible && <SideWidget><AnnotationRequestForm/></SideWidget>}
+          {this.props.notificationVisible && <Toast/>}
+          <ViewerManager/>
+        </div>
+      );
+    } else {
+      return null;
+    }
   }
 }
