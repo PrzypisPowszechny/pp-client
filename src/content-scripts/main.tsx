@@ -2,6 +2,9 @@ import * as sentry from 'common/sentry';
 
 sentry.init();
 
+// Set script type by importing (so ALL other imports are executed afterwards)
+import './meta';
+
 import React from 'react';
 import { Provider } from 'react-redux';
 
@@ -32,6 +35,7 @@ import { updateTabInfo } from 'common/store/tabs/tab/tabInfo/actions';
 import { TAB_INIT, tabInit } from 'common/store/tabs/actions';
 import { ScriptType, setScriptType } from 'common/meta';
 import { waitUntilPageAndStoreReady } from '../common/utils/init';
+import { selectStorage, selectUser } from '../common/store/storage/selectors';
 
 // set script type for future introspection
 setScriptType(ScriptType.contentScript);
@@ -56,7 +60,6 @@ console.log('Przypis script working!');
  * Browser storage is the source of truth for Redux store; we do not change state.appModes directly;
  * we commit changes to browser storage and recalculate state.appMode on storage change.
  */
-
 
 Promise.all([
   waitUntilPageAndStoreReady(store),
@@ -90,8 +93,12 @@ Promise.all([
     // API settings
     configureAPIRequests();
 
-    // Optimization: load data from storage first, so annotations are not drawn before we know current application modes
-    // (disabled extension mode and disabled page mode will erase them)
-    data.loadFromChromeStorage()
-      .then(data.loadFromAPI);
+    // temporary fix: todo update on storage changes
+    const user = selectUser(store.getState());
+    if (user) {
+      // Optimization: load data from storage first, so annotations are not drawn before we know current application modes
+      // (disabled extension mode and disabled page mode will erase them)
+      data.loadFromChromeStorage()
+        .then(data.loadFromAPI);
+    }
   });

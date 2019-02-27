@@ -21,6 +21,8 @@ import { initCurrentTabId } from './tab';
 
 import { configureAxios } from '../common/axios';
 import { getChromeCookie } from '../common/chrome-cookies';
+import store from './store/store';
+import { selectAccessToken, selectStorage } from '../common/store/storage/selectors';
 
 function onContextMenuAnnotate() {
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
@@ -63,7 +65,10 @@ function ppGaOnInstalled(details: InstalledDetails) {
   }
 }
 
-configureAxios(name => getChromeCookie(PPSettings.API_URL, name).then(cookie => cookie.value));
+configureAxios(
+  name => getChromeCookie(PPSettings.API_URL, name).then(cookie => cookie.value),
+  () => selectAccessToken(store.getState()),
+);
 
 /*
  * Basic extension settings

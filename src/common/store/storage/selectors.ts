@@ -10,6 +10,7 @@ export const selectStorage = (state) => {
 }
 
 export const selectUser = (state) => {
+  // "collect" user data from login data
   if (!selectIsStorageInitialized(state)) {
     return null;
   }
@@ -24,4 +25,12 @@ export const selectUser = (state) => {
       userId,
     };
   }
+}
+
+export const selectAccessToken = (state) => {
+  const storage = selectStorage(state);
+  if (storage && storage.auth) {
+    return storage.auth.access || null;
+  }
+  return null;
 }

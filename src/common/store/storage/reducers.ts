@@ -12,16 +12,11 @@ export interface IStorageState {
   auth: IAuthState;
 }
 
-const initialState = {
-  loggedIn: false,
-}
-
 export function auth(state = {}, action) {
   switch (action.type) {
     case SET_AUTH_CREDENTIALS:
       const loggedIn = action.payload.userId !== undefined;
       return {
-        loggedIn,
         ...action.payload,
       };
     default:
