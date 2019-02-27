@@ -10,3 +10,10 @@ export function userLoggedIn(auth: IAuthState) {
     },
   };
 }
+
+export function userLoggedOut() {
+  return {
+    type: SET_AUTH_CREDENTIALS,
+    payload: {},
+  };
+}
