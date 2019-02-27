@@ -1,10 +1,38 @@
 import { Store } from 'redux';
-import { REDUX_STORAGE } from '../common/chrome-storage/keys';
+import { REDUX_STORAGE } from 'common/chrome-storage/keys';
 import _ from 'lodash';
 
 export const HYDRATE_FROM_CHROME_STORAGE = 'HYDRATE_FROM_CHROME_STORAGE';
+export const SET_STATE_HYDRATED = 'SET_STATE_HYDRATED';
 
 export default class StorageSync {
+  static getReducer(originalReducer: (state, action) => any) {
+    const initialState = {
+      isHydrated: false,
+      value: originalReducer(undefined, {}),
+    };
+
+    return (state: any = initialState, action) => {
+      switch (action.type) {
+        case SET_STATE_HYDRATED:
+          return {
+            isHydrated: true,
+            value: state.value,
+          };
+        case HYDRATE_FROM_CHROME_STORAGE:
+          return {
+            isHydrated: true,
+            value: action.payload,
+          };
+        default:
+          return {
+            isHydrated: state.isHydrated || false,
+            value: originalReducer(state.value, action),
+          };
+      }
+    };
+  }
+
   protected static defaultKey: string = REDUX_STORAGE;
 
   protected key: string;
@@ -14,18 +42,8 @@ export default class StorageSync {
 
   protected lastState: any;
 
+  protected isHydrating: boolean;
   protected unsubscribe: () => void;
-
-  static getReducer(reducer: (state, action) => any) {
-    return (state, action) => {
-      switch (action.type) {
-        case HYDRATE_FROM_CHROME_STORAGE:
-          return { ...action.payload };
-        default:
-          return reducer(state, action);
-      }
-    };
-  }
 
   constructor(
     store: Store<any>,
@@ -37,16 +55,41 @@ export default class StorageSync {
     this.selectStorage = selectStorage;
     this.key = StorageSync.defaultKey;
     this.lastState = store.getState().storage;
+    this.isHydrating = false;
   }
 
-  init() {
-    this.unsubscribe = this.store.subscribe(() => {
-      const storageState = this.selectStorage(this.store.getState());
-      if (!_.isEqual(this.lastState, storageState)) {
-        this.lastState = storageState;
-        this.storage.set({ [this.key]: storageState });
+  async init() {
+    this.unsubscribe = this.store.subscribe(this.onStoreChange);
+    return this.hydrateFromStorage();
+  }
+
+  async hydrateFromStorage() {
+    const items = await new Promise(resolve => this.storage.get([this.key], resolve));
+    const state = items[this.key];
+    this.isHydrating = true;
+    try {
+      // await in case dispatch returns promise as in webext-redux
+      if (state !== undefined) {
+        await this.store.dispatch({ type: HYDRATE_FROM_CHROME_STORAGE, payload: state });
+      } else {
+        await this.store.dispatch({ type: SET_STATE_HYDRATED });
       }
-    });
+    } catch (e) {
+      throw new Error(`Error hydrating store from chrome storage: ${e.toString()}`);
+    } finally {
+      this.isHydrating = false;
+    }
+    const newState = this.selectStorage(this.store.getState()).value;
+    this.lastState = newState;
+    return newState;
+  }
+
+  onStoreChange = () => {
+    const storageState = this.selectStorage(this.store.getState()).value;
+    if (!_.isEqual(this.lastState, storageState) && !this.isHydrating) {
+      this.lastState = storageState;
+      this.storage.set({ [this.key]: storageState });
+    }
   }
 
   destroy() {

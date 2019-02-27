@@ -29,6 +29,10 @@ wrapStore(store, {
   diffStrategy: deepDiff,
 });
 
-new StorageSync(store, chrome.storage.local).init();
+new StorageSync(
+  store,
+    state => state.storage,
+  chrome.storage.local,
+).init();
 
 export default store;
