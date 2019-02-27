@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { SET_AUTH_CREDENTIALS } from './actions';
+import StorageSync from 'background/storage-sync';
 
 export interface IAuthState {
   userId: string;
@@ -28,6 +29,8 @@ export function auth(state = {}, action) {
   }
 }
 
-export default combineReducers<IStorageState>({
+export const storageReducer = combineReducers<IStorageState>({
   auth,
 });
+
+export default StorageSync.getReducer(storageReducer);

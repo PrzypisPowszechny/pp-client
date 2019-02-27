@@ -1,7 +1,20 @@
 import React from 'react';
 import { FacebookLoginButton, GoogleLoginButton } from 'react-social-login-buttons';
+import { connect } from 'react-redux';
+import { userLoggedIn } from '../../common/store/storage/actions';
+import axios from 'axios';
 
-export default class Login extends React.Component<{}, {}> {
+export interface LoginProps {
+  userLoggedIn: (userData) => void;
+}
+
+@connect(
+  state => ({}),
+  {
+    userLoggedIn,
+  },
+)
+export default class Login extends React.Component<Partial<LoginProps>, {}> {
 
   static parseQuery(queryString): any {
     const query = {};
@@ -24,16 +37,28 @@ export default class Login extends React.Component<{}, {}> {
 
     // This is not real queryString, in OAuth is is queryString passed in hash fragment
     const queryString = redirectUrl.substr(redirectUrl.indexOf('#') + 1);
-    const data = Login.parseQuery(queryString);
+    return Login.parseQuery(queryString);
+  }
 
-    const ppAuthParams = {
-      expiresIn: data.expires_in,
-      access_token: data.access_token,
-      tokenType: data.token_type,
+  logIn(authResponse, provider) {
+    const authParams = this.getAuthData(authResponse);
+    const data = {
+      // fb uses camelcase while google underscores
+      accessToken: authParams.accessToken || authParams.access_token,
+      expiresIn: authParams.expiresIn || authParams.expires_in,
+      tokenType: authParams.tokenType || authParams.token_type,
     };
-    console.log(ppAuthParams);
 
-    // TODO: pass ppAuthParams to /api/auth/{provider}/ endpoint and receive PP access token for PP frontend app
+    axios({
+      method: 'post',
+      url: `${PPSettings.API_URL}/auth/${provider}/`,
+      data: { data },
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+      },
+    }).then((resp) => {
+      this.props.userLoggedIn(resp.data.data);
+    });
   }
 
   googleAuthorize = () => {
@@ -49,7 +74,7 @@ export default class Login extends React.Component<{}, {}> {
     return chrome.identity.launchWebAuthFlow({
       interactive: true,
       url: authURL,
-    }, this.getAuthData);
+    }, data => this.logIn(data, 'google'));
   }
 
   fbAuthorize = () => {
@@ -66,7 +91,7 @@ export default class Login extends React.Component<{}, {}> {
     return chrome.identity.launchWebAuthFlow({
       interactive: true,
       url: authURL,
-    }, getAuthData);
+    }, data => this.logIn(data, 'facebook'));
   }
 
   render() {

@@ -17,7 +17,6 @@ export interface IBrowserPopupNavigatorProps {
   user: any;
 }
 
-
 interface IBrowserPopupNavigatorState {
   page: PopupPages;
 }
@@ -49,7 +48,7 @@ export default class BrowserPopupNavigator extends React.Component<Partial<IBrow
       isStorageInitialized,
       user,
     } = this.props;
-    if (!isTabInitialized || isStorageInitialized) {
+    if (!isTabInitialized || !isStorageInitialized) {
       return (<div/>);
     }
     // todo refactor divs
