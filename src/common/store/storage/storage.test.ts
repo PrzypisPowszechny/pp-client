@@ -2,19 +2,7 @@ import * as chromeKeys from 'common/chrome-storage/keys';
 import { userLoggedIn } from './actions';
 import StorageSync from 'background/storage-sync';
 import { combineReducers, createStore } from 'redux';
-import storage from './reducers';
 
-const credentials = {
-  userId: 'dummy',
-  access: 'dummy',
-  refresh: 'dummy',
-};
-
-const reducer = combineReducers({
-  storage,
-});
-
-let store;
 /*
  *
  */
@@ -25,33 +13,52 @@ describe('storage reducer sync', () => {
     chrome.storage.local.set.mockClear();
   });
 
-  it('dispatch on store calls storage', async () => {
-    const initialState = {
-      storage: {},
+  it('storage sync reducer works like the original reducer', async () => {
+    const originalReducer = (state = {}, action) => {
+      return { ...state, ...action.payload };
     };
-    store = createStore(
-      reducer,
-      initialState,
+    const reducer = StorageSync.getReducer(originalReducer);
+    const changeAction = { type: 'CHANGE_STORE_ACTION', payload: 'dummy' };
+    expect(originalReducer(undefined, changeAction)).toEqual(reducer(undefined, changeAction));
+    expect(originalReducer({}, changeAction)).toEqual(reducer({}, changeAction));
+  });
+
+  it('dispatch on store calls storage', async () => {
+    const originalReducer = (state, action) => {
+      return { ...state, ...action };
+    };
+    const rootReducer = combineReducers({
+      storage: StorageSync.getReducer(originalReducer),
+    });
+    const store = createStore(
+      rootReducer,
     );
-    new StorageSync(store, chrome.storage.local).init();
-    store.dispatch(userLoggedIn(credentials));
+    new StorageSync(store, state => state.storage, chrome.storage.local).init();
+
+    const changeAction = { type: 'CHANGE_STORE_ACTION', payload: 'dummy' };
+    store.dispatch(changeAction);
 
     expect(chrome.storage.local.set).toHaveBeenCalledWith({
-      [chromeKeys.REDUX_STORAGE]: { auth: credentials },
+      [chromeKeys.REDUX_STORAGE]: changeAction,
     });
   });
 
   it('dispatch only calls storage on change', async () => {
-    const initialState = {
-      storage: { auth: credentials },
+    const originalReducer = (state, action) => {
+      return { ...state, ...action };
     };
-    store = createStore(
-      reducer,
-      initialState,
+    const rootReducer = combineReducers({
+      storage: StorageSync.getReducer(originalReducer),
+    });
+    const store = createStore(
+      rootReducer,
     );
-    new StorageSync(store, chrome.storage.local).init();
-    store.dispatch(userLoggedIn(credentials));
+    new StorageSync(store, state => state.storage, chrome.storage.local).init();
 
-    expect(chrome.storage.local.set).toHaveBeenCalledTimes(0);
+    const changeAction = { type: 'CHANGE_STORE_ACTION', payload: 'dummy' };
+    store.dispatch(changeAction);
+    store.dispatch(changeAction);
+
+    expect(chrome.storage.local.set).toHaveBeenCalledTimes(1);
   });
 });
