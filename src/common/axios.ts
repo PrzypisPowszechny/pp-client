@@ -13,7 +13,10 @@ export function configureAxios(
    */
   axios.interceptors.request.use(config =>
     new Promise((resolve, reject) => {
-      config.headers['Authorization'] = `JWT ${getAccessToken()}`;
+      const access = getAccessToken();
+      if (access) {
+        config.headers['Authorization'] = `JWT ${access}`;
+      }
       if (['options', 'get', 'head'].indexOf(config.method) === -1) {
         return getExtensionCookie('csrftoken').then((csrfToken) => {
           if (!csrfToken) {
