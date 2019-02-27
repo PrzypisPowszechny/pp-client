@@ -29,10 +29,17 @@ wrapStore(store, {
   diffStrategy: deepDiff,
 });
 
-new StorageSync(
+const storageSync = new StorageSync(
   store,
-    state => state.storage,
+  state => state.storage,
   chrome.storage.local,
-).init();
+);
+
+storageSync.init()
+  .then(() =>
+    wrapStore(store, {
+      portName: 'PP',
+      diffStrategy: deepDiff,
+    }));
 
 export default store;
