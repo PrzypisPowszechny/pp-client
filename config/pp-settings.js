@@ -89,8 +89,8 @@ function getGaId(env, mode) {
 }
 
 
-CHROME_OAUTH_CLIENT_ID_PROD = '823340157121-9lgqhscdek0meu7ahg9qd4keqjupej3c.apps.googleusercontent.com';
-CHROME_OAUTH_CLIENT_ID_DEV = '823340157121-5l2aioh9vumn8hik3oi28sajc0uj0kfh.apps.googleusercontent.com';
+const CHROME_OAUTH_CLIENT_ID_PROD = '823340157121-9lgqhscdek0meu7ahg9qd4keqjupej3c.apps.googleusercontent.com';
+const CHROME_OAUTH_CLIENT_ID_DEV = '823340157121-5l2aioh9vumn8hik3oi28sajc0uj0kfh.apps.googleusercontent.com';
 
 function getChromeOauthClientId(env, mode) {
   const dev = getDev(env, mode);
