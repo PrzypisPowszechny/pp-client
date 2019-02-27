@@ -45,15 +45,6 @@ export default class App extends React.Component<Partial<AppProps>, {}> {
     super(props);
   }
 
-  componentDidMount() {
-    // Locating annotations in DOM
-    annotationLocator.init();
-    // Saving the annotation location information to DOM for reads in selenium + in console
-    annotationLocationNotifier.init();
-    // Rendering annotations in DOM
-    highlightManager.init();
-  }
-
   render() {
     if (this.props.isStorageInitialized && this.props.user) {
       return (
