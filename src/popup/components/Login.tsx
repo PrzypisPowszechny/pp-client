@@ -3,6 +3,7 @@ import { FacebookLoginButton, GoogleLoginButton } from 'react-social-login-butto
 import { connect } from 'react-redux';
 import { userLoggedIn } from '../../common/store/storage/actions';
 import axios from 'axios';
+import { EMULATE_ON_PP_AUTH_RESPONSE } from '../../../e2e/events';
 
 export interface LoginProps {
   userLoggedIn: (userData) => void;
@@ -28,6 +29,19 @@ export default class Login extends React.Component<Partial<LoginProps>, {}> {
 
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    document.addEventListener(EMULATE_ON_PP_AUTH_RESPONSE, this.onPPAuthResponse);
+  }
+
+  onPPAuthResponse = (e: CustomEvent) => {
+    const response = e.detail;
+    this.saveLoginState(response);
+  }
+
+  saveLoginState = (response) => {
+    this.props.userLoggedIn(response.data);
   }
 
   getAuthData = (redirectUrl) => {
@@ -56,9 +70,7 @@ export default class Login extends React.Component<Partial<LoginProps>, {}> {
       headers: {
         'Content-Type': 'application/vnd.api+json',
       },
-    }).then((resp) => {
-      this.props.userLoggedIn(resp.data.data);
-    });
+    }).then(resp => this.saveLoginState(resp.data));
   }
 
   googleAuthorize = () => {

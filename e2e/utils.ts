@@ -13,3 +13,11 @@ export async function waitUntil(condition: () => boolean, timeout = 2000, interv
       }, interval);
   });
 }
+
+export async function dispatchDOMEvent(browser, name: string, attrs: any = {}) {
+  return browser.executeScript(`
+      var event = new CustomEvent('${name}', { detail: ${JSON.stringify(attrs)} });
+      console.log(event);
+      document.dispatchEvent(event);
+    `);
+}

@@ -6,6 +6,7 @@ import http from 'http';
 import { By } from 'selenium-webdriver';
 import { buildBrowser } from './browser';
 import * as e2ePPSettings from './settings';
+import { simulateLogIn } from './common';
 
 describe('extension runs normally', () => {
   let browser;
@@ -30,6 +31,7 @@ describe('extension runs normally', () => {
   });
 
   test('fetches annotations on page open', async () => {
+    await simulateLogIn(browser);
     await browser.get(`${e2ePPSettings.SITE_URL}/some-text/`);
 
     let areAnnotationsFetched = false;
