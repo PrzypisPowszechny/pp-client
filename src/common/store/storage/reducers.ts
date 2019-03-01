@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { SET_AUTH_CREDENTIALS } from './actions';
+import { REFRESH_AUTH_CREDENTIALS, SET_AUTH_CREDENTIALS } from './actions';
 import StorageSync from 'background/storage-sync';
 
 export interface IAuthState {
@@ -12,11 +12,15 @@ export interface IStorageState {
   auth: IAuthState;
 }
 
-export function auth(state = {}, action) {
+export function auth(state: Partial<IAuthState> = {}, action) {
   switch (action.type) {
     case SET_AUTH_CREDENTIALS:
-      const loggedIn = action.payload.userId !== undefined;
       return {
+        ...action.payload,
+      };
+    case REFRESH_AUTH_CREDENTIALS:
+      return {
+        userId: state.userId,
         ...action.payload,
       };
     default:

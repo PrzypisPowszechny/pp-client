@@ -6,4 +6,5 @@ export default interface IPPSettings {
   GA_ID: string;
   SENTRY_DSN: string;
   DEV_SENTRY_UNLOCATED_IGNORE: boolean;
+  ACCESS_REFRESH_INTERVAL: number;
 }

@@ -24,22 +24,19 @@ const store: Store<IState> = createStore(
   applyMiddleware(alias(aliases), ...middlewares),
 );
 
-wrapStore(store, {
-  portName: 'PP',
-  diffStrategy: deepDiff,
-});
-
 const storageSync = new StorageSync(
   store,
   state => state.storage,
   chrome.storage.local,
 );
 
-storageSync.init()
-  .then(() =>
-    wrapStore(store, {
-      portName: 'PP',
-      diffStrategy: deepDiff,
-    }));
+export function initStore() {
+  return storageSync.init()
+    .then(() =>
+      wrapStore(store, {
+        portName: 'PP',
+        diffStrategy: deepDiff,
+      }));
+}
 
 export default store;
