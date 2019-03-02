@@ -41,7 +41,7 @@ export default class Login extends React.Component<Partial<LoginProps>, {}> {
   }
 
   saveLoginState = (response) => {
-    this.props.userLoggedIn(response.data);
+    const prom = this.props.userLoggedIn(response.data);
   }
 
   getAuthData = (redirectUrl) => {
@@ -109,8 +109,10 @@ export default class Login extends React.Component<Partial<LoginProps>, {}> {
   render() {
     return (
       <div>
-        <GoogleLoginButton onClick={this.googleAuthorize}>Zaloguj się przez Google</GoogleLoginButton>
-        <FacebookLoginButton onClick={this.fbAuthorize}>Zaloguj się przez Facebooka</FacebookLoginButton>
+        <GoogleLoginButton className="google-login-button" onClick={this.googleAuthorize}>Zaloguj się przez
+          Google</GoogleLoginButton>
+        <FacebookLoginButton className="fb-login-button" onClick={this.fbAuthorize}>Zaloguj się przez
+          Facebooka</FacebookLoginButton>
       </div>
     );
   }

@@ -221,80 +221,83 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     }
 
     return (
+      // todo move top container to outer component
       <div className="pp-popup">
-        <ul className="menu">
-          <div className="menu-top">
-            <div className="menu-logo"/>
-            <a href={`${PPSettings.SITE_URL}/about/`} target="_blank">
-              <Icon className="icon" icon={ic_home} size={20}/>
-            </a>
-          </div>
-          <AnnotationSummary onFullViewClick={this.handleFullAnnotationViewClick}/>
-          <li
-            className={classNames('menu-item', 'clickable', 'primary',
-              { disabled: isExtensionDisabled || isCurrentPageDisabled },
-              { active: isAnnotationMode })}
-            onClick={this.handleAnnotationModeClick}
-          >
-            <Icon className="icon" icon={ic_add_circle} size={25}/>
-            {isAnnotationMode ?
-              <span>Dodajesz przypis </span>
-              : <span>Dodaj przypis</span>
-            }
-            <p className="caption">
-              Dodaj przypis, aby podzielić się wartościową informacją ze społecznością *PP
-            </p>
-          </li>
-          <li
-            className={classNames('menu-item', 'clickable',
-              { disabled: isExtensionDisabled || isCurrentPageDisabled },
-              { active: isRequestMode })}
-            onClick={this.handleAnnotationRequestClick}
-          >
-            <Icon className="icon" icon={ic_live_help} size={25}/>
-            {isRequestMode ?
-              <span>Zgłaszasz prośbę o przypis </span>
-              : <span>Poproś o przypis</span>
-            }
-            <p className="caption">Możesz poprosić o sprawdzenie wybranego fragmentu artykułu.
-              Twoje zgłoszenie zostanie przekazane do redaktorów Demagoga.
-            </p>
-          </li>
-          <hr className="menu-separator"/>
-          <li className="menu-item">
-            <Icon className="icon" icon={ic_block} size={25}/>
-            <span>Wyłącz przypisy</span>
-          </li>
-          <li className="menu-subitem">
-            <span className={classNames({ negativeActive: isCurrentPageDisabled })}>na tej stronie</span>
-            <Toggle
-              checked={isCurrentPageDisabled}
-              onChange={this.handleDisabledPageChange}
-            />
-          </li>
-          <li className="menu-subitem">
-            <span className={classNames({ negativeActive: isExtensionDisabled })}>wszędzie</span>
-            <Toggle
-              checked={isExtensionDisabled}
-              onChange={this.handleDisabledExtensionChange}
-            />
-          </li>
-          <hr className="menu-separator"/>
-          <div className="menu-bottom">
-            <p className="menu-header">Pomóż nam ulepszać Przypis Powszechny</p>
-            <p className="menu-text">Coś nie działa? Uważasz, że czegoś brakuje?</p>
-            <Button
-              // className="cta-Button"
-              iconBefore={<Icon icon={send} size={14}/>}
-              appearance="link"
-              onClick={this.handleReportButtonClick}
+        <div className="popup-content">
+          <ul className="menu">
+            <div className="menu-top">
+              <div className="menu-logo"/>
+              <a href={`${PPSettings.SITE_URL}/about/`} target="_blank">
+                <Icon className="icon" icon={ic_home} size={20}/>
+              </a>
+            </div>
+            <AnnotationSummary onFullViewClick={this.handleFullAnnotationViewClick}/>
+            <li
+              className={classNames('menu-item', 'clickable', 'primary',
+                { disabled: isExtensionDisabled || isCurrentPageDisabled },
+                { active: isAnnotationMode })}
+              onClick={this.handleAnnotationModeClick}
             >
-              Daj znać, co myślisz
-            </Button>
-          </div>
-        </ul>
-        {/* temporary location */}
-        <Logout/>
+              <Icon className="icon" icon={ic_add_circle} size={25}/>
+              {isAnnotationMode ?
+                <span>Dodajesz przypis </span>
+                : <span>Dodaj przypis</span>
+              }
+              <p className="caption">
+                Dodaj przypis, aby podzielić się wartościową informacją ze społecznością *PP
+              </p>
+            </li>
+            <li
+              className={classNames('menu-item', 'clickable',
+                { disabled: isExtensionDisabled || isCurrentPageDisabled },
+                { active: isRequestMode })}
+              onClick={this.handleAnnotationRequestClick}
+            >
+              <Icon className="icon" icon={ic_live_help} size={25}/>
+              {isRequestMode ?
+                <span>Zgłaszasz prośbę o przypis </span>
+                : <span>Poproś o przypis</span>
+              }
+              <p className="caption">Możesz poprosić o sprawdzenie wybranego fragmentu artykułu.
+                Twoje zgłoszenie zostanie przekazane do redaktorów Demagoga.
+              </p>
+            </li>
+            <hr className="menu-separator"/>
+            <li className="menu-item">
+              <Icon className="icon" icon={ic_block} size={25}/>
+              <span>Wyłącz przypisy</span>
+            </li>
+            <li className="menu-subitem">
+              <span className={classNames({ negativeActive: isCurrentPageDisabled })}>na tej stronie</span>
+              <Toggle
+                checked={isCurrentPageDisabled}
+                onChange={this.handleDisabledPageChange}
+              />
+            </li>
+            <li className="menu-subitem">
+              <span className={classNames({ negativeActive: isExtensionDisabled })}>wszędzie</span>
+              <Toggle
+                checked={isExtensionDisabled}
+                onChange={this.handleDisabledExtensionChange}
+              />
+            </li>
+            <hr className="menu-separator"/>
+            <div className="menu-bottom">
+              <p className="menu-header">Pomóż nam ulepszać Przypis Powszechny</p>
+              <p className="menu-text">Coś nie działa? Uważasz, że czegoś brakuje?</p>
+              <Button
+                // className="cta-Button"
+                iconBefore={<Icon icon={send} size={14}/>}
+                appearance="link"
+                onClick={this.handleReportButtonClick}
+              >
+                Daj znać, co myślisz
+              </Button>
+            </div>
+          </ul>
+          {/* temporary location */}
+          <Logout/>
+        </div>
       </div>
     )
       ;

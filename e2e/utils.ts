@@ -17,7 +17,7 @@ export async function waitUntil(condition: () => boolean, timeout = 2000, interv
 export async function dispatchDOMEvent(browser, name: string, data: any = {}) {
   return browser.executeScript(`
       var event = new CustomEvent('${name}', { detail: ${JSON.stringify(data)} });
-      console.log(event);
+      console.log('event dispatched by selenium:', event);
       document.dispatchEvent(event);
     `);
 }

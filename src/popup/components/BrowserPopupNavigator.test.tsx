@@ -17,7 +17,7 @@ const middlewares = [];
 const mockStore = configureStore(middlewares);
 
 describe('BrowserPopupNavigator component', () => {
-  
+
   it('does not crash when storage and tab not initialized', () => {
     const initialState = {
       tabs: {},
