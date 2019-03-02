@@ -8,7 +8,7 @@ export interface IState {
   tabs: {
     [tabId: number]: ITabState,
   };
-  runtime: IRuntimeState;
+  // runtime: IRuntimeState;
   storage: IStorageState;
 }
 
