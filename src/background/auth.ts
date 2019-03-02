@@ -10,7 +10,6 @@ export function refreshToken() {
   if (!auth) {
     return;
   }
-  console.log(auth);
   const data = {
     refresh: auth.refresh,
   };

@@ -25,7 +25,6 @@ describe('extension runs normally', () => {
   beforeAll(async () => {
     browser = await buildBrowser();
     await new Promise(res => apiServer = http.createServer(apiApp).listen(e2ePPSettings.API_PORT, res));
-
   });
 
   test('loads background page', async () => {

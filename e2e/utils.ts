@@ -14,9 +14,9 @@ export async function waitUntil(condition: () => boolean, timeout = 2000, interv
   });
 }
 
-export async function dispatchDOMEvent(browser, name: string, attrs: any = {}) {
+export async function dispatchDOMEvent(browser, name: string, data: any = {}) {
   return browser.executeScript(`
-      var event = new CustomEvent('${name}', { detail: ${JSON.stringify(attrs)} });
+      var event = new CustomEvent('${name}', { detail: ${JSON.stringify(data)} });
       console.log(event);
       document.dispatchEvent(event);
     `);

@@ -11,9 +11,6 @@ import SideWidget from './elements/SideWidget/SideWidget';
 import Toast from './elements/Toast/Toast';
 import { selectTab } from 'common/store/tabs/selectors';
 import { selectIsStorageInitialized, selectUser } from '../../common/store/storage/selectors';
-import annotationLocator from '../modules/annotation-locator';
-import { annotationLocationNotifier } from '../modules';
-import highlightManager from '../modules/highlight-manager';
 
 interface AppProps {
   isStorageInitialized: boolean;

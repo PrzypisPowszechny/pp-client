@@ -7,9 +7,9 @@ export async function simulateLogIn(browser) {
   await browser.get(`chrome-extension://${packageConf.pp.devAppID}/popup.html`);
   return dispatchDOMEvent(browser, EMULATE_ON_PP_AUTH_RESPONSE, {
     data: {
-      access: 'qwerty',
+      access: 'access-token',
       userId: 'e2e.test@user.com',
-      expires: 1234,
+      refresh: 'refresh-token',
     },
   });
 }
