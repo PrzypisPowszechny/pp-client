@@ -2,7 +2,7 @@ import store from './store';
 import axios from 'axios';
 import { refreshAccessToken } from '../common/store/storage/actions';
 import { selectStorage } from '../common/store/storage/selectors';
-import axiosRetry, { isNetworkError } from 'axios-retry';
+import axiosRetry, { isRetryableError } from 'axios-retry';
 import interval from 'interval-promise';
 
 export function refreshToken() {
@@ -15,9 +15,10 @@ export function refreshToken() {
   };
   const client = axios.create();
   axiosRetry(client, {
-    retryDelay: retryCount => retryCount * 1000,
-    retries: 10,
-    retryCondition: e => true,
+    retryDelay: retryCount => retryCount * 2000,
+    retries: 5,
+    // overwrite default axiosRetry retry condition to "no response or status code in <500, 599>"
+    retryCondition: isRetryableError,
   });
   return client({
     method: 'post',
