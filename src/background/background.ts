@@ -23,7 +23,7 @@ import { configureAxios } from '../common/axios';
 import { getChromeCookie } from '../common/chrome-cookies';
 import store, { initStore } from './store/store';
 import { selectAccessToken, selectStorage } from '../common/store/storage/selectors';
-import { refreshToken, setRefreshTokenInterval } from './auth';
+import { refreshToken, refreshTokenRoutine } from './auth';
 
 function onContextMenuAnnotate() {
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
@@ -65,9 +65,9 @@ function ppGaOnInstalled(details: InstalledDetails) {
   }
 }
 
+// start refreshing tokens no sooner than the store has been initialized from browser storage
 initStore()
-  .then(refreshToken)
-  .then(setRefreshTokenInterval);
+  .then(refreshTokenRoutine);
 
 configureAxios(
   name => getChromeCookie(PPSettings.API_URL, name).then(cookie => cookie.value),

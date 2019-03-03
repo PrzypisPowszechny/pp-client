@@ -4,7 +4,9 @@ import { refreshAccessToken } from '../common/store/storage/actions';
 import { selectStorage } from '../common/store/storage/selectors';
 import axiosRetry, { isRetryableError } from 'axios-retry';
 import interval from 'interval-promise';
+import * as Sentry from '@sentry/browser';
 
+// TODO turn into observable; fot now it seems complicated...
 export function refreshToken() {
   const { auth } = selectStorage(store.getState());
   if (!auth) {
@@ -29,6 +31,9 @@ export function refreshToken() {
     },
   })
     .then((resp) => {
+      if (!resp || !resp.data || !resp.data.data) {
+        throw new Error(`Error refreshing access token: bad response`);
+      }
       const { access, refresh } = resp.data.data;
       return store.dispatch(refreshAccessToken({
         access,
@@ -36,11 +41,12 @@ export function refreshToken() {
       }));
     })
     .catch((err) => {
-      // catch it so set interval keeps trying
-      // todo sentry or what?
+      Sentry.captureException(new Error(`Error refreshing token: ${err.toString()}`));
     });
 }
 
-export function setRefreshTokenInterval() {
-  interval(refreshToken, PPSettings.ACCESS_REFRESH_INTERVAL);
+export function refreshTokenRoutine() {
+  refreshToken().finally(() =>
+    interval(refreshToken, PPSettings.ACCESS_REFRESH_INTERVAL, { stopOnError: false }),
+  );
 }
