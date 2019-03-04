@@ -4,7 +4,7 @@ import AnnotationList from './annotationList/AnnotationList';
 import { selectIsTabInitialized } from '../../common/store/tabs/selectors';
 import { connect } from 'react-redux';
 import { selectIsStorageInitialized, selectUser } from '../../common/store/storage/selectors';
-import Login from './Login';
+import LoginForm from './LoginForm';
 
 export enum PopupPages {
   main,
@@ -48,14 +48,14 @@ export default class BrowserPopupNavigator extends React.Component<Partial<IBrow
       isStorageInitialized,
       user,
     } = this.props;
+    // todo refactor divs when current PRs are merged
     if (!isTabInitialized || !isStorageInitialized) {
       return (<div/>);
     }
-    // todo refactor divs
     if (!user) {
       return (
         <div>
-          <Login/>
+          <LoginForm/>
         </div>
       );
     }

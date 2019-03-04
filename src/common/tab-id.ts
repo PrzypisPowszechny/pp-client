@@ -15,7 +15,7 @@ function initializeTabId() {
         throw Error('Tab id not retrieved');
       }
       tabId = response;
-      console.log('Retrieved tab Id', tabId);
+      console.debug('Retrieved tab Id', tabId);
       resolve(tabId);
     });
   });

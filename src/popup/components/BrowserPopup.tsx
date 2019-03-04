@@ -18,7 +18,7 @@ import ppGa from 'common/pp-ga/index';
 import AnnotationSummary from './annotationSummary/AnnotationSummary';
 import { PopupPages } from './BrowserPopupNavigator';
 import '../css/popup.scss';
-import Logout from './Logout';
+import LogoutPanel from './LogoutPanel';
 
 export interface IBrowserPopupProps {
   onAnnotationRequestSelect: () => void;
@@ -296,7 +296,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
             </div>
           </ul>
           {/* temporary location */}
-          <Logout/>
+          <LogoutPanel/>
         </div>
       </div>
     )

@@ -17,7 +17,7 @@ interface LogoutProps {
     userLoggedOut,
   },
 )
-export default class Logout extends React.Component<Partial<LogoutProps>, {}> {
+export default class LogoutPanel extends React.Component<Partial<LogoutProps>, {}> {
 
   constructor(props: LogoutProps) {
     super(props);

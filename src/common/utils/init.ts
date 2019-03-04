@@ -8,11 +8,7 @@ export const waitUntilFirstStoreUpdate = store => new Promise((resolve) => {
   });
 });
 
-export const waitUntilPageLoaded = () => new Promise((resolve) => {
-  window.addEventListener('load', () => {
-    resolve();
-  });
-});
+export const waitUntilPageLoaded = () => new Promise(resolve => window.addEventListener('load', resolve));
 
 export function waitUntilPageAndStoreReady(store) {
   return Promise.all([
