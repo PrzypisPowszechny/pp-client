@@ -72,7 +72,6 @@ export default class LoginForm extends React.Component<Partial<LoginFormProps>, 
     this.setState({ error: 'W trakcie logowania wystąpił błąd' });
   }
 
-
   ppAuthenticate(authResponse, provider) {
     let authParams;
     try {

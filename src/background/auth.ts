@@ -6,10 +6,10 @@ import axiosRetry, { isRetryableError } from 'axios-retry';
 import interval from 'interval-promise';
 import * as Sentry from '@sentry/browser';
 
-// TODO turn into observable; fot now it seems complicated...
+// TODO turn into observable; for now it seems complicated...
 export function refreshToken() {
   const { auth } = selectStorage(store.getState());
-  if (!auth) {
+  if (!auth.access) {
     return;
   }
   const data = {
