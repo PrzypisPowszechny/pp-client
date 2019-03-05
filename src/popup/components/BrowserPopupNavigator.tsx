@@ -41,7 +41,7 @@ export default class BrowserPopupNavigator extends React.Component<Partial<IBrow
       isTabInitialized,
     } = this.props;
     if (!isTabInitialized) {
-      return (<div/>);
+      return (<div className="pp-popup"/>);
     }
 
     switch (this.state.page) {

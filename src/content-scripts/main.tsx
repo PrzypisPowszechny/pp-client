@@ -24,7 +24,6 @@ import highlightManager from './modules/highlight-manager';
 import annotationLocator from './modules/annotation-locator';
 import annotationEventHandlers from './handlers/annotation-event-handlers';
 import appComponent from './modules/app-component';
-import { configureAPIRequests } from './init-API';
 import { annotationLocationNotifier } from './modules';
 import { initializeTabId } from 'common/tab-id';
 import store from './store';
@@ -32,6 +31,9 @@ import { updateTabInfo } from 'common/store/tabs/tab/tabInfo/actions';
 import { TAB_INIT, tabInit } from 'common/store/tabs/actions';
 import { ScriptType, setScriptType } from 'common/meta';
 import { waitUntilPageAndStoreReady } from '../common/utils/init';
+import { configureAxios } from '../common/axios';
+import { getExtensionCookie } from '../common/messages';
+import { setAxiosConfig } from 'redux-json-api';
 
 // set script type for future introspection
 setScriptType(ScriptType.contentScript);
@@ -56,7 +58,6 @@ console.log('Przypis script working!');
  * Browser storage is the source of truth for Redux store; we do not change state.appModes directly;
  * we commit changes to browser storage and recalculate state.appMode on storage change.
  */
-
 
 Promise.all([
   waitUntilPageAndStoreReady(store),
@@ -87,8 +88,12 @@ Promise.all([
     // Rendering annotations in DOM
     highlightManager.init();
 
-    // API settings
-    configureAPIRequests();
+    configureAxios(getExtensionCookie);
+    // tab-specific settings for redux-json-api
+    store.dispatch(setAxiosConfig({
+      baseURL: PPSettings.API_URL,
+      withCredentials: true,
+    }));
 
     // Optimization: load data from storage first, so annotations are not drawn before we know current application modes
     // (disabled extension mode and disabled page mode will erase them)

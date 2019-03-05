@@ -1,7 +1,7 @@
 // NOTE: This page is also used for hot reloading in webpack-chrome-extension-reloader
 // (so it must be present at least in development)
 
-import * as sentry from '../common/sentry';
+import * as sentry from 'common/sentry';
 
 sentry.init();
 
@@ -17,10 +17,11 @@ import InstalledDetails = chrome.runtime.InstalledDetails;
 import { returnExtensionCookie, returnCurrentTabId, setBadge } from './messages';
 import * as ppGaBg from 'common/pp-ga/bg';
 import ppGa from 'common/pp-ga';
-import { initCurrentTabId } from './tab';
+import { initTrackActiveTabId } from './tab';
 
 import { configureAxios } from '../common/axios';
 import { getChromeCookie } from '../common/chrome-cookies';
+import store from '../content-scripts/store/store';
 
 function onContextMenuAnnotate() {
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
@@ -63,6 +64,10 @@ function ppGaOnInstalled(details: InstalledDetails) {
   }
 }
 
+/*
+ * API settings
+ */
+// settings for all HTTP requests
 configureAxios(name => getChromeCookie(PPSettings.API_URL, name).then(cookie => cookie.value));
 
 /*
@@ -76,13 +81,12 @@ chrome.runtime.onInstalled.addListener(contextMenuOnInstalled);
  */
 chrome.runtime.onMessage.addListener(setBadge);
 chrome.runtime.onMessage.addListener(returnExtensionCookie);
+chrome.runtime.onMessage.addListener(returnCurrentTabId);
 
 /*
  * Init current tab id tracking
  */
-
-initCurrentTabId();
-chrome.runtime.onMessage.addListener(returnCurrentTabId);
+initTrackActiveTabId();
 
 /*
  * Google analytics

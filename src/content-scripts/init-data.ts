@@ -1,7 +1,6 @@
 import * as chromeKeys from 'common/chrome-storage/keys';
 import { changeAppModes } from 'common/store/tabs/tab/appModes/actions';
 import store from './store';
-import chromeStorage from 'common/chrome-storage';
 import * as endpoints from 'common/api/endpoints';
 import { selectTab } from '../common/store/tabs/selectors';
 import { readEndpointWithCustomOptions } from '../common/store/tabs/tab/api/actions';
@@ -17,7 +16,7 @@ export function loadFromAPI() {
 
 export function loadFromChromeStorage() {
   return new Promise((resolve, reject) => {
-    chromeStorage.get([
+    chrome.storage.local.get([
       chromeKeys.ANNOTATION_MODE_PAGES,
       chromeKeys.REQUEST_MODE_PAGES,
       chromeKeys.DISABLED_EXTENSION,

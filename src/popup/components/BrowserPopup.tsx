@@ -10,7 +10,7 @@ import { send } from 'react-icons-kit/fa/send';
 import { standardizeUrlForPageSettings } from 'common/url';
 import Toggle from './toggle/Toggle';
 import Button from 'content-scripts/components/elements/Button/Button';
-import chromeStorage, { turnOnRequestMode } from 'common/chrome-storage';
+import { turnOnRequestMode } from 'common/chrome-storage';
 import * as chromeKeys from 'common/chrome-storage/keys';
 import _filter from 'lodash/filter';
 import classNames from 'classnames';
@@ -56,7 +56,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
      *   for more sources of data, resort to a local popup Redux store or a global background page Redux store
      */
     if (this.state.isLoading) {
-      chromeStorage.get([
+      chrome.storage.local.get([
         chromeKeys.ANNOTATION_MODE_PAGES,
         chromeKeys.REQUEST_MODE_PAGES,
         chromeKeys.DISABLED_EXTENSION,
@@ -134,7 +134,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
       }
 
       this.setState({ annotationModePages: newAnnotationModePages, requestModePages: newRequestModePages });
-      chromeStorage.set({
+      chrome.storage.local.set({
         [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages,
         [chromeKeys.REQUEST_MODE_PAGES]: newRequestModePages
       });
@@ -159,7 +159,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
   handleDisabledExtensionChange = (e: ChangeEvent<HTMLInputElement>) => {
     const isDisabledNewValue = e.target.checked;
     this.setState({ isExtensionDisabled: isDisabledNewValue });
-    chromeStorage.set({ [chromeKeys.DISABLED_EXTENSION]: isDisabledNewValue });
+    chrome.storage.local.set({ [chromeKeys.DISABLED_EXTENSION]: isDisabledNewValue });
     if (isDisabledNewValue) {
       ppGa.extensionDisabledOnAllSites({ location: this.state.currentStandardizedTabUrl });
     } else {
@@ -193,7 +193,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
       annotationModePages: newAnnotationModePages,
       requestModePages: newRequestnModePages,
     });
-    chromeStorage.set({
+    chrome.storage.local.set({
       [chromeKeys.DISABLED_PAGES]: newDisabledPages,
       [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages,
       [chromeKeys.REQUEST_MODE_PAGES]: newRequestnModePages,

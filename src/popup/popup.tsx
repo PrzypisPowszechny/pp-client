@@ -21,9 +21,9 @@ import BrowserPopupNavigator from './components/BrowserPopupNavigator';
 import { initializeTabId } from 'common/tab-id';
 import { tabPopupInit } from 'common/store/tabs/actions';
 import { ScriptType, setScriptType } from 'common/meta';
-import { getExtensionCookie } from '../common/messages';
-import { configureAxios } from '../common/axios';
-import { waitUntilFirstStoreUpdate, waitUntilPageLoaded } from '../common/utils/init';
+import { getExtensionCookie } from 'common/messages';
+import { configureAxios } from 'common/axios';
+import { waitUntilFirstStoreUpdate, waitUntilPageLoaded } from 'common/utils/init';
 
 // initialize id of the tab for which the popup is displayed
 initializeTabId();
