@@ -3,6 +3,8 @@ import BrowserPopup from './BrowserPopup';
 import AnnotationList from './annotationList/AnnotationList';
 import { selectIsTabInitialized } from '../../common/store/tabs/selectors';
 import { connect } from 'react-redux';
+import { selectIsStorageInitialized, selectUser } from '../../common/store/storage/selectors';
+import LoginForm from './LoginForm';
 
 export enum PopupPages {
   main,
@@ -11,6 +13,8 @@ export enum PopupPages {
 
 export interface IBrowserPopupNavigatorProps {
   isTabInitialized: boolean;
+  isStorageInitialized: boolean;
+  user: any;
 }
 
 interface IBrowserPopupNavigatorState {
@@ -20,6 +24,8 @@ interface IBrowserPopupNavigatorState {
 @connect(
   state => ({
     isTabInitialized: selectIsTabInitialized(state),
+    isStorageInitialized: selectIsStorageInitialized(state),
+    user: selectUser(state),
   }),
 )
 export default class BrowserPopupNavigator extends React.Component<Partial<IBrowserPopupNavigatorProps>,
@@ -39,9 +45,18 @@ export default class BrowserPopupNavigator extends React.Component<Partial<IBrow
   render() {
     const {
       isTabInitialized,
+      isStorageInitialized,
+      user,
     } = this.props;
-    if (!isTabInitialized) {
+    if (!isTabInitialized || !isStorageInitialized) {
       return (<div className="pp-popup"/>);
+    }
+    if (!user) {
+      return (
+        <div>
+          <LoginForm/>
+        </div>
+      );
     }
 
     switch (this.state.page) {

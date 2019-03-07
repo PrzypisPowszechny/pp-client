@@ -2,6 +2,9 @@ import * as sentry from 'common/sentry';
 
 sentry.init();
 
+// Set script type by importing (so ALL other imports are executed afterwards)
+import './meta';
+
 import React from 'react';
 import { Provider } from 'react-redux';
 
@@ -31,9 +34,10 @@ import { updateTabInfo } from 'common/store/tabs/tab/tabInfo/actions';
 import { TAB_INIT, tabInit } from 'common/store/tabs/actions';
 import { ScriptType, setScriptType } from 'common/meta';
 import { waitUntilPageAndStoreReady } from '../common/utils/init';
+import { selectStorage, selectUser } from '../common/store/storage/selectors';
 import { configureAxios } from '../common/axios';
 import { getExtensionCookie } from '../common/messages';
-import { setAxiosConfig } from 'redux-json-api';
+import { configureAPIRequests } from './init-API';
 
 // set script type for future introspection
 setScriptType(ScriptType.contentScript);
@@ -88,15 +92,15 @@ Promise.all([
     // Rendering annotations in DOM
     highlightManager.init();
 
-    configureAxios(getExtensionCookie);
-    // tab-specific settings for redux-json-api
-    store.dispatch(setAxiosConfig({
-      baseURL: PPSettings.API_URL,
-      withCredentials: true,
-    }));
+    // API settings
+    configureAPIRequests();
 
-    // Optimization: load data from storage first, so annotations are not drawn before we know current application modes
-    // (disabled extension mode and disabled page mode will erase them)
-    data.loadFromChromeStorage()
-      .then(data.loadFromAPI);
+    // temporary fix: todo update on storage changes
+    const user = selectUser(store.getState());
+    if (user) {
+      // Optimization: load data from storage first, so annotations are not drawn before we know current application modes
+      // (disabled extension mode and disabled page mode will erase them)
+      data.loadFromChromeStorage()
+        .then(data.loadFromAPI);
+    }
   });

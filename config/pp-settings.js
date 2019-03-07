@@ -14,8 +14,10 @@ exports.loadSettings = (environment, argv) => {
     API_URL: getApi(env, mode) + '/api',
     SITE_URL: getApi(env, mode) + '/site',
     GA_ID: getGaId(env, mode),
+    CHROME_OAUTH_CLIENT_ID: getChromeOauthClientId(env, mode),
     DEV_SENTRY_UNLOCATED_IGNORE: getDevSentryUnlocatedIgnore(env, mode),
     SENTRY_DSN: getSentryDSN(env, mode),
+    ACCESS_REFRESH_INTERVAL: 5 * 60 * 1000,
   };
 
   if (!settingsLogged) {
@@ -24,7 +26,6 @@ exports.loadSettings = (environment, argv) => {
   }
   return settings;
 }
-
 
 function fromEnv(env, key) {
   if (fromEnv._keys === undefined) {
@@ -86,6 +87,15 @@ const GA_ID_DEV = 'UA-123054125-2';
 function getGaId(env, mode) {
   const dev = getDev(env, mode);
   return dev ? GA_ID_DEV : GA_ID_PROD;
+}
+
+
+const CHROME_OAUTH_CLIENT_ID_PROD = '823340157121-9lgqhscdek0meu7ahg9qd4keqjupej3c.apps.googleusercontent.com';
+const CHROME_OAUTH_CLIENT_ID_DEV = '823340157121-5l2aioh9vumn8hik3oi28sajc0uj0kfh.apps.googleusercontent.com';
+
+function getChromeOauthClientId(env, mode) {
+  const dev = getDev(env, mode);
+  return dev ? CHROME_OAUTH_CLIENT_ID_DEV : CHROME_OAUTH_CLIENT_ID_PROD;
 }
 
 

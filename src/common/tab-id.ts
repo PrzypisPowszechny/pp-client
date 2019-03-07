@@ -19,6 +19,7 @@ function initializeTabId() {
       if (error) {
         reject(error);
       }
+      console.debug('Retrieved tab Id', tabId);
       resolve(tabId);
     });
   });

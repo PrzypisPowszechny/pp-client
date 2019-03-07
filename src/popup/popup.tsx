@@ -4,8 +4,8 @@ sentry.init();
 
 console.log('Przypis Powszechny popup script working!');
 
-// set script type for future introspection
-setScriptType(ScriptType.popup);
+// Set script type by importing (so ALL other imports are executed afterwards)
+import './meta';
 
 // import Semantic-ui packages
 import 'semantic-ui-css/semantic.min.css';
@@ -21,13 +21,17 @@ import BrowserPopupNavigator from './components/BrowserPopupNavigator';
 import { initializeTabId } from 'common/tab-id';
 import { tabPopupInit } from 'common/store/tabs/actions';
 import { ScriptType, setScriptType } from 'common/meta';
-import { getExtensionCookie } from 'common/messages';
-import { configureAxios } from 'common/axios';
-import { waitUntilFirstStoreUpdate, waitUntilPageLoaded } from 'common/utils/init';
+import { getExtensionCookie } from '../common/messages';
+import { configureAxios } from '../common/axios';
+import { waitUntilFirstStoreUpdate, waitUntilPageLoaded } from '../common/utils/init';
+import { selectAccessToken } from '../common/store/storage/selectors';
 
 // initialize id of the tab for which the popup is displayed
 initializeTabId();
-configureAxios(getExtensionCookie);
+configureAxios(
+  getExtensionCookie,
+  () => selectAccessToken(store.getState()),
+);
 
 Promise.all([
   waitUntilPageLoaded(),
@@ -43,7 +47,7 @@ Promise.all([
 
 waitUntilFirstStoreUpdate(store)
   .then(() => {
-  console.log('Store hydrated from background page.');
-  // initialize tab state in the store
-  return store.dispatch(tabPopupInit());
-})
+    console.log('Store hydrated from background page.');
+    // initialize tab state in the store
+    return store.dispatch(tabPopupInit());
+  })
