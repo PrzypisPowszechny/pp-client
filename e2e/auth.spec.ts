@@ -1,5 +1,5 @@
 // noinspection TsLint
-import { dispatchDOMEvent } from './utils';
+import { dispatchDOMEvent, waitUntil } from './utils';
 // noinspection TsLint
 const packageConf = require('../package');
 import express from 'express';
@@ -13,13 +13,18 @@ import { EMULATE_ON_CONTEXT_MENU_ANNOTATE } from './events';
 const PP_CSS_SCOPE_CLASS = 'pp-ui';
 const PP_CSS_EDITOR_CLASS_PREFIX = 'Editor__self';
 
-describe('extension runs normally', () => {
+let refreshTimesCalled;
+let refreshStatus;
+
+describe('access token', () => {
   let browser;
   let apiServer;
 
   const apiApp = express();
-  apiApp.get('/site/some-text/', (req, res) => {
-    res.send('<p>some text</p> here');
+  apiApp.post('/api/auth/refresh/', (req, res) => {
+    refreshTimesCalled += 1;
+    res.status(refreshStatus);
+    res.send();
   });
 
   beforeAll(async () => {
@@ -27,22 +32,22 @@ describe('extension runs normally', () => {
     await new Promise(res => apiServer = http.createServer(apiApp).listen(e2ePPSettings.API_PORT, res));
   });
 
-  test('loads background page', async () => {
+  test('calls token refresh on extension start', async () => {
+    refreshStatus = 200;
+    await simulateLogIn(browser);
     await browser.get(`chrome-extension://${packageConf.pp.devAppID}/_generated_background_page.html`);
-    await browser.findElement(By.tagName('script'));
+    refreshTimesCalled = 0;
+    await browser.navigate().refresh(); // reload the extension
+    expect(await waitUntil(() => refreshTimesCalled >= 1)).toBeTruthy();
   }, e2ePPSettings.TIMEOUT);
 
-  test('opens editor', async () => {
+  test('retries token refresh on extension start if failed with 503', async () => {
+    refreshStatus = 503;
     await simulateLogIn(browser);
-    await browser.get(`${e2ePPSettings.SITE_URL}/some-text/`);
-    const someText = await browser.findElement(By.tagName('p'));
-    await browser.actions().doubleClick(someText).perform();
-    // Use special hook to emmit and open editor on this event as context menu click is out of selenium's control...
-    await dispatchDOMEvent(browser, EMULATE_ON_CONTEXT_MENU_ANNOTATE);
-    await browser.findElement(By.css(`.${PP_CSS_SCOPE_CLASS}[class*="${PP_CSS_EDITOR_CLASS_PREFIX}"]`));
-
-    // Example of selecting all
-    // await browser.actions().keyDown(Key.CONTROL).sendKeys('a').keyUp(Key.CONTROL).perform();
+    await browser.get(`chrome-extension://${packageConf.pp.devAppID}/_generated_background_page.html`);
+    refreshTimesCalled = 0;
+    await browser.navigate().refresh(); // reload the extension
+    expect(await waitUntil(() => refreshTimesCalled >= 2, 5000)).toBeTruthy();
   }, e2ePPSettings.TIMEOUT);
 
   afterAll(async () => {

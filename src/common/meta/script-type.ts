@@ -2,6 +2,8 @@ enum ScriptType {
   background,
   contentScript,
   popup,
+
+  test,
 }
 
 let scriptType;
@@ -15,7 +17,6 @@ function getScriptType() {
 }
 
 function setScriptType(type: ScriptType) {
-  console.log(type);
   scriptType = type;
 }
 

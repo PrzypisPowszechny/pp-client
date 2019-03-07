@@ -26,6 +26,7 @@ import store from '../store';
 import { selectAnnotationLocationForBrowserStorage } from 'common/store/tabs/tab/annotations/selectors';
 import { PopupAnnotationLocationData } from '../../popup/messages';
 import { selectTab } from 'common/store/tabs/selectors';
+import { EMULATE_ON_CONTEXT_MENU_ANNOTATE, EMULATE_ON_CONTEXT_MENU_ANNOTATION_REQUEST } from '../../../e2e/events';
 
 let handlers;
 
@@ -55,8 +56,8 @@ function init() {
   chrome.runtime.onMessage.addListener(popupGetAnnotationMessageHandler);
 
   // This special hook for selenium e2e test to open editor as context menu click is out of selenium's control...
-  document.addEventListener('EMULATE_ON_CONTEXT_MENU_ANNOTATE', annotateCommand);
-  document.addEventListener('EMULATE_ON_CONTEXT_MENU_ANNOTATION_REQUEST', annotationRequestCommand);
+  document.addEventListener(EMULATE_ON_CONTEXT_MENU_ANNOTATE, annotateCommand);
+  document.addEventListener(EMULATE_ON_CONTEXT_MENU_ANNOTATION_REQUEST, annotationRequestCommand);
 }
 
 export function deinit() {

@@ -2,6 +2,7 @@ import store from 'content-scripts/store';
 import { selectAnnotation } from 'common/store/tabs/tab/api/selectors';
 import * as DOMNotifications from '../dom-notifications';
 import { selectTab } from 'common/store/tabs/selectors';
+import { selectIsStorageInitialized, selectUser } from '../../common/store/storage/selectors';
 
 let instance;
 
@@ -28,7 +29,9 @@ function deinit() {
 // save the annotation location information to DOM for reads in selenium + in console
 function markLocatedAnnotations() {
   const state = store.getState();
-  if (selectTab(state).annotations.hasLoaded) {
+  const user = selectUser(state);
+  const isStorageInitialized = selectIsStorageInitialized(state);
+  if (isStorageInitialized && user && selectTab(state).annotations.hasLoaded) {
     const located = selectTab(state).annotations.located.map(location =>
       selectAnnotation(store.getState(), location.annotationId),
     );

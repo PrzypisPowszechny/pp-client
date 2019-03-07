@@ -12,6 +12,7 @@ import { annotationRootNode } from '../settings';
 import { PopupAnnotationLocationData } from '../../popup/messages';
 import { selectAnnotationLocationForBrowserStorage } from 'common/store/tabs/tab/annotations/selectors';
 import { selectTab } from 'common/store/tabs/selectors';
+import { selectIsStorageInitialized, selectUser } from '../../common/store/storage/selectors';
 
 let instance;
 
@@ -40,23 +41,27 @@ function deinit() {
 }
 
 function drawHighlights() {
+  const user = selectUser(store.getState());
+  const isStorageInitialized = selectIsStorageInitialized(store.getState());
   const arePageHighlightsDisabled = selectModeForCurrentPage(store.getState()).arePageHighlightsDisabled;
   const locatedAnnotationsIds = selectTab(store.getState()).annotations.located.map(annotation => annotation.annotationId);
-  if (arePageHighlightsDisabled && !instance.arePageHighlightsDisabled) {
-    instance.highlighter.undrawAll();
-  } else if (!arePageHighlightsDisabled &&
-    (!_isEqual(locatedAnnotationsIds, instance.locatedAnnotationsIds)
-      || arePageHighlightsDisabled !== instance.arePageHighlightsDisabled
-    )
-  ) {
-    // located annotations have changed, so redraw them
-    instance.highlighter.drawAll(selectTab(store.getState()).annotations.located.map(({ annotationId, range }) => {
-      return {
-        id: annotationId,
-        range,
-        annotationData: selectAnnotation(store.getState(), annotationId),
-      };
-    }));
+  if (isStorageInitialized && user) {
+    if (arePageHighlightsDisabled && !instance.arePageHighlightsDisabled) {
+      instance.highlighter.undrawAll();
+    } else if (!arePageHighlightsDisabled &&
+      (!_isEqual(locatedAnnotationsIds, instance.locatedAnnotationsIds)
+        || arePageHighlightsDisabled !== instance.arePageHighlightsDisabled
+      )
+    ) {
+      // located annotations have changed, so redraw them
+      instance.highlighter.drawAll(selectTab(store.getState()).annotations.located.map(({ annotationId, range }) => {
+        return {
+          id: annotationId,
+          range,
+          annotationData: selectAnnotation(store.getState(), annotationId),
+        };
+      }));
+    }
   }
 
   instance.arePageHighlightsDisabled = arePageHighlightsDisabled;

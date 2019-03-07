@@ -4,8 +4,13 @@
  */
 
 let currentTabId;
+let listening;
 
 function initTrackActiveTabId() {
+  if (!listening) {
+    chrome.tabs.onActivated.addListener(setActiveTabId);
+    listening = true;
+  }
   return new Promise((resolve) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs[0]) {
@@ -18,8 +23,6 @@ function initTrackActiveTabId() {
     });
   });
 }
-
-chrome.tabs.onActivated.addListener(setActiveTabId);
 
 function setActiveTabId({ tabId, windowId }) {
   currentTabId = tabId;
