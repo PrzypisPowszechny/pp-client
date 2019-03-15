@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { userLoggedIn } from '../../common/store/storage/actions';
 import axios from 'axios';
 import { EMULATE_ON_PP_AUTH_RESPONSE } from '../../../e2e/events';
+import dashboardMessaging from 'background/dashboard-messaging';
 import {
   FacebookCredentials,
   GoogleCredentials,
@@ -64,8 +65,9 @@ export default class LoginForm extends React.Component<Partial<LoginFormProps>, 
     this.dispatchUserLoggedIn(e.detail);
   }
 
-  dispatchUserLoggedIn = (response: PPLoginResponseAPIModel) => {
-    this.props.userLoggedIn(response.data);
+  dispatchUserLoggedIn = async (response: PPLoginResponseAPIModel) => {
+    await this.props.userLoggedIn(response.data);
+    dashboardMessaging.sendLoginData();
   }
 
   setErrorMessage() {

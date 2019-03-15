@@ -50,3 +50,4 @@ export function returnCurrentTabId(request, sender, sendResponse) {
     return true;
   }
 }
+

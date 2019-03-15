@@ -21,6 +21,7 @@ export const selectUser = (state) => {
   if (!userId) {
     return null;
   } else {
+    // todo add user type
     return {
       userId,
     };
@@ -34,3 +35,9 @@ export const selectAccessToken = (state) => {
   }
   return null;
 }
+
+export const selectUserForDashboard = state => ({
+  // It should inclue all relevant user info
+  ...selectUser(state),
+  access: selectAccessToken(state),
+});

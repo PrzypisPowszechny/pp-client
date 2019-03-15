@@ -1,10 +1,11 @@
 import store from './store';
 import axios from 'axios';
 import { refreshAccessToken } from '../common/store/storage/actions';
-import { selectStorage } from '../common/store/storage/selectors';
+import { selectStorage, selectUserForDashboard } from '../common/store/storage/selectors';
 import axiosRetry, { isRetryableError } from 'axios-retry';
 import interval from 'interval-promise';
 import * as Sentry from '@sentry/browser';
+import Port = chrome.runtime.Port;
 
 // TODO turn into observable; for now it seems complicated...
 export function refreshToken() {
