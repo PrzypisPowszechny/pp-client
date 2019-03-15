@@ -1,3 +1,5 @@
+import { IAuthState } from './reducers';
+
 export const selectIsStorageInitialized = (state) => {
   return Boolean(state.storage && state.storage.isHydrated);
 }
@@ -36,8 +38,15 @@ export const selectAccessToken = (state) => {
   return null;
 }
 
-export const selectUserForDashboard = state => ({
-  // It should inclue all relevant user info
-  ...selectUser(state),
-  access: selectAccessToken(state),
-});
+export const selectUserForDashboard = (state) => {
+  const userData: Partial<IAuthState> = {
+    // It should inclue all relevant user info
+    ...selectUser(state),
+  };
+
+  const access = selectAccessToken(state);
+  if (access) {
+    userData.access = access;
+  }
+  return userData;
+};

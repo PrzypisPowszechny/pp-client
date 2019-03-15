@@ -2,19 +2,21 @@ import { selectUserForDashboard } from 'common/store/storage/selectors';
 import store from './store';
 import Port = chrome.runtime.Port;
 
+// A simplified implementation updating only the latest opened tab with dashboard
 class DashboardMessaging {
   dashboardPort: Port;
+  portName = 'DASHBOARD';
 
   init() {
-    chrome.runtime.onConnectExternal.addListener((port) => {
-      console.log('connext')
-      this.dashboardPort = port;
-      this.dashboardPort.onMessage.addListener(this.dashboardMessageHandler);
+    chrome.runtime.onConnectExternal.addListener((port: Port) => {
+      if (port.name === this.portName) {
+        this.dashboardPort = port;
+        this.dashboardPort.onMessage.addListener(this.dashboardMessageHandler);
+      }
     });
   }
 
   dashboardMessageHandler = (request, port) => {
-    console.log('sdf')
     if (request.action === 'GET_LOGIN_DATA') {
       this.sendLoginData();
     }
@@ -28,10 +30,16 @@ class DashboardMessaging {
   }
 
   sendLoginData() {
-    this.getPort().postMessage({
-      action: 'UPDATE_LOGIN_DATA',
-      payload: selectUserForDashboard(store.getState()),
-    });
+    if (this.dashboardPort) {
+      try {
+        this.dashboardPort.postMessage({
+          action: 'UPDATE_LOGIN_DATA',
+          payload: selectUserForDashboard(store.getState()),
+        });
+      } catch (err) {
+        // ignore disconnected dashboard tabs
+      }
+    }
   }
 }
 
