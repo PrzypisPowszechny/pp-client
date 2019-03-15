@@ -12,17 +12,6 @@ const base = (env, argv) => ({
   // chrome version can be composed of integers only, so strip alpha/beta/rc/etc part
   version: packageConf.version.split('-')[0],
   version_name: `${packageConf.version}`,
-
-  permissions: [
-    'storage',
-    'activeTab',
-    'contextMenus',
-    'cookies',
-    'identity',
-    // API URL must be included so we can read cookies for this host
-    loadSettings(env, argv).API_URL,
-    loadSettings(env, argv).SITE_URL,
-  ],
   content_security_policy: "script-src 'self' 'unsafe-eval' https://www.google-analytics.com; object-src 'self'",
   browser_action: {
     default_title: 'Przypis Powszechny - wersja testowa'
@@ -37,7 +26,26 @@ const base = (env, argv) => ({
     'node_modules/*',
     'fonts/*'
   ],
+  permissions: [
+    'storage',
+    'activeTab',
+    'contextMenus',
+    'cookies',
+    'identity',
+    // server URLs must be included so we can read cookies for these hosts
+    loadSettings(env, argv).API_URL,
+    loadSettings(env, argv).SITE_URL,
+  ],
 });
+
+const externallyConnectable = ['*://*.przypispowszechny.pl/*'];
+if (loadSettings(env, argv).DEV)  {
+  externallyConnectable.push('*://localhost/*');
+}
+
+base.externally_connectable = {
+  matches: externallyConnectable,
+};
 
 const contentScriptSettings = {
   matches: ['<all_urls>'],
