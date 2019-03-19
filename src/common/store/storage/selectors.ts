@@ -39,9 +39,13 @@ export const selectAccessToken = (state): string => {
 }
 
 export const selectUserForDashboard = (state) => {
+  const user = selectUser(state);
+  if (!user) {
+    return null;
+  }
   const userData: Partial<IUserState> = {
     // It should include all relevant user info
-    ...selectUser(state),
+    ...user,
   };
 
   const access = selectAccessToken(state);
