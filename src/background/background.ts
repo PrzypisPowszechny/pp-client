@@ -23,7 +23,8 @@ import { configureAxios } from '../common/axios';
 import { getChromeCookie } from '../common/chrome-cookies';
 import store, { initStore } from './store/store';
 import { selectAccessToken, selectStorage } from '../common/store/storage/selectors';
-import { refreshToken, refreshTokenRoutine } from './auth';
+import { refreshTokenRoutine } from './auth';
+import dashboardMessaging from 'background/dashboard-messaging';
 
 function onContextMenuAnnotate() {
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
@@ -65,9 +66,13 @@ function ppGaOnInstalled(details: InstalledDetails) {
   }
 }
 
-// start refreshing tokens no sooner than the store has been initialized from browser storage
 initStore()
-  .then(refreshTokenRoutine);
+  .then(() => {
+    // start refreshing tokens no sooner than the store has been initialized from browser storage
+    refreshTokenRoutine();
+    // start listening for user queries no sooner than the store has been hydrated with user data from chrome storage
+    dashboardMessaging.init();
+  });
 
 configureAxios(
   name => getChromeCookie(PPSettings.API_URL, name).then(cookie => cookie.value),
@@ -86,7 +91,6 @@ chrome.runtime.onInstalled.addListener(contextMenuOnInstalled);
 chrome.runtime.onMessage.addListener(setBadge);
 chrome.runtime.onMessage.addListener(returnExtensionCookie);
 chrome.runtime.onMessage.addListener(returnCurrentTabId);
-
 /*
  * Init current tab id tracking
  */

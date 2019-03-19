@@ -1,19 +1,19 @@
 import React from 'react';
 import { FacebookLoginButton, GoogleLoginButton } from 'react-social-login-buttons';
 import { connect } from 'react-redux';
-import { userLoggedIn } from '../../common/store/storage/actions';
 import axios from 'axios';
 import { EMULATE_ON_PP_AUTH_RESPONSE } from '../../../e2e/events';
 import {
   FacebookCredentials,
   GoogleCredentials,
   PPLoginResponseAPIModel,
-  PPIntegrationCredentialsAPIModel
+  PPIntegrationCredentialsAPIModel,
 } from 'common/api/auth';
 import * as Sentry from '@sentry/browser';
+import { userLoggedInAlias } from '../../common/store/storage/action-aliases';
 
 export interface LoginFormProps {
-  userLoggedIn: (userData) => void;
+  userLoggedInAlias: (userData) => void;
 }
 
 interface LoginFormState {
@@ -23,7 +23,7 @@ interface LoginFormState {
 @connect(
   state => ({}),
   {
-    userLoggedIn,
+    userLoggedInAlias,
   },
 )
 export default class LoginForm extends React.Component<Partial<LoginFormProps>, Partial<LoginFormState>> {
@@ -65,7 +65,7 @@ export default class LoginForm extends React.Component<Partial<LoginFormProps>, 
   }
 
   dispatchUserLoggedIn = (response: PPLoginResponseAPIModel) => {
-    this.props.userLoggedIn(response.data);
+    this.props.userLoggedInAlias(response.data);
   }
 
   setErrorMessage() {

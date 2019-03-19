@@ -1,20 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { selectUser } from '../../common/store/storage/selectors';
-import { userLoggedOut } from '../../common/store/storage/actions';
+import { userLoggedOutAlias } from '../../common/store/storage/action-aliases';
 
 interface LogoutProps {
   user: any;
 
-  userLoggedOut: () => void;
+  userLoggedOutAlias: () => void;
 }
 
 @connect(
-  (state) => ({
+  state => ({
     user: selectUser(state),
   }),
   {
-    userLoggedOut,
+    userLoggedOutAlias,
   },
 )
 export default class LogoutPanel extends React.Component<Partial<LogoutProps>, {}> {
@@ -23,11 +23,15 @@ export default class LogoutPanel extends React.Component<Partial<LogoutProps>, {
     super(props);
   }
 
+  userLoggedOutHandler = () => {
+    this.props.userLoggedOutAlias();
+  }
+
   render() {
     const { user } = this.props;
     return (
       <div>
-        <button onClick={this.props.userLoggedOut}> Wyloguj </button>
+        <button onClick={this.userLoggedOutHandler}> Wyloguj </button>
       </div>
     );
   }
