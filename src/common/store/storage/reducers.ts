@@ -5,10 +5,12 @@ import StorageSync from 'background/storage-sync';
 export interface IUserAuth {
   access: string;
   refresh: string;
+  userRole: string;
 }
 
 export interface IUserProperties {
   userId: string;
+  userEmail: string;
 }
 
 export type IUserState = IUserAuth & IUserProperties;

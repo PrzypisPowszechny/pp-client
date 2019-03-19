@@ -8,7 +8,7 @@ import {
   GoogleCredentials,
   PPLoginResponseAPIModel,
   PPIntegrationCredentialsAPIModel,
-} from 'common/api/auth';
+} from 'common/api/user';
 import * as Sentry from '@sentry/browser';
 import { userLoggedInAlias } from '../../common/store/storage/action-aliases';
 

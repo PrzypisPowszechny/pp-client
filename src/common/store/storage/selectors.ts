@@ -2,14 +2,14 @@ import { IUserState } from './reducers';
 
 export const selectIsStorageInitialized = (state) => {
   return Boolean(state.storage && state.storage.isHydrated);
-}
+};
 
 export const selectStorage = (state) => {
   if (!selectIsStorageInitialized(state)) {
     throw new Error('state.storage not initialized');
   }
   return state.storage.value;
-}
+};
 
 export const selectUser = (state) => {
   // "collect" user data from login data
@@ -18,17 +18,20 @@ export const selectUser = (state) => {
   }
   const {
     userId,
+    userEmail,
+    userRole,
   } = selectStorage(state).auth;
 
   if (!userId) {
     return null;
   } else {
-    // todo add user type
     return {
       userId,
+      userEmail,
+      userRole,
     };
   }
-}
+};
 
 export const selectAccessToken = (state): string => {
   const storage = selectStorage(state);
@@ -36,7 +39,7 @@ export const selectAccessToken = (state): string => {
     return storage.auth.access || null;
   }
   return null;
-}
+};
 
 export const selectUserForDashboard = (state) => {
   const user = selectUser(state);
