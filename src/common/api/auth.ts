@@ -11,18 +11,14 @@ export interface GoogleCredentials {
 }
 
 export interface PPIntegrationCredentialsAPIModel {
-  data: {
-    accessToken: string;
-    expiresIn: string;
-    tokenType: string;
-  };
+  accessToken: string;
+  expiresIn: string;
+  tokenType: string;
 }
 
 // api/auth/(facebook|google)
 export interface PPLoginResponseAPIModel {
-  data: {
-    access: string;
-    refresh: string;
-    userId: string;
-  };
+  access: string;
+  refresh: string;
+  userId: string;
 }

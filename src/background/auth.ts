@@ -26,9 +26,9 @@ export function refreshToken() {
   return client({
     method: 'post',
     url: `${PPSettings.API_URL}/auth/refresh/`,
-    data: { data },
+    data,
     headers: {
-      'Content-Type': 'application/vnd.api+json',
+      'Content-Type': 'application/json',
     },
   })
     .then((resp) => {
