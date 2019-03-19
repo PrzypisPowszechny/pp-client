@@ -75,7 +75,6 @@ initStore()
   });
 
 configureAxios(
-  name => getChromeCookie(PPSettings.API_URL, name).then(cookie => cookie.value),
   () => selectAccessToken(store.getState()),
 );
 
