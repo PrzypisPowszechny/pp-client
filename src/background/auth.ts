@@ -1,6 +1,6 @@
 import store from './store';
 import axios from 'axios';
-import { refreshAccessToken } from '../common/store/storage/actions';
+import { accessTokenRefresh } from '../common/store/storage/actions';
 import { selectStorage, selectUserForDashboard } from '../common/store/storage/selectors';
 import axiosRetry, { isRetryableError } from 'axios-retry';
 import interval from 'interval-promise';
@@ -36,7 +36,7 @@ export function refreshToken() {
         throw new Error(`Error refreshing access token: bad response`);
       }
       const { access, refresh } = resp.data.data;
-      return store.dispatch(refreshAccessToken({
+      return store.dispatch(accessTokenRefresh({
         access,
         refresh,
       }));
