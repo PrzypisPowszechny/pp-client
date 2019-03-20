@@ -54,13 +54,8 @@ export class AnnotationLocator {
     const located: LocatedAnnotation[] = [];
     const unlocated: LocatedAnnotation[] = [];
     for (const annotation of annotations) {
-      const { quote, range } = annotation.attributes;
-      let locatedRange;
-      if (range) {
-        locatedRange = range;
-      } else {
-        locatedRange = this.findUniqueTextInDOMAsRange(quote, annotation.id);
-      }
+      const { quote } = annotation.attributes;
+      const locatedRange = this.findUniqueTextInDOMAsRange(quote, annotation.id);
       if (locatedRange) {
         located.push({
           annotationId: annotation.id,
