@@ -54,9 +54,14 @@ export function retrieveActionTab(action) {
   return retrievePrimaryActionTab(action);
 }
 
-export function markInThunkActionWithTabId(action, tabId) {
+export function markActionWithTabId(action, tabId) {
   return {
     ...action,
     _meta: { tabId },
   };
+}
+
+export function syncTabMark(action1, action2) {
+  const tabId = retrieveActionTab(action1);
+  return markActionWithTabId(action2, tabId);
 }

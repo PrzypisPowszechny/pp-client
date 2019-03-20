@@ -1,7 +1,4 @@
 import * as sentry from 'common/sentry';
-
-sentry.init();
-
 // Set script type by importing (so ALL other imports are executed afterwards)
 import './meta';
 
@@ -24,20 +21,20 @@ import IPPSettings from 'common/PPSettings';
 import chromeStorageHandlers from './handlers/chrome-storage-handlers';
 import * as data from './init-data';
 import highlightManager from './modules/highlight-manager';
-import annotationLocator from './modules/annotation-locator';
 import annotationEventHandlers from './handlers/annotation-event-handlers';
 import appComponent from './modules/app-component';
 import { annotationLocationNotifier } from './modules';
 import { initializeTabId } from 'common/tab-id';
 import store from './store';
 import { updateTabInfo } from 'common/store/tabs/tab/tabInfo/actions';
-import { TAB_INIT, tabInit } from 'common/store/tabs/actions';
+import { tabInit } from 'common/store/tabs/actions';
 import { ScriptType, setScriptType } from 'common/meta';
 import { waitUntilPageAndStoreReady } from '../common/utils/init';
-import { selectStorage, selectUser } from '../common/store/storage/selectors';
-import { configureAxios } from '../common/axios';
-import { getExtensionCookie } from '../common/messages';
+import { selectUser } from '../common/store/storage/selectors';
 import { configureAPIRequests } from './init-API';
+import { AnnotationLocator } from './annotations/AnnotationLocator';
+
+sentry.init();
 
 // set script type for future introspection
 setScriptType(ScriptType.contentScript);
@@ -73,7 +70,6 @@ Promise.all([
 })
   .then(() => store.dispatch(updateTabInfo({ currentUrl: window.location.href })))
   .then(() => {
-
     /*
      * Modules hooked to asynchronous events
      */
@@ -86,7 +82,7 @@ Promise.all([
     // Injecting React components into DOM
     appComponent.init();
     // Locating annotations in DOM
-    annotationLocator.init();
+    new AnnotationLocator(document, store).init();
     // Saving the annotation location information to DOM for reads in selenium + in console
     annotationLocationNotifier.init();
     // Rendering annotations in DOM

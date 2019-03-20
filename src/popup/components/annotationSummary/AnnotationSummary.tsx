@@ -1,51 +1,39 @@
 import React from 'react';
-import { loadAnnotationLocationData, PopupAnnotationLocationData } from '../../messages';
-import {
-  AnnotationAPIModel,
-  AnnotationPPCategories,
-  annotationPPCategoriesLabels,
-} from 'common/api/annotations';
+import { AnnotationAPIModel, AnnotationPPCategories, } from 'common/api/annotations';
 import _ from 'lodash';
 import { Icon } from 'react-icons-kit';
 import { ic_chevron_right } from 'react-icons-kit/md/ic_chevron_right';
 import classNames from 'classnames';
 import styles from './AnnotationSummary.scss';
+import { connect } from 'react-redux';
+import {
+  PopupAnnotationLocationData,
+  selectAnnotationLocations,
+} from 'common/store/tabs/tab/annotations/selectors';
 
 export interface IAnnotationSummaryProps {
+  annotations: PopupAnnotationLocationData;
+
   onFullViewClick: (Event) => void;
 }
 
-interface IAnnotationSummaryState {
-  isLoading: boolean;
-  willNotLoad: boolean;
-  annotationLocationData: PopupAnnotationLocationData;
-}
+// interface IAnnotationSummaryState {
+// }
 
+@connect(
+  state => ({
+    annotations: selectAnnotationLocations(state),
+  }),
+)
 export default class AnnotationSummary extends React.Component<Partial<IAnnotationSummaryProps>,
-  Partial<IAnnotationSummaryState>> {
+  {}> {
   constructor(props) {
     super(props);
-    this.state = {
-      isLoading: true,
-      willNotLoad: false,
-    };
-  }
-
-  componentDidMount() {
-    loadAnnotationLocationData().then((data) => {
-      this.setState({
-        annotationLocationData: data,
-        isLoading: false,
-      });
-    }).catch(() => {
-      this.setState({
-        willNotLoad: true,
-      });
-    });
   }
 
   categoryCounts() {
-    const annotations: AnnotationAPIModel[] = this.state.annotationLocationData.located;
+    const { located, unlocated } = this.props.annotations;
+    const annotations: AnnotationAPIModel[] = located.concat(unlocated);
     return {
       [AnnotationPPCategories.ADDITIONAL_INFO]: 0,
       [AnnotationPPCategories.CLARIFICATION]: 0,
@@ -87,14 +75,15 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
   }
 
   render() {
-    if (this.state.willNotLoad) {
+    // todo check site support
+    if (false) {
       return (
         <div className={styles.self}>
           Na tej stronie nie ma przypisów.
         </div>
       );
     }
-    if (this.state.isLoading) {
+    if (!this.props.annotations.hasLoaded) {
       return (
         <div className={styles.self}>
           Ładuję przypisy...
