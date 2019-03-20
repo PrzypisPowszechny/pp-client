@@ -17,7 +17,7 @@ exports.loadSettings = (environment, argv) => {
     CHROME_OAUTH_CLIENT_ID: getChromeOauthClientId(env, mode),
     DEV_SENTRY_UNLOCATED_IGNORE: getDevSentryUnlocatedIgnore(env, mode),
     SENTRY_DSN: getSentryDSN(env, mode),
-    ACCESS_REFRESH_INTERVAL: 5 * 60 * 1000 * 1000,
+    ACCESS_REFRESH_INTERVAL: 5 * 60 * 1000,
   };
 
   if (!settingsLogged) {

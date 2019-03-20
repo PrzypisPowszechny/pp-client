@@ -1,4 +1,4 @@
-import { IUserState } from './reducers';
+import { IUserState } from './types';
 
 export const selectIsStorageInitialized = (state) => {
   return Boolean(state.storage && state.storage.isHydrated);

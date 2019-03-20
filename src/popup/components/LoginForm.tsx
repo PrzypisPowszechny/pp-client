@@ -61,7 +61,7 @@ export default class LoginForm extends React.Component<Partial<LoginFormProps>, 
 
   // used in e2e tests to log in
   onPPLoginSimulate = (e: CustomEvent) => {
-    this.dispatchUserLoggedIn(e.detail);
+    this.props.userLoggedInAlias(e.detail);
   }
 
   dispatchUserLoggedIn = (response: PPLoginResponseAPIModel) => {

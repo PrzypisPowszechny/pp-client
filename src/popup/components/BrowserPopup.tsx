@@ -20,7 +20,7 @@ import { PopupPages } from './BrowserPopupNavigator';
 import '../css/popup.scss';
 import LogoutPanel from './LogoutPanel';
 import { selectUser } from '../../common/store/storage/selectors';
-import { IUserState } from '../../common/store/storage/reducers';
+import { IUserState } from '../../common/store/storage/types';
 import { connect } from 'react-redux';
 import { UserRoles } from '../../common/api/user';
 

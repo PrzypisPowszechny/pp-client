@@ -1,23 +1,7 @@
+import { IStorageState, IUserAuth, IUserState } from './types';
 import { combineReducers } from 'redux';
 import { USER_DATA_NEW, USER_DATA_CLEARED, USER_ACCESS_TOKEN_REFRESHED } from './actions';
 import StorageSync from 'background/storage-sync';
-
-export interface IUserAuth {
-  access: string;
-  refresh: string;
-  userRole: string;
-}
-
-export interface IUserProperties {
-  userId: string;
-  userEmail: string;
-}
-
-export type IUserState = IUserAuth & IUserProperties;
-
-export interface IStorageState {
-  auth: IUserState;
-}
 
 export function auth(state: Partial<IUserState> = {}, action) {
   switch (action.type) {

@@ -1,10 +1,9 @@
 import store from './store';
 import axios from 'axios';
-import { accessTokenRefresh } from '../common/store/storage/actions';
-import { selectStorage, selectUserForDashboard } from '../common/store/storage/selectors';
+import { accessTokenRefresh } from '../common/store/storage/actions-background';
+import { selectStorage } from '../common/store/storage/selectors';
 import axiosRetry, { isRetryableError } from 'axios-retry';
 import interval from 'interval-promise';
-import * as Sentry from '@sentry/browser';
 
 // TODO turn into observable; for now it seems complicated...
 export function refreshToken() {
@@ -31,17 +30,18 @@ export function refreshToken() {
     },
   })
     .then((resp) => {
-      if (!resp || !resp.data || !resp.data.data) {
+      console.log(resp);
+      if (!resp || !resp.data) {
         throw new Error(`Error refreshing access token: bad response`);
       }
-      const { access, refresh } = resp.data.data;
+      const { access, refresh } = resp.data;
       return store.dispatch(accessTokenRefresh({
         access,
         refresh,
       }));
     })
     .catch((err) => {
-      Sentry.captureException(new Error(`Error refreshing token: ${err.toString()}`));
+      throw new Error(`Error refreshing token: ${err.toString()}`);
     });
 }
 

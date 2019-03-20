@@ -1,3 +1,7 @@
+export async function sleep(ms) {
+  await new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export async function waitUntil(condition: () => boolean, timeout = 2000, interval = 20) {
   return new Promise((resolve) => {
     const start = Date.now();
