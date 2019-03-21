@@ -3,10 +3,9 @@ import Enzyme from 'enzyme';
 import AdapterReact16 from 'enzyme-adapter-react-16';
 import configureStore from 'redux-mock-store';
 import BrowserPopupNavigator from './BrowserPopupNavigator';
-import { IState } from '../../common/store/reducer';
 
 const mockTabId = 1;
-jest.mock('common/tab-id', () => ({
+jest.mock('common/store/tabs/tab-utils', () => ({
   __esModule: true,
   initializeTabId: () => null,
   getTabId: () => mockTabId,

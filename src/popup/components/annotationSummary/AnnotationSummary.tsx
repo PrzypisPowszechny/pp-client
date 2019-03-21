@@ -1,5 +1,5 @@
 import React from 'react';
-import { AnnotationAPIModel, AnnotationPPCategories, } from 'common/api/annotations';
+import { AnnotationAPIModel, AnnotationPPCategories } from 'common/api/annotations';
 import _ from 'lodash';
 import { Icon } from 'react-icons-kit';
 import { ic_chevron_right } from 'react-icons-kit/md/ic_chevron_right';
@@ -76,13 +76,14 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
 
   render() {
     // todo check site support
-    if (false) {
-      return (
-        <div className={styles.self}>
-          Na tej stronie nie ma przypisów.
-        </div>
-      );
-    }
+    // if () {
+    //   return (
+    //     <div className={styles.self}>
+    //       Na tej stronie nie ma przypisów.
+    //     </div>
+    //   );
+    // }
+
     if (!this.props.annotations.hasLoaded) {
       return (
         <div className={styles.self}>

@@ -11,6 +11,7 @@ import { AnnotationAPIModel } from '../../common/api/annotations';
 import * as Sentry from '@sentry/browser';
 import { Store } from 'redux';
 import { IState } from '../../common/store/reducer';
+import { waitUntilPageLoaded } from '../../common/utils/init';
 
 export class AnnotationLocator {
 
@@ -31,6 +32,7 @@ export class AnnotationLocator {
 
   private document;
   private store;
+  private documentReady: boolean;
 
   constructor(
     document: Document,
@@ -38,24 +40,32 @@ export class AnnotationLocator {
   ) {
     this.document = document;
     this.store = store;
+    this.documentReady = false;
   }
 
   init() {
     chrome.runtime.onMessage.addListener(this.handleMessage);
+
   }
 
   handleMessage = (request, sender, sendResponse) => {
     if (request.action === 'TAB_LOCATE_ANNOTATIONS') {
-      sendResponse(this.locate(request.payload));
+      waitUntilPageLoaded(this.document)
+        .then(() => {
+          this.locate(request.payload).then(sendResponse);
+        }).catch((err) => {
+        throw new Error(`Error locating annotations: ${err.toString()}`);
+      });
+      return true;
     }
   }
 
-  locate(annotations: AnnotationAPIModel[]) {
+  async locate(annotations: AnnotationAPIModel[]) {
     const located: LocatedAnnotation[] = [];
     const unlocated: LocatedAnnotation[] = [];
     for (const annotation of annotations) {
       const { quote } = annotation.attributes;
-      const locatedRange = this.findUniqueTextInDOMAsRange(quote, annotation.id);
+      const locatedRange = await this.findUniqueTextInDOMAsRange(quote, annotation.id);
       if (locatedRange) {
         located.push({
           annotationId: annotation.id,
@@ -77,7 +87,28 @@ export class AnnotationLocator {
     };
   }
 
-  findUniqueTextInDOMAsRange(quote: string, debugId?: string): XPathRange.SerializedRange {
+  waitUntilRangyReady() {
+    let intervalId;
+    return new Promise((resolve) => {
+      const rangyCheck = () => {
+        try {
+          rangy.createRange();
+        } catch (e) {
+          return;
+        }
+        if (intervalId) {
+          clearInterval(intervalId);
+        }
+        resolve();
+      };
+      rangyCheck();
+      intervalId = setInterval(rangyCheck, 50);
+    });
+  }
+
+  async findUniqueTextInDOMAsRange(quote: string, debugId?: string): Promise<XPathRange.SerializedRange> {
+    // rangy can be unpredictable and throw errors when run right after DOM is loaded
+    await this.waitUntilRangyReady();
     const searchScopeRange = rangy.createRange();
     searchScopeRange.selectNodeContents(this.document.body);
     const options = {

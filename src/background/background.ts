@@ -20,9 +20,8 @@ import ppGa from 'common/pp-ga';
 import { initTrackActiveTabId } from './tab';
 
 import { configureAxios } from '../common/axios';
-import { getChromeCookie } from '../common/chrome-cookies';
 import store, { initStore } from './store/store';
-import { selectAccessToken, selectStorage } from '../common/store/storage/selectors';
+import { selectAccessToken } from '../common/store/storage/selectors';
 import { refreshTokenRoutine } from './auth';
 import dashboardMessaging from 'background/dashboard-messaging';
 

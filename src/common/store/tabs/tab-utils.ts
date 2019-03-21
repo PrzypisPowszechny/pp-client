@@ -1,8 +1,8 @@
 /*
- * Module that synchronously returns content script's / popup's tab id
+ * Module that synchronously returns content script's / popup's tab id for use in reducers
  */
 
-import { checkResponse } from './messages/utils';
+import { checkResponse } from '../../messages/utils';
 
 let tabId;
 

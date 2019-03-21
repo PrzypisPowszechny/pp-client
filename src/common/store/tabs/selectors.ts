@@ -1,7 +1,7 @@
 /*
  * Content script/popup side selector retrieving the appropriate tab from state
  */
-import { getTabId } from 'common/tab-id';
+import { getTabId } from './tab-utils';
 
 export const selectTab = (state) => {
   const tabId = getTabId();
