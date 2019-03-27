@@ -28,7 +28,6 @@ import { selectAccessToken } from '../common/store/storage/selectors';
 // initialize id of the tab for which the popup is displayed
 initializeTabId();
 configureAxios(
-  getExtensionCookie,
   () => selectAccessToken(store.getState()),
 );
 

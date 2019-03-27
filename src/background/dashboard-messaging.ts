@@ -1,11 +1,18 @@
 import { selectUserForDashboard } from 'common/store/storage/selectors';
-import store from './store';
 import Port = chrome.runtime.Port;
+import { IState } from '../common/store/reducer';
+import { Store } from 'redux';
+import store from './store';
 
 // A simplified implementation updating only the latest opened tab with dashboard
 class DashboardMessaging {
   dashboardPort: Port;
   portName = 'DASHBOARD';
+  store: Store<IState>;
+
+  constructor(store: Store<IState>) {
+    this.store = store;
+  }
 
   init() {
     chrome.runtime.onConnectExternal.addListener((port: Port) => {
@@ -34,7 +41,7 @@ class DashboardMessaging {
       try {
         this.dashboardPort.postMessage({
           action: 'UPDATE_LOGIN_DATA',
-          payload: selectUserForDashboard(store.getState()),
+          payload: selectUserForDashboard(this.store.getState()),
         });
       } catch (err) {
         // ignore disconnected dashboard tabs
@@ -43,4 +50,4 @@ class DashboardMessaging {
   }
 }
 
-export default new DashboardMessaging();
+export default new DashboardMessaging(store);

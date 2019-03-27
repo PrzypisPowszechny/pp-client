@@ -1,15 +1,15 @@
-import { IAuthState } from './reducers';
+import { IUserState } from './types';
 
 export const selectIsStorageInitialized = (state) => {
   return Boolean(state.storage && state.storage.isHydrated);
-}
+};
 
 export const selectStorage = (state) => {
   if (!selectIsStorageInitialized(state)) {
     throw new Error('state.storage not initialized');
   }
   return state.storage.value;
-}
+};
 
 export const selectUser = (state) => {
   // "collect" user data from login data
@@ -18,30 +18,37 @@ export const selectUser = (state) => {
   }
   const {
     userId,
+    userEmail,
+    userRole,
   } = selectStorage(state).auth;
 
   if (!userId) {
     return null;
   } else {
-    // todo add user type
     return {
       userId,
+      userEmail,
+      userRole,
     };
   }
-}
+};
 
-export const selectAccessToken = (state) => {
+export const selectAccessToken = (state): string => {
   const storage = selectStorage(state);
   if (storage && storage.auth) {
     return storage.auth.access || null;
   }
   return null;
-}
+};
 
 export const selectUserForDashboard = (state) => {
-  const userData: Partial<IAuthState> = {
-    // It should inclue all relevant user info
-    ...selectUser(state),
+  const user = selectUser(state);
+  if (!user) {
+    return null;
+  }
+  const userData: Partial<IUserState> = {
+    // It should include all relevant user info
+    ...user,
   };
 
   const access = selectAccessToken(state);

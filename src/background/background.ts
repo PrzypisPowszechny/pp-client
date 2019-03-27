@@ -68,6 +68,7 @@ function ppGaOnInstalled(details: InstalledDetails) {
 
 initStore()
   .then(() => {
+    console.debug('Store initialized');
     // start refreshing tokens no sooner than the store has been initialized from browser storage
     refreshTokenRoutine();
     // start listening for user queries no sooner than the store has been hydrated with user data from chrome storage
@@ -75,7 +76,6 @@ initStore()
   });
 
 configureAxios(
-  name => getChromeCookie(PPSettings.API_URL, name).then(cookie => cookie.value),
   () => selectAccessToken(store.getState()),
 );
 

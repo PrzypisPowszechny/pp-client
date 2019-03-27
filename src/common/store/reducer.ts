@@ -2,7 +2,8 @@ import { combineReducers } from 'redux';
 import { ITabState } from './tabs/tab/reducer';
 import runtime, { IRuntimeState } from './runtime/reducer';
 import tabs from './tabs/reducer';
-import storage, { IAuthState, IStorageState } from './storage/reducers';
+import { IUserState, IStorageState } from './storage/types';
+import storage from './storage/reducers';
 
 export interface IState {
   tabs: {

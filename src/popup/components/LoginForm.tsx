@@ -8,7 +8,7 @@ import {
   GoogleCredentials,
   PPLoginResponseAPIModel,
   PPIntegrationCredentialsAPIModel,
-} from 'common/api/auth';
+} from 'common/api/user';
 import * as Sentry from '@sentry/browser';
 import { userLoggedInAlias } from '../../common/store/storage/action-aliases';
 
@@ -61,11 +61,11 @@ export default class LoginForm extends React.Component<Partial<LoginFormProps>, 
 
   // used in e2e tests to log in
   onPPLoginSimulate = (e: CustomEvent) => {
-    this.dispatchUserLoggedIn(e.detail);
+    this.props.userLoggedInAlias(e.detail);
   }
 
   dispatchUserLoggedIn = (response: PPLoginResponseAPIModel) => {
-    this.props.userLoggedInAlias(response.data);
+    this.props.userLoggedInAlias(response);
   }
 
   setErrorMessage() {
@@ -85,12 +85,10 @@ export default class LoginForm extends React.Component<Partial<LoginFormProps>, 
     }
 
     const data: PPIntegrationCredentialsAPIModel = {
-      data: {
-        // fb uses camelcase while google underscores
-        accessToken: authParams.accessToken || authParams.access_token,
-        expiresIn: authParams.expiresIn || authParams.expires_in,
-        tokenType: authParams.tokenType || authParams.token_type,
-      },
+      // fb uses camelcase while google underscores
+      accessToken: authParams.accessToken || authParams.access_token,
+      expiresIn: authParams.expiresIn || authParams.expires_in,
+      tokenType: authParams.tokenType || authParams.token_type,
     };
 
     axios({
@@ -98,7 +96,7 @@ export default class LoginForm extends React.Component<Partial<LoginFormProps>, 
       url: `${PPSettings.API_URL}/auth/${provider}/`,
       data,
       headers: {
-        'Content-Type': 'application/vnd.api+json',
+        'Content-Type': 'application/json',
       },
     }).then(resp => this.dispatchUserLoggedIn(resp.data))
       .catch((err) => {
