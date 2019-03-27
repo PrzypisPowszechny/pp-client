@@ -1,5 +1,5 @@
 import React from 'react';
-import { loadAnnotationLocationData, PopupAnnotationLocationData, sendScrollToAnnotation } from '../../messages';
+import { sendScrollToAnnotation } from '../../messages';
 import { PopupPages } from '../BrowserPopupNavigator';
 import { AnnotationPPCategories } from 'common/api/annotations';
 import styles from './AnnotationList.scss';
@@ -8,8 +8,14 @@ import { ic_chevron_left } from 'react-icons-kit/md/ic_chevron_left';
 import classNames from 'classnames';
 import ppGa from '../../../common/pp-ga';
 import { standardizeUrlForPageSettings } from '../../../common/url';
+import { connect } from 'react-redux';
+import {
+  PopupAnnotationLocationData,
+  selectAnnotationLocations,
+} from 'common/store/tabs/tab/annotations/selectors';
 
 export interface IAnnotationListProps {
+  annotations: PopupAnnotationLocationData;
   onPageChange: (Event) => void;
 }
 
@@ -18,6 +24,11 @@ interface IAnnotationListState {
   annotationLocationData: PopupAnnotationLocationData;
 }
 
+@connect(
+  state => ({
+    annotations: selectAnnotationLocations(state),
+  }),
+)
 export default class AnnotationList extends React.Component<Partial<IAnnotationListProps>,
   Partial<IAnnotationListState>> {
 
@@ -32,15 +43,6 @@ export default class AnnotationList extends React.Component<Partial<IAnnotationL
     this.state = {
       isLoading: true,
     };
-  }
-
-  componentDidMount() {
-    loadAnnotationLocationData().then((data) => {
-      this.setState({
-        annotationLocationData: data,
-        isLoading: false,
-      });
-    });
   }
 
   handleGoBackClick = (e) => {
@@ -60,7 +62,7 @@ export default class AnnotationList extends React.Component<Partial<IAnnotationL
   }
 
   render() {
-    if (this.state.isLoading) {
+    if (!this.props.annotations.hasLoaded) {
       return (
         <div className={styles.self}>
           Ładuję...
@@ -75,20 +77,20 @@ export default class AnnotationList extends React.Component<Partial<IAnnotationL
             <span className={styles.header}>Przypisy dodane na tej stronie</span>
           </div>
           <ul className={styles.annotationList}>
-          {this.state.annotationLocationData.located.map(annotation => (
-            <li
-              className={styles.listItem}
-              key={annotation.id}
-              data-annotation-id={annotation.id}
-              onClick={this.onAnnotationClick}
-            >
-              <div className={classNames(styles.marker, this.markerStyles[annotation.attributes.ppCategory])}/>
-              <div className={styles.annotationTexts}>
-                <div className={styles.quote} >"{annotation.attributes.quote}"</div>
-                <div className={styles.comment} >{annotation.attributes.comment}</div>
-              </div>
-            </li>
-          ))}
+            {this.props.annotations.located.map(annotation => (
+              <li
+                className={styles.listItem}
+                key={annotation.id}
+                data-annotation-id={annotation.id}
+                onClick={this.onAnnotationClick}
+              >
+                <div className={classNames(styles.marker, this.markerStyles[annotation.attributes.ppCategory])}/>
+                <div className={styles.annotationTexts}>
+                  <div className={styles.quote}>"{annotation.attributes.quote}"</div>
+                  <div className={styles.comment}>{annotation.attributes.comment}</div>
+                </div>
+              </li>
+            ))}
           </ul>
         </div>
       );

@@ -1,7 +1,4 @@
 import * as sentry from 'common/sentry';
-
-sentry.init();
-
 // Set script type by importing (so ALL other imports are executed afterwards)
 import './meta';
 
@@ -22,22 +19,28 @@ import 'css/selection.scss';
 import * as moment from 'moment';
 import IPPSettings from 'common/PPSettings';
 import chromeStorageHandlers from './handlers/chrome-storage-handlers';
-import * as data from './init-data';
 import highlightManager from './modules/highlight-manager';
-import annotationLocator from './modules/annotation-locator';
 import annotationEventHandlers from './handlers/annotation-event-handlers';
 import appComponent from './modules/app-component';
 import { annotationLocationNotifier } from './modules';
-import { initializeTabId } from 'common/tab-id';
 import store from './store';
 import { updateTabInfo } from 'common/store/tabs/tab/tabInfo/actions';
-import { TAB_INIT, tabInit } from 'common/store/tabs/actions';
+import { tabInit } from 'common/store/tabs/actions';
 import { ScriptType, setScriptType } from 'common/meta';
-import { waitUntilPageAndStoreReady } from '../common/utils/init';
-import { selectStorage, selectUser } from '../common/store/storage/selectors';
+import {
+  waitUntilPageLoaded,
+  waitUntilStoreReady,
+} from '../common/utils/init';
+import { selectAccessToken, selectUser } from '../common/store/storage/selectors';
+import { AnnotationLocator } from './annotations/AnnotationLocator';
+import { setAxiosConfig } from 'redux-json-api';
 import { configureAxios } from '../common/axios';
-import { getExtensionCookie } from '../common/messages';
-import { configureAPIRequests } from './init-API';
+import * as endpoints from '../common/api/endpoints';
+import { selectTab } from '../common/store/tabs/selectors';
+import { loadAppModes } from '../common/store/tabs/tab/appModes/actions';
+import { readEndpointWithHeaders } from '../common/store/tabs/tab/api/actions';
+
+sentry.init();
 
 // set script type for future introspection
 setScriptType(ScriptType.contentScript);
@@ -63,44 +66,60 @@ console.log('Przypis script working!');
  * we commit changes to browser storage and recalculate state.appMode on storage change.
  */
 
-Promise.all([
-  waitUntilPageAndStoreReady(store),
-  initializeTabId(),
-]).then(() => {
+waitUntilStoreReady(store).then(async () => {
   console.debug('Store hydrated from background page.');
-  // initialize tab state in the store
-  return store.dispatch(tabInit());
-})
-  .then(() => store.dispatch(updateTabInfo({ currentUrl: window.location.href })))
-  .then(() => {
 
-    /*
-     * Modules hooked to asynchronous events
-     */
-    annotationEventHandlers.init();
-    chromeStorageHandlers.appModes.init();
+  const loggedIn = Boolean(selectUser(store.getState()));
+  if (!loggedIn) {
+    return;
+  }
+  // todo if(blacklisted) return
 
-    /*
-     * Modules hooked to Redux store
-     */
-    // Injecting React components into DOM
-    appComponent.init();
-    // Locating annotations in DOM
-    annotationLocator.init();
-    // Saving the annotation location information to DOM for reads in selenium + in console
-    annotationLocationNotifier.init();
-    // Rendering annotations in DOM
-    highlightManager.init();
+  await Promise.all([
+    initData(),
+    waitUntilPageLoaded(document),
+  ]);
+  initUI();
+});
 
-    // API settings
-    configureAPIRequests();
+async function initData() {
+  // HTTP settings
+  configureAxios(() => selectAccessToken(store.getState()));
+  // Locating annotations in DOM
+  // locator must be initialized already when annotations are loaded (it is used in a Redux epic)
+  new AnnotationLocator(document, store).init();
+  // Optimization: load data from storage first, so annotations are not drawn before we know current application modes
+  // (disabled extension mode and disabled page mode will erase them)
 
-    // temporary fix: todo update on storage changes
-    const user = selectUser(store.getState());
-    if (user) {
-      // Optimization: load data from storage first, so annotations are not drawn before we know current application modes
-      // (disabled extension mode and disabled page mode will erase them)
-      data.loadFromChromeStorage()
-        .then(data.loadFromAPI);
-    }
-  });
+  // initiate tab before any other actions
+  await store.dispatch(tabInit());
+  await Promise.all([
+    store.dispatch(updateTabInfo({ currentUrl: window.location.href })),
+    store.dispatch(setAxiosConfig({ baseURL: PPSettings.API_URL })), // settings for redux-json-api
+    store.dispatch(loadAppModes()),
+  ]);
+
+  await store.dispatch(readEndpointWithHeaders(
+    endpoints.ANNOTATIONS,
+    { 'PP-SITE-URL': selectTab(store.getState()).tabInfo.currentUrl },
+  ));
+}
+
+async function initUI() {
+  /*
+   * Modules hooked to asynchronous events
+   */
+  annotationEventHandlers.init();
+  chromeStorageHandlers.appModes.init();
+
+  /*
+   * Modules hooked to Redux store
+   */
+  // Injecting React components into DOM
+  appComponent.init();
+
+  // Saving the annotation location information to DOM for reads in selenium + in console
+  annotationLocationNotifier.init();
+  // Rendering annotations in DOM
+  highlightManager.init();
+}

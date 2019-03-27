@@ -9,8 +9,6 @@ import _isEqual from 'lodash/isEqual';
 import { selectViewerState } from 'common/store/tabs/tab/widgets/selectors';
 import { selectAnnotation } from 'common/store/tabs/tab/api/selectors';
 import { annotationRootNode } from '../settings';
-import { PopupAnnotationLocationData } from '../../popup/messages';
-import { selectAnnotationLocationForBrowserStorage } from 'common/store/tabs/tab/annotations/selectors';
 import { selectTab } from 'common/store/tabs/selectors';
 import { selectIsStorageInitialized, selectUser } from '../../common/store/storage/selectors';
 

@@ -32,19 +32,6 @@ describe('extension runs normally', () => {
     await browser.findElement(By.tagName('script'));
   }, e2ePPSettings.TIMEOUT);
 
-  test('opens editor', async () => {
-    await simulateLogIn(browser);
-    await browser.get(`${e2ePPSettings.SITE_URL}/some-text/`);
-    const someText = await browser.findElement(By.tagName('p'));
-    await browser.actions().doubleClick(someText).perform();
-    // Use special hook to emmit and open editor on this event as context menu click is out of selenium's control...
-    await dispatchDOMEvent(browser, EMULATE_ON_CONTEXT_MENU_ANNOTATE);
-    await browser.findElement(By.css(`.${PP_CSS_SCOPE_CLASS}[class*="${PP_CSS_EDITOR_CLASS_PREFIX}"]`));
-
-    // Example of selecting all
-    // await browser.actions().keyDown(Key.CONTROL).sendKeys('a').keyUp(Key.CONTROL).perform();
-  }, e2ePPSettings.TIMEOUT);
-
   afterAll(async () => {
     await browser.quit();
     await new Promise(resolve => apiServer.close(resolve));

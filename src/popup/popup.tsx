@@ -18,21 +18,18 @@ import { Provider } from 'react-redux';
 import store from './store';
 
 import BrowserPopupNavigator from './components/BrowserPopupNavigator';
-import { initializeTabId } from 'common/tab-id';
 import { tabPopupInit } from 'common/store/tabs/actions';
-import { getExtensionCookie } from '../common/messages';
 import { configureAxios } from '../common/axios';
-import { waitUntilFirstStoreUpdate, waitUntilPageLoaded } from '../common/utils/init';
+import { waitUntilPageLoaded, waitUntilStoreReady } from '../common/utils/init';
 import { selectAccessToken } from '../common/store/storage/selectors';
 
-// initialize id of the tab for which the popup is displayed
-initializeTabId();
+//  HTTP settings
 configureAxios(
   () => selectAccessToken(store.getState()),
 );
 
 Promise.all([
-  waitUntilPageLoaded(),
+  waitUntilPageLoaded(document),
 ])
   .then(() => {
     ReactDOM.render(
@@ -43,7 +40,7 @@ Promise.all([
     );
   });
 
-waitUntilFirstStoreUpdate(store)
+waitUntilStoreReady(store)
   .then(() => {
     console.log('Store hydrated from background page.');
     // initialize tab state in the store

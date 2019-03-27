@@ -29,3 +29,11 @@ export function deleteResource(...args) {
 export function requireResource(...args) {
   return { type: 'requireResource', args };
 }
+
+// auxiliary action creators
+export function readEndpointWithHeaders(endpoint, headers) {
+  const requestOptions = {
+    headers,
+  };
+  return readEndpointWithCustomOptions(endpoint, { requestOptions });
+}

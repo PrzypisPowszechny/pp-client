@@ -1,4 +1,4 @@
-import { markInThunkActionWithTabId, retrieveActionTab } from './tabs/action-tab';
+import { markActionWithTabId, retrieveActionTab } from './tabs/action-tab';
 
 /*
  * The primary actions (ordinary objects {} ) are marked by webext-redux with _sender.
@@ -18,7 +18,7 @@ export function aliasActionToTabMarkedThunk(originalThunk) {
     return (dispatch, getState) => {
       const tabId = retrieveActionTab(aliasAction);
       // attach the sender to all actions dispatched within the thunk
-      const newDispatch = action => dispatch(markInThunkActionWithTabId(action, tabId));
+      const newDispatch = action => dispatch(markActionWithTabId(action, tabId));
       return originalThunk(...aliasAction.args)(newDispatch, getState);
     };
   };

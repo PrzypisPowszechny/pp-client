@@ -8,7 +8,7 @@ jest.mock('common/pp-ga/ga', () => null);
 jest.mock('common/chrome-storage', () => null);
 
 const mockTabId = 1;
-jest.mock('common/tab-id', () => ({
+jest.mock('common/store/tabs/tab-utils', () => ({
   __esModule: true,
   initializeTabId: () => null,
   getTabId: () => mockTabId,

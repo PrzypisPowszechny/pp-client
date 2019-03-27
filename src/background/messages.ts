@@ -2,6 +2,8 @@
 
 import { initTrackActiveTabId } from './tab';
 import * as Sentry from '@sentry/browser';
+import { AnnotationsState } from '../common/store/tabs/tab/annotations/types';
+import { ILocationData } from '../common/store/tabs/tab/annotations/actions';
 
 export function returnExtensionCookie(request, sender, sendResponse) {
   if (request.action === 'GET_COOKIE') {
@@ -51,3 +53,9 @@ export function returnCurrentTabId(request, sender, sendResponse) {
   }
 }
 
+export function tabLocateAnnotations(tabId, annotations): Promise<ILocationData> {
+  return new Promise(resolve => chrome.tabs.sendMessage(tabId, {
+    action: 'TAB_LOCATE_ANNOTATIONS',
+    payload: annotations,
+  }, resolve));
+}

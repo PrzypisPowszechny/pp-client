@@ -1,3 +1,4 @@
+import { initializeTabId } from '../store/tabs/tab-utils';
 
 export const waitUntilFirstStoreUpdate = store => new Promise((resolve) => {
   // Wait until Redux store first update before initializing components
@@ -8,11 +9,21 @@ export const waitUntilFirstStoreUpdate = store => new Promise((resolve) => {
   });
 });
 
-export const waitUntilPageLoaded = () => new Promise(resolve => window.addEventListener('load', resolve));
+export const waitUntilPageLoaded = (document) => new Promise(resolve => {
+  // in case the document is already rendered
+  const state = document.readyState;
+  if (state === 'complete') {
+    setTimeout(resolve, 0); // additional timeout for rangy; todo find better solution
+  } else {
+    document.addEventListener('readystatechange', (event) => {
+      if (event.target.readyState === 'complete') {
+        resolve();
+      }
+    });
+  }
+});
 
-export function waitUntilPageAndStoreReady(store) {
-  return Promise.all([
-    waitUntilFirstStoreUpdate(store),
-    waitUntilPageLoaded(),
-  ]);
-}
+export const waitUntilStoreReady = store => Promise.all([
+  waitUntilFirstStoreUpdate(store),
+  initializeTabId(), // initialize tab id for synchronous access in reducers
+]);
