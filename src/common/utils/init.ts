@@ -9,7 +9,7 @@ export const waitUntilFirstStoreUpdate = store => new Promise((resolve) => {
   });
 });
 
-export const waitUntilPageLoaded = (document) => new Promise(resolve => {
+export const waitUntilPageLoaded = document => new Promise((resolve) => {
   // in case the document is already rendered
   const state = document.readyState;
   if (state === 'complete') {

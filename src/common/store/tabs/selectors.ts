@@ -13,9 +13,9 @@ export const selectTab = (state) => {
     throw new Error('Tab state is accessed though not initialized');
   }
   return tab;
-}
+};
 
 export const selectIsTabInitialized = (state) => {
   const tabId = getTabId();
   return Boolean(tabId !== undefined && state.tabs && state.tabs[tabId]);
-}
+};

@@ -45,4 +45,4 @@ waitUntilStoreReady(store)
     console.log('Store hydrated from background page.');
     // initialize tab state in the store
     return store.dispatch(tabPopupInit());
-  })
+  });

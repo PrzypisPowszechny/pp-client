@@ -34,11 +34,10 @@ export default class Button extends React.Component <Partial<ButtonProps>, {}> {
         )}
         onClick={this.props.onClick}
         disabled={this.props.isDisabled}
-    >
-      {
-        this.props.iconBefore && <div className={styles.iconBefore}>{this.props.iconBefore}</div>
-      }
-      <span className={styles.buttonContent}>
+      >
+        {
+          this.props.iconBefore && <div className={styles.iconBefore}>{this.props.iconBefore}</div>}
+        <span className={styles.buttonContent}>
         <span className={styles.label}>{this.props.children}</span>
       </span>
       </button>

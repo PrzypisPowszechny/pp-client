@@ -2,7 +2,6 @@
 
 import { initTrackActiveTabId } from './tab';
 import * as Sentry from '@sentry/browser';
-import { AnnotationsState } from '../common/store/tabs/tab/annotations/types';
 import { ILocationData } from '../common/store/tabs/tab/annotations/actions';
 
 export function returnExtensionCookie(request, sender, sendResponse) {
@@ -45,7 +44,8 @@ export function returnCurrentTabId(request, sender, sendResponse) {
       return sendResponse({ value: sender.tab.id });
     } else {
       // popup
-      // there is an edge case (not very easy to find out) when the tab is just becoming active with the popup icon click
+      // there is an edge case (not very easy to find out) when the tab
+      // is just becoming active with the popup icon click
       // in such cases current tab id will not have been set before receiving this message; request it asynchronously
       initTrackActiveTabId().then(tabId => sendResponse({ value: tabId }));
     }

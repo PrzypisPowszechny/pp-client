@@ -57,7 +57,7 @@ interface IBrowserPopupState {
   {
     showAnnotationRequestForm,
     hideAnnotationRequestForm,
-  }
+  },
 )
 export default class BrowserPopup extends React.Component<Partial<IBrowserPopupProps>,
   Partial<IBrowserPopupState>> {

@@ -37,7 +37,8 @@ enum Dialogs {
         isDeleteModalOpen,
       },
     } = selectTab(state).widgets.viewer;
-    const viewerItem = selectTab(state).widgets.viewer.viewerItems.find(item => item.annotationId === props.annotation.id);
+    const viewerItem =
+      selectTab(state).widgets.viewer.viewerItems.find(item => item.annotationId === props.annotation.id);
 
     return {
       locationX,

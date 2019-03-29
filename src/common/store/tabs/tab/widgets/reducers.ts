@@ -28,7 +28,6 @@ export interface IAnnotationRequestFormState extends IWidgetState {
   initialData: Partial<AnnotationRequestFormData>;
 }
 
-
 export interface IViewerState extends IWidgetState {
   location: { x: number; y: number };
   viewerItems: IViewerItemState[];

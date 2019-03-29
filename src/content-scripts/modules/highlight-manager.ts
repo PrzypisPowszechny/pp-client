@@ -42,7 +42,8 @@ function drawHighlights() {
   const user = selectUser(store.getState());
   const isStorageInitialized = selectIsStorageInitialized(store.getState());
   const arePageHighlightsDisabled = selectModeForCurrentPage(store.getState()).arePageHighlightsDisabled;
-  const locatedAnnotationsIds = selectTab(store.getState()).annotations.located.map(annotation => annotation.annotationId);
+  const locatedAnnotationsIds =
+    selectTab(store.getState()).annotations.located.map(annotation => annotation.annotationId);
   if (isStorageInitialized && user) {
     if (arePageHighlightsDisabled && !instance.arePageHighlightsDisabled) {
       instance.highlighter.undrawAll();
@@ -52,13 +53,14 @@ function drawHighlights() {
       )
     ) {
       // located annotations have changed, so redraw them
-      instance.highlighter.drawAll(selectTab(store.getState()).annotations.located.map(({ annotationId, range }) => {
-        return {
-          id: annotationId,
-          range,
-          annotationData: selectAnnotation(store.getState(), annotationId),
-        };
-      }));
+      instance.highlighter.drawAll(selectTab(store.getState()).annotations.located.map(
+        ({ annotationId, range }) => {
+          return {
+            id: annotationId,
+            range,
+            annotationData: selectAnnotation(store.getState(), annotationId),
+          };
+        }));
     }
   }
 

@@ -10,12 +10,19 @@
     "arrow-return-shorthand": true,
     "interface-name": false,
     "jsx-no-multiline-js": false,
+    "jsx-no-lambda": false,
     "max-classes-per-file": [
       true,
       2
     ],
     "member-access": [
       true, "no-public"
+    ],
+    "no-shadowed-variable": [
+        true,
+        {
+          "import": false
+        }
     ],
     "no-console": false,
     "no-unnecessary-callback-wrapper": true,

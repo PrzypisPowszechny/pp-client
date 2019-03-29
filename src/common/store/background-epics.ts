@@ -18,8 +18,7 @@ export const locateEpic: Epic<FluxStandardAction> = action$ => action$.pipe(
   filter(action => action.payload.endpoint === endpoints.ANNOTATIONS),
   mergeMap(async (action) => {
     const tabId = retrieveActionTab(action);
-    const locationData = await tabLocateAnnotations(tabId, action.payload.data)
-    console.log(locationData);
+    const locationData = await tabLocateAnnotations(tabId, action.payload.data);
     syncBadgeWithAnnotations(locationData, tabId);
     const newAction = locateAnnotations(locationData);
     return syncTabMark(action, newAction);

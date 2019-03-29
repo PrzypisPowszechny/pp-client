@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { Popup } from 'semantic-ui-react';
 import _isEqual from 'lodash/isEqual';
 
-import { AnnotationAPICreateModel, AnnotationAPIModel, AnnotationAPIModelAttrs, } from 'common/api/annotations';
+import { AnnotationAPICreateModel, AnnotationAPIModel, AnnotationAPIModelAttrs } from 'common/api/annotations';
 import { turnOffAnnotationMode } from 'common/chrome-storage';
 import { PPScopeClass } from 'content-scripts/settings';
 import { hideEditor } from 'common/store/tabs/tab/actions';
@@ -29,7 +29,7 @@ import { Icon } from 'react-icons-kit';
 import { link } from 'react-icons-kit/icomoon/link';
 import { priceTag } from 'react-icons-kit/icomoon/priceTag';
 import { ic_close } from 'react-icons-kit/md/ic_close';
-import { ic_help_outline } from 'react-icons-kit/md/ic_help_outline'
+import { ic_help_outline } from 'react-icons-kit/md/ic_help_outline';
 import { ic_add_circle } from 'react-icons-kit/md/ic_add_circle';
 import { changeNotification } from 'common/store/tabs/tab/widgets/actions';
 import { bindActionCreators } from 'redux';
@@ -389,8 +389,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
             trigger={
               <div className={styles.label}>
                 Tytuł źródła
-              </div>
-            }
+              </div>}
             flowing={true}
             hoverable={true}
             position="left center"

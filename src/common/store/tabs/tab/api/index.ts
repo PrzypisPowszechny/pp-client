@@ -13,7 +13,7 @@ const initialState = {
   ...apiInitializedFields,
   // reducer call mirroring store initialisation with combineReducers
   ...api(undefined, {}),
-}
+};
 
 export default function initializedApi(state = initialState, action) {
   return api(state, action);

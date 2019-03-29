@@ -1,5 +1,7 @@
 import { combineReducers } from 'redux';
 
+// tslint:disable
+
 export interface IUserState {
   // todo
 }

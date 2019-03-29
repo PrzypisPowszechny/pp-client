@@ -107,7 +107,7 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
       });
     }
   }
-  
+
   render() {
     const { quote, comment, quoteError, commentError } = this.state;
 

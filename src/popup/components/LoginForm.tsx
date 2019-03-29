@@ -31,9 +31,9 @@ export default class LoginForm extends React.Component<Partial<LoginFormProps>, 
   static parseParams(queryString): GoogleCredentials | FacebookCredentials {
     const query: any = {};
     const pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
-    for (let i = 0; i < pairs.length; i++) {
-      const pair = pairs[i].split('=');
-      query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+    for (const pair of pairs) {
+      const p = pair.split('=');
+      query[decodeURIComponent(p[0])] = decodeURIComponent(p[1] || '');
     }
     return query;
   }

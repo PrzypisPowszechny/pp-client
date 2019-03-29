@@ -160,4 +160,4 @@ export const changeNotification = (visible: boolean, message?: string, type?: To
       type,
     },
   };
-}
+};
