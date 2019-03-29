@@ -30,6 +30,9 @@ describe('App component', () => {
             editor: {
               visible: false,
             },
+            annotationRequestForm: {
+              visible: false,
+            },
             viewer: {
               visible: false,
             },
@@ -79,6 +82,9 @@ describe('App component', () => {
                 x: 0,
                 y: 0,
               },
+              visible: false,
+            },
+            annotationRequestForm: {
               visible: false,
             },
             viewer: {
