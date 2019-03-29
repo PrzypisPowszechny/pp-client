@@ -2,35 +2,43 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { PPScopeClass } from 'content-scripts/settings';
-import { turnOffRequestMode } from 'common/chrome-storage';
-import { AnnotationRequestFormData, AppModes } from 'common/store/tabs/tab/appModes/types';
 import { saveAnnotationRequest } from 'common/api/utils';
 import ppGa from 'common/pp-ga';
 
 import styles from './AnnotationRequestForm.scss';
 import { Icon } from 'react-icons-kit';
 import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
-import { changeNotification } from 'common/store/tabs/tab/widgets/actions';
+import { changeNotification, hideAnnotationRequestForm } from 'common/store/tabs/tab/widgets/actions';
 import * as helpers from './helpers';
 import Button from '../elements/Button/Button';
 import { ToastType } from '../elements/Toast/Toast';
 import { selectTab } from 'common/store/tabs/selectors';
 
+export interface AnnotationRequestFormData {
+  quote: string;
+  comment: string;
+}
+
 export interface AnnotationRequestFormProps {
-  appModes: AppModes;
+  initialData: Partial<AnnotationRequestFormData>;
+
+  hideAnnotationRequestForm: () => void;
   changeNotification: (visible: boolean, message?: string, type?: ToastType) => void;
 }
 
 interface AnnotationRequestFormState extends AnnotationRequestFormData {
-  commentError: string;
   quoteError: string;
+  commentError: string;
 }
 
 @connect(
   state => ({
-    appModes: selectTab(state).appModes,
+    initialData: selectTab(state).widgets.annotationRequestForm.initialData,
   }),
-  { changeNotification },
+  {
+    hideAnnotationRequestForm,
+    changeNotification,
+  },
 )
 export default class AnnotationRequestForm extends React.Component<Partial<AnnotationRequestFormProps>,
   Partial<AnnotationRequestFormState>> {
@@ -39,9 +47,9 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
     return {
       quote: '',
       comment: '',
-      ...nextProps.appModes.requestModeFormData,
-      commentError: '',
+      ...nextProps.initialData,
       quoteError: '',
+      commentError: '',
     };
   }
 
@@ -68,7 +76,6 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
     const { quote, comment } = this.state;
 
     const validationResult = helpers.validateAnnotationRequestForm({ quote, comment });
-    console.log(validationResult)
 
     if (validationResult.valid) {
       return true;
@@ -80,7 +87,7 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
   }
 
   handleCancelClick = (e: any) => {
-    turnOffRequestMode(this.props.appModes, window.location.href);
+    this.props.hideAnnotationRequestForm();
     ppGa.annotationAddingModeCancelled();
   }
 
@@ -91,16 +98,15 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
       saveAnnotationRequest({
         url, quote, comment,
       }).then((response) => {
+        this.props.hideAnnotationRequestForm();
         this.props.changeNotification(true, 'Twoja prośba o przypis została wysłana', ToastType.success);
-        turnOffRequestMode(this.props.appModes, window.location.href);
         ppGa.annotationRequestSent(!quote, !comment);
       }).catch((error) => {
-        console.log(error);
         this.props.changeNotification(true, 'Błąd! Nie udało się wysłać prośby', ToastType.failure);
+        throw new Error(`Failed to submit annotation request form: ${error}`);
       });
     }
   }
-
   
   render() {
     const { quote, comment, quoteError, commentError } = this.state;
@@ -153,11 +159,6 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
             {commentError}
           </div>
         </div>
-
-        <div className={styles.label}>Twój adres e-mail (opcjonalny)</div>
-        <p className={styles.caption}>
-          Zostaw adres e-mail, jeśli chcesz żebyśmy powiadomili Cię, kiedy dodamy w tym miejscu przypis
-        </p>
         <div className={styles.actions}>
           <Button appearance="subtle" onClick={this.handleCancelClick}>
             Anuluj
