@@ -5,7 +5,6 @@ const quoteMaxLength = 1000;
 interface ValidatorValues {
   comment: string;
   quote: string;
-  notificationEmail: string;
 }
 
 interface ValidatorResult {
@@ -13,7 +12,6 @@ interface ValidatorResult {
   errors: {
     commentError?: string;
     quoteError?: string;
-    notificationEmailError?: string;
   };
 }
 
@@ -26,7 +24,6 @@ export function validateAnnotationRequestForm(values: ValidatorValues): Validato
   const {
     comment,
     quote,
-    notificationEmail,
   } = values;
 
   const result: ValidatorResult = {
@@ -47,23 +44,6 @@ export function validateAnnotationRequestForm(values: ValidatorValues): Validato
   } else if (quote.length > quoteMaxLength) {
     result.errors = { quoteError: `Skróć komentarz z ${quote.length} do ${quoteMaxLength} znaków!` };
     return result;
-  }
-
-  if (notificationEmail) {
-    if (notificationEmail.length > notificationEmailMaxLength) {
-      result.errors = {
-        notificationEmailError:
-          `Skróć email z ${notificationEmail.length} do ${notificationEmailMaxLength} znaków!`,
-      };
-      return result;
-    }
-    if (!validateEmail(notificationEmail)) {
-      result.errors = {
-        notificationEmailError:
-          `Email nie jest poprawny`,
-      };
-      return result;
-    }
   }
 
   result.valid = true;

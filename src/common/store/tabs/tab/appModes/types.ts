@@ -2,7 +2,6 @@
 export interface AnnotationRequestFormData {
   quote: string;
   comment: string;
-  notificationEmail: string;
 }
 
 export interface AppModes {

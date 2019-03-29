@@ -179,13 +179,12 @@ export function annotationRequestFormOpened(triggeredBy: string, isQuoteBlank: b
   }, options);
 }
 
-export function annotationRequestSent(isQuoteBlank: boolean, isCommentBlank: boolean, isEmailBlank: boolean,
+export function annotationRequestSent(isQuoteBlank: boolean, isCommentBlank: boolean,
                                       options?: EventOptions) {
   sendEvent({
       eventCategory: 'AnnotationRequest', eventAction: 'Send', eventLabel: 'AnnotationRequestSent',
       [GACustomFieldsIndex.isQuoteBlank]: formatBoolean(isQuoteBlank),
       [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
-      [GACustomFieldsIndex.isEmailBlank]: formatBoolean(isEmailBlank),
     }, options);
 }
 

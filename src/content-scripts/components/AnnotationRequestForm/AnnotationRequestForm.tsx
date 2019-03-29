@@ -24,7 +24,6 @@ export interface AnnotationRequestFormProps {
 interface AnnotationRequestFormState extends AnnotationRequestFormData {
   commentError: string;
   quoteError: string;
-  notificationEmailError: string;
 }
 
 @connect(
@@ -40,11 +39,9 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
     return {
       quote: '',
       comment: '',
-      notificationEmail: '',
       ...nextProps.appModes.requestModeFormData,
       commentError: '',
       quoteError: '',
-      notificationEmailError: '',
     };
   }
 
@@ -64,16 +61,13 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
     if (stateUpdate.comment) {
       stateUpdate.commentError = '';
     }
-    if (stateUpdate.notificationEmail) {
-      stateUpdate.notificationEmailError = '';
-    }
     this.setState(stateUpdate);
   }
 
   validateForm(): boolean {
-    const { quote, comment, notificationEmail, quoteError, notificationEmailError } = this.state;
+    const { quote, comment } = this.state;
 
-    const validationResult = helpers.validateAnnotationRequestForm({ quote, comment, notificationEmail });
+    const validationResult = helpers.validateAnnotationRequestForm({ quote, comment });
     console.log(validationResult)
 
     if (validationResult.valid) {
@@ -92,14 +86,14 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
 
   handleSubmit = (e) => {
     if (this.validateForm()) {
-      const { quote, comment, notificationEmail } = this.state;
+      const { quote, comment } = this.state;
       const url = window.location.href;
       saveAnnotationRequest({
-        url, quote, comment, notificationEmail,
+        url, quote, comment,
       }).then((response) => {
         this.props.changeNotification(true, 'Twoja prośba o przypis została wysłana', ToastType.success);
         turnOffRequestMode(this.props.appModes, window.location.href);
-        ppGa.annotationRequestSent(!quote, !comment, !notificationEmail);
+        ppGa.annotationRequestSent(!quote, !comment);
       }).catch((error) => {
         console.log(error);
         this.props.changeNotification(true, 'Błąd! Nie udało się wysłać prośby', ToastType.failure);
@@ -107,8 +101,9 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
     }
   }
 
+  
   render() {
-    const { quote, comment, notificationEmail, quoteError, commentError, notificationEmailError } = this.state;
+    const { quote, comment, quoteError, commentError } = this.state;
 
     return (
       <div
@@ -163,20 +158,6 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
         <p className={styles.caption}>
           Zostaw adres e-mail, jeśli chcesz żebyśmy powiadomili Cię, kiedy dodamy w tym miejscu przypis
         </p>
-        <div className={styles.notificationEmail}>
-          <input
-            className={styles.formField}
-            name="notificationEmail"
-            value={notificationEmail}
-            onChange={this.handleInputChange}
-          />
-          <div
-            className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { [styles.hide]: notificationEmailError === '' })}
-          >
-            {notificationEmailError}
-          </div>
-        </div>
         <div className={styles.actions}>
           <Button appearance="subtle" onClick={this.handleCancelClick}>
             Anuluj

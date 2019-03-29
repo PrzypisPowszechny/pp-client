@@ -135,7 +135,6 @@ function annotationRequestCommand() {
     const formData = {
       url: window.location.href,
       quote: annotationLocation.quote,
-      notificationEmail: '',
       comment: '',
     };
 
