@@ -10,8 +10,11 @@ import {
   PopupAnnotationLocationData,
   selectAnnotationLocations,
 } from 'common/store/tabs/tab/annotations/selectors';
+import { ITabInfoState } from '../../../common/store/tabs/tab/tabInfo';
+import { selectTab } from '../../../common/store/tabs/selectors';
 
 export interface IAnnotationSummaryProps {
+  tabInfo: ITabInfoState;
   annotations: PopupAnnotationLocationData;
 
   onFullViewClick: (Event) => void;
@@ -22,6 +25,7 @@ export interface IAnnotationSummaryProps {
 
 @connect(
   state => ({
+    tabInfo: selectTab(state).tabInfo,
     annotations: selectAnnotationLocations(state),
   }),
 )
@@ -75,14 +79,17 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
   }
 
   render() {
-    // todo check site support
-    // if () {
-    //   return (
-    //     <div className={styles.self}>
-    //       Na tej stronie nie ma przypisów.
-    //     </div>
-    //   );
-    // }
+    const {
+      isSupported,
+      notSupportedMessage,
+    } = this.props.tabInfo;
+
+    if (!isSupported) {
+      return (
+        <div className={styles.self}>
+          {notSupportedMessage}
+        </div>);
+    }
 
     if (!this.props.annotations.hasLoaded) {
       return (

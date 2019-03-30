@@ -94,7 +94,7 @@ async function initData() {
   // initiate tab before any other actions
   await store.dispatch(tabInit());
   await Promise.all([
-    store.dispatch(updateTabInfo({ currentUrl: window.location.href })),
+    store.dispatch(updateTabInfo(window.location.href)),
     store.dispatch(setAxiosConfig({ baseURL: PPSettings.API_URL })), // settings for redux-json-api
     store.dispatch(loadAppModes()),
   ]);

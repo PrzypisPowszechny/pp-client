@@ -26,10 +26,13 @@ import { selectTab } from '../../common/store/tabs/selectors';
 import { IAnnotationRequestFormState } from '../../common/store/tabs/tab/widgets';
 import { hideAnnotationRequestForm, showAnnotationRequestForm } from '../../common/store/tabs/tab/widgets/actions';
 import { AnnotationRequestFormData } from 'content-scripts/components/AnnotationRequestForm';
+import { ITabInfoState } from '../../common/store/tabs/tab/tabInfo';
 
 export interface IBrowserPopupProps {
   user: IUserState;
+  tabInfo: ITabInfoState;
   annotationRequestForm: IAnnotationRequestFormState;
+
   hideAnnotationRequestForm: () => void;
   showAnnotationRequestForm: (initialData: Partial<AnnotationRequestFormData>) => void;
 
@@ -52,6 +55,7 @@ interface IBrowserPopupState {
 @connect(
   state => ({
     user: selectUser(state),
+    tabInfo: selectTab(state).tabInfo,
     annotationRequestForm: selectTab(state).widgets.annotationRequestForm,
   }),
   {
@@ -267,6 +271,10 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
       isExtensionDisabled,
     } = this.state;
 
+    const {
+      isSupported,
+    } = this.props.tabInfo;
+
     const isCurrentPageDisabled = this.isExtensionDisabledForCurrentTab();
 
     if (isLoading) {
@@ -287,19 +295,22 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
             </div>
             <AnnotationSummary onFullViewClick={this.handleFullAnnotationViewClick}/>
 
-            {this.renderFeatureButtons()}
+            {isSupported && this.renderFeatureButtons()}
 
             <li className="menu-item">
               <Icon className="icon" icon={ic_block} size={25}/>
               <span>Wyłącz przypisy</span>
             </li>
-            <li className="menu-subitem">
-              <span className={classNames({ negativeActive: isCurrentPageDisabled })}>na tej stronie</span>
-              <Toggle
-                checked={isCurrentPageDisabled}
-                onChange={this.handleDisabledPageChange}
-              />
-            </li>
+
+            {isSupported &&
+              <li className="menu-subitem">
+                <span className={classNames({ negativeActive: isCurrentPageDisabled })}>na tej stronie</span>
+                <Toggle
+                  checked={isCurrentPageDisabled}
+                  onChange={this.handleDisabledPageChange}
+                />
+              </li>
+            }
             <li className="menu-subitem">
               <span className={classNames({ negativeActive: isExtensionDisabled })}>wszędzie</span>
               <Toggle

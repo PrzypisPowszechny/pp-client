@@ -1,11 +1,11 @@
 
 export const UPDATE_TAB_INFO = 'UPDATE_TAB_INFO';
 
-export function updateTabInfo(tabInfo) {
+export function updateTabInfo(currentUrl: string) {
   return {
     type: UPDATE_TAB_INFO,
     payload: {
-      ...tabInfo,
+      currentUrl,
     },
   };
 }

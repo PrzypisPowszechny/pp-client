@@ -1,4 +1,5 @@
 import { UPDATE_TAB_INFO } from './actions';
+import { defaultWebsiteSupport } from '../../../../website-support';
 
 const initialState = {
   currentUrl: '',
@@ -6,15 +7,20 @@ const initialState = {
 
 export interface ITabInfoState {
   currentUrl: string;
+  isSupported: boolean;
+  notSupportedMessage: string;
 }
 
 export function tabInfo(state = initialState, action) {
   switch (action.type) {
     case UPDATE_TAB_INFO:
-      console.log('tab info updated');
+      const { currentUrl } = action.payload;
+      const notSupportedMessage = defaultWebsiteSupport.isBlacklisted(currentUrl);
+      const isSupported = notSupportedMessage === null;
       return {
-        ...state,
-        ...action.payload,
+        currentUrl,
+        isSupported,
+        notSupportedMessage,
       };
     default:
       return state;
