@@ -82,39 +82,48 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
     const {
       isSupported,
       notSupportedMessage,
+      contentScriptLoaded,
+      contentScriptWontLoad,
     } = this.props.tabInfo;
 
-    if (!isSupported) {
+    let message;
+    console.log(contentScriptWontLoad);
+    if (isSupported !== null && !isSupported) {
+      message = notSupportedMessage;
+    } else if (contentScriptWontLoad) {
+      message = 'Nie można dodawać przypisów na tej stronie lub pojawił się błąd. ' +
+        'Jeśli uważasz, że PP powinien obsługiwać tę stronę, daj nam znać!';
+    } else if (!contentScriptLoaded) {
+      message = 'Łączę się ze stroną...';
+    } else if (!this.props.annotations.hasLoaded) {
+      message = 'Ładuję przypisy...';
+    }
+    console.log(message)
+    if (message) {
       return (
         <div className={styles.self}>
-          {notSupportedMessage}
+          {message}
         </div>);
     }
 
-    if (!this.props.annotations.hasLoaded) {
+    const categoryCounts = this.categoryCounts();
+    const allCount = _.sum(Object.keys(categoryCounts).map(category => categoryCounts[category]));
+    if (allCount > 0) {
+      return (
+        <div className={classNames(styles.self, styles.anyFound)} onClick={this.props.onFullViewClick}>
+          {this.renderSummary(categoryCounts)}
+          <div className={styles.chevronButton}>
+            <Icon icon={ic_chevron_right} size={25}/>
+          </div>
+        </div>
+      );
+    } else {
       return (
         <div className={styles.self}>
-          Ładuję przypisy...
-        </div>);
-    } else {
-      const categoryCounts = this.categoryCounts();
-      const allCount = _.sum(Object.keys(categoryCounts).map(category => categoryCounts[category]));
-      if (allCount > 0) {
-        return (
-          <div className={classNames(styles.self, styles.anyFound)} onClick={this.props.onFullViewClick}>
-            {this.renderSummary(categoryCounts)}
-            <div className={styles.chevronButton}>
-              <Icon icon={ic_chevron_right} size={25}/>
-            </div>
-          </div>
-        );
-      } else {
-        return (
-          <div className={styles.self}>
-            Brak przypisów na stronie
-          </div>
-        );
-      }
+          Brak przypisów na stronie
+        </div>
+      );
+
     }
   }
 }

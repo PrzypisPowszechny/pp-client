@@ -22,6 +22,10 @@ import { tabPopupInit } from 'common/store/tabs/actions';
 import { configureAxios } from '../common/axios';
 import { waitUntilPageLoaded, waitUntilStoreReady } from '../common/utils/init';
 import { selectAccessToken } from '../common/store/storage/selectors';
+import { waitUntilContentScriptShouldHaveConnected, waitUntilCurrentTabLoaded } from './messages';
+import { selectTab } from '../common/store/tabs/selectors';
+import { contentScriptWontLoad, setTabUrl } from '../common/store/tabs/tab/tabInfo/actions';
+import { getCurrentTabUrl } from './utils';
 
 //  HTTP settings
 configureAxios(
@@ -41,8 +45,19 @@ Promise.all([
   });
 
 waitUntilStoreReady(store)
-  .then(() => {
+  .then(async () => {
     console.log('Store hydrated from background page.');
     // initialize tab state in the store
-    return store.dispatch(tabPopupInit());
+    await store.dispatch(tabPopupInit());
+
+    const currentUrl = await getCurrentTabUrl();
+    if (selectTab(store.getState()).tabInfo.currentUrl === null) {
+      await store.dispatch(setTabUrl(currentUrl));
+    }
+
+    await waitUntilContentScriptShouldHaveConnected();
+    if (!selectTab(store.getState()).tabInfo.contentScriptLoaded) {
+      store.dispatch(contentScriptWontLoad());
+    }
+
   });

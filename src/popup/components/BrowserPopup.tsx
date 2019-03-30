@@ -27,6 +27,7 @@ import { IAnnotationRequestFormState } from '../../common/store/tabs/tab/widgets
 import { hideAnnotationRequestForm, showAnnotationRequestForm } from '../../common/store/tabs/tab/widgets/actions';
 import { AnnotationRequestFormData } from 'content-scripts/components/AnnotationRequestForm';
 import { ITabInfoState } from '../../common/store/tabs/tab/tabInfo';
+import { waitUntilCurrentTabLoaded } from '../messages';
 
 export interface IBrowserPopupProps {
   user: IUserState;
