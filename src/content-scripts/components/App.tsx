@@ -18,7 +18,7 @@ interface AppProps {
   editorVisible: boolean;
   menuVisible: boolean;
   annotationModeWidgetVisible: boolean;
-  requestModeWidgetVisible: boolean;
+  annotationRequestFormVisible: boolean;
   notificationVisible: boolean;
 }
 
@@ -30,9 +30,9 @@ interface AppProps {
       user: selectUser(state),
       editorVisible: tab.widgets.editor.visible,
       menuVisible: tab.widgets.menu.visible,
+      annotationRequestFormVisible: tab.widgets.annotationRequestForm.visible,
       notificationVisible: tab.widgets.notification.visible,
       annotationModeWidgetVisible: selectModeForCurrentPage(state).isAnnotationMode,
-      requestModeWidgetVisible: selectModeForCurrentPage(state).isRequestMode,
     };
   },
 )
@@ -49,7 +49,7 @@ export default class App extends React.Component<Partial<AppProps>, {}> {
           {this.props.editorVisible && <Editor/>}
           {this.props.menuVisible && <Menu/>}
           {this.props.annotationModeWidgetVisible && <AnnotationModeWidget/>}
-          {this.props.requestModeWidgetVisible && <SideWidget><AnnotationRequestForm/></SideWidget>}
+          {this.props.annotationRequestFormVisible && <SideWidget><AnnotationRequestForm/></SideWidget>}
           {this.props.notificationVisible && <Toast/>}
           <ViewerManager/>
         </div>

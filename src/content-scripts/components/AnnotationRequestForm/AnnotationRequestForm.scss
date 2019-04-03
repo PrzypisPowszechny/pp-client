@@ -66,8 +66,7 @@ textarea.formField {
 
 
 .quote,
-.comment,
-.notification-email {
+.comment {
   position: relative;
 }
 
@@ -76,13 +75,6 @@ textarea.formField {
   .error-msg {
     left: 0;
     top: $textarea-height;
-  }
-}
-
-.notification-email {
-  .error-msg {
-    left: 0;
-    top: 20px;
   }
 }
 

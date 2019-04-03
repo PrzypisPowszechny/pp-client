@@ -10,7 +10,7 @@ import mousePosition from '../utils/mousePosition';
 import { makeSelection, showMenu } from 'common/store/tabs/tab/actions';
 
 import { TextSelector } from '../utils/index';
-import { hideMenu } from 'common/store/tabs/tab/widgets/actions';
+import { hideMenu, showAnnotationRequestForm } from 'common/store/tabs/tab/widgets/actions';
 import {
   annotationRootNode,
   outsideArticleClasses,
@@ -20,10 +20,7 @@ import {
 import { selectModeForCurrentPage } from 'common/store/tabs/tab/appModes/selectors';
 import { setSelectionRange, showEditorAnnotation } from 'common/store/tabs/tab/widgets/actions';
 import ppGa from 'common/pp-ga';
-import { standardizeUrlForPageSettings } from 'common/url';
-import { turnOnRequestMode } from 'common/chrome-storage';
 import store from '../store';
-import { selectTab } from 'common/store/tabs/selectors';
 import { EMULATE_ON_CONTEXT_MENU_ANNOTATE, EMULATE_ON_CONTEXT_MENU_ANNOTATION_REQUEST } from '../../../e2e/events';
 
 let handlers;
@@ -129,22 +126,14 @@ function tryGetSingleSelection() {
 function annotationRequestCommand() {
   const selection = tryGetSingleSelection();
   if (selection) {
-    const currentUrl = window.location.href;
     const annotationLocation = fullAnnotationLocation(selection);
 
     const formData = {
-      url: window.location.href,
       quote: annotationLocation.quote,
-      notificationEmail: '',
       comment: '',
     };
 
-    const currentStandardizedTabUrl = standardizeUrlForPageSettings(window.location.href);
-
-    turnOnRequestMode(selectTab(store.getState()).appModes, currentStandardizedTabUrl);
-    chrome.storage.local.set({ ANNOTATION_REQUEST_FORM_DATA: formData }, () => {
-      console.log('annotation request window opened!');
-    });
+    store.dispatch(showAnnotationRequestForm(formData));
     ppGa.annotationRequestFormOpened('rightMouseContextMenu', !selection);
   }
 }

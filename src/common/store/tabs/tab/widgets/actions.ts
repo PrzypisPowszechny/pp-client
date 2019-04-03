@@ -1,9 +1,11 @@
 import { AnnotationLocation } from 'content-scripts/handlers/annotation-event-handlers';
 import { ToastType } from 'content-scripts/components/elements/Toast/Toast';
+import { AnnotationRequestFormData } from 'content-scripts/components/AnnotationRequestForm';
 
 export const EDITOR_ANNOTATION = 'EDITOR_ANNOTATION';
 export const SET_EDITOR_SELECTION_RANGE = 'SET_EDITOR_SELECTION_RANGE';
 export const EDITOR_VISIBLE_CHANGE = 'EDITOR_VISIBLE_CHANGE';
+export const ANNOTATION_REQUEST_FORM_VISIBLE_CHANGE = 'ANNOTATION_REQUEST_FORM_VISIBLE_CHANGE';
 export const VIEWER_VISIBLE_CHANGE = 'VIEWER_VISIBLE_CHANGE';
 export const VIEWER_MODAL_CHANGE = 'VIEWER_MODAL_CHANGE';
 export const VIEWER_REPORT_EDITOR_CHANGE = 'VIEWER_REPORT_EDITOR_CHANGE';
@@ -60,6 +62,26 @@ export const hideMenu = () => {
     type: MENU_WIDGET_CHANGE,
     payload: {
       visible: false,
+    },
+  };
+};
+
+export const showAnnotationRequestForm = (initialData: Partial<AnnotationRequestFormData>) => {
+  return {
+    type: ANNOTATION_REQUEST_FORM_VISIBLE_CHANGE,
+    payload: {
+      visible: true,
+      initialData,
+    },
+  };
+};
+
+export const hideAnnotationRequestForm = () => {
+  return {
+    type: ANNOTATION_REQUEST_FORM_VISIBLE_CHANGE,
+    payload: {
+      visible: false,
+      initialData: null,
     },
   };
 };
@@ -138,4 +160,4 @@ export const changeNotification = (visible: boolean, message?: string, type?: To
       type,
     },
   };
-}
+};

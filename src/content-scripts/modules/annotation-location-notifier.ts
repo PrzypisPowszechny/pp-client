@@ -25,7 +25,6 @@ function deinit() {
   instance.unsubscribe();
 }
 
-
 // save the annotation location information to DOM for reads in selenium + in console
 function markLocatedAnnotations() {
   const state = store.getState();

@@ -24,7 +24,8 @@ export default class NoCommentModal extends React.PureComponent<NoCommentModalPr
           </div>
           <div>
             <p className={styles.modalText}>
-              Treśc przypisu to miejsce na streszczenie najważniejszych informacji ze źrodła albo zacytowanie wprost jego fragmentu.
+              Treść przypisu to miejsce na streszczenie najważniejszych informacji ze źrodła
+              albo zacytowanie wprost jego fragmentu.
             </p>
             <p className={styles.modalText}>
               Możesz nie wpisywac treści, jeśli chcesz podlinkowac tylko źródło do artykułu.

@@ -12,6 +12,7 @@ export function configureAxios(
   axios.interceptors.request.use((config) => {
     const access = getAccessToken();
     if (access) {
+      // tslint:disable
       config.headers['Authorization'] = `JWT ${access}`;
     }
     return config;

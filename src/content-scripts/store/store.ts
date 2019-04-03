@@ -9,7 +9,7 @@ const middlewares = [thunk, promise];
 
 function tabOnlyPatch(obj, difference: any[]) {
   const tabId = getTabId();
-  if (difference.every((item) =>
+  if (difference.every(item =>
     item.key === 'tabs' && item.value.every(subitem => subitem.key !== tabId.toString(),
     ))) {
     console.debug('Ignoring patch (not applicable):', difference);

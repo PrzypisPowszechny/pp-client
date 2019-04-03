@@ -10,7 +10,6 @@ import { send } from 'react-icons-kit/fa/send';
 import { standardizeUrlForPageSettings } from 'common/url';
 import Toggle from './toggle/Toggle';
 import Button from 'content-scripts/components/elements/Button/Button';
-import { turnOnRequestMode } from 'common/chrome-storage';
 import * as chromeKeys from 'common/chrome-storage/keys';
 import _filter from 'lodash/filter';
 import classNames from 'classnames';
@@ -23,11 +22,18 @@ import { selectUser } from '../../common/store/storage/selectors';
 import { IUserState } from '../../common/store/storage/types';
 import { connect } from 'react-redux';
 import { UserRoles } from '../../common/api/user';
+import { selectTab } from '../../common/store/tabs/selectors';
+import { IAnnotationRequestFormState } from '../../common/store/tabs/tab/widgets';
+import { hideAnnotationRequestForm, showAnnotationRequestForm } from '../../common/store/tabs/tab/widgets/actions';
+import { AnnotationRequestFormData } from 'content-scripts/components/AnnotationRequestForm';
 
 export interface IBrowserPopupProps {
   user: IUserState;
+  annotationRequestForm: IAnnotationRequestFormState;
+  hideAnnotationRequestForm: () => void;
+  showAnnotationRequestForm: (initialData: Partial<AnnotationRequestFormData>) => void;
 
-  onAnnotationRequestSelect: () => void;
+  // React callbacks
   onPageChange: (PopupPages) => void;
 }
 
@@ -35,7 +41,6 @@ interface IBrowserPopupState {
   isLoading: boolean;
   currentStandardizedTabUrl: string;
   annotationModePages: string[];
-  requestModePages: string[];
   isExtensionDisabled: boolean;
   disabledPages: string[];
 }
@@ -47,7 +52,12 @@ interface IBrowserPopupState {
 @connect(
   state => ({
     user: selectUser(state),
+    annotationRequestForm: selectTab(state).widgets.annotationRequestForm,
   }),
+  {
+    showAnnotationRequestForm,
+    hideAnnotationRequestForm,
+  },
 )
 export default class BrowserPopup extends React.Component<Partial<IBrowserPopupProps>,
   Partial<IBrowserPopupState>> {
@@ -58,7 +68,6 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
       isLoading: true,
       currentStandardizedTabUrl: null,
       annotationModePages: [],
-      requestModePages: [],
       isExtensionDisabled: false,
       disabledPages: [],
     };
@@ -73,14 +82,12 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     if (this.state.isLoading) {
       chrome.storage.local.get([
         chromeKeys.ANNOTATION_MODE_PAGES,
-        chromeKeys.REQUEST_MODE_PAGES,
         chromeKeys.DISABLED_EXTENSION,
         chromeKeys.DISABLED_PAGES,
       ], (result) => {
         this.setState({
           isLoading: false,
           annotationModePages: result[chromeKeys.ANNOTATION_MODE_PAGES] || [],
-          requestModePages: result[chromeKeys.REQUEST_MODE_PAGES] || [],
           isExtensionDisabled: result[chromeKeys.DISABLED_EXTENSION] || false,
           disabledPages: result[chromeKeys.DISABLED_PAGES] || [],
         });
@@ -110,10 +117,6 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     return (this.state.annotationModePages || []).indexOf(this.state.currentStandardizedTabUrl) !== -1;
   }
 
-  isRequestModeForCurrentTab() {
-    return (this.state.requestModePages || []).indexOf(this.state.currentStandardizedTabUrl) !== -1;
-  }
-
   handleFullAnnotationViewClick = (e) => {
     const { onPageChange } = this.props;
     if (onPageChange) {
@@ -128,11 +131,10 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
    * - storage, because we need to communicate changes to other parts of the application
    * - state, because there is no other clean method to ensure state continuity, so we can have interface transitions
    * This method of communication with content scripts in fact proves cumbersome;
-   * we could consider moving to react-redux-chrome instead of refining it
+   * we should move more and more to the global redux store
    */
   handleAnnotationModeClick = (e) => {
     const {
-      requestModePages,
       annotationModePages,
       currentStandardizedTabUrl,
     } = this.state;
@@ -143,15 +145,11 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
       newAnnotationModePages = [...annotationModePages, currentStandardizedTabUrl];
 
       // switch off request mode
-      let newRequestModePages = requestModePages;
-      if (this.isRequestModeForCurrentTab()) {
-        newRequestModePages = _filter(requestModePages, url => url !== currentStandardizedTabUrl);
-      }
+      this.props.hideAnnotationRequestForm();
 
-      this.setState({ annotationModePages: newAnnotationModePages, requestModePages: newRequestModePages });
+      this.setState({ annotationModePages: newAnnotationModePages });
       chrome.storage.local.set({
         [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages,
-        [chromeKeys.REQUEST_MODE_PAGES]: newRequestModePages,
       });
       window.close();
       ppGa.annotationAddingModeInited({ location: currentStandardizedTabUrl });
@@ -159,15 +157,11 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
   }
 
   handleAnnotationRequestClick = (e) => {
-    const {
-      currentStandardizedTabUrl,
-    } = this.state;
-
-    const isRequestMode = this.isRequestModeForCurrentTab();
-    if (!isRequestMode) {
-      turnOnRequestMode(this.state, currentStandardizedTabUrl);
-      window.close();
+    const { visible } = this.props.annotationRequestForm;
+    if (!visible) {
+      this.props.showAnnotationRequestForm({});
       ppGa.annotationRequestFormOpened('popup', true, { location: this.state.currentStandardizedTabUrl });
+      window.close();
     }
   }
 
@@ -188,7 +182,6 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
       disabledPages,
       currentStandardizedTabUrl,
       annotationModePages,
-      requestModePages,
     } = this.state;
 
     let newDisabledPages;
@@ -201,17 +194,15 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     }
     // Permanently turn off the annotation mode for the disabled pages
     const newAnnotationModePages = _filter(annotationModePages, url => !newDisabledPages.includes(url));
-    const newRequestnModePages = _filter(requestModePages, url => !newDisabledPages.includes(url));
+    this.props.hideAnnotationRequestForm();
 
     this.setState({
       disabledPages: newDisabledPages,
       annotationModePages: newAnnotationModePages,
-      requestModePages: newRequestnModePages,
     });
     chrome.storage.local.set({
       [chromeKeys.DISABLED_PAGES]: newDisabledPages,
       [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages,
-      [chromeKeys.REQUEST_MODE_PAGES]: newRequestnModePages,
     });
   }
 
@@ -225,9 +216,10 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
       isExtensionDisabled,
     } = this.state;
 
+    const annotationRequestFormVisible = this.props.annotationRequestForm.visible;
+
     const isCurrentPageDisabled = this.isExtensionDisabledForCurrentTab();
     const isAnnotationMode = this.isAnnotationModeForCurrentTab();
-    const isRequestMode = this.isRequestModeForCurrentTab();
 
     return (
       <>
@@ -252,11 +244,11 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
         <li
           className={classNames('menu-item', 'clickable',
             { disabled: isExtensionDisabled || isCurrentPageDisabled },
-            { active: isRequestMode })}
+            { active: annotationRequestFormVisible })}
           onClick={this.handleAnnotationRequestClick}
         >
           <Icon className="icon" icon={ic_live_help} size={25}/>
-          {isRequestMode ?
+          {annotationRequestFormVisible ?
             <span>Zgłaszasz prośbę o przypis </span>
             : <span>Poproś o przypis</span>
           }

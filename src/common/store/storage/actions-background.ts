@@ -14,7 +14,7 @@ export function userLoggedIn(auth) {
 
 export function accessTokenRefresh(auth) {
   return (dispatch, state) => {
-    console.log('refresh')
+    console.log('refresh');
     dispatch(userTokensRefreshed(auth));
     dashboardMessaging.sendLoginData();
   };

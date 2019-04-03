@@ -12,5 +12,4 @@ export const GACustomFieldsIndex = {
   annotationId: 'dimension6',
   annotationLink: 'dimension7',
   isQuoteBlank: 'dimension8',
-  isEmailBlank: 'dimension9',
 };
