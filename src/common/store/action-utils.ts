@@ -10,16 +10,16 @@ import { markActionWithTabId, retrieveActionTab } from './tabs/action-tab';
  * This function converts a thunk into a tab-marked thunk by additionally decorating thunk (state, dispatch) arguments.
  * Actions dispatched within a thunk action are now marked with tab information, too.
  *
- * "aliasAction" stands for the serializable action alias sent within browser message,
+ * "aliasOrdinaryAction" stands for the serializable action alias sent within browser message,
  * mapped to a thunk on background page side.
  */
-export function aliasActionToTabMarkedThunk(originalThunk) {
-  return (aliasAction) => {
+export function aliasActionToTabMarkedThunk(originalThunkAction) {
+  return (aliasOrdinaryAction) => {
     return (dispatch, getState) => {
-      const tabId = retrieveActionTab(aliasAction);
+      const tabId = retrieveActionTab(aliasOrdinaryAction);
       // attach the sender to all actions dispatched within the thunk
       const newDispatch = action => dispatch(markActionWithTabId(action, tabId));
-      return originalThunk(...aliasAction.args)(newDispatch, getState);
+      return originalThunkAction(...aliasOrdinaryAction.args)(newDispatch, getState);
     };
   };
 }

@@ -1,15 +1,21 @@
 import { combineReducers } from 'redux';
+import { SET_AUTH_PROC_STAGE } from './actions';
+import { IAuthProcState, IRuntimeState } from './types';
 
-// tslint:disable
-
-export interface IUserState {
-  // todo
-}
-
-export interface IRuntimeState {
-  user: IUserState;
+export function authProc(
+    state: Partial<IAuthProcState> = {}, action: {type: string, payload: IAuthProcState},
+): Partial<IAuthProcState> {
+  switch (action.type) {
+    case SET_AUTH_PROC_STAGE:
+      return {
+        ...action.payload,
+      };
+    default:
+      return state;
+  }
 }
 
 export default combineReducers<IRuntimeState>({
-  // todo
+  authProc,
+  // user, // todo
 });
