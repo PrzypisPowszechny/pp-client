@@ -1,4 +1,4 @@
-import {AuthProcStages, AuthProviders, IAuthProcState} from './types';
+import { AuthProcStages, AuthProviders, IAuthProcState } from './types';
 
 export const SET_AUTH_PROC_STAGE = 'SET_AUTH_PROC_STAGE';
 
@@ -6,9 +6,9 @@ export function initiateAuthProc(provider: AuthProviders): { type: string, paylo
   return {
     type: SET_AUTH_PROC_STAGE,
     payload: {
-        stage: AuthProcStages.initiated,
-        provider,
-        msg: null,
+      stage: AuthProcStages.initiated,
+      provider,
+      msg: null,
     },
   };
 }
@@ -17,8 +17,8 @@ export function failAuthProc(msg): { type: string, payload: Partial<IAuthProcSta
   return {
     type: SET_AUTH_PROC_STAGE,
     payload: {
-        stage: AuthProcStages.failed,
-        msg,
+      stage: AuthProcStages.failed,
+      msg,
     },
   };
 }
@@ -27,7 +27,17 @@ export function completeAuthProc(): { type: string, payload: Partial<IAuthProcSt
   return {
     type: SET_AUTH_PROC_STAGE,
     payload: {
-        stage: AuthProcStages.completed,
+      stage: AuthProcStages.completed,
+    },
+  };
+}
+
+export function cancelAuthProc(msg = ''): { type: string, payload: Partial<IAuthProcState> } {
+  return {
+    type: SET_AUTH_PROC_STAGE,
+    payload: {
+      stage: AuthProcStages.canceled,
+      msg,
     },
   };
 }

@@ -8,20 +8,17 @@ import dashboardMessaging from '../../../background/dashboard-messaging';
 export function userLoggedIn(auth) {
   return (dispatch, state) => {
     dispatch(userDataNew(auth));
-    dashboardMessaging.sendLoginData();
   };
 }
 
 export function accessTokenRefresh(auth) {
   return (dispatch, state) => {
     dispatch(userTokensRefreshed(auth));
-    dashboardMessaging.sendLoginData();
   };
 }
 
 export function userLoggedOut() {
   return (dispatch, state) => {
     dispatch(userDataCleared());
-    dashboardMessaging.sendLoginData();
   };
 }

@@ -4,6 +4,111 @@ import { accessTokenRefresh } from '../common/store/storage/actions-background';
 import { selectStorage } from '../common/store/storage/selectors';
 import axiosRetry, { isRetryableError } from 'axios-retry';
 import interval from 'interval-promise';
+import {
+  FacebookCredentials,
+  GoogleCredentials,
+  PPIntegrationCredentialsAPIModel,
+  PPLoginResponseAPIModel,
+} from 'common/api/user';
+import { AuthProviders } from 'common/store/runtime/types';
+
+type URLString = string;
+
+export async function authenticate(provider: AuthProviders): Promise<PPLoginResponseAPIModel> {
+  const authFlowResult: PPIntegrationCredentialsAPIModel = await authenticateProvider(provider);
+  // Check if canceled
+  if (!authFlowResult) {
+    return null;
+  }
+  return await authenticatePP(provider, authFlowResult);
+}
+
+export async function authenticateProvider(provider: AuthProviders): Promise<PPIntegrationCredentialsAPIModel> {
+  let authURL;
+  switch (provider) {
+    case AuthProviders.facebook:
+      authURL = buildFbRedirectUrl();
+      break;
+    case AuthProviders.google:
+      authURL = buildGoogleRedirectUrl();
+      break;
+    default:
+      throw Error(`Cannot build authUrl for supplied provider, value: "${provider}"`);
+  }
+
+  const authResponseUrl: URLString = await new Promise<URLString>(
+    resolve => chrome.identity.launchWebAuthFlow({ interactive: true, url: authURL }, resolve),
+  );
+
+  let authParams;
+  // Leaving auth window by closing it triggers chrome exception, so we can't treat chrome errors seriously
+  if (chrome.runtime.lastError || !authResponseUrl) {
+    return null;
+  }
+  authParams = parsePostAuthenticateRedirectURL(authResponseUrl);
+  return {
+    // fb uses camelcase while google underscores
+    accessToken: authParams.accessToken || authParams.access_token,
+    expiresIn: authParams.expiresIn || authParams.expires_in,
+    tokenType: authParams.tokenType || authParams.token_type,
+  };
+}
+
+export async function authenticatePP(
+  provider: AuthProviders, data: PPIntegrationCredentialsAPIModel,
+): Promise<PPLoginResponseAPIModel> {
+  const httpResponse = await axios({
+    method: 'post',
+    url: `${PPSettings.API_URL}/auth/${provider}/`,
+    data,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  return httpResponse.data;
+}
+
+function buildFbRedirectUrl() {
+  const redirectURL = chrome.identity.getRedirectURL();
+  const appID = '2290339024350798';
+  const scopes = ['email', 'public_profile'];
+  let authURL = 'https://www.facebook.com/v2.9/dialog/oauth';
+  authURL += `?client_id=${appID}`;
+  authURL += `&response_type=token`;
+  authURL += `&redirect_uri=${encodeURIComponent(redirectURL)}`;
+  authURL += `&scope=${encodeURIComponent(scopes.join(' '))}`;
+
+  return authURL;
+}
+
+function buildGoogleRedirectUrl() {
+  const redirectURL = chrome.identity.getRedirectURL();
+  const clientID = '823340157121-mplb4uvgu5ena8fuuuvvnpn773hpjim4.apps.googleusercontent.com';
+  const scopes = ['email', 'profile'];
+  let authURL = 'https://accounts.google.com/o/oauth2/auth';
+  authURL += `?client_id=${clientID}`;
+  authURL += `&response_type=token`;
+  authURL += `&redirect_uri=${encodeURIComponent(redirectURL)}`;
+  authURL += `&scope=${encodeURIComponent(scopes.join(' '))}`;
+
+  return authURL;
+}
+
+function parseParams(queryString): GoogleCredentials | FacebookCredentials {
+  const query: any = {};
+  const pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
+  for (const pair of pairs) {
+    const p = pair.split('=');
+    query[decodeURIComponent(p[0])] = decodeURIComponent(p[1] || '');
+  }
+  return query;
+}
+
+function parsePostAuthenticateRedirectURL(redirectUrl) {
+  // This is not real queryString, in OAuth is is queryString passed in hash fragment
+  const queryString = redirectUrl.substr(redirectUrl.indexOf('#') + 1);
+  return parseParams(queryString);
+}
 
 // TODO turn into observable; for now it seems complicated...
 export function refreshToken() {
@@ -30,7 +135,6 @@ export function refreshToken() {
     },
   })
     .then((resp) => {
-      console.log(resp);
       if (!resp || !resp.data) {
         throw new Error(`Error refreshing access token: bad response`);
       }

@@ -5,13 +5,14 @@ export interface IUserState {
 }
 
 export enum AuthProviders {
-  google,
-  facebook,
+  google = 'google',
+  facebook = 'facebook',
 }
 
 export enum AuthProcStages {
   initiated,
   failed,
+  canceled,
   completed,
 }
 
