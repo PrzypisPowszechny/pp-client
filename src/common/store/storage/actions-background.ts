@@ -1,5 +1,4 @@
 import { userDataCleared, userDataNew, userTokensRefreshed } from './actions';
-import dashboardMessaging from '../../../background/dashboard-messaging';
 
 /*
  * It's convenient to set apart background actions in a different file

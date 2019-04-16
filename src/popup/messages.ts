@@ -24,10 +24,9 @@ export function waitUntilContentScriptShouldHaveConnected(): Promise<null> {
   return new Promise(resolve =>
     waitUntilCurrentTabLoaded().then(
       () => setTimeout(resolve, timeoutBeforeCSConnects),
-    )
+    ),
   );
 }
-
 
 export function sendScrollToAnnotation(annotationId: string) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {

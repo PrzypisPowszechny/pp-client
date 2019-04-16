@@ -1,5 +1,4 @@
 
-
 export interface WebsiteSupportItem {
   urls: RegExp[];
   message: string;
@@ -16,7 +15,7 @@ export class WebsiteSupport {
   isBlacklisted(url: string): string | null {
     for (const item of this.items) {
       for (const urlPattern of item.urls) {
-        if(urlPattern.test(url)) {
+        if (urlPattern.test(url)) {
           console.debug(`Website is not supported: ${urlPattern}`);
           return item.message;
         }
@@ -40,6 +39,5 @@ export const blacklist: WebsiteSupportItem[] = [
     message: 'Na tej stronie nie ma do czego dodać przypisu',
   },
 ];
-
 
 export const defaultWebsiteSupport = new WebsiteSupport(blacklist);
