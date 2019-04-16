@@ -3,15 +3,15 @@ import 'rangy/lib/rangy-classapplier';
 import 'rangy/lib/rangy-highlighter';
 import 'rangy/lib/rangy-textrange';
 import 'rangy/lib/rangy-serializer';
-import { LocatedAnnotation } from '../../common/store/tabs/tab/annotations/types';
+import { LocatedAnnotation } from 'common/store/tabs/tab/annotations/types';
 import { annotationRootNode } from '../settings';
 import { Range as XPathRange } from 'xpath-range';
-import { escapeRegExp } from 'tslint/lib/utils';
-import { AnnotationAPIModel } from '../../common/api/annotations';
+import { AnnotationAPIModel } from 'common/api/annotations';
 import * as Sentry from '@sentry/browser';
 import { Store } from 'redux';
-import { IState } from '../../common/store/reducer';
-import { waitUntilPageLoaded } from '../../common/utils/init';
+import { IState } from 'common/store/reducer';
+import { waitUntilPageLoaded } from 'common/utils/init';
+import { escapeRegExp } from 'lodash';
 
 export class AnnotationLocator {
 

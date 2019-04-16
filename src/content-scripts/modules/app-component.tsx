@@ -14,10 +14,11 @@ function init() {
   documentContainer.id = 'pp-document-container';
   window.document.body.appendChild(documentContainer);
 
-  ReactDOM.render(
-    <Provider store={store}>
-      <App />
-    </Provider>,
+  ReactDOM.render((
+      <Provider store={store}>
+        <App />
+      </Provider>
+    ),
     documentContainer,
   );
 }

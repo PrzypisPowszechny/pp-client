@@ -48,9 +48,13 @@ export const processAuthenticationEpic: Epic<FluxStandardAction, any, IState> = 
     filter(action => action.payload.stage === AuthProcStages.initiated),
     mergeMap( (action): Observable<FluxStandardAction> =>
       from(authenticate(action.payload.provider)).pipe(
-        mergeMap( loginData => !loginData
-          ? of(cancelAuthProc('Anulowano autoryzację'))
-          : of(completeAuthProc(), userDataNew(loginData)),
+        mergeMap( loginData =>
+          loginData ? of(
+            completeAuthProc(),
+            userDataNew(loginData),
+          ) : of(
+            cancelAuthProc('Anulowano autoryzację'),
+          ),
         ),
         catchError((err) => {
           Sentry.captureException(err);

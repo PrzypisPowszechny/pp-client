@@ -103,7 +103,8 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
       return (
         <div className={styles.self}>
           {message}
-        </div>);
+        </div>
+      );
     }
 
     const categoryCounts = this.categoryCounts();

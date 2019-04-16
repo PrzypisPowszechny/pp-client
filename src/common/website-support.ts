@@ -34,7 +34,7 @@ export const blacklist: WebsiteSupportItem[] = [
       /.*:\/\/(\S+\.)*facebook.com(\/.*)?/i,
       /chrome:\/\/newtab\//i,
       /.*pdf/i,
-      //i,
+      // i,
     ],
     message: 'Na tej stronie nie ma do czego dodać przypisu',
   },
