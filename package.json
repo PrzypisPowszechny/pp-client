@@ -68,6 +68,7 @@
     "jest": "24.7.1",
     "jest-webextension-mock": "3.5.0",
     "node-sass": "4.8.3",
+    "npm-scripts-help": "0.8.0",
     "ps-node": "0.1.6",
     "redux-mock-store": "1.5.3",
     "regenerator-runtime": "0.12.1",
@@ -97,6 +98,7 @@
     "prodAppKey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArkmF/06jK2b976qLc1RoSyrhGMN1QkbRCbDLnMGL+RfOlZdbDBwXxtTXcnzm2uwUlrZKCaecuD0GOrnOfihaqQv3cVRbRTCWhvyhswqiWea8YA8P0pjiTrsuth6l0NK9WqKYLTUxP+oM9H0nDaOg5I9Jzh5kCZPpwavbx1naXCv7PPcIoGNRgA4y3YJL8qiJx9eY0I6yRdCSS8JX4AeZ4K1ShnzPg5Wih7NZdJlmWCjOajdF8GHxYGt68eGOamIlQYwFzAjinCN+DbI1f4suQcq5oJzw3NCBmCvepaw5f/ivhzCsw0aRfVqRk6EVxhQvRwTBxeBQQ28j5JecxtfN5wIDAQAB"
   },
   "scripts": {
+    "help": "npm-scripts-help",
     "build-client": "webpack --mode development --config config/client/prod.config.js",
     "start-client": "webpack-dev-server --mode development --config config/client/dev.config.js",
     "start": "node loadExtensionToChromiumServer.js & webpack --mode development --config config/browser-extension/ext.dev.config.js --watch",
@@ -107,9 +109,22 @@
     "pack": "cd ./dist && zip -r pp-chrome.zip ./browser-extension",
     "lint": "tslint --project tsconfig.json",
     "lint-fix": "npm run lint -- --fix",
-    "test": "jest src",
-    "e2e": "jest e2e --maxWorkers=1",
+    "test-unit": "jest src",
+    "test-unit-full": "npm run build && npm run test-unit",
+    "test-e2e": "jest e2e --maxWorkers=1",
+    "test-e2e-full": "npm run build && npm run test-e2e",
+    "test": "jest --maxWorkers=1",
     "validate-annotations": "PP_DEV_SENTRY_ALT=true PP_DEV_SENTRY_UNLOCATED_IGNORE=true npm run build && PP_API=devdeploy1 jest validate-annotations"
+  },
+  "scriptshelp": {
+    "help-message": [
+      "PP Commandline"
+    ],
+    "help": "Display this help",
+    "test": {
+      "Desciption": "Run selected tests",
+      "Usage": "npm run test <directory>"
+    }
   },
   "repository": {
     "type": "git",

@@ -35,16 +35,16 @@ jobs:
             - node_modules
           key: v2-node-8-dependencies-{{ checksum "package-lock.json" }}-and-{{ checksum "package.json" }}
 
-  test:
+  test-unit:
     executor: node-browsers-local-api
     steps:
       - checkout
       - restore_cache:
           keys:
             - v2-node-8-dependencies-{{ checksum "package-lock.json" }}-and-{{ checksum "package.json" }}
-      - run: npm run test
+      - run: npm run test-unit
 
-  e2e-build:
+  test-e2e-build:
     executor: node-browsers-local-api
     steps:
       - checkout
@@ -52,9 +52,9 @@ jobs:
           keys:
             - v2-node-8-dependencies-{{ checksum "package-lock.json" }}-and-{{ checksum "package.json" }}
       - run: npm run build
-      - run: npm run e2e
+      - run: npm run test-e2e
 
-  e2e-build-optimized:
+  test-e2e-build-optimized:
     executor: node-browsers-local-api
     steps:
       - checkout
@@ -62,7 +62,7 @@ jobs:
           keys:
             - v2-node-8-dependencies-{{ checksum "package-lock.json" }}-and-{{ checksum "package.json" }}
       - run: npm run build-optimized
-      - run: npm run e2e
+      - run: npm run test-e2e
 
   release:
     executor: node-pp-api
@@ -89,19 +89,19 @@ workflows:
           filters:
             tags: # required since `release` has tag filters AND requires this job
               only: /.*/
-      - test:
+      - test-unit:
           requires:
             - install
           filters:
             tags: # required since `release` has tag filters AND requires this job
               only: /.*/
-      - e2e-build:
+      - test-e2e-build:
           requires:
             - install
           filters:
             tags: # required since `release` has tag filters AND requires this job
               only: /.*/
-      - e2e-build-optimized:
+      - test-e2e-build-optimized:
           requires:
             - install
           filters:
@@ -110,9 +110,9 @@ workflows:
       - release:
           requires:
             - install
-            - test
-            - e2e-build
-            - e2e-build-optimized
+            - test-unit
+            - test-e2e-build
+            - test-e2e-build-optimized
           filters:
             branches: # no branches, now tag condition can filter commits with proper tag
               ignore: /.*/
