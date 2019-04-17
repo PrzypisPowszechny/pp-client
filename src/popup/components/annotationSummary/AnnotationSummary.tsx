@@ -10,8 +10,11 @@ import {
   PopupAnnotationLocationData,
   selectAnnotationLocations,
 } from 'common/store/tabs/tab/annotations/selectors';
+import { ITabInfoState } from '../../../common/store/tabs/tab/tabInfo';
+import { selectTab } from '../../../common/store/tabs/selectors';
 
 export interface IAnnotationSummaryProps {
+  tabInfo: ITabInfoState;
   annotations: PopupAnnotationLocationData;
 
   onFullViewClick: (Event) => void;
@@ -22,6 +25,7 @@ export interface IAnnotationSummaryProps {
 
 @connect(
   state => ({
+    tabInfo: selectTab(state).tabInfo,
     annotations: selectAnnotationLocations(state),
   }),
 )
@@ -75,39 +79,51 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
   }
 
   render() {
-    // todo check site support
-    // if () {
-    //   return (
-    //     <div className={styles.self}>
-    //       Na tej stronie nie ma przypisów.
-    //     </div>
-    //   );
-    // }
+    const {
+      isSupported,
+      notSupportedMessage,
+      contentScriptLoaded,
+      contentScriptWontLoad,
+    } = this.props.tabInfo;
 
-    if (!this.props.annotations.hasLoaded) {
+    let message;
+    console.log(contentScriptWontLoad);
+    if (isSupported !== null && !isSupported) {
+      message = notSupportedMessage;
+    } else if (contentScriptWontLoad) {
+      message = 'Nie można dodawać przypisów na tej stronie lub pojawił się błąd. ' +
+        'Jeśli uważasz, że PP powinien obsługiwać tę stronę, daj nam znać!';
+    } else if (!contentScriptLoaded) {
+      message = 'Łączę się ze stroną...';
+    } else if (!this.props.annotations.hasLoaded) {
+      message = 'Ładuję przypisy...';
+    }
+    console.log(message)
+    if (message) {
       return (
         <div className={styles.self}>
-          Ładuję przypisy...
+          {message}
         </div>);
+    }
+
+    const categoryCounts = this.categoryCounts();
+    const allCount = _.sum(Object.keys(categoryCounts).map(category => categoryCounts[category]));
+    if (allCount > 0) {
+      return (
+        <div className={classNames(styles.self, styles.anyFound)} onClick={this.props.onFullViewClick}>
+          {this.renderSummary(categoryCounts)}
+          <div className={styles.chevronButton}>
+            <Icon icon={ic_chevron_right} size={25}/>
+          </div>
+        </div>
+      );
     } else {
-      const categoryCounts = this.categoryCounts();
-      const allCount = _.sum(Object.keys(categoryCounts).map(category => categoryCounts[category]));
-      if (allCount > 0) {
-        return (
-          <div className={classNames(styles.self, styles.anyFound)} onClick={this.props.onFullViewClick}>
-            {this.renderSummary(categoryCounts)}
-            <div className={styles.chevronButton}>
-              <Icon icon={ic_chevron_right} size={25}/>
-            </div>
-          </div>
-        );
-      } else {
-        return (
-          <div className={styles.self}>
-            Brak przypisów na stronie
-          </div>
-        );
-      }
+      return (
+        <div className={styles.self}>
+          Brak przypisów na stronie
+        </div>
+      );
+
     }
   }
 }

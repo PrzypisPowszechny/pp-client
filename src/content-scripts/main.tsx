@@ -24,7 +24,7 @@ import annotationEventHandlers from './handlers/annotation-event-handlers';
 import appComponent from './modules/app-component';
 import { annotationLocationNotifier } from './modules';
 import store from './store';
-import { updateTabInfo } from 'common/store/tabs/tab/tabInfo/actions';
+import { contentScriptLoaded, setTabUrl } from 'common/store/tabs/tab/tabInfo/actions';
 import { tabInit } from 'common/store/tabs/actions';
 import { ScriptType, setScriptType } from 'common/meta';
 import {
@@ -56,9 +56,12 @@ console.log('Przypis script working!');
 
 /*
  * APPLICATION STATE POLICY
- * The application state is populated both from browser storage (appModes) and from the API (all other reducers)
+ * The application state is populated mostly from global webext-redux global store
  *
- * While API data changes are not listened to (no need),
+ * The only legacy case where chrome storage is directly modified (not via syncing it with parts of redux store)
+ * is app modes data.
+ *
+ * In this particular case:
  * browser storage is the communication channel between browser extension popup and the content script(s)
  * running on all open tabs, so beside loading data from browser storage we listen to changes to react to
  * popup settings changes in real time.
@@ -68,18 +71,24 @@ console.log('Przypis script working!');
 
 waitUntilStoreReady(store).then(async () => {
   console.debug('Store hydrated from background page.');
+    // initiate tab before any other actions
+  await store.dispatch(tabInit());
+  await store.dispatch(contentScriptLoaded());
 
   const loggedIn = Boolean(selectUser(store.getState()));
   if (!loggedIn) {
     return;
   }
-  // todo if(blacklisted) return
+  await store.dispatch(setTabUrl(window.location.href));
+  const { isSupported } = selectTab(store.getState()).tabInfo;
 
-  await Promise.all([
-    initData(),
-    waitUntilPageLoaded(document),
-  ]);
-  initUI();
+  if (isSupported) {
+    await Promise.all([
+      initData(),
+      waitUntilPageLoaded(document),
+    ]);
+    initUI();
+  }
 });
 
 async function initData() {
@@ -91,10 +100,7 @@ async function initData() {
   // Optimization: load data from storage first, so annotations are not drawn before we know current application modes
   // (disabled extension mode and disabled page mode will erase them)
 
-  // initiate tab before any other actions
-  await store.dispatch(tabInit());
   await Promise.all([
-    store.dispatch(updateTabInfo({ currentUrl: window.location.href })),
     store.dispatch(setAxiosConfig({ baseURL: PPSettings.API_URL })), // settings for redux-json-api
     store.dispatch(loadAppModes()),
   ]);

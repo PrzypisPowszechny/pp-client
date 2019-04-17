@@ -52,18 +52,6 @@ const base = (env, argv) => {
 
 const contentScriptSettings = {
   matches: ['<all_urls>'],
-  exclude_matches: [
-    /* Popular websites to which PP is not applicable
-    Beware, these are not regular expressions / typical wildcard expressions:
-    they are a special 3-part google URL match patterns.
-    (see https://developer.chrome.com/extensions/match_patterns)
-    */
-    '*://*.google.com/*',
-    '*://*.google.pl/*',
-    '*://*.wikipedia.org/*',
-    '*://*.facebook.com/*',
-    '*://*.slack.com/*',
-  ],
 };
 
 module.exports = {

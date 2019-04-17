@@ -13,6 +13,7 @@ import * as helpers from './helpers';
 import Button from '../elements/Button/Button';
 import { ToastType } from '../elements/Toast/Toast';
 import { selectTab } from 'common/store/tabs/selectors';
+import { ITabInfoState } from '../../../common/store/tabs/tab/tabInfo';
 
 export interface AnnotationRequestFormData {
   quote: string;
@@ -21,6 +22,7 @@ export interface AnnotationRequestFormData {
 
 export interface AnnotationRequestFormProps {
   initialData: Partial<AnnotationRequestFormData>;
+  tabInfo: ITabInfoState;
 
   hideAnnotationRequestForm: () => void;
   changeNotification: (visible: boolean, message?: string, type?: ToastType) => void;
@@ -34,6 +36,7 @@ interface AnnotationRequestFormState extends AnnotationRequestFormData {
 @connect(
   state => ({
     initialData: selectTab(state).widgets.annotationRequestForm.initialData,
+    tabInfo: selectTab(state).tabInfo,
   }),
   {
     hideAnnotationRequestForm,
@@ -94,7 +97,7 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
   handleSubmit = (e) => {
     if (this.validateForm()) {
       const { quote, comment } = this.state;
-      const url = window.location.href;
+      const url = this.props.tabInfo.currentUrl;
       saveAnnotationRequest({
         url, quote, comment,
       }).then((response) => {
