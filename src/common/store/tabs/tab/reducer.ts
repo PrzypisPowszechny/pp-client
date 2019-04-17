@@ -4,7 +4,7 @@ import { AnnotationUpvoteAPIModel } from '../../../api/annotation-upvotes';
 import { AppModes } from './appModes/types';
 import { AnnotationAPIModel } from '../../../api/annotations';
 import { WidgetReducer } from './widgets';
-import { tabInfo } from './tabInfo';
+import { ITabInfoState, tabInfo } from './tabInfo';
 import appModes from './appModes/reducers';
 import annotations from './annotations/reducers';
 import widgets from './widgets/reducers';
@@ -12,6 +12,7 @@ import textSelector from './textSelector/reducers';
 import api from './api';
 
 export interface ITabState {
+  tabInfo: ITabInfoState;
   api: {
     annotations: { data: AnnotationAPIModel[] };
     annotationUpvotes: { data: AnnotationUpvoteAPIModel[] };

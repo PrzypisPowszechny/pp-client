@@ -139,7 +139,7 @@ export function refreshToken() {
         throw new Error(`Error refreshing access token: bad response`);
       }
       const { access, refresh } = resp.data;
-      return store.dispatch(accessTokenRefresh({
+      return store.dispatch<any>(accessTokenRefresh({
         access,
         refresh,
       }));

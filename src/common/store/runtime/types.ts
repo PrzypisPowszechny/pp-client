@@ -18,11 +18,11 @@ export enum AuthProcStages {
 
 export interface IAuthProcState {
   stage: AuthProcStages;
-  provider: AuthProviders;
+  provider?: AuthProviders;
   msg?: string;
 }
 
 export interface IRuntimeState {
-  user: IUserState;
+  // user: IUserState;
   authProc: IAuthProcState;
 }

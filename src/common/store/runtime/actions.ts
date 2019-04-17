@@ -13,7 +13,7 @@ export function initiateAuthProc(provider: AuthProviders): { type: string, paylo
   };
 }
 
-export function failAuthProc(msg): { type: string, payload: Partial<IAuthProcState> } {
+export function failAuthProc(msg): { type: string, payload: IAuthProcState } {
   return {
     type: SET_AUTH_PROC_STAGE,
     payload: {
@@ -23,7 +23,7 @@ export function failAuthProc(msg): { type: string, payload: Partial<IAuthProcSta
   };
 }
 
-export function completeAuthProc(): { type: string, payload: Partial<IAuthProcState> } {
+export function completeAuthProc(): { type: string, payload: IAuthProcState } {
   return {
     type: SET_AUTH_PROC_STAGE,
     payload: {
@@ -32,7 +32,7 @@ export function completeAuthProc(): { type: string, payload: Partial<IAuthProcSt
   };
 }
 
-export function cancelAuthProc(msg = ''): { type: string, payload: Partial<IAuthProcState> } {
+export function cancelAuthProc(msg = ''): { type: string, payload: IAuthProcState } {
   return {
     type: SET_AUTH_PROC_STAGE,
     payload: {

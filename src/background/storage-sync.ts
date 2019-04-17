@@ -5,6 +5,11 @@ import _ from 'lodash';
 export const HYDRATE_FROM_CHROME_STORAGE = 'HYDRATE_FROM_CHROME_STORAGE';
 export const SET_STATE_HYDRATED = 'SET_STATE_HYDRATED';
 
+export interface IStorageSyncState<T> {
+  isHydrated: boolean;
+  value: T;
+}
+
 export default class StorageSync {
   static getReducer(originalReducer: (state, action) => any) {
     const initialState = {

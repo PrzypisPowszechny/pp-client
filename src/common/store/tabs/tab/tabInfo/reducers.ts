@@ -13,7 +13,7 @@ export interface ITabInfoState {
   contentScriptWontLoad: boolean;
   currentUrl: string;
   isSupported: boolean;
-  notSupportedMessage: string;
+  notSupportedMessage?: string;
 }
 
 export function tabInfo(state = initialState, action) {
