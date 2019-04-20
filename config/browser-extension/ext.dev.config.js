@@ -1,5 +1,6 @@
 const merge = require('webpack-merge');
-const ChromeExtensionReloader  = require('webpack-chrome-extension-reloader');
+const ChromeExtensionReloader = require('webpack-chrome-extension-reloader');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const extBaseConfig = require('./ext.base.config');
 const devPlugins = require('../dev.plugins');
@@ -18,6 +19,12 @@ module.exports = (env, argv) => merge(extBaseConfig.getConfig(env, argv), {
         })
       ]
     ),
+    new CopyWebpackPlugin([
+      {
+        from: 'dev-pages',
+        to: 'dev-pages'
+      }
+    ]),
     ...devPlugins,
-  ]
+  ],
 });

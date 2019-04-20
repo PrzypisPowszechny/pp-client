@@ -28,6 +28,7 @@ const proxyStore = new Store({
   patchStrategy: tabOnlyPatch,
 });
 
+
 const storeWithMiddleware = applyMiddleware(proxyStore, ...middlewares);
 
 export default storeWithMiddleware;

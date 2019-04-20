@@ -10,7 +10,7 @@ const ps = require('ps-node');
  */
 
 const hotReloadWsPath = 'ws://localhost:9090';
-const ChromeInitURL = '';
+const ChromeInitURL = './dev-pages/index.html';
 const N_ATTEMPTS = 100;
 const ATTEMPT_INTERVAL = 500;
 
@@ -62,11 +62,12 @@ function message(data) {
         console.log(`${__filename}: Open Chromium instance has been found; doing nothing...`);
       } else {
         console.log(`${__filename}: Opening Chromium instance...`);
-        exec(`chromium-browser --load-extension=./dist/browser-extension/ "${ChromeInitURL}"`,
-          (err, stdout, stderr) => {
-            console.log(err, stdout, stderr);
-          }
-        );
+        const command = `chromium-browser --load-extension=./dist/browser-extension/ "${ChromeInitURL}"`;
+        console.log(command);
+        exec(command);
+        // , (err, stdout, stderr) => {
+        //   console.log(err, stdout, stderr);
+        // }
       }
     });
 
