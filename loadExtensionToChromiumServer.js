@@ -64,10 +64,12 @@ function message(data) {
         console.log(`${__filename}: Opening Chromium instance...`);
         const command = `chromium-browser --load-extension=./dist/browser-extension/ "${ChromeInitURL}"`;
         console.log(command);
-        exec(command);
-        // , (err, stdout, stderr) => {
-        //   console.log(err, stdout, stderr);
-        // }
+        // var spawn = require('child_process').spawn;
+        // spawn('chromium-browser', ['--load-extension=./dist/browser-extension/', ChromeInitURL], { stdio: 'inherit' });
+        exec(command, (err, stdout, stderr) => {
+          console.log('ugabuga')
+          console.log(err, stdout, stderr);
+        });
       }
     });
 
@@ -76,7 +78,6 @@ function message(data) {
 
 
 function connectToReloadServer() {
-  // console.log('Connecting...')
   ws = new WebSocket(hotReloadWsPath); //, {handshakeTimeout: 1000000});
   ws.on('open', open);
   ws.on('message', message);

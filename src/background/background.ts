@@ -124,6 +124,6 @@ if (PPSettings.DEV) {
           url: './popup.html',
         });
       }
-    }
+    },
   );
 }

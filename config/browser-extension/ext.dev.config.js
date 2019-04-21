@@ -22,7 +22,7 @@ module.exports = (env, argv) => merge(extBaseConfig.getConfig(env, argv), {
     new CopyWebpackPlugin([
       {
         from: 'dev-pages',
-        to: 'dev-pages'
+        to: 'dev-pages',
       }
     ]),
     ...devPlugins,

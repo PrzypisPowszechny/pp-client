@@ -1,9 +1,7 @@
 import { Range as XPathRange } from 'xpath-range';
 
-import 'rangy/lib/rangy-classapplier';
-import 'rangy/lib/rangy-highlighter';
+// import more rangy modules if needed
 import 'rangy/lib/rangy-textrange';
-import 'rangy/lib/rangy-serializer';
 import rangy from 'rangy';
 
 import mousePosition from '../utils/mousePosition';

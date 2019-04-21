@@ -6,10 +6,29 @@
     <script src="./util-page.js"></script>
 </head>
 <body>
+<h1>Useful links</h1>
+<a href="#" id="open-background">Background</a>
+<br/>
+<a href="#" id="open-popup">Popup</a>
+<hr>
+<h2> Notes</h2>
 
-    <a href="#" id="open-background">Background</a> <span> Warning: this actually creates a copy of the background page so can be unpredictable</span>
-    <br/>
-    <a href="#" id="open-popup">Popup</a>
+<p>Windows opened as separate tabs are distinct from the original ones</p>
+<ul>
+    <li> original background page can only be opened via clicking the background page link in extension settings</li>
+    <li>popup opened by clicking extension icon is alwways a different instance than the one opened in separate tab</li>
+</ul>
+<p>However:</p>
+<ul>
+    <li>
+        the "forked" pages are still exceptional pages in that they still have equal permissions
+        and other relationships that a normal backgorund page/popup would have.
+        E.g. they exchange messages etc.
+        The only issue is their coexistence, i.e. unusual interaction of actions this may generate
 
+    </li>
+    <li> as long as the "forked" page does not interfere with the application logic, it can be well used for testing</li>
+    <li> e.g. in popup, when the tab does not modify the global application state spontaneously (e.g. via timer) everything should be fine</li>
+</ul>
 </body>
 </html>

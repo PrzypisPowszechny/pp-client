@@ -27,11 +27,6 @@ import { selectTab } from '../common/store/tabs/selectors';
 import { contentScriptWontLoad, setTabUrl } from '../common/store/tabs/tab/tabInfo/actions';
 import { getCurrentTabUrl } from './utils';
 
-//  HTTP settings
-configureAxios(
-  () => selectAccessToken(store.getState()),
-);
-
 Promise.all([
   waitUntilPageLoaded(document),
 ])

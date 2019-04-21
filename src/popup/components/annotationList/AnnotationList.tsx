@@ -3,7 +3,7 @@ import { sendScrollToAnnotation } from '../../messages';
 import { PopupPages } from '../BrowserPopupNavigator';
 import { AnnotationPPCategories } from 'common/api/annotations';
 import styles from './AnnotationList.scss';
-import { Icon } from 'react-icons-kit';
+import { Icon } from 'react-icons-kit/Icon';
 import { ic_chevron_left } from 'react-icons-kit/md/ic_chevron_left';
 import classNames from 'classnames';
 import ppGa from '../../../common/pp-ga';

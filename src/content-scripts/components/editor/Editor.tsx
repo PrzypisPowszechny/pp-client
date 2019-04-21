@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createResource, updateResource } from 'common/store/tabs/tab/api/actions';
 
 import classNames from 'classnames';
-import { Popup } from 'semantic-ui-react';
+import Popup from 'semantic-ui-react/dist/commonjs/modules/Popup';
 import _isEqual from 'lodash/isEqual';
 
 import { AnnotationAPICreateModel, AnnotationAPIModel, AnnotationAPIModelAttrs } from 'common/api/annotations';
@@ -25,7 +25,7 @@ import ppGa from 'common/pp-ga';
 import { AnnotationPPCategories } from 'common/api/annotations';
 import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
 
-import { Icon } from 'react-icons-kit';
+import { Icon } from 'react-icons-kit/Icon';
 import { link } from 'react-icons-kit/icomoon/link';
 import { priceTag } from 'react-icons-kit/icomoon/priceTag';
 import { ic_close } from 'react-icons-kit/md/ic_close';

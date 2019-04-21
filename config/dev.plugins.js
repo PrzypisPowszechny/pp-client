@@ -9,7 +9,7 @@ module.exports = [
   new ForkTsCheckerWebpackPlugin({
     async: true,
     watch: 'src',
-    tslint: true,
+    // tslint: true,
   }),
   new ForkTsCheckerNotifierWebpackPlugin({
     excludeWarnings: true

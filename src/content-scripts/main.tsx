@@ -12,11 +12,7 @@ import 'css/common/pp-semantic-ui-reset.scss';
 import 'css/common/pp-semantic-ui-overrides.scss';
 
 import 'css/selection.scss';
-// Set moment.js language for whole package
-// Apparently, there is no clean solution to import only momentJS specific locale package
-// and set it for future momentJS calls;
-// (https://github.com/moment/moment/issues/2517)
-import * as moment from 'moment';
+
 import IPPSettings from 'common/PPSettings';
 import chromeStorageHandlers from './handlers/chrome-storage-handlers';
 import highlightManager from './modules/highlight-manager';
@@ -42,10 +38,12 @@ import { readEndpointWithHeaders } from '../common/store/tabs/tab/api/actions';
 
 sentry.init();
 
+// Set moment.js language for whole package
+// based on https://medium.com/@michalozogan/how-to-split-moment-js-locales-to-chunks-with-webpack-de9e25caccea
+import 'moment/locale/pl.js';
+
 // set script type for future introspection
 setScriptType(ScriptType.contentScript);
-
-moment.locale('pl');
 
 // Declared in webpack.config through DefinePlugin
 declare global {

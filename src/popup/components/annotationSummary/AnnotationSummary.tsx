@@ -1,7 +1,8 @@
 import React from 'react';
 import { AnnotationAPIModel, AnnotationPPCategories } from 'common/api/annotations';
-import _ from 'lodash';
-import { Icon } from 'react-icons-kit';
+import _countBy from 'lodash/countBy';
+import _sum from 'lodash/sum';
+import { Icon } from 'react-icons-kit/Icon';
 import { ic_chevron_right } from 'react-icons-kit/md/ic_chevron_right';
 import classNames from 'classnames';
 import styles from './AnnotationSummary.scss';
@@ -42,7 +43,7 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
       [AnnotationPPCategories.ADDITIONAL_INFO]: 0,
       [AnnotationPPCategories.CLARIFICATION]: 0,
       [AnnotationPPCategories.ERROR]: 0,
-      ..._.countBy(annotations.map(annotation => annotation.attributes.ppCategory)),
+      ..._countBy(annotations.map(annotation => annotation.attributes.ppCategory)),
     };
   }
 
@@ -108,7 +109,7 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
     }
 
     const categoryCounts = this.categoryCounts();
-    const allCount = _.sum(Object.keys(categoryCounts).map(category => categoryCounts[category]));
+    const allCount = _sum(Object.keys(categoryCounts).map(category => categoryCounts[category]));
     if (allCount > 0) {
       return (
         <div className={classNames(styles.self, styles.anyFound)} onClick={this.props.onFullViewClick}>

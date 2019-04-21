@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react';
 
-import { Icon } from 'react-icons-kit';
+import { Icon } from 'react-icons-kit/Icon';
 import { ic_add_circle } from 'react-icons-kit/md/ic_add_circle';
 import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
 import { ic_block } from 'react-icons-kit/md/ic_block';

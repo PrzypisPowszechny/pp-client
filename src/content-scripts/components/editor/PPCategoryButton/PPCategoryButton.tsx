@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import { Popup } from 'semantic-ui-react';
+import Popup from 'semantic-ui-react/dist/commonjs/modules/Popup';
 
 import styles from './PPCategoryButton.scss';
 import { PPScopeClass } from 'content-scripts/settings';

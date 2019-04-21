@@ -1,8 +1,8 @@
-import rangy from 'rangy';
-import 'rangy/lib/rangy-classapplier';
-import 'rangy/lib/rangy-highlighter';
+
+// import more rangy modules if needed
 import 'rangy/lib/rangy-textrange';
-import 'rangy/lib/rangy-serializer';
+import rangy from 'rangy';
+
 import { LocatedAnnotation } from 'common/store/tabs/tab/annotations/types';
 import { annotationRootNode } from '../settings';
 import { Range as XPathRange } from 'xpath-range';
@@ -11,7 +11,7 @@ import * as Sentry from '@sentry/browser';
 import { Store } from 'redux';
 import { IState } from 'common/store/reducer';
 import { waitUntilPageLoaded } from 'common/utils/init';
-import { escapeRegExp } from 'lodash';
+import _escapeRegExp from 'lodash/escapeRegExp';
 
 export class AnnotationLocator {
 
@@ -123,7 +123,7 @@ export class AnnotationLocator {
     // &nbsp; appears naturally in HTML articles and is copy-pasted as a normal space;
     // As a result, we must take into account that each space may have been generated from a &nbsp;
 
-    const searchRegexp = escapeRegExp(quote.trim()).replace(/\s/g, '(\\s|&nbsp;)+');
+    const searchRegexp = _escapeRegExp(quote.trim()).replace(/\s/g, '(\\s|&nbsp;)+');
     if (PPSettings.DEV) {
       const annotationId = debugId ? debugId : 'no details';
       console.debug(`Locating annotation (${annotationId}) by regex: ${searchRegexp}`);

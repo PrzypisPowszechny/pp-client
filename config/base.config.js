@@ -32,11 +32,14 @@ const getConfig = (env, argv) => ({
     rules: [
       {
         test: /\.(tsx?|js)$/,
+        include: localPath(ROOT, 'src'),
         use: [
           {
             loader: "ts-loader",
             options: {
               transpileOnly: true,
+              // happyPackMode: true,
+              // experimentalWatchApi: true,
             },
           }
         ],
@@ -101,7 +104,10 @@ const getConfig = (env, argv) => ({
     ],
   },
   plugins: [
-    new CleanWebpackPlugin([BUILD_DIR, EXT_DIR], { root: ROOT}),
+    // a recommended hack to only build selected languages in momentjs
+    // (https://medium.com/@michalozogan/how-to-split-moment-js-locales-to-chunks-with-webpack-de9e25caccea)
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new CleanWebpackPlugin(),
     new webpack.DefinePlugin({
       // use appropriate (development or production) PP settings
       PPSettings: JSON.stringify(loadSettings(env, argv)),
