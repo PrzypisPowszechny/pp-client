@@ -10,7 +10,7 @@ import AnnotationRequestForm from './AnnotationRequestForm/AnnotationRequestForm
 import SideWidget from './elements/SideWidget/SideWidget';
 import Toast from './elements/Toast/Toast';
 import { selectTab } from 'common/store/tabs/selectors';
-import { selectIsStorageInitialized, selectUser } from '../../common/store/storage/selectors';
+import { trySelectStorage, selectUser } from '../../common/store/storage/selectors';
 
 interface AppProps {
   isStorageInitialized: boolean;
@@ -26,7 +26,7 @@ interface AppProps {
   (state) => {
     const tab = selectTab(state);
     return {
-      isStorageInitialized: selectIsStorageInitialized(state),
+      isStorageInitialized: Boolean(trySelectStorage(state)),
       user: selectUser(state),
       editorVisible: tab.widgets.editor.visible,
       menuVisible: tab.widgets.menu.visible,

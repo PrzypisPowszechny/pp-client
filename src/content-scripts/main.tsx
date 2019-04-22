@@ -25,7 +25,7 @@ import { tabInit } from 'common/store/tabs/actions';
 import { ScriptType, setScriptType } from 'common/meta';
 import {
   waitUntilPageLoaded,
-  waitUntilStoreReady,
+  waitUntilFirstStoreUpdate,
 } from '../common/utils/init';
 import { selectAccessToken, selectUser } from '../common/store/storage/selectors';
 import { AnnotationLocator } from './annotations/AnnotationLocator';
@@ -41,6 +41,7 @@ sentry.init();
 // Set moment.js language for whole package
 // based on https://medium.com/@michalozogan/how-to-split-moment-js-locales-to-chunks-with-webpack-de9e25caccea
 import 'moment/locale/pl.js';
+import { initializeTabId } from '../common/store/tabs/tab-utils';
 
 // set script type for future introspection
 setScriptType(ScriptType.contentScript);
@@ -67,10 +68,12 @@ console.log('Przypis script working!');
  * we commit changes to browser storage and recalculate state.appMode on storage change.
  */
 
-waitUntilStoreReady(store).then(async () => {
+waitUntilFirstStoreUpdate(store).then(async () => {
   console.debug('Store hydrated from background page.');
+
+  const tabId = await initializeTabId();
     // initiate tab before any other actions
-  await store.dispatch(tabInit());
+  await store.dispatch(tabInit(tabId));
   await store.dispatch(contentScriptLoaded());
 
   const loggedIn = Boolean(selectUser(store.getState()));

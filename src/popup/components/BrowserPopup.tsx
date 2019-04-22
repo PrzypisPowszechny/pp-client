@@ -22,17 +22,17 @@ import { selectUser } from '../../common/store/storage/selectors';
 import { IUserState } from '../../common/store/storage/types';
 import { connect } from 'react-redux';
 import { UserRoles } from '../../common/api/user';
-import { selectTab } from '../../common/store/tabs/selectors';
+import { selectRealTab, selectTab, trySelectRealTab } from '../../common/store/tabs/selectors';
 import { IAnnotationRequestFormState } from '../../common/store/tabs/tab/widgets';
 import { hideAnnotationRequestForm, showAnnotationRequestForm } from '../../common/store/tabs/tab/widgets/actions';
 import { AnnotationRequestFormData } from 'content-scripts/components/AnnotationRequestForm';
-import { ITabInfoState } from '../../common/store/tabs/tab/tabInfo';
-import { waitUntilCurrentTabLoaded } from '../messages';
+import { ITabState } from '../../common/store/tabs/tab/reducer';
 
 export interface IBrowserPopupProps {
   user: IUserState;
-  tabInfo: ITabInfoState;
+  tab: ITabState;
   annotationRequestForm: IAnnotationRequestFormState;
+  debugIsPopupEmulated: boolean;
 
   hideAnnotationRequestForm: () => void;
   showAnnotationRequestForm: (initialData: Partial<AnnotationRequestFormData>) => void;
@@ -56,8 +56,9 @@ interface IBrowserPopupState {
 @connect(
   state => ({
     user: selectUser(state),
-    tabInfo: selectTab(state).tabInfo,
+    tab: selectTab(state),
     annotationRequestForm: selectTab(state).widgets.annotationRequestForm,
+    debugIsPopupEmulated: selectRealTab(state).tabInfo.debugIsTabPopupEmulated,
   }),
   {
     showAnnotationRequestForm,
@@ -102,11 +103,8 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
   }
 
   componentDidMount() {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      const tab = tabs[0];
-      this.setState({ currentStandardizedTabUrl: standardizeUrlForPageSettings(tab.url) });
-    });
-
+    console.log(this.props.tab.tabInfo.currentUrl);
+    this.setState({ currentStandardizedTabUrl: standardizeUrlForPageSettings(this.props.tab.tabInfo.currentUrl) });
     this.loadStateFromAppModes();
   }
 
@@ -156,8 +154,10 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
       chrome.storage.local.set({
         [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages,
       });
-      window.close();
       ppGa.annotationAddingModeInited({ location: currentStandardizedTabUrl });
+      if(!this.props.debugIsPopupEmulated) {
+        //window.close();
+      }
     }
   }
 
@@ -166,7 +166,10 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     if (!visible) {
       this.props.showAnnotationRequestForm({});
       ppGa.annotationRequestFormOpened('popup', true, { location: this.state.currentStandardizedTabUrl });
-      window.close();
+      console.log(this.props.tab);
+      if(!this.props.debugIsPopupEmulated) {
+        window.close();
+      }
     }
   }
 
@@ -274,7 +277,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
 
     const {
       isSupported,
-    } = this.props.tabInfo;
+    } = this.props.tab.tabInfo;
 
     const isCurrentPageDisabled = this.isExtensionDisabledForCurrentTab();
 
@@ -304,13 +307,13 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
             </li>
 
             {isSupported &&
-              <li className="menu-subitem">
-                <span className={classNames({ negativeActive: isCurrentPageDisabled })}>na tej stronie</span>
-                <Toggle
-                  checked={isCurrentPageDisabled}
-                  onChange={this.handleDisabledPageChange}
-                />
-              </li>
+            <li className="menu-subitem">
+              <span className={classNames({ negativeActive: isCurrentPageDisabled })}>na tej stronie</span>
+              <Toggle
+                checked={isCurrentPageDisabled}
+                onChange={this.handleDisabledPageChange}
+              />
+            </li>
             }
             <li className="menu-subitem">
               <span className={classNames({ negativeActive: isExtensionDisabled })}>wszędzie</span>

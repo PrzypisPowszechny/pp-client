@@ -64,11 +64,8 @@ function message(data) {
         console.log(`${__filename}: Opening Chromium instance...`);
         const command = `chromium-browser --load-extension=./dist/browser-extension/ "${ChromeInitURL}"`;
         console.log(command);
-        // var spawn = require('child_process').spawn;
-        // spawn('chromium-browser', ['--load-extension=./dist/browser-extension/', ChromeInitURL], { stdio: 'inherit' });
         exec(command, (err, stdout, stderr) => {
-          console.log('ugabuga')
-          console.log(err, stdout, stderr);
+          // console.log(err, stdout, stderr);
         });
       }
     });

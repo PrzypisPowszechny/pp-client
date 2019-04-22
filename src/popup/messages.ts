@@ -1,15 +1,14 @@
 import Tab = chrome.tabs.Tab;
-import { selectTab } from '../common/store/tabs/selectors';
 
-export function waitUntilCurrentTabLoaded(): Promise<Tab> {
+export function waitUntilTabLoaded(tabId): Promise<Tab> {
   return new Promise((resolve) => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      const activeTab = tabs[0];
-      if (activeTab.status === 'complete') {
-        resolve(activeTab);
+    chrome.tabs.get(tabId, (tab) => {
+      console.log('dff');
+      if (tab.status === 'complete') {
+        resolve(tab);
       }
       chrome.tabs.onUpdated.addListener(function listener(anyTabId, info, updatedTab) {
-        if (info.status === 'complete' && anyTabId === activeTab.id) {
+        if (info.status === 'complete' && anyTabId === tab.id) {
           chrome.tabs.onUpdated.removeListener(listener);
           resolve(updatedTab);
         }
@@ -20,9 +19,9 @@ export function waitUntilCurrentTabLoaded(): Promise<Tab> {
 
 const timeoutBeforeCSConnects = 500;
 
-export function waitUntilContentScriptShouldHaveConnected(): Promise<null> {
+export function waitUntilContentScriptShouldHaveConnected(tabId): Promise<null> {
   return new Promise(resolve =>
-    waitUntilCurrentTabLoaded().then(
+    waitUntilTabLoaded(tabId).then(
       () => setTimeout(resolve, timeoutBeforeCSConnects),
     ),
   );

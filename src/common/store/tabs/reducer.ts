@@ -1,11 +1,12 @@
 import tab from './tab/reducer';
-import { retrieveActionTab } from './action-tab';
-import { TAB_INIT, TAB_POPUP_INIT } from './actions';
+import { retrieveLogicalActionTab } from './action-tab';
+import { DEBUG_TAB_POPUP_INIT, TAB_INIT, TAB_POPUP_INIT } from './actions';
 
 export default function tabs(state = {}, action) {
-  const tabId = retrieveActionTab(action);
+  const tabId = retrieveLogicalActionTab(action, state);
   // Only actions coming from content script or popup should modify the state
   if (tabId !== null && tabId !== undefined) {
+    console.log(`Action coming from tab ${tabId}`);
     let tabState;
     switch (action.type) {
       case TAB_INIT:
@@ -13,6 +14,7 @@ export default function tabs(state = {}, action) {
         tabState = undefined;
         break;
       case TAB_POPUP_INIT:
+      case DEBUG_TAB_POPUP_INIT:
         // initiate but do not reset if already initiated
         tabState = state[tabId];
         break;

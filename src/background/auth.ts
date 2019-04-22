@@ -11,6 +11,7 @@ import {
   PPLoginResponseAPIModel,
 } from 'common/api/user';
 import { AuthProviders } from 'common/store/runtime/types';
+import { parseUrlParams } from '../common/url';
 
 type URLString = string;
 
@@ -94,20 +95,10 @@ function buildGoogleRedirectUrl() {
   return authURL;
 }
 
-function parseParams(queryString): GoogleCredentials | FacebookCredentials {
-  const query: any = {};
-  const pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
-  for (const pair of pairs) {
-    const p = pair.split('=');
-    query[decodeURIComponent(p[0])] = decodeURIComponent(p[1] || '');
-  }
-  return query;
-}
-
-function parsePostAuthenticateRedirectURL(redirectUrl) {
+function parsePostAuthenticateRedirectURL(redirectUrl): GoogleCredentials | FacebookCredentials {
   // This is not real queryString, in OAuth is is queryString passed in hash fragment
   const queryString = redirectUrl.substr(redirectUrl.indexOf('#') + 1);
-  return parseParams(queryString);
+  return parseUrlParams(queryString) as any;
 }
 
 // TODO turn into observable; for now it seems complicated...
