@@ -57,7 +57,7 @@ export default class DragTracker {
   }
 
   // Event handler for mousemove
-  mouseMove(e: JQuery.Event) {
+  mouseMove(e: JQuery.TriggeredEvent) {
     if (this.throttled || this.lastPos === null) {
       return;
     }
@@ -101,7 +101,7 @@ export default class DragTracker {
   }
 
   // Event handler for mousedown -- starts drag tracking
-  mouseDown(e: JQuery.Event) {
+  mouseDown(e: JQuery.TriggeredEvent) {
     if (e.target !== this.handle) {
       return;
     }

@@ -66,7 +66,8 @@ export default class AnnotationList extends React.Component<Partial<IAnnotationL
       return (
         <div className={styles.self}>
           Ładuję...
-        </div>);
+        </div>
+      );
     } else {
       return (
         <div className={styles.self}>

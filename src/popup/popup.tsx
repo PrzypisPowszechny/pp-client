@@ -36,10 +36,11 @@ Promise.all([
   waitUntilPageLoaded(document),
 ])
   .then(() => {
-    ReactDOM.render(
-      <Provider store={store}>
-        <BrowserPopupNavigator/>
-      </Provider>,
+    ReactDOM.render((
+        <Provider store={store}>
+          <BrowserPopupNavigator/>
+        </Provider>
+      ),
       document.body,
     );
   });

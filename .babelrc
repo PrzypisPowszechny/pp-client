@@ -1,14 +1,14 @@
 {
   "presets": [
-    ["es2015", {
+    ["@babel/preset-env", {
       "modules": false
     }],
-    "react"
+    "@babel/preset-react"
   ],
   "env": {
     "test": {
       "presets": [
-        ["es2015"], "react"
+        ["@babel/preset-env"], "@babel/preset-react"
       ],
     }
   }

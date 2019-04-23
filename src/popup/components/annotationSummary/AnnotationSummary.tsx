@@ -98,12 +98,13 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
     } else if (!this.props.annotations.hasLoaded) {
       message = 'Ładuję przypisy...';
     }
-    console.log(message)
+    console.log(message);
     if (message) {
       return (
         <div className={styles.self}>
           {message}
-        </div>);
+        </div>
+      );
     }
 
     const categoryCounts = this.categoryCounts();
