@@ -18,14 +18,15 @@ import { Provider } from 'react-redux';
 import store from './store';
 
 import BrowserPopupNavigator from './components/BrowserPopupNavigator';
-import { debugTabPopupInit, debugTabPopupIsValid, tabPopupInit } from 'common/store/tabs/actions';
+import { debugTabPopupInit, tabPopupInit } from 'common/store/tabs/actions';
 import { waitUntilPageLoaded, waitUntilFirstStoreUpdate } from '../common/utils/init';
 import { waitUntilContentScriptShouldHaveConnected } from './messages';
-import { selectTab } from '../common/store/tabs/selectors';
+import { selectTab, trySelectTab } from '../common/store/tabs/selectors';
 import { contentScriptWontLoad, setTabUrl } from '../common/store/tabs/tab/tabInfo/actions';
-import { getCurrentTabUrl } from './utils';
+import { getActiveTabId, getActiveTabUrl, getTabUrl } from './utils';
 import { parseUrlParams } from '../common/url';
 import { initializeTabId } from '../common/store/tabs/tab-utils';
+import { PopupMode } from '../common/store/tabs/tab/popupInfo';
 
 // Render the popup right away so the popup has constant width
 // Make sure the store is ready to use at the component level
@@ -45,61 +46,75 @@ Promise.all([
 waitUntilFirstStoreUpdate(store)
   .then(async () => {
     console.log('Store hydrated from background page.');
-
     // initialize tab id for synchronous access in reducers
     const tabId = await initializeTabId();
-    let isTabValid = true;
-
-    const isDebugEmulatedTab = PPSettings.DEV && getEmulatedTabId();
-    if (isDebugEmulatedTab) {
-      await debugTabInit();
-      // A valid existing tab should have been opened in emulated popup mode
-      const logicalTab = selectTab(store.getState());
-      isTabValid = Boolean(logicalTab);
-      store.dispatch(debugTabPopupIsValid(isTabValid));
-    } else {
-      await tabInit(tabId);
-    }
-
-    // const {
-    //   debugIsTabPopupEmulated,
-    //   debugIsTabValid,
-    // } = selectRealTab(store.getState()).tabInfo;
-
-    if (isTabValid) {
-      const logicalTabId = selectTab(store.getState()).tabInfo.tabId;
-      await waitUntilContentScriptShouldHaveConnected(logicalTabId);
-      if (!selectTab(store.getState()).tabInfo.contentScriptLoaded) {
-        store.dispatch(contentScriptWontLoad());
-      }
+    const popupMode = await getPopupMode();
+    let tabUrl;
+    switch (popupMode) {
+      case PopupMode.notEmulated:
+        // Get main page URL (for which the popup is opened)
+        tabUrl = await getActiveTabUrl();
+        await store.dispatch(tabPopupInit(tabId, tabUrl));
+        await pollForContentScriptLoaded();
+        break;
+      case PopupMode.autonomousTabLinkedToTab:
+        // Get URL of the tab to which the popup is linked
+        console.log('Emulated popup mode: autonomous tab linked to a tab');
+        const debugTabId = getEmulatedTabId();
+        console.log(`Parsed URL params: linked tabId ${debugTabId}`);
+        tabUrl = await getTabUrl(debugTabId);
+        // check if the tab has already been initiated
+        const linkedToTab = Boolean(store.getState().tabs[debugTabId]);
+        console.log(`Linked to tab state: ${linkedToTab}`);
+        // initialize tab state in the store
+        await store.dispatch(debugTabPopupInit(debugTabId, tabUrl, PopupMode.autonomousTabLinkedToTab,
+          linkedToTab));
+        // The tab must exist to wait until it has been loaded
+        if (linkedToTab) {
+          await pollForContentScriptLoaded();
+        }
+        break;
+      case PopupMode.autonomousTab:
+        console.log('Emulated popup mode: autonomous tab');
+        // Content script does not really exist; It's like the content script was simply not loaded
+        tabUrl = 'www.autonomousEmulatedTab.popup';
+        await store.dispatch(debugTabPopupInit(await getActiveTabId(), tabUrl, PopupMode.autonomousTab));
+        await pollForContentScriptLoaded();
+        break;
     }
   });
 
-async function tabInit(tabId) {
-  // initialize tab state in the store
-  await store.dispatch(tabPopupInit(tabId));
-
-  // if current tab url is not set (e.g. because content script has not been injected), set it
-  const currentUrl = await getCurrentTabUrl();
-  if (selectTab(store.getState()).tabInfo.currentUrl === null) {
-    await store.dispatch(setTabUrl(currentUrl));
+async function pollForContentScriptLoaded() {
+  const logicalTabId = selectTab(store.getState()).tabInfo.tabId;
+  await waitUntilContentScriptShouldHaveConnected(logicalTabId);
+  if (!selectTab(store.getState()).tabInfo.contentScriptLoaded) {
+    return await store.dispatch(contentScriptWontLoad());
   }
 }
 
-function getEmulatedTabId() {
-  return parseUrlParams(window.location.search)['devTabId'];
+export async function getPopupMode() {
+  if (!PPSettings.DEV) {
+    return PopupMode.notEmulated;
+  }
+
+  // is popup opened normally on extension icon click? (unlike opened in a tab like a usual page)
+  const window: any = await new Promise((resolve) => chrome.windows.getCurrent({}, resolve));
+  const currentTab = await new Promise (resolve => chrome.tabs.getCurrent(resolve));
+  if (!currentTab) {
+    return PopupMode.notEmulated;
+  }
+
+  if (getEmulatedTabId()) {
+    return PopupMode.autonomousTabLinkedToTab;
+  } else {
+    return PopupMode.autonomousTab;
+  }
 }
 
-async function debugTabInit() {
-  /*
-   * A special dev entry to override tabId from URL params and emulate tabId
-   */
-  console.log('Loading tabId in an emulated popup mode from URL params');
-  const params = parseUrlParams(window.location.search);
-  console.log(params);
-  const debugTabId = getEmulatedTabId();
-  console.log('tabId', debugTabId);
-
-  // initialize tab state in the store
-  await store.dispatch(debugTabPopupInit(debugTabId));
+function getEmulatedTabId(): number {
+  const tabId = Number(parseUrlParams(window.location.search)['devTabId']);
+  if (isNaN(tabId)) {
+    return null;
+  }
+  return tabId;
 }

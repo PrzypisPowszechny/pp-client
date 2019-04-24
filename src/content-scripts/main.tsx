@@ -73,14 +73,13 @@ waitUntilFirstStoreUpdate(store).then(async () => {
 
   const tabId = await initializeTabId();
     // initiate tab before any other actions
-  await store.dispatch(tabInit(tabId));
+  await store.dispatch(tabInit(tabId, window.location.href));
   await store.dispatch(contentScriptLoaded());
 
   const loggedIn = Boolean(selectUser(store.getState()));
   if (!loggedIn) {
     return;
   }
-  await store.dispatch(setTabUrl(window.location.href));
   const { isSupported } = selectTab(store.getState()).tabInfo;
 
   if (isSupported) {

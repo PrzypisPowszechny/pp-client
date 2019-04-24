@@ -3,7 +3,6 @@ import Tab = chrome.tabs.Tab;
 export function waitUntilTabLoaded(tabId): Promise<Tab> {
   return new Promise((resolve) => {
     chrome.tabs.get(tabId, (tab) => {
-      console.log('dff');
       if (tab.status === 'complete') {
         resolve(tab);
       }

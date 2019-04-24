@@ -4,8 +4,8 @@
 
 import { getScriptType, ScriptType } from 'common/meta/script-type';
 import { getActiveTabId } from '../../../background/tab';
-import store from '../../../background/store/store';
-import { DEBUG_TAB_POPUP_INIT, DEBUG_TAB_POPUP_IS_VALID } from './actions';
+import { DEBUG_POPUP_INIT } from './actions';
+import { PopupMode } from './tab/popupInfo';
 
 /*
  * Retrieve tab id for an primary action (transported from a different browser extension part or not)
@@ -69,14 +69,14 @@ export function retrieveLogicalActionTab(action, tabs) {
 }
 
 export function checkForEmulatedPopupTabId(realTabId, actionType, tabs) {
-  if (actionType === DEBUG_TAB_POPUP_INIT || actionType === DEBUG_TAB_POPUP_IS_VALID) {
+  if (actionType === DEBUG_POPUP_INIT) {
     // These are the only actions that apply to the real tab (and the logical tab, for which the popup is emulated)
     return realTabId;
   }
 
   const tab = tabs[realTabId];
-  if (tab && tab.tabInfo && tab.tabInfo.debugIsTabPopupEmulated) {
-    return tab.tabInfo.tabId;
+  if (tab && tab.popupInfo && tab.popupInfo.debugEmulationMode === PopupMode.autonomousTabLinkedToTab) {
+    return tab.popupInfo.debugLinkedTabId;
   }
   return null;
 }

@@ -10,9 +10,12 @@ import annotations from './annotations/reducers';
 import widgets from './widgets/reducers';
 import textSelector from './textSelector/reducers';
 import api from './api';
+import popupInfo from './popupInfo/reducers';
+import { IPopupInfoState } from './popupInfo';
 
 export interface ITabState {
   tabInfo: ITabInfoState;
+  popupInfo: IPopupInfoState;
   api: {
     annotations: { data: AnnotationAPIModel[] };
     annotationUpvotes: { data: AnnotationUpvoteAPIModel[] };
@@ -25,6 +28,7 @@ export interface ITabState {
 
 export default combineReducers<ITabState>({
   tabInfo,
+  popupInfo,
   api,
   annotations,
   appModes,

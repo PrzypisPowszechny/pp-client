@@ -24,16 +24,12 @@ function initializeCoreHandlers() {
   window.highlighter = new Highlighter(document.body, null);
   window.highlighter.onHighlightEvent('mouseover', (e, annotationData) => {
     console.log(e);
-    console.log(annotationData);
   });
 }
 
 function handleSelect(data: XPathRange.NormalizedRange[], event) {
-  console.log('data: ', data);
-  console.log('event: ', event);
   if (data) {
     if (data.length === 1) {
-      console.log(data);
       window.highlighter.draw(1, data[0].serialize(document.body), { test: 'test' });
 
       // setTimeout(() => window.highlighter.undraw(1), 1000);

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { trySelectStorage, selectUser } from '../../common/store/storage/selectors';
 import LoginForm from './LoginForm';
 import { ITabState } from '../../common/store/tabs/tab/reducer';
+import { PopupMode } from '../../common/store/tabs/tab/popupInfo';
 
 export enum PopupPages {
   main,
@@ -30,13 +31,11 @@ interface IBrowserPopupNavigatorState {
     let isPopupEmulatedAndInvalid = false;
     if (realTab) {
       const {
-        debugIsTabPopupEmulated,
-        debugIsTabValid,
-      } = realTab.tabInfo;
-      isPopupEmulatedAndInvalid = debugIsTabPopupEmulated && !debugIsTabValid;
-      console.log('invalid:', isPopupEmulatedAndInvalid)
+        debugEmulationMode,
+        debugLinkedCorrectly,
+      } = realTab.popupInfo;
+      isPopupEmulatedAndInvalid = debugEmulationMode === PopupMode.autonomousTabLinkedToTab && !debugLinkedCorrectly;
     }
-
 
     return {
       tab: trySelectTab(state),
@@ -76,16 +75,19 @@ export default class BrowserPopupNavigator extends React.Component<Partial<IBrow
       user,
       isPopupEmulatedAndInvalid,
     } = this.props;
-    console.log(tab, storage, user);
 
-    // if (!tab || !storage) {
-    //   return this.renderEmptyPopup();
-    // }
+    if (!tab || !storage) {
+      return this.renderEmptyPopup();
+    }
 
     if (PPSettings.DEV && isPopupEmulatedAndInvalid) {
-      return (<span> The tab id for an emulated popup
-        does not match any existing tab or no content script was injected into the matching tab
-      </span>);
+      return (
+        <div className="popup-no-tab-match">
+          <span> The tab id for an emulated popup
+          does not match any existing tab or no content script was injected into the matching tab
+          </span>
+        </div>
+      );
     }
     /*
      * Also make sure that:

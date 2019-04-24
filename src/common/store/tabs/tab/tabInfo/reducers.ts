@@ -1,6 +1,6 @@
 import { CONTENT_SCRIPT_LOADED, CONTENT_SCRIPT_WONT_LOAD, SET_TAB_URL } from './actions';
 import { defaultWebsiteSupport } from '../../../../website-support';
-import { DEBUG_TAB_POPUP_INIT, DEBUG_TAB_POPUP_IS_VALID, TAB_INIT, TAB_POPUP_INIT } from '../../actions';
+import { DEBUG_POPUP_INIT, DEBUG_POPUP_LINKED, TAB_INIT, POPUP_INIT } from '../../actions';
 
 const initialState = {
   tabId: null,
@@ -23,13 +23,26 @@ export interface ITabInfoState {
 }
 
 export function tabInfo(state = initialState, action) {
+  if (!PPSettings.DEV && action.type === DEBUG_POPUP_INIT) {
+    throw Error(`${DEBUG_POPUP_INIT} action can only be dispatched in debug mode`)
+  }
   switch (action.type) {
     case TAB_INIT:
-    case TAB_POPUP_INIT:
+    case POPUP_INIT:
+    case DEBUG_POPUP_INIT:
+      const { tabId, currentUrl } = action.payload;
+      if (state.currentUrl && state.currentUrl !== currentUrl) {
+        throw new Error(`Current tab url already set to ${state.currentUrl}. Cannot set it to ${currentUrl}`);
+      }
+      const notSupportedMessage = defaultWebsiteSupport.isBlacklisted(currentUrl);
+      const isSupported = notSupportedMessage === null;
       return {
         ...state,
-        tabId: action.payload.tabId,
-      }
+        tabId,
+        currentUrl,
+        isSupported,
+        notSupportedMessage,
+      };
     case CONTENT_SCRIPT_WONT_LOAD:
       return {
         ...state,
@@ -40,34 +53,7 @@ export function tabInfo(state = initialState, action) {
       return {
         ...state,
         contentScriptLoaded: true,
-      };
-    case SET_TAB_URL:
-      const { currentUrl } = action.payload;
-      const notSupportedMessage = defaultWebsiteSupport.isBlacklisted(currentUrl);
-      const isSupported = notSupportedMessage === null;
-      return {
-        ...state,
-        currentUrl,
-        isSupported,
-        notSupportedMessage,
-      };
-    case DEBUG_TAB_POPUP_INIT:
-      // A special action to initiate an emulated tab in a debug mode
-      if (!PPSettings.DEV) {
-        throw Error(`${DEBUG_TAB_POPUP_INIT} action can only be dispatched in debug mode`)
-      }
-      return {
-        ...state,
-        tabId: action.payload.tabId,
-        debugIsTabPopupEmulated: true,
-      };
-    case DEBUG_TAB_POPUP_IS_VALID:
-      if (!PPSettings.DEV) {
-        throw Error(`${DEBUG_TAB_POPUP_INIT} action can only be dispatched in debug mode`)
-      }
-      return {
-        ...state,
-        debugIsTabValid: action.payload.isValid,
+        contentScriptWontLoad: false,
       };
     default:
       return state;

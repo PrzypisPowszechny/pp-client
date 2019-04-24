@@ -18,35 +18,40 @@ Enzyme.configure({ adapter: new AdapterReact16() });
 const middlewares = [];
 const mockStore = configureStore(middlewares);
 
-describe('App component', () => {
-  it('shallow renders without crashing', () => {
-    const initialState = {
-      tabs: {
-        [mockTabId]: {
-          widgets: {
-            menu: {
-              visible: false,
-            },
-            editor: {
-              visible: false,
-            },
-            annotationRequestForm: {
-              visible: false,
-            },
-            viewer: {
-              visible: false,
-            },
-            notification: {
-              visible: false,
-            },
-          },
-          appModes: {
-            isExtensionDisabled: false,
-            disabledPages: [],
-          },
+const correctStoreState = {
+  tabs: {
+    [mockTabId]: {
+      tabInfo: {
+        currentUrl: 'www.xyz.com',
+      },
+      widgets: {
+        menu: {
+          visible: false,
+        },
+        editor: {
+          visible: false,
+        },
+        annotationRequestForm: {
+          visible: false,
+        },
+        viewer: {
+          visible: false,
+        },
+        notification: {
+          visible: false,
         },
       },
-    };
+      appModes: {
+        isExtensionDisabled: false,
+        disabledPages: [],
+      },
+    },
+  },
+};
+
+describe('App component', () => {
+  it('shallow renders without crashing', () => {
+    const initialState = { ...correctStoreState };
     const store = mockStore(initialState);
 
     // Shallow render of the connect
@@ -66,48 +71,49 @@ describe('App component', () => {
   });
 
   it('mounts without crashing', () => {
-    const initialState = {
-      tabs: {
-        [mockTabId]: {
-          widgets: {
-            menu: {
-              location: {
-                x: 0,
-                y: 0,
-              },
-              visible: false,
-            },
-            editor: {
-              location: {
-                x: 0,
-                y: 0,
-              },
-              visible: false,
-            },
-            annotationRequestForm: {
-              visible: false,
-            },
-            viewer: {
-              location: {
-                x: 0,
-                y: 0,
-              },
-              visible: false,
-              viewerItems: [],
-              deleteModal: false,
-              mouseOver: false,
-            },
-            notification: {
-              visible: false,
-            },
-          },
-          appModes: {
-            isExtensionDisabled: false,
-            disabledPages: [],
-          },
-        },
-      },
-    };
+    const initialState = { ...correctStoreState };
+    // const initialState = {
+    //   tabs: {
+    //     [mockTabId]: {
+    //       widgets: {
+    //         menu: {
+    //           location: {
+    //             x: 0,
+    //             y: 0,
+    //           },
+    //           visible: false,
+    //         },
+    //         editor: {
+    //           location: {
+    //             x: 0,
+    //             y: 0,
+    //           },
+    //           visible: false,
+    //         },
+    //         annotationRequestForm: {
+    //           visible: false,
+    //         },
+    //         viewer: {
+    //           location: {
+    //             x: 0,
+    //             y: 0,
+    //           },
+    //           visible: false,
+    //           viewerItems: [],
+    //           deleteModal: false,
+    //           mouseOver: false,
+    //         },
+    //         notification: {
+    //           visible: false,
+    //         },
+    //       },
+    //       appModes: {
+    //         isExtensionDisabled: false,
+    //         disabledPages: [],
+    //       },
+    //     },
+    //   },
+    // };
 
     const store = mockStore(initialState);
 

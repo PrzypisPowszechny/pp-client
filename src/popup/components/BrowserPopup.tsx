@@ -58,7 +58,7 @@ interface IBrowserPopupState {
     user: selectUser(state),
     tab: selectTab(state),
     annotationRequestForm: selectTab(state).widgets.annotationRequestForm,
-    debugIsPopupEmulated: selectRealTab(state).tabInfo.debugIsTabPopupEmulated,
+    debugIsPopupEmulated: selectRealTab(state).popupInfo.isEmulated,
   }),
   {
     showAnnotationRequestForm,
@@ -103,7 +103,6 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
   }
 
   componentDidMount() {
-    console.log(this.props.tab.tabInfo.currentUrl);
     this.setState({ currentStandardizedTabUrl: standardizeUrlForPageSettings(this.props.tab.tabInfo.currentUrl) });
     this.loadStateFromAppModes();
   }
@@ -156,7 +155,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
       });
       ppGa.annotationAddingModeInited({ location: currentStandardizedTabUrl });
       if(!this.props.debugIsPopupEmulated) {
-        //window.close();
+        window.close();
       }
     }
   }
@@ -166,7 +165,6 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     if (!visible) {
       this.props.showAnnotationRequestForm({});
       ppGa.annotationRequestFormOpened('popup', true, { location: this.state.currentStandardizedTabUrl });
-      console.log(this.props.tab);
       if(!this.props.debugIsPopupEmulated) {
         window.close();
       }

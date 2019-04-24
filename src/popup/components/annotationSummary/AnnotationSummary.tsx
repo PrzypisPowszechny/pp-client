@@ -88,7 +88,6 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
     } = this.props.tabInfo;
 
     let message;
-    console.log(contentScriptWontLoad);
     if (isSupported !== null && !isSupported) {
       message = notSupportedMessage;
     } else if (contentScriptWontLoad) {
@@ -99,7 +98,6 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
     } else if (!this.props.annotations.hasLoaded) {
       message = 'Ładuję przypisy...';
     }
-    console.log(message);
     if (message) {
       return (
         <div className={styles.self}>

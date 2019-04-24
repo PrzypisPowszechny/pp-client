@@ -1,4 +1,4 @@
-import { applyMiddleware, compose, createStore, Store } from 'redux';
+import { applyMiddleware, createStore, Store } from 'redux';
 import thunk from 'redux-thunk';
 import rootReducer, { IState } from 'common/store/reducer';
 import promise from 'redux-promise';
@@ -8,7 +8,7 @@ import deepDiff from 'webext-redux/lib/strategies/deepDiff/diff';
 import actionAliases from 'common/store/action-aliases';
 import StorageSync from '../storage-sync';
 import { createEpicMiddleware } from 'redux-observable';
-import { FluxStandardAction, PPEpic, rootEpic } from 'common/store/background-epics';
+import { FluxStandardAction, rootEpic } from 'common/store/background-epics';
 
 const epicMiddleware = createEpicMiddleware<FluxStandardAction, FluxStandardAction, IState>();
 

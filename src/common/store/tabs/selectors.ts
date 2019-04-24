@@ -2,6 +2,7 @@
  * Content script/popup side selector retrieving the appropriate tab from state
  */
 import { getTabId } from './tab-utils';
+import { PopupMode } from './tab/popupInfo';
 
 export const selectTab = (state) => baseSelectTab(state, true);
 
@@ -12,15 +13,15 @@ export const baseSelectTab = (state, raiseException: boolean) => {
   if (realTabId === null) {
     return null;
   }
-  const logicaltabId = state.tabs[realTabId].tabInfo.tabId;
-  return state.tabs[logicaltabId];
-  // if (PPSettings.DEV) {
-  //   if (tab.tabInfo.debugIsTabPopupEmulated) {
-  //     const logicalTabId = tab.tabInfo.tabId;
-  //     return state.tabs[logicalTabId];
-  //   }
-  // }
-  // return tab;
+  let logicalTabId = realTabId;
+  const realTab = state.tabs[realTabId];
+  if (realTab.popupInfo) {
+    const { debugEmulationMode, debugLinkedTabId } = realTab.popupInfo;
+    if (debugEmulationMode == PopupMode.autonomousTabLinkedToTab) {
+      logicalTabId = debugLinkedTabId;
+    }
+  }
+  return state.tabs[logicalTabId];
 };
 
 const selectRealTabId = (state, raiseException: boolean) => {

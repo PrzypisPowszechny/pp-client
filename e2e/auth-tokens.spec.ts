@@ -1,5 +1,5 @@
 // noinspection TsLint
-import { dispatchDOMEvent, waitUntil } from './utils';
+import { waitUntil } from './utils';
 // noinspection TsLint
 const packageConf = require('../package');
 import express from 'express';
@@ -8,10 +8,6 @@ import { By } from 'selenium-webdriver';
 import { buildBrowser } from './browser';
 import * as e2ePPSettings from './settings';
 import { simulateLogIn } from './common';
-import { EMULATE_ON_CONTEXT_MENU_ANNOTATE } from './events';
-
-const PP_CSS_SCOPE_CLASS = 'pp-ui';
-const PP_CSS_EDITOR_CLASS_PREFIX = 'Editor__self';
 
 let refreshTimesCalled;
 let refreshStatus;

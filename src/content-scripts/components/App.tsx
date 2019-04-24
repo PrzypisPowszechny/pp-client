@@ -43,7 +43,8 @@ export default class App extends React.Component<Partial<AppProps>, {}> {
   }
 
   render() {
-    if (this.props.isStorageInitialized && this.props.user) {
+    const { isStorageInitialized, user } = this.props;
+    if (isStorageInitialized && user) {
       return (
         <div>
           {this.props.editorVisible && <Editor/>}

@@ -33,7 +33,7 @@ function initializeTabId() {
   });
 }
 
-function getTabId() {
+function getTabId(): number {
   // return tab id for the current content script / popup
   return tabId;
 }
