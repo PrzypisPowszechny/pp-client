@@ -26,7 +26,12 @@ const getConfig = (env, argv) => ({
     modules: [
       localPath(ROOT, 'src'),
       localPath(ROOT, 'node_modules'),
-    ]
+    ],
+    // use alias so all dependencies use jquery-slim too
+    // jquery-slim doesn't include ajax and animated side-effects
+    alias: {
+      'jquery': 'jquery-slim/dist/jquery.slim.min',
+    },
   },
   module: {
     rules: [
