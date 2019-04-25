@@ -8,7 +8,7 @@ import { buildBrowser } from './browser';
 import express from 'express';
 import http from 'http';
 import * as e2ePPSettings from './settings';
-import { sleep } from './utils';
+import { newTab, sleep, switchToTab } from './utils';
 
 
 const PP_FB_BUTTON_CLASS = 'fb-login-button';
@@ -16,14 +16,7 @@ const PP_GOOGLE_BUTTON_CLASS = 'google-login-button';
 const PP_POPUP_CONTENT_CLASS = 'popup-content';
 const PP_POPUP_NO_MATCH_CLASS = 'popup-no-tab-match';
 
-async function newTab(browser) {
-  await browser.executeScript('window.open()')
-}
 
-async function switchToTab(browser, tabIndex: number) {
-  const tabs = await browser.getAllWindowHandles();
-  await browser.switchTo().window(tabs[tabIndex]);
-}
 
 // todo: find a cleaner way to delete all tabs but the first one then restart the browser
 describe('checks additional e2e setup necessary for other tests', () => {
@@ -83,7 +76,7 @@ describe('checks additional e2e setup necessary for other tests', () => {
 
   afterEach(async () => {
     await browser.quit();
-  })
+  });
 
   afterAll(async () => {
     await new Promise(resolve => apiServer.close(resolve));

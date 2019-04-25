@@ -76,10 +76,6 @@ export default class BrowserPopupNavigator extends React.Component<Partial<IBrow
       isPopupEmulatedAndInvalid,
     } = this.props;
 
-    if (!tab || !storage) {
-      return this.renderEmptyPopup();
-    }
-
     if (PPSettings.DEV && isPopupEmulatedAndInvalid) {
       return (
         <div className="popup-no-tab-match">

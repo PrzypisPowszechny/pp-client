@@ -1,9 +1,9 @@
-import { Builder, By, Key, ActionSequence, Button } from 'selenium-webdriver';
+import { Builder, By, Key, ActionSequence, Button, IWebDriver } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome';
 import firefox from 'selenium-webdriver/firefox';
 import * as e2ePPSettings from './settings';
 
-export async function buildBrowser() {
+export async function buildBrowser(): IWebDriver {
   const browser = new Builder().forBrowser(e2ePPSettings.BROWSER)
   // In chrome extension are disabled when running headless
   .setChromeOptions(new chrome.Options().addArguments('load-extension=./dist/browser-extension'))
