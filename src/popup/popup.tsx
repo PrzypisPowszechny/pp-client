@@ -112,7 +112,7 @@ export async function getPopupMode() {
 }
 
 function getEmulatedTabId(): number {
-  const tabId = Number(parseUrlParams(window.location.search)['devTabId']);
+  const tabId = Number(parseUrlParams(window.location.search).devTabId);
   if (isNaN(tabId)) {
     return null;
   }

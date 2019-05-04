@@ -46,7 +46,7 @@ const selectRealTabId = (state, raiseException: boolean) => {
     return null;
   }
   return realTabId;
-}
+};
 
 export const selectRealTab = (state) => state.tabs[selectRealTabId(state, true)];
 
@@ -56,4 +56,4 @@ export const trySelectRealTab = (state) => {
     return null;
   }
   return state.tabs[realTabId];
-}
+};

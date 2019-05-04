@@ -24,7 +24,6 @@ interface IBrowserPopupNavigatorState {
   page: PopupPages;
 }
 
-
 @connect(
   state => {
     const realTab = trySelectRealTab(state);

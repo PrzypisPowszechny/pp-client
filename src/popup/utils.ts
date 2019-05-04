@@ -14,17 +14,16 @@ export function getActiveTabId(): Promise<number> {
   });
 }
 
-
 export function getTabUrl(tabId: number): Promise<string> {
   return new Promise(
-    (resolve) => chrome.tabs.get(
+    resolve => chrome.tabs.get(
       tabId,
       (tab) => {
         if (chrome.runtime.lastError) {
           resolve(null);
         }
         resolve(tab ? tab.url : null);
-      }
-    )
+      },
+    ),
   );
 }

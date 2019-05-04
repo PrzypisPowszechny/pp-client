@@ -1,9 +1,3 @@
-//tslint:disable
-
-export interface IUserState {
-  // todo
-}
-
 export enum AuthProviders {
   google = 'google',
   facebook = 'facebook',
@@ -23,6 +17,5 @@ export interface IAuthProcState {
 }
 
 export interface IRuntimeState {
-  // user: IUserState;
   authProc: IAuthProcState;
 }

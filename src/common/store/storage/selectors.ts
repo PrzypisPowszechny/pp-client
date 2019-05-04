@@ -10,7 +10,7 @@ export const baseSelectStorage = (state, raiseException: boolean) => {
     return null;
   }
   return state.storage.value;
-}
+};
 
 export const selectUser = (state) => {
   // "collect" user data from login data

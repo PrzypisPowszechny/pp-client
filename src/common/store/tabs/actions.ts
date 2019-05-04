@@ -24,7 +24,6 @@ export function tabPopupInit(tabId: string, currentUrl: string) {
   };
 }
 
-
 export const DEBUG_POPUP_INIT = 'DEBUG_POPUP_INIT';
 export const DEBUG_POPUP_LINKED = 'DEBUG_POPUP_LINKED';
 

@@ -27,7 +27,7 @@ export interface FluxStandardAction {
   meta?: any;
 }
 
-export type PPEpic = Epic<FluxStandardAction, FluxStandardAction, IState>
+export type PPEpic = Epic<FluxStandardAction, FluxStandardAction, IState>;
 
 export const locateEpic: PPEpic = (action$, state$) => action$.pipe(
   ofType('API_READ'),

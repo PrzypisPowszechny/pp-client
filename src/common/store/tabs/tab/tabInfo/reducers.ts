@@ -24,7 +24,7 @@ export interface ITabInfoState {
 
 export function tabInfo(state = initialState, action) {
   if (!PPSettings.DEV && action.type === DEBUG_POPUP_INIT) {
-    throw Error(`${DEBUG_POPUP_INIT} action can only be dispatched in debug mode`)
+    throw Error(`${DEBUG_POPUP_INIT} action can only be dispatched in debug mode`);
   }
   switch (action.type) {
     case TAB_INIT:

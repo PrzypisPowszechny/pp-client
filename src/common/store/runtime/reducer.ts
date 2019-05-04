@@ -17,5 +17,4 @@ export function authProc(
 
 export default combineReducers<IRuntimeState>({
   authProc,
-  // user, // todo
 });

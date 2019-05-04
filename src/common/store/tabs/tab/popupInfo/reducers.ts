@@ -28,7 +28,7 @@ export default function popupInfo(state = initialState, action) {
     case DEBUG_POPUP_INIT:
       // A special action to initiate an emulated tab in a debug mode
       if (!PPSettings.DEV) {
-        throw Error(`${DEBUG_POPUP_INIT} action can only be dispatched in debug mode`)
+        throw Error(`${DEBUG_POPUP_INIT} action can only be dispatched in debug mode`);
       }
       const { emulationMode, tabId, linkedCorrectly } = action.payload;
       let debugLinkedTabId;

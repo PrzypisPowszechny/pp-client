@@ -33,4 +33,3 @@ export const quoteContextWidth = 100;
 /*
  * Constants used within e2e tests -- special classes set only to make possible detection of selected elements
  */
-

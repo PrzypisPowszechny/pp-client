@@ -15,8 +15,9 @@
 
 <p>Windows opened as separate tabs are distinct from the original ones</p>
 <ul>
-    <li> original background page can only be opened via clicking the background page link in extension settings</li>
-    <li>popup opened by clicking extension icon is alwways a different instance than the one opened in separate tab</li>
+    <li>original background page can only be opened via clicking the background page link in extension settings</li>
+    <li>popup opened by clicking extension icon is always a different instance than the one opened from here in separate tab</li>
+    <li></li>
 </ul>
 <p>However:</p>
 <ul>
@@ -27,8 +28,12 @@
         The only issue is their coexistence, i.e. unusual interaction of actions this may generate
 
     </li>
-    <li> as long as the "forked" page does not interfere with the application logic, it can be well used for testing</li>
-    <li> e.g. in popup, when the tab does not modify the global application state spontaneously (e.g. via timer) everything should be fine</li>
+    <li> as long as the "forked" page does not interfere with the logic of the whole application, it can be well used for testing</li>
+    <li> e.g. in popup, when the tab does not modify the global application state spontaneously (e.g. via timer) everything should be fine.</li>
+    <li> As a rule of thumb, when only one instance of each type (popup / background page) exists, the extension should function perfectly.
+      Obviously, a background page opened by the links above MAY interfere with the original one.
+      Popup however is <b> safe </b> as long as you do not open it both as a separate tab and via extension icon
+     </li>
 </ul>
 </body>
 </html>

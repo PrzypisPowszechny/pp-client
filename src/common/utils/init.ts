@@ -20,4 +20,3 @@ export const waitUntilPageLoaded = document => new Promise((resolve) => {
     });
   }
 });
-

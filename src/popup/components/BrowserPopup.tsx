@@ -154,7 +154,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
         [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages,
       });
       ppGa.annotationAddingModeInited({ location: currentStandardizedTabUrl });
-      if(!this.props.debugIsPopupEmulated) {
+      if (!this.props.debugIsPopupEmulated) {
         window.close();
       }
     }
@@ -165,7 +165,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     if (!visible) {
       this.props.showAnnotationRequestForm({});
       ppGa.annotationRequestFormOpened('popup', true, { location: this.state.currentStandardizedTabUrl });
-      if(!this.props.debugIsPopupEmulated) {
+      if (!this.props.debugIsPopupEmulated) {
         window.close();
       }
     }
