@@ -2,7 +2,7 @@ export default function mousePosition(event) {
   const body = global.document.body;
   let offset = { top: 0, left: 0 };
 
-  if ($(body).css('position') !== "static") {
+  if ($(body).css("position") !== "static") {
     offset = $(body).offset();
   }
 

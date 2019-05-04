@@ -22,7 +22,7 @@ const getConfig = (env, argv) => ({
     filename: '[name].pp-bundle.js',
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".json"],
+    extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
     modules: [
       localPath(ROOT, 'src'),
       localPath(ROOT, 'node_modules'),
@@ -36,7 +36,7 @@ const getConfig = (env, argv) => ({
   module: {
     rules: [
       {
-        test: /\.(tsx?|js)$/,
+        test: /\.(tsx?|jsx?)$/,
         include: localPath(ROOT, 'src'),
         use: [
           {

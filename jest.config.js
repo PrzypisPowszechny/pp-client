@@ -4,10 +4,7 @@ module.exports = {
     "<rootDir>/e2e",
     "<rootDir>/validate-annotations",
   ],
-  "transform": {
-    "^.+\\.tsx?$": "ts-jest",
-    "^.+\\.jsx?$": "babel-jest"
-  },
+  "preset": "ts-jest/presets/js-with-ts",
   "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
   "moduleFileExtensions": [
     "ts",

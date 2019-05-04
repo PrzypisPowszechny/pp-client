@@ -6,7 +6,6 @@
   "//comments": {
     "react, react-dom": "Cannot be upgraded to react@^16.4: https://github.com/PrzypisPowszechny/pp-client/issues/314",
     "semantic-ui-react": "Requires react@^16.4",
-    "babel-runtime": "used so redux-json-api compiles with webpack-cli@^3: https://github.com/redux-json-api/redux-json-api/issues/176",
     "xpath-range": "cannot be updated: 1.0 is a new interface from scratch",
     "react-redux": "some errors appear in versions ^6, probably related to old react version"
   },
@@ -42,12 +41,10 @@
     "xpath-range": "0.0.5"
   },
   "//devComments": {
-    "webpack-chrome-extension-reloader": "must be locked at 1.0 since our chromium-opening script listens to the module's websocket without setting user agent which causes newer versions to fail (here: https://github.com/rubenspgcavalcante/webpack-chrome-extension-reloader/blob/master/src/hot-reload/SignEmitter.ts)"
+    "webpack-chrome-extension-reloader": "must be locked at 1.0 since our chromium-opening script listens to the module's websocket without setting user agent which causes newer versions to fail (here: https://github.com/rubenspgcavalcante/webpack-chrome-extension-reloader/blob/master/src/hot-reload/SignEmitter.ts)",
+    "babel-runtime": "used so redux-json-api compiles with webpack-cli@^3: https://github.com/redux-json-api/redux-json-api/issues/176"
   },
   "devDependencies": {
-    "@babel/core": "7.4.3",
-    "@babel/preset-env": "7.4.3",
-    "@babel/preset-react": "7.0.0",
     "@types/chrome": "0.0.83",
     "@types/classnames": "2.2.7",
     "@types/enzyme": "3.1.14",
@@ -58,8 +55,6 @@
     "@types/react": "16.3.14",
     "@types/react-dom": "16.0.6",
     "@types/reselect": "2.2.0",
-    "babel-jest": "24.7.1",
-    "babel-loader": "8.0.5",
     "babel-runtime": "6.26.0",
     "chromedriver": "2.42.0",
     "clean-webpack-plugin": "2.0.1",
@@ -93,19 +88,13 @@
     "tslint": "5.16.0",
     "tslint-eslint-rules": "5.4.0",
     "tslint-react": "4.0.0",
-    "typescript": "3.4.4",
+    "typescript": "3.4.5",
     "url-loader": "1.1.2",
     "webpack": "4.30.0",
     "webpack-chrome-extension-reloader": "1.0.0",
     "webpack-cli": "3.3.1",
     "webpack-dev-server": "3.3.1",
     "webpack-merge": "4.2.1"
-  },
-  "pp": {
-    "devAppID": "lkdlhhnnkbhhnocdodbeikfboeckpaih",
-    "devAppKey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxq8nV/aj5t9OCS5BaRfNNVdEYFqSYCfgSRmXzizAGCoIfro6bewIL3tFP4aIkreQHg4/09Xiv6TSJ7ZiFnuVat5iYGC3w1h+z9fzj/i0lyASilp0N7watpAGLh+msGzr59J/lGR7G0Nt3Ixy82RBlLmU5gjR9eHueOMNaUe1m4I74BSPG6GboUmUpidaqAbSV3lgYFppWHDjCQ5rqIkue1JLAsRBwiV+3DeGJs3JN+TfLduEgDzMcNuCkFdym1L+9qJKQI6t56ElkHMse3aToSTrG0flPedfCpPgEcGKfkgDxO11de7hKrRcbX4wmQzACvBm1YzzrLRR7yIRBhFEQIDAQAB",
-    "prodAppID": "afephghdinbdpfmfdkgbhbolflhnbbdf",
-    "prodAppKey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArkmF/06jK2b976qLc1RoSyrhGMN1QkbRCbDLnMGL+RfOlZdbDBwXxtTXcnzm2uwUlrZKCaecuD0GOrnOfihaqQv3cVRbRTCWhvyhswqiWea8YA8P0pjiTrsuth6l0NK9WqKYLTUxP+oM9H0nDaOg5I9Jzh5kCZPpwavbx1naXCv7PPcIoGNRgA4y3YJL8qiJx9eY0I6yRdCSS8JX4AeZ4K1ShnzPg5Wih7NZdJlmWCjOajdF8GHxYGt68eGOamIlQYwFzAjinCN+DbI1f4suQcq5oJzw3NCBmCvepaw5f/ivhzCsw0aRfVqRk6EVxhQvRwTBxeBQQ28j5JecxtfN5wIDAQAB"
   },
   "scripts": {
     "help": "npm-scripts-help",
@@ -125,6 +114,12 @@
     "test-e2e-full": "npm run build && npm run test-e2e",
     "test": "jest --maxWorkers=1",
     "validate-annotations": "PP_DEV_SENTRY_ALT=true PP_DEV_SENTRY_UNLOCATED_IGNORE=true npm run build && PP_API=devdeploy1 jest validate-annotations"
+  },
+  "pp": {
+    "devAppID": "lkdlhhnnkbhhnocdodbeikfboeckpaih",
+    "devAppKey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxq8nV/aj5t9OCS5BaRfNNVdEYFqSYCfgSRmXzizAGCoIfro6bewIL3tFP4aIkreQHg4/09Xiv6TSJ7ZiFnuVat5iYGC3w1h+z9fzj/i0lyASilp0N7watpAGLh+msGzr59J/lGR7G0Nt3Ixy82RBlLmU5gjR9eHueOMNaUe1m4I74BSPG6GboUmUpidaqAbSV3lgYFppWHDjCQ5rqIkue1JLAsRBwiV+3DeGJs3JN+TfLduEgDzMcNuCkFdym1L+9qJKQI6t56ElkHMse3aToSTrG0flPedfCpPgEcGKfkgDxO11de7hKrRcbX4wmQzACvBm1YzzrLRR7yIRBhFEQIDAQAB",
+    "prodAppID": "afephghdinbdpfmfdkgbhbolflhnbbdf",
+    "prodAppKey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArkmF/06jK2b976qLc1RoSyrhGMN1QkbRCbDLnMGL+RfOlZdbDBwXxtTXcnzm2uwUlrZKCaecuD0GOrnOfihaqQv3cVRbRTCWhvyhswqiWea8YA8P0pjiTrsuth6l0NK9WqKYLTUxP+oM9H0nDaOg5I9Jzh5kCZPpwavbx1naXCv7PPcIoGNRgA4y3YJL8qiJx9eY0I6yRdCSS8JX4AeZ4K1ShnzPg5Wih7NZdJlmWCjOajdF8GHxYGt68eGOamIlQYwFzAjinCN+DbI1f4suQcq5oJzw3NCBmCvepaw5f/ivhzCsw0aRfVqRk6EVxhQvRwTBxeBQQ28j5JecxtfN5wIDAQAB"
   },
   "scriptshelp": {
     "help-message": [
