@@ -3,6 +3,12 @@
   "version": "0.6.0-alpha",
   "description": "",
   "main": "index.js",
+  "//comments": {
+    "react, react-dom": "Cannot be upgraded to react@^16.4: https://github.com/PrzypisPowszechny/pp-client/issues/314",
+    "semantic-ui-react": "Requires react@^16.4",
+    "babel-runtime": "used so redux-json-api compiles with webpack-cli@^3: https://github.com/redux-json-api/redux-json-api/issues/176",
+    "xpath-range": "cannot be updated: 1.0 is a new interface from scratch"
+  },
   "dependencies": {
     "@sentry/browser": "5.1.0",
     "axios-retry": "3.1.2",
