@@ -7,7 +7,8 @@
     "react, react-dom": "Cannot be upgraded to react@^16.4: https://github.com/PrzypisPowszechny/pp-client/issues/314",
     "semantic-ui-react": "Requires react@^16.4",
     "babel-runtime": "used so redux-json-api compiles with webpack-cli@^3: https://github.com/redux-json-api/redux-json-api/issues/176",
-    "xpath-range": "cannot be updated: 1.0 is a new interface from scratch"
+    "xpath-range": "cannot be updated: 1.0 is a new interface from scratch",
+    "react-redux": "some errors appear in versions ^6, probably related to old react version"
   },
   "dependencies": {
     "@sentry/browser": "5.1.0",
@@ -23,7 +24,7 @@
     "react": "16.3.2",
     "react-dom": "16.3.3",
     "react-icons-kit": "1.3.1",
-    "react-redux": "5.0.7",
+    "react-redux": "5.1.1",
     "react-social-login-buttons": "2.3.0",
     "redux": "4.0.1",
     "redux-actions": "2.6.1",
@@ -39,6 +40,9 @@
     "semantic-ui-react": "0.81.3",
     "webext-redux": "2.0.2",
     "xpath-range": "0.0.5"
+  },
+  "//devComments": {
+    "webpack-chrome-extension-reloader": "must be locked at 1.0 since our chromium-opening script listens to the module's websocket without setting user agent which causes newer versions to fail (here: https://github.com/rubenspgcavalcante/webpack-chrome-extension-reloader/blob/master/src/hot-reload/SignEmitter.ts)"
   },
   "devDependencies": {
     "@babel/core": "7.4.3",
@@ -68,7 +72,7 @@
     "express": "4.16.4",
     "file-loader": "3.0.1",
     "fork-ts-checker-notifier-webpack-plugin": "1.0.0",
-    "fork-ts-checker-webpack-plugin": "1.0.4",
+    "fork-ts-checker-webpack-plugin": "1.3.0",
     "geckodriver": "1.16.2",
     "html-webpack-plugin": "3.2.0",
     "jest": "24.7.1",
