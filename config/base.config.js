@@ -43,8 +43,6 @@ const getConfig = (env, argv) => ({
             loader: "ts-loader",
             options: {
               transpileOnly: true,
-              // happyPackMode: true,
-              // experimentalWatchApi: true,
             },
           }
         ],

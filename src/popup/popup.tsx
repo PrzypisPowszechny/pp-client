@@ -98,7 +98,7 @@ export async function getPopupMode() {
   }
 
   // is popup opened normally on extension icon click? (unlike opened in a tab like a usual page)
-  const window: any = await new Promise((resolve) => chrome.windows.getCurrent({}, resolve));
+  const window: any = await new Promise(resolve => chrome.windows.getCurrent({}, resolve));
   const currentTab = await new Promise (resolve => chrome.tabs.getCurrent(resolve));
   if (!currentTab) {
     return PopupMode.notEmulated;

@@ -25,7 +25,7 @@ interface IBrowserPopupNavigatorState {
 }
 
 @connect(
-  state => {
+  (state) => {
     const realTab = trySelectRealTab(state);
     let isPopupEmulatedAndInvalid = false;
     if (realTab) {

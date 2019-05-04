@@ -4,9 +4,9 @@
 import { getTabId } from './tab-utils';
 import { PopupMode } from './tab/popupInfo';
 
-export const selectTab = (state) => baseSelectTab(state, true);
+export const selectTab = state => baseSelectTab(state, true);
 
-export const trySelectTab = (state) => baseSelectTab(state, false);
+export const trySelectTab = state => baseSelectTab(state, false);
 
 export const baseSelectTab = (state, raiseException: boolean) => {
   const realTabId = selectRealTabId(state, raiseException);
@@ -17,7 +17,7 @@ export const baseSelectTab = (state, raiseException: boolean) => {
   const realTab = state.tabs[realTabId];
   if (realTab.popupInfo) {
     const { debugEmulationMode, debugLinkedTabId } = realTab.popupInfo;
-    if (debugEmulationMode == PopupMode.autonomousTabLinkedToTab) {
+    if (debugEmulationMode === PopupMode.autonomousTabLinkedToTab) {
       logicalTabId = debugLinkedTabId;
     }
   }
@@ -48,7 +48,7 @@ const selectRealTabId = (state, raiseException: boolean) => {
   return realTabId;
 };
 
-export const selectRealTab = (state) => state.tabs[selectRealTabId(state, true)];
+export const selectRealTab = state => state.tabs[selectRealTabId(state, true)];
 
 export const trySelectRealTab = (state) => {
   const realTabId = selectRealTabId(state, false);
