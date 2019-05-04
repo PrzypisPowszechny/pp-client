@@ -1,19 +1,20 @@
 import { IUserState } from './types';
 
-export const selectIsStorageInitialized = (state) => {
-  return Boolean(state.storage && state.storage.isHydrated);
-};
+export const selectStorage = (state) => baseSelectStorage(state, true);
 
-export const selectStorage = (state) => {
-  if (!selectIsStorageInitialized(state)) {
-    throw new Error('state.storage not initialized');
+export const trySelectStorage = (state) => baseSelectStorage(state, false);
+
+export const baseSelectStorage = (state, raiseException: boolean) => {
+  if (!state.storage || !state.storage.isHydrated) {
+    if (raiseException) { throw new Error('state.storage not initialized'); }
+    return null;
   }
   return state.storage.value;
 };
 
 export const selectUser = (state) => {
   // "collect" user data from login data
-  if (!selectIsStorageInitialized(state)) {
+  if (!trySelectStorage(state)) {
     return null;
   }
   const {

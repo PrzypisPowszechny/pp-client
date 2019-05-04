@@ -1,5 +1,3 @@
-import { initializeTabId } from '../store/tabs/tab-utils';
-
 export const waitUntilFirstStoreUpdate = store => new Promise((resolve) => {
   // Wait until Redux store first update before initializing components
   // so the store has been initialized with default reducers
@@ -22,8 +20,3 @@ export const waitUntilPageLoaded = document => new Promise((resolve) => {
     });
   }
 });
-
-export const waitUntilStoreReady = store => Promise.all([
-  waitUntilFirstStoreUpdate(store),
-  initializeTabId(), // initialize tab id for synchronous access in reducers
-]);

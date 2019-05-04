@@ -26,17 +26,25 @@ const getConfig = (env, argv) => ({
     modules: [
       localPath(ROOT, 'src'),
       localPath(ROOT, 'node_modules'),
-    ]
+    ],
+    // use alias so all dependencies use jquery-slim too
+    // jquery-slim doesn't include ajax and animated side-effects
+    alias: {
+      'jquery': 'jquery-slim/dist/jquery.slim.min',
+    },
   },
   module: {
     rules: [
       {
         test: /\.(tsx?|js)$/,
+        include: localPath(ROOT, 'src'),
         use: [
           {
             loader: "ts-loader",
             options: {
               transpileOnly: true,
+              // happyPackMode: true,
+              // experimentalWatchApi: true,
             },
           }
         ],
@@ -101,7 +109,10 @@ const getConfig = (env, argv) => ({
     ],
   },
   plugins: [
-    new CleanWebpackPlugin([BUILD_DIR, EXT_DIR], { root: ROOT}),
+    // a recommended hack to only build selected languages in momentjs
+    // (https://medium.com/@michalozogan/how-to-split-moment-js-locales-to-chunks-with-webpack-de9e25caccea)
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new CleanWebpackPlugin(),
     new webpack.DefinePlugin({
       // use appropriate (development or production) PP settings
       PPSettings: JSON.stringify(loadSettings(env, argv)),

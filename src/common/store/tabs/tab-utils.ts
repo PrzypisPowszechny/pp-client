@@ -6,6 +6,14 @@ import { checkResponse } from '../../messages/utils';
 
 let tabId;
 
+/*
+ * Get information on the tabId of this application script.
+ * Leave it to the background script to return this script's id.
+ *
+ * The logic:
+ * In case of content script, use the sender info to extract the tab id
+ * In case of popup check which tab is currently active since popup can only be open for the active tab
+ */
 function initializeTabId() {
   if (tabId !== undefined) {
     return Promise.resolve(tabId);
@@ -25,7 +33,7 @@ function initializeTabId() {
   });
 }
 
-function getTabId() {
+function getTabId(): number {
   // return tab id for the current content script / popup
   return tabId;
 }

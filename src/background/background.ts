@@ -24,6 +24,7 @@ import store, { initStore } from './store/store';
 import { selectAccessToken } from '../common/store/storage/selectors';
 import { refreshTokenRoutine } from './auth';
 import dashboardMessaging from 'background/dashboard-messaging';
+import Port = chrome.runtime.Port;
 
 function onContextMenuAnnotate() {
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
@@ -102,3 +103,27 @@ initTrackActiveTabId();
 ppGaBg.init().then(() => null);
 chrome.runtime.onInstalled.addListener(ppGaOnInstalled);
 chrome.runtime.onMessage.addListener(ppGaBg.sendEventFromMessage);
+
+/*
+ * Additional debug utilities
+ */
+
+if (PPSettings.DEV) {
+  chrome.runtime.onMessage.addListener(
+    (request, sender, sendResponse) => {
+      if (request.action === 'DEV_BACKGROUND_PAGE_OPEN') {
+        chrome.runtime.getBackgroundPage((window) => {
+          chrome.tabs.create({
+            url: window.location.href,
+          });
+        });
+      }
+
+      if (request.action === 'DEV_POPUP_OPEN') {
+        chrome.tabs.create({
+          url: './popup.html',
+        });
+      }
+    },
+  );
+}

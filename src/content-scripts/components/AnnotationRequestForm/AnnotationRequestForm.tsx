@@ -6,7 +6,7 @@ import { saveAnnotationRequest } from 'common/api/utils';
 import ppGa from 'common/pp-ga';
 
 import styles from './AnnotationRequestForm.scss';
-import { Icon } from 'react-icons-kit';
+import { Icon } from 'react-icons-kit/Icon';
 import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
 import { changeNotification, hideAnnotationRequestForm } from 'common/store/tabs/tab/widgets/actions';
 import * as helpers from './helpers';

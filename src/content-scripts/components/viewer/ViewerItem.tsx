@@ -17,7 +17,7 @@ import ppGa from 'common/pp-ga';
 import { selectAnnotation } from 'common/store/tabs/tab/api/selectors';
 
 import styles from './Viewer.scss';
-import { Icon } from 'react-icons-kit';
+import { Icon } from 'react-icons-kit/Icon';
 import { link } from 'react-icons-kit/icomoon/link';
 
 interface IViewerItemProps {

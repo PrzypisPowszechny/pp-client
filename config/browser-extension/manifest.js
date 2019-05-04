@@ -20,23 +20,30 @@ const base = (env, argv) => {
       client_id: loadSettings(env, argv).CHROME_OAUTH_CLIENT_ID,
       scopes: ['email', 'profile']
     },
-    web_accessible_resources: [
-      'assets/*',
-      'help/*',
-      'node_modules/*',
-      'fonts/*'
-    ],
-    permissions: [
-      'storage',
-      'activeTab',
-      'contextMenus',
-      'cookies',
-      'identity',
-      // server URLs must be included so we can read cookies for these hosts
-      loadSettings(env, argv).API_URL,
-      loadSettings(env, argv).SITE_URL,
-    ],
   };
+
+  const permissions = [
+    'storage',
+    'activeTab',
+    'contextMenus',
+    'cookies',
+    'identity',
+    // server URLs must be included so we can read cookies for these hosts
+    loadSettings(env, argv).API_URL,
+    loadSettings(env, argv).SITE_URL,
+  ];
+  manifest.permissions = permissions;
+
+  const webAccessibleResources = [
+    'assets/*',
+    'help/*',
+    'node_modules/*',
+    'fonts/*',
+  ];
+  if (loadSettings(env, argv).DEV) {
+    webAccessibleResources.push('dev-pages/*');
+  }
+  manifest.web_accessible_resources = webAccessibleResources;
 
   const externallyConnectable = ['*://*.przypispowszechny.pl/*'];
   if (loadSettings(env, argv).DEV) {

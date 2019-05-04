@@ -10,7 +10,7 @@ import { selectViewerState } from 'common/store/tabs/tab/widgets/selectors';
 import { selectAnnotation } from 'common/store/tabs/tab/api/selectors';
 import { annotationRootNode } from '../settings';
 import { selectTab } from 'common/store/tabs/selectors';
-import { selectIsStorageInitialized, selectUser } from '../../common/store/storage/selectors';
+import { trySelectStorage, selectUser } from '../../common/store/storage/selectors';
 
 let instance;
 
@@ -40,11 +40,11 @@ function deinit() {
 
 function drawHighlights() {
   const user = selectUser(store.getState());
-  const isStorageInitialized = selectIsStorageInitialized(store.getState());
+  const storage = trySelectStorage(store.getState());
   const arePageHighlightsDisabled = selectModeForCurrentPage(store.getState()).arePageHighlightsDisabled;
   const locatedAnnotationsIds =
     selectTab(store.getState()).annotations.located.map(annotation => annotation.annotationId);
-  if (isStorageInitialized && user) {
+  if (storage && user) {
     if (arePageHighlightsDisabled && !instance.arePageHighlightsDisabled) {
       instance.highlighter.undrawAll();
     } else if (!arePageHighlightsDisabled &&

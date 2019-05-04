@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import styles from '../Viewer.scss';
-import { Icon } from 'react-icons-kit';
+import { Icon } from 'react-icons-kit/Icon';
 import { ic_mode_edit } from 'react-icons-kit/md/ic_mode_edit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
 import {

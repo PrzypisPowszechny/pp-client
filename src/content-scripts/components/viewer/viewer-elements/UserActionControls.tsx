@@ -7,7 +7,7 @@ import { AnnotationAPIModel } from 'common/api/annotations';
 import Upvote from './Upvote';
 import UserActionDialog from './UserActionDialog';
 import ppGa from 'common/pp-ga';
-import { Icon } from 'react-icons-kit';
+import { Icon } from 'react-icons-kit/Icon';
 import { ic_more_horiz } from 'react-icons-kit/md/ic_more_horiz';
 import { selectTab } from 'common/store/tabs/selectors';
 

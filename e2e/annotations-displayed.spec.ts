@@ -5,8 +5,12 @@ import { By } from 'selenium-webdriver';
 import { buildBrowser } from './browser';
 import * as e2ePPSettings from './settings';
 import { simulateLogIn } from './common';
+import { newTab, switchToTab } from './utils';
+
+const packageConf = require('../package');
 
 const PP_CSS_SCOPE_CLASS = 'pp-ui';
+const PP_CSS_ANNOTATION_SUMMARY_PREFIX = 'AnnotationSummary__summaryItem';
 const PP_CSS_VIEWER_CLASS_PREFIX = 'Viewer__self';
 const PP_CSS_HIGHLIGHT_CLASS = 'pp-highlight';
 
@@ -74,8 +78,11 @@ describe('annotations are highlighted and can be viewed on mouse hover', () => {
   });
 
   beforeAll(async () => {
-    browser = await buildBrowser();
     await new Promise(res => apiServer = http.createServer(apiApp).listen(e2ePPSettings.API_PORT, res));
+  });
+
+  beforeEach(async () => {
+    browser = await buildBrowser();
   });
 
   test('annotations highlighted', async () => {
@@ -92,8 +99,20 @@ describe('annotations are highlighted and can be viewed on mouse hover', () => {
     await browser.findElement(By.css(`.${PP_CSS_SCOPE_CLASS}[class*="${PP_CSS_VIEWER_CLASS_PREFIX}"]`));
   }, e2ePPSettings.TIMEOUT);
 
-  afterAll(async () => {
+  test('annotations displayed in popup', async () => {
+    await simulateLogIn(browser);
+    await browser.get(`${e2ePPSettings.SITE_URL}/some-text/`);
+    await newTab(browser);
+    await switchToTab(browser, 1);
+    await browser.get(`chrome-extension://${packageConf.pp.devAppID}/popup.html?devTabId=2`);
+    await browser.findElement(By.css(`[class*="${PP_CSS_ANNOTATION_SUMMARY_PREFIX}"]`));
+  }, e2ePPSettings.TIMEOUT);
+
+  afterEach(async () => {
     await browser.quit();
+  });
+
+  afterAll(async () => {
     await new Promise(resolve => apiServer.close(resolve));
   });
 });

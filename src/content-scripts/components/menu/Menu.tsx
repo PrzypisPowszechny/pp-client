@@ -4,14 +4,13 @@ import classNames from 'classnames';
 
 import { selectMenuState } from 'common/store/tabs/tab/selectors';
 import { hideMenu, setSelectionRange, showEditorAnnotation } from 'common/store/tabs/tab/widgets/actions';
-import { Range as XPathRange } from 'xpath-range';
 import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
 
 import Widget from 'content-scripts/components/widget';
 
 import styles from './Menu.scss';
 import { PPScopeClass } from 'content-scripts/settings';
-import { Icon } from 'react-icons-kit';
+import { Icon } from 'react-icons-kit/Icon';
 import { ic_add_circle } from 'react-icons-kit/md/ic_add_circle';
 
 import ppGa from 'common/pp-ga';

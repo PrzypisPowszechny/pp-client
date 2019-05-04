@@ -1,4 +1,3 @@
-import { TAB_INIT } from '../../actions';
 import { reducer as api } from 'redux-json-api';
 
 // Because redux-json-api is not prepared to safely execute all actions

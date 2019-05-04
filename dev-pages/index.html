@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PP development index</title>
+</head>
+<body>
+    <script type="application/javascript">
+        /*
+         * Full dev util page flow:
+         *
+         * 1. Wait for the extension to be loaded (when this page is loaded simultaneously with the extension)
+         * It cannot be opened directly via commandline.
+         * 2. Open util page that is a part of the extension
+         * (chrome.runtime API is apparently not accessible from a local file (file:// protocol), so no contact with an extension is allowed)
+         * 3. On click events send messages to the background page, that can create new tabs and can access any extension pages.
+         * Why?
+         * - even extension resources (such as chrome-extension://<id>/some_page.html) cannot directly open the background page.
+         *
+         */
+        setTimeout(function () {
+          window.location.href = 'chrome-extension://lkdlhhnnkbhhnocdodbeikfboeckpaih/dev-pages/util-page.html';
+        }, 100);
+    </script>
+</body>
+</html>

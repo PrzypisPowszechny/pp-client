@@ -1,9 +1,14 @@
 import { Store } from 'redux';
 import { REDUX_STORAGE } from 'common/chrome-storage/keys';
-import _ from 'lodash';
+import _isEqual from 'lodash/isEqual';
 
 export const HYDRATE_FROM_CHROME_STORAGE = 'HYDRATE_FROM_CHROME_STORAGE';
 export const SET_STATE_HYDRATED = 'SET_STATE_HYDRATED';
+
+export interface IStorageSyncState<T> {
+  isHydrated: boolean;
+  value: T;
+}
 
 export default class StorageSync {
   static getReducer(originalReducer: (state, action) => any) {
@@ -86,7 +91,7 @@ export default class StorageSync {
 
   onStoreChange = () => {
     const storageState = this.selectStorage(this.store.getState()).value;
-    if (!_.isEqual(this.lastState, storageState) && !this.isHydrating) {
+    if (!_isEqual(this.lastState, storageState) && !this.isHydrating) {
       this.lastState = storageState;
       this.storage.set({ [this.key]: storageState });
     }

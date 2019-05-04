@@ -4,7 +4,7 @@ import { combineEpics, Epic, ofType } from 'redux-observable';
 import { locateAnnotations } from 'common/store/tabs/tab/annotations/actions';
 import { AuthProcStages } from 'common/store/runtime/types';
 import { cancelAuthProc, completeAuthProc, failAuthProc, SET_AUTH_PROC_STAGE } from 'common/store/runtime/actions';
-import { retrieveActionTab, syncTabMark } from 'common/store/tabs/action-tab';
+import { retrieveRealActionTab, syncTabMark } from 'common/store/tabs/action-tab';
 import { tabLocateAnnotations } from 'background/messages';
 import { syncBadgeWithAnnotations } from 'background/badge';
 import * as endpoints from '../api/endpoints';
@@ -20,19 +20,21 @@ import {
 import dashboardMessaging from 'background/dashboard-messaging';
 import { selectUser } from 'common/store/storage/selectors';
 
-interface FluxStandardAction {
+export interface FluxStandardAction {
   type: string | symbol | any;
   payload?: any;
   error?: boolean | any;
   meta?: any;
 }
 
-export const locateEpic: Epic<FluxStandardAction> = action$ => action$.pipe(
+export type PPEpic = Epic<FluxStandardAction, FluxStandardAction, IState>;
+
+export const locateEpic: PPEpic = (action$, state$) => action$.pipe(
   ofType('API_READ'),
   filter(action => action.payload.endpoint === endpoints.ANNOTATIONS),
   mergeMap(action => defer(
     async () => {
-      const tabId = retrieveActionTab(action);
+      const tabId = retrieveRealActionTab(action);
       const locationData = await tabLocateAnnotations(tabId, action.payload.data);
       syncBadgeWithAnnotations(locationData, tabId);
       const newAction = locateAnnotations(locationData);
@@ -41,7 +43,7 @@ export const locateEpic: Epic<FluxStandardAction> = action$ => action$.pipe(
   )),
 );
 
-export const processAuthenticationEpic: Epic<FluxStandardAction, any, IState> = (action$, state$) => (
+export const processAuthenticationEpic: PPEpic = (action$, state$) => (
   action$.pipe(
     ofType(SET_AUTH_PROC_STAGE),
     filter(() => !selectUser(state$.value)),
@@ -66,7 +68,7 @@ export const processAuthenticationEpic: Epic<FluxStandardAction, any, IState> = 
   )
 );
 
-export const propagateAuthenticationDataEpic: Epic<FluxStandardAction, any, IState> = action$ => (
+export const propagateAuthenticationDataEpic: PPEpic = action$ => (
   action$.pipe(
     filter(action => [USER_DATA_NEW, USER_ACCESS_TOKEN_REFRESHED, USER_DATA_CLEARED].includes(action.type)),
     // Perform side effect and ignore (do not map to new action)

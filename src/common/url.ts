@@ -1,4 +1,6 @@
 // Url without protocol, not very strict validation
+import { FacebookCredentials, GoogleCredentials } from './api/user';
+
 const urlRegex = new RegExp(
   /^(https?:\/\/)?[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,24}\b(\/[-a-zA-Z0-9@:%_\+.,~#?&//=]*)?$/gi,
 );
@@ -29,7 +31,7 @@ export function extractHostname(url) {
 }
 
 export function httpPrefixed(url) {
-  if (url.indexOf('http://') === 0 || url.indexOf('https://') === 0 ) {
+  if (url.indexOf('http://') === 0 || url.indexOf('https://') === 0) {
     return url;
   }
   return 'http://' + url;
@@ -42,4 +44,18 @@ export function isValidUrl(url) {
 export function standardizeUrlForPageSettings(url) {
   // find & remove URL parameters
   return url.split('?')[0];
+}
+
+export interface UrlParams {
+  [param: string]: string;
+}
+
+export function parseUrlParams(queryString): UrlParams {
+  const query: any = {};
+  const pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
+  for (const pair of pairs) {
+    const p = pair.split('=');
+    query[decodeURIComponent(p[0])] = decodeURIComponent(p[1] || '');
+  }
+  return query;
 }

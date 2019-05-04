@@ -5,7 +5,7 @@ import {
   deleteResource as originalDeleteResource,
   requireResource as originalRequireResource,
 } from 'redux-json-api';
-import { markActionWithTabId, retrieveActionTab } from '../../action-tab';
+import { markActionWithTabId, retrieveRealActionTab } from '../../action-tab';
 import {
   readEndpointWithCustomOptions as originalReadEndpointWithCustomOptions,
 } from 'common/api/redux-json-api-patch';
@@ -15,7 +15,7 @@ import {
 export function reduxJsonApiAliasActionToTabMarkedThunk(originalThunk) {
   return (aliasAction) => {
     return (dispatch, getState) => {
-      const tabId = retrieveActionTab(aliasAction);
+      const tabId = retrieveRealActionTab(aliasAction);
       // attach the tabId to all actions dispatched within the thunk
       const newDispatch = action => dispatch(markActionWithTabId(action, tabId));
       const newGetState = () => getState().tabs[tabId];

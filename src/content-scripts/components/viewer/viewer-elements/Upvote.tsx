@@ -3,8 +3,8 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createResource, deleteResource, readEndpoint } from 'common/store/tabs/tab/api/actions';
 
-import { Popup } from 'semantic-ui-react';
-import { Icon } from 'react-icons-kit';
+import Popup from 'semantic-ui-react/dist/commonjs/modules/Popup';
+import { Icon } from 'react-icons-kit/Icon';
 import { ic_star } from 'react-icons-kit/md/ic_star';
 import styles from '../Viewer.scss';
 import { AnnotationResourceType, AnnotationAPIModel } from 'common/api/annotations';

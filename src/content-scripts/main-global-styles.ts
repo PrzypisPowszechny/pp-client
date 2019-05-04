@@ -17,17 +17,5 @@
 /*
  Import selected components
   */
-// modal
-import 'semantic-ui-css/components/modal.js';
-import 'semantic-ui-css/components/modal.css';
-
-import 'semantic-ui-css/components/icon.css';
-import 'semantic-ui-css/components/button.css';
 import 'semantic-ui-css/components/label.css';
-import 'semantic-ui-css/components/dimmer.css';
 import 'semantic-ui-css/components/popup.css';
-// Some marginal uses in modals
-import 'semantic-ui-css/components/header.css';
-import 'semantic-ui-css/components/grid.css';
-// Set language for momentjs time display
-import 'moment/locale/pl';

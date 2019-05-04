@@ -12,11 +12,7 @@ import 'css/common/pp-semantic-ui-reset.scss';
 import 'css/common/pp-semantic-ui-overrides.scss';
 
 import 'css/selection.scss';
-// Set moment.js language for whole package
-// Apparently, there is no clean solution to import only momentJS specific locale package
-// and set it for future momentJS calls;
-// (https://github.com/moment/moment/issues/2517)
-import * as moment from 'moment';
+
 import IPPSettings from 'common/PPSettings';
 import chromeStorageHandlers from './handlers/chrome-storage-handlers';
 import highlightManager from './modules/highlight-manager';
@@ -29,7 +25,7 @@ import { tabInit } from 'common/store/tabs/actions';
 import { ScriptType, setScriptType } from 'common/meta';
 import {
   waitUntilPageLoaded,
-  waitUntilStoreReady,
+  waitUntilFirstStoreUpdate,
 } from '../common/utils/init';
 import { selectAccessToken, selectUser } from '../common/store/storage/selectors';
 import { AnnotationLocator } from './annotations/AnnotationLocator';
@@ -42,10 +38,13 @@ import { readEndpointWithHeaders } from '../common/store/tabs/tab/api/actions';
 
 sentry.init();
 
+// Set moment.js language for whole package
+// based on https://medium.com/@michalozogan/how-to-split-moment-js-locales-to-chunks-with-webpack-de9e25caccea
+import 'moment/locale/pl.js';
+import { initializeTabId } from '../common/store/tabs/tab-utils';
+
 // set script type for future introspection
 setScriptType(ScriptType.contentScript);
-
-moment.locale('pl');
 
 // Declared in webpack.config through DefinePlugin
 declare global {
@@ -69,17 +68,18 @@ console.log('Przypis script working!');
  * we commit changes to browser storage and recalculate state.appMode on storage change.
  */
 
-waitUntilStoreReady(store).then(async () => {
+waitUntilFirstStoreUpdate(store).then(async () => {
   console.debug('Store hydrated from background page.');
+
+  const tabId = await initializeTabId();
     // initiate tab before any other actions
-  await store.dispatch(tabInit());
+  await store.dispatch(tabInit(tabId, window.location.href));
   await store.dispatch(contentScriptLoaded());
 
   const loggedIn = Boolean(selectUser(store.getState()));
   if (!loggedIn) {
     return;
   }
-  await store.dispatch(setTabUrl(window.location.href));
   const { isSupported } = selectTab(store.getState()).tabInfo;
 
   if (isSupported) {

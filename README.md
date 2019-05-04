@@ -177,6 +177,13 @@ _Out of operation for now._
 npm run build-client
 ```
 
+## Modifying packages
+We usually want to install the exact version of a package to ensure no differences between our development environments.
+You can set it the default behaviour when installing new package from commandline.
+```
+npm config set save-exact=true
+```
+From now on, commands like `npm install <package>` will specify an exact package version when saving it in `package.json`.
 
 ## Connecting to backend
 
