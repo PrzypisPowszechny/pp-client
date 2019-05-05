@@ -5,6 +5,7 @@
     "alwaysStrict": true,
     "module": "es6",
     "target": "es2015",
+    "allowJs": true,
     "jsx": "react",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,

@@ -1,6 +1,6 @@
-import { API_WILL_READ, API_READ, API_READ_FAILED } from 'redux-json-api/lib/constants';
-import { getPaginationUrl, apiRequest } from 'redux-json-api/lib/utils';
-import { createAction } from 'redux-actions';
+import { API_WILL_READ, API_READ, API_READ_FAILED } from "redux-json-api/lib/constants";
+import { getPaginationUrl, apiRequest } from "redux-json-api/lib/utils";
+import { createAction } from "redux-actions";
 
 /*
  * Patch allowing to modify axios settings per readEndpoint dispatch
@@ -43,8 +43,8 @@ export const readEndpointWithCustomOptions = (endpoint, {
         .then(json => {
           dispatch(apiRead({ endpoint, options, ...json }));
 
-          const nextUrl = getPaginationUrl(json, 'next', axiosConfig.baseURL);
-          const prevUrl = getPaginationUrl(json, 'prev', axiosConfig.baseURL);
+          const nextUrl = getPaginationUrl(json, "next", axiosConfig.baseURL);
+          const prevUrl = getPaginationUrl(json, "prev", axiosConfig.baseURL);
 
           resolve(new ApiResponse(json, dispatch, nextUrl, prevUrl));
         })

@@ -1,8 +1,8 @@
 import { IUserState } from './types';
 
-export const selectStorage = (state) => baseSelectStorage(state, true);
+export const selectStorage = state => baseSelectStorage(state, true);
 
-export const trySelectStorage = (state) => baseSelectStorage(state, false);
+export const trySelectStorage = state => baseSelectStorage(state, false);
 
 export const baseSelectStorage = (state, raiseException: boolean) => {
   if (!state.storage || !state.storage.isHydrated) {
