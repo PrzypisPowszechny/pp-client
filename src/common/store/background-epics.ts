@@ -1,13 +1,13 @@
 import { catchError, filter, ignoreElements, map, mergeMap, tap } from 'rxjs/operators';
 import { defer, from, Observable, of } from 'rxjs';
 import { combineEpics, Epic, ofType } from 'redux-observable';
-import { locateAnnotations } from 'common/store/tabs/tab/annotations/actions';
+import { locateAnnotations, locateCreatedAnnotations } from 'common/store/tabs/tab/annotations/actions';
 import { AuthProcStages } from 'common/store/runtime/types';
 import { cancelAuthProc, completeAuthProc, failAuthProc, SET_AUTH_PROC_STAGE } from 'common/store/runtime/actions';
-import { retrieveRealActionTab, syncTabMark } from 'common/store/tabs/action-tab';
+import { retrieveLogicalActionTab, retrieveRealActionTab, syncTabMark } from 'common/store/tabs/action-tab';
 import { tabLocateAnnotations } from 'background/messages';
 import { syncBadgeWithAnnotations } from 'background/badge';
-import * as endpoints from '../api/endpoints';
+import * as resourceTypes from '../api/resource-types';
 import { IState } from 'common/store/reducer';
 import { authenticate } from 'background/auth';
 import * as Sentry from '@sentry/browser';
@@ -19,6 +19,8 @@ import {
 } from 'common/store/storage/actions';
 import dashboardMessaging from 'background/dashboard-messaging';
 import { selectUser } from 'common/store/storage/selectors';
+import { locateAnnotationRequests, locateCreatedAnnotationRequests } from './tabs/tab/annotationRequests/actions';
+import { getActionResourceType } from '../api/utils';
 
 export interface FluxStandardAction {
   type: string | symbol | any;
@@ -27,14 +29,15 @@ export interface FluxStandardAction {
   meta?: any;
 }
 
-export type PPEpic = Epic<FluxStandardAction, FluxStandardAction, IState>;
+export type StandardEpic = Epic<FluxStandardAction, FluxStandardAction, IState>;
 
-export const locateEpic: PPEpic = (action$, state$) => action$.pipe(
+// locate annotations just loaded from API
+export const annotationLocateEpic: StandardEpic = (action$, state$) => action$.pipe(
   ofType('API_READ'),
-  filter(action => action.payload.endpoint === endpoints.ANNOTATIONS),
+  filter(action => getActionResourceType(action) === resourceTypes.ANNOTATIONS),
   mergeMap(action => defer(
     async () => {
-      const tabId = retrieveRealActionTab(action);
+      const tabId = retrieveLogicalActionTab(action, state$.value.tabs);
       const locationData = await tabLocateAnnotations(tabId, action.payload.data);
       syncBadgeWithAnnotations(locationData, tabId);
       const newAction = locateAnnotations(locationData);
@@ -43,14 +46,57 @@ export const locateEpic: PPEpic = (action$, state$) => action$.pipe(
   )),
 );
 
-export const processAuthenticationEpic: PPEpic = (action$, state$) => (
+// locate annotations just loaded from API
+export const annotationRequestLocateEpic: StandardEpic = (action$, state$) => action$.pipe(
+  ofType('API_READ'),
+  filter(action => getActionResourceType(action) === resourceTypes.ANNOTATION_REQUESTS),
+  mergeMap(action => defer(
+    async () => {
+      const tabId = retrieveLogicalActionTab(action, state$.value.tabs);
+      const locationData = await tabLocateAnnotations(tabId, action.payload.data);
+      syncBadgeWithAnnotations(locationData, tabId);
+      const newAction = locateAnnotationRequests(locationData);
+      return syncTabMark(action, newAction);
+    },
+  )),
+);
+
+export const annotationLocateCreatedEpic: StandardEpic = (action$, state$) => action$.pipe(
+  ofType('API_CREATED'),
+  filter(action => getActionResourceType(action) === resourceTypes.ANNOTATIONS),
+  mergeMap(action => defer(
+    async () => {
+      const tabId = retrieveLogicalActionTab(action, state$.value.tabs);
+      const locationData = await tabLocateAnnotations(tabId, [action.payload.data]);
+      const newAction = locateCreatedAnnotations(locationData);
+      return syncTabMark(action, newAction);
+    },
+  )),
+);
+
+
+export const annotationRequestLocateCreatedEpic: StandardEpic = (action$, state$) => action$.pipe(
+  ofType('API_CREATED'),
+  filter(action => getActionResourceType(action) === resourceTypes.ANNOTATION_REQUESTS),
+  mergeMap(action => defer(
+    async () => {
+      const tabId = retrieveLogicalActionTab(action, state$.value.tabs);
+      const locationData = await tabLocateAnnotations(tabId, [action.payload.data]);
+      const newAction = locateCreatedAnnotationRequests(locationData);
+      return syncTabMark(action, newAction);
+    },
+  )),
+);
+
+
+export const processAuthenticationEpic: StandardEpic = (action$, state$) => (
   action$.pipe(
     ofType(SET_AUTH_PROC_STAGE),
     filter(() => !selectUser(state$.value)),
     filter(action => action.payload.stage === AuthProcStages.initiated),
-    mergeMap( (action): Observable<FluxStandardAction> =>
+    mergeMap((action): Observable<FluxStandardAction> =>
       from(authenticate(action.payload.provider)).pipe(
-        mergeMap( loginData =>
+        mergeMap(loginData =>
           loginData ? of(
             completeAuthProc(),
             userDataNew(loginData),
@@ -68,7 +114,7 @@ export const processAuthenticationEpic: PPEpic = (action$, state$) => (
   )
 );
 
-export const propagateAuthenticationDataEpic: PPEpic = action$ => (
+export const propagateAuthenticationDataEpic: StandardEpic = action$ => (
   action$.pipe(
     filter(action => [USER_DATA_NEW, USER_ACCESS_TOKEN_REFRESHED, USER_DATA_CLEARED].includes(action.type)),
     // Perform side effect and ignore (do not map to new action)
@@ -78,7 +124,10 @@ export const propagateAuthenticationDataEpic: PPEpic = action$ => (
 );
 
 export const rootEpic = combineEpics(
-  locateEpic,
+  annotationLocateEpic,
+  annotationRequestLocateEpic,
+  annotationLocateCreatedEpic,
+  annotationRequestLocateCreatedEpic,
   processAuthenticationEpic,
   propagateAuthenticationDataEpic,
 );

@@ -3,6 +3,8 @@
 import { initTrackActiveTabId } from './tab';
 import * as Sentry from '@sentry/browser';
 import { ILocationData } from '../common/store/tabs/tab/annotations/actions';
+import { AnnotationRequestAPIModel } from '../common/api/annotation-requests';
+import { AnnotationAPIModel } from '../common/api/annotations';
 
 export function returnExtensionCookie(request, sender, sendResponse) {
   if (request.action === 'GET_COOKIE') {
@@ -53,7 +55,7 @@ export function returnCurrentTabId(request, sender, sendResponse) {
   }
 }
 
-export function tabLocateAnnotations(tabId, annotations): Promise<ILocationData> {
+export function tabLocateAnnotations(tabId, annotations: AnnotationAPIModel[] | AnnotationRequestAPIModel[]): Promise<ILocationData> {
   return new Promise(resolve => chrome.tabs.sendMessage(tabId, {
     action: 'TAB_LOCATE_ANNOTATIONS',
     payload: annotations,

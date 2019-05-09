@@ -24,6 +24,11 @@ describe('extension runs normally', () => {
     res.send({ data: [] });
   });
 
+  apiApp.get('/api/annotationRequests/', (req, res) => {
+    res.set('Content-Type', 'application/vnd.api+json');
+    res.send({ data: [] });
+  });
+
   beforeAll( async () => {
     browser = await buildBrowser();
     onAnnotationsRequest = () => null;

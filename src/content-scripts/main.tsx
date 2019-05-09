@@ -31,7 +31,7 @@ import { selectAccessToken, selectUser } from '../common/store/storage/selectors
 import { AnnotationLocator } from './annotations/AnnotationLocator';
 import { setAxiosConfig } from 'redux-json-api';
 import { configureAxios } from '../common/axios';
-import * as endpoints from '../common/api/endpoints';
+import * as endpoints from '../common/api/resource-types';
 import { selectTab } from '../common/store/tabs/selectors';
 import { loadAppModes } from '../common/store/tabs/tab/appModes/actions';
 import { readEndpointWithHeaders } from '../common/store/tabs/tab/api/actions';
@@ -42,6 +42,7 @@ sentry.init();
 // based on https://medium.com/@michalozogan/how-to-split-moment-js-locales-to-chunks-with-webpack-de9e25caccea
 import 'moment/locale/pl.js';
 import { initializeTabId } from '../common/store/tabs/tab-utils';
+import * as Sentry from '@sentry/browser';
 
 // set script type for future introspection
 setScriptType(ScriptType.contentScript);
@@ -72,7 +73,7 @@ waitUntilFirstStoreUpdate(store).then(async () => {
   console.debug('Store hydrated from background page.');
 
   const tabId = await initializeTabId();
-    // initiate tab before any other actions
+  // initiate tab before any other actions
   await store.dispatch(tabInit(tabId, window.location.href));
   await store.dispatch(contentScriptLoaded());
 
@@ -105,10 +106,25 @@ async function initData() {
     store.dispatch(loadAppModes()),
   ]);
 
-  await store.dispatch(readEndpointWithHeaders(
-    endpoints.ANNOTATIONS,
-    { 'PP-SITE-URL': selectTab(store.getState()).tabInfo.currentUrl },
-  ));
+  const currentUrl = selectTab(store.getState()).tabInfo.currentUrl;
+
+  try {
+    await store.dispatch(readEndpointWithHeaders(
+      endpoints.ANNOTATIONS, { 'PP-SITE-URL': currentUrl },
+    ))
+  } catch (err) {
+    console.debug(`Failed to fetch annotations: ${err.toString()}`);
+    Sentry.captureException(err);
+  }
+
+  try {
+    await store.dispatch(readEndpointWithHeaders(
+      endpoints.ANNOTATION_REQUESTS, { 'PP-SITE-URL': currentUrl },
+    ));
+  } catch (err) {
+    console.debug(`Failed to fetch annotation requests: ${err.toString()}`);
+    Sentry.captureException(err);
+  }
 }
 
 async function initUI() {

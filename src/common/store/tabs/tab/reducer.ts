@@ -6,12 +6,14 @@ import { AnnotationAPIModel } from '../../../api/annotations';
 import { WidgetReducer } from './widgets';
 import { ITabInfoState, tabInfo } from './tabInfo';
 import appModes from './appModes/reducers';
+import annotationRequests from './annotationRequests/reducers';
 import annotations from './annotations/reducers';
 import widgets from './widgets/reducers';
 import textSelector from './textSelector/reducers';
 import api from './api';
 import popupInfo from './popupInfo/reducers';
 import { IPopupInfoState } from './popupInfo';
+import { AnnotationRequestsState } from './annotationRequests/types';
 
 export interface ITabState {
   tabInfo: ITabInfoState;
@@ -21,6 +23,7 @@ export interface ITabState {
     annotationUpvotes: { data: AnnotationUpvoteAPIModel[] };
   };
   annotations: AnnotationsState;
+  annotationRequests: AnnotationRequestsState;
   appModes: AppModes;
   widgets: WidgetReducer;
   textSelector: any;
@@ -31,6 +34,7 @@ export default combineReducers<ITabState>({
   popupInfo,
   api,
   annotations,
+  annotationRequests,
   appModes,
   widgets,
   textSelector,

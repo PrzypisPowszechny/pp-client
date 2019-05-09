@@ -45,9 +45,9 @@ interface IEditorProps {
   annotation: AnnotationAPIModel;
   annotationLocation: AnnotationLocation;
 
-  createOrUpdateAnnotation: (instance: AnnotationAPICreateModel) => Promise<object>;
   hideEditor: () => void;
   changeNotification: (visible: boolean, message?: string, type?: ToastType) => void;
+  createOrUpdateResource: (instance: AnnotationAPICreateModel) => Promise<object>;
 }
 
 interface IEditorState {
@@ -97,7 +97,7 @@ interface IEditorState {
         changeNotification,
       },
       dispatch),
-    createOrUpdateAnnotation: (instance: AnnotationAPICreateModel) => {
+    createOrUpdateResource: (instance: AnnotationAPICreateModel) => {
       if (instance.id) {
         return dispatch(updateResource(instance));
       } else {
@@ -203,7 +203,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
     return false;
   }
 
-  onSaveClick = (event: any) => {
+  handleSubmit = (event: any) => {
     if (this.validateForm()) { // if form values are correct
       if (!this.state.comment) { // if comment field is empty, display the modal
         this.setState({ noCommentModalOpen: true });
@@ -253,12 +253,11 @@ class Editor extends React.Component<Partial<IEditorProps>,
       this.setState({ isCreating: true });
       const instance = this.getAnnotationFromState();
       const isNewInstance = !instance.id;
-      this.props.createOrUpdateAnnotation(instance).then(() => {
-        this.setState({ isCreating: false });
+      this.props.createOrUpdateResource(instance).then(() => {
         this.props.hideEditor();
         // Right after creating a new annotation, turn off the annotation mode (it might be already off)
         // Do it by directly changing Chrome storage. Changes to the Redux store will follow thanks to subscription.
-        const attributes = instance.attributes;
+        const { attributes } = instance;
         if (isNewInstance) {
           turnOffAnnotationMode(this.props.appModes, window.location.href);
           ppGa.annotationAdded(instance.id, attributes.ppCategory, !attributes.comment, attributes.annotationLink);
@@ -268,9 +267,10 @@ class Editor extends React.Component<Partial<IEditorProps>,
           this.props.changeNotification(true, 'Edytowałeś/aś przypis', ToastType.success);
         }
       }).catch((errors) => {
-        this.setState({ isCreating: false });
         console.log(errors);
         this.props.changeNotification(true, 'Błąd! Nie udało się zapisać przypisu', ToastType.failure);
+      }).finally(() => {
+        this.setState({ isCreating: false });
       });
     }
   }
@@ -417,7 +417,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
             <Button className={styles.cancelButton} onClick={this.onCancelClick}>
               Anuluj
             </Button>
-            <Button className={styles.saveButton} appearance="primary" onClick={this.onSaveClick}>
+            <Button className={styles.saveButton} appearance="primary" onClick={this.handleSubmit}>
               Zapisz
             </Button>
             {noCommentModalOpen &&

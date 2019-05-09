@@ -12,6 +12,8 @@ import { Store } from 'redux';
 import { IState } from 'common/store/reducer';
 import { waitUntilPageLoaded } from 'common/utils/init';
 import _escapeRegExp from 'lodash/escapeRegExp';
+import { AnnotationRequestAPIModel } from 'common/api/annotation-requests';
+import * as resourceTypes from 'common/api/resource-types';
 
 export class AnnotationLocator {
 
@@ -60,7 +62,7 @@ export class AnnotationLocator {
     }
   }
 
-  async locate(annotations: AnnotationAPIModel[]) {
+  async locate(annotations: AnnotationAPIModel[] | AnnotationRequestAPIModel[]) {
     const located: LocatedAnnotation[] = [];
     const unlocated: LocatedAnnotation[] = [];
     for (const annotation of annotations) {
@@ -76,8 +78,8 @@ export class AnnotationLocator {
           annotationId: annotation.id,
           range: null,
         });
-        if (!PPSettings.DEV_SENTRY_UNLOCATED_IGNORE) {
-          AnnotationLocator.sendSentryLocationEvent(false, annotation);
+        if (!PPSettings.DEV_SENTRY_UNLOCATED_IGNORE && annotation.type === resourceTypes.ANNOTATIONS) {
+          AnnotationLocator.sendSentryLocationEvent(false, annotation as AnnotationAPIModel);
         }
       }
     }

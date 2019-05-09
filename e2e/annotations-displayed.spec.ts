@@ -24,6 +24,14 @@ describe('annotations are highlighted and can be viewed on mouse hover', () => {
     res.send('<p>word1 word2 word3</p>');
   });
 
+  apiApp.get('/api/annotationRequests/', (req, res) => {
+    res.set('Content-Type', 'application/vnd.api+json');
+    const response = {
+      data: [],
+    };
+    res.send(response);
+  });
+
   apiApp.get('/api/annotations/', (req, res) => {
     res.set('Content-Type', 'application/vnd.api+json');
     // The full response is probably redundant
