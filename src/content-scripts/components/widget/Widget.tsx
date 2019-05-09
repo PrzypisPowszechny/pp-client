@@ -114,11 +114,15 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
 
     // Set callbacks
     const inner = this.innerElement.current;
+    const { onMouseEnter, onMouseLeave } = this.props;
     if (inner) {
-      inner.addEventListener('mouseleave', this.props.onMouseLeave);
-      inner.addEventListener('mouseenter', this.props.onMouseEnter);
+      if (onMouseLeave) {
+        inner.addEventListener('mouseleave', onMouseLeave);
+      }
+      if (onMouseEnter) {
+        inner.addEventListener('mouseenter', onMouseEnter);
+      }
     }
-
     if (this.state.updateInverted) {
       this.setState({
         ...isInverted(this.innerElement.current, window),
