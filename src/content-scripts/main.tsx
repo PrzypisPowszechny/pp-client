@@ -97,7 +97,7 @@ async function initData() {
   // Locating annotations in DOM
   // locator must be initialized already when annotations are loaded (it is used in a Redux epic)
   new AnnotationLocator(document, store).init();
-  // Optimization: load data from storage first, so annotations are not drawn before we know current application modes
+  // Optimization: load app modes data from storage first, so annotations are not drawn before we know current application modes
   // (disabled extension mode and disabled page mode will erase them)
 
   await Promise.all([
