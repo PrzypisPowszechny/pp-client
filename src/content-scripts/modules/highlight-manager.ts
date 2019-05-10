@@ -1,5 +1,5 @@
 import store from 'content-scripts/store';
-import { showViewer } from 'common/store/tabs/tab/actions';
+import { showAnnotationForm, showViewer } from 'common/store/tabs/tab/actions';
 import mousePosition from '../utils/mousePosition';
 import Highlighter from 'content-scripts/utils/Highlighter';
 import { setMouseOverViewer, showAnnotationRequestForm } from 'common/store/tabs/tab/widgets/actions';
@@ -106,7 +106,7 @@ function handleHighlightMouseClick(e, annotations: QuoteAnnotationAPIModel[]) {
   // we can display multiple annotation requests that overlap and we can display them in annotation request viewer,
   // so only one can be selected for answerring
   // for now use the first one to simplify
-  store.dispatch(showAnnotationRequestForm({ quote: annotationRequest.attributes.quote }));
+  store.dispatch(showAnnotationForm(annotationRequest.id));
 }
 
 function handleHighlightMouseLeave(e, annotations: QuoteAnnotationAPIModel[]) {

@@ -18,15 +18,14 @@ import AnnotationSummary from './annotationSummary/AnnotationSummary';
 import { PopupPages } from './BrowserPopupNavigator';
 import '../css/popup.scss';
 import LogoutPanel from './LogoutPanel';
-import { selectUser } from '../../common/store/storage/selectors';
-import { IUserState } from '../../common/store/storage/types';
+import { selectUser } from 'common/store/storage/selectors';
+import { IUserState } from 'common/store/storage/types';
 import { connect } from 'react-redux';
-import { UserRoles } from '../../common/api/user';
-import { selectRealTab, selectTab, trySelectRealTab } from '../../common/store/tabs/selectors';
-import { IAnnotationRequestFormState } from '../../common/store/tabs/tab/widgets';
-import { hideAnnotationRequestForm, showAnnotationRequestForm } from '../../common/store/tabs/tab/widgets/actions';
-import { AnnotationRequestFormData } from 'content-scripts/components/AnnotationRequestForm';
-import { ITabState } from '../../common/store/tabs/tab/reducer';
+import { UserRoles } from 'common/api/user';
+import { selectRealTab, selectTab, trySelectRealTab } from 'common/store/tabs/selectors';
+import { IAnnotationRequestFormData, IAnnotationRequestFormState } from 'common/store/tabs/tab/widgets';
+import { hideAnnotationRequestForm, showAnnotationRequestForm } from 'common/store/tabs/tab/widgets/actions';
+import { ITabState } from 'common/store/tabs/tab/reducer';
 
 export interface IBrowserPopupProps {
   user: IUserState;
@@ -35,7 +34,7 @@ export interface IBrowserPopupProps {
   debugIsPopupEmulated: boolean;
 
   hideAnnotationRequestForm: () => void;
-  showAnnotationRequestForm: (initialData: Partial<AnnotationRequestFormData>) => void;
+  showAnnotationRequestForm: (initialData: Partial<IAnnotationRequestFormData>) => void;
 
   // React callbacks
   onPageChange: (PopupPages) => void;

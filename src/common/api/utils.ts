@@ -1,4 +1,3 @@
-
 /*
  * Redux-json-api helper that gets the resource type of the object read / created / updated / deleted via redux json api
  * based on the action

@@ -34,6 +34,9 @@ const correctStoreState = {
         annotationRequestForm: {
           visible: false,
         },
+        annotationForm: {
+          visible: false,
+        },
         viewer: {
           visible: false,
         },

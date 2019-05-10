@@ -1,0 +1,151 @@
+@import "css/common/theme";
+@import "css/common/vars/z-index.scss";
+@import 'css/common/buttons.scss';
+
+$textarea-height: calc(4 * 1.3em + 1.1em); // 3 lines
+
+.self {
+  padding: 20px;
+  text-align: left;
+
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 16px;
+  line-height: 1.5em;
+  color: #778ca3;
+  font-weight: 600;
+
+  .headerIcon {
+    margin-right: 10px;
+  }
+}
+
+p.description {
+  font-size: 0.9em;
+  line-height: 1.5em;
+  margin: 0 0 20px 0;
+}
+
+p.caption {
+  font-size: 0.8em;
+  line-height: 1.5em;
+  margin: 0 0 5px 0;
+}
+
+.label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  font-size: 14px;
+
+  .popup-label {
+    cursor: help;
+    user-select: none;
+
+  }
+}
+
+.form-field-wrapper {
+  display: block;
+  padding: 0;
+  position: relative;
+  margin-bottom: 0;
+
+  .form-field {
+    font-size: 0.9em;
+    width: 100%;
+    padding: 0.5em;
+    border: 1px solid #D8DADA;
+    outline: none;
+    margin: 0;
+    color: #000000;
+    line-height: 1.3em;
+    background: none;
+    resize: none;
+    margin-bottom: 5px;
+
+    &:hover, &:focus {
+      border: 1px dashed #888888;
+      background: none;
+    }
+  }
+}
+
+textarea.form-field {
+  height: $textarea-height;
+}
+
+
+.quote,
+.annotation-link,
+.annotation-link-title {
+  position: relative;
+}
+
+.comment {
+  .error-msg {
+    left: 0;
+    top: $textarea-height;
+  }
+}
+
+.comment-textarea-wrapper {
+  overflow: auto;
+  textarea {
+    float: left;
+    padding: 0.5em;
+    width: 100%;
+    line-height: 1.2em;
+    height: calc(3 * 1.2em + 1.1em); // 3 lines
+  }
+
+}
+
+.annotation-link {
+  .error-msg {
+    left: 0;
+    top: 20px;
+  }
+}
+
+.annotation-link-title {
+  margin-bottom: 0;
+  .input-icon {
+    top: 11px;
+  }
+  .error-msg {
+    left: 0;
+    top: 20px;
+  }
+  .link-help {
+    width: 20px;
+  }
+}
+
+.error-msg {
+  font-size: 14px;
+  position: absolute !important; // override semantic-ui defaults
+  z-index: $annotation-mode-widget-z-index + 1;
+}
+
+.hide {
+  display: none !important;
+}
+
+.actions {
+  .submitButton {
+    margin-left: 30px;
+  }
+}
+
+
+.popup-tooltip {
+  // override semantic-ui
+  // TODO: rewrite without important
+  z-index: $annotation-mode-widget-z-index + 1 !important;
+}
+

@@ -34,12 +34,36 @@ const storageSync = new StorageSync(
   chrome.storage.local,
 );
 
+/*
+ * Result of async actions (the result of the promise) is by default ignored. By that we mean *value* of the
+ * resolved promise is ignored, because the promise itself is resolved in right moment.
+ * For the case of passing *value* the intended way is by explicitly wrapping it with { payload: value } object.
+ * https://github.com/tshaddix/webext-redux/wiki/Advanced-Usage#how-does-this-work-under-the-hood
+ */
+const reduxPromiseResponder = (dispatchResult, send) => {
+  Promise
+    .resolve(dispatchResult) // pull out the promise
+    .then((res) => {
+      send({
+        error: null,
+        value: { payload: res },
+      });
+    })
+    .catch((err) => {
+      send({
+        error: err,
+        value: null,
+      });
+    });
+};
+
 export function initStore() {
   return storageSync.init()
     .then(() =>  {
       wrapStore(store, {
         portName: 'PP',
         diffStrategy: deepDiff,
+        dispatchResponder: reduxPromiseResponder,
       });
       epicMiddleware.run(rootEpic);
     });

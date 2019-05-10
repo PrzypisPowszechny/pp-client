@@ -3,6 +3,7 @@
 // (besides the missing "type" field the schema is compliant)
 
 import { APICreateModel, APIModel } from './json-api';
+import { RangeAPIModel } from 'common/api/annotations';
 
 export interface AnnotationRequestCreateAttributes {
   url: string;
@@ -13,7 +14,10 @@ export interface AnnotationRequestCreateAttributes {
 
 export interface AnnotationRequestAttributes {
   url: string;
+  range?: RangeAPIModel;
   quote: string;
+  quoteContext: string;
+  // TODO: unused remove after v0.6
   notificationEmail?: string;
   comment: string;
   requestedByUser: boolean;

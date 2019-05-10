@@ -1,28 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import { PPScopeClass } from 'content-scripts/settings';
-import ppGa from 'common/pp-ga';
-
-import styles from './AnnotationRequestForm.scss';
 import { Icon } from 'react-icons-kit/Icon';
 import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
-import { changeNotification, hideAnnotationRequestForm } from 'common/store/tabs/tab/widgets/actions';
+
+import { PPScopeClass } from 'content-scripts/settings';
+import styles from './AnnotationRequestForm.scss';
 import * as helpers from './helpers';
 import Button from '../elements/Button/Button';
 import { ToastType } from '../elements/Toast/Toast';
+
+import ppGa from 'common/pp-ga';
+import { AnnotationRequestAPICreateModel } from 'common/api/annotation-requests';
 import { selectTab } from 'common/store/tabs/selectors';
-import { ITabInfoState } from '../../../common/store/tabs/tab/tabInfo';
-import { createResource } from '../../../common/store/tabs/tab/api/actions';
-import { AnnotationRequestAPICreateModel } from '../../../common/api/annotation-requests';
+import { ITabInfoState } from 'common/store/tabs/tab/tabInfo';
+import { createResource } from 'common/store/tabs/tab/api/actions';
+import { changeNotification, hideAnnotationRequestForm } from 'common/store/tabs/tab/widgets/actions';
+import { IAnnotationRequestFormData } from 'common/store/tabs/tab/widgets';
 
-export interface AnnotationRequestFormData {
-  quote: string;
-  comment: string;
-}
-
-export interface AnnotationRequestFormProps {
-  initialData: Partial<AnnotationRequestFormData>;
+interface AnnotationRequestFormProps {
+  initialData: Partial<IAnnotationRequestFormData>;
   tabInfo: ITabInfoState;
 
   hideAnnotationRequestForm: () => void;
@@ -30,7 +27,7 @@ export interface AnnotationRequestFormProps {
   createResource: (instance: AnnotationRequestAPICreateModel) => Promise<object>;
 }
 
-interface AnnotationRequestFormState extends AnnotationRequestFormData {
+interface AnnotationRequestFormState extends IAnnotationRequestFormData {
   quote: string;
   comment: string;
 
