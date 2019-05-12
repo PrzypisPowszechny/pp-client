@@ -5,7 +5,7 @@
  */
 export function getActionResourceType(action) {
   const { payload } = action;
-  switch(action.type) {
+  switch (action.type) {
     case 'API_READ':
       return payload.endpoint;
     case 'API_CREATED':

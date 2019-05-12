@@ -2,7 +2,7 @@ import store from 'content-scripts/store';
 import { showViewer } from 'common/store/tabs/tab/actions';
 import mousePosition from '../utils/mousePosition';
 import Highlighter from 'content-scripts/utils/Highlighter';
-import { setMouseOverViewer } from 'common/store/tabs/tab/widgets/actions';
+import { setMouseOverViewer, showAnnotationRequestForm } from 'common/store/tabs/tab/widgets/actions';
 import { selectModeForCurrentPage } from 'common/store/tabs/tab/appModes/selectors';
 import _difference from 'lodash/difference';
 import _isEqual from 'lodash/isEqual';
@@ -11,6 +11,9 @@ import { selectAnnotation, selectAnnotationRequest } from 'common/store/tabs/tab
 import { annotationRootNode } from '../settings';
 import { selectTab } from 'common/store/tabs/selectors';
 import { trySelectStorage, selectUser } from '../../common/store/storage/selectors';
+import * as resourceTypes from 'common/api/resource-types';
+import { AnnotationRequestAPIModel } from '../../common/api/annotation-requests';
+import { QuoteAnnotationAPIModel } from 'common/api';
 
 let instance;
 
@@ -20,6 +23,9 @@ function init() {
   // This event subscription will last irrespective of whether annotations are redrawn or not
   highlighter.onHighlightEvent('mouseover', handleHighlightMouseEnter);
   highlighter.onHighlightEvent('mouseleave', handleHighlightMouseLeave);
+
+  // Temporarily open annotation request form on highlight click
+  highlighter.onHighlightEvent('click', handleHighlightMouseClick);
 
   // subscribe to store changes and return unsubscribe fn
   const unsubscribe = store.subscribe(drawHighlights);
@@ -38,6 +44,7 @@ function deinit() {
   chrome.runtime.onMessage.removeListener(popupScrollToAnnotationHandler);
 }
 
+// TODO consider replacing with a React component, so listening for changes is not done manually
 async function drawHighlights() {
   const user = selectUser(store.getState());
   const storage = trySelectStorage(store.getState());
@@ -47,7 +54,6 @@ async function drawHighlights() {
 
   const locatedAnnotationRequestsIds =
     selectTab(store.getState()).annotationRequests.located.map(annotation => annotation.annotationId);
-
 
   if (storage && user) {
     // undraw all if the highlights have just been disabled
@@ -92,41 +98,54 @@ async function drawHighlights() {
   }
 }
 
-function handleHighlightMouseLeave(e, annotations) {
+function handleHighlightMouseClick(e, annotations: QuoteAnnotationAPIModel[]) {
+  const annotationRequests: AnnotationRequestAPIModel[]
+    = annotations.filter(item => item.type === resourceTypes.ANNOTATION_REQUESTS) as any;
+  // TODO open editor answering to this annotation request; this is just an example of using this annotation request
+  const annotationRequest = annotationRequests[0];
+  // we can display multiple annotation requests that overlap and we can display them in annotation request viewer,
+  // so only one can be selected for answerring
+  // for now use the first one to simplify
+  store.dispatch(showAnnotationRequestForm({ quote: annotationRequest.attributes.quote }));
+}
+
+function handleHighlightMouseLeave(e, annotations: QuoteAnnotationAPIModel[]) {
   if (e.buttons !== 0) {
     return;
   }
   store.dispatch(setMouseOverViewer(false));
 }
 
-function handleHighlightMouseEnter(e, annotations) {
+function handleHighlightMouseEnter(e, annotations: QuoteAnnotationAPIModel[]) {
   // If the mouse button is currently depressed, we're probably trying to
   // make a selection, so we shouldn't show the viewer.
   if (e.buttons !== 0) {
     return;
   }
+  annotations = annotations.filter(item => item.type === resourceTypes.ANNOTATIONS);
+  if (annotations.length > 0) {
+    const {
+      annotationIds,
+      isAnyReportEditorOpen,
+      visible,
+    } = selectViewerState(store.getState());
 
-  const {
-    annotationIds,
-    isAnyReportEditorOpen,
-    visible,
-  } = selectViewerState(store.getState());
-
-  if (!isAnyReportEditorOpen) {
-    // Open a new Viewer only when
-    // - the viewer is not visible
-    // - the displayed annotations have changed, too. This prevents the widget from shifting location
-    //   every time the user's cursor slips off the widget
-    const newIds = annotations.map(item => item.id);
-    const annotationsChanged =
-      _difference(annotationIds, newIds).length !== 0 || _difference(newIds, annotationIds).length !== 0;
-    if (!visible || annotationsChanged) {
-      const position = mousePosition(e);
-      store.dispatch(showViewer(
-        position.x,
-        position.y,
-        annotations.map(annotation => annotation.id),
-      ));
+    if (!isAnyReportEditorOpen) {
+      // Open a new Viewer only when
+      // - the viewer is not visible
+      // - the displayed annotations have changed, too. This prevents the widget from shifting location
+      //   every time the user's cursor slips off the widget
+      const newIds = annotations.map(item => item.id);
+      const annotationsChanged =
+        _difference(annotationIds, newIds).length !== 0 || _difference(newIds, annotationIds).length !== 0;
+      if (!visible || annotationsChanged) {
+        const position = mousePosition(e);
+        store.dispatch(showViewer(
+          position.x,
+          position.y,
+          annotations.map(annotation => annotation.id),
+        ));
+      }
     }
   }
 }

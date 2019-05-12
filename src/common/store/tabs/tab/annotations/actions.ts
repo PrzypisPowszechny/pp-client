@@ -18,7 +18,6 @@ export function locateAnnotations({ located, unlocated }: ILocationData) {
   };
 }
 
-
 export function locateCreatedAnnotations({ located, unlocated }: ILocationData) {
   return {
     type: LOCATE_CREATED_ANNOTATIONS,

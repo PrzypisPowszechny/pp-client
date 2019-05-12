@@ -16,7 +16,7 @@ export default function annotations(state = initialState, action): AnnotationsSt
       return {
         ...state,
         ...action.payload,
-      }
+      };
     case LOCATE_CREATED_ANNOTATIONS:
       return {
         ...state,

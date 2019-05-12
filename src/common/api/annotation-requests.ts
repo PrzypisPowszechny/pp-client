@@ -17,7 +17,7 @@ export interface AnnotationRequestAttributes {
   notificationEmail?: string;
   comment: string;
   requestedByUser: boolean;
-  createDate: Date,
+  createDate: Date;
 }
 
 export interface AnnotationRequestAPICreateModel extends APICreateModel {

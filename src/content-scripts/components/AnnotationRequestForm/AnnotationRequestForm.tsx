@@ -117,8 +117,8 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
         url,
         quote,
         comment,
-      }
-    }
+      },
+    };
   }
 
   save() {

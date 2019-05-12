@@ -75,7 +75,6 @@ export const annotationLocateCreatedEpic: StandardEpic = (action$, state$) => ac
   )),
 );
 
-
 export const annotationRequestLocateCreatedEpic: StandardEpic = (action$, state$) => action$.pipe(
   ofType('API_CREATED'),
   filter(action => getActionResourceType(action) === resourceTypes.ANNOTATION_REQUESTS),
@@ -89,7 +88,6 @@ export const annotationRequestLocateCreatedEpic: StandardEpic = (action$, state$
     },
   )),
 );
-
 
 export const processAuthenticationEpic: StandardEpic = (action$, state$) => (
   action$.pipe(
