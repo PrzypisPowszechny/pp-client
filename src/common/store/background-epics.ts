@@ -54,7 +54,7 @@ export const annotationRequestLocateEpic: StandardEpic = (action$, state$) => ac
     async () => {
       const tabId = retrieveLogicalActionTab(action, state$.value.tabs);
       const locationData = await tabLocateAnnotations(tabId, action.payload.data);
-      syncBadgeWithAnnotations(locationData, tabId);
+      // TODO anything to do with badge?
       const newAction = locateAnnotationRequests(locationData);
       return syncTabMark(action, newAction);
     },
@@ -68,6 +68,7 @@ export const annotationLocateCreatedEpic: StandardEpic = (action$, state$) => ac
     async () => {
       const tabId = retrieveLogicalActionTab(action, state$.value.tabs);
       const locationData = await tabLocateAnnotations(tabId, [action.payload.data]);
+      // TODO sync with badge
       const newAction = locateCreatedAnnotations(locationData);
       return syncTabMark(action, newAction);
     },
@@ -82,6 +83,7 @@ export const annotationRequestLocateCreatedEpic: StandardEpic = (action$, state$
     async () => {
       const tabId = retrieveLogicalActionTab(action, state$.value.tabs);
       const locationData = await tabLocateAnnotations(tabId, [action.payload.data]);
+      // TODO anything to do with badge?
       const newAction = locateCreatedAnnotationRequests(locationData);
       return syncTabMark(action, newAction);
     },

@@ -147,14 +147,6 @@ export default class Highlighter {
       };
 
       loader(annotations.slice());
-
-      // Undraw all stale annotations from registry
-      const annotationIds = annotations.map(annotation => annotation.id);
-      for (const annotationId in this.highlightRegistry) {
-        if (annotationIds.indexOf(annotationId) === -1) {
-          this.undraw(annotationId);
-        }
-      }
     });
   }
 

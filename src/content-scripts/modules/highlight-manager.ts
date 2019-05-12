@@ -7,7 +7,7 @@ import { selectModeForCurrentPage } from 'common/store/tabs/tab/appModes/selecto
 import _difference from 'lodash/difference';
 import _isEqual from 'lodash/isEqual';
 import { selectViewerState } from 'common/store/tabs/tab/widgets/selectors';
-import { selectAnnotation } from 'common/store/tabs/tab/api/selectors';
+import { selectAnnotation, selectAnnotationRequest } from 'common/store/tabs/tab/api/selectors';
 import { annotationRootNode } from '../settings';
 import { selectTab } from 'common/store/tabs/selectors';
 import { trySelectStorage, selectUser } from '../../common/store/storage/selectors';
@@ -38,34 +38,58 @@ function deinit() {
   chrome.runtime.onMessage.removeListener(popupScrollToAnnotationHandler);
 }
 
-function drawHighlights() {
+async function drawHighlights() {
   const user = selectUser(store.getState());
   const storage = trySelectStorage(store.getState());
   const arePageHighlightsDisabled = selectModeForCurrentPage(store.getState()).arePageHighlightsDisabled;
   const locatedAnnotationsIds =
     selectTab(store.getState()).annotations.located.map(annotation => annotation.annotationId);
+
+  const locatedAnnotationRequestsIds =
+    selectTab(store.getState()).annotationRequests.located.map(annotation => annotation.annotationId);
+
+
   if (storage && user) {
+    // undraw all if the highlights have just been disabled
     if (arePageHighlightsDisabled && !instance.arePageHighlightsDisabled) {
       instance.highlighter.undrawAll();
-    } else if (!arePageHighlightsDisabled &&
-      (!_isEqual(locatedAnnotationsIds, instance.locatedAnnotationsIds)
-        || arePageHighlightsDisabled !== instance.arePageHighlightsDisabled
-      )
-    ) {
-      // located annotations have changed, so redraw them
-      instance.highlighter.drawAll(selectTab(store.getState()).annotations.located.map(
-        ({ annotationId, range }) => {
-          return {
-            id: annotationId,
-            range,
-            annotationData: selectAnnotation(store.getState(), annotationId),
-          };
-        }));
-    }
-  }
+    } else if (!arePageHighlightsDisabled) {
 
-  instance.arePageHighlightsDisabled = arePageHighlightsDisabled;
-  instance.locatedAnnotationsIds = locatedAnnotationsIds;
+      // if located annotations changed or highglights have just been re-enabled, redraw them all
+      if (
+        !_isEqual(locatedAnnotationsIds, instance.locatedAnnotationsIds)
+        || arePageHighlightsDisabled !== instance.arePageHighlightsDisabled
+      ) {
+        await instance.highlighter.drawAll(selectTab(store.getState()).annotations.located.map(
+          ({ annotationId, range }) => {
+            return {
+              id: `annotation:${annotationId}`,
+              range,
+              annotationData: selectAnnotation(store.getState(), annotationId),
+            };
+          }));
+      }
+
+      // if located annotation requests changed or highglights have just been re-enabled, redraw them all
+      if (
+        !_isEqual(locatedAnnotationRequestsIds, instance.locatedAnnotationRequestsIds)
+        || arePageHighlightsDisabled !== instance.arePageHighlightsDisabled
+      ) {
+        await instance.highlighter.drawAll(selectTab(store.getState()).annotationRequests.located.map(
+          ({ annotationId, range }) => {
+            return {
+              id: `annotationRequest:${annotationId}`,
+              range,
+              annotationData: selectAnnotationRequest(store.getState(), annotationId),
+            };
+          }));
+      }
+    }
+
+    instance.arePageHighlightsDisabled = arePageHighlightsDisabled;
+    instance.locatedAnnotationsIds = locatedAnnotationsIds;
+    instance.locatedAnnotationRequestsIds = locatedAnnotationRequestsIds;
+  }
 }
 
 function handleHighlightMouseLeave(e, annotations) {
