@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { PPScopeClass } from 'content-scripts/settings';
-import { saveAnnotationRequest } from 'common/api/utils';
 import ppGa from 'common/pp-ga';
 
 import styles from './AnnotationRequestForm.scss';
@@ -14,6 +13,8 @@ import Button from '../elements/Button/Button';
 import { ToastType } from '../elements/Toast/Toast';
 import { selectTab } from 'common/store/tabs/selectors';
 import { ITabInfoState } from '../../../common/store/tabs/tab/tabInfo';
+import { createResource } from '../../../common/store/tabs/tab/api/actions';
+import { AnnotationRequestAPICreateModel } from '../../../common/api/annotation-requests';
 
 export interface AnnotationRequestFormData {
   quote: string;
@@ -26,11 +27,17 @@ export interface AnnotationRequestFormProps {
 
   hideAnnotationRequestForm: () => void;
   changeNotification: (visible: boolean, message?: string, type?: ToastType) => void;
+  createResource: (instance: AnnotationRequestAPICreateModel) => Promise<object>;
 }
 
 interface AnnotationRequestFormState extends AnnotationRequestFormData {
+  quote: string;
+  comment: string;
+
   quoteError: string;
   commentError: string;
+
+  isCreating: boolean;
 }
 
 @connect(
@@ -41,6 +48,7 @@ interface AnnotationRequestFormState extends AnnotationRequestFormData {
   {
     hideAnnotationRequestForm,
     changeNotification,
+    createResource,
   },
 )
 export default class AnnotationRequestForm extends React.Component<Partial<AnnotationRequestFormProps>,
@@ -96,17 +104,37 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
 
   handleSubmit = (e) => {
     if (this.validateForm()) {
-      const { quote, comment } = this.state;
-      const url = this.props.tabInfo.currentUrl;
-      saveAnnotationRequest({
-        url, quote, comment,
-      }).then((response) => {
+      this.save();
+    }
+  }
+
+  getAnnotationRequestFromState() {
+    const { quote, comment } = this.state;
+    const url = this.props.tabInfo.currentUrl;
+    return {
+      type: 'annotationRequests',
+      attributes: {
+        url,
+        quote,
+        comment,
+      },
+    };
+  }
+
+  save() {
+    if (!this.state.isCreating) {
+      this.setState({ isCreating: true });
+      const instance = this.getAnnotationRequestFromState();
+      this.props.createResource(instance).then((response) => {
         this.props.hideAnnotationRequestForm();
         this.props.changeNotification(true, 'Twoja prośba o przypis została wysłana', ToastType.success);
-        ppGa.annotationRequestSent(!quote, !comment);
+        const { attributes } = instance;
+        ppGa.annotationRequestSent(!attributes.quote, !attributes.comment);
       }).catch((error) => {
         this.props.changeNotification(true, 'Błąd! Nie udało się wysłać prośby', ToastType.failure);
         throw new Error(`Failed to submit annotation request form: ${error}`);
+      }).finally(() => {
+        this.setState({ isCreating: false });
       });
     }
   }

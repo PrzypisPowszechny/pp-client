@@ -19,19 +19,19 @@ function initTrackActiveTabId() {
         currentTabId = null;
       }
       resolve(currentTabId);
-      console.debug(`Initial tab id: ${currentTabId}`);
+      console.debug(`Initial active tab id: ${currentTabId}`);
     });
   });
 }
 
 function setActiveTabId({ tabId, windowId }) {
   currentTabId = tabId;
-  console.debug(`New tab id: ${currentTabId}`);
+  console.debug(`Active tab changed: ${currentTabId}`);
 }
 
 function getActiveTabId() {
   if (currentTabId === undefined || currentTabId === null) {
-    throw new Error('Current tab id not set');
+    throw new Error('Current active tab id not set');
   }
   return currentTabId;
 }

@@ -8,10 +8,11 @@ import { buildBrowser } from './browser';
 import * as e2ePPSettings from './settings';
 import { simulateLogIn } from './common';
 
-describe('extension runs normally', () => {
+describe('extension calls api on startup', () => {
   let browser;
   let apiServer;
   let onAnnotationsRequest;
+  let onAnnotationRequestsRequest;
 
   const apiApp = express();
   apiApp.get('/site/some-text/', (req, res) => {
@@ -24,10 +25,17 @@ describe('extension runs normally', () => {
     res.send({ data: [] });
   });
 
-  beforeAll( async () => {
+  apiApp.get('/api/annotationRequests/', (req, res) => {
+    onAnnotationRequestsRequest();
+    res.set('Content-Type', 'application/vnd.api+json');
+    res.send({ data: [] });
+  });
+
+  beforeAll(async () => {
     browser = await buildBrowser();
     onAnnotationsRequest = () => null;
-    await new Promise( res => apiServer = http.createServer(apiApp).listen(e2ePPSettings.API_PORT, res));
+    onAnnotationRequestsRequest = () => null;
+    await new Promise(res => apiServer = http.createServer(apiApp).listen(e2ePPSettings.API_PORT, res));
   });
 
   test('fetches annotations on page open', async () => {
@@ -36,12 +44,22 @@ describe('extension runs normally', () => {
 
     let areAnnotationsFetched = false;
     onAnnotationsRequest = () => areAnnotationsFetched = true;
-    await expect(await waitUntil( () => areAnnotationsFetched)).toBeTruthy();
+    await expect(await waitUntil(() => areAnnotationsFetched)).toBeTruthy();
 
   }, e2ePPSettings.TIMEOUT);
 
-  afterAll( async () => {
+  test('fetches annotation requests on page open', async () => {
+    await simulateLogIn(browser);
+    await browser.get(`${e2ePPSettings.SITE_URL}/some-text/`);
+
+    let areAnnotationRequestsFetched = false;
+    onAnnotationRequestsRequest = () => areAnnotationRequestsFetched = true;
+    await expect(await waitUntil(() => areAnnotationRequestsFetched)).toBeTruthy();
+
+  }, e2ePPSettings.TIMEOUT);
+
+  afterAll(async () => {
     await browser.quit();
-    await new Promise( resolve => apiServer.close(resolve));
+    await new Promise(resolve => apiServer.close(resolve));
   });
 });

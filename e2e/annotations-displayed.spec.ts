@@ -14,6 +14,54 @@ const PP_CSS_ANNOTATION_SUMMARY_PREFIX = 'AnnotationSummary__summaryItem';
 const PP_CSS_VIEWER_CLASS_PREFIX = 'Viewer__self';
 const PP_CSS_HIGHLIGHT_CLASS = 'pp-highlight';
 
+// The full response is probably redundant
+// but we'd better trim it carefully so it more or less reflects full API schema
+const apiResponse = {
+  'data': [
+    {
+      'type': 'annotations',
+      'id': '1',
+      'attributes': {
+        'url': `some-url`,
+        'range': null,
+        'quote': 'word2',
+        'quoteContext': '',
+        'ppCategory': 'ADDITIONAL_INFO',
+        'comment': 'mock comment',
+        'annotationLink': 'http://mock-url.com',
+        'annotationLinkTitle': 'mock title',
+        'publisher': 'PP',
+        'createDate': '2019-03-04T17:17:21Z',
+        'upvoteCountExceptUser': 0,
+        'doesBelongToUser': false
+      },
+      'relationships': {
+        'user': {
+          'links': {
+            'related': 'https://devdeploy1.przypispowszechny.pl/api/annotations/1/user'
+          },
+          'data': {
+            'type': 'users',
+            'id': '1'
+          }
+        },
+        'annotationRequest': {
+          'data': null
+        },
+        'annotationUpvote': {
+          'links': {
+            'related': 'https://devdeploy1.przypispowszechny.pl/api/annotations/1/upvote'
+          },
+          'data': null
+        }
+      },
+      'links': {
+        'self': 'https://devdeploy1.przypispowszechny.pl/api/annotations/1'
+      }
+    },
+
+  ]
+};
 
 describe('annotations are highlighted and can be viewed on mouse hover', () => {
   let browser;
@@ -24,57 +72,14 @@ describe('annotations are highlighted and can be viewed on mouse hover', () => {
     res.send('<p>word1 word2 word3</p>');
   });
 
+  apiApp.get('/api/annotationRequests/', (req, res) => {
+    res.set('Content-Type', 'application/vnd.api+json');
+    res.send({ data: []});
+  });
+
   apiApp.get('/api/annotations/', (req, res) => {
     res.set('Content-Type', 'application/vnd.api+json');
-    // The full response is probably redundant
-    // but it should be trimmed carefully so for now the response reflect full API schema
-    const response = {
-      data: [
-        {
-          'type': 'annotations',
-          'id': '1',
-          'attributes': {
-            'url': `${apiApp.baseURL}/site/some-text`,
-            'range': null,
-            'quote': 'word2',
-            'quoteContext': '',
-            'ppCategory': 'ADDITIONAL_INFO',
-            'comment': 'mock comment',
-            'annotationLink': 'http://mock-url.com',
-            'annotationLinkTitle': 'mock title',
-            'publisher': 'PP',
-            'createDate': '2019-03-04T17:17:21Z',
-            'upvoteCountExceptUser': 0,
-            'doesBelongToUser': false
-          },
-          'relationships': {
-            'user': {
-              'links': {
-                'related': 'https://devdeploy1.przypispowszechny.pl/api/annotations/1/user'
-              },
-              'data': {
-                'type': 'users',
-                'id': '1'
-              }
-            },
-            'annotationRequest': {
-              'data': null
-            },
-            'annotationUpvote': {
-              'links': {
-                'related': 'https://devdeploy1.przypispowszechny.pl/api/annotations/1/upvote'
-              },
-              'data': null
-            }
-          },
-          'links': {
-            'self': 'https://devdeploy1.przypispowszechny.pl/api/annotations/1'
-          }
-        },
-
-      ]
-    };
-    res.send(response);
+    res.send(apiResponse);
   });
 
   beforeAll(async () => {

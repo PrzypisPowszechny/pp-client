@@ -5,7 +5,7 @@ export const SCREEN = {
   width: 1280,
   height: 800,
 };
-export const TIMEOUT = 10000;
+export const TIMEOUT = 100000;
 export const BROWSER = 'chrome';
 export const { API_URL, SITE_URL } = PPSettings;
 

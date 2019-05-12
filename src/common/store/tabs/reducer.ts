@@ -6,7 +6,7 @@ export default function tabs(state = {}, action) {
   const tabId = retrieveLogicalActionTab(action, state);
   // Only actions coming from content script or popup should modify the state
   if (tabId !== null && tabId !== undefined) {
-    console.debug(`Action coming from tab ${tabId}`);
+    console.debug(`Received action coming from tab ${tabId}`);
     let tabState;
     switch (action.type) {
       case TAB_INIT:
