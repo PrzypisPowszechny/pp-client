@@ -16,6 +16,7 @@ html, body {
   }
   span, p {
     user-select: none;
+    margin: 0;
   }
 }
 
@@ -119,7 +120,6 @@ body {
   border-color: rgba(0, 0, 0, 0.08);
 }
 
-
 .menu-bottom {
   display: flex;
   flex-direction: column;
@@ -129,17 +129,19 @@ body {
 .menu-header {
   font-weight: 600;
   font-size: 12px;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 
 .menu-text {
   color: #616161;
   font-size: 12px;
+  margin-bottom: 8px;
 }
 
 .caption {
   color: #616161;
   font-size: 11px;
-  margin-left: 36px;
+  margin: 0 0 0 36px;
+  line-height: 1.5em;
 }
 

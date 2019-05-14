@@ -59,7 +59,7 @@ export default class BrowserPopupNavigator extends React.Component<Partial<IBrow
   }
 
   renderEmptyPopup() {
-    return (<div className="pp-popup"/>);
+    return (<div className="pp-ui pp-popup"/>);
   }
 
   render() {
@@ -77,7 +77,7 @@ export default class BrowserPopupNavigator extends React.Component<Partial<IBrow
 
     if (PPSettings.DEV && isPopupEmulatedAndInvalid) {
       return (
-        <div className="popup-no-tab-match">
+        <div className="pp-ui popup-no-tab-match">
           <span> The tab id for an emulated popup
           does not match any existing tab or no content script was injected into the matching tab
           </span>

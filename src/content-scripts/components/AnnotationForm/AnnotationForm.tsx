@@ -284,14 +284,15 @@ export default class AnnotationForm extends React.Component<Partial<AnnotationFo
           />
           <Label
             className={classNames(styles.errorMsg, { [styles.hide]: annotationLinkError === '' })}
-            basic pointing color='red' size='large'
+            basic={true}
+            pointing={true}
+            color="red"
+            size="large"
           >
             {annotationLinkError}
           </Label>
 
-
         </div>
-
 
         <div className={styles.label}>
           <Popup
@@ -314,9 +315,12 @@ export default class AnnotationForm extends React.Component<Partial<AnnotationFo
             onChange={this.handleInputChange}
             placeholder="np. Treść ustawy, Nagranie wypowiedzi, Artykuł na Wikipedii"
           />
-                    <Label
+          <Label
             className={classNames(styles.errorMsg, { [styles.hide]: annotationLinkTitleError === '' })}
-            basic pointing color='red' size='large'
+            basic={true}
+            pointing={true}
+            color="red"
+            size="large"
           >
             {annotationLinkTitleError}
           </Label>

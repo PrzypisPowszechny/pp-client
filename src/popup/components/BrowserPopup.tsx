@@ -285,7 +285,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
 
     return (
       // todo move top container to outer component
-      <div className="pp-popup">
+      <div className="pp-ui pp-popup">
         <div className="popup-content">
           <ul className="menu">
             <div className="menu-top">

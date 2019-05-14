@@ -3,8 +3,7 @@
 @import 'vars/sizes';
 @import "vars/z-index";
 
-#{$pp-scope}.ui.popup,
-#{$pp-scope}.ui.modal {
+#{$pp-scope}.ui.popup {
   font-family: $font-family-preset !important;
   font-size: $default-font-size !important;
 }
@@ -17,9 +16,4 @@
 // Override default semantic ui popup length
 #{$pp-scope}.ui.popup.pp-popup-long-line {
   max-width: 420px;
-}
-
-// Override default semantic ui modal z-index
-.ui.page.modals.dimmer.transition.visible.active {
-  z-index: $z-index-base + 100;
 }

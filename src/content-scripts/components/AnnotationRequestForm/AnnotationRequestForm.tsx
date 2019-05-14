@@ -166,7 +166,10 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
 
           <Label
             className={classNames(styles.errorMsg, { [styles.hide]: quoteError === '' })}
-            basic pointing color='red' size='large'
+            basic={true}
+            pointing={true}
+            color="red"
+            size="large"
           >
             {quoteError}
           </Label>
