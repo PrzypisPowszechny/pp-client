@@ -19,18 +19,11 @@ import * as ppGaBg from 'common/pp-ga/bg';
 import ppGa from 'common/pp-ga';
 import { initTrackActiveTabId } from './tab';
 
-import { configureAxios } from '../common/axios';
+import { configureAxios } from 'common/axios';
 import store, { initStore } from './store/store';
-import { selectAccessToken } from '../common/store/storage/selectors';
+import { selectAccessToken } from 'common/store/storage/selectors';
 import { refreshTokenRoutine } from './auth';
 import dashboardMessaging from 'background/dashboard-messaging';
-import Port = chrome.runtime.Port;
-
-function onContextMenuAnnotate() {
-  chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { action: 'ANNOTATE' });
-  });
-}
 
 function onContextMenuAnnotationRequest() {
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
@@ -39,12 +32,6 @@ function onContextMenuAnnotationRequest() {
 }
 
 function contextMenuOnInstalled(details: InstalledDetails) {
-  chrome.contextMenus.create({
-    title: 'Dodaj przypis',
-    contexts: ['selection'],
-    onclick: onContextMenuAnnotate,
-  });
-
   chrome.contextMenus.create({
     title: 'Poproś o przypis',
     contexts: ['selection'],

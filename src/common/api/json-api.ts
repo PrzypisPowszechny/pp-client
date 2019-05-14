@@ -21,3 +21,5 @@ export interface APICreateModel {
   id?: string;
   type: string;
 }
+
+export type ID = string;

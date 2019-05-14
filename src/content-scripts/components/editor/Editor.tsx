@@ -191,7 +191,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
       annotationLinkTitle: linkTitle,
     } = this.state;
 
-    const validationResult = helpers.validateEditorForm({ comment, link, linkTitle });
+    const validationResult = helpers.validateEditorForm({ comment, annotationLink: link, linkTitle });
 
     if (validationResult.valid) {
       return true;

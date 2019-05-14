@@ -1,11 +1,13 @@
 import { AnnotationLocation } from 'content-scripts/handlers/annotation-event-handlers';
 import { ToastType } from 'content-scripts/components/elements/Toast/Toast';
-import { AnnotationRequestFormData } from 'content-scripts/components/AnnotationRequestForm';
+import { ID } from 'common/api/json-api';
+import { IAnnotationRequestFormData } from 'common/store/tabs/tab/widgets/reducers';
 
 export const EDITOR_ANNOTATION = 'EDITOR_ANNOTATION';
 export const SET_EDITOR_SELECTION_RANGE = 'SET_EDITOR_SELECTION_RANGE';
 export const EDITOR_VISIBLE_CHANGE = 'EDITOR_VISIBLE_CHANGE';
 export const ANNOTATION_REQUEST_FORM_VISIBLE_CHANGE = 'ANNOTATION_REQUEST_FORM_VISIBLE_CHANGE';
+export const ANNOTATION_FORM_VISIBLE_CHANGE = 'ANNOTATION_FORM_VISIBLE_CHANGE';
 export const VIEWER_VISIBLE_CHANGE = 'VIEWER_VISIBLE_CHANGE';
 export const VIEWER_MODAL_CHANGE = 'VIEWER_MODAL_CHANGE';
 export const VIEWER_REPORT_EDITOR_CHANGE = 'VIEWER_REPORT_EDITOR_CHANGE';
@@ -66,7 +68,7 @@ export const hideMenu = () => {
   };
 };
 
-export const showAnnotationRequestForm = (initialData: Partial<AnnotationRequestFormData>) => {
+export const showAnnotationRequestForm = (initialData: Partial<IAnnotationRequestFormData>)  => {
   return {
     type: ANNOTATION_REQUEST_FORM_VISIBLE_CHANGE,
     payload: {
@@ -82,6 +84,26 @@ export const hideAnnotationRequestForm = () => {
     payload: {
       visible: false,
       initialData: null,
+    },
+  };
+};
+
+export const showAnnotationForm = (annotationRequestId: ID) => {
+  return {
+    type: ANNOTATION_FORM_VISIBLE_CHANGE,
+    payload: {
+      visible: true,
+      annotationRequestId,
+    },
+  };
+};
+
+export const hideAnnotationForm = () => {
+  return {
+    type: ANNOTATION_FORM_VISIBLE_CHANGE,
+    payload: {
+      visible: false,
+      annotationId: null,
     },
   };
 };

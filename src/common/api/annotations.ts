@@ -31,7 +31,9 @@ export interface AnnotationAPIModelAttrs {
 
 export interface AnnotationAPICreateModelAttrs {
   url: string;
-  range: RangeAPIModel;
+  quote: string;
+  quoteContext?: string;
+  range?: RangeAPIModel;
   ppCategory: AnnotationPPCategories;
   comment: string;
   annotationLink: string;

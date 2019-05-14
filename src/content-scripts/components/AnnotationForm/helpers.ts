@@ -7,7 +7,7 @@ const commentMaxLength = 1000;
 interface ValidatorValues {
   comment: string;
   annotationLink: string;
-  linkTitle: string;
+  annotationLinkTitle: string;
 }
 
 interface ValidatorResult {
@@ -19,13 +19,9 @@ interface ValidatorResult {
   };
 }
 
-export function validateEditorForm(values: ValidatorValues): ValidatorResult {
-  const {
-    comment,
-    annotationLink,
-    linkTitle,
-  } = values;
-
+export function validateAnnotationForm(
+  { comment, annotationLink, annotationLinkTitle }: ValidatorValues,
+): ValidatorResult {
   const result: ValidatorResult = {
     valid: false,
     errors: {},
@@ -47,12 +43,12 @@ export function validateEditorForm(values: ValidatorValues): ValidatorResult {
     result.errors = { annotationLinkError: 'Podaj poprawny link do źródła!' };
     return result;
   }
-  if (!linkTitle) {
+  if (!annotationLinkTitle) {
     result.errors = { annotationLinkTitleError: 'Musisz podać tytuł źródła, jeśli chcesz dodać przypis!' };
     return result;
-  } else if (linkTitle.length > linkTitleMaxLength) {
+  } else if (annotationLinkTitle.length > linkTitleMaxLength) {
     result.errors = {
-      annotationLinkTitleError: `Skróć tytuł źródła z ${linkTitle.length} do ${linkTitleMaxLength} znaków!`,
+      annotationLinkTitleError: `Skróć tytuł źródła z ${annotationLinkTitle.length} do ${linkTitleMaxLength} znaków!`,
     };
     return result;
   }

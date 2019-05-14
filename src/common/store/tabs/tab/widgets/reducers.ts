@@ -1,5 +1,6 @@
 import {
   ANNOTATION_REQUEST_FORM_VISIBLE_CHANGE,
+  ANNOTATION_FORM_VISIBLE_CHANGE,
   EDITOR_ANNOTATION,
   EDITOR_VISIBLE_CHANGE,
   MENU_WIDGET_CHANGE, NOTIFICATION_CHANGE,
@@ -12,9 +13,9 @@ import { combineReducers } from 'redux';
 import { MODIFY_APP_MODES } from '../appModes/actions';
 import { isAnnotationMode } from 'common/store/tabs/tab/appModes/selectors';
 import { AnnotationLocation } from 'content-scripts/handlers/annotation-event-handlers';
-import { AnnotationRequestFormData } from 'content-scripts/components/AnnotationRequestForm';
+import { ID } from 'common/api/json-api';
 
-export interface IWidgetState {
+interface IWidgetState {
   visible: boolean;
 }
 
@@ -24,8 +25,17 @@ export interface IEditorState extends IWidgetState {
   location: { x: number; y: number };
 }
 
+export interface IAnnotationRequestFormData {
+  quote: string;
+  comment: string;
+}
+
 export interface IAnnotationRequestFormState extends IWidgetState {
-  initialData: Partial<AnnotationRequestFormData>;
+  initialData?: Partial<IAnnotationRequestFormData>;
+}
+
+export interface IAnnotationFormState extends IWidgetState {
+  annotationRequestId?: ID;
 }
 
 export interface IViewerState extends IWidgetState {
@@ -79,7 +89,6 @@ function editor(state = initialEditorState, action) {
     default:
       return state;
   }
-
 }
 
 function menu(state = initialWidgetState, action) {
@@ -91,15 +100,38 @@ function menu(state = initialWidgetState, action) {
   }
 }
 
-function annotationRequestForm(state = initialWidgetState, action) {
+function annotationRequestForm(state: IAnnotationRequestFormState = initialWidgetState, action) {
   switch (action.type) {
     case ANNOTATION_REQUEST_FORM_VISIBLE_CHANGE:
       return { ...state, ...action.payload };
+    case ANNOTATION_FORM_VISIBLE_CHANGE:
+      // Hide annotationRequestFormWidget if other widget gets opened
+      if (action.payload.visible) {
+        return { ...state, visible: false };
+      } else {
+        return state;
+      }
     default:
       return state;
   }
-
 }
+
+function annotationForm(state: IAnnotationFormState = initialWidgetState, action) {
+  switch (action.type) {
+    case ANNOTATION_FORM_VISIBLE_CHANGE:
+      return { ...state, ...action.payload };
+    case ANNOTATION_REQUEST_FORM_VISIBLE_CHANGE:
+      // Hide annotationFormWidget if other widget gets opened
+      if (action.payload.visible) {
+        return { ...state, visible: false };
+      } else {
+        return state;
+      }
+    default:
+      return state;
+  }
+}
+
 const initialViewerState = {
   ...initialWidgetState,
   deleteModal: {},
@@ -160,7 +192,7 @@ function notification(state = { visible: false }, action) {
 }
 
 const widgets = combineReducers({
-  editor, menu, annotationRequestForm, viewer, notification,
+  editor, menu, annotationRequestForm, annotationForm, viewer, notification,
 });
 
 export default widgets;
