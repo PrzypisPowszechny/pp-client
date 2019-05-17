@@ -42,11 +42,6 @@ p.caption {
   margin-top: 5px;
   font-size: 14px;
 
-  .popup-label {
-    cursor: help;
-    user-select: none;
-
-  }
 }
 
 .form-field-wrapper {
@@ -127,7 +122,7 @@ textarea.form-field {
 }
 
 .error-msg {
-  font-size: 14px;
+  font-size: 14px !important;;
   position: absolute !important; // override semantic-ui defaults
   z-index: $annotation-mode-widget-z-index + 1;
 }

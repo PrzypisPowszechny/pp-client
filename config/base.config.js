@@ -54,10 +54,17 @@ const getConfig = (env, argv) => ({
         use: ['style-loader', 'css-loader'],
       },
       {
-        /* SCSS global styles */
+        /* SCSS global content script styles */
         test: /\.scss$/,
         include: [
           localPath(ROOT, 'src', 'css'),
+        ],
+        use: ['style-loader', 'css-loader', 'cssimportant-loader', 'sass-loader'],
+      },
+      {
+        /* SCSS global popup styles */
+        test: /\.scss$/,
+        include: [
           localPath(ROOT, 'src', 'popup', 'css'),
         ],
         use: ['style-loader', 'css-loader', 'cssimportant-loader', 'sass-loader'],

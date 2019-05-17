@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { Icon } from 'react-icons-kit/Icon';
 import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
-
+import Label from 'semantic-ui-react/dist/commonjs/elements/Label';
 import { PPScopeClass } from 'content-scripts/settings';
 import styles from './AnnotationRequestForm.scss';
 import * as helpers from './helpers';
@@ -163,12 +163,16 @@ export default class AnnotationRequestForm extends React.Component<Partial<Annot
             value={quote}
             onChange={this.handleInputChange}
           />
-          <div
-            className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { [styles.hide]: quoteError === '' })}
+
+          <Label
+            className={classNames(styles.errorMsg, { [styles.hide]: quoteError === '' })}
+            basic={true}
+            pointing={true}
+            color="red"
+            size="large"
           >
             {quoteError}
-          </div>
+          </Label>
         </div>
         <div className={styles.label}>Komentarz (opcjonalny)</div>
         <div className={styles.comment}>

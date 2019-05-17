@@ -8,6 +8,7 @@ import styles from './AnnotationForm.scss';
 import { Icon } from 'react-icons-kit/Icon';
 import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
 import Popup from 'semantic-ui-react/dist/commonjs/modules/Popup';
+import Label from 'semantic-ui-react/dist/commonjs/elements/Label';
 import { changeNotification, hideAnnotationForm } from 'common/store/tabs/tab/widgets/actions';
 import * as helpers from './helpers';
 import Button from '../elements/Button/Button';
@@ -34,7 +35,7 @@ export interface AnnotationFormProps {
 
   hideAnnotationForm: () => void;
   changeNotification: (visible: boolean, message?: string, type?: ToastType) => void;
-  createAnnotation: (instance: AnnotationAPICreateModel) => Promise<{ data: AnnotationAPIModel}>;
+  createAnnotation: (instance: AnnotationAPICreateModel) => Promise<{ data: AnnotationAPIModel }>;
 }
 
 interface AnnotationFormState extends AnnotationFormData {
@@ -157,7 +158,7 @@ export default class AnnotationForm extends React.Component<Partial<AnnotationFo
       ppCategory,
       annotationLink, annotationLinkError,
       annotationLinkTitle, annotationLinkTitleError,
-    }  = this.state;
+    } = this.state;
     const { quote, comment: annotationRequestComment } = this.props.annotationRequest.attributes;
 
     return (
@@ -176,22 +177,22 @@ export default class AnnotationForm extends React.Component<Partial<AnnotationFo
           {quote}
         </div>
         {annotationRequestComment &&
-          <div>
-            <div className={styles.label}>Komentarz zgłaszającego</div>
-            <div className={styles.quote}>
-              {annotationRequestComment}
-            </div>
+        <div>
+          <div className={styles.label}>Komentarz zgłaszającego</div>
+          <div className={styles.quote}>
+            {annotationRequestComment}
           </div>
+        </div>
         }
 
         <div className={styles.label}>
           <Popup
-              className={classNames(PPScopeClass, styles.popupTooltip, 'small-padding')}
-              hideOnScroll={true}
-              trigger={<span className={styles.popupLabel}>Typ przypisu</span>}
-              flowing={true}
-              hoverable={true}
-              position="left center"
+            className={classNames(PPScopeClass, styles.popupTooltip, 'small-padding')}
+            hideOnScroll={true}
+            trigger={<span className={styles.popupLabel}>Typ przypisu</span>}
+            flowing={true}
+            hoverable={true}
+            position="left center"
           >
             Typ sygnalizuje innym użytkownikom, na ile <br/>
             przypis jest zgodny z fragmentem artykułu, którego <br/>
@@ -281,12 +282,16 @@ export default class AnnotationForm extends React.Component<Partial<AnnotationFo
             onChange={this.handleInputChange}
             placeholder="Wklej link do strony, na podstawie której dodajesz przypis"
           />
-          <div
-            className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { [styles.hide]: annotationLinkError === '' })}
+          <Label
+            className={classNames(styles.errorMsg, { [styles.hide]: annotationLinkError === '' })}
+            basic={true}
+            pointing={true}
+            color="red"
+            size="large"
           >
             {annotationLinkError}
-          </div>
+          </Label>
+
         </div>
 
         <div className={styles.label}>
@@ -310,12 +315,15 @@ export default class AnnotationForm extends React.Component<Partial<AnnotationFo
             onChange={this.handleInputChange}
             placeholder="np. Treść ustawy, Nagranie wypowiedzi, Artykuł na Wikipedii"
           />
-          <div
-            className={classNames(styles.errorMsg, 'ui', 'pointing', 'red', 'basic', 'label', 'large',
-              { [styles.hide]: annotationLinkTitleError === '' })}
+          <Label
+            className={classNames(styles.errorMsg, { [styles.hide]: annotationLinkTitleError === '' })}
+            basic={true}
+            pointing={true}
+            color="red"
+            size="large"
           >
             {annotationLinkTitleError}
-          </div>
+          </Label>
         </div>
 
         <div className={styles.actions}>
@@ -327,6 +335,7 @@ export default class AnnotationForm extends React.Component<Partial<AnnotationFo
           </Button>
         </div>
       </div>
-    );
+    )
+      ;
   }
 }

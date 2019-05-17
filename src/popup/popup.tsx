@@ -7,8 +7,12 @@ console.log('Przypis Powszechny popup script working!');
 // Set script type by importing (so ALL other imports are executed afterwards)
 import './meta';
 
-// import Semantic-ui packages
-import 'semantic-ui-css/semantic.min.css';
+// semantic-ui minimum defaults
+// these are prerequisites for any semantic ui components as well as reasonable defaults for our own style
+// shared with content script styles
+import 'css/common/pp-semantic-ui-reset.scss';
+// New defaults/modifiers for some semantic-ui components
+import 'css/common/pp-semantic-ui-overrides.scss';
 
 import '../../assets/icon.png';
 
@@ -21,8 +25,8 @@ import BrowserPopupNavigator from './components/BrowserPopupNavigator';
 import { debugTabPopupInit, tabPopupInit } from 'common/store/tabs/actions';
 import { waitUntilPageLoaded, waitUntilFirstStoreUpdate } from '../common/utils/init';
 import { waitUntilContentScriptShouldHaveConnected } from './messages';
-import { selectTab, trySelectTab } from '../common/store/tabs/selectors';
-import { contentScriptWontLoad, setTabUrl } from '../common/store/tabs/tab/tabInfo/actions';
+import { selectTab } from '../common/store/tabs/selectors';
+import { contentScriptWontLoad } from '../common/store/tabs/tab/tabInfo/actions';
 import { getActiveTabId, getActiveTabUrl, getTabUrl } from './utils';
 import { parseUrlParams } from '../common/url';
 import { initializeTabId } from '../common/store/tabs/tab-utils';
