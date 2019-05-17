@@ -1,11 +1,13 @@
 import React from 'react';
+
 import classNames from 'classnames';
 
-import styles from './ReportEditor.scss';
-import { AnnotationAPIModel } from 'common/api/annotations';
 import { AnnotationReportAPIModel, DataResponse, Reasons } from 'common/api/annotation-reports';
-import { PPScopeClass } from 'content-scripts/settings';
+import { AnnotationAPIModel } from 'common/api/annotations';
 import ppGa from 'common/pp-ga';
+import { PPScopeClass } from 'content-scripts/settings';
+
+import styles from './ReportEditor.scss';
 
 interface IReportProps {
   annotation: AnnotationAPIModel;

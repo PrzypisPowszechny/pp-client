@@ -1,4 +1,5 @@
 import * as utils from './utils';
+
 import * as chromeKeys from '../chrome-storage/keys';
 
 // @ts-ignore

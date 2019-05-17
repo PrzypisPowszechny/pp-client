@@ -1,6 +1,7 @@
 import $ from 'jquery';
-import { PPHighlightClass } from 'content-scripts/settings';
 import { Range as XPathRange } from 'xpath-range';
+
+import { PPHighlightClass } from 'content-scripts/settings';
 
 /**
  * highlightRange wraps the DOM Nodes within the provided range with a highlight

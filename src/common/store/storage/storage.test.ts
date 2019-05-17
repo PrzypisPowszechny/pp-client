@@ -1,6 +1,7 @@
-import * as chromeKeys from 'common/chrome-storage/keys';
-import StorageSync from 'background/storage-sync';
 import { combineReducers, createStore } from 'redux';
+
+import StorageSync from 'background/storage-sync';
+import * as chromeKeys from 'common/chrome-storage/keys';
 
 const originalReducer = (state: any = { key: 'initial' }, action) => {
   return { ...action.payload };

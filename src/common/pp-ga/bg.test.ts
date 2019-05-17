@@ -1,6 +1,6 @@
 import * as bg from './bg';
-import * as utils from './utils';
 import { GACustomFieldsIndex } from './types';
+import * as utils from './utils';
 
 jest.mock('common/pp-ga/ga', () => null);
 

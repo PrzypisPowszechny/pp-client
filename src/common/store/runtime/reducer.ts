@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+
 import { SET_AUTH_PROC_STAGE } from './actions';
 import { IAuthProcState, IRuntimeState } from './types';
 

@@ -1,25 +1,29 @@
+import rangy from 'rangy';
+import 'rangy/lib/rangy-textrange';
 import { Range as XPathRange } from 'xpath-range';
 
-// import more rangy modules if needed
-import 'rangy/lib/rangy-textrange';
-import rangy from 'rangy';
-
-import mousePosition from '../utils/mousePosition';
+import ppGa from 'common/pp-ga';
 import { makeSelection, showMenu } from 'common/store/tabs/tab/actions';
-
-import { TextSelector } from '../utils/index';
-import { hideMenu, showAnnotationRequestForm } from 'common/store/tabs/tab/widgets/actions';
+import { selectModeForCurrentPage } from 'common/store/tabs/tab/appModes/selectors';
+import {
+  hideMenu,
+  setSelectionRange,
+  showAnnotationRequestForm,
+  showEditorAnnotation,
+} from 'common/store/tabs/tab/widgets/actions';
 import {
   annotationRootNode,
   outsideArticleClasses,
   PPHighlightClass,
   quoteContextWidth,
 } from 'content-scripts/settings';
-import { selectModeForCurrentPage } from 'common/store/tabs/tab/appModes/selectors';
-import { setSelectionRange, showEditorAnnotation } from 'common/store/tabs/tab/widgets/actions';
-import ppGa from 'common/pp-ga';
-import store from '../store';
+
 import { EMULATE_ON_CONTEXT_MENU_ANNOTATE, EMULATE_ON_CONTEXT_MENU_ANNOTATION_REQUEST } from '../../../e2e/events';
+import store from '../store';
+import { TextSelector } from '../utils/index';
+import mousePosition from '../utils/mousePosition';
+
+// import more rangy modules if needed
 
 let handlers;
 

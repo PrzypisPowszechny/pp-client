@@ -1,17 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createResource } from 'common/store/tabs/tab/api/actions';
 
-import { AnnotationAPIModel, AnnotationResourceType } from 'common/api/annotations';
 import {
   AnnotationReportAPICreateModel,
   AnnotationReportAPIModel,
-  AnnotationReportResourceType, DataResponse,
+  AnnotationReportResourceType,
+  DataResponse,
   Reasons,
 } from 'common/api/annotation-reports';
+import { AnnotationAPIModel, AnnotationResourceType } from 'common/api/annotations';
+import { createResource } from 'common/store/tabs/tab/api/actions';
+
 import Report from './Report';
-import Suggestion from './Suggestion';
 import SuccessToast from './SuccessToast';
+import Suggestion from './Suggestion';
 
 interface IReportEditorProps {
   reportComponentClass: typeof Report | typeof Suggestion;

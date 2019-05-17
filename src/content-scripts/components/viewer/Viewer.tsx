@@ -1,14 +1,16 @@
 import React from 'react';
-import classNames from 'classnames';
 import { connect } from 'react-redux';
-import Widget from 'content-scripts/components/widget';
 
-import ViewerItem from './ViewerItem';
-import styles from './Viewer.scss';
-import { selectViewerState } from 'common/store/tabs/tab/widgets/selectors';
-import { PPScopeClass, PPViewerHoverContainerClass, PPViewerIndirectChildClass } from 'content-scripts/settings';
+import classNames from 'classnames';
+
 import { setMouseOverViewer } from 'common/store/tabs/tab/widgets/actions';
+import { selectViewerState } from 'common/store/tabs/tab/widgets/selectors';
+import Widget from 'content-scripts/components/widget';
+import { PPScopeClass, PPViewerHoverContainerClass, PPViewerIndirectChildClass } from 'content-scripts/settings';
+
 import DeleteAnnotationModal from './DeleteAnnotationModal';
+import styles from './Viewer.scss';
+import ViewerItem from './ViewerItem';
 
 interface IViewerProps {
   locationX: number;

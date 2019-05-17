@@ -1,48 +1,45 @@
-import * as sentry from 'common/sentry';
-// Set script type by importing (so ALL other imports are executed afterwards)
-import './meta';
-
+import * as Sentry from '@sentry/browser';
 import React from 'react';
-import { Provider } from 'react-redux';
+import { setAxiosConfig } from 'redux-json-api';
 
-import '../css/common/base.scss';
+import 'moment/locale/pl.js';
+
+import * as endpoints from 'common/api/resource-types';
+import { configureAxios } from 'common/axios';
+import { ScriptType, setScriptType } from 'common/meta';
+import IPPSettings from 'common/PPSettings';
+import * as sentry from 'common/sentry';
+import { selectAccessToken, selectUser } from 'common/store/storage/selectors';
+import { tabInit } from 'common/store/tabs/actions';
+import { selectTab } from 'common/store/tabs/selectors';
+import { initializeTabId } from 'common/store/tabs/tab-utils';
+import { readEndpointWithHeaders } from 'common/store/tabs/tab/api/actions';
+import { loadAppModes } from 'common/store/tabs/tab/appModes/actions';
+import { contentScriptLoaded } from 'common/store/tabs/tab/tabInfo/actions';
+import { waitUntilFirstStoreUpdate, waitUntilPageLoaded } from 'common/utils/init';
+import 'css/common/pp-semantic-ui-overrides.scss';
 // semantic-ui minimum defaults for semantic-ui to work
 import 'css/common/pp-semantic-ui-reset.scss';
-// New defaults/modifiers for some semantic-ui components
-import 'css/common/pp-semantic-ui-overrides.scss';
-
 import 'css/selection.scss';
 
-import IPPSettings from 'common/PPSettings';
-import chromeStorageHandlers from './handlers/chrome-storage-handlers';
-import highlightManager from './modules/highlight-manager';
-import annotationEventHandlers from './handlers/annotation-event-handlers';
-import appComponent from './modules/app-component';
-import { annotationLocationNotifier } from './modules';
-import store from './store';
-import { contentScriptLoaded, setTabUrl } from 'common/store/tabs/tab/tabInfo/actions';
-import { tabInit } from 'common/store/tabs/actions';
-import { ScriptType, setScriptType } from 'common/meta';
-import {
-  waitUntilPageLoaded,
-  waitUntilFirstStoreUpdate,
-} from '../common/utils/init';
-import { selectAccessToken, selectUser } from '../common/store/storage/selectors';
 import { AnnotationLocator } from './annotations/AnnotationLocator';
-import { setAxiosConfig } from 'redux-json-api';
-import { configureAxios } from '../common/axios';
-import * as endpoints from '../common/api/resource-types';
-import { selectTab } from '../common/store/tabs/selectors';
-import { loadAppModes } from '../common/store/tabs/tab/appModes/actions';
-import { readEndpointWithHeaders } from '../common/store/tabs/tab/api/actions';
+import annotationEventHandlers from './handlers/annotation-event-handlers';
+import chromeStorageHandlers from './handlers/chrome-storage-handlers';
+// Set script type by importing (so ALL other imports are executed afterwards)
+import './meta';
+import { annotationLocationNotifier } from './modules';
+import appComponent from './modules/app-component';
+import highlightManager from './modules/highlight-manager';
+import store from './store';
+
+import '../css/common/base.scss';
+
+// New defaults/modifiers for some semantic-ui components
 
 sentry.init();
 
 // Set moment.js language for whole package
 // based on https://medium.com/@michalozogan/how-to-split-moment-js-locales-to-chunks-with-webpack-de9e25caccea
-import 'moment/locale/pl.js';
-import { initializeTabId } from '../common/store/tabs/tab-utils';
-import * as Sentry from '@sentry/browser';
 
 // set script type for future introspection
 setScriptType(ScriptType.contentScript);

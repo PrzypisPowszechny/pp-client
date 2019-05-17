@@ -1,6 +1,7 @@
 import { annotationPPCategoriesLabels } from 'common/api/annotations';
-import * as chromeKeys from '../chrome-storage/keys';
+
 import { getChromeCookie } from '../chrome-cookies';
+import * as chromeKeys from '../chrome-storage/keys';
 
 export function formatPriority(priority) {
   return `${priority} - ${annotationPPCategoriesLabels[priority]}`;

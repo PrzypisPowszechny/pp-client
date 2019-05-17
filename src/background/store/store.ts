@@ -1,14 +1,17 @@
 import { applyMiddleware, createStore, Store } from 'redux';
-import thunk from 'redux-thunk';
-import rootReducer, { IState } from 'common/store/reducer';
-import promise from 'redux-promise';
 import { createLogger } from 'redux-logger';
-import { wrapStore, alias } from 'webext-redux';
-import deepDiff from 'webext-redux/lib/strategies/deepDiff/diff';
-import actionAliases from 'common/store/action-aliases';
-import StorageSync from '../storage-sync';
 import { createEpicMiddleware } from 'redux-observable';
+import promise from 'redux-promise';
+import thunk from 'redux-thunk';
+
+import { alias, wrapStore } from 'webext-redux';
+import deepDiff from 'webext-redux/lib/strategies/deepDiff/diff';
+
+import actionAliases from 'common/store/action-aliases';
 import { FluxStandardAction, rootEpic } from 'common/store/background-epics';
+import rootReducer, { IState } from 'common/store/reducer';
+
+import StorageSync from '../storage-sync';
 
 const epicMiddleware = createEpicMiddleware<FluxStandardAction, FluxStandardAction, IState>();
 

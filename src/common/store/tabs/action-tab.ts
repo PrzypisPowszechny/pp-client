@@ -2,8 +2,9 @@
  * This module identifies where the redux action was originally issued (content script / poopup / background)
  */
 
+import { getActiveTabId } from 'background/tab';
 import { getScriptType, ScriptType } from 'common/meta/script-type';
-import { getActiveTabId } from '../../../background/tab';
+
 import { DEBUG_POPUP_INIT } from './actions';
 import { PopupMode } from './tab/popupInfo';
 

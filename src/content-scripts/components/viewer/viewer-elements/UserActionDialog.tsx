@@ -1,13 +1,15 @@
 import React from 'react';
-import classNames from 'classnames';
 import { connect } from 'react-redux';
-import styles from '../report-editor/ReportEditor.scss';
-import { changeViewerReportEditorOpen } from 'common/store/tabs/tab/widgets/actions';
+
+import classNames from 'classnames';
+
 import { AnnotationAPIModel } from 'common/api/annotations';
-import { PPScopeClass } from 'content-scripts/settings';
-import ReportEditor from '../report-editor/ReportEditor';
-import ppGa from 'common/pp-ga';
 import { selectTab } from 'common/store/tabs/selectors';
+import { changeViewerReportEditorOpen } from 'common/store/tabs/tab/widgets/actions';
+import { PPScopeClass } from 'content-scripts/settings';
+
+import ReportEditor from '../report-editor/ReportEditor';
+import styles from '../report-editor/ReportEditor.scss';
 
 interface IUserActionDialogProps {
   annotation: AnnotationAPIModel;

@@ -1,6 +1,6 @@
 import FieldsObject = UniversalAnalytics.FieldsObject;
-import { EventOptions } from './types';
 import { isGaRunningInWindow, sendEvent as bgSendEvent } from './bg';
+import { EventOptions } from './types';
 
 export function sendEvent(fieldsObject: FieldsObject, options: EventOptions = {}) {
   if (isGaRunningInWindow()) {

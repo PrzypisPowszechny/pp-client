@@ -1,12 +1,14 @@
 import React from 'react';
+
 import classNames from 'classnames';
+
+import styles from './Modal.scss';
+
 import { PPScopeClass } from '../../../settings';
 
 interface ModalProps {
   onCloseModal: (e) => void;
 }
-
-import styles from './Modal.scss';
 
 export default class Modal extends React.PureComponent<ModalProps> {
     handleContentClick = (e) => {

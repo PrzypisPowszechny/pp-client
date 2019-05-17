@@ -1,7 +1,9 @@
 import React, { RefObject } from 'react';
+
 import classNames from 'classnames';
-import styles from './Widget.scss';
+
 import { isInverted } from './utils';
+import styles from './Widget.scss';
 
 interface IWidgetProps {
   locationX: number;

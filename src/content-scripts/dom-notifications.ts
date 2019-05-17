@@ -1,4 +1,3 @@
-
 /*
  * API for communicating and checkings the application state via DOM
  * useful for selenium automation, where console logs cannot be easily accessed

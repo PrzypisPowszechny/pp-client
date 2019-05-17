@@ -1,9 +1,7 @@
-import store from './store';
 import axios from 'axios';
-import { accessTokenRefresh } from '../common/store/storage/actions-background';
-import { selectStorage } from '../common/store/storage/selectors';
 import axiosRetry, { isRetryableError } from 'axios-retry';
 import interval from 'interval-promise';
+
 import {
   FacebookCredentials,
   GoogleCredentials,
@@ -11,7 +9,11 @@ import {
   PPLoginResponseAPIModel,
 } from 'common/api/user';
 import { AuthProviders } from 'common/store/runtime/types';
-import { parseUrlParams } from '../common/url';
+import { accessTokenRefresh } from 'common/store/storage/actions-background';
+import { selectStorage } from 'common/store/storage/selectors';
+import { parseUrlParams } from 'common/url';
+
+import store from './store';
 
 type URLString = string;
 

@@ -1,12 +1,14 @@
 import React from 'react';
-import BrowserPopup from './BrowserPopup';
-import AnnotationList from './annotationList/AnnotationList';
-import { trySelectRealTab, trySelectTab } from '../../common/store/tabs/selectors';
 import { connect } from 'react-redux';
-import { trySelectStorage, selectUser } from '../../common/store/storage/selectors';
+
+import { selectUser, trySelectStorage } from 'common/store/storage/selectors';
+import { trySelectRealTab, trySelectTab } from 'common/store/tabs/selectors';
+import { PopupMode } from 'common/store/tabs/tab/popupInfo';
+import { ITabState } from 'common/store/tabs/tab/reducer';
+
+import AnnotationList from './annotationList/AnnotationList';
+import BrowserPopup from './BrowserPopup';
 import LoginForm from './LoginForm';
-import { ITabState } from '../../common/store/tabs/tab/reducer';
-import { PopupMode } from '../../common/store/tabs/tab/popupInfo';
 
 export enum PopupPages {
   main,

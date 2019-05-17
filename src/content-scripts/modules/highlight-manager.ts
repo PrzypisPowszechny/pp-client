@@ -1,19 +1,21 @@
-import store from 'content-scripts/store';
-import { showAnnotationForm, showViewer } from 'common/store/tabs/tab/actions';
-import mousePosition from '../utils/mousePosition';
-import Highlighter from 'content-scripts/utils/Highlighter';
-import { setMouseOverViewer, showAnnotationRequestForm } from 'common/store/tabs/tab/widgets/actions';
-import { selectModeForCurrentPage } from 'common/store/tabs/tab/appModes/selectors';
 import _difference from 'lodash/difference';
 import _isEqual from 'lodash/isEqual';
-import { selectViewerState } from 'common/store/tabs/tab/widgets/selectors';
-import { selectAnnotation, selectAnnotationRequest } from 'common/store/tabs/tab/api/selectors';
-import { annotationRootNode } from '../settings';
-import { selectTab } from 'common/store/tabs/selectors';
-import { trySelectStorage, selectUser } from '../../common/store/storage/selectors';
-import * as resourceTypes from 'common/api/resource-types';
-import { AnnotationRequestAPIModel } from '../../common/api/annotation-requests';
+
 import { QuoteAnnotationAPIModel } from 'common/api';
+import { AnnotationRequestAPIModel } from 'common/api/annotation-requests';
+import * as resourceTypes from 'common/api/resource-types';
+import { selectUser, trySelectStorage } from 'common/store/storage/selectors';
+import { selectTab } from 'common/store/tabs/selectors';
+import { showAnnotationForm, showViewer } from 'common/store/tabs/tab/actions';
+import { selectAnnotation, selectAnnotationRequest } from 'common/store/tabs/tab/api/selectors';
+import { selectModeForCurrentPage } from 'common/store/tabs/tab/appModes/selectors';
+import { setMouseOverViewer } from 'common/store/tabs/tab/widgets/actions';
+import { selectViewerState } from 'common/store/tabs/tab/widgets/selectors';
+import store from 'content-scripts/store';
+import Highlighter from 'content-scripts/utils/Highlighter';
+
+import { annotationRootNode } from '../settings';
+import mousePosition from '../utils/mousePosition';
 
 let instance;
 

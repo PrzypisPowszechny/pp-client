@@ -1,29 +1,32 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import classNames from 'classnames';
-import { PPScopeClass } from 'content-scripts/settings';
-import ppGa from 'common/pp-ga';
-
-import styles from './AnnotationForm.scss';
 import { Icon } from 'react-icons-kit/Icon';
 import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
-import Popup from 'semantic-ui-react/dist/commonjs/modules/Popup';
+import { connect } from 'react-redux';
+
+import classNames from 'classnames';
 import Label from 'semantic-ui-react/dist/commonjs/elements/Label';
-import { changeNotification, hideAnnotationForm } from 'common/store/tabs/tab/widgets/actions';
-import * as helpers from './helpers';
-import Button from '../elements/Button/Button';
-import { ToastType } from '../elements/Toast/Toast';
-import { selectTab } from 'common/store/tabs/selectors';
-import { ITabInfoState } from 'common/store/tabs/tab/tabInfo';
+import Popup from 'semantic-ui-react/dist/commonjs/modules/Popup';
+
 import { AnnotationRequestAPIModel } from 'common/api/annotation-requests';
-import { selectAnnotationRequest } from 'common/store/tabs/tab/api/selectors';
 import {
   AnnotationAPICreateModel,
   AnnotationAPIModel,
   AnnotationPPCategories,
   annotationPPCategoriesLabels,
 } from 'common/api/annotations';
+import ppGa from 'common/pp-ga';
+import { selectTab } from 'common/store/tabs/selectors';
 import { createResource } from 'common/store/tabs/tab/api/actions';
+import { selectAnnotationRequest } from 'common/store/tabs/tab/api/selectors';
+import { ITabInfoState } from 'common/store/tabs/tab/tabInfo';
+import { changeNotification, hideAnnotationForm } from 'common/store/tabs/tab/widgets/actions';
+import { PPScopeClass } from 'content-scripts/settings';
+
+import styles from './AnnotationForm.scss';
+import * as helpers from './helpers';
+
+import Button from '../elements/Button/Button';
+import { ToastType } from '../elements/Toast/Toast';
 
 export interface AnnotationFormData {
   comment: string;

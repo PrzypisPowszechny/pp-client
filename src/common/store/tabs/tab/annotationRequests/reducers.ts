@@ -1,8 +1,11 @@
-import { LOCATE_ANNOTATION_REQUESTS, LOCATE_CREATED_ANNOTATION_REQUESTS } from './actions';
-import { AnnotationsState } from '../annotations/types';
-import { API_READ, API_CREATED, API_DELETED } from 'redux-json-api/lib/constants';
+import { API_DELETED, API_READ } from 'redux-json-api/lib/constants';
+
 import * as resourceTypes from 'common/api/resource-types';
 import { getActionResourceType } from 'common/api/utils';
+
+import { LOCATE_ANNOTATION_REQUESTS, LOCATE_CREATED_ANNOTATION_REQUESTS } from './actions';
+
+import { AnnotationsState } from '../annotations/types';
 
 const initialState: AnnotationsState = {
   hasLoaded: false,

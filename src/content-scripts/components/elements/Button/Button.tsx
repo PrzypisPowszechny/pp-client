@@ -1,5 +1,7 @@
 import React, { ReactNode } from 'react';
+
 import classNames from 'classnames';
+
 import { PPScopeClass } from 'content-scripts/settings';
 
 import styles from './Button.scss';

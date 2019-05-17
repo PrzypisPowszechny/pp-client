@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import store from '../store';
 import { Provider } from 'react-redux';
+
 import App from '../components/App';
+import store from '../store';
 
 export default {
   init,

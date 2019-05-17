@@ -1,15 +1,18 @@
 import React from 'react';
-import classNames from 'classnames';
-import { connect } from 'react-redux';
-import styles from '../Viewer.scss';
-import { hideViewer } from 'common/store/tabs/tab/widgets/actions';
-import { AnnotationAPIModel } from 'common/api/annotations';
-import Upvote from './Upvote';
-import UserActionDialog from './UserActionDialog';
-import ppGa from 'common/pp-ga';
 import { Icon } from 'react-icons-kit/Icon';
 import { ic_more_horiz } from 'react-icons-kit/md/ic_more_horiz';
+import { connect } from 'react-redux';
+
+import classNames from 'classnames';
+
+import { AnnotationAPIModel } from 'common/api/annotations';
 import { selectTab } from 'common/store/tabs/selectors';
+import { hideViewer } from 'common/store/tabs/tab/widgets/actions';
+
+import Upvote from './Upvote';
+import UserActionDialog from './UserActionDialog';
+
+import styles from '../Viewer.scss';
 
 interface IUserActionControlsProps {
   indirectChildClassName: string;

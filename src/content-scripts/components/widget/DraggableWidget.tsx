@@ -1,6 +1,8 @@
 import React, { RefObject } from 'react';
-import { default as DragTracker, IVec2 } from '../../utils/DragTracker';
+
 import { default as Widget } from './Widget';
+
+import { default as DragTracker, IVec2 } from '../../utils/DragTracker';
 
 export interface IDraggableWidgetProps {
   // Props consumed by DraggableWidget

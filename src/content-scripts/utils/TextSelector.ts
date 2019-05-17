@@ -1,9 +1,11 @@
-import { Range as XPathRange } from 'xpath-range';
-import $ from 'jquery';
-import _isEqual from 'lodash/isEqual';
-import { PPHighlightClass } from 'content-scripts/settings';
 // More on xpath-range here: https://github.com/opengovfoundation/xpath-range
 // Wondering what's inside? See https://github.com/opengovfoundation/xpath-range/blob/master/src/range.coffee#L227
+import $ from 'jquery';
+import _isEqual from 'lodash/isEqual';
+import { Range as XPathRange } from 'xpath-range';
+
+import { PPHighlightClass } from 'content-scripts/settings';
+
 import { annotationRootNode } from '../settings';
 
 /**

@@ -1,18 +1,19 @@
 import React from 'react';
-import { sendScrollToAnnotation } from '../../messages';
-import { PopupPages } from '../BrowserPopupNavigator';
-import { AnnotationPPCategories } from 'common/api/annotations';
-import styles from './AnnotationList.scss';
 import { Icon } from 'react-icons-kit/Icon';
 import { ic_chevron_left } from 'react-icons-kit/md/ic_chevron_left';
-import classNames from 'classnames';
-import ppGa from '../../../common/pp-ga';
-import { standardizeUrlForPageSettings } from '../../../common/url';
 import { connect } from 'react-redux';
-import {
-  PopupAnnotationLocationData,
-  selectAnnotationLocations,
-} from 'common/store/tabs/tab/annotations/selectors';
+
+import classNames from 'classnames';
+
+import { AnnotationPPCategories } from 'common/api/annotations';
+import ppGa from 'common/pp-ga';
+import { PopupAnnotationLocationData, selectAnnotationLocations } from 'common/store/tabs/tab/annotations/selectors';
+import { standardizeUrlForPageSettings } from 'common/url';
+
+import styles from './AnnotationList.scss';
+
+import { sendScrollToAnnotation } from '../../messages';
+import { PopupPages } from '../BrowserPopupNavigator';
 
 export interface IAnnotationListProps {
   annotations: PopupAnnotationLocationData;

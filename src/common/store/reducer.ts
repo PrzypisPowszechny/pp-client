@@ -1,14 +1,13 @@
 import { combineReducers } from 'redux';
 
-import tabs from './tabs/reducer';
-import { ITabState } from './tabs/tab/reducer';
+import { IStorageSyncState } from 'background/storage-sync';
 
 import runtime from './runtime/reducer';
 import { IRuntimeState } from './runtime/types';
-
-import { IStorageState } from './storage/types';
 import storage from './storage/reducers';
-import { IStorageSyncState } from '../../background/storage-sync';
+import { IStorageState } from './storage/types';
+import tabs from './tabs/reducer';
+import { ITabState } from './tabs/tab/reducer';
 
 export interface IState {
   tabs: {

@@ -1,7 +1,8 @@
 import React from 'react';
 
-import styles from './Toggle.scss';
 import classNames from 'classnames';
+
+import styles from './Toggle.scss';
 
 interface IToggleProps {
   checked: boolean;

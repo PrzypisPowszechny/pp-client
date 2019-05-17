@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { selectViewerState } from 'common/store/tabs/tab/widgets/selectors';
+
 import { hideViewer, setMouseOverViewer } from 'common/store/tabs/tab/widgets/actions';
+import { selectViewerState } from 'common/store/tabs/tab/widgets/selectors';
+import { PPViewerHoverContainerClass } from 'content-scripts/settings';
+
 import Viewer from './Viewer';
 import Timer = NodeJS.Timer;
-import { PPViewerHoverContainerClass } from 'content-scripts/settings';
 
 interface IViewerManagerState {
   isMouseOver: boolean;

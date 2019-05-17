@@ -1,4 +1,5 @@
 import { AppModes } from './types';
+
 import * as chromeKeys from '../../../../chrome-storage/keys';
 
 export const MODIFY_APP_MODES = 'MODIFY_APP_MODES';

@@ -1,6 +1,7 @@
-import { CONTENT_SCRIPT_LOADED, CONTENT_SCRIPT_WONT_LOAD, SET_TAB_URL } from './actions';
+import { CONTENT_SCRIPT_LOADED, CONTENT_SCRIPT_WONT_LOAD } from './actions';
+
 import { defaultWebsiteSupport } from '../../../../website-support';
-import { DEBUG_POPUP_INIT, DEBUG_POPUP_LINKED, TAB_INIT, POPUP_INIT } from '../../actions';
+import { DEBUG_POPUP_INIT, POPUP_INIT, TAB_INIT } from '../../actions';
 
 const initialState = {
   tabId: null,

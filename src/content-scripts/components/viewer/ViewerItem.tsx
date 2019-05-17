@@ -1,24 +1,27 @@
 import React from 'react';
-import classNames from 'classnames';
+import { link } from 'react-icons-kit/icomoon/link';
+import { Icon } from 'react-icons-kit/Icon';
 import { connect } from 'react-redux';
+
+import classNames from 'classnames';
 import moment from 'moment';
 
-import { hideViewer } from 'common/store/tabs/tab/widgets/actions';
 import {
-  AnnotationAPIModel, AnnotationPublishers,
-  AnnotationPPCategories, AnnotationDemagogCategories,
-  annotationPPCategoriesLabels, annotationDemagogCategoriesLabels,
+  AnnotationAPIModel,
+  AnnotationDemagogCategories,
+  annotationDemagogCategoriesLabels,
+  AnnotationPPCategories,
+  annotationPPCategoriesLabels,
+  AnnotationPublishers,
 } from 'common/api/annotations';
+import ppGa from 'common/pp-ga';
+import { selectAnnotation } from 'common/store/tabs/tab/api/selectors';
+import { hideViewer } from 'common/store/tabs/tab/widgets/actions';
 import { extractMinimalLabel, httpPrefixed } from 'common/url';
 
 import AuthorActionControls from './viewer-elements/AuthorActionControls';
 import UserActionControls from './viewer-elements/UserActionControls';
-import ppGa from 'common/pp-ga';
-import { selectAnnotation } from 'common/store/tabs/tab/api/selectors';
-
 import styles from './Viewer.scss';
-import { Icon } from 'react-icons-kit/Icon';
-import { link } from 'react-icons-kit/icomoon/link';
 
 interface IViewerItemProps {
   key: string;

@@ -1,15 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
+
 import classNames from 'classnames';
 
-import styles from './AnnotationModeWidget.scss';
-import { PPScopeClass } from 'content-scripts/settings';
 import { turnOffAnnotationMode } from 'common/chrome-storage';
-import { AppModes } from 'common/store/tabs/tab/appModes/types';
-import Button from '../elements/Button/Button';
 import ppGa from 'common/pp-ga';
-import { hideMenu } from 'common/store/tabs/tab/widgets/actions';
 import { selectTab } from 'common/store/tabs/selectors';
+import { AppModes } from 'common/store/tabs/tab/appModes/types';
+import { hideMenu } from 'common/store/tabs/tab/widgets/actions';
+import { PPScopeClass } from 'content-scripts/settings';
+
+import styles from './AnnotationModeWidget.scss';
+
+import Button from '../elements/Button/Button';
 
 export interface IAnnotationModeWidgetProps {
   appModes: AppModes;

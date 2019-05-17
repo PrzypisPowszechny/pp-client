@@ -1,6 +1,6 @@
 import { Range as XPathRange } from 'xpath-range';
-import { Highlighter, TextSelector } from 'content-scripts/utils';
 
+import { Highlighter, TextSelector } from 'content-scripts/utils';
 import 'css/selection.scss';
 
 /*

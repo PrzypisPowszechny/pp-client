@@ -1,14 +1,16 @@
 import {
   createResource as originalcreateResource,
-  readEndpoint as originalReadEndpoint,
-  updateResource as originalUpdateResource,
   deleteResource as originalDeleteResource,
+  readEndpoint as originalReadEndpoint,
   requireResource as originalRequireResource,
+  updateResource as originalUpdateResource,
 } from 'redux-json-api';
-import { markActionWithTabId, retrieveRealActionTab } from '../../action-tab';
+
 import {
   readEndpointWithCustomOptions as originalReadEndpointWithCustomOptions,
 } from 'common/api/redux-json-api-patch';
+
+import { markActionWithTabId, retrieveRealActionTab } from '../../action-tab';
 
 // A redux-json-api version of common/action-utils converter
 // Amend getState to return current tab state (since redux-json-api assumes its state is preserved in the root)

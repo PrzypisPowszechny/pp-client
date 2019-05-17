@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { selectUser } from '../../common/store/storage/selectors';
-import { userLoggedOutAlias } from '../../common/store/storage/action-aliases';
+
+import { userLoggedOutAlias } from 'common/store/storage/action-aliases';
+import { selectUser } from 'common/store/storage/selectors';
 
 interface LogoutProps {
   user: any;

@@ -1,15 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Modal from 'content-scripts/components/elements/Modal/Modal';
-import styles from './DeleteAnnotationModal.scss';
-import Button from '../elements/Button';
-import { changeNotification, hideViewerDeleteModal, setMouseOverViewer } from 'common/store/tabs/tab/widgets/actions';
-import { ToastType } from '../elements/Toast/Toast';
-import { selectViewerState } from 'common/store/tabs/tab/widgets/selectors';
-import { selectAnnotation } from 'common/store/tabs/tab/api/selectors';
+
 import { AnnotationAPIModel } from 'common/api/annotations';
 import ppGa from 'common/pp-ga';
 import { deleteResource } from 'common/store/tabs/tab/api/actions';
+import { selectAnnotation } from 'common/store/tabs/tab/api/selectors';
+import { changeNotification, hideViewerDeleteModal, setMouseOverViewer } from 'common/store/tabs/tab/widgets/actions';
+import { selectViewerState } from 'common/store/tabs/tab/widgets/selectors';
+import Modal from 'content-scripts/components/elements/Modal/Modal';
+
+import styles from './DeleteAnnotationModal.scss';
+
+import Button from '../elements/Button';
+import { ToastType } from '../elements/Toast/Toast';
 
 interface IModalProps {
   deleteModalId: string;

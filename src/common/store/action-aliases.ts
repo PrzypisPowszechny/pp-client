@@ -1,6 +1,6 @@
-import { reduxJsonApiAliases } from './tabs/tab/api/action-aliases';
-import { accessTokenRefresh, userLoggedIn, userLoggedOut } from './storage/actions-background';
 import { aliasActionToTabMarkedThunk } from './action-utils';
+import { accessTokenRefresh, userLoggedIn, userLoggedOut } from './storage/actions-background';
+import { reduxJsonApiAliases } from './tabs/tab/api/action-aliases';
 
 export const authAliases = {
   userLoggedInAlias: aliasActionToTabMarkedThunk(userLoggedIn),
