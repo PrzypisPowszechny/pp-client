@@ -1,5 +1,4 @@
 // Url without protocol, not very strict validation
-import { FacebookCredentials, GoogleCredentials } from './api/user';
 
 const urlRegex = new RegExp(
   /^(https?:\/\/)?[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,24}\b(\/[-a-zA-Z0-9@:%_\+.,~#?&//=]*)?$/gi,

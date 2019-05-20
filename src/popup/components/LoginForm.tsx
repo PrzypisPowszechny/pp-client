@@ -1,10 +1,12 @@
 import React from 'react';
-import { FacebookLoginButton, GoogleLoginButton } from 'react-social-login-buttons';
 import { connect } from 'react-redux';
+import { FacebookLoginButton, GoogleLoginButton } from 'react-social-login-buttons';
+
+import { initiateAuthProc } from 'common/store/runtime/actions';
+import { AuthProviders } from 'common/store/runtime/types';
+import { userDataNew } from 'common/store/storage/actions';
+
 import { EMULATE_ON_PP_AUTH_RESPONSE } from '../../../e2e/events';
-import { userDataNew } from '../../common/store/storage/actions';
-import { initiateAuthProc } from '../../common/store/runtime/actions';
-import { AuthProviders } from '../../common/store/runtime/types';
 
 export interface LoginFormProps {
   userDataNew: (userData) => void;

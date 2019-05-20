@@ -1,19 +1,18 @@
 import React from 'react';
-import classNames from 'classnames';
-import { connect } from 'react-redux';
-import styles from '../Viewer.scss';
 import { Icon } from 'react-icons-kit/Icon';
-import { ic_mode_edit } from 'react-icons-kit/md/ic_mode_edit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
-import {
-  hideViewer,
-  openViewerDeleteModal,
-  showEditorAnnotation,
-} from 'common/store/tabs/tab/widgets/actions';
+import { ic_mode_edit } from 'react-icons-kit/md/ic_mode_edit';
+import { connect } from 'react-redux';
+
+import classNames from 'classnames';
+
 import { AnnotationAPIModel } from 'common/api/annotations';
-import Timer = NodeJS.Timer;
 import ppGa from 'common/pp-ga';
 import { selectTab } from 'common/store/tabs/selectors';
+import { hideViewer, openViewerDeleteModal, showEditorAnnotation } from 'common/store/tabs/tab/widgets/actions';
+
+import styles from '../Viewer.scss';
+import Timer = NodeJS.Timer;
 
 interface IAuthorActionControlsProps {
   locationX: number;

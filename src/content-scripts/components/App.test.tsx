@@ -1,7 +1,9 @@
 import React from 'react';
+import configureStore from 'redux-mock-store';
+
 import Enzyme from 'enzyme';
 import AdapterReact16 from 'enzyme-adapter-react-16';
-import configureStore from 'redux-mock-store';
+
 import ConnectedApp from './App';
 
 jest.mock('common/pp-ga/ga', () => null);

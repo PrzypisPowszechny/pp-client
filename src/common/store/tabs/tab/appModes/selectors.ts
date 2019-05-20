@@ -1,8 +1,10 @@
 import { createSelector } from 'reselect';
+
+import { selectTab } from 'common/store/tabs/selectors';
 import { ITabState } from 'common/store/tabs/tab/reducer';
 import { standardizeUrlForPageSettings } from 'common/url';
+
 import { AppModes } from './types';
-import { selectTab } from 'common/store/tabs/selectors';
 
 export function isAnnotationMode(appModes: AppModes) {
   const currentStandardizedUrl = standardizeUrlForPageSettings(window.location.href);

@@ -2,8 +2,9 @@ import React from 'react';
 
 import { AnnotationPPCategories, annotationPPCategoriesLabels } from 'common/api/annotations';
 
-import PPCategoryButton from '../PPCategoryButton/PPCategoryButton';
 import styles from './PPCategoryButtonsBar.scss';
+
+import PPCategoryButton from '../PPCategoryButton/PPCategoryButton';
 
 interface PPCategoryBarProps {
   ppCategory: AnnotationPPCategories;

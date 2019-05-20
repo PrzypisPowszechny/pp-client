@@ -1,25 +1,29 @@
-import { catchError, filter, ignoreElements, map, mergeMap, tap } from 'rxjs/operators';
-import { defer, from, Observable, of } from 'rxjs';
-import { combineEpics, Epic, ofType } from 'redux-observable';
-import { locateAnnotations, locateCreatedAnnotations } from 'common/store/tabs/tab/annotations/actions';
-import { AuthProcStages } from 'common/store/runtime/types';
-import { cancelAuthProc, completeAuthProc, failAuthProc, SET_AUTH_PROC_STAGE } from 'common/store/runtime/actions';
-import { retrieveLogicalActionTab, retrieveRealActionTab, syncTabMark } from 'common/store/tabs/action-tab';
-import { tabLocateAnnotations } from 'background/messages';
-import { syncBadgeWithAnnotations } from 'background/badge';
-import * as resourceTypes from '../api/resource-types';
-import { IState } from 'common/store/reducer';
-import { authenticate } from 'background/auth';
 import * as Sentry from '@sentry/browser';
+import { combineEpics, Epic, ofType } from 'redux-observable';
+
+import { defer, from, Observable, of } from 'rxjs';
+import { catchError, filter, ignoreElements, map, mergeMap, tap } from 'rxjs/operators';
+
+import { authenticate } from 'background/auth';
+import { syncBadgeWithAnnotations } from 'background/badge';
+import dashboardMessaging from 'background/dashboard-messaging';
+import { tabLocateAnnotations } from 'background/messages';
+import { IState } from 'common/store/reducer';
+import { cancelAuthProc, completeAuthProc, failAuthProc, SET_AUTH_PROC_STAGE } from 'common/store/runtime/actions';
+import { AuthProcStages } from 'common/store/runtime/types';
 import {
   USER_ACCESS_TOKEN_REFRESHED,
   USER_DATA_CLEARED,
   USER_DATA_NEW,
   userDataNew,
 } from 'common/store/storage/actions';
-import dashboardMessaging from 'background/dashboard-messaging';
 import { selectUser } from 'common/store/storage/selectors';
+import { retrieveLogicalActionTab, syncTabMark } from 'common/store/tabs/action-tab';
+import { locateAnnotations, locateCreatedAnnotations } from 'common/store/tabs/tab/annotations/actions';
+
 import { locateAnnotationRequests, locateCreatedAnnotationRequests } from './tabs/tab/annotationRequests/actions';
+
+import * as resourceTypes from '../api/resource-types';
 import { getActionResourceType } from '../api/utils';
 
 export interface FluxStandardAction {

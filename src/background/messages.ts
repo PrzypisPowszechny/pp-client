@@ -1,10 +1,12 @@
 // Message handlers
 
-import { initTrackActiveTabId } from './tab';
 import * as Sentry from '@sentry/browser';
-import { ILocationData } from '../common/store/tabs/tab/annotations/actions';
-import { AnnotationRequestAPIModel } from '../common/api/annotation-requests';
-import { AnnotationAPIModel } from '../common/api/annotations';
+
+import { AnnotationRequestAPIModel } from 'common/api/annotation-requests';
+import { AnnotationAPIModel } from 'common/api/annotations';
+import { ILocationData } from 'common/store/tabs/tab/annotations/actions';
+
+import { initTrackActiveTabId } from './tab';
 
 export function returnExtensionCookie(request, sender, sendResponse) {
   if (request.action === 'GET_COOKIE') {

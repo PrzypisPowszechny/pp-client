@@ -1,19 +1,23 @@
 import React from 'react';
-import classNames from 'classnames';
-import { connect } from 'react-redux';
-import { createResource, deleteResource, readEndpoint } from 'common/store/tabs/tab/api/actions';
-
-import Popup from 'semantic-ui-react/dist/commonjs/modules/Popup';
 import { Icon } from 'react-icons-kit/Icon';
 import { ic_star } from 'react-icons-kit/md/ic_star';
-import styles from '../Viewer.scss';
-import { AnnotationResourceType, AnnotationAPIModel } from 'common/api/annotations';
+import { connect } from 'react-redux';
+
+import classNames from 'classnames';
+import Popup from 'semantic-ui-react/dist/commonjs/modules/Popup';
+
 import {
-  AnnotationUpvoteResourceType, AnnotationUpvoteAPIModel, AnnotationUpvoteAPICreateModel,
+  AnnotationUpvoteAPICreateModel,
+  AnnotationUpvoteAPIModel,
+  AnnotationUpvoteResourceType,
 } from 'common/api/annotation-upvotes';
-import { PPScopeClass } from 'content-scripts/settings';
+import { AnnotationAPIModel, AnnotationResourceType } from 'common/api/annotations';
 import ppGa from 'common/pp-ga';
+import { createResource, deleteResource, readEndpoint } from 'common/store/tabs/tab/api/actions';
 import { selectUpvote } from 'common/store/tabs/tab/api/selectors';
+import { PPScopeClass } from 'content-scripts/settings';
+
+import styles from '../Viewer.scss';
 
 interface IUpvoteProps {
   indirectChildClassName: string;

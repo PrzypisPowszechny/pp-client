@@ -1,19 +1,21 @@
 import { combineReducers } from 'redux';
-import { AnnotationsState } from './annotations/types';
-import { AnnotationUpvoteAPIModel } from '../../../api/annotation-upvotes';
-import { AppModes } from './appModes/types';
-import { AnnotationAPIModel } from '../../../api/annotations';
-import { WidgetReducer } from './widgets';
-import { ITabInfoState, tabInfo } from './tabInfo';
-import appModes from './appModes/reducers';
+
 import annotationRequests from './annotationRequests/reducers';
-import annotations from './annotations/reducers';
-import widgets from './widgets/reducers';
-import textSelector from './textSelector/reducers';
-import api from './api';
-import popupInfo from './popupInfo/reducers';
-import { IPopupInfoState } from './popupInfo';
 import { AnnotationRequestsState } from './annotationRequests/types';
+import annotations from './annotations/reducers';
+import { AnnotationsState } from './annotations/types';
+import api from './api';
+import appModes from './appModes/reducers';
+import { AppModes } from './appModes/types';
+import { IPopupInfoState } from './popupInfo';
+import popupInfo from './popupInfo/reducers';
+import { ITabInfoState, tabInfo } from './tabInfo';
+import textSelector from './textSelector/reducers';
+import { WidgetReducer } from './widgets';
+import widgets from './widgets/reducers';
+
+import { AnnotationUpvoteAPIModel } from '../../../api/annotation-upvotes';
+import { AnnotationAPIModel } from '../../../api/annotations';
 
 export interface ITabState {
   tabInfo: ITabInfoState;

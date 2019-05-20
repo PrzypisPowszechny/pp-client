@@ -1,8 +1,10 @@
-import thunk from 'redux-thunk';
-import promise from 'redux-promise';
 import { createLogger } from 'redux-logger';
-import { Store, applyMiddleware } from 'webext-redux';
+import promise from 'redux-promise';
+import thunk from 'redux-thunk';
+
+import { applyMiddleware, Store } from 'webext-redux';
 import patchDeepDiff from 'webext-redux/lib/strategies/deepDiff/patch';
+
 import { getTabId } from 'common/store/tabs/tab-utils';
 
 const middlewares = [thunk, promise];

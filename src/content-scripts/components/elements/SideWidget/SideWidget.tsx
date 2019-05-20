@@ -1,10 +1,13 @@
 import React from 'react';
-import classNames from 'classnames';
-import { PPScopeClass } from 'content-scripts/settings';
-import styles from './SideWidget.scss';
-import { Icon } from 'react-icons-kit/Icon';
-import { chevronRight } from 'react-icons-kit/feather/chevronRight';
 import { chevronLeft } from 'react-icons-kit/feather/chevronLeft';
+import { chevronRight } from 'react-icons-kit/feather/chevronRight';
+import { Icon } from 'react-icons-kit/Icon';
+
+import classNames from 'classnames';
+
+import { PPScopeClass } from 'content-scripts/settings';
+
+import styles from './SideWidget.scss';
 
 interface SideWidgetState {
     collapsed: boolean;

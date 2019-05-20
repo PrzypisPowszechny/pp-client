@@ -1,8 +1,9 @@
-import store from 'content-scripts/store';
-import { selectAnnotation } from 'common/store/tabs/tab/api/selectors';
-import * as DOMNotifications from '../dom-notifications';
+import { selectUser, trySelectStorage } from 'common/store/storage/selectors';
 import { selectTab } from 'common/store/tabs/selectors';
-import { trySelectStorage, selectUser } from '../../common/store/storage/selectors';
+import { selectAnnotation } from 'common/store/tabs/tab/api/selectors';
+import store from 'content-scripts/store';
+
+import * as DOMNotifications from '../dom-notifications';
 
 let instance;
 

@@ -1,40 +1,39 @@
 import React, { RefObject } from 'react';
+import { Icon } from 'react-icons-kit/Icon';
+import { ic_add_circle } from 'react-icons-kit/md/ic_add_circle';
+import { ic_close } from 'react-icons-kit/md/ic_close';
 import { connect } from 'react-redux';
-import { createResource, updateResource } from 'common/store/tabs/tab/api/actions';
+import { bindActionCreators } from 'redux';
 
 import classNames from 'classnames';
-import Popup from 'semantic-ui-react/dist/commonjs/modules/Popup';
 import _isEqual from 'lodash/isEqual';
+import Popup from 'semantic-ui-react/dist/commonjs/modules/Popup';
 
-import { AnnotationAPICreateModel, AnnotationAPIModel, AnnotationAPIModelAttrs } from 'common/api/annotations';
+import {
+  AnnotationAPICreateModel,
+  AnnotationAPIModel,
+  AnnotationAPIModelAttrs,
+  AnnotationPPCategories,
+} from 'common/api/annotations';
 import { turnOffAnnotationMode } from 'common/chrome-storage';
-import { PPScopeClass } from 'content-scripts/settings';
+import ppGa from 'common/pp-ga';
+import { selectTab } from 'common/store/tabs/selectors';
 import { hideEditor } from 'common/store/tabs/tab/actions';
+import { createResource, updateResource } from 'common/store/tabs/tab/api/actions';
 import { AppModes } from 'common/store/tabs/tab/appModes/types';
 import { selectEditorState } from 'common/store/tabs/tab/selectors';
-
-import { DraggableWidget } from 'content-scripts/components/widget';
-import Button from '../elements/Button/Button';
-
+import { changeNotification } from 'common/store/tabs/tab/widgets/actions';
 import NoCommentModal from 'content-scripts/components/editor/NoCommentModal/NoCommentModal';
 import PPCategoryButtonsBar from 'content-scripts/components/editor/PPCategoryButtonBar/PPCategoryButtonsBar';
-import * as helpers from './helpers';
+import { DraggableWidget } from 'content-scripts/components/widget';
+import { PPScopeClass } from 'content-scripts/settings';
 
 import styles from './Editor.scss';
-import ppGa from 'common/pp-ga';
-import { AnnotationPPCategories } from 'common/api/annotations';
-import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
+import * as helpers from './helpers';
 
-import { Icon } from 'react-icons-kit/Icon';
-import { link } from 'react-icons-kit/icomoon/link';
-import { priceTag } from 'react-icons-kit/icomoon/priceTag';
-import { ic_close } from 'react-icons-kit/md/ic_close';
-import { ic_help_outline } from 'react-icons-kit/md/ic_help_outline';
-import { ic_add_circle } from 'react-icons-kit/md/ic_add_circle';
-import { changeNotification } from 'common/store/tabs/tab/widgets/actions';
-import { bindActionCreators } from 'redux';
+import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
+import Button from '../elements/Button/Button';
 import { ToastType } from '../elements/Toast/Toast';
-import { selectTab } from 'common/store/tabs/selectors';
 
 interface IEditorProps {
   appModes: AppModes;

@@ -1,6 +1,6 @@
 import { sendEvent } from './client';
-import { formatBoolean, formatPriority, formatReason } from './utils';
 import { EventOptions, GACustomFieldsIndex } from './types';
+import { formatBoolean, formatPriority, formatReason } from './utils';
 
 // Extension Installation events
 

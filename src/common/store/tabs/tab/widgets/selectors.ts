@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
+
 import { selectTab } from 'common/store/tabs/selectors';
+
 import { ITabState } from '../reducer';
 
 function selectWidgetState({ location = { x: null, y: null }, visible }) {

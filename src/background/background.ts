@@ -1,8 +1,7 @@
 // NOTE: This page is also used for hot reloading in webpack-chrome-extension-reloader
 // (so it must be present at least in development)
 
-import * as sentry from 'common/sentry';
-
+/* tslint:disable:ordered-imports */
 sentry.init();
 
 console.log('Przypis background script!');
@@ -12,18 +11,25 @@ import './meta';
 
 // initialize Redux store
 import './store';
+/* tslint:enable:ordered-imports */
 
-import InstalledDetails = chrome.runtime.InstalledDetails;
-import { returnExtensionCookie, returnCurrentTabId, setBadge } from './messages';
-import * as ppGaBg from 'common/pp-ga/bg';
+import dashboardMessaging from 'background/dashboard-messaging';
+import { configureAxios } from 'common/axios';
 import ppGa from 'common/pp-ga';
+import * as ppGaBg from 'common/pp-ga/bg';
+import * as sentry from 'common/sentry';
+import { selectAccessToken } from 'common/store/storage/selectors';
+
+import { refreshTokenRoutine } from './auth';
+import { returnCurrentTabId, returnExtensionCookie, setBadge } from './messages';
+import store, { initStore } from './store/store';
 import { initTrackActiveTabId } from './tab';
 
-import { configureAxios } from 'common/axios';
-import store, { initStore } from './store/store';
-import { selectAccessToken } from 'common/store/storage/selectors';
-import { refreshTokenRoutine } from './auth';
-import dashboardMessaging from 'background/dashboard-messaging';
+// Set script type by importing (so ALL other imports such as redux are executed afterwards)
+
+// initialize Redux store
+
+import InstalledDetails = chrome.runtime.InstalledDetails;
 
 function onContextMenuAnnotationRequest() {
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {

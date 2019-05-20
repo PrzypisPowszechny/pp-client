@@ -1,5 +1,6 @@
-import { ITabState } from '../reducer';
 import { selectTab } from 'common/store/tabs/selectors';
+
+import { ITabState } from '../reducer';
 
 export function selectAnnotations(state: ITabState) {
   return selectTab(state).api.annotations.data;

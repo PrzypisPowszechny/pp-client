@@ -1,7 +1,8 @@
+import { selectTab } from 'common/store/tabs/selectors';
+
+import { AnnotationAPIModel } from '../../../../api/annotations';
 import { selectAnnotation } from '../api/selectors';
 import { ITabState } from '../reducer';
-import { selectTab } from 'common/store/tabs/selectors';
-import { AnnotationAPIModel } from '../../../../api/annotations';
 
 export interface PopupAnnotationLocationData {
   hasLoaded: boolean;

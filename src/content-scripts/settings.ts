@@ -1,5 +1,6 @@
-import scopeStyles from '../css/common/vars/scope.scss';
 import selectionStyles from 'css/selection.scss';
+
+import scopeStyles from '../css/common/vars/scope.scss';
 
 /*
  * Elements wearing this class will be ignored in viewer mouseleave handling

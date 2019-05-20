@@ -28,7 +28,21 @@
     "no-unnecessary-callback-wrapper": true,
     "object-literal-sort-keys": false,
     "object-curly-spacing": true,
-    "ordered-imports": false,
+    "ordered-imports": [
+        true,
+        {
+            "import-sources-order": "case-insensitive",
+            "named-imports-order": "case-insensitive",
+            "grouped-imports": true,
+            "groups": [
+                { "name": "high level external dependencies","match": "^(react|redux|@sentry)", "order": 10 },
+                { "name": "inter-application dependencies", "match": "^(common|background|content-scripts|css|misc|pages|popup)", "order": 30 },
+                { "name": "distant local import", "match": "^[.][.]", "order": 50 },
+                { "name": "close local import", "match": "^[.]", "order": 40 },
+                { "name": "other external dependencies", "match": "^.*", "order": 20 }
+            ]
+        }
+    ],
     "ter-arrow-parens": [true, "as-needed", { "requireForBlockBody": true }],
     "trailing-comma": [
       true,

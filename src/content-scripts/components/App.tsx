@@ -1,17 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
+
+import { selectUser, trySelectStorage } from 'common/store/storage/selectors';
+import { selectTab } from 'common/store/tabs/selectors';
 import { selectModeForCurrentPage } from 'common/store/tabs/tab/appModes/selectors';
 
-import Menu from './menu/index';
-import Editor from './editor/index';
-import ViewerManager from './viewer/ViewerManager';
+import AnnotationForm from './AnnotationForm/AnnotationForm';
 import AnnotationModeWidget from './AnnotationModeWidget/AnnotationModeWidget';
 import AnnotationRequestForm from './AnnotationRequestForm/AnnotationRequestForm';
-import AnnotationForm from './AnnotationForm/AnnotationForm';
+import Editor from './editor/index';
 import SideWidget from './elements/SideWidget/SideWidget';
 import Toast from './elements/Toast/Toast';
-import { selectTab } from 'common/store/tabs/selectors';
-import { trySelectStorage, selectUser } from '../../common/store/storage/selectors';
+import Menu from './menu/index';
+import ViewerManager from './viewer/ViewerManager';
 
 interface AppProps {
   isStorageInitialized: boolean;

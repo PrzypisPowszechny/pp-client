@@ -1,10 +1,12 @@
-import gaScript from './ga.js';
 import FieldsObject = UniversalAnalytics.FieldsObject;
 import cookieLib from 'cookie';
-import { getIamstaffFromCookie } from './utils';
-import { setChromeCookie, getChromeCookie } from '../chrome-cookies';
-import { EventOptions, GACustomFieldsIndex } from './types';
 import * as retry from 'retry';
+
+import gaScript from './ga.js';
+import { EventOptions, GACustomFieldsIndex } from './types';
+import { getIamstaffFromCookie } from './utils';
+
+import { getChromeCookie, setChromeCookie } from '../chrome-cookies';
 
 let bgInited = false;
 let gaReady = false;

@@ -1,7 +1,7 @@
-import { AnnotationLocation } from 'content-scripts/handlers/annotation-event-handlers';
-import { ToastType } from 'content-scripts/components/elements/Toast/Toast';
 import { ID } from 'common/api/json-api';
 import { IAnnotationRequestFormData } from 'common/store/tabs/tab/widgets/reducers';
+import { ToastType } from 'content-scripts/components/elements/Toast/Toast';
+import { AnnotationLocation } from 'content-scripts/handlers/annotation-event-handlers';
 
 export const EDITOR_ANNOTATION = 'EDITOR_ANNOTATION';
 export const SET_EDITOR_SELECTION_RANGE = 'SET_EDITOR_SELECTION_RANGE';

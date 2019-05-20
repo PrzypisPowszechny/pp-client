@@ -1,19 +1,20 @@
-
 // import more rangy modules if needed
-import 'rangy/lib/rangy-textrange';
-import rangy from 'rangy';
-
-import { LocatedAnnotation } from 'common/store/tabs/tab/annotations/types';
-import { annotationRootNode } from '../settings';
-import { Range as XPathRange } from 'xpath-range';
-import { AnnotationAPIModel } from 'common/api/annotations';
 import * as Sentry from '@sentry/browser';
 import { Store } from 'redux';
-import { IState } from 'common/store/reducer';
-import { waitUntilPageLoaded } from 'common/utils/init';
+
 import _escapeRegExp from 'lodash/escapeRegExp';
+import rangy from 'rangy';
+import 'rangy/lib/rangy-textrange';
+import { Range as XPathRange } from 'xpath-range';
+
 import { AnnotationRequestAPIModel } from 'common/api/annotation-requests';
+import { AnnotationAPIModel } from 'common/api/annotations';
 import * as resourceTypes from 'common/api/resource-types';
+import { IState } from 'common/store/reducer';
+import { LocatedAnnotation } from 'common/store/tabs/tab/annotations/types';
+import { waitUntilPageLoaded } from 'common/utils/init';
+
+import { annotationRootNode } from '../settings';
 
 export class AnnotationLocator {
 

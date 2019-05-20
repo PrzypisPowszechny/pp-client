@@ -2,8 +2,9 @@
 // Annotation request is not fully a JSON API model (it misses type id)
 // (besides the missing "type" field the schema is compliant)
 
-import { APICreateModel, APIModel } from './json-api';
 import { RangeAPIModel } from 'common/api/annotations';
+
+import { APICreateModel, APIModel } from './json-api';
 
 export interface AnnotationRequestCreateAttributes {
   url: string;

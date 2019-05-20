@@ -1,6 +1,6 @@
-import tab from './tab/reducer';
 import { retrieveLogicalActionTab } from './action-tab';
-import { DEBUG_POPUP_INIT, TAB_INIT, POPUP_INIT } from './actions';
+import { DEBUG_POPUP_INIT, POPUP_INIT, TAB_INIT } from './actions';
+import tab from './tab/reducer';
 
 export default function tabs(state = {}, action) {
   const tabId = retrieveLogicalActionTab(action, state);

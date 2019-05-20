@@ -1,19 +1,19 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import classNames from 'classnames';
-
-import { selectMenuState } from 'common/store/tabs/tab/selectors';
-import { hideMenu, setSelectionRange, showEditorAnnotation } from 'common/store/tabs/tab/widgets/actions';
-import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
-
-import Widget from 'content-scripts/components/widget';
-
-import styles from './Menu.scss';
-import { PPScopeClass } from 'content-scripts/settings';
 import { Icon } from 'react-icons-kit/Icon';
 import { ic_add_circle } from 'react-icons-kit/md/ic_add_circle';
+import { connect } from 'react-redux';
+
+import classNames from 'classnames';
 
 import ppGa from 'common/pp-ga';
+import { selectMenuState } from 'common/store/tabs/tab/selectors';
+import { hideMenu, setSelectionRange, showEditorAnnotation } from 'common/store/tabs/tab/widgets/actions';
+import Widget from 'content-scripts/components/widget';
+import { PPScopeClass } from 'content-scripts/settings';
+
+import styles from './Menu.scss';
+
+import { AnnotationLocation } from '../../handlers/annotation-event-handlers';
 
 interface IMenuProps {
   locationX: number;

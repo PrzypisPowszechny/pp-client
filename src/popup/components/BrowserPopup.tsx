@@ -1,31 +1,33 @@
 import React, { ChangeEvent } from 'react';
-
+import { send } from 'react-icons-kit/fa/send';
 import { Icon } from 'react-icons-kit/Icon';
 import { ic_add_circle } from 'react-icons-kit/md/ic_add_circle';
-import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
 import { ic_block } from 'react-icons-kit/md/ic_block';
 import { ic_home } from 'react-icons-kit/md/ic_home';
-import { send } from 'react-icons-kit/fa/send';
+import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
+import { connect } from 'react-redux';
 
-import { standardizeUrlForPageSettings } from 'common/url';
-import Toggle from './toggle/Toggle';
-import Button from 'content-scripts/components/elements/Button/Button';
-import * as chromeKeys from 'common/chrome-storage/keys';
-import _filter from 'lodash/filter';
 import classNames from 'classnames';
+import _filter from 'lodash/filter';
+
+import { UserRoles } from 'common/api/user';
+import * as chromeKeys from 'common/chrome-storage/keys';
 import ppGa from 'common/pp-ga/index';
-import AnnotationSummary from './annotationSummary/AnnotationSummary';
-import { PopupPages } from './BrowserPopupNavigator';
-import '../css/popup.scss';
-import LogoutPanel from './LogoutPanel';
 import { selectUser } from 'common/store/storage/selectors';
 import { IUserState } from 'common/store/storage/types';
-import { connect } from 'react-redux';
-import { UserRoles } from 'common/api/user';
-import { selectRealTab, selectTab, trySelectRealTab } from 'common/store/tabs/selectors';
+import { selectRealTab, selectTab } from 'common/store/tabs/selectors';
+import { ITabState } from 'common/store/tabs/tab/reducer';
 import { IAnnotationRequestFormData, IAnnotationRequestFormState } from 'common/store/tabs/tab/widgets';
 import { hideAnnotationRequestForm, showAnnotationRequestForm } from 'common/store/tabs/tab/widgets/actions';
-import { ITabState } from 'common/store/tabs/tab/reducer';
+import { standardizeUrlForPageSettings } from 'common/url';
+import Button from 'content-scripts/components/elements/Button/Button';
+
+import AnnotationSummary from './annotationSummary/AnnotationSummary';
+import { PopupPages } from './BrowserPopupNavigator';
+import LogoutPanel from './LogoutPanel';
+import Toggle from './toggle/Toggle';
+
+import '../css/popup.scss';
 
 export interface IBrowserPopupProps {
   user: IUserState;

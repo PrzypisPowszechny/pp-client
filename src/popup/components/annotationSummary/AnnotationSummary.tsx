@@ -1,18 +1,18 @@
 import React from 'react';
-import { AnnotationAPIModel, AnnotationPPCategories } from 'common/api/annotations';
-import _countBy from 'lodash/countBy';
-import _sum from 'lodash/sum';
 import { Icon } from 'react-icons-kit/Icon';
 import { ic_chevron_right } from 'react-icons-kit/md/ic_chevron_right';
-import classNames from 'classnames';
-import styles from './AnnotationSummary.scss';
 import { connect } from 'react-redux';
-import {
-  PopupAnnotationLocationData,
-  selectAnnotationLocations,
-} from 'common/store/tabs/tab/annotations/selectors';
-import { ITabInfoState } from '../../../common/store/tabs/tab/tabInfo';
-import { selectTab } from '../../../common/store/tabs/selectors';
+
+import classNames from 'classnames';
+import _countBy from 'lodash/countBy';
+import _sum from 'lodash/sum';
+
+import { AnnotationAPIModel, AnnotationPPCategories } from 'common/api/annotations';
+import { selectTab } from 'common/store/tabs/selectors';
+import { PopupAnnotationLocationData, selectAnnotationLocations } from 'common/store/tabs/tab/annotations/selectors';
+import { ITabInfoState } from 'common/store/tabs/tab/tabInfo';
+
+import styles from './AnnotationSummary.scss';
 
 export interface IAnnotationSummaryProps {
   tabInfo: ITabInfoState;

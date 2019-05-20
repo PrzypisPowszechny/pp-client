@@ -1,19 +1,25 @@
-import {
-  ANNOTATION_REQUEST_FORM_VISIBLE_CHANGE,
-  ANNOTATION_FORM_VISIBLE_CHANGE,
-  EDITOR_ANNOTATION,
-  EDITOR_VISIBLE_CHANGE,
-  MENU_WIDGET_CHANGE, NOTIFICATION_CHANGE,
-  SET_EDITOR_SELECTION_RANGE, VIEWER_MODAL_CHANGE, VIEWER_REPORT_EDITOR_CHANGE,
-  VIEWER_VISIBLE_CHANGE,
-} from './actions';
-import { API_DELETED } from 'redux-json-api/lib/constants';
-import { AnnotationResourceType } from 'common/api/annotations';
 import { combineReducers } from 'redux';
-import { MODIFY_APP_MODES } from '../appModes/actions';
+import { API_DELETED } from 'redux-json-api/lib/constants';
+
+import { AnnotationResourceType } from 'common/api/annotations';
+import { ID } from 'common/api/json-api';
 import { isAnnotationMode } from 'common/store/tabs/tab/appModes/selectors';
 import { AnnotationLocation } from 'content-scripts/handlers/annotation-event-handlers';
-import { ID } from 'common/api/json-api';
+
+import {
+  ANNOTATION_FORM_VISIBLE_CHANGE,
+  ANNOTATION_REQUEST_FORM_VISIBLE_CHANGE,
+  EDITOR_ANNOTATION,
+  EDITOR_VISIBLE_CHANGE,
+  MENU_WIDGET_CHANGE,
+  NOTIFICATION_CHANGE,
+  SET_EDITOR_SELECTION_RANGE,
+  VIEWER_MODAL_CHANGE,
+  VIEWER_REPORT_EDITOR_CHANGE,
+  VIEWER_VISIBLE_CHANGE,
+} from './actions';
+
+import { MODIFY_APP_MODES } from '../appModes/actions';
 
 interface IWidgetState {
   visible: boolean;

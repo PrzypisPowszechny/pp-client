@@ -1,13 +1,16 @@
 import React from 'react';
-import classNames from 'classnames';
-import { PPScopeClass } from 'content-scripts/settings';
-import styles from './Toast.scss';
-import { Icon } from 'react-icons-kit/Icon';
 import { check } from 'react-icons-kit/feather/check';
 import { x } from 'react-icons-kit/feather/x';
-import { changeNotification } from 'common/store/tabs/tab/widgets/actions';
+import { Icon } from 'react-icons-kit/Icon';
 import { connect } from 'react-redux';
+
+import classNames from 'classnames';
+
 import { selectTab } from 'common/store/tabs/selectors';
+import { changeNotification } from 'common/store/tabs/tab/widgets/actions';
+import { PPScopeClass } from 'content-scripts/settings';
+
+import styles from './Toast.scss';
 
 export enum ToastType {
   success,

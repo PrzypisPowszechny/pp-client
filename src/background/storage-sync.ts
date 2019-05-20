@@ -1,6 +1,8 @@
 import { Store } from 'redux';
-import { REDUX_STORAGE } from 'common/chrome-storage/keys';
+
 import _isEqual from 'lodash/isEqual';
+
+import { REDUX_STORAGE } from 'common/chrome-storage/keys';
 
 export const HYDRATE_FROM_CHROME_STORAGE = 'HYDRATE_FROM_CHROME_STORAGE';
 export const SET_STATE_HYDRATED = 'SET_STATE_HYDRATED';

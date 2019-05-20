@@ -1,7 +1,9 @@
-import { AppModes } from 'common/store/tabs/tab/appModes/types';
 import _filter from 'lodash/filter';
-import * as chromeKeys from './keys';
+
+import { AppModes } from 'common/store/tabs/tab/appModes/types';
 import { standardizeUrlForPageSettings } from 'common/url';
+
+import * as chromeKeys from './keys';
 
 // Firefox fix for chrome global interface
 interface CustomWindow extends Window {

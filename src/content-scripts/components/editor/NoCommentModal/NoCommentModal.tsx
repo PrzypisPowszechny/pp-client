@@ -1,7 +1,9 @@
 import React from 'react';
+
 import Modal from 'content-scripts/components/elements/Modal/Modal';
-import classNames from 'classnames';
+
 import styles from './NoCommentModal.scss';
+
 import Button from '../../elements/Button/Button';
 
 interface NoCommentModalProps {
