@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import Timer = NodeJS.Timer;
+import _isEqual from 'lodash/isEqual';
+
 import { hideViewer, setMouseOverViewer } from 'common/store/tabs/tab/widgets/actions';
 import { selectViewerState } from 'common/store/tabs/tab/widgets/selectors';
 import { PPViewerHoverContainerClass } from 'content-scripts/settings';
 
 import Viewer from './Viewer';
-import Timer = NodeJS.Timer;
 
 interface IViewerManagerState {
   isMouseOver: boolean;
@@ -17,6 +19,8 @@ interface IViewerManagerState {
 
   isDeleteModalOpen: boolean;
   deleteModalJustClosed: boolean;
+
+  prevProps: Partial<IViewerManagerProps>;
 }
 
 interface IViewerManagerProps {
@@ -68,19 +72,24 @@ export default class ViewerManager extends React.Component<Partial<IViewerManage
   static modalCloseDisappearTimeout = 1100;
 
   static defaultProps = {
-    visible: true,
+    visible: false,
     isDeleteModalOpen: false,
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    return {
-      isDeleteModalOpen: nextProps.isDeleteModalOpen,
-      isMouseOver: nextProps.isMouseOver,
+    // this check is a universal quick fix to allow React 16.4 compatibility
+    // according to https://reactjs.org/blog/2018/05/23/react-v-16-4.html#bugfix-for-getderivedstatefromprops
+    if (!_isEqual(prevState.prevProps, nextProps)) {
+      return {
+        prevProps: nextProps,
+        isDeleteModalOpen: nextProps.isDeleteModalOpen,
+        isMouseOver: nextProps.isMouseOver,
 
-      mouseHasLeft: prevState.isMouseOver && !nextProps.isMouseOver,
-      mouseHasEntered: !prevState.isMouseOver && nextProps.isMouseOver,
-      deleteModalJustClosed: prevState.isDeleteModalOpen && !nextProps.isDeleteModalOpen,
-    };
+        mouseHasLeft: prevState.isMouseOver && !nextProps.isMouseOver,
+        mouseHasEntered: !prevState.isMouseOver && nextProps.isMouseOver,
+        deleteModalJustClosed: prevState.isDeleteModalOpen && !nextProps.isDeleteModalOpen,
+      };
+    }
   }
 
   disappearTimeoutTimer: Timer;
@@ -88,7 +97,9 @@ export default class ViewerManager extends React.Component<Partial<IViewerManage
 
   constructor(props: IViewerManagerProps) {
     super(props);
-    this.state = {};
+    this.state = {
+      prevProps: {},
+    };
   }
 
   componentDidUpdate() {
