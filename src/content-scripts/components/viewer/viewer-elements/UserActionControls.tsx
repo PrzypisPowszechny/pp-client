@@ -15,7 +15,6 @@ import UserActionDialog from './UserActionDialog';
 import styles from '../Viewer.scss';
 
 interface IUserActionControlsProps {
-  indirectChildClassName: string;
   locationX: number;
   locationY: number;
   annotation: AnnotationAPIModel;
@@ -70,7 +69,7 @@ export default class UserActionControls extends
     return (
       <div className={styles.controlsContainer}>
         <div className={classNames(styles.controls, styles.visible)}>
-          <Upvote annotation={this.props.annotation}  indirectChildClassName={this.props.indirectChildClassName}/>
+          <Upvote annotation={this.props.annotation}/>
           <button
             className={styles.ppButton}
             type="button"

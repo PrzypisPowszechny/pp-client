@@ -14,7 +14,7 @@ import {
   MENU_WIDGET_CHANGE,
   NOTIFICATION_CHANGE,
   SET_EDITOR_SELECTION_RANGE,
-  VIEWER_MODAL_CHANGE,
+  VIEWER_MODAL_CHANGE, VIEWER_MOUSE_CHANGE,
   VIEWER_REPORT_EDITOR_CHANGE,
   VIEWER_VISIBLE_CHANGE,
 } from './actions';
@@ -147,6 +147,7 @@ const initialViewerState = {
 function viewer(state = initialViewerState, action) {
   switch (action.type) {
     case VIEWER_VISIBLE_CHANGE:
+    case VIEWER_MOUSE_CHANGE:
       return {
         ...state,
         ...action.payload,

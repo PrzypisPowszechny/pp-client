@@ -11,6 +11,7 @@ import Modal from 'content-scripts/components/elements/Modal/Modal';
 
 import styles from './DeleteAnnotationModal.scss';
 
+import { PPViewerIndirectHoverClass } from '../../settings';
 import Button from '../elements/Button';
 import { ToastType } from '../elements/Toast/Toast';
 
@@ -42,7 +43,6 @@ interface IModalProps {
     };
   },
   {
-    setMouseOverViewer,
     hideViewerDeleteModal,
     changeNotification,
     deleteAnnotation: deleteResource,
@@ -68,7 +68,6 @@ export default class DeleteAnnotationModal extends React.PureComponent<Partial<I
 
   handleCancel = (e) => {
     this.props.hideViewerDeleteModal();
-    this.props.setMouseOverViewer(false);
   }
 
   render() {
@@ -78,7 +77,10 @@ export default class DeleteAnnotationModal extends React.PureComponent<Partial<I
 
     if (isDeleteModalOpen) {
       return (
-        <Modal onCloseModal={this.handleCancel}>
+        <Modal
+          className={PPViewerIndirectHoverClass}
+          onCloseModal={this.handleCancel}
+        >
           <div className={styles.modalContent}>
             <div className={styles.modalHeader}>
               Czy na pewno chcesz usunąć przypis?

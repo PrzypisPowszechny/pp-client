@@ -20,9 +20,12 @@ export interface IWidgetProps {
   widgetTriangle: boolean;
 
   className: string;
-  offsetClassName?: string;
+  offsetClassName: string;
+
+  // These handlers are not used now but are very handy for simple (not very nested) components
   onMouseLeave: (Event) => void;
   onMouseEnter: (Event) => void;
+
   children: React.ReactChild | React.ReactChild[];
 }
 
@@ -89,6 +92,7 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
         updateInverted: nextProps.updateInverted,
       };
     }
+    return null;
   }
 
   rootElement: RefObject<HTMLDivElement>;
@@ -124,22 +128,45 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
     // Set the CSS left/top properties
     this.setLocationStyle();
 
-    // Set callbacks
-    const inner = this.innerElement.current;
-    const { onMouseEnter, onMouseLeave } = this.props;
-    if (inner) {
-      if (onMouseLeave) {
-        inner.addEventListener('mouseleave', onMouseLeave);
-      }
-      if (onMouseEnter) {
-        inner.addEventListener('mouseenter', onMouseEnter);
-      }
-    }
     if (this.state.updateInverted) {
       this.setState({
         ...isInverted(this.innerElement.current, window),
         updateInverted: false,
       });
+    } else {
+      // once the component is all set (no need to invert it anymore), set up handlers
+
+      const rootElement = this.rootElement.current;
+      const { onMouseEnter, onMouseLeave } = this.props;
+      if (rootElement) {
+        if (onMouseLeave) {
+          rootElement.addEventListener('mouseleave', onMouseLeave);
+        }
+        if (onMouseEnter) {
+          rootElement.addEventListener('mouseenter', onMouseEnter);
+        }
+      }
+      if (onMouseLeave) {
+        document.addEventListener('mouseleave', onMouseLeave);
+      }
+    }
+  }
+
+  removeEventListeners() {
+    const rootElement = this.rootElement.current;
+
+    const { onMouseEnter, onMouseLeave } = this.props;
+    if (rootElement) {
+      if (onMouseLeave) {
+        rootElement.removeEventListener('mouseleave', onMouseLeave);
+        document.removeEventListener('mouseleave', onMouseLeave);
+      }
+      if (onMouseEnter) {
+        rootElement.removeEventListener('mouseenter', onMouseEnter);
+      }
+    }
+    if (onMouseLeave) {
+      document.removeEventListener('mouseleave', onMouseLeave);
     }
   }
 
@@ -149,6 +176,10 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
 
   componentDidUpdate(prevProps, prevState) {
     this.onMountedOrUpdated();
+  }
+
+  componentWillUnmount() {
+    this.removeEventListeners();
   }
 
   render() {

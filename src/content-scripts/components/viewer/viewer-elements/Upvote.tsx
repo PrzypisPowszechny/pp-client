@@ -17,11 +17,10 @@ import { createResource, deleteResource, readEndpoint } from 'common/store/tabs/
 import { selectUpvote } from 'common/store/tabs/tab/api/selectors';
 import { PPScopeClass } from 'content-scripts/settings';
 
+import { PPViewerIndirectHoverClass } from '../../../settings';
 import styles from '../Viewer.scss';
 
 interface IUpvoteProps {
-  indirectChildClassName: string;
-
   annotation: AnnotationAPIModel;
   upvoteId?: string;
   upvoteUrl: string;
@@ -118,15 +117,11 @@ export default class Upvote extends React.Component<Partial<IUpvoteProps>, Parti
   }
 
   render() {
-    const {
-      indirectChildClassName,
-    } = this.props;
-
     return this.state.isFetchingUpvote ? null : (
         <Popup
           trigger={this.renderUpvoteButton()}
           size="small"
-          className={classNames(indirectChildClassName, PPScopeClass, styles.popup, 'pp-popup-small-padding')}
+          className={classNames(PPViewerIndirectHoverClass, PPScopeClass, styles.popup, 'pp-popup-small-padding')}
           inverted={true}
         >
           Daj znać, że uważasz przypis za pomocny.
