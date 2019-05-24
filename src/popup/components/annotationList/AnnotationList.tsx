@@ -12,6 +12,7 @@ import { standardizeUrlForPageSettings } from 'common/url';
 
 import styles from './AnnotationList.scss';
 
+import { AnnotationsStage } from '../../../common/store/tabs/tab/annotations/types';
 import { sendScrollToAnnotation } from '../../messages';
 import { PopupPages } from '../BrowserPopupNavigator';
 
@@ -63,7 +64,7 @@ export default class AnnotationList extends React.Component<Partial<IAnnotationL
   }
 
   render() {
-    if (!this.props.annotations.hasLoaded) {
+    if (this.props.annotations.stage !== AnnotationsStage.located) {
       return (
         <div className={styles.self}>
           Ładuję...

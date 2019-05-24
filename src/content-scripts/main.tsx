@@ -32,6 +32,10 @@ import appComponent from './modules/app-component';
 import highlightManager from './modules/highlight-manager';
 import store from './store';
 
+import { setAnnotationRequestStage } from '../common/store/tabs/tab/annotationRequests/actions';
+import { AnnotationRequestsStage, AnnotationRequestsState } from '../common/store/tabs/tab/annotationRequests/types';
+import { setAnnotationStage } from '../common/store/tabs/tab/annotations/actions';
+import { AnnotationsStage } from '../common/store/tabs/tab/annotations/types';
 import '../css/common/base.scss';
 
 // New defaults/modifiers for some semantic-ui components
@@ -113,6 +117,8 @@ async function initData() {
   } catch (err) {
     console.debug(`Failed to fetch annotations: ${err.toString()}`);
     Sentry.captureException(err);
+  } finally {
+    store.dispatch(setAnnotationStage(AnnotationsStage.loaded));
   }
 
   try {
@@ -122,6 +128,8 @@ async function initData() {
   } catch (err) {
     console.debug(`Failed to fetch annotation requests: ${err.toString()}`);
     Sentry.captureException(err);
+  } finally {
+    store.dispatch(setAnnotationRequestStage(AnnotationRequestsStage.loaded));
   }
 }
 

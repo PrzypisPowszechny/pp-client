@@ -5,7 +5,7 @@ import { defer, from, Observable, of } from 'rxjs';
 import { catchError, filter, ignoreElements, map, mergeMap, tap } from 'rxjs/operators';
 
 import { authenticate } from 'background/auth';
-import { syncBadgeWithAnnotations } from 'background/badge';
+import { setBadgeLocating, syncBadgeWithAnnotations } from 'background/badge';
 import dashboardMessaging from 'background/dashboard-messaging';
 import { tabLocateAnnotations } from 'background/messages';
 import { IState } from 'common/store/reducer';
@@ -21,7 +21,14 @@ import { selectUser } from 'common/store/storage/selectors';
 import { retrieveLogicalActionTab, syncTabMark } from 'common/store/tabs/action-tab';
 import { locateAnnotations, locateCreatedAnnotations } from 'common/store/tabs/tab/annotations/actions';
 
-import { locateAnnotationRequests, locateCreatedAnnotationRequests } from './tabs/tab/annotationRequests/actions';
+import {
+  LOCATE_ANNOTATION_REQUESTS,
+  locateAnnotationRequests,
+  locateCreatedAnnotationRequests, setAnnotationRequestStage,
+} from './tabs/tab/annotationRequests/actions';
+import { AnnotationRequestsStage } from './tabs/tab/annotationRequests/types';
+import { LOCATE_ANNOTATIONS, setAnnotationStage } from './tabs/tab/annotations/actions';
+import { AnnotationsStage } from './tabs/tab/annotations/types';
 
 import * as resourceTypes from '../api/resource-types';
 import { getActionResourceType } from '../api/utils';
@@ -42,12 +49,23 @@ export const annotationLocateEpic: StandardEpic = (action$, state$) => action$.p
   mergeMap(action => defer(
     async () => {
       const tabId = retrieveLogicalActionTab(action, state$.value.tabs);
+      setBadgeLocating(tabId);
       const locationData = await tabLocateAnnotations(tabId, action.payload.data);
       syncBadgeWithAnnotations(locationData, tabId);
       const newAction = locateAnnotations(locationData);
       return syncTabMark(action, newAction);
     },
   )),
+);
+
+// TODO better return more than one action in annotationLocateEpic (not sure how to do it)
+export const annotationStageEpic: StandardEpic = (action$, state$) => action$.pipe(
+  ofType(LOCATE_ANNOTATIONS),
+  map(action => {
+      const newAction = setAnnotationStage(AnnotationsStage.located);
+      return syncTabMark(action, newAction);
+    },
+  ),
 );
 
 // locate annotations just loaded from API
@@ -63,6 +81,16 @@ export const annotationRequestLocateEpic: StandardEpic = (action$, state$) => ac
       return syncTabMark(action, newAction);
     },
   )),
+);
+
+// TODO better return more than one action in annotationRequestLocateEpic (not sure how to do it)
+export const annotationRequestStageEpic: StandardEpic = (action$, state$) => action$.pipe(
+  ofType(LOCATE_ANNOTATION_REQUESTS),
+  map(action => {
+      const newAction = setAnnotationRequestStage(AnnotationRequestsStage.located);
+      return syncTabMark(action, newAction);
+    },
+  ),
 );
 
 export const annotationLocateCreatedEpic: StandardEpic = (action$, state$) => action$.pipe(
@@ -129,7 +157,9 @@ export const propagateAuthenticationDataEpic: StandardEpic = action$ => (
 
 export const rootEpic = combineEpics(
   annotationLocateEpic,
+  annotationStageEpic,
   annotationRequestLocateEpic,
+  annotationRequestStageEpic,
   annotationLocateCreatedEpic,
   annotationRequestLocateCreatedEpic,
   processAuthenticationEpic,
