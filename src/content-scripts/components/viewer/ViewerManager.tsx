@@ -78,6 +78,7 @@ export default class ViewerManager extends React.Component<Partial<IViewerManage
 
   static getDerivedStateFromProps(nextProps, prevState) {
     // this check is a universal quick fix to allow React 16.4 compatibility
+    // todo: this usage of getDerivedStateFromProps is discouraged
     // according to https://reactjs.org/blog/2018/05/23/react-v-16-4.html#bugfix-for-getderivedstatefromprops
     if (!_isEqual(prevState.prevProps, nextProps)) {
       return {

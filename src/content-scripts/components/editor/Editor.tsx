@@ -114,6 +114,8 @@ class Editor extends React.Component<Partial<IEditorProps>,
   };
 
   static getDerivedStateFromProps(nextProps: IEditorProps, prevState: IEditorState) {
+    // todo: this usage of getDerivedStateFromProps is discouraged
+    // according to https://reactjs.org/blog/2018/05/23/react-v-16-4.html#bugfix-for-getderivedstatefromprops
     /*
      * The window should update whenever either annotation or range changes
      * Comparing ranges is crucial when the annotation was null before and is null again;
