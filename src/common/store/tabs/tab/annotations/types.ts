@@ -1,9 +1,9 @@
 import { Range as XPathRange } from 'xpath-range';
 
 export enum AnnotationsStage {
-  unloaded,
-  loaded,
-  located,
+  unloaded = 'unloaded',
+  loaded = 'loaded',
+  located = 'located',
 }
 
 export interface AnnotationsState {

@@ -146,8 +146,10 @@ async function initUI() {
   // Injecting React components into DOM
   appComponent.init();
 
-  // Saving the annotation location information to DOM for reads in selenium + in console
-  annotationLocationNotifier.init();
+  if (PPSettings.DEV) {
+    // Saving the annotation location information to DOM for reads in selenium + in console
+    annotationLocationNotifier.init();
+  }
   // Rendering annotations in DOM
   highlightManager.init();
 }

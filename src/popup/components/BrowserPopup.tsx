@@ -16,7 +16,6 @@ import ppGa from 'common/pp-ga/index';
 import { selectUser } from 'common/store/storage/selectors';
 import { IUserState } from 'common/store/storage/types';
 import { selectRealTab, selectTab } from 'common/store/tabs/selectors';
-import { ITabState } from 'common/store/tabs/tab/reducer';
 import { IAnnotationRequestFormData, IAnnotationRequestFormState } from 'common/store/tabs/tab/widgets';
 import { hideAnnotationRequestForm, showAnnotationRequestForm } from 'common/store/tabs/tab/widgets/actions';
 import { standardizeUrlForPageSettings } from 'common/url';
@@ -28,11 +27,25 @@ import LogoutPanel from './LogoutPanel';
 import Toggle from './toggle/Toggle';
 
 import '../css/popup.scss';
+import {
+  PopupAnnotationLocationData,
+  selectAnnotationLocations
+} from '../../common/store/tabs/tab/annotations/selectors';
+import {
+  PopupAnnotationRequestLocationData,
+  selectAnnotationRequestLocations
+} from '../../common/store/tabs/tab/annotationRequests/selectors';
+import { ITabInfoState } from '../../common/store/tabs/tab/tabInfo';
+import { AnnotationsStage } from '../../common/store/tabs/tab/annotations/types';
+import { AnnotationRequestsStage } from '../../common/store/tabs/tab/annotationRequests/types';
 
 export interface IBrowserPopupProps {
   user: IUserState;
-  tab: ITabState;
+  tabInfo: ITabInfoState;
+  annotations: PopupAnnotationLocationData;
+  annotationRequests: PopupAnnotationRequestLocationData;
   annotationRequestForm: IAnnotationRequestFormState;
+
   debugIsPopupEmulated: boolean;
 
   hideAnnotationRequestForm: () => void;
@@ -57,8 +70,11 @@ interface IBrowserPopupState {
 @connect(
   state => ({
     user: selectUser(state),
-    tab: selectTab(state),
+    tabInfo: selectTab(state).tabInfo,
+    annotations: selectAnnotationLocations(state),
+    annotationRequests: selectAnnotationRequestLocations(state),
     annotationRequestForm: selectTab(state).widgets.annotationRequestForm,
+
     debugIsPopupEmulated: selectRealTab(state).popupInfo.isEmulated,
   }),
   {
@@ -104,7 +120,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
   }
 
   componentDidMount() {
-    this.setState({ currentStandardizedTabUrl: standardizeUrlForPageSettings(this.props.tab.tabInfo.currentUrl) });
+    this.setState({ currentStandardizedTabUrl: standardizeUrlForPageSettings(this.props.tabInfo.currentUrl) });
     this.loadStateFromAppModes();
   }
 
@@ -143,7 +159,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     } = this.state;
 
     const isAnnotationMode = this.isAnnotationModeForCurrentTab();
-    if (!isAnnotationMode) {
+    if (!isAnnotationMode && this.isAnnotationButtonEnabled()) {
       let newAnnotationModePages;
       newAnnotationModePages = [...annotationModePages, currentStandardizedTabUrl];
 
@@ -161,15 +177,43 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     }
   }
 
+  isAnnotationButtonEnabled = () => {
+    const {
+      isExtensionDisabled,
+    } = this.state;
+    const {
+      tabInfo: { contentScriptWontLoad },
+      annotations: { stage },
+    } = this.props;
+    const isCurrentPageDisabled = this.isExtensionDisabledForCurrentTab();
+    return !isExtensionDisabled && !isCurrentPageDisabled
+      && !contentScriptWontLoad && (stage === AnnotationsStage.located);
+  }
+
   handleAnnotationRequestClick = (e) => {
     const { visible } = this.props.annotationRequestForm;
-    if (!visible) {
+    if (!visible && this.isAnnotationRequestButtonEnabled()) {
       this.props.showAnnotationRequestForm({});
       ppGa.annotationRequestFormOpened('popup', true, { location: this.state.currentStandardizedTabUrl });
       if (!this.props.debugIsPopupEmulated) {
         window.close();
       }
     }
+  }
+
+
+  isAnnotationRequestButtonEnabled = () => {
+    const {
+      isExtensionDisabled,
+    } = this.state;
+    const {
+      tabInfo: { contentScriptWontLoad },
+      annotationRequests: { stage },
+    } = this.props;
+
+    const isCurrentPageDisabled = this.isExtensionDisabledForCurrentTab();
+    return !isExtensionDisabled && !isCurrentPageDisabled
+      && !contentScriptWontLoad && (stage === AnnotationRequestsStage.located);
   }
 
   handleDisabledExtensionChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -219,26 +263,20 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
   }
 
   renderFeatureButtons() {
-    const {
-      isExtensionDisabled,
-    } = this.state;
-
-    const annotationRequestFormVisible = this.props.annotationRequestForm.visible;
-
-    const isCurrentPageDisabled = this.isExtensionDisabledForCurrentTab();
-    const isAnnotationMode = this.isAnnotationModeForCurrentTab();
+    const isAnnotationRequestFormOpen = Boolean(this.props.annotationRequestForm.visible);
+    const isAnnotationFormOpen = this.isAnnotationModeForCurrentTab();
 
     return (
       <>
         {this.props.user.userRole === UserRoles.editor &&
         <li
           className={classNames('menu-item', 'clickable', 'primary',
-            { disabled: isExtensionDisabled || isCurrentPageDisabled },
-            { active: isAnnotationMode })}
+            { disabled: !this.isAnnotationButtonEnabled() },
+            { active: isAnnotationFormOpen })}
           onClick={this.handleAnnotationModeClick}
         >
           <Icon className="icon" icon={ic_add_circle} size={25}/>
-          {isAnnotationMode ?
+          {isAnnotationFormOpen ?
             <span>Dodajesz przypis </span>
             : <span>Dodaj przypis</span>
           }
@@ -250,12 +288,12 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
 
         <li
           className={classNames('menu-item', 'clickable',
-            { disabled: isExtensionDisabled || isCurrentPageDisabled },
-            { active: annotationRequestFormVisible })}
+            { disabled: !this.isAnnotationRequestButtonEnabled() },
+            { active: isAnnotationRequestFormOpen })}
           onClick={this.handleAnnotationRequestClick}
         >
           <Icon className="icon" icon={ic_live_help} size={25}/>
-          {annotationRequestFormVisible ?
+          {isAnnotationRequestFormOpen ?
             <span>Zgłaszasz prośbę o przypis </span>
             : <span>Poproś o przypis</span>
           }
@@ -276,7 +314,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
 
     const {
       isSupported,
-    } = this.props.tab.tabInfo;
+    } = this.props.tabInfo;
 
     const isCurrentPageDisabled = this.isExtensionDisabledForCurrentTab();
 

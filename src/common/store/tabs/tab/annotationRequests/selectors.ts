@@ -1,21 +1,22 @@
 import { selectTab } from 'common/store/tabs/selectors';
 
-import { AnnotationAPIModel } from '../../../../api/annotations';
-import { selectAnnotation } from '../api/selectors';
 import { ITabState } from '../reducer';
+import { AnnotationRequestAPIModel } from '../../../../api/annotation-requests';
+import { selectAnnotationRequest } from '../api/selectors';
+import { AnnotationRequestsStage } from './types';
 
-export interface PopupAnnotationLocationData {
-  hasLoaded: boolean;
-  located: AnnotationAPIModel[];
-  unlocated: AnnotationAPIModel[];
+export interface PopupAnnotationRequestLocationData {
+  stage: AnnotationRequestsStage;
+  located: AnnotationRequestAPIModel[];
+  unlocated: AnnotationRequestAPIModel[];
 }
 
-export function selectAnnotationLocations(state: ITabState): PopupAnnotationLocationData {
-  const { located, unlocated, hasLoaded } = selectTab(state).annotations;
+export function selectAnnotationRequestLocations(state: ITabState): PopupAnnotationRequestLocationData {
+  const { located, unlocated, stage } = selectTab(state).annotationRequests;
   // Save annotation location data for usage in popup
   return {
-    hasLoaded,
-    located: located.map(location => selectAnnotation(state, location.annotationId)),
-    unlocated: unlocated.map(location => selectAnnotation(state, location.annotationId)),
+    stage,
+    located: located.map(location => selectAnnotationRequest(state, location.annotationId)),
+    unlocated: unlocated.map(location => selectAnnotationRequest(state, location.annotationId)),
   };
 }
