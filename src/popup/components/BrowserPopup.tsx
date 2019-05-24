@@ -26,18 +26,18 @@ import { PopupPages } from './BrowserPopupNavigator';
 import LogoutPanel from './LogoutPanel';
 import Toggle from './toggle/Toggle';
 
-import '../css/popup.scss';
-import {
-  PopupAnnotationLocationData,
-  selectAnnotationLocations
-} from '../../common/store/tabs/tab/annotations/selectors';
 import {
   PopupAnnotationRequestLocationData,
-  selectAnnotationRequestLocations
+  selectAnnotationRequestLocations,
 } from '../../common/store/tabs/tab/annotationRequests/selectors';
-import { ITabInfoState } from '../../common/store/tabs/tab/tabInfo';
-import { AnnotationsStage } from '../../common/store/tabs/tab/annotations/types';
 import { AnnotationRequestsStage } from '../../common/store/tabs/tab/annotationRequests/types';
+import {
+  PopupAnnotationLocationData,
+  selectAnnotationLocations,
+} from '../../common/store/tabs/tab/annotations/selectors';
+import { AnnotationsStage } from '../../common/store/tabs/tab/annotations/types';
+import { ITabInfoState } from '../../common/store/tabs/tab/tabInfo';
+import '../css/popup.scss';
 
 export interface IBrowserPopupProps {
   user: IUserState;
@@ -200,7 +200,6 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
       }
     }
   }
-
 
   isAnnotationRequestButtonEnabled = () => {
     const {

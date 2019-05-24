@@ -61,7 +61,7 @@ export const annotationLocateEpic: StandardEpic = (action$, state$) => action$.p
 // TODO better return more than one action in annotationLocateEpic (not sure how to do it)
 export const annotationStageEpic: StandardEpic = (action$, state$) => action$.pipe(
   ofType(LOCATE_ANNOTATIONS),
-  map(action => {
+  map((action) => {
       const newAction = setAnnotationStage(AnnotationsStage.located);
       return syncTabMark(action, newAction);
     },
@@ -72,7 +72,7 @@ export const annotationStageEpic: StandardEpic = (action$, state$) => action$.pi
 export const annotationRequestLocateEpic: StandardEpic = (action$, state$) => action$.pipe(
   ofType('API_READ'),
   filter(action => getActionResourceType(action) === resourceTypes.ANNOTATION_REQUESTS),
-  mergeMap(action => defer(
+  mergeMap((action) => defer(
     async () => {
       const tabId = retrieveLogicalActionTab(action, state$.value.tabs);
       const locationData = await tabLocateAnnotations(tabId, action.payload.data);

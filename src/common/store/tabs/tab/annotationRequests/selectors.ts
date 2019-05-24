@@ -1,9 +1,10 @@
 import { selectTab } from 'common/store/tabs/selectors';
 
-import { ITabState } from '../reducer';
+import { AnnotationRequestsStage } from './types';
+
 import { AnnotationRequestAPIModel } from '../../../../api/annotation-requests';
 import { selectAnnotationRequest } from '../api/selectors';
-import { AnnotationRequestsStage } from './types';
+import { ITabState } from '../reducer';
 
 export interface PopupAnnotationRequestLocationData {
   stage: AnnotationRequestsStage;
