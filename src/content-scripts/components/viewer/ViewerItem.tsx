@@ -26,7 +26,6 @@ import styles from './Viewer.scss';
 interface IViewerItemProps {
   key: string;
   annotationId: string;
-  indirectChildClassName: string;
 
   annotation: AnnotationAPIModel;
   hideViewer: () => undefined;
@@ -61,15 +60,6 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     const { ppCategory, comment, annotationLink } = this.props.annotation.attributes;
     this.props.hideViewer();
     ppGa.annotationLinkClicked(this.props.annotationId, ppCategory, !comment, annotationLink);
-  }
-
-  headerPPCategoryClass() {
-    const ppCategoryToClass = {
-      [AnnotationPPCategories.ADDITIONAL_INFO]: styles.categoryAdditionalInfo,
-      [AnnotationPPCategories.CLARIFICATION]: styles.categoryClarification,
-      [AnnotationPPCategories.ERROR]: styles.categoryError,
-    };
-    return ppCategoryToClass[this.props.annotation.attributes.ppCategory];
   }
 
   ppCategoryToClass(ppCategory) {
@@ -146,7 +136,6 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
               onClick={this.handleAnnotationLinkClick}
               target="_blank"
             >
-              {/* <span className={styles.annotationLinkIcon}/> */}
               <Icon className={styles.annotationLinkIcon} icon={link} size={11} />
               {extractMinimalLabel(annotationLink)}
             </a>
@@ -161,7 +150,6 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
           </div>
           <UserActionControls
             annotation={this.props.annotation}
-            indirectChildClassName={this.props.indirectChildClassName}
           />
         </div>
       </li>

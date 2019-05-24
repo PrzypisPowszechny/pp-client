@@ -6,9 +6,7 @@ import scopeStyles from '../css/common/vars/scope.scss';
  * Elements wearing this class will be ignored in viewer mouseleave handling
  * (their mouseenter will not trigger viewer disappearance)
  */
-export const PPViewerIndirectChildClass = 'pp-viewer-indirect-child';
-
-export const PPViewerHoverContainerClass = 'pp-viewer-hover-container';
+export const PPViewerIndirectHoverClass = 'pp-viewer-indirect-hover-child';
 
 export const PPScopeClass = scopeStyles['pp-scope-class'];
 
@@ -22,6 +20,8 @@ export const outsideArticleClasses = [
 ];
 
 export const PPHighlightClass = selectionStyles['pp-highlight-class'];
+
+export const PPHighlightIdAttr = 'pp-highlight-id';
 
 // The node within which annotations are made
 // It's lazy so operations on DOM can be done here if needed

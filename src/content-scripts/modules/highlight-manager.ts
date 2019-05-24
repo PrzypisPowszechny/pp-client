@@ -24,7 +24,6 @@ function init() {
 
   // This event subscription will last irrespective of whether annotations are redrawn or not
   highlighter.onHighlightEvent('mouseover', handleHighlightMouseEnter);
-  highlighter.onHighlightEvent('mouseleave', handleHighlightMouseLeave);
 
   // Temporarily open annotation request form on highlight click
   highlighter.onHighlightEvent('click', handleHighlightMouseClick);
@@ -106,16 +105,9 @@ function handleHighlightMouseClick(e, annotations: QuoteAnnotationAPIModel[]) {
   // TODO open editor answering to this annotation request; this is just an example of using this annotation request
   const annotationRequest = annotationRequests[0];
   // we can display multiple annotation requests that overlap and we can display them in annotation request viewer,
-  // so only one can be selected for answerring
+  // so only one can be selected for answering
   // for now use the first one to simplify
   store.dispatch(showAnnotationForm(annotationRequest.id));
-}
-
-function handleHighlightMouseLeave(e, annotations: QuoteAnnotationAPIModel[]) {
-  if (e.buttons !== 0) {
-    return;
-  }
-  store.dispatch(setMouseOverViewer(false));
 }
 
 function handleHighlightMouseEnter(e, annotations: QuoteAnnotationAPIModel[]) {

@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { Range as XPathRange } from 'xpath-range';
 
-import { PPHighlightClass } from 'content-scripts/settings';
+import { PPHighlightClass, PPHighlightIdAttr } from 'content-scripts/settings';
 
 /**
  * highlightRange wraps the DOM Nodes within the provided range with a highlight
@@ -94,7 +94,7 @@ export default class Highlighter {
   static defaultOptions = {
     // The CSS class to apply to drawn highlights
     highlightClass: PPHighlightClass,
-    highlightIdAttr: 'highlight-id',
+    highlightIdAttr: PPHighlightIdAttr,
     // Number of annotations to draw at once
     chunkSize: 10,
     // Time (in ms) to pause between drawing chunks of annotations
