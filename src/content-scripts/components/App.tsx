@@ -13,6 +13,7 @@ import SideWidget from './elements/SideWidget/SideWidget';
 import Toast from './elements/Toast/Toast';
 import Menu from './menu/index';
 import ViewerManager from './viewer/ViewerManager';
+import { IAnnotationFormState, IAnnotationRequestFormState } from '../../common/store/tabs/tab/widgets';
 
 interface AppProps {
   isStorageInitialized: boolean;
@@ -20,9 +21,9 @@ interface AppProps {
   editorVisible: boolean;
   menuVisible: boolean;
   annotationModeWidgetVisible: boolean;
-  annotationRequestFormVisible: boolean;
-  annotationFormVisible: boolean;
   notificationVisible: boolean;
+  annotationRequestForm: IAnnotationRequestFormState;
+  annotationForm: IAnnotationFormState;
 }
 
 @connect(
@@ -33,10 +34,10 @@ interface AppProps {
       user: selectUser(state),
       editorVisible: tab.widgets.editor.visible,
       menuVisible: tab.widgets.menu.visible,
-      annotationRequestFormVisible: tab.widgets.annotationRequestForm.visible,
-      annotationFormVisible: tab.widgets.annotationForm.visible,
-      notificationVisible: tab.widgets.notification.visible,
       annotationModeWidgetVisible: selectModeForCurrentPage(state).isAnnotationMode,
+      notificationVisible: tab.widgets.notification.visible,
+      annotationRequestForm: tab.widgets.annotationRequestForm,
+      annotationForm: tab.widgets.annotationForm,
     };
   },
 )
@@ -49,14 +50,19 @@ export default class App extends React.Component<Partial<AppProps>, {}> {
   render() {
     const { isStorageInitialized, user } = this.props;
     if (isStorageInitialized && user) {
+      const { annotationForm, annotationRequestForm } = this.props;
       return (
         <div>
           {this.props.editorVisible && <Editor/>}
           {this.props.menuVisible && <Menu/>}
           {this.props.annotationModeWidgetVisible && <AnnotationModeWidget/>}
-          {this.props.annotationRequestFormVisible && <SideWidget><AnnotationRequestForm/></SideWidget>}
-          {this.props.annotationFormVisible && <SideWidget><AnnotationForm/></SideWidget>}
           {this.props.notificationVisible && <Toast/>}
+          {annotationRequestForm.visible &&
+          <SideWidget><AnnotationRequestForm key={annotationRequestForm.initialData.quote}/></SideWidget>
+          }
+          {annotationForm.visible &&
+          <SideWidget><AnnotationForm key={annotationRequestForm.initialData.quote}/></SideWidget>
+          }
           <ViewerManager/>
         </div>
       );

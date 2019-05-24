@@ -54,19 +54,15 @@ interface AnnotationRequestFormState extends IAnnotationRequestFormData {
 export default class AnnotationRequestForm extends React.Component<Partial<AnnotationRequestFormProps>,
   Partial<AnnotationRequestFormState>> {
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    return {
+  constructor(props: AnnotationRequestFormProps) {
+    super(props);
+    this.state = {
       quote: '',
       comment: '',
-      ...nextProps.initialData,
+      ...props.initialData,
       quoteError: '',
       commentError: '',
     };
-  }
-
-  constructor(props: AnnotationRequestFormProps) {
-    super(props);
-    this.state = {};
   }
 
   handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

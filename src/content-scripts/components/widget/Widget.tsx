@@ -1,11 +1,12 @@
 import React, { RefObject } from 'react';
 
 import classNames from 'classnames';
+import _isEqual from 'lodash/isEqual';
 
 import { isInverted } from './utils';
 import styles from './Widget.scss';
 
-interface IWidgetProps {
+export interface IWidgetProps {
   locationX: number;
   locationY: number;
   invertedX: boolean;
@@ -29,6 +30,8 @@ interface IWidgetState {
   invertedX: boolean;
   invertedY: boolean;
   updateInverted: boolean;
+
+  prevProps: Partial<IWidgetProps>;
 }
 
 export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
@@ -61,24 +64,31 @@ export default class Widget extends React.PureComponent<Partial<IWidgetProps>,
     onMouseLeave: null,
     onMouseEnter: null,
     widgetTriangle: false,
+    prevProps: {},
   };
 
-  static getDerivedStateFromProps(nextProps: IWidgetProps) {
+  static getDerivedStateFromProps(nextProps, prevState) {
     /*
      * If updateInverted prop is set to true, invertedX and invertedY are set to false, so the initial measurements
      * may take place after the first render
     */
-    let inverted;
-    if (nextProps.updateInverted) {
-      inverted = {
-        invertedX: false,
-        invertedY: false,
+    //
+    // this check is a universal quick fix to allow React 16.4 compatibility
+    // according to https://reactjs.org/blog/2018/05/23/react-v-16-4.html#bugfix-for-getderivedstatefromprops
+    if (!_isEqual(prevState.prevProps, nextProps)) {
+      let inverted;
+      if (nextProps.updateInverted) {
+        inverted = {
+          invertedX: false,
+          invertedY: false,
+        };
+      }
+      return {
+        prevProps: nextProps,
+        ...inverted,
+        updateInverted: nextProps.updateInverted,
       };
     }
-    return {
-      ...inverted,
-      updateInverted: nextProps.updateInverted,
-    };
   }
 
   rootElement: RefObject<HTMLDivElement>;

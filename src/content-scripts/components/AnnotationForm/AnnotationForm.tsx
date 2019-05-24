@@ -69,8 +69,9 @@ interface AnnotationFormState extends AnnotationFormData {
 export default class AnnotationForm extends React.Component<Partial<AnnotationFormProps>,
   Partial<AnnotationFormState>> {
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    return {
+  constructor(props: AnnotationFormProps) {
+    super(props);
+    this.state = {
       ppCategory: AnnotationPPCategories.ADDITIONAL_INFO,
       comment: '',
       annotationLink: '',
@@ -81,11 +82,6 @@ export default class AnnotationForm extends React.Component<Partial<AnnotationFo
       annotationLinkTitleError: '',
       noCommentModalOpen: false,
     };
-  }
-
-  constructor(props: AnnotationFormProps) {
-    super(props);
-    this.state = {};
   }
 
   getAnnotationFromState(): AnnotationAPICreateModel {

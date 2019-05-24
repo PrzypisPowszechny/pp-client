@@ -5,7 +5,7 @@ import { By } from 'selenium-webdriver';
 import { buildBrowser } from './browser';
 import * as e2ePPSettings from './settings';
 import { simulateLogIn } from './common';
-import { newTab, switchToTab } from './utils';
+import { newTab, sleep, switchToTab } from './utils';
 
 const packageConf = require('../package');
 
@@ -96,11 +96,14 @@ describe('annotations are highlighted and can be viewed on mouse hover', () => {
     await browser.findElement(By.css(`.${PP_CSS_HIGHLIGHT_CLASS}`));
   }, e2ePPSettings.TIMEOUT);
 
-  test('viewer displayed on hover', async () => {
+  test('viewer displayed and lingering on hover', async () => {
     await simulateLogIn(browser);
     await browser.get(`${e2ePPSettings.SITE_URL}/some-text/`);
     const highlightedWord = await browser.findElement(By.css(`.${PP_CSS_HIGHLIGHT_CLASS}`));
     await browser.actions().mouseMove(highlightedWord).perform();
+    await browser.findElement(By.css(`.${PP_CSS_SCOPE_CLASS}[class*="${PP_CSS_VIEWER_CLASS_PREFIX}"]`));
+    await sleep(500);
+    // make sure the viewer lingers rather than just flashing
     await browser.findElement(By.css(`.${PP_CSS_SCOPE_CLASS}[class*="${PP_CSS_VIEWER_CLASS_PREFIX}"]`));
   }, e2ePPSettings.TIMEOUT);
 
