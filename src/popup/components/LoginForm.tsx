@@ -6,7 +6,7 @@ import { initiateAuthProc } from 'common/store/runtime/actions';
 import { AuthProviders } from 'common/store/runtime/types';
 import { userDataNew } from 'common/store/storage/actions';
 
-import { EMULATE_ON_PP_AUTH_RESPONSE } from '../../../e2e/events';
+import { EMULATE_ON_PP_AUTH_RESPONSE } from '../../../e2e/shared/events';
 
 export interface LoginFormProps {
   userDataNew: (userData) => void;

@@ -12,11 +12,11 @@ import { standardizeUrlForPageSettings } from 'common/url';
 
 import styles from './AnnotationList.scss';
 
+import { AnnotationResourceType } from '../../../common/api/annotations';
 import { AnnotationsStage } from '../../../common/store/tabs/tab/annotations/types';
+import { resourceToHighlightId } from '../../../content-scripts/utils/Highlighter';
 import { sendScrollToHighlight } from '../../messages';
 import { PopupPages } from '../BrowserPopupNavigator';
-import { AnnotationResourceType } from '../../../common/api/annotations';
-import { resourceToHighlightId } from '../../../content-scripts/utils/Highlighter';
 
 export interface IAnnotationListProps {
   annotations: PopupAnnotationLocationData;

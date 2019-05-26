@@ -1,8 +1,8 @@
-import { dispatchDOMEvent, sleep } from './utils';
+import { dispatchDOMEvent, sleep } from '../utils';
 import { EMULATE_ON_PP_AUTH_RESPONSE } from './events';
-import { IUserState } from '../src/common/store/storage/types';
+import { IUserState } from '../../src/common/store/storage/types';
 // noinspection TsLint
-const packageConf = require('../package');
+const packageConf = require('../../package');
 
 export async function simulateLogIn(browser) {
   await browser.get(`chrome-extension://${packageConf.pp.devAppID}/popup.html`);

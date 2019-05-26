@@ -1,13 +1,13 @@
 // noinspection TsLint
-import { simulateLogIn } from './common';
+import { simulateLogIn } from './shared/routines';
 import { Builder, By, Key, ActionSequence, Button } from 'selenium-webdriver';
 
 const packageConf = require('../package');
-import { buildBrowser } from './browser';
+import { buildBrowser } from './setup/browser';
 
 import express from 'express';
 import http from 'http';
-import * as e2ePPSettings from './settings';
+import * as e2ePPSettings from './setup/settings';
 import { newTab, sleep, switchToTab } from './utils';
 
 

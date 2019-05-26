@@ -1,7 +1,7 @@
 import { By } from 'selenium-webdriver';
-import { buildBrowser } from './browser';
-import * as e2ePPSettings from './settings';
-import { simulateLogIn } from './common';
+import { buildBrowser } from './setup/browser';
+import * as e2ePPSettings from './setup/settings';
+import { simulateLogIn } from './shared/routines';
 // noinspection TsLint
 const packageConf = require('../package');
 
