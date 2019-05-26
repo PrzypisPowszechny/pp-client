@@ -99,7 +99,10 @@ describe('annotations are highlighted and can be viewed on mouse hover', () => {
     await simulateLogIn(browser);
     await browser.get(`${e2ePPSettings.SITE_URL}/some-text/`);
     const highlightedWord = await browser.findElement(By.css(`.${PP_CSS_HIGHLIGHT_CLASS}`));
-    await browser.actions().mouseMove(highlightedWord).perform();
+    console.log(Object.getOwnPropertyNames(browser.actions()));
+    // in some cases {bridge: true} is required to use legacy API still used by chromedriver
+    // https://github.com/SeleniumHQ/selenium/issues/4564
+    await browser.actions({bridge:true}).move({origin: highlightedWord}).perform();
     await browser.findElement(By.css(`.${PP_CSS_SCOPE_CLASS}[class*="${PP_CSS_VIEWER_CLASS_PREFIX}"]`));
     await sleep(500);
     // make sure the viewer lingers rather than just flashing
