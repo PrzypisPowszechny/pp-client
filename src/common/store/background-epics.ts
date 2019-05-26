@@ -46,51 +46,46 @@ export type StandardEpic = Epic<FluxStandardAction, FluxStandardAction, IState>;
 export const annotationLocateEpic: StandardEpic = (action$, state$) => action$.pipe(
   ofType('API_READ'),
   filter(action => getActionResourceType(action) === resourceTypes.ANNOTATIONS),
-  mergeMap(action => defer(
-    async () => {
-      const tabId = retrieveLogicalActionTab(action, state$.value.tabs);
-      setBadgeLocating(tabId);
-      const locationData = await tabLocateAnnotations(tabId, action.payload.data);
-      syncBadgeWithAnnotations(locationData, tabId);
-      const newAction = locateAnnotations(locationData);
-      return syncTabMark(action, newAction);
-    },
-  )),
-);
-
-// TODO better return more than one action in annotationLocateEpic (not sure how to do it)
-export const annotationStageEpic: StandardEpic = (action$, state$) => action$.pipe(
-  ofType(LOCATE_ANNOTATIONS),
-  map((action) => {
-      const newAction = setAnnotationStage(AnnotationsStage.located);
-      return syncTabMark(action, newAction);
-    },
+  mergeMap(action =>
+    defer(async () => {
+        const tabId = retrieveLogicalActionTab(action, state$.value.tabs);
+        setBadgeLocating(tabId);
+        const locationData = await tabLocateAnnotations(tabId, action.payload.data);
+        syncBadgeWithAnnotations(locationData, tabId);
+        return [
+          locateAnnotations(locationData),
+          setAnnotationStage(AnnotationsStage.located),
+        ].map(
+          newAction => syncTabMark(action, newAction),
+        );
+      },
+    ),
   ),
+  // mergeMap treats array as a stream, every element is emitted separately
+  mergeMap(action => action),
 );
 
-// locate annotations just loaded from API
+// locate annotation requests just loaded from API
 export const annotationRequestLocateEpic: StandardEpic = (action$, state$) => action$.pipe(
   ofType('API_READ'),
   filter(action => getActionResourceType(action) === resourceTypes.ANNOTATION_REQUESTS),
-  mergeMap((action) => defer(
-    async () => {
-      const tabId = retrieveLogicalActionTab(action, state$.value.tabs);
-      const locationData = await tabLocateAnnotations(tabId, action.payload.data);
-      // TODO anything to do with badge?
-      const newAction = locateAnnotationRequests(locationData);
-      return syncTabMark(action, newAction);
-    },
-  )),
-);
-
-// TODO better return more than one action in annotationRequestLocateEpic (not sure how to do it)
-export const annotationRequestStageEpic: StandardEpic = (action$, state$) => action$.pipe(
-  ofType(LOCATE_ANNOTATION_REQUESTS),
-  map(action => {
-      const newAction = setAnnotationRequestStage(AnnotationRequestsStage.located);
-      return syncTabMark(action, newAction);
-    },
+  mergeMap(action =>
+    defer(async () => {
+        const tabId = retrieveLogicalActionTab(action, state$.value.tabs);
+        // todo anything to do with badge?
+        const locationData = await tabLocateAnnotations(tabId, action.payload.data);
+        // todo anything to do with badge?
+        return [
+          locateAnnotationRequests(locationData),
+          setAnnotationRequestStage(AnnotationRequestsStage.located),
+        ].map(
+          newAction => syncTabMark(action, newAction),
+        );
+      },
+    ),
   ),
+  // mergeMap treats array as a stream, every element is emitted separately
+  mergeMap(action => action),
 );
 
 export const annotationLocateCreatedEpic: StandardEpic = (action$, state$) => action$.pipe(
@@ -157,9 +152,7 @@ export const propagateAuthenticationDataEpic: StandardEpic = action$ => (
 
 export const rootEpic = combineEpics(
   annotationLocateEpic,
-  annotationStageEpic,
   annotationRequestLocateEpic,
-  annotationRequestStageEpic,
   annotationLocateCreatedEpic,
   annotationRequestLocateCreatedEpic,
   processAuthenticationEpic,
