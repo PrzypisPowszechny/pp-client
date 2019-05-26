@@ -9,10 +9,9 @@ import { selectTab } from 'common/store/tabs/selectors';
 import { showAnnotationForm, showViewer } from 'common/store/tabs/tab/actions';
 import { selectAnnotation, selectAnnotationRequest } from 'common/store/tabs/tab/api/selectors';
 import { selectModeForCurrentPage } from 'common/store/tabs/tab/appModes/selectors';
-import { setMouseOverViewer } from 'common/store/tabs/tab/widgets/actions';
 import { selectViewerState } from 'common/store/tabs/tab/widgets/selectors';
 import store from 'content-scripts/store';
-import Highlighter from 'content-scripts/utils/Highlighter';
+import Highlighter, { instanceToHighlightId } from 'content-scripts/utils/Highlighter';
 
 import { annotationRootNode } from '../settings';
 import mousePosition from '../utils/mousePosition';
@@ -31,7 +30,7 @@ function init() {
   // subscribe to store changes and return unsubscribe fn
   const unsubscribe = store.subscribe(drawHighlights);
 
-  chrome.runtime.onMessage.addListener(popupScrollToAnnotationHandler);
+  chrome.runtime.onMessage.addListener(popupScrollToHighlightHandler);
 
   // store objects required for later operations
   instance = {
@@ -42,7 +41,7 @@ function init() {
 
 function deinit() {
   instance.unsubscribe();
-  chrome.runtime.onMessage.removeListener(popupScrollToAnnotationHandler);
+  chrome.runtime.onMessage.removeListener(popupScrollToHighlightHandler);
 }
 
 // TODO consider replacing with a React component, so listening for changes is not done manually
@@ -69,10 +68,11 @@ async function drawHighlights() {
       ) {
         await instance.highlighter.drawAll(selectTab(store.getState()).annotations.located.map(
           ({ annotationId, range }) => {
+            const annotation = selectAnnotation(store.getState(), annotationId);
             return {
-              id: `annotation:${annotationId}`,
+              id: instanceToHighlightId(annotation),
               range,
-              annotationData: selectAnnotation(store.getState(), annotationId),
+              annotationData: annotation,
             };
           }));
       }
@@ -84,10 +84,11 @@ async function drawHighlights() {
       ) {
         await instance.highlighter.drawAll(selectTab(store.getState()).annotationRequests.located.map(
           ({ annotationId, range }) => {
+            const annotationRequest = selectAnnotationRequest(store.getState(), annotationId);
             return {
-              id: `annotationRequest:${annotationId}`,
+              id: instanceToHighlightId(annotationRequest),
               range,
-              annotationData: selectAnnotationRequest(store.getState(), annotationId),
+              annotationData: annotationRequest,
             };
           }));
       }
@@ -144,14 +145,14 @@ function handleHighlightMouseEnter(e, annotations: QuoteAnnotationAPIModel[]) {
   }
 }
 
-function popupScrollToAnnotationHandler(request, sender, sendResponse) {
-  if (request.action === 'SCROLL_TO_ANNOTATION') {
-    const { annotationId } = request.payload;
-    console.debug(`Request from popup to scroll to annotation id: ${annotationId}`);
+function popupScrollToHighlightHandler(request, sender, sendResponse) {
+  if (request.action === 'SCROLL_TO_HIGHLIGHT') {
+    const { highlightId } = request.payload;
+    console.debug(`Request from popup to scroll to highlight: ${highlightId}`);
     try {
-      instance.highlighter.scrollToAnnotation(annotationId);
+      instance.highlighter.scrollToHighlight(highlightId);
     } catch (e) {
-      console.warn(`Could not scroll to annotation ${annotationId}: ${e.message}`);
+      console.warn(`Could not scroll to annotation ${highlightId}: ${e.message}`);
     }
   }
 }

@@ -1,7 +1,13 @@
 import { Range as XPathRange } from 'xpath-range';
 
+export enum AnnotationsStage {
+  unloaded = 'unloaded',
+  loaded = 'loaded',
+  located = 'located',
+}
+
 export interface AnnotationsState {
-  hasLoaded: boolean;
+  stage: AnnotationsStage;
   located: LocatedAnnotation[];
   unlocated: LocatedAnnotation[];
 }

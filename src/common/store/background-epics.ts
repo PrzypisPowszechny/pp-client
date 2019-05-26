@@ -5,7 +5,7 @@ import { defer, from, Observable, of } from 'rxjs';
 import { catchError, filter, ignoreElements, map, mergeMap, tap } from 'rxjs/operators';
 
 import { authenticate } from 'background/auth';
-import { syncBadgeWithAnnotations } from 'background/badge';
+import { setBadgeLocating, syncBadgeWithAnnotations } from 'background/badge';
 import dashboardMessaging from 'background/dashboard-messaging';
 import { tabLocateAnnotations } from 'background/messages';
 import { IState } from 'common/store/reducer';
@@ -21,7 +21,14 @@ import { selectUser } from 'common/store/storage/selectors';
 import { retrieveLogicalActionTab, syncTabMark } from 'common/store/tabs/action-tab';
 import { locateAnnotations, locateCreatedAnnotations } from 'common/store/tabs/tab/annotations/actions';
 
-import { locateAnnotationRequests, locateCreatedAnnotationRequests } from './tabs/tab/annotationRequests/actions';
+import {
+  LOCATE_ANNOTATION_REQUESTS,
+  locateAnnotationRequests,
+  locateCreatedAnnotationRequests, setAnnotationRequestStage,
+} from './tabs/tab/annotationRequests/actions';
+import { AnnotationRequestsStage } from './tabs/tab/annotationRequests/types';
+import { LOCATE_ANNOTATIONS, setAnnotationStage } from './tabs/tab/annotations/actions';
+import { AnnotationsStage } from './tabs/tab/annotations/types';
 
 import * as resourceTypes from '../api/resource-types';
 import { getActionResourceType } from '../api/utils';
@@ -39,30 +46,46 @@ export type StandardEpic = Epic<FluxStandardAction, FluxStandardAction, IState>;
 export const annotationLocateEpic: StandardEpic = (action$, state$) => action$.pipe(
   ofType('API_READ'),
   filter(action => getActionResourceType(action) === resourceTypes.ANNOTATIONS),
-  mergeMap(action => defer(
-    async () => {
-      const tabId = retrieveLogicalActionTab(action, state$.value.tabs);
-      const locationData = await tabLocateAnnotations(tabId, action.payload.data);
-      syncBadgeWithAnnotations(locationData, tabId);
-      const newAction = locateAnnotations(locationData);
-      return syncTabMark(action, newAction);
-    },
-  )),
+  mergeMap(action =>
+    defer(async () => {
+        const tabId = retrieveLogicalActionTab(action, state$.value.tabs);
+        setBadgeLocating(tabId);
+        const locationData = await tabLocateAnnotations(tabId, action.payload.data);
+        syncBadgeWithAnnotations(locationData, tabId);
+        return [
+          locateAnnotations(locationData),
+          setAnnotationStage(AnnotationsStage.located),
+        ].map(
+          newAction => syncTabMark(action, newAction),
+        );
+      },
+    ),
+  ),
+  // mergeMap treats array as a stream, every element is emitted separately
+  mergeMap(action => action),
 );
 
-// locate annotations just loaded from API
+// locate annotation requests just loaded from API
 export const annotationRequestLocateEpic: StandardEpic = (action$, state$) => action$.pipe(
   ofType('API_READ'),
   filter(action => getActionResourceType(action) === resourceTypes.ANNOTATION_REQUESTS),
-  mergeMap(action => defer(
-    async () => {
-      const tabId = retrieveLogicalActionTab(action, state$.value.tabs);
-      const locationData = await tabLocateAnnotations(tabId, action.payload.data);
-      // TODO anything to do with badge?
-      const newAction = locateAnnotationRequests(locationData);
-      return syncTabMark(action, newAction);
-    },
-  )),
+  mergeMap(action =>
+    defer(async () => {
+        const tabId = retrieveLogicalActionTab(action, state$.value.tabs);
+        // todo anything to do with badge?
+        const locationData = await tabLocateAnnotations(tabId, action.payload.data);
+        // todo anything to do with badge?
+        return [
+          locateAnnotationRequests(locationData),
+          setAnnotationRequestStage(AnnotationRequestsStage.located),
+        ].map(
+          newAction => syncTabMark(action, newAction),
+        );
+      },
+    ),
+  ),
+  // mergeMap treats array as a stream, every element is emitted separately
+  mergeMap(action => action),
 );
 
 export const annotationLocateCreatedEpic: StandardEpic = (action$, state$) => action$.pipe(

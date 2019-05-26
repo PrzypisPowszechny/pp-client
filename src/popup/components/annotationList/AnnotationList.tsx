@@ -12,8 +12,11 @@ import { standardizeUrlForPageSettings } from 'common/url';
 
 import styles from './AnnotationList.scss';
 
-import { sendScrollToAnnotation } from '../../messages';
+import { AnnotationsStage } from '../../../common/store/tabs/tab/annotations/types';
+import { sendScrollToHighlight } from '../../messages';
 import { PopupPages } from '../BrowserPopupNavigator';
+import { AnnotationResourceType } from '../../../common/api/annotations';
+import { resourceToHighlightId } from '../../../content-scripts/utils/Highlighter';
 
 export interface IAnnotationListProps {
   annotations: PopupAnnotationLocationData;
@@ -52,7 +55,7 @@ export default class AnnotationList extends React.Component<Partial<IAnnotationL
 
   onAnnotationClick = (e) => {
     const { annotationId } = e.currentTarget.dataset;
-    sendScrollToAnnotation(annotationId);
+    sendScrollToHighlight(resourceToHighlightId(AnnotationResourceType, annotationId));
 
     // TODO: such tabs query already takes in BrowserPopup component, pass those data using store to be DRY
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -63,7 +66,7 @@ export default class AnnotationList extends React.Component<Partial<IAnnotationL
   }
 
   render() {
-    if (!this.props.annotations.hasLoaded) {
+    if (this.props.annotations.stage !== AnnotationsStage.located) {
       return (
         <div className={styles.self}>
           Ładuję...

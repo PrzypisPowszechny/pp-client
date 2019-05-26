@@ -13,6 +13,7 @@ import SideWidget from './elements/SideWidget/SideWidget';
 import Toast from './elements/Toast/Toast';
 import Menu from './menu/index';
 import ViewerManager from './viewer/ViewerManager';
+
 import { IAnnotationFormState, IAnnotationRequestFormState } from '../../common/store/tabs/tab/widgets';
 
 interface AppProps {

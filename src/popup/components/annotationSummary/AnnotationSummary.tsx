@@ -14,6 +14,8 @@ import { ITabInfoState } from 'common/store/tabs/tab/tabInfo';
 
 import styles from './AnnotationSummary.scss';
 
+import { AnnotationsStage } from '../../../common/store/tabs/tab/annotations/types';
+
 export interface IAnnotationSummaryProps {
   tabInfo: ITabInfoState;
   annotations: PopupAnnotationLocationData;
@@ -87,6 +89,8 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
       contentScriptWontLoad,
     } = this.props.tabInfo;
 
+    const { stage } = this.props.annotations;
+
     let message;
     if (isSupported !== null && !isSupported) {
       message = notSupportedMessage;
@@ -95,8 +99,10 @@ export default class AnnotationSummary extends React.Component<Partial<IAnnotati
         'Jeśli uważasz, że PP powinien obsługiwać tę stronę, daj nam znać!';
     } else if (!contentScriptLoaded) {
       message = 'Łączę się ze stroną...';
-    } else if (!this.props.annotations.hasLoaded) {
+    } else if (stage === AnnotationsStage.unloaded) {
       message = 'Ładuję przypisy...';
+    } else if (stage === AnnotationsStage.loaded) {
+      message = 'Lokalizuję przypisy...';
     }
     if (message) {
       return (

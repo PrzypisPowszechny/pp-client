@@ -6,6 +6,8 @@ import { RangeAPIModel } from 'common/api/annotations';
 
 import { APICreateModel, APIModel } from './json-api';
 
+export const AnnotationRequestResourceType = 'annotationRequests';
+
 export interface AnnotationRequestCreateAttributes {
   url: string;
   quote?: string;

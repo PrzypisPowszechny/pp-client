@@ -2,6 +2,9 @@ import $ from 'jquery';
 import { Range as XPathRange } from 'xpath-range';
 
 import { PPHighlightClass, PPHighlightIdAttr } from 'content-scripts/settings';
+import { AnnotationResourceType } from '../../common/api/annotations';
+import { APIModel } from '../../common/api/json-api';
+import { AnnotationRequestResourceType } from '../../common/api/annotation-requests';
 
 /**
  * highlightRange wraps the DOM Nodes within the provided range with a highlight
@@ -231,7 +234,7 @@ export default class Highlighter {
     delete this.highlightRegistry[normedId];
   }
 
-  scrollToAnnotation = (id: number | string) => {
+  scrollToHighlight = (id: number | string) => {
     const normedId = Highlighter.coerceId(id);
     const data = this.highlightRegistry[normedId];
     // Take an arbitrary first span (there are hardly any multiline annotations anyway)
@@ -266,3 +269,26 @@ export default class Highlighter {
       });
   }
 }
+
+
+
+// tslint:disable-next-line:no-shadowed-variable
+export function instanceToHighlightId(instance: APIModel) {
+  /*
+   * Get unique id for an instance of an object that should be highlighted in text
+   * Highlighter indexes highlighted objects by id
+   */
+  return resourceToHighlightId(instance.type, instance.id);
+}
+
+export function resourceToHighlightId(resourceType: string, id: string) {
+  const allowedTypes = [AnnotationResourceType, AnnotationRequestResourceType];
+  if (allowedTypes.indexOf(resourceType) === -1) {
+    throw new Error(
+      `Generating unique highlighter id for an instance that cannot be highlighted (type: ${resourceType})`,
+    );
+  }
+  return resourceToUniqueId(resourceType, id);
+}
+
+const resourceToUniqueId = (resourceType: string, id: string) => `${resourceType}:${id}`;
