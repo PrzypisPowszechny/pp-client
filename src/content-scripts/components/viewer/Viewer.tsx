@@ -15,7 +15,10 @@ import {
 import DeleteAnnotationModal from './DeleteAnnotationModal';
 import styles from './Viewer.scss';
 import ViewerItem from './ViewerItem';
+
+import { AnnotationResourceType } from '../../../common/api/annotations';
 import Timer = NodeJS.Timer;
+import { resourceToHighlightId } from '../../utils/Highlighter';
 
 interface IViewerProps {
   locationX: number;
@@ -93,7 +96,8 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
         [${PPHighlightIdAttr}]:hover
       `).forEach((node) => {
         for (const annotationId of this.props.annotationIds) {
-          if (node.matches(`[${PPHighlightIdAttr}="annotation:${annotationId}"]`)) {
+          const highlightId = resourceToHighlightId(AnnotationResourceType, annotationId);
+          if (node.matches(`[${PPHighlightIdAttr}="${highlightId}"]`)) {
             mouseOver = true;
           }
         }

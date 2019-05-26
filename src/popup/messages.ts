@@ -26,12 +26,12 @@ export function waitUntilContentScriptShouldHaveConnected(tabId): Promise<null> 
   );
 }
 
-export function sendScrollToAnnotation(annotationId: string) {
+export function sendScrollToHighlight(highlightId: string) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.tabs.sendMessage(tabs[0].id,
       {
-        action: 'SCROLL_TO_ANNOTATION',
-        payload: { annotationId },
+        action: 'SCROLL_TO_HIGHLIGHT',
+        payload: { highlightId },
       });
   });
 }
