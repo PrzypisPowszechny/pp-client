@@ -1,4 +1,4 @@
-import { loadSettings } from '../config/pp-settings';
+import { loadSettings } from '../../config/pp-settings';
 const PPSettings = loadSettings();
 
 export const SCREEN = {

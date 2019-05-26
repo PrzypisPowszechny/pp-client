@@ -1,3 +1,5 @@
+// Special DOM events emitted to cause UI events that cannot be triggered otherwise
+
 // login
 export const EMULATE_ON_PP_AUTH_RESPONSE = 'EMULATE_ON_PP_AUTH_RESPONSE';
 

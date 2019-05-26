@@ -2,9 +2,10 @@ import $ from 'jquery';
 import { Range as XPathRange } from 'xpath-range';
 
 import { PPHighlightClass, PPHighlightIdAttr } from 'content-scripts/settings';
+
+import { AnnotationRequestResourceType } from '../../common/api/annotation-requests';
 import { AnnotationResourceType } from '../../common/api/annotations';
 import { APIModel } from '../../common/api/json-api';
-import { AnnotationRequestResourceType } from '../../common/api/annotation-requests';
 
 /**
  * highlightRange wraps the DOM Nodes within the provided range with a highlight
@@ -269,8 +270,6 @@ export default class Highlighter {
       });
   }
 }
-
-
 
 // tslint:disable-next-line:no-shadowed-variable
 export function instanceToHighlightId(instance: APIModel) {

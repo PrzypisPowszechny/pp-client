@@ -18,7 +18,10 @@ import {
   quoteContextWidth,
 } from 'content-scripts/settings';
 
-import { EMULATE_ON_CONTEXT_MENU_ANNOTATE, EMULATE_ON_CONTEXT_MENU_ANNOTATION_REQUEST } from '../../../e2e/events';
+import {
+  EMULATE_ON_CONTEXT_MENU_ANNOTATE,
+  EMULATE_ON_CONTEXT_MENU_ANNOTATION_REQUEST,
+} from '../../../e2e/shared/events';
 import store from '../store';
 import { TextSelector } from '../utils/index';
 import mousePosition from '../utils/mousePosition';
