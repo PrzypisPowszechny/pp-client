@@ -34,13 +34,13 @@ interface IUserActionControlsState {
           y: locationY,
       },
     } = selectTab(state).widgets.viewer;
-    const viewerItem =
-      selectTab(state).widgets.viewer.viewerItems.find(item => item.annotationId === props.annotation.id);
+    const annotation =
+      selectTab(state).widgets.viewer.annotations.find(item => item.annotationId === props.annotation.id);
 
     return {
       locationX,
       locationY,
-      ...viewerItem,
+      ...annotation,
     };
   }, {
     hideViewer,

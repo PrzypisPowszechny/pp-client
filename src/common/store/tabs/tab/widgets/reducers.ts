@@ -19,6 +19,7 @@ import {
   VIEWER_VISIBLE_CHANGE,
 } from './actions';
 
+import { getActionResourceType } from '../../../../api/utils';
 import { MODIFY_APP_MODES } from '../appModes/actions';
 
 interface IWidgetState {
@@ -46,15 +47,20 @@ export interface IAnnotationFormState extends IWidgetState {
 
 export interface IViewerState extends IWidgetState {
   location: { x: number; y: number };
-  viewerItems: IViewerItemState[];
+  annotations: IViewerAnnotationItemState[];
+  annotationRequests: IViewerAnnotationRequestItemState[];
   deleteModal: any;
   mouseOver: boolean;
 
 }
 
-export interface IViewerItemState {
+export interface IViewerAnnotationItemState {
   annotationId: string;
   isReportEditorOpen: boolean;
+}
+
+export interface IViewerAnnotationRequestItemState {
+  annotationRequestId: string;
 }
 
 export interface INotificationState {
@@ -141,7 +147,8 @@ function annotationForm(state: IAnnotationFormState = initialWidgetState, action
 const initialViewerState = {
   ...initialWidgetState,
   deleteModal: {},
-  viewerItems: [],
+  annotations: [],
+  annotationRequests: [],
 };
 
 function viewer(state = initialViewerState, action) {
@@ -160,7 +167,7 @@ function viewer(state = initialViewerState, action) {
     case VIEWER_REPORT_EDITOR_CHANGE:
       return {
         ...state,
-        viewerItems: state.viewerItems.map(item =>
+        annotations: state.annotations.map(item =>
           item.annotationId === action.payload.annotationId ?
             // Update fields related to this action, preserving all other
             { ...item, ...action.payload } :
@@ -170,16 +177,15 @@ function viewer(state = initialViewerState, action) {
       };
     case API_DELETED:
       // If one of viewed annotation is removed, filter it out
-      const { type: resType, id: resId } = action.payload;
-      if (resType === AnnotationResourceType && state.visible) {
-        const filteredViewerItems = state.viewerItems.slice()
-          .filter(item => item.annotationId !== resId);
+      if ((getActionResourceType(action) === AnnotationResourceType) && state.visible) {
+        const filteredAnnotations = state.annotations.slice()
+          .filter(item => item.annotationId !== action.payload.id);
 
-        if (state.viewerItems.length !== filteredViewerItems.length) {
+        if (state.annotations.length !== filteredAnnotations.length) {
           return {
             ...state,
-            viewerItems: filteredViewerItems,
-            visible: filteredViewerItems.length > 0,
+            annotations: filteredAnnotations,
+            visible: filteredAnnotations.length > 0,
           };
         }
       }

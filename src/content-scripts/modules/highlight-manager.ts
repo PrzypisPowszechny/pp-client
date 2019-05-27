@@ -2,7 +2,8 @@ import _difference from 'lodash/difference';
 import _isEqual from 'lodash/isEqual';
 
 import { QuoteAnnotationAPIModel } from 'common/api';
-import { AnnotationRequestAPIModel } from 'common/api/annotation-requests';
+import { AnnotationRequestAPIModel, AnnotationRequestResourceType } from 'common/api/annotation-requests';
+import { AnnotationResourceType } from 'common/api/annotations';
 import * as resourceTypes from 'common/api/resource-types';
 import { selectUser, trySelectStorage } from 'common/store/storage/selectors';
 import { selectTab } from 'common/store/tabs/selectors';
@@ -13,6 +14,7 @@ import { selectViewerState } from 'common/store/tabs/tab/widgets/selectors';
 import store from 'content-scripts/store';
 import Highlighter, { instanceToHighlightId } from 'content-scripts/utils/Highlighter';
 
+import { setsEqual } from '../../common/utils/collections';
 import { annotationRootNode } from '../settings';
 import mousePosition from '../utils/mousePosition';
 
@@ -23,9 +25,6 @@ function init() {
 
   // This event subscription will last irrespective of whether annotations are redrawn or not
   highlighter.onHighlightEvent('mouseover', handleHighlightMouseEnter);
-
-  // Temporarily open annotation request form on highlight click
-  highlighter.onHighlightEvent('click', handleHighlightMouseClick);
 
   // subscribe to store changes and return unsubscribe fn
   const unsubscribe = store.subscribe(drawHighlights);
@@ -100,16 +99,16 @@ async function drawHighlights() {
   }
 }
 
-function handleHighlightMouseClick(e, annotations: QuoteAnnotationAPIModel[]) {
-  const annotationRequests: AnnotationRequestAPIModel[]
-    = annotations.filter(item => item.type === resourceTypes.ANNOTATION_REQUESTS) as any;
-  // TODO open editor answering to this annotation request; this is just an example of using this annotation request
-  const annotationRequest = annotationRequests[0];
-  // we can display multiple annotation requests that overlap and we can display them in annotation request viewer,
-  // so only one can be selected for answering
-  // for now use the first one to simplify
-  store.dispatch(showAnnotationForm(annotationRequest.id));
-}
+// function handleHighlightMouseClick(e, annotations: QuoteAnnotationAPIModel[]) {
+//   const annotationRequests: AnnotationRequestAPIModel[]
+//     = annotations.filter(item => item.type === resourceTypes.ANNOTATION_REQUESTS) as any;
+//   // TODO open editor answering to this annotation request; this is just an example of using this annotation request
+//   const annotationRequest = annotationRequests[0];
+//   // we can display multiple annotation requests that overlap and we can display them in annotation request viewer,
+//   // so only one can be selected for answering
+//   // for now use the first one to simplify
+//   store.dispatch(showAnnotationForm(annotationRequest.id));
+// }
 
 function handleHighlightMouseEnter(e, annotations: QuoteAnnotationAPIModel[]) {
   // If the mouse button is currently depressed, we're probably trying to
@@ -121,26 +120,29 @@ function handleHighlightMouseEnter(e, annotations: QuoteAnnotationAPIModel[]) {
   if (annotations.length > 0) {
     const {
       annotationIds,
+      annotationRequestIds,
       isAnyReportEditorOpen,
       visible,
     } = selectViewerState(store.getState());
 
-    if (!isAnyReportEditorOpen) {
-      // Open a new Viewer only when
-      // - the viewer is not visible
-      // - the displayed annotations have changed, too. This prevents the widget from shifting location
-      //   every time the user's cursor slips off the widget
-      const newIds = annotations.map(item => item.id);
-      const annotationsChanged =
-        _difference(annotationIds, newIds).length !== 0 || _difference(newIds, annotationIds).length !== 0;
-      if (!visible || annotationsChanged) {
-        const position = mousePosition(e);
-        store.dispatch(showViewer(
-          position.x,
-          position.y,
-          annotations.map(annotation => annotation.id),
-        ));
-      }
+    if (isAnyReportEditorOpen) {
+      return;
+    }
+    const newAnnotationIds = annotations.filter(item => item.type === AnnotationResourceType)
+      .map(item => item.id);
+    const newAnnotationRequestIds = annotations.filter(item => item.type === AnnotationRequestResourceType)
+      .map(item => item.id);
+    const itemsChanged =
+      !setsEqual(annotationIds, newAnnotationIds) || !setsEqual(annotationRequestIds, newAnnotationRequestIds);
+    if (!visible || itemsChanged) {
+      console.log('itemschanged', newAnnotationIds, newAnnotationRequestIds);
+      const position = mousePosition(e);
+      store.dispatch(showViewer(
+        position.x,
+        position.y,
+        newAnnotationIds,
+        newAnnotationRequestIds,
+      ));
     }
   }
 }

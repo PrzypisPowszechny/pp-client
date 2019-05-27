@@ -46,6 +46,27 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
 
   static defaultState = {};
 
+  static ppCategoryToClass(ppCategory) {
+    const ppCategoryToClass = {
+      [AnnotationPPCategories.ADDITIONAL_INFO]: styles.categoryAdditionalInfo,
+      [AnnotationPPCategories.CLARIFICATION]: styles.categoryClarification,
+      [AnnotationPPCategories.ERROR]: styles.categoryError,
+    };
+    return ppCategoryToClass[ppCategory];
+  }
+
+  static demagogCategoryToClass(demagogCategory) {
+    const ppCategoryToClass = {
+      [AnnotationDemagogCategories.TRUE]: styles.dgCategoryTrue,
+      [AnnotationDemagogCategories.PTRUE]: styles.dgCategoryTrue,
+      [AnnotationDemagogCategories.FALSE]: styles.dgCategoryFalse,
+      [AnnotationDemagogCategories.PFALSE]: styles.dgCategoryFalse,
+      [AnnotationDemagogCategories.LIE]: styles.dgCategoryLie,
+      [AnnotationDemagogCategories.UNKNOWN]: styles.dgCategoryUnknown,
+    };
+    return ppCategoryToClass[demagogCategory];
+  }
+
   constructor(props: IViewerItemProps) {
     super(props);
     this.state = ViewerItem.defaultState;
@@ -62,27 +83,6 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     ppGa.annotationLinkClicked(this.props.annotationId, ppCategory, !comment, annotationLink);
   }
 
-  ppCategoryToClass(ppCategory) {
-    const ppCategoryToClass = {
-      [AnnotationPPCategories.ADDITIONAL_INFO]: styles.categoryAdditionalInfo,
-      [AnnotationPPCategories.CLARIFICATION]: styles.categoryClarification,
-      [AnnotationPPCategories.ERROR]: styles.categoryError,
-    };
-    return ppCategoryToClass[ppCategory];
-  }
-
-  demagogCategoryToClass(demagogCategory) {
-    const ppCategoryToClass = {
-      [AnnotationDemagogCategories.TRUE]: styles.dgCategoryTrue,
-      [AnnotationDemagogCategories.PTRUE]: styles.dgCategoryTrue,
-      [AnnotationDemagogCategories.FALSE]: styles.dgCategoryFalse,
-      [AnnotationDemagogCategories.PFALSE]: styles.dgCategoryFalse,
-      [AnnotationDemagogCategories.LIE]: styles.dgCategoryLie,
-      [AnnotationDemagogCategories.UNKNOWN]: styles.dgCategoryUnknown,
-    };
-    return ppCategoryToClass[demagogCategory];
-  }
-
   render() {
     const {
       comment,
@@ -96,10 +96,10 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     } = this.props.annotation.attributes;
 
     return (
-      <li className={styles.annotation}>
+      <li className={classNames(styles.annotation)}>
         <div className={styles.headBar}>
           <div>
-            <div className={classNames(styles.ppCategory, this.ppCategoryToClass(ppCategory))}>
+            <div className={classNames(styles.ppCategory, ViewerItem.ppCategoryToClass(ppCategory))}>
               {comment ? annotationPPCategoriesLabels[ppCategory] : 'źródło'}
             </div>
             <div className={styles.commentDate}>
@@ -110,21 +110,21 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
             {publisher === AnnotationPublishers.DEMAGOG &&
             <a className={styles.publisherDemagog} href={'http://demagog.org.pl/'} target="_blank">
               <span className={styles.publisherName}>Dodane przez Demagoga</span>
-              <span className={styles.publisherIcon} />
+              <span className={styles.publisherIcon}/>
             </a>
             }
             {publisher === AnnotationPublishers.PP && doesBelongToUser &&
-              <AuthorActionControls annotation={this.props.annotation} />
+            <AuthorActionControls annotation={this.props.annotation}/>
             }
           </div>
         </div>
         {!comment ? '' :
           <div className={styles.comment}>
             {publisher === AnnotationPublishers.DEMAGOG &&
-              <span className={classNames(styles.demagogCategory, this.demagogCategoryToClass(demagogCategory))}>
+            <span className={classNames(styles.demagogCategory, ViewerItem.demagogCategoryToClass(demagogCategory))}>
                 {annotationDemagogCategoriesLabels[demagogCategory]}
               </span>
-              }
+            }
             {comment}
           </div>
         }
@@ -136,7 +136,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
               onClick={this.handleAnnotationLinkClick}
               target="_blank"
             >
-              <Icon className={styles.annotationLinkIcon} icon={link} size={11} />
+              <Icon className={styles.annotationLinkIcon} icon={link} size={11}/>
               {extractMinimalLabel(annotationLink)}
             </a>
             <a

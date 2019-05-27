@@ -11,6 +11,7 @@ const packageConf = require('../package');
 const PP_CSS_SCOPE_CLASS = 'pp-ui';
 const PP_CSS_ANNOTATION_SUMMARY_PREFIX = 'AnnotationSummary__summaryItem';
 const PP_CSS_VIEWER_CLASS_PREFIX = 'Viewer__self';
+const PP_CSS_VIEWER_ITEM_CLASS_PREFIX = 'Viewer__annotation';
 const PP_CSS_HIGHLIGHT_CLASS = 'pp-highlight';
 
 // The full response is probably redundant
@@ -99,11 +100,12 @@ describe('annotations are highlighted and can be viewed on mouse hover', () => {
     await simulateLogIn(browser);
     await browser.get(`${e2ePPSettings.SITE_URL}/some-text/`);
     const highlightedWord = await browser.findElement(By.css(`.${PP_CSS_HIGHLIGHT_CLASS}`));
-    console.log(Object.getOwnPropertyNames(browser.actions()));
     // in some cases {bridge: true} is required to use legacy API still used by chromedriver
     // https://github.com/SeleniumHQ/selenium/issues/4564
     await browser.actions({bridge:true}).move({origin: highlightedWord}).perform();
+    // check both the window and the single items
     await browser.findElement(By.css(`.${PP_CSS_SCOPE_CLASS}[class*="${PP_CSS_VIEWER_CLASS_PREFIX}"]`));
+    await browser.findElement(By.css(`.${PP_CSS_SCOPE_CLASS} [class*="${PP_CSS_VIEWER_ITEM_CLASS_PREFIX}"]`));
     await sleep(500);
     // make sure the viewer lingers rather than just flashing
     await browser.findElement(By.css(`.${PP_CSS_SCOPE_CLASS}[class*="${PP_CSS_VIEWER_CLASS_PREFIX}"]`));
