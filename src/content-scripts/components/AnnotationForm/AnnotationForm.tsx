@@ -97,6 +97,14 @@ export default class AnnotationForm extends React.Component<Partial<AnnotationFo
         annotationLink: this.state.annotationLink,
         annotationLinkTitle: this.state.annotationLinkTitle,
       },
+      relationships: {
+        annotationRequest: {
+          data: {
+            type: 'annotationRequests',
+            id: this.props.annotationRequest.id,
+          },
+        },
+      },
     };
   }
 

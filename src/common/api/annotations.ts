@@ -6,11 +6,15 @@ export interface AnnotationAPIModel extends APIModel {
   attributes: AnnotationAPIModelAttrs;
   relationships: {
     annotationUpvote: Relation;
+    annotationRequest: Relation;
   };
 }
 
 export interface AnnotationAPICreateModel extends APICreateModel {
   attributes: AnnotationAPICreateModelAttrs;
+  relationships: {
+    annotationRequest: Relation;
+  };
 }
 
 export interface AnnotationAPIModelAttrs {
