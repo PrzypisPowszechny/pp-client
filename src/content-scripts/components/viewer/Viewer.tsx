@@ -15,7 +15,8 @@ import {
 
 import DeleteAnnotationModal from './DeleteAnnotationModal';
 import styles from './Viewer.scss';
-import ViewerItem from './ViewerItem';
+import ViewerAnnotationItem from './ViewerAnnotationItem';
+import ViewerAnnotationRequestItem from './ViewerAnnotationRequestItem';
 
 import { AnnotationRequestResourceType } from '../../../common/api/annotation-requests';
 import Timer = NodeJS.Timer;
@@ -126,10 +127,10 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
     }
   }
 
-  renderItems() {
+  renderAnnotationItems() {
     return this.props.annotationIds.map((id) => {
       return (
-        <ViewerItem
+        <ViewerAnnotationItem
           key={id}
           annotationId={id}
         />
@@ -137,9 +138,18 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
     });
   }
 
+  renderAnnotationRequestItems() {
+    return this.props.annotationRequestIds.map((id) => {
+      return (
+        <ViewerAnnotationRequestItem
+          key={id}
+          annotationRequestId={id}
+        />
+      );
+    });
+  }
+
   render() {
-    console.log('annotations1', this.props.annotationIds);
-    console.log('annotations1', this.props.annotationRequestIds);
     return (
       <Widget
         className={classNames(PPScopeClass, styles.self)}
@@ -150,7 +160,10 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
         widgetTriangle={true}
       >
         <ul className={styles.annotationItems}>
-          {this.renderItems()}
+          {this.renderAnnotationItems()}
+        </ul>
+        <ul className={styles.annotationRequestItems}>
+          {this.renderAnnotationRequestItems()}
         </ul>
         <DeleteAnnotationModal/>
       </Widget>

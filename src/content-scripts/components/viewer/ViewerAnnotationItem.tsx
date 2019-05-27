@@ -23,7 +23,7 @@ import AuthorActionControls from './viewer-elements/AuthorActionControls';
 import UserActionControls from './viewer-elements/UserActionControls';
 import styles from './Viewer.scss';
 
-interface IViewerItemProps {
+interface IViewerAnnotationItemProps {
   key: string;
   annotationId: string;
 
@@ -31,7 +31,7 @@ interface IViewerItemProps {
   hideViewer: () => undefined;
 }
 
-interface IViewerItemState {
+interface IViewerAnnotationItemState {
   initialView: boolean; // used to determine whether edit/delete buttons should be visible
 }
 
@@ -42,7 +42,8 @@ interface IViewerItemState {
     hideViewer,
   },
 )
-export default class ViewerItem extends React.Component<Partial<IViewerItemProps>, Partial<IViewerItemState>> {
+export default class ViewerAnnotationItem extends React.Component<Partial<IViewerAnnotationItemProps>,
+  Partial<IViewerAnnotationItemState>> {
 
   static defaultState = {};
 
@@ -67,9 +68,9 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
     return ppCategoryToClass[demagogCategory];
   }
 
-  constructor(props: IViewerItemProps) {
+  constructor(props: IViewerAnnotationItemProps) {
     super(props);
-    this.state = ViewerItem.defaultState;
+    this.state = ViewerAnnotationItem.defaultState;
   }
 
   componentDidMount() {
@@ -99,7 +100,7 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
       <li className={classNames(styles.annotation)}>
         <div className={styles.headBar}>
           <div>
-            <div className={classNames(styles.ppCategory, ViewerItem.ppCategoryToClass(ppCategory))}>
+            <div className={classNames(styles.ppCategory, ViewerAnnotationItem.ppCategoryToClass(ppCategory))}>
               {comment ? annotationPPCategoriesLabels[ppCategory] : 'źródło'}
             </div>
             <div className={styles.commentDate}>
@@ -121,9 +122,12 @@ export default class ViewerItem extends React.Component<Partial<IViewerItemProps
         {!comment ? '' :
           <div className={styles.comment}>
             {publisher === AnnotationPublishers.DEMAGOG &&
-            <span className={classNames(styles.demagogCategory, ViewerItem.demagogCategoryToClass(demagogCategory))}>
-                {annotationDemagogCategoriesLabels[demagogCategory]}
-              </span>
+            <span
+              className={classNames(styles.demagogCategory,
+                ViewerAnnotationItem.demagogCategoryToClass(demagogCategory))}
+            >
+                  {annotationDemagogCategoriesLabels[demagogCategory]}
+            </span>
             }
             {comment}
           </div>

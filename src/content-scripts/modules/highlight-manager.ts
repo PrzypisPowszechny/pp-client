@@ -1,13 +1,11 @@
-import _difference from 'lodash/difference';
 import _isEqual from 'lodash/isEqual';
 
 import { QuoteAnnotationAPIModel } from 'common/api';
-import { AnnotationRequestAPIModel, AnnotationRequestResourceType } from 'common/api/annotation-requests';
+import { AnnotationRequestResourceType } from 'common/api/annotation-requests';
 import { AnnotationResourceType } from 'common/api/annotations';
-import * as resourceTypes from 'common/api/resource-types';
 import { selectUser, trySelectStorage } from 'common/store/storage/selectors';
 import { selectTab } from 'common/store/tabs/selectors';
-import { showAnnotationForm, showViewer } from 'common/store/tabs/tab/actions';
+import { showViewer } from 'common/store/tabs/tab/actions';
 import { selectAnnotation, selectAnnotationRequest } from 'common/store/tabs/tab/api/selectors';
 import { selectModeForCurrentPage } from 'common/store/tabs/tab/appModes/selectors';
 import { selectViewerState } from 'common/store/tabs/tab/widgets/selectors';
@@ -99,24 +97,12 @@ async function drawHighlights() {
   }
 }
 
-// function handleHighlightMouseClick(e, annotations: QuoteAnnotationAPIModel[]) {
-//   const annotationRequests: AnnotationRequestAPIModel[]
-//     = annotations.filter(item => item.type === resourceTypes.ANNOTATION_REQUESTS) as any;
-//   // TODO open editor answering to this annotation request; this is just an example of using this annotation request
-//   const annotationRequest = annotationRequests[0];
-//   // we can display multiple annotation requests that overlap and we can display them in annotation request viewer,
-//   // so only one can be selected for answering
-//   // for now use the first one to simplify
-//   store.dispatch(showAnnotationForm(annotationRequest.id));
-// }
-
 function handleHighlightMouseEnter(e, annotations: QuoteAnnotationAPIModel[]) {
   // If the mouse button is currently depressed, we're probably trying to
   // make a selection, so we shouldn't show the viewer.
   if (e.buttons !== 0) {
     return;
   }
-  annotations = annotations.filter(item => item.type === resourceTypes.ANNOTATIONS);
   if (annotations.length > 0) {
     const {
       annotationIds,
@@ -135,7 +121,6 @@ function handleHighlightMouseEnter(e, annotations: QuoteAnnotationAPIModel[]) {
     const itemsChanged =
       !setsEqual(annotationIds, newAnnotationIds) || !setsEqual(annotationRequestIds, newAnnotationRequestIds);
     if (!visible || itemsChanged) {
-      console.log('itemschanged', newAnnotationIds, newAnnotationRequestIds);
       const position = mousePosition(e);
       store.dispatch(showViewer(
         position.x,

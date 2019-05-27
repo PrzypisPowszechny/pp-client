@@ -62,7 +62,7 @@ export default class App extends React.Component<Partial<AppProps>, {}> {
           <SideWidget><AnnotationRequestForm key={annotationRequestForm.initialData.quote}/></SideWidget>
           }
           {annotationForm.visible &&
-          <SideWidget><AnnotationForm key={annotationRequestForm.initialData.quote}/></SideWidget>
+          <SideWidget><AnnotationForm key={annotationForm.annotationRequestId}/></SideWidget>
           }
           <ViewerManager/>
         </div>

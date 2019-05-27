@@ -23,12 +23,14 @@
   z-index: $viewer-z-index + 1;
 }
 
-ul.annotation-items {
+ul.annotation-items,
+ul.annotation-request-items {
   margin: 0;
   padding: 0;
 }
 
-li.annotation {
+li.annotation,
+li.annotation-request{
   display: block;
   list-style: none;
   position: relative;
