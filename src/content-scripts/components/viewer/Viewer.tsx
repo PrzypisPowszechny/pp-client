@@ -165,12 +165,7 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
         </ul>
         }
         {this.props.annotationIds.length > 0 &&
-        <ul
-          className={classNames(
-            styles.annotationItems,
-            { [styles.annotationRequestsAbove]: this.props.annotationIds.length && this.props.annotationRequestIds.length },
-          )}
-        >
+        <ul className={styles.annotationItems}>
           {this.renderAnnotationItems()}
         </ul>
         }

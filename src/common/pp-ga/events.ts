@@ -170,6 +170,24 @@ export function annotationAddingModeCancelled(options?: EventOptions) {
 
 // Annotation Request events
 
+export function annotationRequestDisplayed(annotationRequestId: string, isCommentBlank: boolean,
+                                           options?: EventOptions) {
+  sendEvent({
+    eventCategory: 'AnnotationRequest', eventAction: 'Display', eventLabel: 'AnnotationRequestDisplayed',
+    [GACustomFieldsIndex.annotationRequestId]: annotationRequestId,
+    [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
+  }, options);
+}
+
+export function annotationRequestAnswerButtonClicked(annotationRequestId: string, isCommentBlank: boolean,
+                                                     options?: EventOptions) {
+  sendEvent({
+    eventCategory: 'AnnotationRequest', eventAction: 'Click', eventLabel: 'annotationRequestAnswerButtonClicked',
+    [GACustomFieldsIndex.annotationRequestId]: annotationRequestId,
+    [GACustomFieldsIndex.isCommentBlank]: formatBoolean(isCommentBlank),
+  }, options);
+}
+
 export function annotationRequestFormOpened(triggeredBy: string, isQuoteBlank: boolean = true,
                                             options?: EventOptions) {
   sendEvent({

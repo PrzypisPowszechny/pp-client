@@ -12,10 +12,10 @@ import { hideViewer, showAnnotationForm } from 'common/store/tabs/tab/widgets/ac
 
 import styles from './ViewerItem.scss';
 
+import { E2E_ANNOTATION_REQUEST_CLASS } from '../../../../e2e/shared/classes';
 import { AnnotationRequestAPIModel } from '../../../common/api/annotation-requests';
 import { ID } from '../../../common/api/json-api';
 import Button from '../elements/Button/Button';
-import { E2E_ANNOTATION_REQUEST_CLASS } from '../../../../e2e/shared/classes';
 
 interface IViewerAnnotationRequestItemProps {
   key: string;
@@ -46,15 +46,21 @@ export default class ViewerAnnotationRequestItem extends React.Component<Partial
   }
 
   componentDidMount() {
-    // TODO ppGa
-    // ppGa.annotationDisplayed(this.props.annotationId, ppCategory, !comment, annotationLink);
+    const {
+      annotationRequestId,
+      annotationRequest: { attributes: { comment } },
+    } = this.props;
+    ppGa.annotationRequestDisplayed(annotationRequestId, !comment);
   }
 
   handleAnswerButtonClick = () => {
+    const {
+      annotationRequestId,
+      annotationRequest: { attributes: { comment } },
+    } = this.props;
     this.props.hideViewer();
-    this.props.showAnnotationForm(this.props.annotationRequestId);
-    // todo ppGa
-    // ppGa.annotationLinkClicked(this.props.annotationId, ppCategory, !comment, annotationLink);
+    this.props.showAnnotationForm(annotationRequestId);
+    ppGa.annotationRequestAnswerButtonClicked(annotationRequestId, !comment);
   }
 
   render() {

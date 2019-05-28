@@ -22,6 +22,7 @@ import { extractMinimalLabel, httpPrefixed } from 'common/url';
 import AuthorActionControls from './viewer-elements/AuthorActionControls';
 import UserActionControls from './viewer-elements/UserActionControls';
 import styles from './ViewerItem.scss';
+
 import { E2E_ANNOTATION_CLASS } from '../../../../e2e/shared/classes';
 
 interface IViewerAnnotationItemProps {
