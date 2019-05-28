@@ -159,12 +159,21 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
         updateInverted={true}
         widgetTriangle={true}
       >
-        <ul className={styles.annotationItems}>
-          {this.renderAnnotationItems()}
-        </ul>
+        {this.props.annotationRequestIds.length > 0 &&
         <ul className={styles.annotationRequestItems}>
           {this.renderAnnotationRequestItems()}
         </ul>
+        }
+        {this.props.annotationIds.length > 0 &&
+        <ul
+          className={classNames(
+            styles.annotationItems,
+            { [styles.annotationRequestsAbove]: this.props.annotationIds.length && this.props.annotationRequestIds.length }
+          )}
+        >
+          {this.renderAnnotationItems()}
+        </ul>
+        }
         <DeleteAnnotationModal/>
       </Widget>
     );

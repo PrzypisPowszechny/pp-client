@@ -10,8 +10,9 @@ $grey-03: rgb(59, 67, 71);
 $additional-info-color: #5679B0;
 $clarification-color: #FDE300;
 $error-color: #F7AB00;
+$annotation-request-color: #A0A0A0;
 
-$demagog-color: rgb(255,59,0);
+$demagog-color: rgb(255, 59, 0);
 $demagog-true-color: #6ABA43;
 $demagog-false-color: #E84F2B;
 $demagog-lie-color: #FEBC1E;
@@ -39,7 +40,6 @@ $caption-font-size: 10px;
 $font-light: 300;
 $font-semi-bold: 600;
 
-
 %pp-basic-font {
   font-family: $open-sans;
   font-size: $normal-font-size;
@@ -51,7 +51,7 @@ $font-semi-bold: 600;
 %pp-secondary-font {
   font-family: $open-sans;
   font-size: $secondary-font-size;
-  line-height: 16.5px; 
+  line-height: 16.5px;
   font-weight: $font-light;
   color: $secondary-font-color;
 }
@@ -64,7 +64,7 @@ $font-semi-bold: 600;
   font-size: 16px;
 }
 
- %pp-category-font {
+%pp-category-font {
   font-family: $open-sans;
   font-weight: $font-semi-bold;
   font-size: $secondary-font-size;

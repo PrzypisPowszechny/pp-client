@@ -18,7 +18,7 @@ import { selectUpvote } from 'common/store/tabs/tab/api/selectors';
 import { PPScopeClass } from 'content-scripts/settings';
 
 import { PPViewerIndirectHoverClass } from '../../../settings';
-import styles from '../Viewer.scss';
+import styles from '../ViewerItem.scss';
 
 interface IUpvoteProps {
   annotation: AnnotationAPIModel;

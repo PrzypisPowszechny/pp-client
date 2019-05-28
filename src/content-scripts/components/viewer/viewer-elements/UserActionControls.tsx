@@ -12,7 +12,7 @@ import { hideViewer } from 'common/store/tabs/tab/widgets/actions';
 import Upvote from './Upvote';
 import UserActionDialog from './UserActionDialog';
 
-import styles from '../Viewer.scss';
+import styles from '../ViewerItem.scss';
 
 interface IUserActionControlsProps {
   locationX: number;

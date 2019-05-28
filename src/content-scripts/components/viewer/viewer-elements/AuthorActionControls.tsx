@@ -11,7 +11,7 @@ import ppGa from 'common/pp-ga';
 import { selectTab } from 'common/store/tabs/selectors';
 import { hideViewer, openViewerDeleteModal, showEditorAnnotation } from 'common/store/tabs/tab/widgets/actions';
 
-import styles from '../Viewer.scss';
+import styles from '../ViewerItem.scss';
 import Timer = NodeJS.Timer;
 
 interface IAuthorActionControlsProps {

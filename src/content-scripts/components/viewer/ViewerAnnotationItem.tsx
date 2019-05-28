@@ -21,7 +21,7 @@ import { extractMinimalLabel, httpPrefixed } from 'common/url';
 
 import AuthorActionControls from './viewer-elements/AuthorActionControls';
 import UserActionControls from './viewer-elements/UserActionControls';
-import styles from './Viewer.scss';
+import styles from './ViewerItem.scss';
 
 interface IViewerAnnotationItemProps {
   key: string;
@@ -97,10 +97,10 @@ export default class ViewerAnnotationItem extends React.Component<Partial<IViewe
     } = this.props.annotation.attributes;
 
     return (
-      <li className={classNames(styles.annotation)}>
+      <li className={classNames(styles.self, styles.annotation)}>
         <div className={styles.headBar}>
           <div>
-            <div className={classNames(styles.ppCategory, ViewerAnnotationItem.ppCategoryToClass(ppCategory))}>
+            <div className={classNames(styles.header, ViewerAnnotationItem.ppCategoryToClass(ppCategory))}>
               {comment ? annotationPPCategoriesLabels[ppCategory] : 'źródło'}
             </div>
             <div className={styles.commentDate}>
