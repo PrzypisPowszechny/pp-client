@@ -3,7 +3,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
 
 // app-specific settings (enabled features etc.)
-const { loadSettings } = require('./pp-settings');
+const {loadSettings} = require('./pp-settings');
 
 const localPath = (...args) => path.resolve(__dirname, ...args);
 
@@ -54,20 +54,25 @@ const getConfig = (env, argv) => ({
         use: ['style-loader', 'css-loader'],
       },
       {
-        /* SCSS global content script styles */
+        /* SCSS global content script & popup styles */
         test: /\.scss$/,
         include: [
           localPath(ROOT, 'src', 'css'),
-        ],
-        use: ['style-loader', 'css-loader', 'cssimportant-loader', 'sass-loader'],
-      },
-      {
-        /* SCSS global popup styles */
-        test: /\.scss$/,
-        include: [
           localPath(ROOT, 'src', 'popup', 'css'),
         ],
-        use: ['style-loader', 'css-loader', 'cssimportant-loader', 'sass-loader'],
+        use: [
+          'style-loader',
+          'css-loader',
+          'cssimportant-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              includePaths: [
+                localPath(ROOT, 'src'),
+              ],
+            },
+          }
+        ],
       },
       {
         /* SCSS modules */
@@ -93,7 +98,8 @@ const getConfig = (env, argv) => ({
                 localPath(ROOT, 'src'),
               ],
             },
-          }],
+          }
+        ],
       },
       {
         test: /\.(png|jpg|gif|svg)$/,

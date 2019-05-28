@@ -1,8 +1,8 @@
 /*
  * Global styles for the whole popup window
  */
-
 @import url('https://fonts.googleapis.com/css?family=Roboto');
+@import "css/common/buttons";
 
 html, body {
   height: 171px;
@@ -44,10 +44,11 @@ body {
 
 .menu-top {
   display: flex;
+  justify-content: space-between;
   padding: 10px 0 5px 0;
 
-  .icon {
-    margin: 0;
+  .icon-about {
+    margin: 0 4px 0 0;
     cursor: pointer;
     height: 18px;
 
@@ -59,10 +60,41 @@ body {
 
 .menu-logo {
   background-image: url('../../../assets/popup-logo.png');
-  background-size: contain;
+  background-size: auto 100%;
   background-repeat: no-repeat;
-  height: 70px;
-  width: 90%;
+  height: 60px;
+  width: 120px;
+}
+
+.user-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .user-info {
+    display: flex;
+    font-size: 15px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    padding: 5px;
+
+    .user-role {
+      width: 100%;
+      display: inline-block;
+      text-align: center;
+      font-size: 12px;
+      color: #aaaaaa;
+    }
+
+    .user-icon {
+      margin: auto 5px;
+    }
+  }
+
+  .logout {
+    margin-top: 5px;
+    font-family: 'Roboto', sans-serif;
+  }
 }
 
 .menu-item {
@@ -81,7 +113,7 @@ body {
 }
 
 .menu-item.primary {
-  span, .icon  {
+  span, .icon {
     color: #34495E;
   }
 }
@@ -100,7 +132,6 @@ body {
   color: #e67e22;
 }
 
-
 .clickable.disabled {
   cursor: inherit;
   span, .icon {
@@ -113,7 +144,7 @@ body {
 
 .clickable.active {
   cursor: inherit;
-  span, .icon  {
+  span, .icon {
     color: #2ecc71
   }
   &:hover {

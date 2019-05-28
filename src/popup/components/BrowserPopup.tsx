@@ -2,16 +2,15 @@ import React, { ChangeEvent } from 'react';
 import { send } from 'react-icons-kit/fa/send';
 import { Icon } from 'react-icons-kit/Icon';
 import { ic_add_circle } from 'react-icons-kit/md/ic_add_circle';
-import { ic_view_list } from 'react-icons-kit/md/ic_view_list';
 import { ic_block } from 'react-icons-kit/md/ic_block';
 import { ic_home } from 'react-icons-kit/md/ic_home';
 import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
+import { ic_view_list } from 'react-icons-kit/md/ic_view_list';
 import { connect } from 'react-redux';
 
 import classNames from 'classnames';
 import _filter from 'lodash/filter';
 
-import { UserRoles } from 'common/api/user';
 import * as chromeKeys from 'common/chrome-storage/keys';
 import ppGa from 'common/pp-ga/index';
 import { selectUser } from 'common/store/storage/selectors';
@@ -24,8 +23,8 @@ import Button from 'content-scripts/components/elements/Button/Button';
 
 import AnnotationSummary from './annotationSummary/AnnotationSummary';
 import { PopupPages } from './BrowserPopupNavigator';
-import LogoutPanel from './LogoutPanel';
 import Toggle from './toggle/Toggle';
+import UserPanel from './UserPanel';
 
 import {
   PopupAnnotationRequestLocationData,
@@ -36,7 +35,6 @@ import {
   PopupAnnotationLocationData,
   selectAnnotationLocations,
 } from '../../common/store/tabs/tab/annotations/selectors';
-import { AnnotationsStage } from '../../common/store/tabs/tab/annotations/types';
 import { ITabInfoState } from '../../common/store/tabs/tab/tabInfo';
 import '../css/popup.scss';
 
@@ -265,17 +263,17 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
           className={classNames('menu-item', 'secondary', 'clickable')}
           onClick={this.handleViewAnnotations}
         >
-          <Icon className='icon' icon={ic_view_list} size={20}/>
+          <Icon className="icon" icon={ic_view_list} size={20}/>
           <span>Przeglądaj przypisy</span>
         </li>
         <li
           className={classNames('menu-item', 'secondary', 'clickable')}
           onClick={this.handleViewAnnotationRequests}
         >
-          <Icon className='icon' icon={ic_view_list} size={20}/>
+          <Icon className="icon" icon={ic_view_list} size={20}/>
           <span>Przeglądaj prośby o przypis</span>
         </li>
-        < hr className='menu-separator'/>
+        < hr className="menu-separator"/>
       </>
     );
   }
@@ -299,8 +297,9 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
           <ul className="menu">
             <div className="menu-top">
               <div className="menu-logo"/>
+              <div><UserPanel/></div>
               <a href={`${PPSettings.SITE_URL}/about/`} target="_blank">
-                <Icon className="icon" icon={ic_home} size={20}/>
+                <Icon className="icon-about" icon={ic_home} size={20}/>
               </a>
             </div>
             <AnnotationSummary onFullViewClick={this.handleFullAnnotationViewClick}/>
@@ -313,7 +312,6 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
               <Icon className="icon" icon={ic_block} size={25}/>
               <span>Wyłącz przypisy</span>
             </li>
-
 
             <li className="menu-subitem">
               <span className={classNames({ negativeActive: isCurrentPageDisabled })}>na tej stronie</span>
@@ -344,8 +342,6 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
               </Button>
             </div>
           </ul>
-          {/* temporary location */}
-          <LogoutPanel/>
         </div>
       </div>
     )
