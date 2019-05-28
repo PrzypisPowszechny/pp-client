@@ -70,7 +70,6 @@ body {
   font-size: 14px;
   line-height: 1.5em;
   user-select: none;
-
 }
 
 .menu-subitem {
@@ -85,6 +84,11 @@ body {
   span, .icon  {
     color: #34495E;
   }
+}
+
+.menu-item.secondary {
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .clickable:hover {

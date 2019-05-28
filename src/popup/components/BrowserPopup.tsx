@@ -2,6 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { send } from 'react-icons-kit/fa/send';
 import { Icon } from 'react-icons-kit/Icon';
 import { ic_add_circle } from 'react-icons-kit/md/ic_add_circle';
+import { ic_view_list } from 'react-icons-kit/md/ic_view_list';
 import { ic_block } from 'react-icons-kit/md/ic_block';
 import { ic_home } from 'react-icons-kit/md/ic_home';
 import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
@@ -132,10 +133,6 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     return (this.state.disabledPages || []).indexOf(this.state.currentStandardizedTabUrl) !== -1;
   }
 
-  isAnnotationModeForCurrentTab() {
-    return (this.state.annotationModePages || []).indexOf(this.state.currentStandardizedTabUrl) !== -1;
-  }
-
   handleFullAnnotationViewClick = (e) => {
     const { onPageChange } = this.props;
     if (onPageChange) {
@@ -152,43 +149,6 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
    * This method of communication with content scripts in fact proves cumbersome;
    * we should move more and more to the global redux store
    */
-  handleAnnotationModeClick = (e) => {
-    const {
-      annotationModePages,
-      currentStandardizedTabUrl,
-    } = this.state;
-
-    const isAnnotationMode = this.isAnnotationModeForCurrentTab();
-    if (!isAnnotationMode && this.isAnnotationButtonEnabled()) {
-      let newAnnotationModePages;
-      newAnnotationModePages = [...annotationModePages, currentStandardizedTabUrl];
-
-      // switch off request mode
-      this.props.hideAnnotationRequestForm();
-
-      this.setState({ annotationModePages: newAnnotationModePages });
-      chrome.storage.local.set({
-        [chromeKeys.ANNOTATION_MODE_PAGES]: newAnnotationModePages,
-      });
-      ppGa.annotationAddingModeInited({ location: currentStandardizedTabUrl });
-      if (!this.props.debugIsPopupEmulated) {
-        window.close();
-      }
-    }
-  }
-
-  isAnnotationButtonEnabled = () => {
-    const {
-      isExtensionDisabled,
-    } = this.state;
-    const {
-      tabInfo: { contentScriptWontLoad },
-      annotations: { stage },
-    } = this.props;
-    const isCurrentPageDisabled = this.isExtensionDisabledForCurrentTab();
-    return !isExtensionDisabled && !isCurrentPageDisabled
-      && !contentScriptWontLoad && (stage === AnnotationsStage.located);
-  }
 
   handleAnnotationRequestClick = (e) => {
     const { visible } = this.props.annotationRequestForm;
@@ -206,13 +166,23 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
       isExtensionDisabled,
     } = this.state;
     const {
-      tabInfo: { contentScriptWontLoad },
+      tabInfo: { isSupported, contentScriptWontLoad },
       annotationRequests: { stage },
     } = this.props;
 
     const isCurrentPageDisabled = this.isExtensionDisabledForCurrentTab();
-    return !isExtensionDisabled && !isCurrentPageDisabled
+    return isSupported && !isExtensionDisabled && !isCurrentPageDisabled
       && !contentScriptWontLoad && (stage === AnnotationRequestsStage.located);
+  }
+
+  handleViewAnnotations = () => {
+    // todo? link directly
+    window.open(`${PPSettings.SITE_URL}/viewAnnotations/`, '_blank');
+  }
+
+  handleViewAnnotationRequests = () => {
+    // todo? link directly
+    window.open(`${PPSettings.SITE_URL}/viewAnnotationRequests/`, '_blank');
   }
 
   handleDisabledExtensionChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -262,29 +232,12 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
   }
 
   renderFeatureButtons() {
-    const isAnnotationRequestFormOpen = Boolean(this.props.annotationRequestForm.visible);
-    const isAnnotationFormOpen = this.isAnnotationModeForCurrentTab();
+    const {
+      annotationRequestForm: { visible: isAnnotationRequestFormOpen },
+    } = this.props;
 
     return (
       <>
-        {this.props.user.userRole === UserRoles.editor &&
-        <li
-          className={classNames('menu-item', 'clickable', 'primary',
-            { disabled: !this.isAnnotationButtonEnabled() },
-            { active: isAnnotationFormOpen })}
-          onClick={this.handleAnnotationModeClick}
-        >
-          <Icon className="icon" icon={ic_add_circle} size={25}/>
-          {isAnnotationFormOpen ?
-            <span>Dodajesz przypis </span>
-            : <span>Dodaj przypis</span>
-          }
-          <p className="caption">
-            Dodaj przypis, aby podzielić się wartościową informacją ze społecznością *PP
-          </p>
-        </li>
-        }
-
         <li
           className={classNames('menu-item', 'clickable',
             { disabled: !this.isAnnotationRequestButtonEnabled() },
@@ -305,18 +258,35 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
     );
   }
 
+  renderUsefulLinksSection() {
+    return (
+      <>
+        <li
+          className={classNames('menu-item', 'secondary', 'clickable')}
+          onClick={this.handleViewAnnotations}
+        >
+          <Icon className='icon' icon={ic_view_list} size={20}/>
+          <span>Przeglądaj przypisy</span>
+        </li>
+        <li
+          className={classNames('menu-item', 'secondary', 'clickable')}
+          onClick={this.handleViewAnnotationRequests}
+        >
+          <Icon className='icon' icon={ic_view_list} size={20}/>
+          <span>Przeglądaj prośby o przypis</span>
+        </li>
+        < hr className='menu-separator'/>
+      </>
+    );
+  }
+
   render() {
     const {
       isLoading,
       isExtensionDisabled,
     } = this.state;
 
-    const {
-      isSupported,
-    } = this.props.tabInfo;
-
     const isCurrentPageDisabled = this.isExtensionDisabledForCurrentTab();
-
     if (isLoading) {
       // Do not display the page already, when loading; otherwise we'll always see the toggle transition...
       return null;
@@ -335,14 +305,16 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
             </div>
             <AnnotationSummary onFullViewClick={this.handleFullAnnotationViewClick}/>
 
-            {isSupported && this.renderFeatureButtons()}
+            {this.renderFeatureButtons()}
+
+            {this.renderUsefulLinksSection()}
 
             <li className="menu-item">
               <Icon className="icon" icon={ic_block} size={25}/>
               <span>Wyłącz przypisy</span>
             </li>
 
-            {isSupported &&
+
             <li className="menu-subitem">
               <span className={classNames({ negativeActive: isCurrentPageDisabled })}>na tej stronie</span>
               <Toggle
@@ -350,7 +322,7 @@ export default class BrowserPopup extends React.Component<Partial<IBrowserPopupP
                 onChange={this.handleDisabledPageChange}
               />
             </li>
-            }
+
             <li className="menu-subitem">
               <span className={classNames({ negativeActive: isExtensionDisabled })}>wszędzie</span>
               <Toggle
