@@ -37,6 +37,7 @@ import { AnnotationRequestsStage, AnnotationRequestsState } from '../common/stor
 import { setAnnotationStage } from '../common/store/tabs/tab/annotations/actions';
 import { AnnotationsStage } from '../common/store/tabs/tab/annotations/types';
 import '../css/common/base.scss';
+import { UserRoles } from '../common/api/user';
 
 // New defaults/modifiers for some semantic-ui components
 
@@ -120,16 +121,17 @@ async function initData() {
   } finally {
     store.dispatch(setAnnotationStage(AnnotationsStage.loaded));
   }
-
-  try {
-    await store.dispatch(readEndpointWithHeaders(
-      endpoints.ANNOTATION_REQUESTS, { 'PP-SITE-URL': currentUrl },
-    ));
-  } catch (err) {
-    console.debug(`Failed to fetch annotation requests: ${err.toString()}`);
-    Sentry.captureException(err);
-  } finally {
-    store.dispatch(setAnnotationRequestStage(AnnotationRequestsStage.loaded));
+  if (selectUser(store.getState()).userRole === UserRoles.editor) {
+    try {
+      await store.dispatch(readEndpointWithHeaders(
+        endpoints.ANNOTATION_REQUESTS, { 'PP-SITE-URL': currentUrl },
+      ));
+    } catch (err) {
+      console.debug(`Failed to fetch annotation requests: ${err.toString()}`);
+      Sentry.captureException(err);
+    } finally {
+      store.dispatch(setAnnotationRequestStage(AnnotationRequestsStage.loaded));
+    }
   }
 }
 
