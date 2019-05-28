@@ -2,6 +2,8 @@ import { createSelector } from 'reselect';
 
 import { selectTab } from 'common/store/tabs/selectors';
 
+import { IEditorState, IViewerState } from './reducers';
+
 import { ITabState } from '../reducer';
 
 function selectWidgetState({ location = { x: null, y: null }, visible }) {
@@ -46,7 +48,7 @@ function selectAnnotationForm(annotations, editor) {
   };
 }
 
-export const selectEditorState = createSelector<ITabState, any, any, any>(
+export const selectEditorState = createSelector<ITabState, IEditorState, any, any>(
   state => selectTab(state).widgets.editor,
   state => selectTab(state).api.annotations.data,
   (editor, annotations) => ({
@@ -55,12 +57,13 @@ export const selectEditorState = createSelector<ITabState, any, any, any>(
   }),
 );
 
-export const selectViewerState = createSelector<ITabState, any, any>(
+export const selectViewerState = createSelector<ITabState, IViewerState, any>(
   state => selectTab(state).widgets.viewer,
   viewer => ({
     ...selectWidgetState(viewer),
-    annotationIds: viewer.viewerItems.map(annotation => annotation.annotationId),
-    isAnyReportEditorOpen: viewer.viewerItems.some(item => item.isReportEditorOpen),
+    annotationIds: viewer.annotations.map(annotation => annotation.annotationId),
+    annotationRequestIds: viewer.annotationRequests.map(annotation => annotation.annotationRequestId),
+    isAnyReportEditorOpen: viewer.annotations.some(item => item.isReportEditorOpen),
     deleteModal: viewer.deleteModal,
     mouseOver: viewer.mouseOver,
   }),

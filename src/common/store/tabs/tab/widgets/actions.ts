@@ -112,11 +112,12 @@ export const hideAnnotationForm = () => {
 };
 
 // TODO refactor viewer actions
-export const showViewer = (x: number, y: number, annotationIds: string[]) => {
+export const showViewer = (x: number, y: number, annotationIds: string[], annotationRequestIds: string[]) => {
   return {
     type: VIEWER_VISIBLE_CHANGE,
     payload: {
-      viewerItems: annotationIds.map(id => ({ annotationId: id })),
+      annotations: annotationIds.map(id => ({ annotationId: id })),
+      annotationRequests: annotationRequestIds.map(id => ({ annotationRequestId: id })),
       visible: true,
       mouseOver: true,
       deleteModal: {},

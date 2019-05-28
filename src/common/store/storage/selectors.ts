@@ -1,5 +1,7 @@
 import { IUserState } from './types';
 
+import { IState } from '../reducer';
+
 export const selectStorage = state => baseSelectStorage(state, true);
 
 export const trySelectStorage = state => baseSelectStorage(state, false);
@@ -12,7 +14,7 @@ export const baseSelectStorage = (state, raiseException: boolean) => {
   return state.storage.value;
 };
 
-export const selectUser = (state) => {
+export const selectUser = (state: IState) => {
   // "collect" user data from login data
   if (!trySelectStorage(state)) {
     return null;
@@ -34,7 +36,7 @@ export const selectUser = (state) => {
   }
 };
 
-export const selectAccessToken = (state): string => {
+export const selectAccessToken = (state: IState): string => {
   const storage = selectStorage(state);
   if (storage && storage.auth) {
     return storage.auth.access || null;
@@ -42,7 +44,7 @@ export const selectAccessToken = (state): string => {
   return null;
 };
 
-export const selectUserForDashboard = (state) => {
+export const selectUserForDashboard = (state: IState) => {
   const user = selectUser(state);
   if (!user) {
     return null;

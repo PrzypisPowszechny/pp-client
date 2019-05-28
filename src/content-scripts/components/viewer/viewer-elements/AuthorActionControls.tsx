@@ -11,7 +11,7 @@ import ppGa from 'common/pp-ga';
 import { selectTab } from 'common/store/tabs/selectors';
 import { hideViewer, openViewerDeleteModal, showEditorAnnotation } from 'common/store/tabs/tab/widgets/actions';
 
-import styles from '../Viewer.scss';
+import styles from '../ViewerItem.scss';
 import Timer = NodeJS.Timer;
 
 interface IAuthorActionControlsProps {
@@ -40,14 +40,14 @@ interface IAuthorActionControlsState {
         isDeleteModalOpen,
       },
     } = selectTab(state).widgets.viewer;
-    const viewerItem =
-      selectTab(state).widgets.viewer.viewerItems.find(item => item.annotationId === props.annotation.id);
+    const annotation =
+      selectTab(state).widgets.viewer.annotations.find(item => item.annotationId === props.annotation.id);
 
     return {
       locationX,
       locationY,
       isDeleteModalOpen,
-      ...viewerItem,
+      ...annotation,
     };
   }, {
     showEditorAnnotation,

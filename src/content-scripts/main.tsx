@@ -32,6 +32,7 @@ import appComponent from './modules/app-component';
 import highlightManager from './modules/highlight-manager';
 import store from './store';
 
+import { UserRoles } from '../common/api/user';
 import { setAnnotationRequestStage } from '../common/store/tabs/tab/annotationRequests/actions';
 import { AnnotationRequestsStage, AnnotationRequestsState } from '../common/store/tabs/tab/annotationRequests/types';
 import { setAnnotationStage } from '../common/store/tabs/tab/annotations/actions';
@@ -120,16 +121,17 @@ async function initData() {
   } finally {
     store.dispatch(setAnnotationStage(AnnotationsStage.loaded));
   }
-
-  try {
-    await store.dispatch(readEndpointWithHeaders(
-      endpoints.ANNOTATION_REQUESTS, { 'PP-SITE-URL': currentUrl },
-    ));
-  } catch (err) {
-    console.debug(`Failed to fetch annotation requests: ${err.toString()}`);
-    Sentry.captureException(err);
-  } finally {
-    store.dispatch(setAnnotationRequestStage(AnnotationRequestsStage.loaded));
+  if (selectUser(store.getState()).userRole === UserRoles.editor) {
+    try {
+      await store.dispatch(readEndpointWithHeaders(
+        endpoints.ANNOTATION_REQUESTS, { 'PP-SITE-URL': currentUrl },
+      ));
+    } catch (err) {
+      console.debug(`Failed to fetch annotation requests: ${err.toString()}`);
+      Sentry.captureException(err);
+    } finally {
+      store.dispatch(setAnnotationRequestStage(AnnotationRequestsStage.loaded));
+    }
   }
 }
 

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import classNames from 'classnames';
 
+import { AnnotationResourceType } from 'common/api/annotations';
 import { setMouseOverViewer } from 'common/store/tabs/tab/widgets/actions';
 import { selectViewerState } from 'common/store/tabs/tab/widgets/selectors';
 import Widget from 'content-scripts/components/widget';
@@ -14,9 +15,10 @@ import {
 
 import DeleteAnnotationModal from './DeleteAnnotationModal';
 import styles from './Viewer.scss';
-import ViewerItem from './ViewerItem';
+import ViewerAnnotationItem from './ViewerAnnotationItem';
+import ViewerAnnotationRequestItem from './ViewerAnnotationRequestItem';
 
-import { AnnotationResourceType } from '../../../common/api/annotations';
+import { AnnotationRequestResourceType } from '../../../common/api/annotation-requests';
 import Timer = NodeJS.Timer;
 import { resourceToHighlightId } from '../../utils/Highlighter';
 
@@ -26,6 +28,7 @@ interface IViewerProps {
   isDeleteModalOpen: boolean;
   mouseOver: boolean;
   annotationIds: string[];
+  annotationRequestIds: string[];
 
   setMouseOverViewer: (value: boolean) => void;
 }
@@ -45,6 +48,7 @@ interface IViewerProps {
       },
       mouseOver,
       annotationIds,
+      annotationRequestIds,
     } = selectViewerState(state);
 
     return {
@@ -53,6 +57,7 @@ interface IViewerProps {
       isDeleteModalOpen,
       mouseOver,
       annotationIds,
+      annotationRequestIds,
     };
   }, {
     setMouseOverViewer,
@@ -72,37 +77,48 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
   }
 
   componentDidMount() {
-    this.checkHoverIntervalTimer = setInterval(this.checkHover, Viewer.hoverCheckInterval);
+    this.checkHoverIntervalTimer = setInterval(this.doesHover, Viewer.hoverCheckInterval);
   }
 
   componentWillUnmount() {
     clearInterval(this.checkHoverIntervalTimer);
   }
 
-  checkHover = () => {
-    let mouseOver = false;
+  doesHoverOverOwnHighlight() {
+    const { annotationIds, annotationRequestIds } = this.props;
+    const nodes = document.querySelectorAll(`
+        [${PPHighlightIdAttr}]:hover
+      `);
+    for (const node of Array.from(nodes)) {
+      for (const id of annotationIds) {
+        const highlightId = resourceToHighlightId(AnnotationResourceType, id);
+        if (node.matches(`[${PPHighlightIdAttr}="${highlightId}"]`)) {
+          return true;
+        }
+      }
+      for (const id of annotationRequestIds) {
+        const highlightId = resourceToHighlightId(AnnotationRequestResourceType, id);
+        if (node.matches(`[${PPHighlightIdAttr}="${highlightId}"]`)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 
-    if (document.querySelectorAll(`
+  doesHoverOverWindow() {
+    return Boolean(
+      document.querySelectorAll(`
       .${this.rootHoverClass}:hover,
       .${this.rootHoverClass} :hover,
       .${PPViewerIndirectHoverClass}:hover,
       .${PPViewerIndirectHoverClass} :hover
-    `).length) {
-      mouseOver = true;
-    }
+    `).length,
+    );
+  }
 
-    if (!mouseOver) {
-      document.querySelectorAll(`
-        [${PPHighlightIdAttr}]:hover
-      `).forEach((node) => {
-        for (const annotationId of this.props.annotationIds) {
-          const highlightId = resourceToHighlightId(AnnotationResourceType, annotationId);
-          if (node.matches(`[${PPHighlightIdAttr}="${highlightId}"]`)) {
-            mouseOver = true;
-          }
-        }
-      });
-    }
+  doesHover = () => {
+    const mouseOver = this.doesHoverOverWindow() || this.doesHoverOverOwnHighlight();
     if (mouseOver && !this.props.mouseOver) {
       this.props.setMouseOverViewer(true);
     }
@@ -111,12 +127,23 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
     }
   }
 
-  renderItems() {
+  renderAnnotationItems() {
     return this.props.annotationIds.map((id) => {
       return (
-        <ViewerItem
+        <ViewerAnnotationItem
           key={id}
           annotationId={id}
+        />
+      );
+    });
+  }
+
+  renderAnnotationRequestItems() {
+    return this.props.annotationRequestIds.map((id) => {
+      return (
+        <ViewerAnnotationRequestItem
+          key={id}
+          annotationRequestId={id}
         />
       );
     });
@@ -132,9 +159,16 @@ export default class Viewer extends React.Component<Partial<IViewerProps>, {}> {
         updateInverted={true}
         widgetTriangle={true}
       >
-        <ul className={styles.annotationItems}>
-          {this.renderItems()}
+        {this.props.annotationRequestIds.length > 0 &&
+        <ul className={styles.annotationRequestItems}>
+          {this.renderAnnotationRequestItems()}
         </ul>
+        }
+        {this.props.annotationIds.length > 0 &&
+        <ul className={styles.annotationItems}>
+          {this.renderAnnotationItems()}
+        </ul>
+        }
         <DeleteAnnotationModal/>
       </Widget>
     );
