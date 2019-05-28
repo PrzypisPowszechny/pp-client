@@ -1,10 +1,10 @@
 import React from 'react';
+import { Icon } from 'react-icons-kit/Icon';
+import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
 import { connect } from 'react-redux';
 
 import classNames from 'classnames';
 import moment from 'moment';
-import { Icon } from 'react-icons-kit/Icon';
-import { ic_live_help } from 'react-icons-kit/md/ic_live_help';
 
 import ppGa from 'common/pp-ga';
 import { selectAnnotationRequest } from 'common/store/tabs/tab/api/selectors';
@@ -15,6 +15,7 @@ import styles from './ViewerItem.scss';
 import { AnnotationRequestAPIModel } from '../../../common/api/annotation-requests';
 import { ID } from '../../../common/api/json-api';
 import Button from '../elements/Button/Button';
+import { E2E_ANNOTATION_REQUEST_CLASS } from '../../../../e2e/shared/classes';
 
 interface IViewerAnnotationRequestItemProps {
   key: string;
@@ -63,7 +64,7 @@ export default class ViewerAnnotationRequestItem extends React.Component<Partial
     } = this.props.annotationRequest.attributes;
 
     return (
-      <li className={classNames(styles.self, styles.annotationRequest)}>
+      <li className={classNames(styles.self, styles.annotationRequest, E2E_ANNOTATION_REQUEST_CLASS)}>
         <div className={styles.headBar}>
           <div className={classNames(styles.header, styles.categoryAnnotationRequest)}>
             <Icon className={styles.headerIcon} icon={ic_live_help} size={15}/>

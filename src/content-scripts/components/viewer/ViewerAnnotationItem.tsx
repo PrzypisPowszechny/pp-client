@@ -22,6 +22,7 @@ import { extractMinimalLabel, httpPrefixed } from 'common/url';
 import AuthorActionControls from './viewer-elements/AuthorActionControls';
 import UserActionControls from './viewer-elements/UserActionControls';
 import styles from './ViewerItem.scss';
+import { E2E_ANNOTATION_CLASS } from '../../../../e2e/shared/classes';
 
 interface IViewerAnnotationItemProps {
   key: string;
@@ -31,10 +32,6 @@ interface IViewerAnnotationItemProps {
   hideViewer: () => undefined;
 }
 
-interface IViewerAnnotationItemState {
-  initialView: boolean; // used to determine whether edit/delete buttons should be visible
-}
-
 @connect(
   (state, props) => ({
     annotation: selectAnnotation(state, props.annotationId),
@@ -42,8 +39,7 @@ interface IViewerAnnotationItemState {
     hideViewer,
   },
 )
-export default class ViewerAnnotationItem extends React.Component<Partial<IViewerAnnotationItemProps>,
-  Partial<IViewerAnnotationItemState>> {
+export default class ViewerAnnotationItem extends React.Component<Partial<IViewerAnnotationItemProps>, {}> {
 
   static defaultState = {};
 
@@ -97,7 +93,7 @@ export default class ViewerAnnotationItem extends React.Component<Partial<IViewe
     } = this.props.annotation.attributes;
 
     return (
-      <li className={classNames(styles.self, styles.annotation)}>
+      <li className={classNames(styles.self, styles.annotation, E2E_ANNOTATION_CLASS)}>
         <div className={styles.headBar}>
           <div>
             <div className={classNames(styles.header, ViewerAnnotationItem.ppCategoryToClass(ppCategory))}>
