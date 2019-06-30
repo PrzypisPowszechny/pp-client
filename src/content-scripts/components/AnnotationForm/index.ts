@@ -1,1 +1,1 @@
-export * from './AnnotationForm';
+export * from './AnnotationFormContent';

@@ -248,9 +248,9 @@ class Editor extends React.Component<Partial<IEditorProps>,
       },
       relationships: {
         annotationRequest: {
-          data: null
-        }
-      }
+          data: null,
+        },
+      },
     };
   }
 

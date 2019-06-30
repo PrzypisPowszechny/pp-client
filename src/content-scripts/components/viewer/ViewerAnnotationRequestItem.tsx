@@ -8,7 +8,7 @@ import moment from 'moment';
 
 import ppGa from 'common/pp-ga';
 import { selectAnnotationRequest } from 'common/store/tabs/tab/api/selectors';
-import { hideViewer, showAnnotationForm } from 'common/store/tabs/tab/widgets/actions';
+import { hideViewer, showAnnotationAddForm } from 'common/store/tabs/tab/widgets/actions';
 
 import styles from './ViewerItem.scss';
 
@@ -24,7 +24,7 @@ interface IViewerAnnotationRequestItemProps {
   annotationRequest: AnnotationRequestAPIModel;
 
   hideViewer: () => any;
-  showAnnotationForm: (id: ID) => any;
+  showAnnotationAddForm: (id: ID) => any;
 }
 
 @connect(
@@ -32,7 +32,7 @@ interface IViewerAnnotationRequestItemProps {
     annotationRequest: selectAnnotationRequest(state, props.annotationRequestId),
   }), {
     hideViewer,
-    showAnnotationForm,
+    showAnnotationAddForm,
   },
 )
 export default class ViewerAnnotationRequestItem extends React.Component<Partial<IViewerAnnotationRequestItemProps>,
@@ -59,7 +59,7 @@ export default class ViewerAnnotationRequestItem extends React.Component<Partial
       annotationRequest: { attributes: { comment } },
     } = this.props;
     this.props.hideViewer();
-    this.props.showAnnotationForm(annotationRequestId);
+    this.props.showAnnotationAddForm(annotationRequestId);
     ppGa.annotationRequestAnswerButtonClicked(annotationRequestId, !comment);
   }
 

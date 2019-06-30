@@ -10,6 +10,10 @@ export interface AnnotationAPIModel extends APIModel {
   };
 }
 
+export interface AnnotationAPIUpdateModel extends APIModel {
+  attributes: Partial<AnnotationAPIModelUpdatableAttrs>;
+}
+
 export interface AnnotationAPICreateModel extends APICreateModel {
   attributes: AnnotationAPICreateModelAttrs;
   relationships: {
@@ -17,31 +21,30 @@ export interface AnnotationAPICreateModel extends APICreateModel {
   };
 }
 
-export interface AnnotationAPIModelAttrs {
+export interface AnnotationAPIModelUpdatableAttrs {
+  ppCategory: AnnotationPPCategories;
+  comment: string;
+  annotationLink: string;
+  annotationLinkTitle: string;
+}
+
+export interface AnnotationAPIModelAttrs extends AnnotationAPIModelUpdatableAttrs {
   url: string;
   range: RangeAPIModel;
   quote: string;
   publisher: AnnotationPublishers;
   quoteContext: string;
-  ppCategory: AnnotationPPCategories;
   demagogCategory: AnnotationDemagogCategories;
-  comment: string;
-  annotationLink: string;
-  annotationLinkTitle: string;
   createDate?: Date;
   upvoteCountExceptUser: number;
   doesBelongToUser: boolean;
 }
 
-export interface AnnotationAPICreateModelAttrs {
+export interface AnnotationAPICreateModelAttrs extends AnnotationAPIModelUpdatableAttrs {
   url: string;
   quote: string;
   quoteContext?: string;
   range?: RangeAPIModel;
-  ppCategory: AnnotationPPCategories;
-  comment: string;
-  annotationLink: string;
-  annotationLinkTitle: string;
 }
 
 export interface RangeAPIModel {

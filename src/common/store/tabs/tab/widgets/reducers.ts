@@ -41,8 +41,9 @@ export interface IAnnotationRequestFormState extends IWidgetState {
   initialData?: Partial<IAnnotationRequestFormData>;
 }
 
-export interface IAnnotationFormState extends IWidgetState {
+export interface IAnnotationFormContentState extends IWidgetState {
   annotationRequestId?: ID;
+  annotationId?: ID;
 }
 
 export interface IViewerState extends IWidgetState {
@@ -128,14 +129,14 @@ function annotationRequestForm(state: IAnnotationRequestFormState = initialWidge
   }
 }
 
-function annotationForm(state: IAnnotationFormState = initialWidgetState, action) {
+function annotationForm(state: IAnnotationFormContentState = initialWidgetState, action): IAnnotationFormContentState {
   switch (action.type) {
     case ANNOTATION_FORM_VISIBLE_CHANGE:
       return { ...state, ...action.payload };
     case ANNOTATION_REQUEST_FORM_VISIBLE_CHANGE:
       // Hide annotationFormWidget if other widget gets opened
       if (action.payload.visible) {
-        return { ...state, visible: false };
+        return { visible: false, annotationRequestId: null, annotationId: null };
       } else {
         return state;
       }
