@@ -226,7 +226,7 @@ class Editor extends React.Component<Partial<IEditorProps>,
     ppGa.annotationFormMoved();
   }
 
-  getAnnotationFromState() {
+  getAnnotationFromState(): AnnotationAPICreateModel {
     const {
       range,
       quote,
@@ -245,6 +245,11 @@ class Editor extends React.Component<Partial<IEditorProps>,
         comment: this.state.comment,
         annotationLink: this.state.annotationLink,
         annotationLinkTitle: this.state.annotationLinkTitle,
+      },
+      relationships: {
+        annotationRequest: {
+          data: null,
+        },
       },
     };
   }

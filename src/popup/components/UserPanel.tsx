@@ -45,8 +45,10 @@ export default class UserPanel extends React.Component<Partial<LogoutProps>, {}>
               {userRole === UserRoles.editor && <><br/><span className="user-role"> redaktor </span></>}
             </div>
           </div>
-          <Button className="logout" appearance="link"
-                  onClick={this.userLoggedOutHandler}
+          <Button
+            className="logout"
+            appearance="link"
+            onClick={this.userLoggedOutHandler}
           >
             Wyloguj
           </Button>

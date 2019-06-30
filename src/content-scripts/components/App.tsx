@@ -14,7 +14,7 @@ import Toast from './elements/Toast/Toast';
 import Menu from './menu/index';
 import ViewerManager from './viewer/ViewerManager';
 
-import { IAnnotationFormState, IAnnotationRequestFormState } from '../../common/store/tabs/tab/widgets';
+import { IAnnotationFormContentState, IAnnotationRequestFormState } from '../../common/store/tabs/tab/widgets';
 
 interface AppProps {
   isStorageInitialized: boolean;
@@ -24,7 +24,7 @@ interface AppProps {
   annotationModeWidgetVisible: boolean;
   notificationVisible: boolean;
   annotationRequestForm: IAnnotationRequestFormState;
-  annotationForm: IAnnotationFormState;
+  annotationForm: IAnnotationFormContentState;
 }
 
 @connect(
@@ -62,7 +62,9 @@ export default class App extends React.Component<Partial<AppProps>, {}> {
           <SideWidget><AnnotationRequestForm key={annotationRequestForm.initialData.quote}/></SideWidget>
           }
           {annotationForm.visible &&
-          <SideWidget><AnnotationForm key={annotationForm.annotationRequestId}/></SideWidget>
+            <SideWidget>
+              <AnnotationForm/>
+            </SideWidget>
           }
           <ViewerManager/>
         </div>

@@ -7,12 +7,17 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 
 import { AnnotationAPIModel } from 'common/api/annotations';
+import Timer = NodeJS.Timer;
+import { ID } from 'common/api/json-api';
 import ppGa from 'common/pp-ga';
 import { selectTab } from 'common/store/tabs/selectors';
-import { hideViewer, openViewerDeleteModal, showEditorAnnotation } from 'common/store/tabs/tab/widgets/actions';
+import {
+  hideViewer,
+  openViewerDeleteModal,
+  showAnnotationEditForm,
+} from 'common/store/tabs/tab/widgets/actions';
 
 import styles from '../ViewerItem.scss';
-import Timer = NodeJS.Timer;
 
 interface IAuthorActionControlsProps {
   locationX: number;
@@ -20,7 +25,7 @@ interface IAuthorActionControlsProps {
   isDeleteModalOpen: boolean;
   annotation: AnnotationAPIModel;
 
-  showEditorAnnotation: (x: number, y: number, id?: string) => void;
+  showAnnotationEditForm: (id: ID) => void;
   hideViewer: () => void;
   openViewerDeleteModal: (id: string) => void;
 }
@@ -50,7 +55,7 @@ interface IAuthorActionControlsState {
       ...annotation,
     };
   }, {
-    showEditorAnnotation,
+    showAnnotationEditForm,
     hideViewer,
     openViewerDeleteModal,
   },
@@ -90,13 +95,9 @@ export default class AuthorActionControls extends
   }
 
   onAnnotationEditClick = () => {
-    const {
-      locationX,
-      locationY,
-      annotation,
-    } = this.props;
+    const { annotation } = this.props;
     const attrs = annotation.attributes;
-    this.props.showEditorAnnotation(locationX, locationY, annotation.id);
+    this.props.showAnnotationEditForm(annotation.id);
     this.props.hideViewer();
     ppGa.annotationEditFormOpened(annotation.id, attrs.ppCategory, !attrs.comment, attrs.annotationLink);
   }

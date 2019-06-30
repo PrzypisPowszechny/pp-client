@@ -91,12 +91,24 @@ export const hideAnnotationRequestForm = () => {
   };
 };
 
-export const showAnnotationForm = (annotationRequestId: ID) => {
+export const showAnnotationAddForm = (annotationRequestId: ID) => {
   return {
     type: ANNOTATION_FORM_VISIBLE_CHANGE,
     payload: {
       visible: true,
+      annotationId: null,
       annotationRequestId,
+    },
+  };
+};
+
+export const showAnnotationEditForm = (annotationId: ID) => {
+  return {
+    type: ANNOTATION_FORM_VISIBLE_CHANGE,
+    payload: {
+      visible: true,
+      annotationId,
+      annotationRequestId: null,
     },
   };
 };
@@ -106,7 +118,6 @@ export const hideAnnotationForm = () => {
     type: ANNOTATION_FORM_VISIBLE_CHANGE,
     payload: {
       visible: false,
-      annotationId: null,
     },
   };
 };
